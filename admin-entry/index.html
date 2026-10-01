@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="am" dir="ltr">
+  <head>
+    <!--
+      =====================================================================
+      MASES Phase 2 UI — Admin entry HTML
+      =====================================================================
+
+      File:    mase_app/admin-entry/index.html
+      Phase:   Admin scaffold (G2.4, step 4 of 10)
+      Version: 1.0.0
+      Target:  admin.maalearna.com.et
+
+      ---------------------------------------------------------------------
+      Revision history
+      ---------------------------------------------------------------------
+      1.0.0  — initial delivery. The admin build's entry HTML. Mirrors
+               workspace-entry/index.html v1.2.0 with the four label
+               deltas identified in G1 §3.4: <title>, application-name,
+               og:title, og:description. The file header comment is
+               written for this file; the workspace file's per-revision
+               history is not copied, because that history documents the
+               workspace file, not this one.
+
+               No other line differs from the workspace file.
+
+      ---------------------------------------------------------------------
+      Purpose
+      ---------------------------------------------------------------------
+      The single HTML input for the admin build. Vite's
+      `rollupOptions.input` (vite.config.ts v1.1.0) points at this file
+      when `--mode admin` is passed.
+
+      This file is byte-for-byte identical to
+      workspace-entry/index.html except for the four label deltas
+      below. Every meta tag, every comment, every structural element,
+      the inline preloader style block, the noscript fallback, and the
+      module script tag are preserved verbatim from that file. Keeping
+      the two files aligned means a future fix to the workspace entry
+      (a new meta tag, a corrected preconnect) can be applied to this
+      file mechanically.
+
+      ---------------------------------------------------------------------
+      The four label deltas — why admin differs
+      ---------------------------------------------------------------------
+      1. <title>            "MASES"  →  "MASES አስተዳደር"
+      2. application-name   "MASES"  →  "MASES አስተዳደር"
+      3. og:title           "MASES"  →  "MASES አስተዳደር"
+      4. og:description     the workspace's description of the shared-
+                            equity management platform, replaced with a
+                            description of the administration console.
+
+      The value "MASES አስተዳደር" is the admin build's application name.
+      It is the string that VITE_APP_NAME carries for the admin build
+      (see the environment configuration delivered at G2.10), and it
+      is the string the router composes into document.title on every
+      admin route.
+
+      The remaining identity-bearing meta tags — description,
+      apple-mobile-web-app-title, og:site_name, twitter:title,
+      twitter:description — are deliberately left at their workspace
+      values in this initial delivery. They are candidates for
+      alignment in a follow-up revision. See the section
+      §"Additional consistency deltas — noted but NOT applied in 1.0.0"
+      at the bottom of this header.
+
+      ---------------------------------------------------------------------
+      Why lang="am" and dir="ltr"
+      ---------------------------------------------------------------------
+      Unchanged from the workspace file. The Amharic-first policy means
+      the <html> element's `lang` attribute defaults to Amharic; the
+      Ge'ez script is written left-to-right, so `dir="ltr"` is correct.
+      App.vue keeps both attributes in sync at runtime if the user
+      switches languages.
+
+      ---------------------------------------------------------------------
+      Why <title>MASES አስተዳደር</title>
+      ---------------------------------------------------------------------
+      Pre-JS default only. App.vue mounts and the active route wrapper's
+      onMounted hook overwrites document.title on every route change
+      (e.g. "ዳሽቦርድ — MASES አስተዳደር"). The initial value exists so the
+      browser tab shows something meaningful during the ~100ms before
+      Vue mounts, and so a user who opens the page in a new tab and
+      navigates away before the JS loads still has a sensible history
+      entry.
+
+      ---------------------------------------------------------------------
+      Why href="/favicon.png" uses an absolute path
+      ---------------------------------------------------------------------
+      Unchanged from the workspace file. Vite copies the project's
+      `public/` directory to the output root without a prefix.
+      `public/favicon.png` becomes `dist-admin/favicon.png`. An
+      absolute path resolves correctly in both the dev server and the
+      production build.
+
+      The admin build does not carry a distinct favicon. If the brand
+      owner supplies one, it is added to `public/` and the two href
+      values below are updated in this file only. The workspace and
+      portal entries are not affected.
+
+      ---------------------------------------------------------------------
+      Why src="./main.ts" uses a relative path
+      ---------------------------------------------------------------------
+      Unchanged from the workspace file. The script is a build-time
+      source file, not a served asset. Vite resolves it against this
+      file's own directory during the build — the path therefore
+      resolves to `admin-entry/main.ts` (delivered at G2.5) — and
+      emits a hashed bundle into `dist-admin/assets/`. A relative path
+      is what Vite expects for an entry script; an absolute path would
+      be treated as a public asset and copied verbatim, which would
+      break the build pipeline.
+
+      ---------------------------------------------------------------------
+      Performance hints — preconnect and dns-prefetch
+      ---------------------------------------------------------------------
+      Unchanged from the workspace file. The API origin is a static
+      literal, kept in sync with VITE_API_BASE_URL manually. The admin
+      build talks to the same API origin as the workspace and the
+      portal, so the literal is identical.
+
+      ---------------------------------------------------------------------
+      Open Graph and Twitter Card
+      ---------------------------------------------------------------------
+      The og:image and twitter:image tags point at /logo.png, matching
+      the workspace file. A dedicated admin social image is out of
+      scope for this delivery; if one is supplied later, it is added
+      to `public/` and the two image meta tags in this file are
+      updated in place. The og:type, og:locale, og:locale:alternate,
+      and twitter:card values are unchanged from the workspace file.
+
+      ---------------------------------------------------------------------
+      The preloader — visual, structural, and CSP notes
+      ---------------------------------------------------------------------
+      Unchanged from the workspace file. The inline <style> block
+      carries the same four Tier 1 colour literals, the same spin
+      animation, and the same prefers-reduced-motion override. The
+      label is Amharic-first and matches the workspace's
+      ("በመጫን ላይ...", "loading..."). No admin-specific preloader is
+      needed.
+
+      ---------------------------------------------------------------------
+      Security posture
+      ---------------------------------------------------------------------
+      Unchanged from the workspace file. No inline <script> beyond the
+      module entry; one inline <style> block for the preloader; no
+      inline style attributes; no CDN links; no meta http-equiv CSP
+      (CSP is delivered as an HTTP header by Plesk); the noscript
+      fallback contains no executable content. The admin subdomain's
+      CSP header is a deployment prerequisite (see G1 §13.1) and is
+      not delivered by this file.
+
+      ---------------------------------------------------------------------
+      Deployment
+      ---------------------------------------------------------------------
+      `npm run build:admin` produces dist-admin/index.html.
+      dist-admin/ is copied to admin.maalearna.com.et/httpdocs/.
+
+      ---------------------------------------------------------------------
+      Additional consistency deltas — noted but NOT applied in 1.0.0
+      ---------------------------------------------------------------------
+      Five meta tags remain at their workspace values. Each identifies
+      the product as "MASES" rather than "MASES አስተዳደር". A reviewer
+      who determines they should be aligned in a follow-up revision
+      may approve a change to:
+
+        · <meta name="description">
+        · <meta name="apple-mobile-web-app-title">
+        · <meta property="og:site_name">
+        · <meta name="twitter:title">
+        · <meta name="twitter:description">
+
+      The rationale for deferring them is recorded in this delivery's
+      change-verification note. The rationale for the four that ARE
+      changed is in the G1 §3.4 table. No dependency exists between
+      the two sets — either can be revised without the other.
+
+      =====================================================================
+    -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--
+      Title. Overwritten by the router on mount; see the file header
+      comment §"Why <title>MASES አስተዳደር</title>".
+    -->
+    <title>MASES አስተዳደር</title>
+
+    <!--
+      Description. Consumed by search engines and by social-platform
+      link unfurls when og:description is absent. Kept short and
+      neutral — this is not a marketing tagline.
+
+      The admin build's description is deliberately unchanged from the
+      workspace file's in this initial delivery. See the file header
+      comment §"Additional consistency deltas".
+    -->
+    <meta
+      name="description"
+      content="MASES — the Maale Arna shared-equity management platform for Ethiopian enterprises."
+    />
+
+    <!--
+      Robots. The admin application must not be indexed: an
+      administration console has no business appearing in search
+      results. Same value as the workspace file.
+    -->
+    <meta name="robots" content="noindex, nofollow" />
+
+    <!--
+      Theme color. Two entries, selected by the browser based on the
+      user's preference. Same values as the workspace file.
+    -->
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content="#ffffff"
+    />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content="#0b0b0d"
+    />
+
+    <!--
+      Color scheme. Same value as the workspace file.
+    -->
+    <meta name="color-scheme" content="light dark" />
+
+    <!--
+      Application name. Used by Android when the site is added to the
+      home screen. For the admin build, this is "MASES አስተዳደር" so
+      that an installed admin tile is distinguishable from an
+      installed workspace tile.
+    -->
+    <meta name="application-name" content="MASES አስተዳደር" />
+
+    <!--
+      iOS home-screen title. Unchanged from the workspace file in this
+      initial delivery. See the file header comment §"Additional
+      consistency deltas".
+    -->
+    <meta name="apple-mobile-web-app-title" content="MASES" />
+
+    <!--
+      iOS status bar style. Same value as the workspace file.
+    -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+    <!--
+      Format detection. Same value as the workspace file.
+    -->
+    <meta name="format-detection" content="telephone=no" />
+
+    <!--
+      Open Graph. Read by Facebook, LinkedIn, Slack, WhatsApp,
+      Telegram, and most other platforms when a URL is shared.
+
+      og:title is changed to "MASES አስተዳደር" and og:description to the
+      admin-specific description. og:site_name is unchanged in this
+      initial delivery; see the file header comment §"Additional
+      consistency deltas".
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MASES" />
+    <meta property="og:title" content="MASES አስተዳደር" />
+    <meta
+      property="og:description"
+      content="The MASES administration console."
+    />
+    <meta property="og:image" content="/logo.png" />
+    <meta property="og:locale" content="am_ET" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <!--
+      Twitter Card. Unchanged from the workspace file in this initial
+      delivery. See the file header comment §"Additional consistency
+      deltas".
+    -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="MASES" />
+    <meta
+      name="twitter:description"
+      content="The Maale Arna shared-equity management platform."
+    />
+    <meta name="twitter:image" content="/logo.png" />
+
+    <!--
+      Favicon. Same source as the workspace file. See the file header
+      comment §"Why href='/favicon.png' uses an absolute path".
+    -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
+
+    <!--
+      iOS home-screen icon. Same source as the workspace file.
+    -->
+    <link rel="apple-touch-icon" href="/favicon.png" />
+
+    <!--
+      API origin performance hints. The API origin is identical to the
+      workspace file's. See the file header comment §"Performance
+      hints".
+    -->
+    <link rel="dns-prefetch" href="https://api.maalearna.com.et" />
+    <link rel="preconnect" href="https://api.maalearna.com.et" crossorigin />
+
+    <!--
+      Logo preload. The logo is rendered by AuthLayout on the shared
+      login page and is a likely LCP candidate. Same source as the
+      workspace file.
+    -->
+    <link
+      rel="preload"
+      as="image"
+      href="/logo.png"
+      fetchpriority="high"
+    />
+
+    <!--
+      Preloader styles. Same four colour literals, same spin animation,
+      same reduced-motion override as the workspace file. See the file
+      header comment §"The preloader".
+    -->
+    <style>
+      .mases-preloader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        min-height: 100vh;
+        padding: 24px;
+        font-family: "Noto Sans Ethiopic", "Inter", system-ui, sans-serif;
+        font-size: 15px;
+        line-height: 22px;
+        color: #615847;
+        background-color: #FFFDF7;
+      }
+
+      .mases-preloader__spinner {
+        display: block;
+        width: 32px;
+        height: 32px;
+        border: 3px solid #DDD5C0;
+        border-top-color: #9B1B30;
+        border-radius: 50%;
+        animation: mases-preloader-spin 0.8s linear infinite;
+      }
+
+      @keyframes mases-preloader-spin {
+        to { transform: rotate(360deg); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .mases-preloader__spinner {
+          animation: none;
+          border-top-color: #DDD5C0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+      No-JS fallback. Same content as the workspace file.
+    -->
+    <noscript>
+      <p>
+        JavaScript is required to use MASES. Please enable JavaScript in
+        your browser settings and reload this page.
+      </p>
+    </noscript>
+
+    <!--
+      Mount point. Same preloader markup as the workspace file. The
+      Amharic label matches the workspace file's ("loading...").
+    -->
+    <div id="app">
+      <div class="mases-preloader" role="status" aria-live="polite">
+        <span class="mases-preloader__spinner" aria-hidden="true"></span>
+        <span class="mases-preloader__label">በመጫን ላይ...</span>
+      </div>
+    </div>
+
+    <!--
+      The application entry script. Vite resolves this path relative
+      to the current file — ./main.ts resolves to admin-entry/main.ts
+      — and emits a hashed bundle into dist-admin/assets/. See the
+      file header comment §"Why src='./main.ts' uses a relative path".
+    -->
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

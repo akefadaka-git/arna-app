@@ -1,0 +1,288 @@
+// =============================================================================
+// MASES UI — Root TypeScript configuration
+// =============================================================================
+//
+// File:    mase_app/tsconfig.json
+// Phase:   1 (Frontend foundation) — Unit 1.2
+// Version: 1.0.1
+// Status:  PROVISIONAL — the pinned TypeScript major is confirmed by
+//          Phase 0 Unit 0.1 Part E. The structure below is final.
+//
+// -----------------------------------------------------------------------------
+// Revision history
+// -----------------------------------------------------------------------------
+// 1.0.0  — initial delivery.
+// 1.0.1  — the `references` block was removed. TypeScript 5.7 (the
+//          pinned major) rejects a composite project with `noEmit:
+//          true` when that project is the target of a reference:
+//          error TS6310. The reference was IDE-tooling-only and was
+//          never followed by `vue-tsc --noEmit` — see the header
+//          comment below. Removing it has no effect on the build or
+//          on the files type-checked. See `tsconfig.node.json`'s
+//          header comment, §"Why noEmit + composite together", for
+//          the anticipated fix that this revision applies.
+//
+// -----------------------------------------------------------------------------
+// What this file governs
+// -----------------------------------------------------------------------------
+// This is the APPLICATION project. It covers:
+//
+//     src/**               — every .ts, .d.ts, and .vue file
+//     workspace-entry/**   — the workspace entry point .ts
+//     portal-entry/**      — the portal entry point .ts
+//     vite-env.d.ts        — the ambient types file (Unit 1.4)
+//
+// It does NOT cover:
+//
+//     vite.config.ts       — covered by tsconfig.node.json (Unit 1.3)
+//
+// -----------------------------------------------------------------------------
+// Project references — REMOVED in v1.0.1
+// -----------------------------------------------------------------------------
+// The v1.0.0 file carried a `references` block:
+//
+//     "references": [{ "path": "./tsconfig.node.json" }]
+//
+// Its only purpose was to associate vite.config.ts with
+// tsconfig.node.json for the VS Code language server. That association
+// is not required for the build (Vite transforms the config file
+// itself) and was never followed by `vue-tsc --noEmit` at the root.
+//
+// TypeScript 5.7 rejects the referenced project's combination of
+// `composite: true` and `noEmit: true` with TS6310. Two fixes were
+// possible: let the referenced project emit declaration files into a
+// temp directory, or stop referencing it. The v1.0.1 revision applies
+// the second fix — the file's own documented "option (a)" — because it
+// is the simpler of the two and preserves every build-time behavior.
+//
+// IDE tooling still works: VS Code selects `tsconfig.node.json` for
+// vite.config.ts by the file's own `include: ["vite.config.ts"]`
+// pattern, which does not depend on the project-reference mechanism.
+//
+// -----------------------------------------------------------------------------
+// Compiler target and library
+// -----------------------------------------------------------------------------
+// `target: ES2022` matches modern evergreen browsers and the Node LTS
+// line used for development. The Vite build itself targets ES2020
+// (vite.config.ts Unit 1.5) — the difference is intentional: TypeScript
+// is free to use newer syntax in its own analysis, and Vite lowers the
+// emitted syntax to the broader ES2020 baseline.
+//
+// `lib` covers both the language primitives (ES2022) and the browser
+// environment (DOM, DOM.Iterable).
+//
+// -----------------------------------------------------------------------------
+// Module system
+// -----------------------------------------------------------------------------
+// The project is ESM. `package.json` declares `"type": "module"`; the
+// emitted syntax and the module resolution behavior both follow.
+//
+// `moduleResolution: "bundler"` is the correct mode for a project built
+// by Vite. It allows extension-less imports of ESM packages, honors
+// package.json `exports` maps, and works with the `.vue` import path
+// that vue-tsc understands.
+//
+// -----------------------------------------------------------------------------
+// Strictness
+// -----------------------------------------------------------------------------
+// `strict: true` enables the baseline family:
+//
+//     noImplicitAny, strictNullChecks, strictFunctionTypes,
+//     strictBindCallApply, strictPropertyInitialization,
+//     noImplicitThis, alwaysStrict, useUnknownInCatchVariables
+//
+// Added explicitly on top of strict:
+//
+//     noImplicitOverride     — subclass overrides must use `override`
+//     noUnusedLocals         — dead imports and locals fail the build
+//     noUnusedParameters     — dead parameters fail the build
+//
+// One known interaction: AppMobileDrawer.vue (Unit 11.17) imports
+// useAuthStore with an ESLint disable comment for "unused for side
+// effect". TypeScript's noUnusedLocals does not honor that comment and
+// will flag the import at Phase 3 verification. A v1.0.1 re-issue of
+// that file removes the import; see the phase plan §5 (bounded re-issue
+// policy). Recorded here so the failure is anticipated.
+//
+// -----------------------------------------------------------------------------
+// Isolated modules and verbatim module syntax
+// -----------------------------------------------------------------------------
+// `isolatedModules` is required by Vite: each file is transpiled in
+// isolation, so TypeScript must not rely on cross-file type inference
+// to resolve imports.
+//
+// `verbatimModuleSyntax` enforces the `import type` / `export type`
+// discipline the delivered source already follows. It prevents a
+// future contribution from accidentally importing a type as a value
+// (which would confuse the bundler's dead-code elimination) or a value
+// as a type (which would confuse the type-checker).
+//
+// -----------------------------------------------------------------------------
+// JSX and class fields
+// -----------------------------------------------------------------------------
+// `jsx: "preserve"` is standard for the Vite + Vue + TS stack. It
+// defers JSX transformation to the Vue plugin.
+//
+// `useDefineForClassFields: true` aligns class-field semantics with
+// ESNext. No delivered source uses class fields, so the flag is inert
+// today but correct for future contributions.
+//
+// -----------------------------------------------------------------------------
+// Interop and resolution
+// -----------------------------------------------------------------------------
+// `esModuleInterop: true` and `allowSyntheticDefaultImports: true`
+// allow default imports from CommonJS packages (axios is the relevant
+// case; it ships ESM wrappers but the type definitions historically
+// assumed CommonJS interop).
+//
+// `resolveJsonModule: true` allows `import data from './x.json'`. No
+// delivered file uses it, but it is standard for Vite projects and
+// costs nothing.
+//
+// `forceConsistentCasingInFileNames: true` prevents cross-platform
+// case-mismatch bugs (macOS and Windows filesystems are case-
+// insensitive; Linux is case-sensitive).
+//
+// `skipLibCheck: true` skips type-checking of `.d.ts` files in
+// node_modules. This is the correct default for an application (as
+// opposed to a library author): the third-party `.d.ts` files are
+// assumed correct, and checking them slows the build without catching
+// errors in your own code.
+//
+// -----------------------------------------------------------------------------
+// Path alias
+// -----------------------------------------------------------------------------
+// `@/*` → `./src/*`. This must match vite.config.ts (Unit 1.5) exactly.
+// The build's `resolve.alias` and TypeScript's `paths` are two halves
+// of the same rule; a divergence between them would make one tool pass
+// and the other fail.
+//
+// `baseUrl: "."` is required for `paths` to resolve relative to the
+// repository root.
+//
+// -----------------------------------------------------------------------------
+// Ambient types
+// -----------------------------------------------------------------------------
+// `types: ["vite/client"]` restricts the ambient type packages
+// TypeScript auto-includes to `vite/client` only. This provides:
+//
+//     import.meta.env.DEV       (used in BaseIcon.vue, Unit 8.19)
+//     import.meta.env.PROD
+//     import.meta.env.MODE
+//     import.meta.glob / .globEager
+//     the .vue module declaration (*.vue imports)
+//
+// It deliberately does NOT include `@types/node`. If a delivered
+// src/ file needed a Node global (process, Buffer, __dirname, fs),
+// that would indicate an architectural error — src/ is browser code.
+// The absence of @types/node in this project makes that class of
+// mistake impossible to introduce without editing this file.
+//
+// =============================================================================
+
+{
+  "compilerOptions": {
+    // ---------------------------------------------------------------------
+    // Target and library
+    // ---------------------------------------------------------------------
+    "target": "ES2022",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+
+    // ---------------------------------------------------------------------
+    // Module system
+    // ---------------------------------------------------------------------
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+
+    // ---------------------------------------------------------------------
+    // Strictness
+    // ---------------------------------------------------------------------
+    "strict": true,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    // ---------------------------------------------------------------------
+    // JSX and class-field semantics
+    // ---------------------------------------------------------------------
+    "jsx": "preserve",
+    "useDefineForClassFields": true,
+
+    // ---------------------------------------------------------------------
+    // Interop and resolution
+    // ---------------------------------------------------------------------
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+
+    // ---------------------------------------------------------------------
+    // Emit — the build is handled by Vite; TypeScript does not emit
+    // ---------------------------------------------------------------------
+    "noEmit": true,
+
+    // ---------------------------------------------------------------------
+    // Path alias — must match vite.config.ts's `resolve.alias` exactly
+    // ---------------------------------------------------------------------
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
+    // ---------------------------------------------------------------------
+    // Ambient type packages
+    // ---------------------------------------------------------------------
+    "types": ["vite/client"]
+  },
+
+  // ---------------------------------------------------------------------
+  // Project contents
+  // ---------------------------------------------------------------------
+  // Every source tree that belongs to the frontend application. The
+  // entry HTML files (workspace-entry/index.html, portal-entry/index.html)
+  // are NOT included — they are not TypeScript. Vite references them
+  // via vite.config.ts's rollupOptions.input.
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.vue",
+    "workspace-entry/**/*.ts",
+    "portal-entry/**/*.ts",
+    "vite-env.d.ts"
+  ],
+
+  // ---------------------------------------------------------------------
+  // Exclusions
+  // ---------------------------------------------------------------------
+  // node_modules and the two build output directories. The `exclude`
+  // here is conventional; TypeScript's default behavior already
+  // ignores node_modules, and the build directories contain no
+  // TypeScript source.
+  "exclude": [
+    "node_modules",
+    "dist",
+    "dist-portal"
+  ]
+
+  // ---------------------------------------------------------------------
+  // Project references — REMOVED in v1.0.1
+  // ---------------------------------------------------------------------
+  // The v1.0.0 file ended with:
+  //
+  //     "references": [
+  //       { "path": "./tsconfig.node.json" }
+  //     ]
+  //
+  // That block is removed. TypeScript 5.7 rejects a referenced project
+  // that combines `composite: true` with `noEmit: true` — error
+  // TS6310 — and the reference served only IDE tooling, which no
+  // longer needs it. See the header comment §"Project references —
+  // REMOVED in v1.0.1".
+}

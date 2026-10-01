@@ -1,0 +1,175 @@
+// =============================================================================
+// MASES UI — Node-side TypeScript configuration
+// =============================================================================
+//
+// File:    mase_app/tsconfig.node.json
+// Phase:   1 (Frontend foundation) — Unit 1.3
+// Version: 1.0.1
+// Status:  PROVISIONAL — the pinned TypeScript and @types/node majors
+//          are confirmed by Phase 0 Unit 0.1 Part E.
+//
+// -----------------------------------------------------------------------------
+// Revision history
+// -----------------------------------------------------------------------------
+// 1.0.0  — initial delivery. Declared `composite: true` to satisfy the
+//          `references` block in tsconfig.json (Unit 1.2 v1.0.0).
+// 1.0.1  — `composite: true` removed. The `references` block that
+//          required it was removed from tsconfig.json in the same
+//          revision, because TypeScript 5.7 rejects `composite: true`
+//          + `noEmit: true` on a referenced project (TS6310). With the
+//          reference gone, `composite` has no purpose; removing it
+//          restores `noEmit: true` to a standalone project, which is
+//          universally valid. See the header comment §"Why no longer
+//          composite".
+//
+// -----------------------------------------------------------------------------
+// What this project covers
+// -----------------------------------------------------------------------------
+// Build-time Node code. Today: exactly one file.
+//
+//     vite.config.ts
+//
+// Future build-time scripts (e.g. a scripts/*.ts helper invoked by an
+// npm script) belong here too. They are added to `include` below when
+// they are created; the compilerOptions do not change.
+//
+// -----------------------------------------------------------------------------
+// Why a separate project (the split rationale)
+// -----------------------------------------------------------------------------
+// tsconfig.json (Unit 1.2) governs browser code (src/, the two entry
+// point .ts files). It declares:
+//
+//     lib:    ES2022, DOM, DOM.Iterable
+//     types:  vite/client
+//
+// This project governs Node code. It declares:
+//
+//     types:  node
+//
+// Splitting them into two projects prevents two classes of defect:
+//
+//   1. Browser code accidentally relying on Node globals
+//      (process.env.XXX in a component, Buffer in a service, etc.).
+//      If tsconfig.json did not restrict `types`, these would compile
+//      and fail at runtime in a way that is hard to trace.
+//
+//   2. Build-time code accidentally relying on browser globals
+//      (document, window, localStorage) in vite.config.ts. This
+//      project omits the DOM lib, so those references fail at
+//      type-check time rather than producing a confusing runtime
+//      error during the build.
+//
+// The split is the standard Vite template convention and mirrors the
+// reviewer's Phase 1 Unit 1.3 specification.
+//
+// -----------------------------------------------------------------------------
+// Why no longer composite
+// -----------------------------------------------------------------------------
+// The v1.0.0 file was composite because tsconfig.json (Unit 1.2
+// v1.0.0) referenced it in a `references` block. TypeScript requires
+// that a project participating in a reference declare `composite:
+// true`.
+//
+// TypeScript 5.7 rejects the pairing `composite: true` + `noEmit:
+// true` on a referenced project with:
+//
+//     error TS6310: Referenced project
+//     '.../tsconfig.node.json' may not disable emit.
+//
+// Two resolutions existed:
+//
+//     (a) remove the reference from tsconfig.json and remove
+//         `composite` here; or
+//     (b) allow emit of declaration files into a temp directory
+//         (`emitDeclarationOnly: true` + `outDir`).
+//
+// The v1.0.1 revision applies (a) — the file's own documented
+// "simplest" option. Removing the reference also removes the reason
+// `composite` was needed, so `composite` is removed in this file.
+// `noEmit: true` on a standalone project is universally valid.
+//
+// IDE tooling still works: VS Code selects this tsconfig for
+// vite.config.ts by this file's own `include: ["vite.config.ts"]`
+// pattern, which does not depend on the project-reference mechanism.
+//
+// -----------------------------------------------------------------------------
+// What this project does NOT declare
+// -----------------------------------------------------------------------------
+// · No `strict: true`.
+//   The delivered vite.config.ts (Unit 1.5) is written without
+//   implicit-any issues; it does not reference untyped values. Adding
+//   `strict` here would surface diagnostics that are not architectural
+//   defects. A future CR can add strict diagnostics to the build
+//   config if the reviewer wants CI to enforce them — this file
+//   deliberately leaves that as a per-CR decision.
+//
+// · No `paths` alias.
+//   vite.config.ts uses relative paths and the `node:url` module. It
+//   does not import from `@/`; that alias is for browser code.
+//
+// · No `lib`.
+//   The default library for target ES2022 is sufficient and correct.
+//   Declaring `lib` explicitly would either duplicate the default
+//   (harmless) or accidentally widen it (a defect). Omitting it is
+//   the cleanest expression of "no browser globals".
+//
+// · No `composite`.
+//   See §"Why no longer composite" above.
+//
+// =============================================================================
+
+{
+  "compilerOptions": {
+    // ---------------------------------------------------------------------
+    // Target and module system
+    // ---------------------------------------------------------------------
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+
+    // ---------------------------------------------------------------------
+    // Ambient type packages — Node globals only
+    // ---------------------------------------------------------------------
+    // Provides `process`, `Buffer`, `NodeJS.ProcessEnv`, and the module
+    // resolution behavior for `node:*` imports. Required by
+    // vite.config.ts's `import { fileURLToPath, URL } from 'node:url'`.
+    //
+    // The DOM library is deliberately not declared (neither via `lib`
+    // nor via an ambient types entry). If vite.config.ts tried to use
+    // `document` or `window`, the compiler would reject it.
+    "types": ["node"],
+
+    // ---------------------------------------------------------------------
+    // Interop and resolution
+    // ---------------------------------------------------------------------
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+
+    // ---------------------------------------------------------------------
+    // Emit — none
+    // ---------------------------------------------------------------------
+    // Standalone project, no reference consumer. `noEmit: true` is
+    // valid on its own; see the header comment §"Why no longer
+    // composite".
+    "noEmit": true,
+
+    // ---------------------------------------------------------------------
+    // Isolated modules
+    // ---------------------------------------------------------------------
+    // Not strictly required for a single-file build script, but kept
+    // consistent with tsconfig.json (Unit 1.2) so the two projects
+    // express the same module-system contract.
+    "isolatedModules": true
+  },
+
+  // ---------------------------------------------------------------------
+  // Project contents
+  // ---------------------------------------------------------------------
+  // Exactly the build-time configuration today. Future build scripts
+  // (scripts/*.ts) are added to this list when they are created.
+  "include": [
+    "vite.config.ts"
+  ]
+}

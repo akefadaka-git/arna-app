@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="am" dir="ltr">
+  <head>
+    <!--
+      =====================================================================
+      MASES Phase 2 UI — Portal entry HTML
+      =====================================================================
+
+      File:    mase_app/portal-entry/index.html
+      Phase:   1 (Frontend foundation) — Unit 1.7
+      Version: 1.3.0
+      Target:  portal.maalearna.com.et
+
+      ---------------------------------------------------------------------
+      Revision history
+      ---------------------------------------------------------------------
+      1.0.0  — initial delivery.
+
+      1.0.1  — favicon reference corrected from /favicon.svg (SVG) to
+               /favicon.png (PNG), matching Unit 1.6 v1.0.1.
+
+      1.1.0  — first-paint, branding, and platform metadata. Mirrors
+               the enhancements made to workspace-entry/index.html in
+               its 1.1.0 revision (Unit 1.6), with three deliberate
+               divergences for the portal's shareholder-facing role:
+
+                 · Brand voice. The portal is the shareholder-visible
+                   surface. Title, description, and social-card copy
+                   are phrased for that audience, not for internal
+                   operators.
+
+                 · Robots posture. noindex, nofollow remains, but the
+                   reason differs from the workspace's. The workspace
+                   excludes search engines because it is an internal
+                   tool. The portal excludes search engines because a
+                   shareholder searching "Maale Arna portal" should
+                   reach the real domain directly — not a search
+                   results page on which a look-alike domain could
+                   appear alongside it. Keeping the portal out of
+                   search results reduces the effectiveness of that
+                   phishing pattern.
+
+                 · iOS home-screen title. Shortened to "Maale Arna"
+                   rather than "Maale Arna Portal". iOS truncates
+                   home-screen labels at approximately twelve
+                   characters; the full product name would be clipped
+                   mid-word, which reads as a defect.
+
+               Every other decision in this file is documented in the
+               workspace entry's header and is not repeated here. If
+               the two files ever diverge in a way this header does
+               not explain, the workspace entry is the reference.
+
+      1.2.0  — static pre-Vue preloader. Same change and reasoning as
+               workspace-entry/index.html 1.2.0. The window between
+               the HTML painting and Vue mounting is dominated by the
+               JS bundle fetch and by the awaited /api/user call
+               inside bootstrapApp (see portal-entry/main.ts 1.0.2).
+               On slow connections that window was visible as a blank
+               page; the preloader below fills it with the same visual
+               language the app's own LoadingState composite uses.
+
+               Vue 3 replaces the contents of the mount target when
+               app.mount('#app') runs; no cleanup code is required,
+               and the inline <style> block becomes inert once the
+               .mases-preloader element is removed from the DOM.
+
+               No other change. Every meta tag, the shareholder-facing
+               copy, the branding divergences documented in 1.1.0,
+               the noscript fallback, and the Vite entry <script> are
+               byte-for-byte identical to 1.1.0.
+
+      1.3.0  — SVG favicon and Web App Manifest (L-2.5):
+               · Added a <link rel="icon" type="image/svg+xml" />
+                 reference to /favicon.svg, placed BEFORE the existing
+                 PNG favicon reference. Browsers that support SVG
+                 favicons (Chrome 80+, Firefox 90+, Safari 14+,
+                 Edge, every modern mobile browser) use the SVG;
+                 those that do not fall through to the next icon
+                 reference, which is the existing PNG.
+               · Added a <link rel="manifest" /> reference to
+                 /manifest.webmanifest. The manifest is shared with
+                 the workspace build — Vite copies public/ into both
+                 output directories, so dist/manifest.webmanifest and
+                 dist-portal/manifest.webmanifest are byte-identical.
+               · No existing meta tag, link, script, noscript
+                 fallback, or inline preloader style changed. The
+                 file is byte-for-byte identical to 1.2.0 except for
+                 the two new <link> elements and this revision entry.
+
+               The change is the portal counterpart of L-2.4
+               (workspace-entry/index.html 1.3.0). The two entry
+               files continue to diverge only in the branding copy
+               documented in 1.1.0 — every structural and metadata
+               decision after 1.1.0 is applied identically to both.
+
+      ---------------------------------------------------------------------
+      Purpose
+      ---------------------------------------------------------------------
+      The single HTML input for the portal build. Vite's
+      `rollupOptions.input` (Unit 1.5) points at this file when
+      `--mode portal` is passed.
+
+      Structurally identical to workspace-entry/index.html (Unit 1.6)
+      except for the branding copy noted above. Shared decisions —
+      why lang="am", why the paths are absolute or relative, why the
+      performance hints are what they are, why there is a noscript
+      fallback, why there is a static preloader, and (from 1.3.0)
+      why the SVG favicon precedes the PNG and why the manifest is
+      shared by both builds — are documented in the workspace entry
+      and are not repeated here.
+
+      ---------------------------------------------------------------------
+      Why <title>Maale Arna Portal</title>
+      ---------------------------------------------------------------------
+      The portal is presented to shareholders as the public-facing
+      brand surface. The workspace uses the shorter project name
+      (MASES); the portal uses the longer formal name. Pre-JS default
+      only — App.vue (Unit 12.13) overwrites document.title on every
+      route change, and PageTitle (Unit 11.9) is the same component
+      in both entries.
+
+      ---------------------------------------------------------------------
+      VITE_APP_NAME — per-entry configuration
+      ---------------------------------------------------------------------
+      The two HTML entries share the same public/ directory and the
+      same Vue source tree, but they are separate Vite builds. The
+      recommended way to give each its own application name is two
+      mode-specific environment files at the project root:
+
+          mase_app/.env.workspace   VITE_APP_NAME="MASES"
+          mase_app/.env.portal      VITE_APP_NAME="Maale Arna Portal"
+
+      Vite loads .env.<mode> automatically when --mode <mode> is
+      passed on the command line. The project's package.json already
+      uses --mode workspace and --mode portal for the two build
+      scripts (see its "scripts" block), so the files are picked up
+      without further configuration.
+
+      AuthLayout.vue (Unit 12.1 v1.1.0) reads VITE_APP_NAME to
+      supply the default alt text for the logo. Setting it per-mode
+      means the workspace's logo alt reads "MASES" and the portal's
+      reads "Maale Arna Portal" without any per-file branching.
+
+      If those .env.<mode> files do not yet exist, they need to be
+      created. They are not committed with secrets — VITE_APP_NAME is
+      a public string, not a credential.
+
+      ---------------------------------------------------------------------
+      The preloader — visual, structural, and CSP notes
+      ---------------------------------------------------------------------
+      The block inside <div id="app"> is visible from the moment the
+      browser paints the HTML until Vue mounts and replaces it. Its
+      purpose is to cover the mounting window on slow connections —
+      see the 1.2.0 revision note above.
+
+      The style rules live in an inline <style> block. They are
+      written against the same values the app's LoadingState composite
+      uses, but inlined as literals — the CSS custom properties from
+      tokens.css are not available at the moment the preloader is
+      visible, because the bundled stylesheet has not yet loaded.
+      The literals used here are drawn from the design system's Tier 1
+      palette:
+
+        text         #615847   (--mases-color-neutral-600)
+        background   #FFFDF7   (--mases-color-neutral-50)
+        track        #DDD5C0   (--mases-color-neutral-300)
+        spinner head #9B1B30   (--mases-color-crimson-600)
+
+      If any of these Tier 1 values change in tokens.css, update the
+      four literals here (and in the workspace entry's matching
+      block) to match.
+
+      The label is Amharic-first, matching the policy. It is exposed
+      to assistive technology via role="status" and aria-live="polite";
+      the spinner itself is decorative and marked aria-hidden.
+
+      Under prefers-reduced-motion: reduce, the spin animation is
+      disabled and the spinner is rendered as a plain static circle.
+
+      ---------------------------------------------------------------------
+      Security posture (reviewer decision Q10)
+      ---------------------------------------------------------------------
+      Same as Unit 1.6's revised posture:
+
+        · No inline <script> beyond the module entry.
+        · One inline <style> block, introduced in 1.2.0 for the
+          preloader. The CSP delivered as an HTTP header by Plesk
+          (Architecture Freeze §21.8) already permits inline styles
+          via 'unsafe-inline' in style-src. If a future CSP tightens
+          style-src, either (a) move the four literals to a small
+          public/preloader.css and reference it via <link>, or
+          (b) add the sha256 hash of this style block to the CSP.
+        · No inline style attributes.
+        · No CDN links.
+        · No <meta http-equiv> CSP — CSP is delivered as an HTTP
+          header by Plesk.
+        · The noscript fallback contains no executable content.
+
+      ---------------------------------------------------------------------
+      Deployment
+      ---------------------------------------------------------------------
+      `npm run build:portal` produces dist-portal/index.html.
+      dist-portal/ is copied to portal.maalearna.com.et/httpdocs/.
+      =====================================================================
+    -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--
+      Title. Overwritten by the router on mount. See the file header
+      comment §"Why <title>Maale Arna Portal</title>".
+    -->
+    <title>Maale Arna Portal</title>
+
+    <!--
+      Description. Consumed by search engines and by social-platform
+      link unfurls when og:description is absent. Addressed to
+      shareholders as the primary reader of this surface.
+    -->
+    <meta
+      name="description"
+      content="Maale Arna Shareholder Portal — view your share holdings, dividend history, and account information."
+    />
+
+    <!--
+      Robots. See the file header comment §"Robots posture" (1.1.0
+      revision entry) for why the portal is excluded from search
+      results.
+    -->
+    <meta name="robots" content="noindex, nofollow" />
+
+    <!--
+      Theme color. Two entries, selected by the browser based on the
+      user's preference. Same values as the workspace entry — both
+      surfaces render inside the same design system, so the browser
+      chrome color should match across a user's session.
+
+      If the design system's surface tokens change, update both files
+      together.
+    -->
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content="#ffffff"
+    />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content="#0b0b0d"
+    />
+
+    <!--
+      Color scheme. Tells the browser that both schemes are supported,
+      so native form controls render in the user's preferred scheme
+      before CSS parses.
+    -->
+    <meta name="color-scheme" content="light dark" />
+
+    <!--
+      Application name. Used by Android when the site is added to the
+      home screen.
+    -->
+    <meta name="application-name" content="Maale Arna Portal" />
+
+    <!--
+      iOS home-screen title. Deliberately shorter than the
+      application-name above — see the file header comment §"iOS
+      home-screen title".
+    -->
+    <meta name="apple-mobile-web-app-title" content="Maale Arna" />
+
+    <!--
+      iOS status bar style. "default" respects the user's light/dark
+      preference. Do not change without an accompanying safe-area CSS
+      rule on the layout root.
+    -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+    <!--
+      Format detection. Disables iOS Safari's automatic phone-number
+      linking. Relevant to this surface specifically: shareholders may
+      paste contact details into support messages, and an
+      unintentional tap-to-call on rendered text would be a UX defect.
+    -->
+    <meta name="format-detection" content="telephone=no" />
+
+    <!--
+      Open Graph. The portal's social-card copy is written for the
+      shareholder audience rather than for internal operators.
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Maale Arna Portal" />
+    <meta property="og:title" content="Maale Arna Shareholder Portal" />
+    <meta
+      property="og:description"
+      content="View your share holdings, dividend history, and account information."
+    />
+    <meta property="og:image" content="/logo.png" />
+    <meta property="og:locale" content="am_ET" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <!--
+      Twitter Card. "summary" is the correct card type for a square or
+      near-square logo. If a 1200×630 social image is supplied later,
+      change both card files in tandem (this file and the workspace
+      entry) to "summary_large_image".
+    -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Maale Arna Shareholder Portal" />
+    <meta
+      name="twitter:description"
+      content="View your share holdings, dividend history, and account information."
+    />
+    <meta name="twitter:image" content="/logo.png" />
+
+    <!--
+      SVG favicon (L-2.5, 1.3.0). Declared FIRST so browsers that
+      support SVG favicons select it. Identical to the workspace
+      entry's reference — the two builds share the same public/
+      directory, so both serve the same /favicon.svg.
+
+      See workspace-entry/index.html 1.3.0 for the fuller comment on
+      why the SVG precedes the PNG; the reasoning is not repeated
+      here per this file's §"Purpose" convention.
+    -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!--
+      PNG favicon. The compatibility floor. Retained unchanged from
+      version 1.0.1.
+    -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
+
+    <!--
+      iOS home-screen icon. Same source image as the PNG favicon for
+      now. If a dedicated 180×180 apple-touch-icon.png is supplied
+      later, point this at it.
+    -->
+    <link rel="apple-touch-icon" href="/favicon.png" />
+
+    <!--
+      Web App Manifest (L-2.5, 1.3.0). Shared with the workspace
+      build — Vite copies public/ into both output directories.
+      See the manifest file for the full icon-list rationale and the
+      forward declarations of the PENDING /icon-192.png and
+      /icon-512.png assets.
+    -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!--
+      API origin performance hints. The portal talks to the same API
+      as the workspace — api.maalearna.com.et — so the hints are
+      identical. See the workspace entry's header §"Performance
+      hints".
+    -->
+    <link rel="dns-prefetch" href="https://api.maalearna.com.et" />
+    <link rel="preconnect" href="https://api.maalearna.com.et" crossorigin />
+
+    <!--
+      Logo preload. Same reasoning as the workspace entry: the logo
+      renders above the card on every auth page served by this entry
+      and is a likely LCP candidate. fetchpriority="high" is a hint
+      to Chromium-based browsers; other browsers ignore it.
+    -->
+    <link
+      rel="preload"
+      as="image"
+      href="/logo.png"
+      fetchpriority="high"
+    />
+
+    <!--
+      Preloader styles. See the file header comment §"The preloader"
+      and the 1.2.0 revision note. Once Vue mounts and replaces the
+      #app contents, the .mases-preloader element is removed and
+      these rules become inert.
+
+      The four colour literals below are drawn from the design
+      system's Tier 1 palette; see the file header comment for the
+      mapping. Keep them in sync with the workspace entry's matching
+      block if the Tier 1 values change.
+    -->
+    <style>
+      .mases-preloader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        min-height: 100vh;
+        padding: 24px;
+        font-family: "Noto Sans Ethiopic", "Inter", system-ui, sans-serif;
+        font-size: 15px;
+        line-height: 22px;
+        color: #615847;
+        background-color: #FFFDF7;
+      }
+
+      .mases-preloader__spinner {
+        display: block;
+        width: 32px;
+        height: 32px;
+        border: 3px solid #DDD5C0;
+        border-top-color: #9B1B30;
+        border-radius: 50%;
+        animation: mases-preloader-spin 0.8s linear infinite;
+      }
+
+      @keyframes mases-preloader-spin {
+        to { transform: rotate(360deg); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .mases-preloader__spinner {
+          animation: none;
+          border-top-color: #DDD5C0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+      No-JS fallback. Browsers display this content only when
+      JavaScript is disabled or blocked. Deliberately plain — no
+      inline styles, no images, no external resources.
+    -->
+    <noscript>
+      <p>
+        JavaScript is required to use the Maale Arna Portal. Please
+        enable JavaScript in your browser settings and reload this
+        page.
+      </p>
+    </noscript>
+
+    <!--
+      Mount point. The .mases-preloader block below is visible until
+      Vue replaces the contents of this element. See the file header
+      comment §"The preloader" and the 1.2.0 revision note.
+
+      The markup is Amharic-first (matching the policy) and exposes a
+      live region so screen readers announce the loading state.
+      The spinner itself is decorative; only the label is read aloud.
+    -->
+    <div id="app">
+      <div class="mases-preloader" role="status" aria-live="polite">
+        <span class="mases-preloader__spinner" aria-hidden="true"></span>
+        <span class="mases-preloader__label">በመጫን ላይ...</span>
+      </div>
+    </div>
+
+    <!--
+      The application entry script. Vite resolves this path relative
+      to the current file and emits a hashed bundle into
+      dist-portal/assets/. The relative path is essential — see the
+      workspace entry's header for the reasoning.
+    -->
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

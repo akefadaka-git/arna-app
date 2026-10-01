@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="am" dir="ltr">
+  <head>
+    <!--
+      =====================================================================
+      MASES Phase 2 UI — Workspace entry HTML
+      =====================================================================
+
+      File:    mase_app/workspace-entry/index.html
+      Phase:   1 (Frontend foundation) — Unit 1.6
+      Version: 1.3.0
+      Target:  app.maalearna.com.et
+
+      ---------------------------------------------------------------------
+      Revision history
+      ---------------------------------------------------------------------
+      1.0.0  — initial delivery.
+
+      1.0.1  — favicon reference corrected from /favicon.svg (SVG) to
+               /favicon.png (PNG) to match the actual supplied asset.
+               The reviewer provided a PNG; converting to SVG via
+               tracing would degrade quality. No other change.
+
+      1.1.0  — first-paint, branding, and platform metadata:
+               · Added meta description, theme-color (light and dark),
+                 color-scheme, application-name, apple-mobile-web-app-
+                 title, and format-detection.
+               · Added preconnect and dns-prefetch to the API origin
+                 (api.maalearna.com.et). The app's first API request —
+                 GET /sanctum/csrf-cookie, then POST /api/login —
+                 happens immediately on user interaction. Opening the
+                 TLS connection during the HTML parse removes the
+                 handshake from the critical path of that request.
+               · Added preload for /logo.png. The logo is the largest
+                 contentful paint on the login page; preloading lets
+                 the browser fetch it in parallel with the JS bundle
+                 instead of discovering it after Vue mounts.
+               · Added Open Graph and Twitter Card meta tags. MASES
+                 links are commonly shared over messaging apps in
+                 Ethiopia; without these tags, every share unfurls as
+                 a blank card.
+               · Added robots=noindex. Auth pages must not appear in
+                 search results. A future marketing site overrides
+                 this on its own HTML entry.
+               · Added a noscript fallback so a user without JS sees a
+                 clear message instead of a blank page. Browsers hide
+                 noscript content automatically when JS is enabled, so
+                 this has no effect on the normal case.
+               · The API origin used in preconnect and dns-prefetch is
+                 a static literal. If VITE_API_BASE_URL ever changes,
+                 this must change with it. A future iteration should
+                 inject it from the environment at build time via
+                 vite-plugin-html or an equivalent; until then, the
+                 two values are kept in sync manually and a code
+                 review checklist item records the coupling.
+
+      1.2.0  — static pre-Vue preloader.
+               The window between the HTML painting and Vue mounting
+               is dominated by (a) the JS bundle fetch and (b) the
+               awaited /api/user call inside bootstrapApp (see
+               workspace-entry/main.ts 1.0.2 — the session-restore
+               call must complete before app.use(router) to prevent
+               the guard from racing the store). On slow connections
+               that window was visible as a blank page.
+
+               The preloader below fills that window with the same
+               visual language the app's own LoadingState composite
+               uses: a centered spinner on the page surface, with an
+               Amharic loading label announced to assistive
+               technology via role="status" and aria-live="polite".
+
+               Vue 3 replaces the contents of the mount target when
+               app.mount('#app') runs; no cleanup code is required.
+               The inline <style> block becomes inert once the
+               .mases-preloader element is removed from the DOM.
+
+               No other change. The metadata, performance hints,
+               favicon references, noscript fallback, and the Vite
+               entry <script> are byte-for-byte identical to 1.1.0.
+
+      1.3.0  — SVG favicon and Web App Manifest (L-2.4):
+               · Added a <link rel="icon" type="image/svg+xml" />
+                 reference to /favicon.svg, placed BEFORE the existing
+                 PNG favicon reference. Browsers that support SVG
+                 favicons (Chrome 80+, Firefox 90+, Safari 14+, Edge,
+                 every modern mobile browser) will use the SVG; those
+                 that do not will fall through to the next icon
+                 reference, which is the existing PNG.
+               · Added a <link rel="manifest" /> reference to
+                 /manifest.webmanifest. The manifest declares the
+                 installed app's name, icons, and theme colours;
+                 it is what appears on a home screen and in the OS
+                 install prompt.
+               · No existing meta tag, link, script, noscript
+                 fallback, or inline preloader style changed. The
+                 file is byte-for-byte identical to 1.2.0 except for
+                 the two new <link> elements and this revision entry.
+
+      ---------------------------------------------------------------------
+      Purpose
+      ---------------------------------------------------------------------
+      The single HTML input for the workspace build. Vite's
+      `rollupOptions.input` (Unit 1.5) points at this file when
+      `--mode workspace` is passed.
+
+      This file is intentionally minimal. It provides:
+
+        · the document skeleton (charset, viewport, lang, dir);
+        · platform and social metadata;
+        · performance hints (preconnect, dns-prefetch, preload);
+        · the pre-JS <title> default;
+        · the favicon and manifest references;
+        · a static pre-Vue loading indicator inside #app;
+        · a no-JS fallback;
+        · the module script tag that boots the SPA.
+
+      Every visible pixel except the preloader belongs to the Vue
+      application. The preloader is the one piece of static markup
+      with a visual contract, and it exists solely to cover the
+      mounting window — see the 1.2.0 revision note above.
+
+      ---------------------------------------------------------------------
+      Why lang="am" and dir="ltr"
+      ---------------------------------------------------------------------
+      The Amharic-first policy means the HTML element's `lang`
+      attribute defaults to Amharic, not English. The Ge'ez script
+      (used by Amharic) is written left-to-right — `dir="ltr"` is
+      correct, not a placeholder. The design system's bilingual
+      typography overrides live under the CSS selector
+      `html[lang="am"]` in tokens.css (Unit 8.1). App.vue (Unit 12.13)
+      keeps both attributes in sync at runtime if the user switches
+      languages.
+
+      ---------------------------------------------------------------------
+      Why <title>MASES</title>
+      ---------------------------------------------------------------------
+      Pre-JS default only. App.vue mounts and PageTitle (Unit 11.9)
+      overwrites document.title on every route change. The initial
+      value exists so the browser tab shows something meaningful
+      during the ~100ms before Vue mounts, and so that a user who
+      opens the page in a new tab and navigates away before the JS
+      loads still has a sensible history entry.
+
+      ---------------------------------------------------------------------
+      Why favicon and manifest links use absolute paths
+      ---------------------------------------------------------------------
+      Vite copies the project's `public/` directory to the output
+      root without a prefix. `public/favicon.svg` becomes
+      `dist/favicon.svg`. An absolute path resolves correctly in both
+      the dev server and the production build. The same reasoning
+      applies to /favicon.png, /manifest.webmanifest, /logo.png,
+      /apple-touch-icon.png, and any future assets placed in
+      `public/`.
+
+      ---------------------------------------------------------------------
+      Why src="./main.ts" uses a relative path
+      ---------------------------------------------------------------------
+      The script is a build-time source file, not a served asset.
+      Vite resolves it against this file's own directory during the
+      build and emits a hashed bundle into dist/assets/. A relative
+      path is what Vite expects for an entry script; an absolute path
+      would be treated as a public asset and copied verbatim, which
+      would break the build pipeline.
+
+      ---------------------------------------------------------------------
+      Performance hints — preconnect and dns-prefetch
+      ---------------------------------------------------------------------
+      dns-prefetch and preconnect are progressive hints, not
+      requirements. A browser that does not understand them ignores
+      them silently; a browser that does benefits:
+
+        · dns-prefetch  — resolves the DNS name early. Cheap, no
+                          connection cost. Supported by every browser
+                          since IE 9.
+        · preconnect    — resolves DNS, opens the TCP connection, and
+                          completes the TLS handshake in advance. More
+                          expensive per-hint; the browser will close
+                          unused connections after a timeout. Supported
+                          by Chrome, Firefox, Safari, and Edge.
+
+      Both are included because some browsers honor one and not the
+      other, and the cost of including both is negligible.
+
+      The API origin here is a literal. See the 1.1.0 revision note
+      above about keeping it in sync with VITE_API_BASE_URL.
+
+      ---------------------------------------------------------------------
+      Open Graph and Twitter Card
+      ---------------------------------------------------------------------
+      When a MASES URL is pasted into a messaging app or social
+      platform, the platform fetches the HTML and reads the og:* and
+      twitter:* meta tags to construct a link preview. Without them,
+      the preview is a blank card showing only the URL.
+
+      The og:image points at /logo.png. If a dedicated 1200×630 social
+      image is supplied later, add it as /og-image.png and update the
+      two image meta tags to point at it — the logo aspect ratio is
+      not ideal for large unfurls, though it is acceptable for a
+      first deployment.
+
+      ---------------------------------------------------------------------
+      The preloader — visual, structural, and CSP notes
+      ---------------------------------------------------------------------
+      The block inside <div id="app"> is visible from the moment the
+      browser paints the HTML until Vue mounts and replaces it. Its
+      purpose is to cover the mounting window on slow connections —
+      see the 1.2.0 revision note above.
+
+      The style rules live in an inline <style> block. They are
+      written against the same values the app's LoadingState composite
+      uses, but inlined as literals — the CSS custom properties from
+      tokens.css are not available at the moment the preloader is
+      visible, because the bundled stylesheet has not yet loaded.
+      The literals used here are drawn from the design system's Tier 1
+      palette:
+
+        text         #615847   (--mases-color-neutral-600)
+        background   #FFFDF7   (--mases-color-neutral-50)
+        track        #DDD5C0   (--mases-color-neutral-300)
+        spinner head #9B1B30   (--mases-color-crimson-600)
+
+      If any of these Tier 1 values change in tokens.css, update the
+      four literals here to match. A future iteration could extract
+      them to a small public/preloader.css referenced via <link>, but
+      that adds a second HTTP request to the critical path for the
+      sake of four values — deferred until the values change often
+      enough to warrant it.
+
+      The label is Amharic-first, matching the policy. It is exposed
+      to assistive technology via role="status" and aria-live="polite";
+      the spinner itself is decorative and marked aria-hidden.
+
+      Under prefers-reduced-motion: reduce, the spin animation is
+      disabled and the spinner is rendered as a plain static circle.
+
+      ---------------------------------------------------------------------
+      Security posture (reviewer decision Q10)
+      ---------------------------------------------------------------------
+        · No inline <script> beyond the module entry.
+        · One inline <style> block, introduced in 1.2.0 for the
+          preloader. The CSP delivered as an HTTP header by Plesk
+          (Architecture Freeze §21.8) already permits inline styles
+          via 'unsafe-inline' in style-src; see the .htaccess for the
+          exact directive. If a future CSP tightens style-src,
+          either (a) move the four literals to a small
+          public/preloader.css and reference it via <link>, or
+          (b) add the sha256 hash of this style block to the CSP.
+        · No inline style attributes.
+        · No CDN links.
+        · No <meta http-equiv> CSP — CSP is delivered as an HTTP
+          header by Plesk.
+        · The noscript fallback contains no executable content.
+
+      ---------------------------------------------------------------------
+      Deployment
+      ---------------------------------------------------------------------
+      `npm run build:workspace` produces dist/index.html.
+      dist/ is copied to app.maalearna.com.et/httpdocs/.
+      =====================================================================
+    -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--
+      Title. Overwritten by the router on mount; see the file header
+      comment §"Why <title>MASES</title>".
+    -->
+    <title>MASES</title>
+
+    <!--
+      Description. Consumed by search engines and by social-platform
+      link unfurls when og:description is absent. Kept short and
+      neutral — this is not a marketing tagline.
+    -->
+    <meta
+      name="description"
+      content="MASES — the Maale Arna shared-equity management platform for Ethiopian enterprises."
+    />
+
+    <!--
+      Robots. Auth pages must not be indexed. A future marketing site
+      may override this on its own HTML entry; the workspace app does
+      not want its login form appearing in search results.
+    -->
+    <meta name="robots" content="noindex, nofollow" />
+
+    <!--
+      Theme color. Two entries, selected by the browser based on the
+      user's preference. The light value matches --mases-color-surface-page
+      (white); the dark value is a neutral near-black used as the
+      fallback before tokens.css loads. If the design system's dark
+      surface token changes, update the dark value here to match.
+    -->
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content="#ffffff"
+    />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content="#0b0b0d"
+    />
+
+    <!--
+      Color scheme. Tells the browser that both schemes are supported,
+      so it renders native form controls (checkboxes, scrollbars,
+      autofill backgrounds) in the scheme the user prefers, even
+      before any CSS is parsed.
+    -->
+    <meta name="color-scheme" content="light dark" />
+
+    <!--
+      Application name. Used by Android when the site is added to the
+      home screen. On iOS, the equivalent is
+      apple-mobile-web-app-title below.
+    -->
+    <meta name="application-name" content="MASES" />
+
+    <!--
+      iOS home-screen title. Kept short because iOS truncates long
+      titles to approximately 12 characters on the home screen.
+    -->
+    <meta name="apple-mobile-web-app-title" content="MASES" />
+
+    <!--
+      iOS status bar style. "default" renders the status bar in the
+      system default style, which respects the user's chosen light or
+      dark mode. Do not change to black-translucent or black without
+      an accompanying safe-area-inset CSS rule on the layout root —
+      changing it without that CSS would push content under the
+      status bar on iPhones with a notch.
+    -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+    <!--
+      Format detection. iOS Safari auto-links anything that looks like
+      a phone number in rendered text. Once phone-number login is
+      live, user-entered phone numbers displayed in error messages or
+      confirmations could become unintended tap-to-call links. Setting
+      this to "no" disables the behavior for the whole document.
+    -->
+    <meta name="format-detection" content="telephone=no" />
+
+    <!--
+      Open Graph. Read by Facebook, LinkedIn, Slack, WhatsApp,
+      Telegram, and most other platforms when a MASES URL is shared.
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MASES" />
+    <meta property="og:title" content="MASES" />
+    <meta
+      property="og:description"
+      content="The Maale Arna shared-equity management platform."
+    />
+    <meta property="og:image" content="/logo.png" />
+    <meta property="og:locale" content="am_ET" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <!--
+      Twitter Card. The "summary" card type is correct for a square or
+      near-square image. If a 1200×630 social image is supplied later,
+      change the card type to "summary_large_image" and point
+      twitter:image at that asset.
+    -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="MASES" />
+    <meta
+      name="twitter:description"
+      content="The Maale Arna shared-equity management platform."
+    />
+    <meta name="twitter:image" content="/logo.png" />
+
+    <!--
+      SVG favicon (L-2.4, 1.3.0). Declared FIRST so browsers that
+      support SVG favicons (Chrome 80+, Firefox 90+, Safari 14+,
+      Edge, every modern mobile browser) select it. The mark is
+      a compact derivation of the corporate emblem — see
+      public/favicon.svg's own header comment for the design
+      rationale and its review status.
+
+      A browser that does not support SVG favicons ignores this
+      <link> and falls through to the PNG reference below. Both
+      are declared for exactly that reason.
+    -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!--
+      PNG favicon. The compatibility floor — served to browsers
+      that do not support SVG favicons, and used by any surface
+      that reads the manifest's icon list without SVG support.
+      Absolute path; see the file header comment §"Why favicon
+      and manifest links use absolute paths".
+
+      This file was the sole favicon reference from version 1.0.1
+      through 1.2.0. It is retained unchanged.
+    -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
+
+    <!--
+      iOS home-screen icon. Same source image as the PNG favicon
+      for now. If a dedicated 180×180 apple-touch-icon.png is
+      supplied later, point this at it — the favicon is likely too
+      small and will look soft on a Retina home screen.
+    -->
+    <link rel="apple-touch-icon" href="/favicon.png" />
+
+    <!--
+      Web App Manifest (L-2.4, 1.3.0). Declares the installed app's
+      name, short_name, icons, and theme colours. Read by the OS
+      when the user installs the app to their home screen or
+      application launcher; ignored during normal browsing.
+
+      The manifest is delivered at public/manifest.webmanifest
+      (L-2.3) and is shared by both the workspace and the portal
+      builds — Vite copies public/ into both output directories,
+      so dist/manifest.webmanifest and dist-portal/manifest.webmanifest
+      are byte-identical.
+
+      The manifest declares the SVG favicon and the PNG favicon
+      among its icon candidates, plus forward-declared references
+      to /icon-192.png and /icon-512.png (PENDING brand-owner
+      delivery). A missing icon does not fail the manifest; the OS
+      logs it and moves to the next candidate. See the manifest
+      file for the full rationale on the icon list.
+    -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!--
+      API origin performance hints. See the file header comment
+      §"Performance hints". The API origin is a literal; keep it in
+      sync with VITE_API_BASE_URL if that ever changes.
+    -->
+    <link rel="dns-prefetch" href="https://api.maalearna.com.et" />
+    <link rel="preconnect" href="https://api.maalearna.com.et" crossorigin />
+
+    <!--
+      Logo preload. The logo is rendered by AuthLayout on every auth
+      page and is a likely LCP candidate. Preloading it in parallel
+      with the JS bundle lets the browser fetch it during the same
+      window it would otherwise use only for scripts.
+
+      fetchpriority="high" is a hint to Chromium-based browsers; other
+      browsers ignore it. The value "high" is appropriate because the
+      logo is above the fold on every route this entry serves.
+    -->
+    <link
+      rel="preload"
+      as="image"
+      href="/logo.png"
+      fetchpriority="high"
+    />
+
+    <!--
+      Preloader styles. See the file header comment §"The preloader"
+      and the 1.2.0 revision note. Once Vue mounts and replaces the
+      #app contents, the .mases-preloader element is removed and
+      these rules become inert.
+
+      The four colour literals below are drawn from the design
+      system's Tier 1 palette; see the file header comment for the
+      mapping. Keep them in sync if the Tier 1 values change.
+    -->
+    <style>
+      .mases-preloader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        min-height: 100vh;
+        padding: 24px;
+        font-family: "Noto Sans Ethiopic", "Inter", system-ui, sans-serif;
+        font-size: 15px;
+        line-height: 22px;
+        color: #615847;
+        background-color: #FFFDF7;
+      }
+
+      .mases-preloader__spinner {
+        display: block;
+        width: 32px;
+        height: 32px;
+        border: 3px solid #DDD5C0;
+        border-top-color: #9B1B30;
+        border-radius: 50%;
+        animation: mases-preloader-spin 0.8s linear infinite;
+      }
+
+      @keyframes mases-preloader-spin {
+        to { transform: rotate(360deg); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .mases-preloader__spinner {
+          animation: none;
+          border-top-color: #DDD5C0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+      No-JS fallback. Browsers display this content only when
+      JavaScript is disabled or blocked. When JS is enabled, this
+      block is hidden and has no visual or performance cost.
+
+      Deliberately simple: no inline styles, no images, no external
+      resources. A user who sees this message is in an environment
+      where loading additional assets would not help.
+    -->
+    <noscript>
+      <p>
+        JavaScript is required to use MASES. Please enable JavaScript in
+        your browser settings and reload this page.
+      </p>
+    </noscript>
+
+    <!--
+      Mount point. The .mases-preloader block below is visible until
+      Vue replaces the contents of this element. See the file header
+      comment §"The preloader" and the 1.2.0 revision note.
+
+      The markup is Amharic-first (matching the policy) and exposes a
+      live region so screen readers announce the loading state.
+      The spinner itself is decorative; only the label is read aloud.
+    -->
+    <div id="app">
+      <div class="mases-preloader" role="status" aria-live="polite">
+        <span class="mases-preloader__spinner" aria-hidden="true"></span>
+        <span class="mases-preloader__label">በመጫን ላይ...</span>
+      </div>
+    </div>
+
+    <!--
+      The application entry script. Vite resolves this path relative
+      to the current file and emits a hashed bundle into
+      dist/assets/. See the file header comment §"Why src='./main.ts'
+      uses a relative path".
+    -->
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

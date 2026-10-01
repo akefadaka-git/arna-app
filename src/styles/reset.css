@@ -1,0 +1,258 @@
+/* =============================================================================
+ * MASES PHASE 2 UI — CSS RESET
+ * =============================================================================
+ *
+ * File:      mase_app/src/styles/reset.css
+ * Version:   1.0.0
+ * Status:    FROZEN
+ * Authority: MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
+ *            MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §21 (CSP)
+ *
+ * -----------------------------------------------------------------------------
+ * Revision history
+ * -----------------------------------------------------------------------------
+ * 1.0.0  — initial delivery. Fixes the horizontal overflow that every
+ *          authenticated page exhibited from the first delivery of the
+ *          AppShell family. The overflow was not caused by any component
+ *          in the shell; it was caused by two browser defaults that were
+ *          never overridden. See §"The bug this file fixes" for the
+ *          diagnostic evidence and the mechanism of each fix.
+ *
+ * -----------------------------------------------------------------------------
+ * What this file is
+ * -----------------------------------------------------------------------------
+ * The reset layer. Two rules that normalise the two defaults the design
+ * system depends on being overridden:
+ *
+ *   1. `box-sizing: border-box` on every element and pseudo-element.
+ *   2. `margin: 0; padding: 0` on <html> and <body>.
+ *
+ * The reset is deliberately minimal. It is not Normalize.css, not
+ * Sanitize.css, and not a kitchen-sink reset. It fixes two specific
+ * defaults and does nothing else. A future CR that wants additional
+ * reset rules (media-element sizing, list-style resets, form-control
+ * appearance) should add them as a distinct, named block with its own
+ * rationale — not append them here without explanation.
+ *
+ * -----------------------------------------------------------------------------
+ * Why a reset is needed at all
+ * -----------------------------------------------------------------------------
+ * Two of the design system's core assumptions require overrides that
+ * browsers do not apply by default:
+ *
+ *   · The shell renders full-viewport chrome. The header, footer, and
+ *     sidebar are designed to span the entire width of the document.
+ *     That only works when <body> has no margin and when an element's
+ *     declared width (100% of its parent) is the total rendered width
+ *     including its own padding. Browsers do neither by default.
+ *
+ *   · Component styles are written against the `border-box` mental
+ *     model. Every primitive in the design system declares a width
+ *     and a padding and expects the padding to sit inside the width.
+ *     `AppHeader` is the clearest example: its CSS declares
+ *     `width: 100%; padding-inline: 24px`, intending the total to be
+ *     100% of its parent. Under the browser default (`content-box`)
+ *     the rendered width is 100% + 48px. Under `border-box` it is
+ *     exactly 100%.
+ *
+ * -----------------------------------------------------------------------------
+ * The bug this file fixes — diagnostic evidence
+ * -----------------------------------------------------------------------------
+ * Every authenticated page rendered with a horizontal scrollbar and
+ * with the header, footer, and sidebar visibly extending past the
+ * viewport's right edge. The measured values at innerWidth=1264:
+ *
+ *     body                width=1248  margin=8px  boxSizing=content-box
+ *     .app-header         cssWidth=1248  paddingL=24  paddingR=24
+ *                         rendered width=1296  right=1264
+ *     .app-footer         cssWidth=1248  paddingL=24  paddingR=24
+ *                         rendered width=1296  right=1264
+ *     html                right=1224  (page scrolled -40px to accommodate)
+ *
+ * The arithmetic:
+ *
+ *     viewport            1264
+ *     body margin (8 × 2)  -16
+ *     body content width   1248
+ *     header padding        +48  (24 × 2, content-box adds to width)
+ *     header total         1296
+ *
+ *     1296 − 1264 = 32px of overflow beyond the viewport, plus the
+ *     body's own 8px left inset for a total horizontal scroll range of
+ *     40px.
+ *
+ * Two defaults, two fixes. Neither is a shell bug; both are pre-existing
+ * gaps in the base layer that the shell inherited.
+ *
+ * -----------------------------------------------------------------------------
+ * Rule 1 — `box-sizing: border-box` on everything
+ * -----------------------------------------------------------------------------
+ * The universal selector is `*, *::before, *::after` rather than just
+ * `*`. The two pseudo-elements are included because a component may
+ * apply `box-sizing: content-box` (the default for pseudo-elements) to
+ * one of them and then declare a size on it — a common pattern in
+ * decorative elements. Missing them produces inconsistent boxes in
+ * exactly the contexts where the box is easiest to overlook.
+ *
+ * This is the standard "modern border-box reset" (see Paul Irish's
+ * write-up, and the equivalent rule in the HTML5 Boilerplate). It is
+ * universally applied in modern CSS codebases for three reasons:
+ *
+ *   1. It matches how designers think about sizes — a 300px box with
+ *      20px of padding is 300px, not 340px.
+ *   2. It makes fluid layouts predictable — a `width: 100%` element
+ *      with padding remains 100%.
+ *   3. It makes the flex/grid `min-width: 0` behaviour easier to
+ *      reason about, because the box's content area is not an implicit
+ *      fraction of the rendered width.
+ *
+ * The alternative (applying border-box only to specific elements, or
+ * leaving it content-box and writing every width calculation as
+ * `calc(100% - 48px)`) is more code, more errors, and inconsistent
+ * with the rest of the industry.
+ *
+ * -----------------------------------------------------------------------------
+ * Rule 2 — `margin: 0; padding: 0` on <html> and <body>
+ * -----------------------------------------------------------------------------
+ * The browser default is `body { margin: 8px }`. Every full-viewport
+ * layout in this application assumes the body has no margin; the shell
+ * is a flex column with `min-height: 100dvh`, and it expects to fill
+ * the viewport edge to edge.
+ *
+ * The rule is applied to both <html> and <body> rather than only to
+ * <body> because:
+ *
+ *   · Firefox and Safari apply an 8px margin to both elements in some
+ *     configurations; Chrome applies it only to <body>. Resetting both
+ *     makes the base layer consistent across engines.
+ *   · A future stylesheet that targets <html> for scrollbar
+ *     customisation or scroll-behavior will not have to remember to
+ *     reset its margin in that rule as well.
+ *
+ * `padding: 0` is included even though browsers default to zero; it
+ * documents the intent and prevents a future user-agent stylesheet or
+ * a stray base rule from introducing a padding that would break the
+ * shell's edge-to-edge assumption.
+ *
+ * -----------------------------------------------------------------------------
+ * What this file does NOT reset
+ * -----------------------------------------------------------------------------
+ * The reset is intentionally narrow. Rules that were considered and
+ * rejected, with their reasoning:
+ *
+ *   · `img, video { max-width: 100%; height: auto }` — not needed by
+ *     the current defect and potentially surprising for components
+ *     that deliberately render images at intrinsic size. Defer until
+ *     a specific component requires it.
+ *
+ *   · `ul, ol { list-style: none; padding: 0 }` — the components that
+ *     render lists (AppSidebar, DropdownMenu, MASESFooterContent)
+ *     already handle their own list styling in scoped CSS. A global
+ *     list reset would silently change other lists a future component
+ *     might want to render with markers.
+ *
+ *   · `button { appearance: none; background: none; border: none }` —
+ *     BaseButton already implements this reset in its own scoped
+ *     styles. A global version would conflict with native form
+ *     controls that might be introduced later (a `<select>` styled by
+ *     the browser, a file input).
+ *
+ *   · `* { font-family: inherit }` — the design system sets font
+ *     family on the shell root and on specific components. A global
+ *     inheritance rule would override browser-provided fonts on
+ *     native controls (the operating system's select dropdown, the
+ *     date picker), producing a worse result than the default.
+ *
+ *   · Anything that touches color, spacing, typography, or radius —
+ *     those belong to tokens.css. This file is only about the box
+ *     model and the document margin.
+ *
+ * -----------------------------------------------------------------------------
+ * Where this file is imported
+ * -----------------------------------------------------------------------------
+ * The import belongs in `src/App.vue`, alongside the existing
+ * `@/styles/tokens.css` import, with the reset imported first:
+ *
+ *     import '@/styles/reset.css';
+ *     import '@/styles/tokens.css';
+ *
+ * The order matters for readability (reset before design tokens), not
+ * for correctness — the two files declare non-overlapping rules.
+ * `tokens.css` declares CSS custom properties on `:root` and
+ * `html[lang="am"]`; this file declares the universal `box-sizing`
+ * rule and the document margin reset. No rule in one is overridden
+ * by a rule in the other.
+ *
+ * App.vue is the correct location because:
+ *
+ *   · Both entry points (`workspace-entry/main.ts` and
+ *     `portal-entry/main.ts`) import App.vue; placing the import here
+ *     means one import covers both builds.
+ *   · Vite hoists the import to the top of the module, so the CSS is
+ *     guaranteed to be in the document before any component's scoped
+ *     styles are evaluated.
+ *   · `main.ts` files do not import any CSS today — the token
+ *     substrate already lives in App.vue, and adding a second CSS
+ *     import to main.ts would split the base layer across two files.
+ *
+ * -----------------------------------------------------------------------------
+ * No hardcoded user-facing string
+ * -----------------------------------------------------------------------------
+ * This file contains no text content. It is CSS only.
+ *
+ * -----------------------------------------------------------------------------
+ * No new tokens, no new colors, no hex values
+ * -----------------------------------------------------------------------------
+ * The reset declares no custom properties and sets no color values.
+ * It is orthogonal to the design system's token substrate; the two
+ * files can be versioned and frozen independently.
+ *
+ * -----------------------------------------------------------------------------
+ * CSP note
+ * -----------------------------------------------------------------------------
+ * This file is loaded via a `<link>` tag that Vite injects into the
+ * built HTML when the module is imported. It contains no inline
+ * styles and no `style` attributes, so the project's CSP
+ * (Architecture Freeze §21.8, delivered as an HTTP header by Plesk)
+ * does not need a hash or nonce for it. The `style-src 'self'`
+ * directive already permits it.
+ * =============================================================================
+ */
+
+/* =============================================================================
+ * RULE 1 — Universal border-box
+ * -----------------------------------------------------------------------------
+ * Every element, including both pseudo-element families, uses
+ * border-box sizing. The `*` selector reaches the element; the
+ * `*::before` and `*::after` selectors reach the two pseudo-elements,
+ * which do not inherit `box-sizing` from their originating element
+ * (they inherit it from their parent, which may differ).
+ *
+ * The rule is not `!important`. A component that deliberately needs
+ * `content-box` can opt out with a scoped rule; nothing in the current
+ * codebase does, and no upstream rule declares a conflicting value.
+ * ============================================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* =============================================================================
+ * RULE 2 — Document margin reset
+ * -----------------------------------------------------------------------------
+ * The browser default is `body { margin: 8px }` (and, in some engines,
+ * an 8px margin on <html> as well). The shell renders full-viewport
+ * chrome and assumes no document inset.
+ *
+ * Both elements are reset for engine consistency and for future
+ * stylesheets that target <html> directly. The `padding: 0` is
+ * defensive — no browser defaults to a padding, but a future
+ * user-agent stylesheet change or a stray base rule would break the
+ * edge-to-edge assumption if it were left unspecified.
+ * ============================================================================= */
+html,
+body {
+  margin: 0;
+  padding: 0;
+}

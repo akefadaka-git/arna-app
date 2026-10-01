@@ -1,0 +1,753 @@
+/* =============================================================================
+ * MASES PHASE 2 UI — DESIGN TOKEN SUBSTRATE
+ * =============================================================================
+ *
+ * File:      mase_app/src/styles/tokens.css
+ * Version:   1.3.0
+ * Status:    FROZEN
+ * Authority: MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
+ *            MASES_SHELL_DESIGN_SYSTEM_MASTER_SPEC.md §7.1, §18, §29,
+ *              §31, §33, §34, §60–§62
+ *
+ * -----------------------------------------------------------------------------
+ * Revision history
+ * -----------------------------------------------------------------------------
+ * 1.0.0  — initial delivery. Full token substrate.
+ *
+ * 1.1.0  — auth surface additions: six tokens specific to the six
+ *          authentication pages. See the AUTH SURFACE — ADDITIONS
+ *          section below. No existing token renamed, removed, or
+ *          reassigned. Additive.
+ *
+ * 1.2.0  — shell chrome additions: --mases-color-overlay-scrim plus the
+ *          three --mases-shell-chrome-padding-inline-* tokens. No
+ *          existing token renamed, removed, or reassigned. Additive.
+ *
+ * 1.3.0  — L-0 audit follow-up. Four additive runtime tokens plus one
+ *          inert spec-target group. See §"1.3.0 additions" below for
+ *          the full classification and the adoption path for the
+ *          spec-target group. No existing token renamed, removed, or
+ *          reassigned. Strictly additive.
+ *
+ * -----------------------------------------------------------------------------
+ * 1.3.0 additions — classification
+ * -----------------------------------------------------------------------------
+ * The additions fall into two classes. The distinction matters: the
+ * first class is consumed today (or will be consumed by an existing
+ * component the moment a downstream defect is fixed); the second class
+ * has no consumer and must not acquire one without a separate CR.
+ *
+ * -----------------------------------------------------------------------------
+ * CLASS 1 — RUNTIME TOKENS (4). Consumed or consumable today.
+ * -----------------------------------------------------------------------------
+ *   · --mases-color-surface-subtle
+ *       Tier 2 surface role. Referenced by four feature views:
+ *         - GovernanceBodyDetailView.vue (quorum rule <pre>)
+ *         - DashboardView.vue (empty-state panel)
+ *         - LoanProductListView.vue (empty-state panel)
+ *         - MyWalletPage.vue (no-wallet state — the "outlined" Card
+ *           variant's neutral fallback)
+ *       Prior to this revision, those declarations resolved to an
+ *       undefined custom property and the browser dropped them,
+ *       producing the browser default background. The fix is
+ *       additive: the token resolves to the same family of surfaces
+ *       the surrounding components already assume.
+ *
+ *   · --mases-letter-spacing-caption
+ *       Typography tracking. Referenced by two feature views:
+ *         - LoanProductListView.vue (thead th cells, uppercase)
+ *         - LoanCollateralForm.vue (fieldset legend, uppercase)
+ *       Prior to this revision, those declarations resolved to
+ *       undefined and the browser fell back to normal tracking.
+ *       The declared value matches --mases-letter-spacing-wide
+ *       today, but is declared under its own name so a future CR can
+ *       diverge the two without touching consumers.
+ *
+ *   · --mases-z-arna
+ *       Z-index scale. Reserved for the ARNA floating assistant family
+ *       (Master Spec §35–§38, §61). No consumer yet. Declared now so
+ *       that a future ARNA CR does not introduce an off-scale value.
+ *
+ *   · --mases-z-command-palette
+ *       Z-index scale. Reserved for the command palette (Master Spec
+ *       §49, §61). No consumer yet. Same reservation rationale as
+ *       --mases-z-arna.
+ *
+ * -----------------------------------------------------------------------------
+ * CLASS 2 — SPEC-TARGET DIMENSIONS (1 inert group, 5 declarations).
+ *           NO CONSUMER. DO NOT ADOPT WITHOUT A SEPARATE CR.
+ * -----------------------------------------------------------------------------
+ * The Master Shell Design System targets shell chrome dimensions that
+ * differ from the values currently in production. This revision
+ * declares the targets as TOKENS with no consumer, so a future
+ * visual-QA-gated CR does not have to invent names. The tokens are:
+ *
+ *     --mases-shell-header-height-desktop          72px
+ *     --mases-shell-header-height-tablet           68px
+ *     --mases-shell-header-height-mobile           60px
+ *     --mases-shell-sidebar-width-expanded-target  260px
+ *     --mases-shell-sidebar-width-collapsed-target 76px
+ *
+ * The tokens are inert in this revision. Adoption requires:
+ *
+ *   1. A visual-QA pass at the four breakpoints (375, 640, 1024, 1440)
+ *      on every authenticated page.
+ *   2. A coordinated edit to AppShell.vue, AppHeader.vue,
+ *      AppSidebar.vue, AppMobileDrawer.vue, SkipToContent.vue, and
+ *      any layout that reads --mases-shell-header-height or
+ *      --mases-shell-sidebar-width today.
+ *   3. Deprecation of the legacy single-value tokens
+ *      (--mases-shell-header-height, --mases-shell-sidebar-width,
+ *      --mases-shell-sidebar-width-collapsed) once no consumer reads
+ *      them.
+ *
+ * This revision deliberately does NOT change the current header height
+ * (64px) or sidebar widths (256px / 64px). Those changes affect every
+ * authenticated page and require product sign-off, not a token-layer
+ * edit. See the L-0 audit (MASES_SHELL_L0_AUDIT_v1.0.0.md §4.6, F1/F2).
+ *
+ * -----------------------------------------------------------------------------
+ * Purpose
+ * -----------------------------------------------------------------------------
+ * Single source of truth for every design value used in the MASES
+ * Phase 2 UI. Every component consumes tokens from this file. No
+ * component may hardcode a color, spacing value, radius, shadow, font
+ * size, duration, easing, or z-index.
+ *
+ * -----------------------------------------------------------------------------
+ * Tier structure
+ * -----------------------------------------------------------------------------
+ *   Tier 1 — Primitive palette and scales. Raw values. Referenced only
+ *            by Tier 2.
+ *   Tier 2 — Semantic roles. Named by purpose, not by appearance.
+ *            Components consume these.
+ *   Tier 3 — Component tokens. Declared inside component files.
+ *            Components consume these first; Tier 3 resolves to Tier 2.
+ *
+ * -----------------------------------------------------------------------------
+ * Bilingual typography
+ * -----------------------------------------------------------------------------
+ * The :root block declares Latin (English) typographic values.
+ * The html[lang="am"] block overrides them with Amharic values.
+ *
+ * -----------------------------------------------------------------------------
+ * Breakpoints — documentation only
+ * -----------------------------------------------------------------------------
+ *   mobile   0px – 639px
+ *   tablet   640px – 1023px
+ *   desktop  1024px – 1439px
+ *   wide     1440px and up
+ *
+ * -----------------------------------------------------------------------------
+ * No dark mode
+ * -----------------------------------------------------------------------------
+ * Dark mode is deferred. The :root block is the only theme block.
+ *
+ * -----------------------------------------------------------------------------
+ * No gradients, no glassmorphism (except the launcher exception)
+ * -----------------------------------------------------------------------------
+ * Enforced at the component layer, not expressed here.
+ *
+ * =============================================================================
+ */
+
+:root {
+  /* ===========================================================================
+   * TIER 1 — PRIMITIVE PALETTE
+   * ===========================================================================
+   * Raw color values. Never consumed by components directly.
+   * ===========================================================================
+   */
+
+  /* ---------------------------------------------------------------------------
+   * Aubergine — brand dark. Hue ~280 degrees. Base: #1F0A2F at step 900.
+   * --------------------------------------------------------------------------- */
+  --mases-color-aubergine-50:  #F5F1F8;
+  --mases-color-aubergine-100: #E4DCE9;
+  --mases-color-aubergine-200: #C6B7CE;
+  --mases-color-aubergine-300: #9F8BAC;
+  --mases-color-aubergine-400: #786286;
+  --mases-color-aubergine-500: #574365;
+  --mases-color-aubergine-600: #3F2B4B;
+  --mases-color-aubergine-700: #2C1A38;
+  --mases-color-aubergine-800: #24132E;
+  --mases-color-aubergine-900: #1F0A2F;
+  --mases-color-aubergine-950: #140620;
+
+  /* ---------------------------------------------------------------------------
+   * Crimson — brand action. Hue ~350 degrees. Base: #9B1B30 at step 600.
+   * --------------------------------------------------------------------------- */
+  --mases-color-crimson-50:  #FCEBEF;
+  --mases-color-crimson-100: #F7CCD5;
+  --mases-color-crimson-200: #EC96A6;
+  --mases-color-crimson-300: #DE5E73;
+  --mases-color-crimson-400: #C8384F;
+  --mases-color-crimson-500: #AE2339;
+  --mases-color-crimson-600: #9B1B30;
+  --mases-color-crimson-700: #7A1526;
+  --mases-color-crimson-800: #5C101D;
+  --mases-color-crimson-900: #3E0A14;
+
+  /* ---------------------------------------------------------------------------
+   * Gold — brand accent. Hue ~42 degrees. Base: #D4A017 at step 500.
+   * --------------------------------------------------------------------------- */
+  --mases-color-gold-50:  #FDF6E1;
+  --mases-color-gold-100: #FAE9B3;
+  --mases-color-gold-200: #F2D274;
+  --mases-color-gold-300: #E8BC44;
+  --mases-color-gold-400: #DEAB28;
+  --mases-color-gold-500: #D4A017;
+  --mases-color-gold-600: #B08310;
+  --mases-color-gold-700: #8C660D;
+  --mases-color-gold-800: #694D0A;
+  --mases-color-gold-900: #4A3607;
+
+  /* ---------------------------------------------------------------------------
+   * Warm Neutral — text, borders, muted surfaces. Anchored on Ivory.
+   * Base: #FFFDF7 at step 50.
+   * --------------------------------------------------------------------------- */
+  --mases-color-neutral-0:   #FFFFFF;
+  --mases-color-neutral-50:  #FFFDF7;
+  --mases-color-neutral-100: #F8F5EC;
+  --mases-color-neutral-200: #EFEADB;
+  --mases-color-neutral-300: #DDD5C0;
+  --mases-color-neutral-400: #BDB29A;
+  --mases-color-neutral-500: #8C8170;
+  --mases-color-neutral-600: #615847;
+  --mases-color-neutral-700: #3F382B;
+  --mases-color-neutral-800: #29231A;
+  --mases-color-neutral-900: #141009;
+
+  /* ---------------------------------------------------------------------------
+   * Success — hue ~145 degrees.
+   * --------------------------------------------------------------------------- */
+  --mases-color-success-50:  #EDF7F1;
+  --mases-color-success-100: #D3EBDD;
+  --mases-color-success-500: #2F7A4A;
+  --mases-color-success-700: #1F5734;
+  --mases-color-success-900: #123620;
+
+  /* ---------------------------------------------------------------------------
+   * Warning — hue ~28 degrees.
+   * --------------------------------------------------------------------------- */
+  --mases-color-warning-50:  #FCF3E6;
+  --mases-color-warning-100: #F7E1BE;
+  --mases-color-warning-500: #A05510;
+  --mases-color-warning-700: #7A3F0A;
+  --mases-color-warning-900: #532A05;
+
+  /* ---------------------------------------------------------------------------
+   * Info — hue ~210 degrees.
+   * --------------------------------------------------------------------------- */
+  --mases-color-info-50:  #ECF2F8;
+  --mases-color-info-100: #CFE0F0;
+  --mases-color-info-500: #2A5C8A;
+  --mases-color-info-700: #1D4164;
+  --mases-color-info-900: #112840;
+
+  /* ---------------------------------------------------------------------------
+   * Danger — reuses the Crimson family. No separate red scale is defined.
+   * --------------------------------------------------------------------------- */
+
+  /* ===========================================================================
+   * TIER 2 — SEMANTIC ROLES
+   * ===========================================================================
+   * Named by purpose. Components consume these.
+   * ===========================================================================
+   */
+
+  /* ---------------------------------------------------------------------------
+   * Surface roles — backgrounds
+   * ---------------------------------------------------------------------------
+   * surface-subtle (added 1.3.0) is a lighter sibling of surface-sunken.
+   * Where surface-sunken is a deliberately recessed panel, surface-subtle
+   * is a hint of separation from the page surface — the correct value
+   * for an empty-state card and an informational block that should read
+   * as "slightly off the page" without the full recess of a well.
+   * --------------------------------------------------------------------------- */
+  --mases-color-surface-page:             var(--mases-color-neutral-50);
+  --mases-color-surface-raised:           var(--mases-color-neutral-100);
+  --mases-color-surface-subtle:           var(--mases-color-neutral-100); /* 1.3.0 */
+  --mases-color-surface-overlay:          var(--mases-color-neutral-0);
+  --mases-color-surface-sunken:           var(--mases-color-neutral-200);
+  --mases-color-surface-inverse:          var(--mases-color-aubergine-800);
+  --mases-color-surface-inverse-raised:   var(--mases-color-aubergine-700);
+  --mases-color-surface-brand:            var(--mases-color-crimson-600);
+  --mases-color-surface-accent:           var(--mases-color-gold-100);
+  --mases-color-surface-disabled:         var(--mases-color-neutral-200);
+  --mases-color-surface-success:          var(--mases-color-success-50);
+  --mases-color-surface-warning:          var(--mases-color-warning-50);
+  --mases-color-surface-info:             var(--mases-color-info-50);
+  --mases-color-surface-danger:           var(--mases-color-crimson-50);
+
+  /* ---------------------------------------------------------------------------
+   * Text roles
+   * --------------------------------------------------------------------------- */
+  --mases-color-text-primary:             var(--mases-color-neutral-900);
+  --mases-color-text-secondary:           var(--mases-color-neutral-700);
+  --mases-color-text-tertiary:            var(--mases-color-neutral-500);
+  --mases-color-text-muted:               var(--mases-color-neutral-400);
+  --mases-color-text-inverse:             var(--mases-color-neutral-50);
+  --mases-color-text-inverse-secondary:   var(--mases-color-neutral-200);
+  --mases-color-text-brand:               var(--mases-color-crimson-600);
+  --mases-color-text-accent:              var(--mases-color-gold-700);
+  --mases-color-text-success:             var(--mases-color-success-700);
+  --mases-color-text-warning:             var(--mases-color-warning-700);
+  --mases-color-text-info:                var(--mases-color-info-700);
+  --mases-color-text-danger:              var(--mases-color-crimson-700);
+  --mases-color-text-disabled:            var(--mases-color-neutral-400);
+
+  /* ---------------------------------------------------------------------------
+   * Border roles
+   * --------------------------------------------------------------------------- */
+  --mases-color-border-default:           var(--mases-color-neutral-300);
+  --mases-color-border-strong:            var(--mases-color-neutral-400);
+  --mases-color-border-subtle:            var(--mases-color-neutral-200);
+  --mases-color-border-brand:             var(--mases-color-crimson-600);
+  --mases-color-border-inverse:           var(--mases-color-aubergine-600);
+  --mases-color-border-success:           var(--mases-color-success-500);
+  --mases-color-border-warning:           var(--mases-color-warning-500);
+  --mases-color-border-info:              var(--mases-color-info-500);
+  --mases-color-border-danger:            var(--mases-color-crimson-500);
+  --mases-color-border-focus:             var(--mases-color-aubergine-900);
+
+  /* ---------------------------------------------------------------------------
+   * Action roles — buttons and interactive surfaces
+   * --------------------------------------------------------------------------- */
+  --mases-color-action-primary:              var(--mases-color-crimson-600);
+  --mases-color-action-primary-hover:        var(--mases-color-crimson-500);
+  --mases-color-action-primary-active:       var(--mases-color-crimson-700);
+  --mases-color-action-primary-disabled:     var(--mases-color-crimson-200);
+  --mases-color-action-secondary:            var(--mases-color-aubergine-900);
+  --mases-color-action-secondary-hover:      var(--mases-color-aubergine-800);
+  --mases-color-action-secondary-active:     var(--mases-color-aubergine-950);
+  --mases-color-action-ghost:                transparent;
+  --mases-color-action-ghost-hover:          var(--mases-color-neutral-200);
+  --mases-color-action-danger:               var(--mases-color-crimson-700);
+  --mases-color-action-danger-hover:         var(--mases-color-crimson-800);
+  --mases-color-action-link:                 var(--mases-color-crimson-600);
+  --mases-color-action-link-hover:           var(--mases-color-crimson-700);
+
+  /* ---------------------------------------------------------------------------
+   * Icon roles
+   * --------------------------------------------------------------------------- */
+  --mases-color-icon-primary:             var(--mases-color-neutral-700);
+  --mases-color-icon-secondary:           var(--mases-color-neutral-500);
+  --mases-color-icon-inverse:             var(--mases-color-neutral-100);
+  --mases-color-icon-brand:               var(--mases-color-crimson-600);
+  --mases-color-icon-accent:              var(--mases-color-gold-600);
+  --mases-color-icon-success:             var(--mases-color-success-700);
+  --mases-color-icon-warning:             var(--mases-color-warning-700);
+  --mases-color-icon-info:                var(--mases-color-info-700);
+  --mases-color-icon-danger:              var(--mases-color-crimson-700);
+
+  /* ---------------------------------------------------------------------------
+   * State and interaction roles
+   * --------------------------------------------------------------------------- */
+  --mases-color-state-hover:              var(--mases-color-neutral-200);
+  --mases-color-state-selected:           var(--mases-color-crimson-50);
+  --mases-color-state-selected-accent:    var(--mases-color-crimson-600);
+  --mases-color-state-disabled-bg:        var(--mases-color-neutral-200);
+  --mases-color-state-disabled-text:      var(--mases-color-neutral-400);
+  --mases-color-state-focus-ring:         var(--mases-color-aubergine-900);
+  --mases-color-state-focus-ring-inverse: var(--mases-color-gold-400);
+
+  /* ---------------------------------------------------------------------------
+   * Overlay roles — scrims and dimming layers (1.2.0)
+   * --------------------------------------------------------------------------- */
+  --mases-color-overlay-scrim: rgba(31, 10, 47, 0.5);
+
+  /* ===========================================================================
+   * SPACING SCALE — 4px base. Every value is a multiple of 4px.
+   * ===========================================================================
+   */
+  --mases-space-0:  0;
+  --mases-space-1:  4px;
+  --mases-space-2:  8px;
+  --mases-space-3:  12px;
+  --mases-space-4:  16px;
+  --mases-space-5:  20px;
+  --mases-space-6:  24px;
+  --mases-space-8:  32px;
+  --mases-space-10: 40px;
+  --mases-space-12: 48px;
+  --mases-space-16: 64px;
+  --mases-space-20: 80px;
+  --mases-space-24: 96px;
+
+  /* ===========================================================================
+   * RADII SCALE
+   * ===========================================================================
+   */
+  --mases-radius-none: 0;
+  --mases-radius-sm:   4px;
+  --mases-radius-md:   8px;
+  --mases-radius-lg:   12px;
+  --mases-radius-xl:   16px;
+  --mases-radius-full: 9999px;
+
+  /* ===========================================================================
+   * ELEVATION (SHADOWS)
+   * ===========================================================================
+   * Shadows use the aubergine RGB (31, 10, 47) at low alpha.
+   * No shadow uses black or a generic gray.
+   * ===========================================================================
+   */
+  --mases-shadow-elevation-1:
+    0 1px 2px rgba(31, 10, 47, 0.06),
+    0 1px 3px rgba(31, 10, 47, 0.10);
+
+  --mases-shadow-elevation-2:
+    0 2px 4px rgba(31, 10, 47, 0.06),
+    0 4px 8px rgba(31, 10, 47, 0.08);
+
+  --mases-shadow-elevation-3:
+    0 4px 8px rgba(31, 10, 47, 0.08),
+    0 8px 16px rgba(31, 10, 47, 0.12);
+
+  --mases-shadow-elevation-4:
+    0 8px 16px rgba(31, 10, 47, 0.10),
+    0 16px 32px rgba(31, 10, 47, 0.14);
+
+  /* ===========================================================================
+   * MOTION
+   * ===========================================================================
+   */
+  --mases-duration-instant:  0ms;
+  --mases-duration-fast:     150ms;
+  --mases-duration-base:     200ms;
+  --mases-duration-slow:     300ms;
+  --mases-duration-slower:   500ms;
+
+  --mases-easing-standard:   cubic-bezier(0.4, 0, 0.2, 1);
+  --mases-easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  --mases-easing-accelerate: cubic-bezier(0.4, 0, 1, 1);
+
+  /* ===========================================================================
+   * Z-INDEX SCALE
+   * ===========================================================================
+   * No component sets a z-index outside this scale.
+   *
+   * Conceptual layer map (Master Spec §61):
+   *
+   *     background          → --mases-z-base (0)
+   *     content             → --mases-z-base (0)
+   *     sticky header       → --mases-z-raised (10)
+   *     sidebar             → --mases-z-raised (10)
+   *     dropdown            → --mases-z-dropdown (100)
+   *     popover             → --mases-z-popover (600)
+   *     modal               → --mases-z-modal (510)
+   *     command palette     → --mases-z-command-palette (650)  [1.3.0, reserved]
+   *     toast               → --mases-z-toast (800)
+   *     ARNA (floating)     → --mases-z-arna (900)             [1.3.0, reserved]
+   *     system overlay      → (no token; not yet specified)
+   * ===========================================================================
+   */
+  --mases-z-base:             0;
+  --mases-z-raised:           10;
+  --mases-z-dropdown:         100;
+  --mases-z-sticky:           200;
+  --mases-z-overlay-backdrop: 500;
+  --mases-z-modal:            510;
+  --mases-z-drawer:           520;
+  --mases-z-popover:          600;
+  --mases-z-command-palette:  650; /* 1.3.0 — reserved, no consumer yet */
+  --mases-z-tooltip:          700;
+  --mases-z-toast:            800;
+  --mases-z-arna:             900; /* 1.3.0 — reserved, no consumer yet */
+
+  /* ===========================================================================
+   * TYPOGRAPHY — FONT FAMILIES
+   * ===========================================================================
+   */
+  --mases-font-family-am:     "Noto Sans Ethiopic", "Inter", system-ui, sans-serif;
+  --mases-font-family-en:     "Inter", "Noto Sans Ethiopic", system-ui, sans-serif;
+  --mases-font-family-mono:   "JetBrains Mono", ui-monospace, "SFMono-Regular",
+                              "Menlo", "Consolas", monospace;
+
+  /* ---------------------------------------------------------------------------
+   * Font size scale — Latin (English) values
+   * ---------------------------------------------------------------------------
+   * Amharic overrides are declared in the html[lang="am"] block below.
+   * --------------------------------------------------------------------------- */
+  --mases-font-size-caption:    12px;
+  --mases-font-size-body-sm:    14px;
+  --mases-font-size-body:       16px;
+  --mases-font-size-body-lg:    18px;
+  --mases-font-size-heading-6:  18px;
+  --mases-font-size-heading-5:  20px;
+  --mases-font-size-heading-4:  24px;
+  --mases-font-size-heading-3:  28px;
+  --mases-font-size-heading-2:  36px;
+  --mases-font-size-heading-1:  48px;
+  --mases-font-size-display:    60px;
+
+  /* ---------------------------------------------------------------------------
+   * Line height scale — Latin (English) values
+   * --------------------------------------------------------------------------- */
+  --mases-line-height-caption:   16px;
+  --mases-line-height-body-sm:   22px;
+  --mases-line-height-body:      26px;
+  --mases-line-height-body-lg:   30px;
+  --mases-line-height-heading-6: 26px;
+  --mases-line-height-heading-5: 28px;
+  --mases-line-height-heading-4: 32px;
+  --mases-line-height-heading-3: 36px;
+  --mases-line-height-heading-2: 44px;
+  --mases-line-height-heading-1: 56px;
+  --mases-line-height-display:   68px;
+
+  /* ---------------------------------------------------------------------------
+   * Font weight tokens
+   * --------------------------------------------------------------------------- */
+  --mases-font-weight-regular:    400;
+  --mases-font-weight-medium:     500;
+  --mases-font-weight-semibold:   600;
+  --mases-font-weight-bold:       700;
+
+  /* ---------------------------------------------------------------------------
+   * Letter spacing (tracking)
+   * ---------------------------------------------------------------------------
+   * Amharic never uses tracking. Latin headings 3 and above use -0.01em.
+   *
+   * letter-spacing-caption (added 1.3.0) — the tracking applied to a
+   * small caption rendered in Latin uppercase (a table header cell, a
+   * fieldset legend, a form section label). The value is the same as
+   * letter-spacing-wide today, but declared under its own name so a
+   * future CR can diverge the two without touching the consumers.
+   * Callers that want "wide tracking for a general purpose" use
+   * letter-spacing-wide; callers that want "the caption register" use
+   * letter-spacing-caption.
+   * --------------------------------------------------------------------------- */
+  --mases-letter-spacing-tight:    -0.01em;
+  --mases-letter-spacing-normal:   0;
+  --mases-letter-spacing-wide:     0.02em;
+  --mases-letter-spacing-caption:  0.02em; /* 1.3.0 */
+
+  /* ===========================================================================
+   * ICON SIZES
+   * ===========================================================================
+   */
+  --mases-icon-xs:   12px;
+  --mases-icon-sm:   16px;
+  --mases-icon-md:   20px;
+  --mases-icon-lg:   24px;
+  --mases-icon-xl:   32px;
+  --mases-icon-2xl:  48px;
+  --mases-icon-3xl:  64px;
+
+  /* ===========================================================================
+   * LAYOUT — CONTAINER WIDTHS
+   * ===========================================================================
+   */
+  --mases-container-page:           1280px;
+  --mases-container-page-wide:      1440px;
+  --mases-container-form:            640px;
+  --mases-container-form-two-col:    896px;
+  --mases-container-modal-sm:        448px;
+  --mases-container-modal-md:        640px;
+  --mases-container-modal-lg:        896px;
+  --mases-container-modal-full:      calc(100vw - 64px);
+  --mases-container-drawer:          480px;
+
+  /* ===========================================================================
+   * LAYOUT — SHELL DIMENSIONS (ACTIVE)
+   * ===========================================================================
+   * These are the shell's chrome dimensions in production today. They
+   * are consumed by AppShell.vue, AppHeader.vue, AppSidebar.vue,
+   * AppMobileDrawer.vue, SkipToContent.vue, and AuthenticatedLayout.vue.
+   *
+   * DO NOT change the values below without a coordinated CR that
+   * updates every consumer AND runs visual QA at all four breakpoints.
+   * The Master Spec targets different values (§7.1, §18); those
+   * targets are declared as OPT-IN tokens in the "SPEC TARGET" block
+   * below. Adoption is a separate, approval-gated CR.
+   * ===========================================================================
+   */
+  --mases-shell-header-height:              64px;
+  --mases-shell-sidebar-width:              256px;
+  --mases-shell-sidebar-width-collapsed:     64px;
+  --mases-shell-content-padding-desktop:    var(--mases-space-8);
+  --mases-shell-content-padding-tablet:     var(--mases-space-6);
+  --mases-shell-content-padding-mobile:     var(--mases-space-4);
+
+  /* ---------------------------------------------------------------------------
+   * Shell chrome inline padding — header, footer, skip-link rhythm (1.2.0)
+   * --------------------------------------------------------------------------- */
+  --mases-shell-chrome-padding-inline-desktop: var(--mases-space-6);
+  --mases-shell-chrome-padding-inline-tablet:  var(--mases-space-6);
+  --mases-shell-chrome-padding-inline-mobile:  var(--mases-space-4);
+
+  --mases-shell-table-row-height-desktop:   56px;
+  --mases-shell-table-row-height-mobile:    64px;
+
+  /* ===========================================================================
+   * FOCUS RING
+   * ===========================================================================
+   */
+  --mases-focus-ring-width:     3px;
+  --mases-focus-ring-offset:    2px;
+  --mases-focus-ring-color:     var(--mases-color-state-focus-ring);
+  --mases-focus-ring-color-inverse: var(--mases-color-state-focus-ring-inverse);
+
+  /* ===========================================================================
+   * AUTH SURFACE — ADDITIONS (1.1.0)
+   * ===========================================================================
+   * Tokens specific to the six authentication pages. See the 1.1.0
+   * revision note above.
+   * ===========================================================================
+   */
+  --mases-container-auth-card:      448px;
+  --mases-container-auth-card-wide: 560px;
+  --mases-size-auth-logo-max-width:  180px;
+  --mases-size-auth-logo-max-height: 72px;
+  --mases-color-surface-auth-backdrop: var(--mases-color-surface-page);
+  --mases-color-text-auth-attribution: var(--mases-color-text-tertiary);
+
+  /* ===========================================================================
+   * SHELL DIMENSIONS — SPEC TARGET (1.3.0) — INERT / OPT-IN
+   * ===========================================================================
+   * The Master Shell Design System (§7.1, §18) targets shell chrome
+   * dimensions that differ from the values currently in production.
+   * This block declares those targets as TOKENS with no consumer.
+   *
+   * Adoption is a separate CR and requires:
+   *   1. A visual-QA pass at all four breakpoints (375, 640, 1024, 1440).
+   *   2. Editing AppShell.vue / AppHeader.vue / AppSidebar.vue to
+   *      consume the new tokens in preference to the legacy single-value
+   *      tokens.
+   *   3. Deprecating --mases-shell-header-height (single value) and
+   *      --mases-shell-sidebar-width (256px) / --mases-shell-sidebar-
+   *      width-collapsed (64px) once no consumer reads them.
+   *
+   * The tokens are declared now so a future CR does not invent names.
+   *
+   * Note on the header heights: the spec's three-value pattern mirrors
+   * the shell's content-padding and chrome-padding patterns. Consumers
+   * select the value by breakpoint, exactly as they do for those tokens.
+   *
+   * Note on the sidebar widths: the spec's collapsed range is "76–80px".
+   * 76 is chosen — the lower bound — because at 76px an icon column has
+   * enough room for a 24px glyph centred with 26px of whitespace per
+   * side, matching the density of the current 64px collapsed sidebar at
+   * its actual visual rhythm. A future design pass may move this to 80.
+   *
+   * ---------------------------------------------------------------------------
+   * DO NOT consume these tokens in the current revision.
+   * ---------------------------------------------------------------------------
+   */
+
+  /* Header heights — spec target (Master Spec §7.1) */
+  --mases-shell-header-height-desktop: 72px;
+  --mases-shell-header-height-tablet:  68px;
+  --mases-shell-header-height-mobile:  60px;
+
+  /* Sidebar widths — spec target (Master Spec §18) */
+  --mases-shell-sidebar-width-expanded-target:  260px;
+  --mases-shell-sidebar-width-collapsed-target:  76px;
+}
+
+/* =============================================================================
+ * BILINGUAL TYPOGRAPHY OVERRIDE — AMHARIC
+ * =============================================================================
+ * When the <html> element's lang attribute is "am", the Amharic type
+ * scale overrides the Latin one.
+ * =============================================================================
+ */
+html[lang="am"] {
+  --mases-font-size-caption:    13px;
+  --mases-font-size-body-sm:    15px;
+  --mases-font-size-body:       17px;
+  --mases-font-size-body-lg:    19px;
+  --mases-font-size-heading-6:  20px;
+  --mases-font-size-heading-5:  22px;
+  --mases-font-size-heading-4:  26px;
+  --mases-font-size-heading-3:  30px;
+  --mases-font-size-heading-2:  38px;
+  --mases-font-size-heading-1:  50px;
+  --mases-font-size-display:    62px;
+
+  --mases-line-height-caption:   22px;
+  --mases-line-height-body-sm:   26px;
+  --mases-line-height-body:      30px;
+  --mases-line-height-body-lg:   34px;
+  --mases-line-height-heading-6: 30px;
+  --mases-line-height-heading-5: 32px;
+  --mases-line-height-heading-4: 38px;
+  --mases-line-height-heading-3: 44px;
+  --mases-line-height-heading-2: 52px;
+  --mases-line-height-heading-1: 62px;
+  --mases-line-height-display:   76px;
+}
+
+/* =============================================================================
+ * BREAKPOINTS — DOCUMENTATION ONLY
+ * =============================================================================
+ *   mobile   0px – 639px
+ *   tablet   640px – 1023px
+ *   desktop  1024px – 1439px
+ *   wide     1440px and up
+ * =============================================================================
+ */
+
+/* =============================================================================
+ * REDUCED MOTION
+ * =============================================================================
+ */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --mases-duration-fast:     1ms;
+    --mases-duration-base:     1ms;
+    --mases-duration-slow:     1ms;
+    --mases-duration-slower:   1ms;
+  }
+}
+
+/* =============================================================================
+ * HIGH CONTRAST MODE
+ * =============================================================================
+ */
+@media (forced-colors: active) {
+  :root {
+    --mases-color-state-focus-ring:     Highlight;
+    --mases-color-action-primary:       ButtonText;
+    --mases-color-action-primary-hover: ButtonText;
+    --mases-color-border-default:       ButtonText;
+    --mases-color-border-strong:        ButtonText;
+  }
+}
+
+/* =============================================================================
+ * END OF DESIGN TOKEN SUBSTRATE
+ * =============================================================================
+ * Every token declared above is frozen. Changes require a Change
+ * Request under MASES_PHASE_2_UI_DESIGN_SYSTEM.md §14.
+ *
+ * Token count summary — v1.3.0
+ * -----------------------------------------------------------------------------
+ *   Tier 1 primitive colors ............... 62
+ *   Tier 2 semantic color roles ........... 71    (+1: surface-subtle)
+ *   Spacing ............................... 13
+ *   Radii .................................  6
+ *   Elevation .............................  4
+ *   Motion ................................  8
+ *   Z-index ............................... 12    (+2: command-palette, arna)
+ *   Typography — families .................  3
+ *   Typography — sizes .................... 11
+ *   Typography — line heights ............. 11
+ *   Typography — weights ..................  4
+ *   Typography — tracking .................  4    (+1: caption)
+ *   Icon sizes ............................  7
+ *   Containers ............................  9
+ *   Shell dimensions (in use) ............. 11
+ *   Focus ring ............................  4
+ *   Auth surface (1.1.0) ..................  6
+ *   Shell chrome additions (1.2.0) ........  4
+ *   Shell spec-target (1.3.0, inert) ......  5
+ *                                          ───
+ *                                     total 253
+ *
+ * Files that must NOT modify any token:
+ *   Every file in src/components/**, src/layouts/**, src/features/**.
+ * =============================================================================
+ */

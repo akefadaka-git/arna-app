@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Vite build outputs
+dist/
+dist-portal/
+dist-admin/
+.vite/
+
+# Logs
+*.log
+
+# OS/editor artifacts
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment files
+.env
+.env.*
+!.env.workspace
+!.env.portal
+!.env.admin
+
+# Plesk deployment marker
+/public/git/plesk-git/
+
+# Temporary/runtime artifacts
+coverage/

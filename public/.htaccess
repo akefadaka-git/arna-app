@@ -1,0 +1,268 @@
+# =============================================================================
+# MASES Phase 2 UI — Apache configuration for the SPA builds
+# =============================================================================
+#
+# File:    mase_app/public/.htaccess
+# Phase:   1 (Frontend foundation) — Unit 1.9
+#
+# -----------------------------------------------------------------------------
+# Deployment
+# -----------------------------------------------------------------------------
+# Vite copies public/* to the build output root without a prefix. After:
+#
+#     npm run build:workspace   →  dist/.htaccess
+#     npm run build:portal      →  dist-portal/.htaccess
+#
+# Each output directory is deployed to the corresponding subdomain's
+# httpdocs/ directory:
+#
+#     dist/          →  app.maalearna.com.et/httpdocs/
+#     dist-portal/   →  portal.maalearna.com.et/httpdocs/
+#
+# This single file serves both deployments. The two sites have
+# identical routing needs (SPA fallback, HTTPS enforcement, security
+# headers, asset caching); no per-build divergence is required.
+#
+# -----------------------------------------------------------------------------
+# Module assumptions
+# -----------------------------------------------------------------------------
+# Plesk enables the following modules by default on standard shared
+# plans. Each block below degrades gracefully if its module is absent
+# (Apache logs a warning; the request still succeeds):
+#
+#     mod_rewrite    — SPA route fallback
+#     mod_headers    — Security headers, cache control
+#     mod_deflate    — Gzip compression
+#     mod_expires    — Cache-Control / Expires hints
+#     mod_mime       — Font MIME types
+#
+# -----------------------------------------------------------------------------
+# Authority
+# -----------------------------------------------------------------------------
+#     Architecture Freeze §5.5  — All communication is HTTPS
+#     Architecture Freeze §21.8 — Required security headers
+#     Master Prompt §40         — Plesk compatibility
+#
+# -----------------------------------------------------------------------------
+# IMPORTANT — production-readiness item
+# -----------------------------------------------------------------------------
+# The Content-Security-Policy `connect-src` directive below uses
+# `'self' https:` as a permissive placeholder. The API origin is not
+# known at build time (it comes from VITE_API_BASE_URL, read at
+# runtime by the frontend's API client). Before production deployment,
+# the reviewer must narrow `connect-src` to the specific API origin,
+# e.g.:
+#
+#     connect-src 'self' https://api.maalearna.com.et;
+#
+# This is the single header line in this file that requires a
+# deployment-time decision. It is flagged here so it does not ship to
+# production with the permissive value.
+#
+# =============================================================================
+
+# =============================================================================
+# HTTPS enforcement
+# =============================================================================
+# Redirect all HTTP traffic to HTTPS, with an exception when the
+# request already arrived via a TLS-terminating proxy (a load
+# balancer that forwards HTTP with X-Forwarded-Proto: https).
+#
+# The dual test on %{HTTPS} and %{HTTP:X-Forwarded-Proto} prevents a
+# redirect loop in both topologies.
+#
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# =============================================================================
+# SPA route fallback
+# =============================================================================
+# Serve /index.html for any request that is not a real file or
+# directory. The two exclusion conditions are what allow static
+# assets (favicon, hashed JS/CSS bundles) to be served directly.
+#
+# The /api/ exclusion is defensive: this site does not proxy API
+# calls, and a request to /api/* arriving here is a client
+# misconfiguration. Serving index.html for it would hide the
+# mistake; a 404 makes it visible.
+#
+<IfModule mod_rewrite.c>
+    RewriteBase /
+
+    # Do not rewrite paths that match a real file or directory.
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Do not rewrite /api/* — this site does not serve the API.
+    RewriteRule ^api/ - [L]
+
+    # Everything else falls through to the SPA entry.
+    RewriteRule ^ /index.html [L]
+</IfModule>
+
+# =============================================================================
+# Security headers
+# =============================================================================
+# Required by Architecture Freeze §21.8. These headers are set on
+# every response.
+#
+<IfModule mod_headers.c>
+
+    # --- Anti-clickjacking -----------------------------------------------
+    # The SPA must not be embedded in an iframe by any origin,
+    # including its own subdomains. `frame-ancestors 'none'` is the
+    # header equivalent of X-Frame-Options: DENY, and supersedes it
+    # in modern browsers.
+    Header always set Content-Security-Policy "frame-ancestors 'none'"
+
+    # --- MIME sniffing ---------------------------------------------------
+    # The browser must trust the server's Content-Type and never
+    # infer a different type from the file contents.
+    Header always set X-Content-Type-Options "nosniff"
+
+    # --- HSTS ------------------------------------------------------------
+    # Force HTTPS for one year. `includeSubDomains` is set because
+    # api.maalearna.com.et and portal.maalearna.com.et also serve
+    # over HTTPS.
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+    # --- Referrer policy -------------------------------------------------
+    # Send the origin for cross-origin requests; send the full path
+    # only for same-origin requests. This matches the freeze's
+    # declaration and avoids leaking the full URL to third parties.
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # --- Additional protective headers -----------------------------------
+    # These are not required by the freeze but are standard hardening
+    # and are safe to add: they do not restrict any legitimate use of
+    # the SPA.
+    Header always set X-Frame-Options "DENY"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+    Header always set X-Permitted-Cross-Domain-Policies "none"
+
+    # --- Extended Content-Security-Policy --------------------------------
+    # A broader CSP than the freeze's minimum. See the file header
+    # §"IMPORTANT — production-readiness item" before deploying: the
+    # connect-src directive uses a permissive placeholder that must
+    # be narrowed to the actual API origin.
+    #
+    # Directive rationale:
+    #   default-src 'self'      — fallback: same-origin only
+    #   script-src 'self'       — no inline scripts, no CDNs
+    #   style-src 'self' 'unsafe-inline'
+    #                           — 'unsafe-inline' supports Vue's
+    #                             dynamic style bindings; see the
+    #                             file header for the trade-off
+    #   img-src 'self' data: blob:
+    #                           — data: for inline SVG;
+    #                             blob: for FilePreview (Unit 10.11)
+    #   font-src 'self'         — fonts are self-hosted (no CDN)
+    #   connect-src 'self' https:
+    #                           — PERMISSIVE PLACEHOLDER — narrow to
+    #                             the API origin before production
+    #   object-src 'none'       — no <object>/<embed> anywhere
+    #   base-uri 'self'         — no <base> rewriting
+    #   form-action 'self'      — forms submit same-origin only
+    #   frame-ancestors 'none'  — no embedding (also declared above)
+    #
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+
+</IfModule>
+
+# =============================================================================
+# Cache policy — index.html
+# =============================================================================
+# index.html must NEVER be cached. A stale index.html would reference
+# an old hashed bundle that no longer exists on the server, producing
+# a "failed to load module" error on the next visit.
+#
+# `must-revalidate` forces the browser to check with the server on
+# every navigation. The response itself can still be a 304 (Not
+# Modified) if unchanged, which is cheap.
+#
+<IfModule mod_headers.c>
+    <FilesMatch "^index\.html$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires "0"
+    </FilesMatch>
+</IfModule>
+
+# =============================================================================
+# Cache policy — hashed static assets
+# =============================================================================
+# Vite emits content-hashed filenames for every bundled asset. A
+# change to the source produces a new filename, so the file
+# identified by a given URL is immutable. Cache for one year.
+#
+# The regex matches Vite's default output paths:
+#     /assets/main-<hash>.js
+#     /assets/main-<hash>.css
+#     and the same pattern for any other bundled asset.
+#
+<IfModule mod_headers.c>
+    <FilesMatch "\.(js|css|woff2?|ttf|otf|svg|png|jpg|jpeg|gif|webp|ico)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+</IfModule>
+
+# =============================================================================
+# Font MIME types
+# =============================================================================
+# Ensure correct Content-Type for the Amharic and Latin fonts (Noto
+# Sans Ethiopic and Inter, per Architecture Freeze §16.8). Fonts are
+# self-hosted; incorrect MIME types cause some browsers to reject
+# the font.
+#
+<IfModule mod_mime.c>
+    AddType font/woff2 .woff2
+    AddType font/woff  .woff
+    AddType font/ttf   .ttf
+    AddType font/otf   .otf
+    AddType application/manifest+json .webmanifest
+</IfModule>
+
+# =============================================================================
+# Compression
+# =============================================================================
+# Gzip-compress text-format responses. This reduces the size of JS,
+# CSS, HTML, JSON, SVG, and font files by 60–80% before transfer.
+#
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE \
+        text/html \
+        text/plain \
+        text/css \
+        text/xml \
+        text/javascript \
+        application/javascript \
+        application/json \
+        application/xml \
+        application/xml+rss \
+        application/manifest+json \
+        image/svg+xml
+</IfModule>
+
+# =============================================================================
+# Charset
+# =============================================================================
+# All text responses are UTF-8. This affects any 40x/50x error pages
+# Apache generates (the SPA itself declares charset in its HTML).
+#
+AddDefaultCharset UTF-8
+
+# =============================================================================
+# Directory listing
+# =============================================================================
+# Disable directory listings. A request to a path that is a
+# directory but has no index file should fall through to the SPA's
+# route handling rather than showing Apache's default directory
+# browser.
+#
+Options -Indexes

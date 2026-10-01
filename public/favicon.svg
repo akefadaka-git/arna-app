@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+=============================================================================
+ MASES — Maale Arna compact favicon (SVG)
+=============================================================================
+
+ File:      mase_app/public/favicon.svg
+ Version:   1.0.0-draft
+ Status:    DRAFT — pending brand-owner review
+ Authority: MASES_SHELL_DESIGN_SYSTEM_MASTER_SPEC.md §10, §29
+            MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
+            L-2.2 (this delivery)
+
+ -----------------------------------------------------------------------------
+ Purpose
+ -----------------------------------------------------------------------------
+ A compact, flat SVG mark derived from the Maale Arna corporate emblem.
+ Served as the browser-tab favicon, referenced by workspace-entry and
+ portal-entry index.html (wiring delivered in L-2.4 / L-2.5).
+
+ The full emblem — the multicolor composition of connected figures,
+ hands, crops, a central triangle, and gears — is authored for
+ full-attention contexts. At 16×16 or 32×32 CSS pixels its internal
+ detail blurs. This file extracts the emblem's four most identifying
+ invariants into a form factor that reads at favicon sizes:
+
+   1. The green circular ring — agriculture and growth. The single
+      most identifying element of the emblem; without it the mark
+      is not recognisably Maale Arna.
+
+   2. The blue figure chain across the top arc — community. Five
+      simplified figure-heads arranged in an arc, echoing the
+      emblem's chain of connected humans.
+
+   3. The central blue triangle with a solid dot at its centre —
+      governance and learning. A simplified reference to the
+      emblem's triangle, cross, star, and open book.
+
+   4. A red accent on the left arc — the emblem's red decorative
+      wing. Reduced to a single curved stroke, placed where the
+      wing sits in the full emblem.
+
+ The result is faithful, not exact. It is a design draft, not a
+ commissioned asset. See the file's `STATUS` — a brand owner may
+ accept, amend, or replace it.
+
+ -----------------------------------------------------------------------------
+ Design decisions — documented
+ -----------------------------------------------------------------------------
+ · VIEWBOX 0 0 32 32. The conventional SVG favicon canvas. The mark
+   scales to any target size the browser chooses (16, 32, 64, 128)
+   without a change here.
+
+ · IVORY GROUND CIRCLE. The emblem sits on a cream/ivory interior.
+   Reproducing that interior as a filled circle (r=15) gives the
+   mark a stable appearance on every tab-bar colour — light, dark,
+   or themed. Without it, the green ring and blue figures would
+   fight the tab bar's own background on some platforms.
+
+ · FOUR COLOURS, FOURTEEN SHAPES. The emblem carries dozens of
+   distinct shapes. This file carries fourteen — five figure-heads,
+   two rings, one triangle, one dot, one arc, one background circle,
+   and three implied strokes. The reduction is deliberate. Every
+   additional shape added to a favicon costs legibility at 16px.
+
+ · LITERAL HEX VALUES, NOT CSS CUSTOM PROPERTIES. A standalone SVG
+   file loaded via `<link rel="icon" />` is outside the page's CSS
+   cascade — it cannot read `var(--mases-color-...)`. The four hex
+   values below are drawn from the emblem itself; they are not
+   design-system tokens. If the brand owner supplies a different
+   palette, this file is the only place to change it. The tokens
+   file (tokens.css) is not the authority for a favicon's colours.
+
+     #1F5A2A  — deep forest green, the emblem's ring
+     #1B3FB8  — royal blue, the emblem's figures and triangle
+     #C8102E  — bright red, the emblem's wing
+     #FFFDF7  — ivory, the emblem's interior ground (matches
+                tokens.css --mases-color-neutral-50)
+
+ · NO CONNECTING ARC BETWEEN THE FIGURES. Early drafts drew a thin
+   curve joining the figure-heads, echoing the emblem's hand-in-hand
+   chain. At 32px the arc cluttered the figures and read as noise.
+   It was removed. The five dots alone say "chain of figures"; the
+   arc was surplus.
+
+ · NO YELLOW. The emblem uses green, red, and yellow in its three
+   hands. This favicon carries green and red only. Yellow at 32px
+   reads as a lighter green and adds palette noise rather than
+   meaning. If the brand owner requires the full tricolour, the
+   figure chain's second figure could carry a yellow fill; that
+   change is one attribute in one element.
+
+ -----------------------------------------------------------------------------
+ Review and replacement
+ -----------------------------------------------------------------------------
+ This file is delivered as a draft. A brand owner reviewing it may:
+
+   · Accept as-is. No change. The file becomes canonical.
+
+   · Amend. The likely amendment sites are the palette (the four hex
+     values), the figure count (add or remove circles in the `<g>`
+     block), or the triangle's proportions (the single path's three
+     vertices). Each is a bounded edit inside this file.
+
+   · Replace. A commissioned compact mark drops into this path —
+     same filename, same `public/` semantics. The file's `<title>`
+     stays "Maale Arna". No consumer references the mark's internal
+     structure; the entry HTML (L-2.4 / L-2.5) references only the
+     path.
+
+ -----------------------------------------------------------------------------
+ Accessibility
+ -----------------------------------------------------------------------------
+ The SVG carries a `<title>` element with the text "Maale Arna". This
+ is the accessible name browsers and assistive technologies announce
+ when the favicon is examined in a bookmark list or an accessibility
+ tool. It is not rendered visually.
+
+ The mark is not announced during normal page browsing — the browser
+ tab's accessible name is the page's `document.title`, not the
+ favicon. The `<title>` here is a defensive convention, not a load-
+ bearing accessibility contract.
+
+ No `role` attribute. SVG loaded via `<link rel="icon" />` is not
+ part of the rendered document; it has no place in the page's
+ accessibility tree.
+
+ -----------------------------------------------------------------------------
+ Browser support
+ -----------------------------------------------------------------------------
+ SVG favicons are supported by:
+
+   · Chrome, Edge, Brave, Opera — since 2019
+   · Firefox — since 2017
+   · Safari — since 2020 (macOS 11+, iOS 14+)
+   · Every modern mobile browser on both platforms
+
+ Unsupported browsers fall through to the next `<link rel="icon" />`
+ in the entry HTML — the existing `/favicon.png`. This file's
+ reference in the entry HTML is therefore additive; the PNG remains
+ as the compatibility floor.
+
+ -----------------------------------------------------------------------------
+ Test hooks
+ -----------------------------------------------------------------------------
+ None. SVG files loaded as favicons are not queryable by the DOM.
+
+ A test that needs to verify the file's presence and validity can:
+   · assert its existence at `public/favicon.svg`;
+   · validate its XML structure (a `<svg>` root with the correct
+     `viewBox` and namespace);
+   · assert the presence of the four hex values documented above.
+=============================================================================
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 32 32"
+  width="32"
+  height="32"
+>
+  <title>Maale Arna</title>
+
+  <!--
+    Ivory ground — a full-radius disc behind the mark. Reproduces the
+    emblem's cream interior and stabilises the mark against every
+    tab-bar colour.
+  -->
+  <circle cx="16" cy="16" r="15" fill="#FFFDF7"/>
+
+  <!--
+    Green ring — the emblem's circular border. The single most
+    identifying element; without it the mark is not recognisably
+    Maale Arna.
+  -->
+  <circle
+    cx="16"
+    cy="16"
+    r="11.8"
+    fill="none"
+    stroke="#1F5A2A"
+    stroke-width="2.4"
+  />
+
+  <!--
+    Red accent on the left arc — the emblem's red decorative wing,
+    reduced to a single curved stroke. Placed where the wing sits in
+    the full emblem: on the ring's left edge, leaning outward.
+  -->
+  <path
+    d="M 4.6 14 Q 3.4 16.5 4.6 19"
+    fill="none"
+    stroke="#C8102E"
+    stroke-width="1.6"
+    stroke-linecap="round"
+  />
+
+  <!--
+    Blue figure chain across the top arc — five simplified figure-
+    heads arranged in an arc, echoing the emblem's hand-in-hand
+    figures. The arc rises to a peak at the centre; the two end
+    figures sit slightly lower than the middle three, matching the
+    emblem's arrangement.
+  -->
+  <g fill="#1B3FB8">
+    <circle cx="7"    cy="6.6" r="1.8"/>
+    <circle cx="11.5" cy="3.6" r="1.8"/>
+    <circle cx="16"   cy="2.5" r="1.8"/>
+    <circle cx="20.5" cy="3.6" r="1.8"/>
+    <circle cx="25"   cy="6.6" r="1.8"/>
+  </g>
+
+  <!--
+    Central blue triangle — the emblem's triangle-of-learning, with
+    the cross and star and open book reduced to a solid dot at the
+    triangle's centre. Stroked, not filled, so the mark reads as an
+    outline even at 16px.
+  -->
+  <path
+    d="M 16 11.5 L 21.2 20.4 L 10.8 20.4 Z"
+    fill="none"
+    stroke="#1B3FB8"
+    stroke-width="1.3"
+    stroke-linejoin="round"
+  />
+  <circle cx="16" cy="17" r="0.9" fill="#1B3FB8"/>
+</svg>
