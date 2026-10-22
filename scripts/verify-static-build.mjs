@@ -55,7 +55,9 @@ for (const [name, outDir] of builds) {
     failures.push(`${name}: missing deployed .htaccess`);
   } else {
     const config = await readFile(htaccessPath, 'utf8');
-    const csp = config.match(/connect-src\s+([^;"]+)/i)?.[1] ?? '';
+    const policies = [...config.matchAll(/Header always set Content-Security-Policy "([^"]+)"/g)].map(match => match[1]);
+    const policy = policies.find(value => value.includes("default-src"));
+    const csp = policy?.match(/(?:^|;\\s*)connect-src\\s+([^;]+)/i)?.[1] ?? '';
     if (!csp.includes(requiredApiOrigin) || /(?:^|\s)https:(?:\s|$)/.test(csp)) {
       failures.push(`${name}: CSP connect-src must allow only the approved API origin; found "${csp.trim()}"`);
     }
