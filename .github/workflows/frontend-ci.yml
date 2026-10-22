@@ -25,6 +25,8 @@ jobs:
         run: npm ci
       - name: Type-check and build all applications
         run: npm run build
+      - name: Verify root entry points, local assets, and deployment policy
+        run: npm run verify:build
       - name: Upload versioned static build outputs
         uses: actions/upload-artifact@v4
         with:
@@ -35,4 +37,5 @@ jobs:
             dist-admin/
             dist-public/
           if-no-files-found: error
+          include-hidden-files: true
           retention-days: 14
