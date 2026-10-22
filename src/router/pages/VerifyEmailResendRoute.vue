@@ -309,6 +309,7 @@
 -->
 
 <script setup lang="ts">
+import PublicSiteLayout from '@/layouts/PublicSiteLayout.vue';
 import { useRouter } from 'vue-router';
 
 import AuthLayout from '@/features/auth/AuthLayout';
@@ -353,6 +354,7 @@ async function onBackToLogin(): Promise<void> {
 </script>
 
 <template>
+  <PublicSiteLayout>
   <!--
     PageTitle renders nothing. It sets document.title during setup
     and restores the previous value on unmount. Placed as a sibling
@@ -375,6 +377,7 @@ async function onBackToLogin(): Promise<void> {
       @back-to-login="onBackToLogin"
     />
   </AuthLayout>
+  </PublicSiteLayout>
 </template>
 
 <style scoped>

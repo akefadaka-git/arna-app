@@ -387,6 +387,7 @@
 -->
 
 <script setup lang="ts">
+import PublicSiteLayout from '@/layouts/PublicSiteLayout.vue';
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
 
@@ -475,6 +476,7 @@ function headingForGroup(group: LegalHubGroup): string {
 </script>
 
 <template>
+  <PublicSiteLayout>
   <!--
     PageTitle renders nothing. It sets document.title during setup
     and restores the previous value on unmount. Placed as a sibling
@@ -596,6 +598,7 @@ function headingForGroup(group: LegalHubGroup): string {
       </footer>
     </article>
   </ErrorShell>
+  </PublicSiteLayout>
 </template>
 
 <style scoped>

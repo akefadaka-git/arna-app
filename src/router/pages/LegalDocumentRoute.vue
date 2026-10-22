@@ -556,6 +556,7 @@
 -->
 
 <script setup lang="ts">
+import PublicSiteLayout from '@/layouts/PublicSiteLayout.vue';
 import { computed } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 
@@ -739,6 +740,7 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 </script>
 
 <template>
+  <PublicSiteLayout>
   <!--
     PageTitle renders nothing. It sets document.title during setup
     and restores the previous value on unmount. Placed as a sibling
@@ -961,6 +963,7 @@ const appName: string = import.meta.env.VITE_APP_NAME;
       </template>
     </article>
   </ErrorShell>
+  </PublicSiteLayout>
 </template>
 
 <style scoped>

@@ -371,6 +371,7 @@
 -->
 
 <script setup lang="ts">
+import PublicSiteLayout from '@/layouts/PublicSiteLayout.vue';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -514,6 +515,7 @@ function onAccessDeniedLauncher(): void {
 </script>
 
 <template>
+  <PublicSiteLayout>
   <!--
     PageTitle renders nothing. It sets document.title during setup
     and restores the previous value on unmount. Placed as a sibling
@@ -571,4 +573,5 @@ function onAccessDeniedLauncher(): void {
       @launcher="onAccessDeniedLauncher"
     />
   </ErrorShell>
+  </PublicSiteLayout>
 </template>

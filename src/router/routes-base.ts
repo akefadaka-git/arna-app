@@ -503,6 +503,12 @@ export const routesBase: RouteRecordRaw[] = [
    * surface that links to the legal information page.
    */
   {
+    path: '/verify',
+    name: 'public-document-verification',
+    component: () => import('./pages/PublicVerificationRoute.vue'),
+  },
+
+  {
     path: '/legal',
     name: 'legal',
     component: () => import('./pages/LegalCenterRoute.vue'),

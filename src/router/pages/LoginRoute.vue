@@ -369,6 +369,7 @@
 -->
 
 <script setup lang="ts">
+import PublicSiteLayout from '@/layouts/PublicSiteLayout.vue';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -436,6 +437,7 @@ async function onRegister(): Promise<void> {
 </script>
 
 <template>
+  <PublicSiteLayout>
   <!--
     PageTitle renders nothing. It sets document.title during setup
     and restores the previous value on unmount. Placed as a sibling
@@ -458,6 +460,7 @@ async function onRegister(): Promise<void> {
       @register="onRegister"
     />
   </AuthLayout>
+  </PublicSiteLayout>
 </template>
 
 <style scoped>
