@@ -58,8 +58,10 @@ for (const [name, outDir] of builds) {
     const policies = [...config.matchAll(/Header always set Content-Security-Policy "([^"]+)"/g)].map(match => match[1]);
     const policy = policies.find(value => value.includes("default-src"));
     const csp = policy?.match(/(?:^|;\s*)connect-src\s+([^;]+)/i)?.[1] ?? '';
-    if (!csp.includes(requiredApiOrigin) || /(?:^|\s)https:(?:\s|$)/.test(csp)) {
-      failures.push(`${name}: CSP connect-src must allow only the approved API origin; found "${csp.trim()}"`);
+    const actualConnectSources = csp.trim().split(/\s+/).sort().join(' ');
+    const expectedConnectSources = ["'self'", requiredApiOrigin].sort().join(' ');
+    if (actualConnectSources !== expectedConnectSources) {
+      failures.push(\`${name}: CSP connect-src must equal the approved allow-list; found "\${csp.trim()}"\`);
     }
     if (!/RewriteRule\s+\^\s+\/index\.html\s+\[L\]/.test(config)) {
       failures.push(`${name}: SPA fallback must target the root /index.html`);
