@@ -22,13 +22,13 @@ The proposed visual system combines:
 - Green and controlled bright accents for growth, connection, and innovation.
 - **The Living Path**, an original proposed graphic language of a seed point, growing lines, connected branches, and meaningful milestones.
 
-These are documented design proposals, not a claim that the palette or brand statement has received final Owner approval or has been implemented in the UI.
+The v1.0 brand direction and proposed palette have been approved by the Owner. They are not yet implemented in the UI; runtime token adoption requires a separately verified change.
 
 ### Brand specification
 
-See [MASES / ARNA Brand Identity Master Specification v1.0](docs/BRAND_IDENTITY_MASTER_SPEC_V1.0.md) for the full proposed brand architecture, principles, palette, semantic-color guidance, typography requirements, emblem rules, domain accents, visual texture, content voice, governance, and adoption acceptance criteria.
+See [MASES / ARNA Brand Identity Master Specification v1.0](docs/BRAND_IDENTITY_MASTER_SPEC_V1.0.md) for the approved brand direction and architecture, principles, palette, semantic-color guidance, typography requirements, emblem rules, domain accents, visual texture, content voice, governance, and adoption acceptance criteria.
 
-**Governance note:** the specification is an Owner-review draft. Existing frozen design tokens and component contracts must not be silently overwritten. Production adoption requires explicit approval, reconciliation with the existing design-system specifications, accessibility checks, a bounded candidate change, exact-head verification, and a separate release decision.
+**Governance note:** the brand direction is Owner-approved; runtime adoption is pending. Existing frozen design tokens and component contracts must not be silently overwritten. Production adoption requires explicit approval, reconciliation with the existing design-system specifications, accessibility checks, a bounded candidate change, exact-head verification, and a separate release decision.
 
 ## Applications and build outputs
 
