@@ -8,7 +8,7 @@
  *   --mode public    → public-entry/index.html    → dist-public/
  *
  * The public corporate website is a standalone entry and does not boot the
- * authenticated application shell or router. All builds share Vue compilation,
+ * authenticated application shell or router. Its build output is independently verified by the public-build smoke test. All builds share Vue compilation,
  * the @ alias, asset handling, and production target.
  */
 

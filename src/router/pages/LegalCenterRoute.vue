@@ -580,20 +580,20 @@ function headingForGroup(group: LegalHubGroup): string {
       </section>
 
       <!-- ============================================================
-           Footer — back-to-login link
+           Footer — back-to-public-homepage link
            ============================================================
-           A convenience for a public visitor. An authenticated
-           user who activates it is redirected by the router
-           guard's guestOnly branch (guards.ts) to their session,
-           so the same link is correct for both audiences.
+           This component is also used by the standalone public build,
+           whose route table intentionally does not include /login.
+           Return visitors to the public homepage instead of sending
+           them to an unregistered path.
            ============================================================ -->
       <footer class="legal-center__footer">
         <RouterLink
-          to="/login"
+          to="/"
           class="legal-center__back-link"
           data-testid="legal-center-back"
         >
-          {{ legalCenterPageLabels.backToLoginLabel }}
+          {{ legalCenterPageLabels.backToPublicHomeLabel }}
         </RouterLink>
       </footer>
     </article>

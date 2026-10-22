@@ -1,0 +1,32 @@
+name: Public route contract smoke
+
+on:
+  push:
+    branches:
+      - test/public-route-contract-smoke
+  pull_request:
+    branches:
+      - feat/public-site-router-integration
+    paths:
+      - 'public-entry/main.ts'
+      - 'src/public-site/PublicHome.vue'
+      - 'src/router/pages/LegalCenterRoute.vue'
+      - 'tests/public-route-contract.test.mjs'
+      - '.github/workflows/public-route-contract.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  public-route-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out exact candidate
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run dependency-free public route contract checks
+        run: node --test tests/public-route-contract.test.mjs

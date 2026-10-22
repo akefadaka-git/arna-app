@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [main]
   push:
-    branches: [main, "feat/**"]
+    branches: [main, "feat/**", "test/**"]
 
 permissions:
   contents: read
@@ -27,6 +27,8 @@ jobs:
         run: npm run build
       - name: Verify root entry points, local assets, and deployment policy
         run: npm run verify:build
+      - name: Smoke-check the standalone public build artifacts
+        run: npm run test:public-build-smoke
       - name: Upload versioned static build outputs
         uses: actions/upload-artifact@v4
         with:

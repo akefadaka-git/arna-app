@@ -60,7 +60,7 @@
  *   legalCenterPageLabels: LegalCenterPageLabels
  *     The hub page's chrome — the page title, the intro sentence,
  *     the two hub group headings, the "draft" chip label used on
- *     document cards, and the back-to-login link at the bottom.
+ *     document cards, and the back-to-public-homepage link at the bottom.
  *
  *   legalDocumentPageLabels: LegalDocumentPageLabels
  *     The document viewer's chrome — the metadata block labels,
@@ -163,12 +163,12 @@
  *
  * "ወደ ሕጋዊ መረጃ ይመለሱ" (return to legal information) is the
  * back-to-hub link. The plural imperative "ይመለሱ" is used to match
- * the register of the auth label set's back-to-login link
+ * the register of the auth label set's back-to-public-homepage link
  * ("ወደ መግቢያ ይመለሱ"), so the two "return to" affordances across
  * the public surface read consistently.
  *
- * "ወደ መግቢያ ይመለሱ" (return to login) is the hub page's
- * back-to-login link. It is the same string that error-labels.ts
+ * "ወደ መግቢያ ይመለሱ" (return to the public homepage) is the hub page's
+ * back-to-public-homepage link. It is the same string that error-labels.ts
  * and the six auth labels use for the same destination, so a user
  * who moves between the legal hub, the login page, and an error
  * page sees one consistent name for the login surface.
@@ -362,17 +362,12 @@ export interface LegalCenterPageLabels {
   readonly draftChipLabel: string;
 
   /**
-   * The "return to login" link at the bottom of the hub page. A
-   * public-visitor convenience — a reader who arrived from a
-   * marketing email or a bookmark can go to the login page without
-   * editing the URL.
-   *
-   * An already-authenticated user who activates this link is
-   * caught by the router guard's guestOnly branch (guards.ts) and
-   * redirected to their session, so the same link is correct for
-   * both audiences without conditional logic.
+   * The link at the bottom of the public Legal Center hub that returns
+   * visitors to the public homepage. The standalone public router does
+   * not register an internal /login route, so this recovery action must
+   * remain within the public-site route table.
    */
-  readonly backToLoginLabel: string;
+  readonly backToPublicHomeLabel: string;
 }
 
 // =============================================================================
@@ -596,7 +591,7 @@ export const legalCenterPageLabels: LegalCenterPageLabels = {
     additional: 'ሌሎች ሕጋዊ መረጃዎች',
   },
   draftChipLabel: 'ረቂቅ',
-  backToLoginLabel: 'ወደ መግቢያ ይመለሱ',
+  backToPublicHomeLabel: 'ወደ መነሻ ገጽ ይመለሱ',
 };
 
 /**
