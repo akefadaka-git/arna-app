@@ -44,20 +44,12 @@
 #     Master Prompt §40         — Plesk compatibility
 #
 # -----------------------------------------------------------------------------
-# IMPORTANT — production-readiness item
+# Content Security Policy
 # -----------------------------------------------------------------------------
-# The Content-Security-Policy `connect-src` directive below uses
-# `'self' https:` as a permissive placeholder. The API origin is not
-# known at build time (it comes from VITE_API_BASE_URL, read at
-# runtime by the frontend's API client). Before production deployment,
-# the reviewer must narrow `connect-src` to the specific API origin,
-# e.g.:
-#
-#     connect-src 'self' https://api.maalearna.com.et;
-#
-# This is the single header line in this file that requires a
-# deployment-time decision. It is flagged here so it does not ship to
-# production with the permissive value.
+# Browser API calls are restricted to the approved ARNA API origin.
+# If VITE_API_BASE_URL changes, update this policy in the same reviewed
+# change. The build verification script fails if the permissive HTTPS
+# wildcard is reintroduced.
 #
 # =============================================================================
 
@@ -147,10 +139,8 @@
     Header always set X-Permitted-Cross-Domain-Policies "none"
 
     # --- Extended Content-Security-Policy --------------------------------
-    # A broader CSP than the freeze's minimum. See the file header
-    # §"IMPORTANT — production-readiness item" before deploying: the
-    # connect-src directive uses a permissive placeholder that must
-    # be narrowed to the actual API origin.
+    # connect-src is restricted to the approved API origin. Update the
+    # allow-list only through a reviewed configuration change.
     #
     # Directive rationale:
     #   default-src 'self'      — fallback: same-origin only
@@ -163,15 +153,14 @@
     #                           — data: for inline SVG;
     #                             blob: for FilePreview (Unit 10.11)
     #   font-src 'self'         — fonts are self-hosted (no CDN)
-    #   connect-src 'self' https:
-    #                           — PERMISSIVE PLACEHOLDER — narrow to
-    #                             the API origin before production
+    #   connect-src 'self' https://api.maalearna.com.et
+    #                           — approved API origin only
     #   object-src 'none'       — no <object>/<embed> anywhere
     #   base-uri 'self'         — no <base> rewriting
     #   form-action 'self'      — forms submit same-origin only
     #   frame-ancestors 'none'  — no embedding (also declared above)
     #
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://api.maalearna.com.et; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
 
 </IfModule>
 
