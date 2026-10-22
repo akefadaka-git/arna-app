@@ -2,7 +2,7 @@
 
 - **Document ID:** ARNA-BRAND-MASTER-001
 - **Version:** 1.0
-- **Status:** Owner review draft — not yet approved for production adoption
+- **Status:** Owner-approved brand direction v1.0 — runtime adoption pending separate implementation verification
 - **Scope:** Maale Arna Smart System (MASES), ARNA corporate identity, public website, workspace, shareholder portal, administration interface, documents, and future product surfaces
 - **Brand principle:** One identity; one semantic design system; many business domains
 - **Companion document:** Repository [README.md](../README.md)
@@ -72,7 +72,7 @@ Do not apply arbitrary gradients, glass effects, heavy patterns, or decorative a
 
 ## 6. Proposed core color palette
 
-The following hex values are the **proposed v1.0 palette for Owner review**. They establish a concrete design direction; they are not yet canonical runtime tokens. Before implementation, test each foreground/background pairing, document approved combinations, and reconcile these values with the existing frozen token substrate.
+The following hex values are the **Owner-approved v1.0 brand palette**. They establish the canonical approved brand direction for future implementation; they are not yet canonical runtime tokens until the existing frozen token substrate is reconciled and an implementation change is verified. Before implementation, test each foreground/background pairing, document approved combinations, and reconcile these values with the existing frozen token substrate.
 
 | Color role | Proposed value | Intended meaning and use |
 |---|---|---|
@@ -219,11 +219,11 @@ Avoid:
 
 We begin with people, grow through productive work, connect opportunity with intelligence, and lead through service. We believe leadership is earned through integrity, responsibility, and results. Our aim is to build enduring trust and create lasting value for the communities we serve.
 
-This statement is proposed copy and requires Owner approval before being treated as official brand language.
+This brand statement is Owner-approved as the v1.0 brand direction. Its final placement and production use remain subject to the implementation and content review described in this specification.
 
 ## 13. Governance and change control
 
-1. This document is a proposal for Owner review, not authorization to alter frozen source files.
+1. The brand direction in this document is Owner-approved. That approval does not itself authorize changes to frozen source files or deployment.
 2. The Owner decides final brand values, naming, scope, exceptions, and adoption.
 3. The current frozen token system remains unchanged until an explicitly authorized change reconciles this specification with existing design-system and shell contracts.
 4. The implementation must use one authoritative token source. Components must not introduce competing hardcoded brand colors.
@@ -234,7 +234,7 @@ This statement is proposed copy and requires Owner approval before being treated
 ## 14. Adoption acceptance criteria
 
 Before this specification is considered implemented:
-- [ ] Owner has approved the canonical palette and brand statement.
+- [x] Owner has approved the canonical brand palette and brand statement.
 - [ ] Corporate emblem and any compact-mark proposal have passed brand review.
 - [ ] The canonical design token file and all referenced frozen specifications are reconciled.
 - [ ] Color pairings have documented WCAG contrast results.
@@ -250,4 +250,4 @@ Before this specification is considered implemented:
 
 | Version | Status | Summary |
 |---|---|---|
-| 1.0 | Owner review draft | Consolidates enterprise blue, aubergine, crimson, gold, warm ivory, controlled bright accents, the Living Leader concept, and the Living Path graphic language. Runtime adoption is not authorized by this draft alone. |
+| 1.0 | Owner-approved brand direction | Consolidates enterprise blue, aubergine, crimson, gold, warm ivory, controlled bright accents, the Living Leader concept, and the Living Path graphic language. Runtime adoption remains subject to token reconciliation and implementation verification. |
