@@ -25,12 +25,13 @@
     "dev:admin": "vite --mode admin",
     "dev:public": "vite --mode public",
     "type-check": "vue-tsc --noEmit",
-    "build:workspace": "npm run type-check && vite build --mode workspace",
-    "build:portal": "npm run type-check && vite build --mode portal",
-    "build:admin": "npm run type-check && vite build --mode admin",
-    "build:public": "npm run type-check && vite build --mode public",
-    "build:all": "npm run type-check && vite build --mode workspace && vite build --mode portal && vite build --mode admin && vite build --mode public",
+    "build:workspace": "npm run type-check && vite build --mode workspace && node scripts/prepare-static-build.mjs workspace",
+    "build:portal": "npm run type-check && vite build --mode portal && node scripts/prepare-static-build.mjs portal",
+    "build:admin": "npm run type-check && vite build --mode admin && node scripts/prepare-static-build.mjs admin",
+    "build:public": "npm run type-check && vite build --mode public && node scripts/prepare-static-build.mjs public",
+    "build:all": "npm run type-check && vite build --mode workspace && vite build --mode portal && vite build --mode admin && vite build --mode public && node scripts/prepare-static-build.mjs",
     "build": "npm run build:all",
+    "verify:build": "node scripts/verify-static-build.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
