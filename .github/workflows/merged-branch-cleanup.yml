@@ -1,0 +1,136 @@
+name: Merged Branch Cleanup
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch_name:
+        description: "Optional: inspect/clean one exact branch; leave empty to process all safe candidates"
+        required: false
+        type: string
+        default: ""
+      delete_merged_branches:
+        description: "Actually delete eligible branches (unchecked means dry run only)"
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: merged-branch-cleanup
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    name: Find and clean merged branches
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Identify eligible branches and optionally delete
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH_FILTER: ${{ inputs.branch_name }}
+          DELETE_ENABLED: ${{ inputs.delete_merged_branches }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          tmpdir="$(mktemp -d)"
+          trap 'rm -rf "$tmpdir"' EXIT
+          branches_file="$tmpdir/branches.txt"
+          merged_prs_file="$tmpdir/merged-prs.tsv"
+          open_prs_file="$tmpdir/open-prs.tsv"
+          default_branch="$(gh api "repos/$REPO" --jq '.default_branch')"
+
+          echo "Repository: $REPO"
+          echo "Default branch: $default_branch"
+          if [[ -n "$BRANCH_FILTER" ]]; then
+            echo "Requested branch: $BRANCH_FILTER"
+          else
+            echo "Requested branch: all eligible branches"
+          fi
+          if [[ "$DELETE_ENABLED" == "true" ]]; then
+            echo "Mode: DELETE eligible branches"
+          else
+            echo "Mode: DRY RUN (no branches will be deleted)"
+          fi
+
+          gh api --paginate "repos/$REPO/branches?per_page=100" --jq '.[].name' > "$branches_file"
+          gh api --paginate "repos/$REPO/pulls?state=all&per_page=100" \
+            --jq '.[] | select(.merged_at != null) | [.head.ref, (.head.repo.full_name // ""), .head.sha, .base.ref, .number, .merged_at] | @tsv' \
+            > "$merged_prs_file"
+          gh api --paginate "repos/$REPO/pulls?state=open&per_page=100" \
+            --jq '.[] | [.head.ref, .base.ref] | @tsv' > "$open_prs_file"
+
+          deleted=0
+          eligible=0
+          skipped=0
+
+          while IFS= read -r branch; do
+            [[ -n "$branch" ]] || continue
+            if [[ "$branch" == "$default_branch" ]]; then
+              continue
+            fi
+            if [[ -n "$BRANCH_FILTER" && "$branch" != "$BRANCH_FILTER" ]]; then
+              continue
+            fi
+
+            # Preserve any branch referenced as a head or base by an open PR.
+            if awk -F '\t' -v b="$branch" '$1 == b || $2 == b { found=1 } END { exit !found }' "$open_prs_file"; then
+              echo "SKIP $branch — referenced by an open pull request"
+              skipped=$((skipped + 1))
+              continue
+            fi
+
+            # Require a merged PR whose source branch belongs to this repository.
+            if ! awk -F '\t' -v b="$branch" -v r="$REPO" '$1 == b && $2 == r { found=1 } END { exit !found }' "$merged_prs_file"; then
+              continue
+            fi
+
+            # Verify the live branch tip is exactly a head SHA recorded for a merged PR.
+            # This deliberately skips branches that advanced after merging, including
+            # branches whose current tip has not been proven merged.
+            if ! branch_sha="$(gh api "repos/$REPO/git/ref/heads/$branch" --jq '.object.sha' 2>/dev/null)"; then
+              echo "SKIP $branch — could not read current branch tip"
+              skipped=$((skipped + 1))
+              continue
+            fi
+            if ! awk -F '\t' -v b="$branch" -v r="$REPO" -v s="$branch_sha" '$1 == b && $2 == r && $3 == s { found=1 } END { exit !found }' "$merged_prs_file"; then
+              echo "SKIP $branch — current tip differs from every merged PR head SHA"
+              skipped=$((skipped + 1))
+              continue
+            fi
+
+            eligible=$((eligible + 1))
+            if [[ "$DELETE_ENABLED" != "true" ]]; then
+              echo "DRY RUN: would delete $branch"
+              continue
+            fi
+
+            # The DELETE operation is reached only after every guard above passes.
+            if gh api --method DELETE "repos/$REPO/git/refs/heads/$branch"; then
+              echo "DELETED $branch"
+              deleted=$((deleted + 1))
+            else
+              echo "FAILED to delete $branch"
+              exit 1
+            fi
+          done < "$branches_file"
+
+          {
+            echo "## Merged branch cleanup"
+            echo
+            echo "- Repository: `$REPO`"
+            echo "- Default branch protected from cleanup: `$default_branch`"
+            echo "- Mode: $([[ "$DELETE_ENABLED" == "true" ]] && echo "delete" || echo "dry run")"
+            echo "- Eligible branches: $eligible"
+            echo "- Deleted branches: $deleted"
+            echo "- Skipped branches: $skipped"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [[ -n "$BRANCH_FILTER" && "$eligible" -eq 0 ]]; then
+            echo "No eligible branch found for filter: $BRANCH_FILTER"
+          fi
