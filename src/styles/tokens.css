@@ -3,8 +3,8 @@
  * =============================================================================
  *
  * File:      mase_app/src/styles/tokens.css
- * Version:   1.3.0
- * Status:    FROZEN
+ * Version:   1.4.0-candidate
+ * Status:    FROZEN BASE + ADDITIVE BRAND CR CANDIDATE (branch only)
  * Authority: MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
  *            MASES_SHELL_DESIGN_SYSTEM_MASTER_SPEC.md §7.1, §18, §29,
  *              §31, §33, §34, §60–§62
@@ -248,6 +248,45 @@
   /* ---------------------------------------------------------------------------
    * Danger — reuses the Crimson family. No separate red scale is defined.
    * --------------------------------------------------------------------------- */
+
+  /* ---------------------------------------------------------------------------
+   * ARNA brand palette — additive CR candidate v1.4.0
+   * Canonical values from docs/BRAND_IDENTITY_MASTER_SPEC_V1.0.md §6.
+   * These namespaced primitives do not rename or reassign frozen MASES tokens.
+   * --------------------------------------------------------------------------- */
+  --arna-color-enterprise-blue: #123D68;
+  --arna-color-action-blue: #1769AA;
+  --arna-color-aubergine: #3D1C50;
+  --arna-color-crimson: #B4233A;
+  --arna-color-gold: var(--mases-color-gold-500);
+  --arna-color-warm-ivory: var(--mases-color-neutral-50);
+  --arna-color-living-green: #216747;
+  --arna-color-bright-azure: #35A7FF;
+  --arna-color-violet: #8B5CF6;
+  --arna-color-rose: #E85D75;
+  --arna-color-teal: #0F9D9A;
+  --arna-color-citrus: #C4D83D;
+  --arna-color-basalt-text: #263445;
+  --arna-color-secondary-text: #64748B;
+  --arna-color-cloud-surface: #F3F6FA;
+  --arna-color-white: var(--mases-color-neutral-0);
+
+  /* Public-site semantic roles. Components consume roles, not raw palette. */
+  --arna-public-page-surface: var(--arna-color-warm-ivory);
+  --arna-public-surface: var(--arna-color-white);
+  --arna-public-text-primary: var(--arna-color-basalt-text);
+  --arna-public-text-secondary: var(--arna-color-secondary-text);
+  --arna-public-brand-anchor: var(--arna-color-enterprise-blue);
+  --arna-public-action: var(--arna-color-action-blue);
+  --arna-public-accent: var(--arna-color-gold);
+  --arna-public-border-subtle: color-mix(in srgb, var(--arna-color-basalt-text) 12%, transparent);
+  --arna-public-brand-border: color-mix(in srgb, var(--arna-color-enterprise-blue) 14%, transparent);
+  --arna-public-surface-overlay: color-mix(in srgb, var(--arna-color-white) 76%, transparent);
+  --arna-public-surface-soft: color-mix(in srgb, var(--arna-color-white) 66%, transparent);
+  --arna-public-accent-soft: color-mix(in srgb, var(--arna-color-gold) 24%, transparent);
+  --arna-public-accent-wash: color-mix(in srgb, var(--arna-color-gold) 13%, transparent);
+  --arna-public-action-wash: color-mix(in srgb, var(--arna-color-action-blue) 7%, transparent);
+  --arna-public-card-shadow: color-mix(in srgb, var(--arna-color-basalt-text) 7%, transparent);
 
   /* ===========================================================================
    * TIER 2 — SEMANTIC ROLES

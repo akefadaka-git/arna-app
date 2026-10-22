@@ -29,6 +29,8 @@ jobs:
         run: npm run verify:build
       - name: Smoke-check the standalone public build artifacts
         run: npm run test:public-build-smoke
+      - name: Verify approved ARNA palette and contrast contract
+        run: npm run test:brand-palette-contract
       - name: Upload versioned static build outputs
         uses: actions/upload-artifact@v4
         with:

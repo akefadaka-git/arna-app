@@ -77,19 +77,14 @@ const year = new Date().getFullYear();
 
 <style scoped>
 .public-home {
-  --public-navy: #123f78;
-  --public-blue: #168bff;
-  --public-gold: #e5b542;
-  --public-ivory: #fffdf7;
-  --public-ink: #202b38;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  color: var(--public-ink);
+  color: var(--arna-public-text-primary);
   background:
-    radial-gradient(ellipse at 78% 14%, rgb(229 181 66 / 13%), transparent 34rem),
-    radial-gradient(ellipse at 8% 55%, rgb(22 139 255 / 7%), transparent 30rem),
-    var(--public-ivory);
+    radial-gradient(ellipse at 78% 14%, var(--arna-public-accent-wash), transparent 34rem),
+    radial-gradient(ellipse at 8% 55%, var(--arna-public-action-wash), transparent 30rem),
+    var(--arna-public-page-surface);
   font-family: "Noto Sans Ethiopic", Inter, system-ui, sans-serif;
 }
 .public-home__header,
@@ -103,13 +98,13 @@ const year = new Date().getFullYear();
 }
 .public-home__header {
   min-height: 6rem;
-  border-bottom: 1px solid rgb(32 43 56 / 12%);
+  border-bottom: 1px solid var(--arna-public-border-subtle);
 }
 .public-home__brand {
   display: inline-flex;
   align-items: center;
   gap: .75rem;
-  color: var(--public-navy);
+  color: var(--arna-public-brand-anchor);
   text-decoration: none;
 }
 .public-home__brand > span:last-child { display: grid; gap: .1rem; }
@@ -121,8 +116,8 @@ const year = new Date().getFullYear();
   display: grid;
   place-items: center;
   border-radius: 50% 50% 50% 12%;
-  color: white;
-  background: var(--public-navy);
+  color: var(--arna-color-white);
+  background: var(--arna-public-brand-anchor);
   font-family: Georgia, serif;
   font-size: 1.6rem;
 }
@@ -130,14 +125,14 @@ const year = new Date().getFullYear();
   display: inline-flex;
   align-items: center;
   gap: .55rem;
-  color: #5c6571;
+  color: var(--arna-public-text-secondary);
   font-size: .85rem;
 }
 .public-home__status-dot {
   width: .5rem;
   height: .5rem;
   border-radius: 50%;
-  background: var(--public-gold);
+  background: var(--arna-public-accent);
 }
 .public-home__main {
   width: min(100% - 3rem, 76rem);
@@ -151,7 +146,7 @@ const year = new Date().getFullYear();
 }
 .public-home__eyebrow {
   margin: 0;
-  color: var(--public-navy);
+  color: var(--arna-public-brand-anchor);
   font-size: .75rem;
   font-weight: 700;
   letter-spacing: .14em;
@@ -168,16 +163,16 @@ const year = new Date().getFullYear();
   width: .38rem;
   height: .38rem;
   transform: rotate(45deg);
-  background: var(--public-gold);
+  background: var(--arna-public-accent);
 }
 .public-home__ornament span:nth-child(2) {
   width: .65rem;
   height: .65rem;
-  background: var(--public-navy);
+  background: var(--arna-public-brand-anchor);
 }
 .public-home h1 {
   margin: 0;
-  color: var(--public-navy);
+  color: var(--arna-public-brand-anchor);
   font-size: clamp(2rem, 5vw, 3.7rem);
   line-height: 1.35;
   font-weight: 750;
@@ -186,19 +181,19 @@ const year = new Date().getFullYear();
 .public-home__welcome {
   max-width: 43rem;
   margin: 1.35rem auto 2.8rem;
-  color: #4d5967;
+  color: var(--arna-public-text-secondary);
   font-size: clamp(1rem, 2vw, 1.2rem);
   line-height: 2;
 }
 .public-home h2 {
   margin: 0;
-  color: var(--public-ink);
+  color: var(--arna-public-text-primary);
   font-size: clamp(1.35rem, 3vw, 2rem);
   line-height: 1.4;
 }
 .public-home__coming {
   margin: .9rem auto 1.5rem;
-  color: #596472;
+  color: var(--arna-public-text-secondary);
   line-height: 1.9;
 }
 .public-home__badge {
@@ -206,10 +201,10 @@ const year = new Date().getFullYear();
   align-items: center;
   gap: .85rem;
   padding: .85rem 1.25rem;
-  border: 1px solid rgb(18 63 120 / 14%);
+  border: 1px solid var(--arna-public-brand-border);
   border-radius: 999px;
-  background: rgb(255 255 255 / 76%);
-  box-shadow: 0 12px 35px rgb(32 43 56 / 7%);
+  background: var(--arna-public-surface-overlay);
+  box-shadow: 0 12px 35px var(--arna-public-card-shadow);
   text-align: left;
 }
 .public-home__badge-icon {
@@ -218,14 +213,14 @@ const year = new Date().getFullYear();
   display: grid;
   place-items: center;
   border-radius: 50%;
-  color: var(--public-navy);
-  background: rgb(229 181 66 / 24%);
+  color: var(--arna-public-brand-anchor);
+  background: var(--arna-public-accent-soft);
   font-size: 1.3rem;
 }
 .public-home__badge strong,
 .public-home__badge small { display: block; }
-.public-home__badge strong { color: var(--public-navy); }
-.public-home__badge small { margin-top: .15rem; color: #596472; }
+.public-home__badge strong { color: var(--arna-public-brand-anchor); }
+.public-home__badge small { margin-top: .15rem; color: var(--arna-public-text-secondary); }
 .public-home__principles {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -234,39 +229,39 @@ const year = new Date().getFullYear();
 }
 .public-home__principles article {
   padding: 1.4rem 1.5rem;
-  border: 1px solid rgb(32 43 56 / 10%);
+  border: 1px solid var(--arna-public-border-subtle);
   border-radius: 1rem;
-  background: rgb(255 255 255 / 66%);
+  background: var(--arna-public-surface-soft);
 }
 .public-home__principle-number {
-  color: #a47a12;
+  color: var(--arna-public-brand-anchor);
   font-size: .75rem;
   font-weight: 800;
   letter-spacing: .12em;
 }
 .public-home__principles h3 {
   margin: .65rem 0 .35rem;
-  color: var(--public-navy);
+  color: var(--arna-public-brand-anchor);
   font-size: 1.05rem;
 }
 .public-home__principles p {
   margin: 0;
-  color: #596472;
+  color: var(--arna-public-text-secondary);
   font-size: .9rem;
   line-height: 1.7;
 }
 .public-home__note {
   margin: 0 auto 2rem;
   padding: 1rem 1.25rem;
-  border-inline-start: 3px solid var(--public-gold);
-  color: #596472;
+  border-inline-start: 3px solid var(--arna-public-accent);
+  color: var(--arna-public-text-secondary);
   font-size: .88rem;
   line-height: 1.8;
 }
 .public-home__footer {
   min-height: 5rem;
-  border-top: 1px solid rgb(32 43 56 / 12%);
-  color: #65707c;
+  border-top: 1px solid var(--arna-public-border-subtle);
+  color: var(--arna-public-text-secondary);
   font-size: .78rem;
 }
 @media (max-width: 42rem) {
