@@ -6,6 +6,7 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 
 <template>
   <div class="public-site-layout" data-testid="public-site-layout">
+    <a class="public-site-layout__skip-link" href="#public-site-main">ወደ ዋናው ይዘት ዝለል</a>
     <header class="public-site-layout__header">
       <nav class="public-site-layout__nav" aria-label="ዋና አሰሳ">
         <RouterLink class="public-site-layout__brand" to="/login">{{ appName }}</RouterLink>
@@ -16,9 +17,9 @@ const appName: string = import.meta.env.VITE_APP_NAME;
         </div>
       </nav>
     </header>
-    <div class="public-site-layout__content">
+    <main id="public-site-main" class="public-site-layout__content" tabindex="-1">
       <slot />
-    </div>
+    </main>
     <footer class="public-site-layout__footer">
       <nav aria-label="የግርጌ አሰሳ">
         <RouterLink to="/legal">ሕጋዊ መረጃ</RouterLink>
@@ -68,9 +69,29 @@ const appName: string = import.meta.env.VITE_APP_NAME;
   font-weight: var(--mases-font-weight-semibold, 700);
   text-decoration: none;
 }
+.public-site-layout__skip-link {
+  position: absolute;
+  z-index: 1000;
+  inset-block-start: 0.5rem;
+  inset-inline-start: 0.5rem;
+  padding: 0.65rem 0.9rem;
+  color: var(--mases-color-text-primary);
+  background: var(--mases-color-surface, var(--mases-color-background));
+  border: 2px solid currentColor;
+  border-radius: 0.25rem;
+  transform: translateY(calc(-100% - 1rem));
+}
+.public-site-layout__skip-link:focus {
+  transform: translateY(0);
+}
 .public-site-layout a {
   color: var(--mases-color-text-primary);
   text-underline-offset: 0.2em;
+}
+.public-site-layout a:focus-visible,
+.public-site-layout__content:focus-visible {
+  outline: 3px solid var(--mases-color-focus, currentColor);
+  outline-offset: 3px;
 }
 .public-site-layout__content {
   flex: 1;
