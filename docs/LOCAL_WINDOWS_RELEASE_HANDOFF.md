@@ -22,7 +22,8 @@ These are source-level consolidations from open draft work. The UI is not verifi
 4. Set the correct environment variables for each build mode. Never put secrets in `VITE_*` variables; these are embedded in browser bundles.
 5. Build the four static applications with `npm run build`. The expected outputs are `dist/`, `dist-portal/`, `dist-admin/`, and `dist-public/`.
 6. Run `npm run verify:build`, `npm run test:public-build-smoke`, and `npm run test:brand-palette-contract` locally. Review generated assets and browser console/network errors for each entry point.
-7. Test login, logout, session expiry, tenant context, permission-denied states, forms, empty/error/loading states, and API failures against a local API.
+8. Run `node --test tests/governance-route-contract.test.mjs` locally in addition to the scripts above.
+9. Test login, logout, session expiry, tenant context, permission-denied states, forms, empty/error/loading states, and API failures against a local API.
 
 ## Deployment cautions
 - The frontend is a static client. API authorization must remain authoritative; hiding a route or button is not access control.
