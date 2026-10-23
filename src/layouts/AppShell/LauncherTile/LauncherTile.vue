@@ -5,8 +5,8 @@
 
  File:      mase_app/src/layouts/AppShell/LauncherTile/LauncherTile.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.1.0
- Status:    FROZEN
+ Version:   1.2.0
+ Status:    ENHANCEMENT — forced-colors accessibility
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §7.4
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §9.5, §15.1, §20.1, §22
@@ -47,6 +47,15 @@
             and for those rows the tile's behavior is identical to
             1.0.0. The change is additive defense and additive icon
             resolution.
+
+ -----------------------------------------------------------------------------
+ 1.2.0  — improve launcher state visibility in forced-colors mode:
+          · Use system colors for unavailable tiles so the disabled
+            state does not depend on low contrast or opacity blending.
+          · Preserve a system highlight focus outline for launchable
+            links in Windows High Contrast / forced-colors settings.
+          · Normal-theme colors, launchability, markup, and contracts
+            remain unchanged.
 
  -----------------------------------------------------------------------------
  Purpose
@@ -591,6 +600,31 @@ function onClick(event: MouseEvent): void {
   inset-block-start: var(--mases-space-3);
   inset-inline-end: var(--mases-space-3);
   color: var(--mases-color-icon-secondary);
+}
+
+/* ============================================================================
+   Forced colors
+   ---------------------------------------------------------------------------
+   Preserve the distinction between launchable and unavailable tiles
+   when user-selected high-contrast colors replace the normal palette.
+   Do not rely on opacity to communicate unavailable state.
+   ============================================================================ */
+@media (forced-colors: active) {
+  .launcher-tile[data-available='false'] {
+    border-color: GrayText;
+    background-color: Canvas;
+    color: GrayText;
+    opacity: 1;
+  }
+
+  .launcher-tile[data-available='false'] .launcher-tile__description,
+  .launcher-tile[data-available='false'] .launcher-tile__lock-icon {
+    color: GrayText;
+  }
+
+  .launcher-tile[data-available='true']:focus-visible {
+    outline-color: Highlight;
+  }
 }
 
 /* ============================================================================
