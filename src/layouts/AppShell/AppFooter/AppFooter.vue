@@ -5,8 +5,8 @@
 
  File:      mase_app/src/layouts/AppShell/AppFooter/AppFooter.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.1.0
- Status:    ENHANCEMENT — responsive slot sizing
+ Version:   1.2.0
+ Status:    ENHANCEMENT — forced-colors accessibility
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §6.x (Layout)
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §15.1, §22 STAGE 11
@@ -457,4 +457,25 @@ const regionCount = computed<number>(() => {
     /* no-op placeholder — see comment above */
   }
 }
+
+/* ============================================================================
+   Forced-colors mode
+   ---------------------------------------------------------------------------
+   Restore a clear system-colored footer boundary and readable text when
+   user-selected high-contrast colors replace the normal token palette.
+   Slot content remains consumer-owned and keeps its own semantics.
+   ============================================================================ */
+@media (forced-colors: active) {
+  .app-footer {
+    background-color: Canvas;
+    color: CanvasText;
+    border-block-start-color: CanvasText;
+  }
+
+  .app-footer__copyright,
+  .app-footer__version {
+    color: CanvasText;
+  }
+}
+
 </style>
