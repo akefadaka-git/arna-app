@@ -521,8 +521,6 @@ export async function completeMfaLogin(
 export async function register(
   payload: RegisterRequest,
 ): Promise<void> {
-  const auth = useAuthStore();
-
   /*
    * Step 0 — Sanctum CSRF handshake. Added in 1.1.0. See the note in
    * login() above; the contract and rationale are identical.
