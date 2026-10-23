@@ -5,11 +5,18 @@
 
  File:      mase_app/src/layouts/AppShell/SkipToContent/SkipToContent.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.0.0
- Status:    FROZEN
+ Version:   1.0.1
+ Status:    ENHANCEMENT — self-contained accessibility rationale
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §6.x (Layout) and
             §17 (Accessibility baseline)
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §15.1, §17.2
+
+
+
+ 1.0.1  — make visibility and stacking rationale self-contained:
+          · Replace references to a chat-delivery preamble with the
+            actual focus-visibility and z-index rationale in this file.
+          · No template, prop, focus behavior, timing, or token changed.
 
  -----------------------------------------------------------------------------
  Purpose
@@ -65,19 +72,20 @@
  Safari ≤ 15 support as its justification.
 
  -----------------------------------------------------------------------------
- Visibility technique — see the response preamble
+ Visibility technique — focus reveals the link
  -----------------------------------------------------------------------------
  Off-screen by default via position: fixed + transform:
  translateY(-100%). Visible on :focus via transform: translateY(0).
- :focus (not :focus-visible) — rationale documented in the response
- preamble.
+ :focus (not :focus-visible) is deliberate because this component
+ exists specifically to expose keyboard navigation and should also
+ appear when focused programmatically.
 
  -----------------------------------------------------------------------------
- z-index coordination with AppHeader — see the response preamble
+ z-index coordination with AppHeader
  -----------------------------------------------------------------------------
- Uses --mases-z-sticky (200). AppHeader must use --mases-z-raised (10)
- or lower for its own sticky positioning, or a token addition via CR is
- required.
+ Uses --mases-z-sticky (200), placing the focused link above AppHeader.
+ AppHeader should use --mases-z-raised (10) or lower for sticky
+ positioning; changing that relationship requires a coordinated token CR.
 
  -----------------------------------------------------------------------------
  Chrome-padding alignment
@@ -215,8 +223,8 @@ const props = defineProps<Props>();
   overflow-wrap: break-word;
   word-break: normal;
   /*
-   * Above the AppHeader. See the response preamble §"z-index
-   * coordination with AppHeader" for the AppHeader-side constraint.
+   * Above the AppHeader. AppHeader should remain at --mases-z-raised (10)
+   * or lower; see the file header §"z-index coordination with AppHeader".
    */
   z-index: var(--mases-z-sticky);
   /*
