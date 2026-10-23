@@ -5,8 +5,8 @@
 
  File:      mase_app/src/layouts/AppShell/MaintenanceBanner/MaintenanceBanner.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.0.1
- Status:    FROZEN
+ Version:   1.1.0
+ Status:    ENHANCEMENT — forced-colors accessibility
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §6.x (Layout)
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §15.1, §22 STAGE 11
@@ -20,6 +20,13 @@
           prior relative paths ('../../primitives/...'), which
           resolved to a non-existent src/layouts/primitives/
           directory. No logic, template, or style change.
+
+ -----------------------------------------------------------------------------
+ 1.1.0  — improve notice readability in forced-colors mode:
+          · Add a high-contrast system-color treatment for all three
+            variants instead of relying on theme-specific backgrounds.
+          · Keep the live-region role and variant metadata unchanged;
+            announcement urgency remains intact.
 
  -----------------------------------------------------------------------------
  Purpose
@@ -436,6 +443,25 @@ function onDismiss(): void {
 .maintenance-banner[data-variant='danger'] {
   background-color: var(--mases-color-surface-danger);
   color: var(--mases-color-text-danger);
+}
+
+/* ============================================================================
+   Forced colors
+   ---------------------------------------------------------------------------
+   In high-contrast environments, theme-specific variant surfaces may
+   be remapped by the user agent. Use explicit system colors and a
+   structural separator so the notice remains legible without depending
+   on the normal theme palette. Variant urgency remains semantic via
+   the existing status/alert live-region role.
+   ============================================================================ */
+@media (forced-colors: active) {
+  .maintenance-banner {
+    border-block-start: 1px solid CanvasText;
+    border-block-end-color: CanvasText;
+    background-color: Canvas;
+    color: CanvasText;
+    forced-color-adjust: auto;
+  }
 }
 
 /* ============================================================================
