@@ -5,8 +5,8 @@
 
  File:      mase_app/src/layouts/AppShell/NotificationsBell/NotificationsBell.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.0.1
- Status:    FROZEN
+ Version:   1.1.0
+ Status:    ENHANCEMENT — forced-colors accessibility
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §24.19
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §15.1, §20.2, §22
@@ -386,6 +386,28 @@ function onClick(): void {
    ============================================================================ */
 [data-disabled='true'] {
   opacity: 0.5;
+}
+
+/* ============================================================================
+   Forced colors
+   ---------------------------------------------------------------------------
+   Do not let the reduced-opacity disabled treatment make the focusable
+   aria-disabled trigger illegible. Use system colors for the unread
+   badge so its count remains distinct in high-contrast environments.
+   ============================================================================ */
+@media (forced-colors: active) {
+  [data-disabled='true'] {
+    opacity: 1;
+    color: GrayText;
+    border: 1px solid GrayText;
+  }
+
+  .notifications-bell__badge {
+    background-color: Highlight;
+    color: HighlightText;
+    border: 1px solid HighlightText;
+    forced-color-adjust: none;
+  }
 }
 
 /* ============================================================================
