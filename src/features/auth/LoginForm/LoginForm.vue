@@ -5,8 +5,8 @@
 
  File:      mase_app/src/features/auth/LoginForm/LoginForm.vue
  Layer:     Features (Stage 12 — Authentication UI)
- Version:   2.1.0
- Status:    FROZEN
+ Version:   2.2.0
+ Status:    ACTIVE — Owner-authorized MFA enhancement
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §8.x
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §6.5, §11.4, §11.5,
