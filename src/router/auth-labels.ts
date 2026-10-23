@@ -5,8 +5,8 @@
  *
  * File:      mase_app/src/router/auth-labels.ts
  * Layer:     Core (router configuration)
- * Version:   3.1.1
- * Status:    FROZEN
+ * Version:   3.2.0
+ * Status:    ACTIVE — Owner-authorized MFA enhancement
  * Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §9 (Localization)
  *            Architecture Freeze §9.1 (Amharic-first)
  *
@@ -37,6 +37,8 @@
  *            submitLabel as the success heading and
  *            backToLoginLabel as the success body.
  *          · Minor version bump — the change was purely additive.
+ *
+ * 3.2.0  — login MFA challenge labels for TOTP and recovery-code entry.
  *
  * 3.1.1  — documentation correction. PATCH bump. No code change.
  *
@@ -274,6 +276,15 @@ export const loginFormLabels = {
   // ---------------------------------------------------------------------------
   /** The label for the password field. */
   passwordLabel: 'የይለፍ ቃል',
+
+  /** Instructions displayed after the backend requires MFA. */
+  mfaInstructions: 'በAuthenticator መተግበሪያዎ የሚታየውን ኮድ ወይም የመልሶ ማግኛ ኮድ ያስገቡ።',
+  /** Label for the TOTP or one-time recovery-code input. */
+  mfaCodeLabel: 'የማረጋገጫ ኮድ',
+  /** Submit label while completing MFA. */
+  verifyMfaLabel: 'ኮዱን አረጋግጥ',
+  /** Action to abandon the current MFA challenge and restart login. */
+  cancelMfaLabel: 'ወደ መግቢያ ተመለስ',
 
   /*
    * aria-label for the password-visibility toggle, when the
