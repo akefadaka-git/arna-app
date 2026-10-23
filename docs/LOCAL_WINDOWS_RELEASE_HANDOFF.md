@@ -7,6 +7,14 @@ Status: source candidate only. Automated tests and production builds have intent
 - Base branch at preparation: `main`
 - Candidate branch: `release/local-candidate-2026-10-23`
 
+## Candidate UI included
+- Amharic-first corporate public homepage and public-site shell.
+- Legal center route and accessible public-route smoke/contract tests.
+- Governance overview with API-backed body counts, governance people directory, and membership detail route.
+- Workspace navigation now opens the governance overview; the routes remain permission-gated by `governance.body.view`.
+
+These are source-level consolidations from open draft work. The UI is not verified against the candidate API yet; any missing backend endpoints or permission grants must be resolved locally before release.
+
 ## Windows preparation
 1. Install Node.js 20 or later and npm 10 or later.
 2. Extract this branch into a new directory. Preserve existing work and do not overwrite an unrelated worktree.
