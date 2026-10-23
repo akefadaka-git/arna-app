@@ -5,8 +5,8 @@
 
  File:      mase_app/src/layouts/AppShell/AppHeader/AppHeader.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.1.0
- Status:    ENHANCEMENT — ARNA brand palette alignment
+ Version:   1.2.0
+ Status:    ENHANCEMENT — forced-colors accessibility
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §6.x (Layout)
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §15.1, §22 STAGE 11
@@ -693,4 +693,18 @@ function onToggleClick(): void {
     /* no-op placeholder — see comment above */
   }
 }
+/* ============================================================================
+   Windows High Contrast / forced-colors
+   ---------------------------------------------------------------------------
+   Retain a clear header boundary and legible text when brand tokens are
+   overridden by the user's operating-system contrast settings.
+   ============================================================================ */
+@media (forced-colors: active) {
+  .app-header {
+    color: CanvasText;
+    border-block-start-color: Highlight;
+    border-block-end-color: CanvasText;
+  }
+}
+
 </style>
