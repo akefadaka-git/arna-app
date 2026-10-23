@@ -5,8 +5,8 @@
 
  File:      mase_app/src/layouts/AppShell/CalendarContext/CalendarContext.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.0.0
- Status:    FROZEN
+ Version:   1.1.0
+ Status:    ENHANCEMENT — forced-colors accessibility
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §15.x
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §10, §15.1, §22
@@ -356,4 +356,17 @@ const datetimeAttribute = computed<string>(() =>
     /* no-op placeholder — see comment above */
   }
 }
+/* ============================================================================
+   Windows High Contrast / forced-colors
+   ---------------------------------------------------------------------------
+   The tertiary token may be overridden by the operating system. Use a
+   system foreground explicitly so the date remains readable when authored
+   colors are suppressed.
+   ============================================================================ */
+@media (forced-colors: active) {
+  .calendar-context {
+    color: CanvasText;
+  }
+}
+
 </style>
