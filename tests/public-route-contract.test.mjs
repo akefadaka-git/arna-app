@@ -8,13 +8,15 @@ test('public entry registers the complete public route set', async () => {
   const source = await read('../public-entry/main.ts');
 
   for (const route of [
-    "path: '/', name: 'public-home'",
+    "path: '/'",
+    "name: 'public-home'",
     "path: '/verify'",
     "path: '/legal'",
     "path: '/legal/:slug'",
-    "path: '/:pathMatch(.*)*', redirect: '/'",
+    "path: '/:pathMatch(.*)*'",
+    "redirect: '/'",
   ]) {
-    assert.ok(source.includes(route), `Missing public route declaration: ${route}`);
+    assert.ok(source.includes(route), `Missing public route declaration token: ${route}`);
   }
 });
 
@@ -31,8 +33,9 @@ test('public entry does not import authenticated application bootstrapping', asy
     assert.ok(!source.includes(forbidden), `Public entry must not import/use ${forbidden}`);
   }
 
-  assert.ok(source.includes('createWebHistory()'));
-  assert.ok(source.includes('createApp({ render: () => h(RouterView) }).use(router).mount'));
+  assert.match(source, /createWebHistory\(\s*import\.meta\.env\.BASE_URL\s*\)/);
+  assert.ok(source.includes('.use(router)'), 'Public entry must install the independent router');
+  assert.ok(source.includes(".mount('#app')"), 'Public entry must mount into the public root');
 });
 
 test('public homepage exposes verification and legal navigation', async () => {
@@ -43,9 +46,23 @@ test('public homepage exposes verification and legal navigation', async () => {
   assert.ok(source.includes('RouterLink'), 'Navigation should use Vue Router links');
 });
 
+test('standalone legal center opts into public-home recovery without changing app default', async () => {
+  const entry = await read('../public-entry/main.ts');
+  const legalPage = await read('../src/router/pages/LegalCenterRoute.vue');
+  const labels = await read('../src/router/legal-labels.ts');
+
+  assert.match(entry, /name: 'public-legal-center',[\s\S]*?props: \{ publicMode: true \}/);
+  assert.ok(legalPage.includes(":to=\"props.publicMode ? '/' : '/login'\""));
+  assert.ok(legalPage.includes('legalCenterPageLabels.backToLoginLabel'));
+  assert.ok(legalPage.includes('legalCenterPageLabels.backToPublicHomeLabel'));
+  assert.ok(labels.includes("backToLoginLabel: 'ወደ መግቢያ ይመለሱ'"));
+  assert.ok(labels.includes("backToPublicHomeLabel: 'ወደ መነሻ ገጽ ይመለሱ'"));
+});
+
 test('legal center recovery remains inside the public route set', async () => {
   const source = await read('../src/router/pages/LegalCenterRoute.vue');
 
-  assert.ok(source.includes('to="/"'), 'Legal center recovery must return to public homepage');
-  assert.ok(!source.includes('to="/login"'), 'Public legal page must not link to unregistered /login');
+  assert.ok(source.includes(":to=\"props.publicMode ? '/' : '/login'\""), 'Legal center recovery must be context-specific');
+  assert.ok(source.includes('legalCenterPageLabels.backToPublicHomeLabel'), 'Public mode must use the homepage label');
+  assert.ok(source.includes('legalCenterPageLabels.backToLoginLabel'), 'Application mode must retain the login label');
 });
