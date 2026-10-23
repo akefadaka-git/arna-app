@@ -5,8 +5,8 @@
 
  File:      mase_app/src/layouts/AppShell/AppSidebar/AppSidebar.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.1.0
- Status:    ENHANCEMENT — active-route group disclosure
+ Version:   1.2.0
+ Status:    ENHANCEMENT — forced-colors accessibility
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §7.2
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §7, §15.1, §18.2, §22
@@ -860,4 +860,29 @@ function groupToggleAriaDisabled(): 'true' | undefined {
     /* no-op placeholder — see comment above */
   }
 }
+/* ============================================================================
+   Windows High Contrast / forced-colors
+   ---------------------------------------------------------------------------
+   Use system colors for navigation controls and make the active route
+   distinguishable without relying on the brand palette alone.
+   ============================================================================ */
+@media (forced-colors: active) {
+  .app-sidebar__link,
+  .app-sidebar__group-toggle {
+    color: LinkText;
+  }
+
+  .app-sidebar__link.router-link-active {
+    color: HighlightText;
+    background-color: Highlight;
+    border-inline-start-color: Highlight;
+  }
+
+  .app-sidebar__link:focus-visible,
+  .app-sidebar__group-toggle:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+}
+
 </style>
