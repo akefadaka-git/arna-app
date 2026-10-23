@@ -28,6 +28,7 @@ const router = createRouter({
       path: '/legal',
       name: 'public-legal-center',
       component: LegalCenterRoute,
+      props: { publicMode: true },
     },
     {
       path: '/legal/:slug',
