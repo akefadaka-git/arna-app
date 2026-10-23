@@ -5,8 +5,8 @@
 
  File:      mase_app/src/layouts/AppShell/AppShell.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.1.0
- Status:    ENHANCEMENT — ARNA brand palette alignment
+ Version:   1.2.0
+ Status:    ENHANCEMENT — forced-colors shell accessibility
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §6.1
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §15.1, §18, §22
@@ -895,4 +895,23 @@ function onMaintenanceDismiss(): void {
     /* no-op placeholder — see comment above */
   }
 }
+
+/* ============================================================================
+   Forced-colors mode
+   ---------------------------------------------------------------------------
+   Preserve a readable shell surface and visible main-content keyboard focus
+   when the operating system replaces author colors with a high-contrast
+   palette. Child controls retain their own forced-colors rules.
+   ============================================================================ */
+@media (forced-colors: active) {
+  .app-shell {
+    background-color: Canvas;
+    color: CanvasText;
+  }
+
+  .app-shell__main:focus-visible {
+    outline-color: Highlight;
+  }
+}
+
 </style>
