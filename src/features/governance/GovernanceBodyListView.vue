@@ -465,6 +465,7 @@ import PageTitle from '@/layouts/AppShell/PageTitle';
 import { listGovernanceBodies } from '@/features/governance/service';
 import type {
   GovernanceBody,
+  GovernanceBodyType,
   GovernanceBodiesPaginationMeta,
 } from '@/features/governance/api';
 import type { GovernanceBodyListViewLabels } from '@/features/governance/labels';
@@ -551,6 +552,16 @@ const loadError = ref<unknown | null>(null);
  */
 const currentPage = ref<number>(1);
 
+/** Draft filter values; they are applied only when the form is submitted. */
+type BodyStatusFilter = '' | 'active' | 'inactive';
+const draftSearch = ref('');
+const draftType = ref<GovernanceBodyType | ''>('');
+const draftStatus = ref<BodyStatusFilter>('');
+const appliedSearch = ref('');
+const appliedType = ref<GovernanceBodyType | ''>('');
+const appliedStatus = ref<BodyStatusFilter>('');
+
+
 // -----------------------------------------------------------------------------
 // Derived state
 // -----------------------------------------------------------------------------
@@ -605,6 +616,11 @@ async function load(): Promise<void> {
   try {
     const result = await listGovernanceBodies({
       page: currentPage.value,
+      ...(appliedSearch.value ? { search: appliedSearch.value } : {}),
+      ...(appliedType.value ? { type: appliedType.value } : {}),
+      ...(appliedStatus.value
+        ? { is_active: appliedStatus.value === 'active' }
+        : {}),
     });
     bodies.value = result.items;
     meta.value = result.meta;
@@ -624,6 +640,32 @@ onMounted(() => {
 watch(currentPage, () => {
   void load();
 });
+
+/** Apply supported server-side filters and return to the first result page. */
+function applyFilters(): void {
+  appliedSearch.value = draftSearch.value.trim();
+  appliedType.value = draftType.value;
+  appliedStatus.value = draftStatus.value;
+  if (currentPage.value === 1) {
+    void load();
+  } else {
+    currentPage.value = 1;
+  }
+}
+
+function clearFilters(): void {
+  draftSearch.value = '';
+  draftType.value = '';
+  draftStatus.value = '';
+  appliedSearch.value = '';
+  appliedType.value = '';
+  appliedStatus.value = '';
+  if (currentPage.value === 1) {
+    void load();
+  } else {
+    currentPage.value = 1;
+  }
+}
 
 // -----------------------------------------------------------------------------
 // Table columns
@@ -714,6 +756,52 @@ function statusLabel(isActive: boolean): string {
       :title="labels.pageTitle"
       :description="labels.pageDescription"
     />
+
+    <form
+      class="governance-body-list-view__filters"
+      data-testid="governance-body-list-view-filters"
+      @submit.prevent="applyFilters"
+    >
+      <div class="governance-body-list-view__filter-field governance-body-list-view__filter-search">
+        <label for="governance-body-search">{{ labels.searchLabel }}</label>
+        <input
+          id="governance-body-search"
+          v-model="draftSearch"
+          type="search"
+          :placeholder="labels.searchPlaceholder"
+        />
+      </div>
+
+      <div class="governance-body-list-view__filter-field">
+        <label for="governance-body-type">{{ labels.typeFilterLabel }}</label>
+        <select id="governance-body-type" v-model="draftType">
+          <option value="">{{ labels.allTypesLabel }}</option>
+          <option value="assembly">{{ labels.typeAssembly }}</option>
+          <option value="board">{{ labels.typeBoard }}</option>
+          <option value="committee">{{ labels.typeCommittee }}</option>
+          <option value="subcommittee">{{ labels.typeSubcommittee }}</option>
+          <option value="ad_hoc">{{ labels.typeAdHoc }}</option>
+        </select>
+      </div>
+
+      <div class="governance-body-list-view__filter-field">
+        <label for="governance-body-status">{{ labels.statusFilterLabel }}</label>
+        <select id="governance-body-status" v-model="draftStatus">
+          <option value="">{{ labels.allStatusesLabel }}</option>
+          <option value="active">{{ labels.statusActive }}</option>
+          <option value="inactive">{{ labels.statusInactive }}</option>
+        </select>
+      </div>
+
+      <div class="governance-body-list-view__filter-actions">
+        <button class="governance-body-list-view__apply" type="submit">
+          {{ labels.applyFiltersLabel }}
+        </button>
+        <button class="governance-body-list-view__clear" type="button" @click="clearFilters">
+          {{ labels.clearFiltersLabel }}
+        </button>
+      </div>
+    </form>
 
     <!-- ============================================================
          Content (four states)
@@ -852,6 +940,86 @@ function statusLabel(isActive: boolean): string {
   flex-direction: column;
   gap: var(--mases-space-6);
   width: 100%;
+}
+
+/* Supported server-side search and filters. */
+.governance-body-list-view__filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--mases-space-3);
+  padding: var(--mases-space-4);
+  border: 1px solid var(--mases-color-border-subtle);
+  border-radius: var(--mases-radius-lg);
+  background: var(--mases-color-surface-raised);
+}
+
+.governance-body-list-view__filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mases-space-1);
+  min-width: 0;
+}
+
+.governance-body-list-view__filter-field label {
+  color: var(--mases-color-text-secondary);
+  font-size: var(--mases-font-size-body-sm);
+  font-weight: var(--mases-font-weight-semibold);
+}
+
+.governance-body-list-view__filter-field input,
+.governance-body-list-view__filter-field select {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--mases-color-border-subtle);
+  border-radius: var(--mases-radius-md);
+  color: var(--mases-color-text-primary);
+  background: var(--mases-color-surface-page);
+  font: inherit;
+}
+
+.governance-body-list-view__filter-field input:focus-visible,
+.governance-body-list-view__filter-field select:focus-visible,
+.governance-body-list-view__apply:focus-visible,
+.governance-body-list-view__clear:focus-visible {
+  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
+  outline-offset: var(--mases-focus-ring-offset);
+}
+
+.governance-body-list-view__filter-actions {
+  display: flex;
+  align-items: end;
+  gap: var(--mases-space-2);
+  flex-wrap: wrap;
+}
+
+.governance-body-list-view__apply,
+.governance-body-list-view__clear {
+  min-height: 2.75rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--mases-radius-md);
+  font: inherit;
+  font-weight: var(--mases-font-weight-semibold);
+  cursor: pointer;
+}
+
+.governance-body-list-view__apply {
+  border: 1px solid var(--mases-color-action-primary);
+  color: var(--mases-color-text-inverse);
+  background: var(--mases-color-action-primary);
+}
+
+.governance-body-list-view__clear {
+  border: 1px solid var(--mases-color-border-subtle);
+  color: var(--mases-color-text-primary);
+  background: var(--mases-color-surface-page);
+}
+
+@media (min-width: 640px) {
+  .governance-body-list-view__filters {
+    grid-template-columns: minmax(12rem, 2fr) minmax(9rem, 1fr) minmax(9rem, 1fr) auto;
+    align-items: end;
+  }
 }
 
 /* ============================================================================
