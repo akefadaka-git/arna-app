@@ -878,7 +878,7 @@ const passwordToggleLabel = computed<string>(() =>
         inputmode="email"
         autocomplete="username"
         enterkeyhint="go"
-        :disabled="isSubmitting"
+        :disabled="isSubmitting || isMfaChallengeActive"
         data-testid="login-form-identifier"
         @blur="onIdentifierBlur"
       />
@@ -909,7 +909,7 @@ const passwordToggleLabel = computed<string>(() =>
         v-model="password"
         :type="passwordFieldType"
         autocomplete="current-password"
-        :disabled="isSubmitting"
+        :disabled="isSubmitting || isMfaChallengeActive"
         data-testid="login-form-password"
         @keydown="updateCapsLockFromEvent"
         @keyup="updateCapsLockFromEvent"
