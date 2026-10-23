@@ -290,6 +290,20 @@ export interface GovernanceBodyListViewLabels extends GovernanceSharedLabels {
   readonly statusActive: string;
   readonly statusInactive: string;
 
+  readonly searchLabel: string;
+  readonly searchPlaceholder: string;
+  readonly typeFilterLabel: string;
+  readonly allTypesLabel: string;
+  readonly typeAssembly: string;
+  readonly typeBoard: string;
+  readonly typeCommittee: string;
+  readonly typeSubcommittee: string;
+  readonly typeAdHoc: string;
+  readonly statusFilterLabel: string;
+  readonly allStatusesLabel: string;
+  readonly applyFiltersLabel: string;
+  readonly clearFiltersLabel: string;
+
   readonly emptyTitle: string;
   readonly emptyDescription: string;
 
@@ -312,6 +326,20 @@ export const governanceBodyListViewLabels: GovernanceBodyListViewLabels = {
 
   statusActive:   'ንቁ',
   statusInactive: 'ንቁ ያልሆነ',
+
+  searchLabel: 'በኮድ ወይም በስም ይፈልጉ',
+  searchPlaceholder: 'የአካሉን ኮድ ወይም ስም ያስገቡ',
+  typeFilterLabel: 'የአካል ዓይነት',
+  allTypesLabel: 'ሁሉም ዓይነቶች',
+  typeAssembly: 'ጠቅላላ ጉባኤ',
+  typeBoard: 'ቦርድ',
+  typeCommittee: 'ኮሚቴ',
+  typeSubcommittee: 'ንዑስ ኮሚቴ',
+  typeAdHoc: 'ጊዜያዊ ኮሚቴ',
+  statusFilterLabel: 'ሁኔታ',
+  allStatusesLabel: 'ሁሉም ሁኔታዎች',
+  applyFiltersLabel: 'ፈልግ',
+  clearFiltersLabel: 'አጽዳ',
 
   emptyTitle: 'ምንም የአስተዳደር አካላት የሉም',
   emptyDescription:
