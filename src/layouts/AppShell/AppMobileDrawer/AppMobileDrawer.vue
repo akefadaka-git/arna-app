@@ -5,8 +5,8 @@
 
  File:      mase_app/src/layouts/AppShell/AppMobileDrawer/AppMobileDrawer.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.1.0
- Status:    ENHANCEMENT — route-change dismissal
+ Version:   1.2.0
+ Status:    ENHANCEMENT — forced-colors accessibility
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §6.1, §7.2
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §15.1, §18.2, §22
@@ -584,4 +584,34 @@ html[dir='rtl'] .app-mobile-drawer {
     animation: none;
   }
 }
+
+/* ============================================================================
+   Forced-colors mode
+   ---------------------------------------------------------------------------
+   Use system colors so the native modal remains distinguishable when
+   author colors and shadows are suppressed by the user's high-contrast
+   palette. Dialog behavior, sizing, and route dismissal are unchanged.
+   ============================================================================ */
+@media (forced-colors: active) {
+  .app-mobile-drawer {
+    background-color: Canvas;
+    color: CanvasText;
+    border-block-start-color: Highlight;
+    box-shadow: none;
+  }
+
+  .app-mobile-drawer::backdrop {
+    background-color: CanvasText;
+    opacity: 0.55;
+  }
+
+  .app-mobile-drawer__header {
+    border-block-end-color: CanvasText;
+  }
+
+  .app-mobile-drawer__extra {
+    border-block-start-color: CanvasText;
+  }
+}
+
 </style>
