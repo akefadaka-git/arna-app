@@ -5,7 +5,7 @@
 
  File:      mase_app/src/layouts/AppShell/AppMobileDrawer/AppMobileDrawer.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.0.2
+ Version:   1.1.0
  Status:    ENHANCEMENT — route-change dismissal
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §6.1, §7.2
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -24,6 +24,13 @@
             the ESLint warning but not the TypeScript `noUnusedLocals`
             error. Removing the import clears the error and loses no
             behavior.
+
+ 1.1.0  — align drawer chrome with ARNA brand palette:
+          · Use the raised surface token for the native dialog frame.
+          · Add the gold brand accent at the drawer's leading edge of the
+            block axis and use the brand border on the close-button header.
+          · Preserve the native dialog, responsive sizing, RTL animation,
+            controlled visibility, and route-change dismissal behavior.
 
  1.0.2  — close the mobile drawer after successful route navigation:
           · Watch the router's resolved `fullPath` and request closure
@@ -469,7 +476,8 @@ onBeforeUnmount(() => {
    */
   height: 100dvh;
   border: 0;
-  background-color: var(--mases-color-surface-page);
+  border-block-start: 3px solid var(--mases-color-gold-500);
+  background-color: var(--mases-color-surface-raised);
   color: var(--mases-color-text-primary);
   font-family: inherit;
   /*
@@ -536,7 +544,7 @@ html[dir='rtl'] .app-mobile-drawer {
   justify-content: flex-end;
   height: var(--mases-shell-header-height);
   padding-inline: var(--mases-space-2);
-  border-block-end: 1px solid var(--mases-color-border-subtle);
+  border-block-end: 1px solid var(--mases-color-border-brand);
   flex-shrink: 0;
 }
 
