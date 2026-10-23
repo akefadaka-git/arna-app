@@ -103,4 +103,33 @@ const appName: string = import.meta.env.VITE_APP_NAME;
     flex-direction: column;
   }
 }
+
+@media (forced-colors: active) {
+  .public-site-layout {
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  .public-site-layout__header,
+  .public-site-layout__footer {
+    border-color: CanvasText;
+  }
+
+  .public-site-layout a {
+    color: LinkText;
+  }
+
+  .public-site-layout a:focus-visible,
+  .public-site-layout__content:focus-visible {
+    outline-color: Highlight;
+  }
+
+  .public-site-layout__skip-link,
+  .public-site-layout__skip-link:focus {
+    color: HighlightText;
+    background: Highlight;
+    border-color: Highlight;
+  }
+}
+
 </style>
