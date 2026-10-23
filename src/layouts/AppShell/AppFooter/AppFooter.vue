@@ -5,8 +5,8 @@
 
  File:      mase_app/src/layouts/AppShell/AppFooter/AppFooter.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.0.1
- Status:    FROZEN
+ Version:   1.0.2
+ Status:    ENHANCEMENT — responsive slot sizing
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §6.x (Layout)
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §15.1, §22 STAGE 11
@@ -34,6 +34,19 @@
             entry is recorded alongside this entry for consistency.
           · No code lines changed. Script, template, and scoped styles
             are byte-for-byte identical to v1.0.0.
+
+
+ 1.0.2  — correct tablet/desktop slot sizing:
+          · The middle slot wrapper now resets its mobile width: 100%
+            to width: auto at the tablet breakpoint. Without this,
+            flex-basis:auto inherited the 100%-width base size, which
+            could force copyright and version regions onto extra rows
+            even when a desktop row had enough space.
+          · In the single-slot layout, the wrapper no longer grows to
+            the full row width and centers its own content, matching
+            the documented one-region alignment behavior.
+          · Mobile remains a full-width stacked layout; multi-region
+            tablet/desktop layouts retain a growing middle region.
 
  -----------------------------------------------------------------------------
  Purpose
@@ -352,10 +365,20 @@ const regionCount = computed<number>(() => {
 
   .app-footer__slot {
     /*
-     * In row mode the slot region grows to fill the space between the
-     * two outer regions.
+     * Reset the mobile width: 100% so flex-basis:auto is based on
+     * the slot's content at tablet/desktop widths. Otherwise the
+     * slot can claim the full row before copyright/version are laid
+     * out and cause avoidable wrapping.
      */
+    width: auto;
     flex: 1 1 auto;
+  }
+
+  .app-footer[data-region-count='1'][data-has-slot='true'] .app-footer__slot {
+    /* A slot-only footer centers its content rather than stretching
+     * the wrapper across the whole row. */
+    flex: 0 1 auto;
+    justify-content: center;
   }
 }
 
