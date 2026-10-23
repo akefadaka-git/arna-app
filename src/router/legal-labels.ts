@@ -361,12 +361,10 @@ export interface LegalCenterPageLabels {
    */
   readonly draftChipLabel: string;
 
-  /**
-   * The link at the bottom of the public Legal Center hub that returns
-   * visitors to the public homepage. The standalone public router does
-   * not register an internal /login route, so this recovery action must
-   * remain within the public-site route table.
-   */
+  /** Footer link label for the existing application login destination. */
+  readonly backToLoginLabel: string;
+
+  /** Footer link label for the standalone public site's homepage destination. */
   readonly backToPublicHomeLabel: string;
 }
 
@@ -591,6 +589,7 @@ export const legalCenterPageLabels: LegalCenterPageLabels = {
     additional: 'ሌሎች ሕጋዊ መረጃዎች',
   },
   draftChipLabel: 'ረቂቅ',
+  backToLoginLabel: 'ወደ መግቢያ ይመለሱ',
   backToPublicHomeLabel: 'ወደ መነሻ ገጽ ይመለሱ',
 };
 
