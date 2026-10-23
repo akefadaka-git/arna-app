@@ -5,8 +5,8 @@
 
  File:      mase_app/src/layouts/AppShell/MASESFooterContent/MASESFooterContent.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.0.0
- Status:    FROZEN
+ Version:   1.1.0
+ Status:    ENHANCEMENT — forced-colors accessibility
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §6.x (Layout)
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §15.1
@@ -412,4 +412,25 @@ const copyrightText = masesFooterLabels.copyrightTemplate.replace(
     /* no-op placeholder — see comment above */
   }
 }
+/* ============================================================================
+   Windows High Contrast / forced-colors
+   ---------------------------------------------------------------------------
+   Preserve clear link affordances when authored palette tokens are suppressed.
+   ============================================================================ */
+@media (forced-colors: active) {
+  .mases-footer-content__copyright {
+    color: CanvasText;
+  }
+
+  .mases-footer-content__link {
+    color: LinkText;
+    text-decoration: underline;
+  }
+
+  .mases-footer-content__link:hover,
+  .mases-footer-content__link:focus-visible {
+    color: ActiveText;
+  }
+}
+
 </style>
