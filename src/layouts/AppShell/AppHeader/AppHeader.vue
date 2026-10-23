@@ -5,8 +5,8 @@
 
  File:      mase_app/src/layouts/AppShell/AppHeader/AppHeader.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.0.2
- Status:    FROZEN
+ Version:   1.0.3
+ Status:    ENHANCEMENT — dialog affordance
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §6.x (Layout)
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §15.1, §22 STAGE 11
@@ -46,6 +46,14 @@
             v1.0.4, AuthenticatedLayout.vue v1.0.3, and
             PortalLayout.vue v1.1.0 continue to bind the same slots
             with the same content and receive identical DOM output.
+
+
+ 1.0.3  — accessible mobile-menu affordance:
+          · The default mobile-menu button now declares
+            aria-haspopup="dialog", indicating that activation opens
+            the shell's native dialog drawer.
+          · This is an additive accessibility hint; props, slots,
+            emitted events, layout, and consumer contracts are unchanged.
 
  -----------------------------------------------------------------------------
  Purpose
@@ -448,6 +456,7 @@ function onToggleClick(): void {
           variant="ghost"
           size="sm"
           :aria-label="mobileMenuLabel"
+          aria-haspopup="dialog"
           data-testid="app-header-mobile-toggle"
           @click="onToggleClick"
         >
