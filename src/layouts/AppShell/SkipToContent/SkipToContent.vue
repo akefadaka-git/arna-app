@@ -5,8 +5,8 @@
 
  File:      mase_app/src/layouts/AppShell/SkipToContent/SkipToContent.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.0.1
- Status:    ENHANCEMENT — self-contained accessibility rationale
+ Version:   1.1.0
+ Status:    ENHANCEMENT — forced-colors accessibility
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §6.x (Layout) and
             §17 (Accessibility baseline)
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §15.1, §17.2
@@ -258,4 +258,26 @@ const props = defineProps<Props>();
   outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color-inverse);
   outline-offset: var(--mases-focus-ring-offset);
 }
+
+/* ============================================================================
+   Forced-colors mode
+   ---------------------------------------------------------------------------
+   Keep the focused skip link visibly distinct using system colors even
+   when the normal inverse-surface tokens are overridden by high contrast.
+   ============================================================================ */
+@media (forced-colors: active) {
+  .skip-to-content {
+    background-color: Canvas;
+    color: CanvasText;
+    border: 1px solid CanvasText;
+    box-shadow: none;
+  }
+
+  .skip-to-content:focus {
+    background-color: Highlight;
+    color: HighlightText;
+    outline-color: Highlight;
+  }
+}
+
 </style>
