@@ -1718,9 +1718,9 @@ export const authenticatedNavItems: ReadonlyArray<NavItem> = [
     permission: 'loan_product.view',
   },
   {
-    id: 'governance-bodies',
-    label: 'የአስተዳደር አካላት',
-    to: '/governance/bodies',
+    id: 'governance',
+    label: 'የአስተዳደር ማዕከል',
+    to: '/governance',
     icon: 'landmark',
     permission: 'governance.body.view',
   },
