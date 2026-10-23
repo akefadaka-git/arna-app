@@ -47,8 +47,8 @@
 
  File:      mase_app/src/layouts/AppShell/UserMenu/UserMenu.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.0.3
- Status:    FROZEN
+ Version:   1.1.0
+ Status:    ENHANCEMENT — forced-colors accessibility
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §12.1
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §15.1, §22 STAGE 11
@@ -584,4 +584,20 @@ function onMenuSelect(key: string): void {
     /* no-op placeholder — see comment above */
   }
 }
+/* ============================================================================
+   Windows High Contrast / forced-colors
+   ---------------------------------------------------------------------------
+   Explicit system colors keep the user identity and disclosure affordance
+   legible when authored token colors are suppressed.
+   ============================================================================ */
+@media (forced-colors: active) {
+  .user-menu__name {
+    color: CanvasText;
+  }
+
+  .user-menu__chevron {
+    color: ButtonText;
+  }
+}
+
 </style>
