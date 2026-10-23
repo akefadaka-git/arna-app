@@ -5,8 +5,8 @@
 
  File:      mase_app/src/layouts/AppShell/AppSidebar/AppSidebar.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.0.1
- Status:    FROZEN
+ Version:   1.0.2
+ Status:    ENHANCEMENT — active-route group disclosure
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §7.2
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §7, §15.1, §18.2, §22
@@ -23,6 +23,20 @@
             binding point — same pattern as DropdownMenu's icon
             handling. The runtime registry check inside BaseIcon still
             runs unchanged.
+
+
+ 1.0.2  — reveal active child route:
+          · When the current route matches a child leaf, its parent
+            navigation group is expanded automatically. This prevents
+            a valid active destination from being hidden inside a
+            collapsed group after direct navigation, refresh, or a
+            deep link.
+          · Expansion remains local UI state: users can still collapse
+            groups manually, and existing permission filtering and
+            collapsed-sidebar behavior remain intact.
+          · Matching uses Vue Router's resolved route record and route
+            params rather than string-prefix checks, avoiding false
+            matches for similarly prefixed paths.
 
  -----------------------------------------------------------------------------
  Purpose
@@ -261,8 +275,8 @@ let __masesSidebarIdCounter = 0;
 </script>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { computed, ref, watch } from 'vue';
+import { RouterLink, useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import BaseIcon from '@/components/primitives/BaseIcon';
 import type { IconName } from '@/components/primitives/BaseIcon';
@@ -296,6 +310,8 @@ const props = withDefaults(defineProps<Props>(), {
 // Auth store
 // -----------------------------------------------------------------------------
 const auth = useAuthStore();
+const route = useRoute();
+const router = useRouter();
 
 // -----------------------------------------------------------------------------
 // Icon-name narrowing
@@ -400,6 +416,57 @@ function toggleGroup(id: string): void {
   }
   expandedGroups.value = next;
 }
+
+/*
+ * Keep the active child discoverable after direct links, refreshes, and
+ * route transitions. Compare resolved route records and params instead
+ * of path prefixes, so '/people/1' cannot accidentally activate
+ * '/people/10'. This only opens the matching group; users retain manual
+ * control to collapse it afterward.
+ */
+function routeParamsMatch(
+  left: Record<string, unknown>,
+  right: Record<string, unknown>,
+): boolean {
+  const leftKeys = Object.keys(left).sort();
+  const rightKeys = Object.keys(right).sort();
+  if (leftKeys.length !== rightKeys.length) return false;
+  return leftKeys.every((key, index) => {
+    if (key !== rightKeys[index]) return false;
+    const leftValue = left[key];
+    const rightValue = right[key];
+    if (Array.isArray(leftValue) || Array.isArray(rightValue)) {
+      return Array.isArray(leftValue)
+        && Array.isArray(rightValue)
+        && leftValue.length === rightValue.length
+        && leftValue.every((value, valueIndex) => value === rightValue[valueIndex]);
+    }
+    return leftValue === rightValue;
+  });
+}
+
+watch(
+  () => route.fullPath,
+  () => {
+    const current = route;
+    const next = new Set(expandedGroups.value);
+    for (const item of props.items) {
+      if (!isNavGroup(item)) continue;
+      const hasActiveChild = item.children.some((child) => {
+        if (!isLeafVisible(child)) return false;
+        const target = router.resolve(child.to);
+        const targetRecord = target.matched[target.matched.length - 1];
+        const currentRecord = current.matched[current.matched.length - 1];
+        return Boolean(targetRecord)
+          && targetRecord === currentRecord
+          && routeParamsMatch(target.params, current.params);
+      });
+      if (hasActiveChild) next.add(item.id);
+    }
+    expandedGroups.value = next;
+  },
+  { immediate: true },
+);
 
 // -----------------------------------------------------------------------------
 // Stable aria-controls ids
