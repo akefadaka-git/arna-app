@@ -460,7 +460,6 @@ const identifier = ref<string>('');
 const password = ref<string>('');
 const mfaCode = ref<string>('');
 const mfaChallengeToken = ref<string | null>(null);
-const mfaMethods = ref<readonly ('totp' | 'recovery_code')[]>([]);
 const isMfaChallengeActive = computed<boolean>(() => mfaChallengeToken.value !== null);
 
 /*
@@ -751,7 +750,6 @@ async function onSubmit(): Promise<void> {
 
       if (result.status === 'mfa-required') {
         mfaChallengeToken.value = result.challengeToken;
-        mfaMethods.value = result.methods;
         mfaCode.value = '';
         await nextTick();
         const mfaInput = document.getElementById('login-mfa-code');
@@ -787,7 +785,6 @@ async function onSubmit(): Promise<void> {
 // -----------------------------------------------------------------------------
 function cancelMfaChallenge(): void {
   mfaChallengeToken.value = null;
-  mfaMethods.value = [];
   mfaCode.value = '';
   banner.value = null;
 }
@@ -970,9 +967,6 @@ const passwordToggleLabel = computed<string>(() =>
           data-testid="login-form-mfa-code"
         />
       </FormField>
-      <p class="login-form__mfa-methods">
-        {{ mfaMethods.includes('totp') ? 'TOTP' : '' }}{{ mfaMethods.includes('totp') && mfaMethods.includes('recovery_code') ? ' · ' : '' }}{{ mfaMethods.includes('recovery_code') ? 'Recovery code' : '' }}
-      </p>
       <button
         type="button"
         class="login-form__mfa-cancel"
@@ -1096,8 +1090,7 @@ const passwordToggleLabel = computed<string>(() =>
   min-width: 0;
 }
 
-.login-form__mfa-instructions,
-.login-form__mfa-methods {
+.login-form__mfa-instructions {
   margin: 0;
   color: var(--mases-color-text-secondary);
   font-size: var(--mases-font-size-body-sm);
@@ -1110,7 +1103,7 @@ const passwordToggleLabel = computed<string>(() =>
   border: 0;
   padding: var(--mases-space-1) 0;
   background: transparent;
-  color: var(--mases-color-text-link);
+  color: var(--mases-color-text-primary);
   font: inherit;
   text-decoration: underline;
   cursor: pointer;
