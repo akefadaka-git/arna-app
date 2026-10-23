@@ -5,8 +5,8 @@
 
  File:      mase_app/src/layouts/AppShell/AppHeader/AppHeader.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.0.3
- Status:    ENHANCEMENT — dialog affordance
+ Version:   1.1.0
+ Status:    ENHANCEMENT — ARNA brand palette alignment
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §6.x (Layout)
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §15.1, §22 STAGE 11
@@ -54,6 +54,15 @@
             the shell's native dialog drawer.
           · This is an additive accessibility hint; props, slots,
             emitted events, layout, and consumer contracts are unchanged.
+
+ 1.1.0  — ARNA brand palette alignment:
+          · Header uses the semantic raised-surface role to establish
+            a clear layer above the page canvas.
+          · The lower divider uses the brand-border role and a slim
+            gold top accent reinforces the ARNA palette without
+            hardcoding colors.
+          · Existing header dimensions, breakpoints, slots, props,
+            events, and z-index behavior are unchanged.
 
  -----------------------------------------------------------------------------
  Purpose
@@ -551,8 +560,9 @@ function onToggleClick(): void {
    * so a page whose content begins without a border still gets a
    * clean transition under the header.
    */
-  border-block-end: 1px solid var(--mases-color-border-subtle);
-  background-color: var(--mases-color-surface-page);
+  border-block-start: 3px solid var(--mases-color-gold-500);
+  border-block-end: 1px solid var(--mases-color-border-brand);
+  background-color: var(--mases-color-surface-raised);
   color: var(--mases-color-text-primary);
   font-family: inherit;
 }
