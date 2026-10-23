@@ -5,7 +5,7 @@
 
  File:      mase_app/src/layouts/AppShell/AppFooter/AppFooter.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.0.2
+ Version:   1.1.0
  Status:    ENHANCEMENT — responsive slot sizing
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §6.x (Layout)
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -47,6 +47,16 @@
             the documented one-region alignment behavior.
           · Mobile remains a full-width stacked layout; multi-region
             tablet/desktop layouts retain a growing middle region.
+
+
+
+ 1.1.0  — align footer chrome with the approved shell palette:
+          · Use the raised surface token to distinguish footer chrome
+            from the page canvas without introducing a hardcoded color.
+          · Use the gold accent for the top separator and secondary
+            semantic text for readable, subdued footer metadata.
+          · Preserve the existing responsive layout, slot sizing,
+            region-count alignment, and consumer-facing contract.
 
  -----------------------------------------------------------------------------
  Purpose
@@ -315,9 +325,9 @@ const regionCount = computed<number>(() => {
    * content, so a page whose content ends without a border still
    * gets a clean transition into the footer.
    */
-  border-block-start: 1px solid var(--mases-color-border-subtle);
-  background-color: var(--mases-color-surface-page);
-  color: var(--mases-color-text-tertiary);
+  border-block-start: 2px solid var(--mases-color-gold-500);
+  background-color: var(--mases-color-surface-raised);
+  color: var(--mases-color-text-secondary);
   font-family: inherit;
   font-size: var(--mases-font-size-caption);
   line-height: var(--mases-line-height-caption);
