@@ -5,7 +5,7 @@
 
  File:      mase_app/src/layouts/AppShell/AppSidebar/AppSidebar.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.0.2
+ Version:   1.1.0
  Status:    ENHANCEMENT — active-route group disclosure
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §7.2
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -24,6 +24,14 @@
             handling. The runtime registry check inside BaseIcon still
             runs unchanged.
 
+
+ 1.1.0  — align navigation chrome with ARNA palette:
+          · Use the raised surface token for the sidebar so it visually
+            separates from the page canvas without introducing a literal color.
+          · Add a token-driven crimson selection rail to the active route link;
+            preserve the existing selected surface and text roles.
+          · Permission filtering, route matching, navigation contracts, and
+            collapsed-mode behavior are unchanged.
 
  1.0.2  — reveal active child route:
           · When the current route matches a child leaf, its parent
@@ -640,7 +648,7 @@ function groupToggleAriaDisabled(): 'true' | undefined {
   height: 100%;
   padding-block: var(--mases-space-4);
   padding-inline: var(--mases-space-2);
-  background-color: var(--mases-color-surface-page);
+  background-color: var(--mases-color-surface-raised);
   color: var(--mases-color-text-primary);
   font-family: inherit;
   overflow-y: auto;
@@ -681,6 +689,7 @@ function groupToggleAriaDisabled(): 'true' | undefined {
    ============================================================================ */
 .app-sidebar__link {
   display: flex;
+  border-inline-start: var(--mases-space-1) solid transparent;
   align-items: center;
   gap: var(--mases-space-3);
   padding-block: var(--mases-space-2);
@@ -714,6 +723,7 @@ function groupToggleAriaDisabled(): 'true' | undefined {
  * navigates within it.
  */
 .app-sidebar__link.router-link-active {
+  border-inline-start-color: var(--mases-color-state-selected-accent);
   background-color: var(--mases-color-state-selected);
   color: var(--mases-color-text-brand);
 }
