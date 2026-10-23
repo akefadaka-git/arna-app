@@ -65,8 +65,8 @@
  *
  * File:      mase_app/src/features/auth/service.ts
  * Layer:     Features (Stage 12 — Authentication UI)
- * Version:   1.2.0
- * Status:    FROZEN
+ * Version:   1.3.0
+ * Status:    ACTIVE — Owner-authorized enhancement
  * Authority: MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §6, §6.5, §6.6, §13
  *            MASES_PHASE_2_UI_COMPONENT_CATALOG.md §26.2
  *
@@ -289,7 +289,7 @@
  */
 
 import * as authApi from './api';
-import type { RegisterRequest, ResetPasswordRequest } from './api';
+import type { LoginSuccessResponse, RegisterRequest, ResetPasswordRequest } from './api';
 import { api } from '@/core/api/client';
 import { useAuthStore } from '@/stores/auth';
 import type { AuthUser } from '@/stores/auth';
@@ -403,32 +403,17 @@ function clearAllStores(): void {
  * Both presentations are appropriate: the user's credentials were
  * never sent, so no credential-specific messaging applies.
  */
-export async function login(
-  email: string,
-  password: string,
-): Promise<void> {
+export type LoginResult =
+  | { readonly status: 'authenticated' }
+  | {
+      readonly status: 'mfa-required';
+      readonly challengeToken: string;
+      readonly methods: readonly ('totp' | 'recovery_code')[];
+    };
+
+/** Establish a session only after the API returns an actual bearer token. */
+async function establishSession(response: LoginSuccessResponse): Promise<void> {
   const auth = useAuthStore();
-
-  /*
-   * ─────────────────────────────────────────────────────────────────────
-   * Step 0 — Sanctum CSRF handshake. Added in 1.1.0.
-   * ─────────────────────────────────────────────────────────────────────
-   *
-   * Awaited (not fire-and-forget): the browser applies the Set-Cookie
-   * headers from this response asynchronously. The login POST below
-   * must not be issued until those headers have been applied, or the
-   * outgoing request will carry a stale or absent X-XSRF-TOKEN
-   * header and the server will return 419.
-   *
-   * See the file header §"Revision history" (1.1.0 entry) for the
-   * full rationale, and §"Interaction with the API client's CSRF
-   * handling" for how this call relates to the client's own
-   * X-XSRF-TOKEN header logic.
-   */
-  await api.csrfCookie();
-
-  const response = await authApi.login(email, password);
-
   auth.setSession({
     token: response.token,
     user: {
@@ -450,6 +435,71 @@ export async function login(
     auth.clearSession();
     throw err;
   }
+}
+
+/**
+ * Authenticate with the supplied identifier and password.
+ * If MFA is required, return the challenge without creating a local session.
+ */
+export async function login(
+  identifier: string,
+  password: string,
+  options: { readonly tenantId?: number; readonly remember?: boolean } = {},
+): Promise<LoginResult> {
+  await api.csrfCookie();
+  const response = await authApi.login({
+    email: identifier,
+    password,
+    ...(options.tenantId !== undefined ? { tenant_id: options.tenantId } : {}),
+    ...(options.remember !== undefined ? { remember: options.remember } : {}),
+  });
+
+  if (response.mfa_required === true) {
+    // Never store a challenge token in the authenticated session or persistent storage.
+    useAuthStore().clearSession();
+    return {
+      status: 'mfa-required',
+      challengeToken: response.challenge_token,
+      methods: response.methods,
+    };
+  }
+
+  await establishSession(response);
+  return { status: 'authenticated' };
+}
+
+/**
+ * Complete the backend's same-endpoint MFA challenge. The password is
+ * resubmitted because the backend login controller validates it on each
+ * request; the challenge token and code are sent only in this request body.
+ */
+export async function completeMfaLogin(
+  identifier: string,
+  password: string,
+  challengeToken: string,
+  code: string,
+  options: { readonly tenantId?: number; readonly remember?: boolean } = {},
+): Promise<void> {
+  const normalizedCode = code.trim();
+  if (!challengeToken || !normalizedCode) {
+    throw new TypeError('A valid MFA challenge token and code are required.');
+  }
+
+  await api.csrfCookie();
+  const response = await authApi.login({
+    email: identifier,
+    password,
+    mfa_challenge_token: challengeToken,
+    mfa_code: normalizedCode,
+    ...(options.tenantId !== undefined ? { tenant_id: options.tenantId } : {}),
+    ...(options.remember !== undefined ? { remember: options.remember } : {}),
+  });
+
+  if (response.mfa_required === true) {
+    throw new Error('The server returned another MFA challenge instead of completing authentication.');
+  }
+
+  await establishSession(response);
 }
 
 /**
@@ -480,28 +530,7 @@ export async function register(
   await api.csrfCookie();
 
   const response = await authApi.register(payload);
-
-  auth.setSession({
-    token: response.token,
-    user: {
-      id: response.user.id,
-      name: response.user.name,
-      email: response.user.email,
-      locale: response.user.locale,
-      default_tenant_id: response.user.default_tenant_id,
-      roles: [],
-      permissions: [],
-      tenants: [],
-    },
-  });
-
-  try {
-    const fullUser = await authApi.fetchCurrentUser();
-    syncUserIntoStores(fullUser);
-  } catch (err) {
-    auth.clearSession();
-    throw err;
-  }
+  await establishSession(response);
 }
 
 /**
