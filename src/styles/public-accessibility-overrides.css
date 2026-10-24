@@ -1,0 +1,21 @@
+/* Public-site contrast corrections: preserve the approved gold/navy palette while meeting WCAG text contrast on light surfaces. */
+.arna-site .hero .eyebrow,
+.arna-site .intro-section .eyebrow,
+.arna-site .principles-section .eyebrow,
+.arna-site .updates-section .eyebrow,
+.arna-site .hero h1 span,
+.arna-site .intro-section h2 span,
+.arna-site .section-heading:not(.section-heading--light) h2 span,
+.arna-site .updates-section h2 span,
+.arna-site .section-kicker__number,
+.arna-site .principle-card__top,
+.arna-site .principle-card__english,
+.arna-site .updates-empty__label,
+.arna-site .updates-empty__status {
+  color: #694d0a !important;
+}
+.arna-site .site-footer,
+.arna-site .site-footer__bottom,
+.arna-site .brand--footer .brand__wordmark small {
+  color: #e6eef5 !important;
+}

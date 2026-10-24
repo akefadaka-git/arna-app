@@ -3,8 +3,8 @@
  * =============================================================================
  *
  * File:      mase_app/src/styles/tokens.css
- * Version:   1.4.0-candidate
- * Status:    FROZEN BASE + ADDITIVE BRAND CR CANDIDATE (branch only)
+ * Version:   1.0.0
+ * Status:    FROZEN BASE + OWNER-APPROVED BRAND PALETTE v1.0.0 (reconciliation candidate)
  * Authority: MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
  *            MASES_SHELL_DESIGN_SYSTEM_MASTER_SPEC.md §7.1, §18, §29,
  *              §31, §33, §34, §60–§62
@@ -258,8 +258,8 @@
   --arna-color-action-blue: #1769AA;
   --arna-color-aubergine: #3D1C50;
   --arna-color-crimson: #B4233A;
-  --arna-color-gold: var(--mases-color-gold-500);
-  --arna-color-warm-ivory: var(--mases-color-neutral-50);
+  --arna-color-gold: #D4A017;
+  --arna-color-warm-ivory: #FFFDF7;
   --arna-color-living-green: #216747;
   --arna-color-bright-azure: #35A7FF;
   --arna-color-violet: #8B5CF6;
@@ -269,7 +269,7 @@
   --arna-color-basalt-text: #263445;
   --arna-color-secondary-text: #64748B;
   --arna-color-cloud-surface: #F3F6FA;
-  --arna-color-white: var(--mases-color-neutral-0);
+  --arna-color-white: #FFFFFF;
 
   /* Public-site semantic roles. Components consume roles, not raw palette. */
   --arna-public-page-surface: var(--arna-color-warm-ivory);

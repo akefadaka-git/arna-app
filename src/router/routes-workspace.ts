@@ -489,6 +489,7 @@ import {
 } from '@/features/loans/labels';
 
 import {
+  governanceOverviewLabels,
   governanceBodyListViewLabels,
   governanceBodyDetailViewLabels,
 } from '@/features/governance/labels';
@@ -690,6 +691,15 @@ export const routesWorkspace: RouteRecordRaw[] = [
 
       // -----------------------------------------------------------------------
       // Governance
+      // The overview is the navigation entry for the governance module.
+      {
+        path: 'governance',
+        name: 'governance-overview',
+        component: () => import('@/features/governance/GovernanceOverviewView.vue'),
+        props: { labels: governanceOverviewLabels },
+        meta: { permission: 'governance.body.view' },
+      },
+
       //
       // ORDER: list, then detail. No static-vs-dynamic conflict at the
       // :id level — the governance tree has no static sub-path
@@ -722,6 +732,18 @@ export const routesWorkspace: RouteRecordRaw[] = [
         name: 'governance-body-detail',
         component: () => import('@/features/governance/GovernanceBodyDetailView.vue'),
         props: { labels: governanceBodyDetailViewLabels },
+        meta: { permission: 'governance.body.view' },
+      },
+      {
+        path: 'governance/people',
+        name: 'governance-people',
+        component: () => import('@/features/governance/GovernancePeopleDirectoryView.vue'),
+        meta: { permission: 'governance.body.view' },
+      },
+      {
+        path: 'governance/people/:bodyId/:membershipId',
+        name: 'governance-person-profile',
+        component: () => import('@/features/governance/GovernancePersonProfileView.vue'),
         meta: { permission: 'governance.body.view' },
       },
     ],

@@ -290,6 +290,20 @@ export interface GovernanceBodyListViewLabels extends GovernanceSharedLabels {
   readonly statusActive: string;
   readonly statusInactive: string;
 
+  readonly searchLabel: string;
+  readonly searchPlaceholder: string;
+  readonly typeFilterLabel: string;
+  readonly allTypesLabel: string;
+  readonly typeAssembly: string;
+  readonly typeBoard: string;
+  readonly typeCommittee: string;
+  readonly typeSubcommittee: string;
+  readonly typeAdHoc: string;
+  readonly statusFilterLabel: string;
+  readonly allStatusesLabel: string;
+  readonly applyFiltersLabel: string;
+  readonly clearFiltersLabel: string;
+
   readonly emptyTitle: string;
   readonly emptyDescription: string;
 
@@ -312,6 +326,20 @@ export const governanceBodyListViewLabels: GovernanceBodyListViewLabels = {
 
   statusActive:   'ንቁ',
   statusInactive: 'ንቁ ያልሆነ',
+
+  searchLabel: 'በኮድ ወይም በስም ይፈልጉ',
+  searchPlaceholder: 'የአካሉን ኮድ ወይም ስም ያስገቡ',
+  typeFilterLabel: 'የአካል ዓይነት',
+  allTypesLabel: 'ሁሉም ዓይነቶች',
+  typeAssembly: 'ጠቅላላ ጉባኤ',
+  typeBoard: 'ቦርድ',
+  typeCommittee: 'ኮሚቴ',
+  typeSubcommittee: 'ንዑስ ኮሚቴ',
+  typeAdHoc: 'ጊዜያዊ ኮሚቴ',
+  statusFilterLabel: 'ሁኔታ',
+  allStatusesLabel: 'ሁሉም ሁኔታዎች',
+  applyFiltersLabel: 'ፈልግ',
+  clearFiltersLabel: 'አጽዳ',
 
   emptyTitle: 'ምንም የአስተዳደር አካላት የሉም',
   emptyDescription:
@@ -513,4 +541,73 @@ export const governanceBodyDetailViewLabels: GovernanceBodyDetailViewLabels = {
 
   exOfficioYes: 'በስልጣን መሠረት',
   exOfficioNo:  '—',
+};
+
+// =============================================================================
+// GovernanceOverviewView — /governance
+// =============================================================================
+
+export interface GovernanceOverviewArea {
+  readonly mark: string;
+  readonly title: string;
+  readonly description: string;
+}
+
+export interface GovernanceOverviewLabels {
+  readonly pageTitle: string;
+  readonly pageDescription: string;
+  readonly eyebrow: string;
+  readonly heroTitle: string;
+  readonly heroDescription: string;
+  readonly browseBodies: string;
+  readonly bodyCount: string;
+  readonly bodyCountCaption: string;
+  readonly retryLabel: string;
+  readonly loadErrorTitle: string;
+  readonly loadingMessage: string;
+  readonly domainsTitle: string;
+  readonly domainsDescription: string;
+  readonly openArea: string;
+  readonly scopeNote: string;
+  readonly areas: readonly GovernanceOverviewArea[];
+}
+
+export const governanceOverviewLabels: GovernanceOverviewLabels = {
+  pageTitle: 'የአስተዳደር ማዕከል',
+  pageDescription: 'የኮሚቴዎችን፣ የቦርድ አካላትን እና የድርጅታዊ ሪፖርት ግንኙነቶችን ከአንድ ቦታ ይመልከቱ።',
+  eyebrow: 'ARNA · GOVERNANCE',
+  heroTitle: 'ግልጽ መዋቅር። ግልጽ ተጠያቂነት።',
+  heroDescription: 'የአስተዳደር አካላትን፣ የሥራ ዘመኖችን፣ የሥልጣን ቦታዎችን እና የአባላት ሹመቶችን በተደራጀ መንገድ ይከታተሉ።',
+  browseBodies: 'የአስተዳደር አካላትን ይመልከቱ',
+  bodyCount: 'የተመዘገቡ የአስተዳደር አካላት',
+  bodyCountCaption: 'በአሁኑ የተቋም ወሰን ውስጥ',
+  retryLabel: 'እንደገና ይሞክሩ',
+  loadErrorTitle: 'የአስተዳደር መረጃን ማምጣት አልተቻለም።',
+  loadingMessage: 'የአስተዳደር መረጃ በመጫን ላይ…',
+  domainsTitle: 'የሥራ ክፍሎች',
+  domainsDescription: 'ከአካል ዝርዝር ውስጥ ወደ ዝርዝር መረጃ በመግባት ተዛማጅ መዝገቦችን ይመልከቱ።',
+  openArea: 'ዝርዝሩን ይክፈቱ',
+  scopeNote: 'ይህ ማያ ገጽ በአሁኑ ጊዜ በAPI የተደገፉ የአስተዳደር አካላትን እና በእያንዳንዱ አካል ውስጥ የሚገኙ የሥራ ዘመን፣ የቦታ፣ የሹመት እና የአባልነት መዝገቦችን ያቀራርባል። የስብሰባ፣ የውሳኔ እና የውክልና ገጾች የAPI ድጋፍ ሲኖራቸው ብቻ ይጨመራሉ።',
+  areas: [
+    {
+      mark: '01',
+      title: 'ቦርዶች እና ኮሚቴዎች',
+      description: 'የአስተዳደር አካላትን፣ ዓይነትን፣ ሁኔታን እና የሚመሩበትን ዓላማ ይመልከቱ።',
+    },
+    {
+      mark: '02',
+      title: 'መዋቅር እና ሪፖርት ግንኙነት',
+      description: 'የወላጅ አካልን እና ሪፖርት የሚቀርብለትን አካል በዝርዝር ገጽ ይመርምሩ።',
+    },
+    {
+      mark: '03',
+      title: 'የሥራ ዘመኖች እና የሥልጣን ቦታዎች',
+      description: 'የአካሉን የሥራ ዘመን፣ የተገለጹ ቦታዎችን፣ የድምፅ መብትን እና የመኮንንነት ሚናዎችን ይመልከቱ።',
+    },
+    {
+      mark: '04',
+      title: 'ሹመቶች እና የአባላት ዝርዝር',
+      description: 'የሹመት መሠረትን፣ የአባልነት ሁኔታን፣ የሥራ ዘመንን እና የተመደበ ቦታን ያረጋግጡ።',
+    },
+  ],
 };

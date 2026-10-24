@@ -420,6 +420,11 @@ import {
  */
 const appName: string = import.meta.env.VITE_APP_NAME;
 
+// The standalone corporate site has no /login route; the main app does.
+const props = withDefaults(defineProps<{ publicMode?: boolean }>(), {
+  publicMode: false,
+});
+
 // -----------------------------------------------------------------------------
 // Grouped documents
 // -----------------------------------------------------------------------------
@@ -589,11 +594,11 @@ function headingForGroup(group: LegalHubGroup): string {
            ============================================================ -->
       <footer class="legal-center__footer">
         <RouterLink
-          to="/"
+          :to="props.publicMode ? '/' : '/login'"
           class="legal-center__back-link"
           data-testid="legal-center-back"
         >
-          {{ legalCenterPageLabels.backToPublicHomeLabel }}
+          {{ props.publicMode ? legalCenterPageLabels.backToPublicHomeLabel : legalCenterPageLabels.backToLoginLabel }}
         </RouterLink>
       </footer>
     </article>

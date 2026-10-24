@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
 
-const appName: string = import.meta.env.VITE_APP_NAME;
+const appName: string = import.meta.env.VITE_APP_NAME || 'ARNA';
 </script>
 
 <template>
   <div class="public-site-layout" data-testid="public-site-layout">
     <header class="public-site-layout__header">
       <nav class="public-site-layout__nav" aria-label="ዋና አሰሳ">
-        <RouterLink class="public-site-layout__brand" to="/login">{{ appName }}</RouterLink>
+        <RouterLink class="public-site-layout__brand" to="/">{{ appName }}</RouterLink>
         <div class="public-site-layout__links">
-          <RouterLink to="/login">ግባ</RouterLink>
           <RouterLink to="/verify">ሰነድ ማረጋገጫ</RouterLink>
           <RouterLink to="/legal">ሕጋዊ መረጃ</RouterLink>
         </div>
