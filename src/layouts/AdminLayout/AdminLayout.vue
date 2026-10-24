@@ -5,8 +5,8 @@
 
  File:      mase_app/src/layouts/AdminLayout/AdminLayout.vue
  Layer:     Layouts (admin application shell)
- Version:   1.0.0
- Status:    FROZEN
+ Version:   1.0.1
+ Status:    ENHANCEMENT — logout history documentation
  Authority: G1 — Admin Application Architecture (approved, §5.1, §5.4)
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §14.2, §15.1
 
@@ -22,6 +22,14 @@
 
           No provide() context is established. See §"No provider at
           1.0.0" for the G1 Q2 decision that governs this.
+
+
+ 1.0.1  — correct logout history explanation (documentation only):
+          · Clarifies that router.push preserves the prior route in
+            browser history, while the auth guard is responsible for
+            rejecting protected-route navigation after logout.
+          · No runtime behavior, routing, authorization, or menu
+            contracts changed.
 
  -----------------------------------------------------------------------------
  Purpose
@@ -302,9 +310,11 @@ async function onUserMenuSelect(payload: { id: string }): Promise<void> {
   // logout — clear session, redirect to /login
   // ---------------------------------------------------------------------------
   /*
-   * router.push (not replace) so the browser Back button returns the
-   * user to the admin application, not to a stale shell state. This
-   * matches PortalLayout.vue's logout branch.
+   * router.push (not replace) preserves normal browser history. A Back
+   * navigation to an authenticated admin route remains subject to the
+   * auth guard, which must reject access after logout and send the user
+   * to login. The guard, not push(), provides that protection.
+   * PortalLayout.vue should be reviewed for the same wording.
    */
   if (payload.id === 'logout') {
     await logout();

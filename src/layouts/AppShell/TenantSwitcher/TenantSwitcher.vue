@@ -5,8 +5,8 @@
 
  File:      mase_app/src/layouts/AppShell/TenantSwitcher/TenantSwitcher.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.0.1
- Status:    FROZEN
+ Version:   1.1.0
+ Status:    ENHANCEMENT — forced-colors accessibility
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §12.5
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §8.5, §13.5, §15.1, §22
@@ -438,6 +438,22 @@ function onSelect(key: string): void {
 
 .tenant-switcher[data-menu-open='true'] .tenant-switcher__chevron {
   transform: rotate(180deg);
+}
+
+/* ============================================================================
+   Forced colors
+   ---------------------------------------------------------------------------
+   Tenant identity must remain legible when user-selected high-contrast
+   colors replace the normal token palette. Keep the name and decorative
+   icons tied to the system foreground; preserve native button/menu
+   interaction and the existing open-state indicator.
+   ============================================================================ */
+@media (forced-colors: active) {
+  .tenant-switcher__name,
+  .tenant-switcher__icon,
+  .tenant-switcher__chevron {
+    color: CanvasText;
+  }
 }
 
 /* ============================================================================

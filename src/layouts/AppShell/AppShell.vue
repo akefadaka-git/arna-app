@@ -5,8 +5,8 @@
 
  File:      mase_app/src/layouts/AppShell/AppShell.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.0.4
- Status:    FROZEN
+ Version:   1.2.0
+ Status:    ENHANCEMENT — forced-colors shell accessibility
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §6.1
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §15.1, §18, §22
@@ -118,6 +118,16 @@
           · No change to either FROZEN consumer. AuthenticatedLayout.vue
             and PortalLayout.vue continue to supply no `#footer` and
             now inherit the default footer content automatically.
+
+ 1.1.0 — ARNA palette alignment and focus-target refinement:
+          · The persistent desktop/tablet sidebar now uses the semantic
+            raised-surface token, separating navigation from the page
+            canvas while remaining compatible with active brand themes.
+          · The main landmark no longer suppresses its focus outline.
+            Keyboard skip-link focus receives a visible token-based
+            focus indicator using the semantic focus-ring token.
+          · No props, slots, events, navigation behavior, store
+            integration, or test hooks changed.
 
  -----------------------------------------------------------------------------
  Purpose
@@ -781,7 +791,7 @@ function onMaintenanceDismiss(): void {
     position: sticky;
     top: var(--mases-shell-header-height);
     border-inline-end: 1px solid var(--mases-color-border-subtle);
-    background-color: var(--mases-color-surface-page);
+    background-color: var(--mases-color-surface-raised);
     /*
      * `overflow: clip` (with a `hidden` fallback) keeps the aside's
      * contents from spilling past its own box without creating a
@@ -831,13 +841,13 @@ function onMaintenanceDismiss(): void {
   padding-block: var(--mases-shell-content-padding-mobile);
   padding-inline: var(--mases-shell-content-padding-mobile);
   /*
-   * When focused via the skip link (tabindex="-1"), suppress the
-   * default focus ring on <main>. This is deliberate: main is a
-   * non-interactive landmark; the ring would be a visual artifact of
-   * the skip-link behavior, not a focus indicator the user should see.
-   * Screen readers still announce the landmark.
+   * The main landmark is a skip-link target, so keep a visible focus
+   * indicator when keyboard navigation transfers focus here. The
+   * semantic focus-ring token follows the active brand/theme palette.
    */
-  outline: none;
+  outline: 3px solid transparent;
+  outline-offset: -3px;
+  border-radius: var(--mases-radius-md);
 }
 
 /* Tablet and up: tablet content padding. */
@@ -854,6 +864,10 @@ function onMaintenanceDismiss(): void {
     padding-block: var(--mases-shell-content-padding-desktop);
     padding-inline: var(--mases-shell-content-padding-desktop);
   }
+}
+
+.app-shell__main:focus-visible {
+  outline-color: var(--mases-color-state-focus-ring);
 }
 
 .app-shell__content {
@@ -881,4 +895,23 @@ function onMaintenanceDismiss(): void {
     /* no-op placeholder — see comment above */
   }
 }
+
+/* ============================================================================
+   Forced-colors mode
+   ---------------------------------------------------------------------------
+   Preserve a readable shell surface and visible main-content keyboard focus
+   when the operating system replaces author colors with a high-contrast
+   palette. Child controls retain their own forced-colors rules.
+   ============================================================================ */
+@media (forced-colors: active) {
+  .app-shell {
+    background-color: Canvas;
+    color: CanvasText;
+  }
+
+  .app-shell__main:focus-visible {
+    outline-color: Highlight;
+  }
+}
+
 </style>

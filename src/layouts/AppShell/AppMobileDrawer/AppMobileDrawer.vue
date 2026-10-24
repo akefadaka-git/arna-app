@@ -5,8 +5,8 @@
 
  File:      mase_app/src/layouts/AppShell/AppMobileDrawer/AppMobileDrawer.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.0.1
- Status:    FROZEN
+ Version:   1.2.0
+ Status:    ENHANCEMENT — forced-colors accessibility
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §6.1, §7.2
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §15.1, §18.2, §22
@@ -24,6 +24,25 @@
             the ESLint warning but not the TypeScript `noUnusedLocals`
             error. Removing the import clears the error and loses no
             behavior.
+
+ 1.1.0  — align drawer chrome with ARNA brand palette:
+          · Use the raised surface token for the native dialog frame.
+          · Add the gold brand accent at the drawer's leading edge of the
+            block axis and use the brand border on the close-button header.
+          · Preserve the native dialog, responsive sizing, RTL animation,
+            controlled visibility, and route-change dismissal behavior.
+
+ 1.0.2  — close the mobile drawer after successful route navigation:
+          · Watch the router's resolved `fullPath` and request closure
+            when it changes while the drawer is open. This prevents the
+            modal drawer from remaining over the newly selected page
+            after a user follows a navigation link.
+          · Preserve controlled visibility: the watcher emits the same
+            `update:open=false` and `close` events as Escape, backdrop,
+            and the close button. It does not mutate the prop or dialog
+            state directly.
+          · No change to desktop navigation, route authorization, or
+            the shell's public component API.
 
  -----------------------------------------------------------------------------
  Purpose
@@ -158,6 +177,7 @@ export type { NavItem, AppSidebarLabels };
 
 <script setup lang="ts">
 import { onBeforeUnmount, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import AppSidebar from '@/layouts/AppShell/AppSidebar';
 import BaseButton from '@/components/primitives/BaseButton';
 import BaseIcon from '@/components/primitives/BaseIcon';
@@ -287,6 +307,28 @@ function onDialogClick(event: MouseEvent): void {
     requestClose();
   }
 }
+
+// -----------------------------------------------------------------------------
+// Route-change dismissal
+// -----------------------------------------------------------------------------
+/*
+ * A navigation link can resolve a new page while this modal is open.
+ * Without closing it, the dialog remains in the top layer and obscures
+ * the destination until the user dismisses it manually. Observe the
+ * resolved route rather than individual links so every successful
+ * navigation path closes the drawer consistently.
+ *
+ * Visibility remains controlled by the parent: requestClose emits the
+ * existing v-model and close events and does not mutate `props.open`.
+ */
+const router = useRouter();
+
+watch(
+  () => router.currentRoute.value.fullPath,
+  () => {
+    if (props.open) requestClose();
+  },
+);
 
 // -----------------------------------------------------------------------------
 // Body scroll lock
@@ -434,7 +476,8 @@ onBeforeUnmount(() => {
    */
   height: 100dvh;
   border: 0;
-  background-color: var(--mases-color-surface-page);
+  border-block-start: 3px solid var(--mases-color-gold-500);
+  background-color: var(--mases-color-surface-raised);
   color: var(--mases-color-text-primary);
   font-family: inherit;
   /*
@@ -501,7 +544,7 @@ html[dir='rtl'] .app-mobile-drawer {
   justify-content: flex-end;
   height: var(--mases-shell-header-height);
   padding-inline: var(--mases-space-2);
-  border-block-end: 1px solid var(--mases-color-border-subtle);
+  border-block-end: 1px solid var(--mases-color-border-brand);
   flex-shrink: 0;
 }
 
@@ -541,4 +584,34 @@ html[dir='rtl'] .app-mobile-drawer {
     animation: none;
   }
 }
+
+/* ============================================================================
+   Forced-colors mode
+   ---------------------------------------------------------------------------
+   Use system colors so the native modal remains distinguishable when
+   author colors and shadows are suppressed by the user's high-contrast
+   palette. Dialog behavior, sizing, and route dismissal are unchanged.
+   ============================================================================ */
+@media (forced-colors: active) {
+  .app-mobile-drawer {
+    background-color: Canvas;
+    color: CanvasText;
+    border-block-start-color: Highlight;
+    box-shadow: none;
+  }
+
+  .app-mobile-drawer::backdrop {
+    background-color: CanvasText;
+    opacity: 0.55;
+  }
+
+  .app-mobile-drawer__header {
+    border-block-end-color: CanvasText;
+  }
+
+  .app-mobile-drawer__extra {
+    border-block-start-color: CanvasText;
+  }
+}
+
 </style>

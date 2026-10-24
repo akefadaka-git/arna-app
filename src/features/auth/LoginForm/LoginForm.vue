@@ -5,8 +5,8 @@
 
  File:      mase_app/src/features/auth/LoginForm/LoginForm.vue
  Layer:     Features (Stage 12 — Authentication UI)
- Version:   2.1.0
- Status:    FROZEN
+ Version:   2.2.0
+ Status:    ACTIVE — Owner-authorized MFA enhancement
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §8.x
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §6.5, §11.4, §11.5,
@@ -326,6 +326,18 @@ export interface LoginFormLabels {
   /** The label for the password field. */
   readonly passwordLabel: string;
 
+  /** Instructions shown when the backend requires multi-factor authentication. */
+  readonly mfaInstructions: string;
+
+  /** Label for a TOTP or one-time recovery-code input. */
+  readonly mfaCodeLabel: string;
+
+  /** Submit label while verifying an MFA challenge. */
+  readonly verifyMfaLabel: string;
+
+  /** Action label to abandon MFA and restart login. */
+  readonly cancelMfaLabel: string;
+
   /** The submit button's label, in the idle state. */
   readonly submitLabel: string;
 
@@ -409,7 +421,7 @@ import BaseInput from '@/components/primitives/BaseInput';
 import BaseLink from '@/components/primitives/BaseLink';
 import PrimaryButton from '@/components/primitives/PrimaryButton';
 
-import { login } from '@/features/auth/service';
+import { completeMfaLogin, login } from '@/features/auth/service';
 import { resolveSafeRedirect } from '@/router/guards';
 
 interface Props {
@@ -446,6 +458,9 @@ const router = useRouter();
 // -----------------------------------------------------------------------------
 const identifier = ref<string>('');
 const password = ref<string>('');
+const mfaCode = ref<string>('');
+const mfaChallengeToken = ref<string | null>(null);
+const isMfaChallengeActive = computed<boolean>(() => mfaChallengeToken.value !== null);
 
 /*
  * Whether the password is visible. When false (default), the input
@@ -718,14 +733,33 @@ async function onSubmit(): Promise<void> {
 
   isSubmitting.value = true;
   try {
-    /*
-     * The service performs the Sanctum CSRF handshake internally
-     * (Unit 12.3 v1.1.0). The remember flag is NOT passed — the
-     * backend session lifetime is not affected by the checkbox.
-     */
-    await login(identifier.value, password.value);
+    if (isMfaChallengeActive.value) {
+      await completeMfaLogin(
+        identifier.value,
+        password.value,
+        mfaChallengeToken.value as string,
+        mfaCode.value,
+        { remember: rememberMe.value },
+      );
+    } else {
+      const result = await login(
+        identifier.value,
+        password.value,
+        { remember: rememberMe.value },
+      );
 
-    /* Persist or clear the remembered identifier on success only. */
+      if (result.status === 'mfa-required') {
+        mfaChallengeToken.value = result.challengeToken;
+        mfaCode.value = '';
+        await nextTick();
+        const mfaInput = document.getElementById('login-mfa-code');
+        if (mfaInput instanceof HTMLElement) mfaInput.focus();
+        return;
+      }
+    }
+
+    // Persist only the identifier. Never persist passwords, MFA codes,
+    // or challenge tokens.
     if (rememberMe.value) {
       persistRememberedIdentifier(identifier.value);
     } else {
@@ -749,6 +783,12 @@ async function onSubmit(): Promise<void> {
 // -----------------------------------------------------------------------------
 // Event forwarding
 // -----------------------------------------------------------------------------
+function cancelMfaChallenge(): void {
+  mfaChallengeToken.value = null;
+  mfaCode.value = '';
+  banner.value = null;
+}
+
 function onForgotPasswordClick(event: MouseEvent): void {
   event.preventDefault();
   emit('forgot-password');
@@ -763,7 +803,11 @@ function onRegisterClick(event: MouseEvent): void {
 // Derived render decisions
 // -----------------------------------------------------------------------------
 const submitLabel = computed<string>(() =>
-  isSubmitting.value ? props.labels.submittingLabel : props.labels.submitLabel,
+  isSubmitting.value
+    ? props.labels.submittingLabel
+    : isMfaChallengeActive.value
+      ? props.labels.verifyMfaLabel
+      : props.labels.submitLabel,
 );
 
 /*
@@ -834,7 +878,7 @@ const passwordToggleLabel = computed<string>(() =>
         inputmode="email"
         autocomplete="username"
         enterkeyhint="go"
-        :disabled="isSubmitting"
+        :disabled="isSubmitting || isMfaChallengeActive"
         data-testid="login-form-identifier"
         @blur="onIdentifierBlur"
       />
@@ -865,7 +909,7 @@ const passwordToggleLabel = computed<string>(() =>
         v-model="password"
         :type="passwordFieldType"
         autocomplete="current-password"
-        :disabled="isSubmitting"
+        :disabled="isSubmitting || isMfaChallengeActive"
         data-testid="login-form-password"
         @keydown="updateCapsLockFromEvent"
         @keyup="updateCapsLockFromEvent"
@@ -892,6 +936,45 @@ const passwordToggleLabel = computed<string>(() =>
         </template>
       </BaseInput>
     </FormField>
+
+    <!-- ============================================================
+         MFA challenge (rendered only after the server requests MFA)
+         ============================================================ -->
+    <div
+      v-if="isMfaChallengeActive"
+      class="login-form__mfa"
+      data-testid="login-form-mfa"
+    >
+      <p class="login-form__mfa-instructions" role="status" aria-live="polite">
+        {{ labels.mfaInstructions }}
+      </p>
+      <FormField
+        :label="labels.mfaCodeLabel"
+        html-for="login-mfa-code"
+        :disabled="isSubmitting"
+        required
+      >
+        <BaseInput
+          id="login-mfa-code"
+          v-model="mfaCode"
+          type="text"
+          inputmode="text"
+          autocomplete="one-time-code"
+          autocapitalize="off"
+          spellcheck="false"
+          :disabled="isSubmitting"
+          required
+          data-testid="login-form-mfa-code"
+        />
+      </FormField>
+      <button
+        type="button"
+        class="login-form__mfa-cancel"
+        :disabled="isSubmitting"
+        data-testid="login-form-mfa-cancel"
+        @click="cancelMfaChallenge"
+      >{{ labels.cancelMfaLabel }}</button>
+    </div>
 
     <!-- ============================================================
          Caps Lock warning
@@ -995,6 +1078,45 @@ const passwordToggleLabel = computed<string>(() =>
   margin-block-start: var(--mases-space-1);
   font-size: var(--mases-font-size-body-sm);
   line-height: var(--mases-line-height-body-sm);
+}
+
+/* ============================================================================
+   MFA challenge
+   ============================================================================ */
+.login-form__mfa {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mases-space-3);
+  min-width: 0;
+}
+
+.login-form__mfa-instructions {
+  margin: 0;
+  color: var(--mases-color-text-secondary);
+  font-size: var(--mases-font-size-body-sm);
+  line-height: var(--mases-line-height-body-sm);
+  overflow-wrap: anywhere;
+}
+
+.login-form__mfa-cancel {
+  align-self: flex-start;
+  border: 0;
+  padding: var(--mases-space-1) 0;
+  background: transparent;
+  color: var(--mases-color-text-primary);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.login-form__mfa-cancel:focus-visible {
+  outline: 2px solid var(--mases-color-border-focus);
+  outline-offset: 3px;
+}
+
+.login-form__mfa-cancel:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
 }
 
 /* ============================================================================

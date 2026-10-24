@@ -5,8 +5,8 @@
  *
  * File:      mase_app/src/features/auth/api.ts
  * Layer:     Features (Stage 12 — Authentication UI)
- * Version:   1.0.1
- * Status:    FROZEN
+ * Version:   1.1.0
+ * Status:    ACTIVE — Owner-authorized enhancement
  * Authority: MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §6, §11, §12
  *            MASES_PHASE_2_UI_COMPONENT_CATALOG.md §26.1, §26.2
  *            Verified against:
@@ -19,6 +19,10 @@
  * Revision history
  * -----------------------------------------------------------------------------
  * 1.0.0  — initial delivery (Stage 12, Unit 12.2)
+ * 1.1.0  — typed login request and discriminated MFA challenge response;
+ *          login accepts tenant and remember context, and supports the
+ *          backend's same-endpoint MFA completion contract.
+ *
  * 1.0.1  — backend-source audit corrections:
  *          · RegisterRequest now reflects AuthController::register()'s
  *            bilingual Ethiopian name fields (CR-005). The legacy
@@ -68,10 +72,11 @@
  * -----------------------------------------------------------------------------
  * Response shapes (verified)
  * -----------------------------------------------------------------------------
- * login / register:
- *   { success: true, data: { user: LoginResponseUser, token, token_type } }
- *   register additionally carries a top-level `message`, which the
- *   client's envelope unwrap discards. Not modeled here.
+ * login:
+ *   success → { user, token, token_type }
+ *   challenge → { mfa_required: true, challenge_token, methods }
+ * register:
+ *   { user, token, token_type }
  *
  * token/refresh:
  *   { success: true, data: { token, token_type } }   (no user)
@@ -118,11 +123,33 @@ export interface LoginResponseUser {
  * POST /api/login and POST /api/register response body, after the
  * shared client unwraps the {success, data} envelope.
  */
-export interface LoginResponse {
+export interface LoginRequest {
+  /** The backend's legacy wire field; accepts a supported login identifier. */
+  readonly email: string;
+  readonly password: string;
+  readonly tenant_id?: number;
+  readonly remember?: boolean;
+  /** Present only when completing an existing MFA challenge. */
+  readonly mfa_challenge_token?: string;
+  /** TOTP or one-time recovery code; never persist this value. */
+  readonly mfa_code?: string;
+}
+
+export interface LoginSuccessResponse {
+  readonly mfa_required?: false;
   readonly user: LoginResponseUser;
   readonly token: string;
   readonly token_type: 'Bearer';
 }
+
+export interface MfaChallengeResponse {
+  readonly mfa_required: true;
+  readonly challenge_token: string;
+  readonly methods: readonly ('totp' | 'recovery_code')[];
+}
+
+/** Discriminated response from POST /api/login. */
+export type LoginResponse = LoginSuccessResponse | MfaChallengeResponse;
 
 /**
  * POST /api/token/refresh response body. Verified against
@@ -198,11 +225,8 @@ export interface ResetPasswordRequest {
  * Returns a partial user + bearer token. See the file header comment
  * §"The partial-vs-full user distinction".
  */
-export function login(
-  email: string,
-  password: string,
-): Promise<LoginResponse> {
-  return api.post<LoginResponse>('/api/login', { email, password });
+export function login(payload: LoginRequest): Promise<LoginResponse> {
+  return api.post<LoginResponse>('/api/login', payload);
 }
 
 /**
@@ -213,8 +237,8 @@ export function login(
  */
 export function register(
   payload: RegisterRequest,
-): Promise<LoginResponse> {
-  return api.post<LoginResponse>('/api/register', payload);
+): Promise<LoginSuccessResponse> {
+  return api.post<LoginSuccessResponse>('/api/register', payload);
 }
 
 /**

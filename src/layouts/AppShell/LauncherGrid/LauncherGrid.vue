@@ -5,8 +5,8 @@
 
  File:      mase_app/src/layouts/AppShell/LauncherGrid/LauncherGrid.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.0.0
- Status:    FROZEN
+ Version:   1.1.0
+ Status:    ENHANCEMENT — narrow-container resilience
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §7.3, §9.1–§9.3
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §13.2, §15.1, §20.1, §22
@@ -290,7 +290,7 @@ function onRetry(): void {
    ============================================================================ */
 .launcher-grid__list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
   gap: var(--mases-space-4);
   list-style: none;
   margin: 0;
