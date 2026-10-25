@@ -3,6 +3,7 @@ import '@/styles/reset.css';
 import '@/styles/tokens.css';
 import '@/styles/public-accessibility-overrides.css';
 import { RouterLink } from 'vue-router';
+import { masesBrandLabels } from '@/router/shell-labels';
 
 const year = new Date().getFullYear();
 
@@ -63,17 +64,11 @@ const offerings = [
 
     <header class="site-header">
       <div class="site-container site-header__inner">
-        <RouterLink class="brand" to="/" aria-label="ARNA — መነሻ">
-          <span class="brand__symbol" aria-hidden="true">
-            <svg viewBox="0 0 48 48" fill="none">
-              <path d="M24 4 43 15v18L24 44 5 33V15L24 4Z" stroke="currentColor" stroke-width="1.5"/>
-              <path d="m13 32 11-21 11 21M18 24h12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="24" cy="24" r="3" fill="var(--arna-public-accent)"/>
-            </svg>
-          </span>
+        <RouterLink class="brand" to="/" :aria-label="masesBrandLabels.corporateName">
+          <img class="public-home__emblem" src="/logo.png" alt="" width="43" height="43" />
           <span class="brand__wordmark">
-            <strong>ARNA</strong>
-            <small>MAALE ARNA</small>
+            <strong>{{ masesBrandLabels.corporateName }}</strong>
+            <small>{{ masesBrandLabels.productName }}</small>
           </span>
         </RouterLink>
 
@@ -247,11 +242,9 @@ const offerings = [
       <div class="site-container">
         <div class="site-footer__main">
           <div class="site-footer__brand">
-            <RouterLink class="brand brand--footer" to="/" aria-label="ARNA — መነሻ">
-              <span class="brand__symbol" aria-hidden="true">
-                <svg viewBox="0 0 48 48" fill="none"><path d="M24 4 43 15v18L24 44 5 33V15L24 4Z" stroke="currentColor" stroke-width="1.5"/><path d="m13 32 11-21 11 21M18 24h12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </span>
-              <span class="brand__wordmark"><strong>ARNA</strong><small>MAALE ARNA</small></span>
+            <RouterLink class="brand brand--footer" to="/" :aria-label="masesBrandLabels.corporateName">
+              <img class="public-home__emblem" src="/logo.png" alt="" width="43" height="43" />
+              <span class="brand__wordmark"><strong>{{ masesBrandLabels.corporateName }}</strong><small>{{ masesBrandLabels.productName }}</small></span>
             </RouterLink>
             <p lang="am">በመተማመን የሚገነባ የጋራ እድገት።</p>
           </div>
@@ -318,6 +311,7 @@ const offerings = [
 .brand { display: inline-flex; align-items: center; gap: .7rem; flex: 0 0 auto; text-decoration: none; }
 .brand__symbol { display: grid; place-items: center; width: 43px; height: 43px; color: var(--arna-navy); }
 .brand__symbol svg { display: block; width: 100%; height: 100%; }
+.public-home__emblem { display: block; width: 43px; height: 43px; flex: 0 0 auto; object-fit: contain; }
 .brand__wordmark { display: grid; gap: .12rem; }
 .brand__wordmark strong { color: var(--arna-navy); font-family: Georgia, serif; font-size: 1.24rem; letter-spacing: .19em; line-height: 1; }
 .brand__wordmark small { color: var(--arna-public-text-secondary); font-size: .55rem; letter-spacing: .16em; }
@@ -463,7 +457,7 @@ const offerings = [
   .announcement-bar__inner p { font-size: .66rem; }
   .announcement-bar__english { display: none; }
   .site-header__inner { min-height: 76px; flex-wrap: wrap; padding-block: .85rem; }
-  .brand__symbol { width: 38px; height: 38px; }
+  .brand__symbol, .public-home__emblem { width: 38px; height: 38px; }
   .brand__wordmark strong { font-size: 1.12rem; }
   .main-nav { order: 3; width: 100%; justify-content: space-between; gap: .5rem; overflow-x: auto; padding-block: .25rem .1rem; }
   .main-nav a { flex: 0 0 auto; font-size: .75rem; }
