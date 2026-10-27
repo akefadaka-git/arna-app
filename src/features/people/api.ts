@@ -70,3 +70,17 @@ export function updatePerson(
     payload,
   );
 }
+
+export interface PersonRelationshipSummary {
+  readonly account_linked: boolean;
+  readonly employment_count: number;
+  readonly shareholding_count: number;
+  readonly governance_membership_count: number;
+  readonly document_linking_supported: boolean;
+}
+
+export function getPersonRelationships(publicId: string): Promise<PersonRelationshipSummary> {
+  return api.get<PersonRelationshipSummary>(
+    `/people/${encodeURIComponent(publicId)}/relationships`,
+  );
+}
