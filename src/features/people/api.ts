@@ -77,6 +77,7 @@ export interface PersonRelationshipSummary {
   readonly shareholding_count: number;
   readonly governance_membership_count: number;
   readonly document_linking_supported: boolean;
+  readonly document_count: number | null;
 }
 
 export function getPersonRelationships(publicId: string): Promise<PersonRelationshipSummary> {
