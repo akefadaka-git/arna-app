@@ -84,3 +84,42 @@ export function getPersonRelationships(publicId: string): Promise<PersonRelation
     `/people/${encodeURIComponent(publicId)}/relationships`,
   );
 }
+
+export interface PersonDocument {
+  readonly file_id: number;
+  readonly display_name_am: string | null;
+  readonly display_name_en: string | null;
+  readonly original_name: string;
+  readonly mime_type: string | null;
+  readonly size: number;
+  readonly version: number;
+  readonly status: string;
+  readonly linked_at: string;
+}
+
+export function listPersonDocuments(publicId: string): Promise<readonly PersonDocument[]> {
+  return api.get<readonly PersonDocument[]>(
+    `/people/${encodeURIComponent(publicId)}/documents`,
+  );
+}
+
+export function linkPersonDocument(
+  publicId: string,
+  payload: { file_id: number; reason: string },
+): Promise<{ linked: boolean }> {
+  return api.post<{ linked: boolean }>(
+    `/people/${encodeURIComponent(publicId)}/documents`,
+    payload,
+  );
+}
+
+export function unlinkPersonDocument(
+  publicId: string,
+  fileId: number,
+  reason: string,
+): Promise<{ linked: boolean }> {
+  return api.delete<{ linked: boolean }>(
+    `/people/${encodeURIComponent(publicId)}/documents/${fileId}`,
+    { data: { reason } },
+  );
+}
