@@ -690,6 +690,23 @@ export const routesWorkspace: RouteRecordRaw[] = [
       },
 
       // -----------------------------------------------------------------------
+      // People — canonical natural-person registry.
+      // The API is tenant-scoped and filters every result through an
+      // explicit active PersonTenantAccess grant. Do not add a local
+      // identity store or infer permissions from linked domain records.
+      // -----------------------------------------------------------------------
+      {
+        path: 'people',
+        name: 'people',
+        component: () => import('@/features/people/PeopleDirectoryView.vue'),
+      },
+      {
+        path: 'people/:publicId',
+        name: 'people-profile',
+        component: () => import('@/features/people/PeopleProfileView.vue'),
+      },
+
+      // -----------------------------------------------------------------------
       // Governance
       // The overview is the navigation entry for the governance module.
       {
