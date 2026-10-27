@@ -1,13 +1,20 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { getPerson, getPersonRelationships, updatePerson, type PersonNamePayload, type PersonProfile, type PersonRelationshipSummary } from './api';
+import { getPerson, getPersonRelationships, listPersonDocuments, linkPersonDocument, unlinkPersonDocument, updatePerson, type PersonDocument, type PersonNamePayload, type PersonProfile, type PersonRelationshipSummary } from './api';
 
 const route = useRoute();
 const router = useRouter();
 const person = ref<PersonProfile | null>(null);
 const relationships = ref<PersonRelationshipSummary | null>(null);
 const relationshipsLoading = ref(false);
+const documents = ref<readonly PersonDocument[]>([]);
+const documentsLoading = ref(false);
+const documentSaving = ref(false);
+const documentError = ref('');
+const documentSuccess = ref('');
+const fileIdDraft = ref('');
+const documentReason = ref('');
 const loading = ref(false);
 const saving = ref(false);
 const editing = ref(false);
@@ -53,6 +60,16 @@ async function load(): Promise<void> {
     } finally {
       relationshipsLoading.value = false;
     }
+    documentsLoading.value = true;
+    documentError.value = '';
+    try {
+      documents.value = await listPersonDocuments(publicId);
+    } catch {
+      documents.value = [];
+      documentError.value = 'የሰነዶችን ዝርዝር ማየት አልተቻለም። ፈቃድዎን ያረጋግጡ።';
+    } finally {
+      documentsLoading.value = false;
+    }
   } catch {
     error.value = 'ይህን መዝገብ ማየት አልተቻለም። መዝገቡ ላይገኝ ወይም ፈቃድ ላይኖርዎት ይችላል።';
   } finally { loading.value = false; }
@@ -93,6 +110,57 @@ async function saveProfile(): Promise<void> {
   } catch {
     error.value = 'ለውጡን ማስቀመጥ አልተቻለም። የመዳረሻ ፈቃድ፣ የስም መረጃ እና ምክንያቱን ያረጋግጡ።';
   } finally { saving.value = false; }
+}
+async function attachDocument(): Promise<void> {
+  const publicId = String(route.params.publicId || '');
+  const parsedFileId = Number(fileIdDraft.value);
+  if (!publicId || !Number.isSafeInteger(parsedFileId) || parsedFileId < 1) {
+    documentError.value = 'ትክክለኛ የፋይል መለያ ያስገቡ።';
+    return;
+  }
+  if (documentReason.value.trim().length < 8) {
+    documentError.value = 'ለሰነዱ ግንኙነት ቢያንስ 8 ቁምፊ ያለው ምክንያት ያስገቡ።';
+    return;
+  }
+  documentSaving.value = true;
+  documentError.value = '';
+  documentSuccess.value = '';
+  try {
+    await linkPersonDocument(publicId, { file_id: parsedFileId, reason: documentReason.value.trim() });
+    documents.value = await listPersonDocuments(publicId);
+    fileIdDraft.value = '';
+    documentReason.value = '';
+    documentSuccess.value = 'ሰነዱ ከሰው መዝገቡ ጋር ተገናኝቷል።';
+  } catch {
+    documentError.value = 'ሰነዱን ማገናኘት አልተቻለም። የፋይል መለያውን፣ የተከራይ አውዱን እና file.view ፈቃድን ያረጋግጡ።';
+  } finally {
+    documentSaving.value = false;
+  }
+}
+async function detachDocument(fileId: number): Promise<void> {
+  const publicId = String(route.params.publicId || '');
+  if (!publicId || documentReason.value.trim().length < 8) {
+    documentError.value = 'ሰነዱን ለማላቀቅ ቢያንስ 8 ቁምፊ ያለው ምክንያት ያስገቡ።';
+    return;
+  }
+  documentSaving.value = true;
+  documentError.value = '';
+  documentSuccess.value = '';
+  try {
+    await unlinkPersonDocument(publicId, fileId, documentReason.value.trim());
+    documents.value = await listPersonDocuments(publicId);
+    documentReason.value = '';
+    documentSuccess.value = 'ሰነዱ ከሰው መዝገቡ ተለይቷል።';
+  } catch {
+    documentError.value = 'ሰነዱን ማላቀቅ አልተቻለም። ፈቃድዎን እና ምክንያቱን ያረጋግጡ።';
+  } finally {
+    documentSaving.value = false;
+  }
+}
+function formatFileSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 onMounted(load);
 </script>
@@ -146,6 +214,33 @@ onMounted(load);
           <div><dt>የሰነድ ግንኙነት</dt><dd>{{ relationships.document_linking_supported ? 'በAPI የሚደገፍ መዋቅር አለ' : 'አሁን አልተገናኘም' }}</dd></div>
         </dl>
       </section>
+      <section v-if="relationships || relationshipsLoading || documentsLoading || documents.length || documentError" class="people-profile__documents" aria-labelledby="people-documents-title">
+        <h2 id="people-documents-title">ሰነዶች እና ፋይሎች</h2>
+        <p v-if="documentsLoading" role="status">ሰነዶች በመጫን ላይ…</p>
+        <p v-if="documentError" class="people-profile__alert" role="alert">{{ documentError }}</p>
+        <p v-if="documentSuccess" class="people-profile__success" role="status">{{ documentSuccess }}</p>
+        <ul v-if="documents.length" class="people-profile__document-list">
+          <li v-for="document in documents" :key="document.file_id">
+            <div>
+              <strong>{{ document.display_name_am || document.display_name_en || document.original_name }}</strong>
+              <p>{{ document.display_name_en || document.original_name }} · {{ document.mime_type || '—' }} · {{ formatFileSize(document.size) }}</p>
+            </div>
+            <button type="button" :disabled="documentSaving" @click="detachDocument(document.file_id)">ከመዝገቡ ለይ</button>
+          </li>
+        </ul>
+        <p v-else-if="!documentsLoading && !documentError">ከዚህ ሰው መዝገብ ጋር የተገናኙ ሰነዶች የሉም።</p>
+        <form class="people-profile__document-form" @submit.prevent="attachDocument">
+          <label>
+            <span>የነባር ፋይል መለያ (File ID)</span>
+            <input v-model="fileIdDraft" name="file_id" type="number" min="1" step="1" inputmode="numeric" required />
+          </label>
+          <label>
+            <span>የሰነዱ ግንኙነት ወይም ማላቀቅ ምክንያት</span>
+            <textarea v-model="documentReason" name="document_reason" minlength="8" maxlength="1000" required rows="2" />
+          </label>
+          <button type="submit" :disabled="documentSaving">{{ documentSaving ? 'በመፈጸም ላይ…' : 'ነባር ፋይል አገናኝ' }}</button>
+        </form>
+      </section>
       <p class="people-profile__note">የተጠቃሚ መለያ፣ ሥራ፣ የባለአክሲዮን ወይም የአስተዳደር ግንኙነቶች ከዚህ የሰው መለያ ተለይተው ይቆጣጠራሉ። የመዳረሻ ፈቃድ በAPI ይወሰናል።</p>
     </section>
   </main>
@@ -155,16 +250,22 @@ onMounted(load);
 .people-profile { display: grid; gap: var(--mases-space-4); color: var(--mases-color-text-primary); }
 .people-profile__header, .people-profile__actions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--mases-space-3); }
 .people-profile__back, .people-profile button { justify-self: start; min-height: 2.75rem; padding: var(--mases-space-2) var(--mases-space-4); border: 1px solid var(--mases-color-border-default); border-radius: var(--mases-radius-md); color: inherit; background: var(--mases-color-surface-page); font: inherit; cursor: pointer; }
-.people-profile__card, .people-profile__state, .people-profile__relationships { padding: var(--mases-space-5); border: 1px solid var(--mases-color-border-subtle); border-radius: var(--mases-radius-lg); background: var(--mases-color-surface-page); }
+.people-profile__card, .people-profile__state, .people-profile__relationships, .people-profile__documents { padding: var(--mases-space-5); border: 1px solid var(--mases-color-border-subtle); border-radius: var(--mases-radius-lg); background: var(--mases-color-surface-page); }
 .people-profile__eyebrow { color: var(--mases-color-text-secondary); font-size: var(--mases-font-size-body-sm); letter-spacing: .08em; }
 .people-profile h1 { margin-block: var(--mases-space-2); font-size: var(--mases-font-size-heading-3); overflow-wrap: anywhere; }
 .people-profile__english { color: var(--mases-color-text-secondary); }
-.people-profile dl, .people-profile__form, .people-profile__relationships dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: var(--mases-space-4); margin-block: var(--mases-space-5); }
-.people-profile dl div, .people-profile__form label, .people-profile__relationships dl div { min-width: 0; display: grid; gap: var(--mases-space-1); }
+.people-profile dl, .people-profile__form, .people-profile__relationships dl, .people-profile__document-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: var(--mases-space-4); margin-block: var(--mases-space-5); }
+.people-profile dl div, .people-profile__form label, .people-profile__relationships dl div, .people-profile__document-form label { min-width: 0; display: grid; gap: var(--mases-space-1); }
 .people-profile dt, .people-profile__form label span { color: var(--mases-color-text-secondary); font-size: var(--mases-font-size-body-sm); }
 .people-profile dd { margin: var(--mases-space-1) 0 0; overflow-wrap: anywhere; }
-.people-profile__form input, .people-profile__form textarea { width: 100%; min-height: 2.75rem; padding: var(--mases-space-2) var(--mases-space-3); border: 1px solid var(--mases-color-border-default); border-radius: var(--mases-radius-md); background: var(--mases-color-surface-page); color: inherit; font: inherit; }
+.people-profile__form input, .people-profile__form textarea, .people-profile__document-form input, .people-profile__document-form textarea { width: 100%; min-height: 2.75rem; padding: var(--mases-space-2) var(--mases-space-3); border: 1px solid var(--mases-color-border-default); border-radius: var(--mases-radius-md); background: var(--mases-color-surface-page); color: inherit; font: inherit; }
 .people-profile__reason, .people-profile__actions { grid-column: 1 / -1; }
+.people-profile__document-list { display: grid; gap: var(--mases-space-3); padding: 0; list-style: none; }
+.people-profile__document-list li { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--mases-space-3); padding-block: var(--mases-space-3); border-bottom: 1px solid var(--mases-color-border-subtle); }
+.people-profile__document-list p { margin: var(--mases-space-1) 0 0; color: var(--mases-color-text-secondary); overflow-wrap: anywhere; }
+.people-profile__document-form { grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); align-items: end; margin-block: var(--mases-space-4); }
+.people-profile__document-form button { justify-self: start; }
+
 .people-profile__note, .people-profile__alert, .people-profile__success { padding: var(--mases-space-3); border-inline-start: 3px solid var(--mases-color-border-brand); background: var(--mases-color-surface-subtle); line-height: var(--mases-line-height-body); }
 .people-profile__alert { border-color: var(--mases-color-border-danger); }
 .people-profile__success { border-color: var(--mases-color-border-success); }
