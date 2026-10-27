@@ -211,7 +211,7 @@ onMounted(load);
           <div><dt>የሥራ ግንኙነቶች</dt><dd>{{ relationships.employment_count }}</dd></div>
           <div><dt>የባለአክሲዮን ግንኙነቶች</dt><dd>{{ relationships.shareholding_count }}</dd></div>
           <div><dt>የአስተዳደር አባልነቶች</dt><dd>{{ relationships.governance_membership_count }}</dd></div>
-          <div><dt>የሰነድ ግንኙነት</dt><dd>{{ relationships.document_linking_supported ? 'በAPI የሚደገፍ መዋቅር አለ' : 'አሁን አልተገናኘም' }}</dd></div>
+          <div><dt>የሰነድ ግንኙነት</dt><dd>{{ relationships.document_count === null ? 'አልተዋቀረም' : relationships.document_count }}</dd></div>
         </dl>
       </section>
       <section v-if="relationships || relationshipsLoading || documentsLoading || documents.length || documentError" class="people-profile__documents" aria-labelledby="people-documents-title">
