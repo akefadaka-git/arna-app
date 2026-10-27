@@ -119,8 +119,8 @@ export function unlinkPersonDocument(
   fileId: number,
   reason: string,
 ): Promise<{ linked: boolean }> {
-  return api.delete<{ linked: boolean }>(
-    `/people/${encodeURIComponent(publicId)}/documents/${fileId}`,
-    { data: { reason } },
+  return api.post<{ linked: boolean }>(
+    `/people/${encodeURIComponent(publicId)}/documents/${fileId}/unlink`,
+    { reason },
   );
 }
