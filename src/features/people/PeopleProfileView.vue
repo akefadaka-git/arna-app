@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { getPerson, updatePerson, type PersonNamePayload, type PersonProfile } from './api';
+import { getPerson, getPersonRelationships, updatePerson, type PersonNamePayload, type PersonProfile, type PersonRelationshipSummary } from './api';
 
 const route = useRoute();
 const router = useRouter();
 const person = ref<PersonProfile | null>(null);
+const relationships = ref<PersonRelationshipSummary | null>(null);
+const relationshipsLoading = ref(false);
 const loading = ref(false);
 const saving = ref(false);
 const editing = ref(false);
@@ -42,6 +44,15 @@ async function load(): Promise<void> {
   try {
     person.value = await getPerson(publicId);
     syncDraft(person.value);
+    relationshipsLoading.value = true;
+    try {
+      relationships.value = await getPersonRelationships(publicId);
+    } catch {
+      // Relationship existence is restricted to People managers; the profile itself remains readable.
+      relationships.value = null;
+    } finally {
+      relationshipsLoading.value = false;
+    }
   } catch {
     error.value = 'ይህን መዝገብ ማየት አልተቻለም። መዝገቡ ላይገኝ ወይም ፈቃድ ላይኖርዎት ይችላል።';
   } finally { loading.value = false; }
@@ -124,6 +135,17 @@ onMounted(load);
         <div><dt>ሁኔታ</dt><dd>{{ person.status === 'active' ? 'ንቁ' : person.status }}</dd></div>
         <div><dt>የመጀመሪያ መዝገብ ቀን</dt><dd>{{ person.created_at ? new Date(person.created_at).toLocaleDateString() : '—' }}</dd></div>
       </dl>
+      <section v-if="relationships || relationshipsLoading" class="people-profile__relationships" aria-labelledby="people-relationships-title">
+        <h2 id="people-relationships-title">የግንኙነት ማጠቃለያ</h2>
+        <p v-if="relationshipsLoading" role="status">የግንኙነት መረጃ በመጫን ላይ…</p>
+        <dl v-else-if="relationships">
+          <div><dt>የተጠቃሚ መለያ</dt><dd>{{ relationships.account_linked ? 'ተገናኝቷል' : 'አልተገናኘም' }}</dd></div>
+          <div><dt>የሥራ ግንኙነቶች</dt><dd>{{ relationships.employment_count }}</dd></div>
+          <div><dt>የባለአክሲዮን ግንኙነቶች</dt><dd>{{ relationships.shareholding_count }}</dd></div>
+          <div><dt>የአስተዳደር አባልነቶች</dt><dd>{{ relationships.governance_membership_count }}</dd></div>
+          <div><dt>የሰነድ ግንኙነት</dt><dd>{{ relationships.document_linking_supported ? 'በAPI የሚደገፍ መዋቅር አለ' : 'አሁን አልተገናኘም' }}</dd></div>
+        </dl>
+      </section>
       <p class="people-profile__note">የተጠቃሚ መለያ፣ ሥራ፣ የባለአክሲዮን ወይም የአስተዳደር ግንኙነቶች ከዚህ የሰው መለያ ተለይተው ይቆጣጠራሉ። የመዳረሻ ፈቃድ በAPI ይወሰናል።</p>
     </section>
   </main>
@@ -133,12 +155,12 @@ onMounted(load);
 .people-profile { display: grid; gap: var(--mases-space-4); color: var(--mases-color-text-primary); }
 .people-profile__header, .people-profile__actions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--mases-space-3); }
 .people-profile__back, .people-profile button { justify-self: start; min-height: 2.75rem; padding: var(--mases-space-2) var(--mases-space-4); border: 1px solid var(--mases-color-border-default); border-radius: var(--mases-radius-md); color: inherit; background: var(--mases-color-surface-page); font: inherit; cursor: pointer; }
-.people-profile__card, .people-profile__state { padding: var(--mases-space-5); border: 1px solid var(--mases-color-border-subtle); border-radius: var(--mases-radius-lg); background: var(--mases-color-surface-page); }
+.people-profile__card, .people-profile__state, .people-profile__relationships { padding: var(--mases-space-5); border: 1px solid var(--mases-color-border-subtle); border-radius: var(--mases-radius-lg); background: var(--mases-color-surface-page); }
 .people-profile__eyebrow { color: var(--mases-color-text-secondary); font-size: var(--mases-font-size-body-sm); letter-spacing: .08em; }
 .people-profile h1 { margin-block: var(--mases-space-2); font-size: var(--mases-font-size-heading-3); overflow-wrap: anywhere; }
 .people-profile__english { color: var(--mases-color-text-secondary); }
-.people-profile dl, .people-profile__form { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: var(--mases-space-4); margin-block: var(--mases-space-5); }
-.people-profile dl div, .people-profile__form label { min-width: 0; display: grid; gap: var(--mases-space-1); }
+.people-profile dl, .people-profile__form, .people-profile__relationships dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: var(--mases-space-4); margin-block: var(--mases-space-5); }
+.people-profile dl div, .people-profile__form label, .people-profile__relationships dl div { min-width: 0; display: grid; gap: var(--mases-space-1); }
 .people-profile dt, .people-profile__form label span { color: var(--mases-color-text-secondary); font-size: var(--mases-font-size-body-sm); }
 .people-profile dd { margin: var(--mases-space-1) 0 0; overflow-wrap: anywhere; }
 .people-profile__form input, .people-profile__form textarea { width: 100%; min-height: 2.75rem; padding: var(--mases-space-2) var(--mases-space-3); border: 1px solid var(--mases-color-border-default); border-radius: var(--mases-radius-md); background: var(--mases-color-surface-page); color: inherit; font: inherit; }
