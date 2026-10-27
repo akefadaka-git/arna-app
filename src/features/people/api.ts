@@ -32,33 +32,41 @@ export type PersonNamePayload = {
   grandfather_name_en: string | null;
 };
 
-type Envelope<T> = { success: true; data: T; meta?: PeoplePage['meta'] };
+type PeoplePageMeta = PeoplePage['meta'];
+
+function isPeoplePageMeta(value: unknown): value is PeoplePageMeta {
+  if (typeof value !== 'object' || value === null) return false;
+  const meta = value as Record<string, unknown>;
+  return ['current_page', 'per_page', 'total', 'last_page'].every(
+    (key) => typeof meta[key] === 'number' && Number.isFinite(meta[key]),
+  );
+}
 
 export async function listPeople(page = 1, perPage = 25): Promise<PeoplePage> {
-  const response = await api.get<Envelope<readonly PersonProfile[]> & { meta: PeoplePage['meta'] }>(
+  const response = await api.getWithMeta<readonly PersonProfile[]>(
     '/people',
     { params: { page, per_page: perPage } },
   );
-  return { data: response.data.data, meta: response.data.meta };
+  if (!isPeoplePageMeta(response.meta)) {
+    throw new Error('The People API returned an invalid pagination contract.');
+  }
+  return { data: response.data, meta: response.meta };
 }
 
-export async function getPerson(publicId: string): Promise<PersonProfile> {
-  const response = await api.get<Envelope<PersonProfile>>(`/people/${encodeURIComponent(publicId)}`);
-  return response.data.data;
+export function getPerson(publicId: string): Promise<PersonProfile> {
+  return api.get<PersonProfile>(`/people/${encodeURIComponent(publicId)}`);
 }
 
-export async function createPerson(payload: PersonNamePayload): Promise<PersonProfile> {
-  const response = await api.post<Envelope<PersonProfile>>('/people', payload);
-  return response.data.data;
+export function createPerson(payload: PersonNamePayload): Promise<PersonProfile> {
+  return api.post<PersonProfile>('/people', payload);
 }
 
-export async function updatePerson(
+export function updatePerson(
   publicId: string,
   payload: PersonNamePayload & { reason: string },
 ): Promise<PersonProfile> {
-  const response = await api.put<Envelope<PersonProfile>>(
+  return api.put<PersonProfile>(
     `/people/${encodeURIComponent(publicId)}`,
     payload,
   );
-  return response.data.data;
 }
