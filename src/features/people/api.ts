@@ -86,6 +86,57 @@ export function getPersonRelationships(publicId: string): Promise<PersonRelation
   );
 }
 
+
+export type PersonRelationshipDomain = 'employees' | 'shareholders' | 'governance-memberships';
+
+export interface PersonRelationshipOption {
+  readonly id: number;
+  readonly label: string;
+  readonly detail: string;
+}
+
+export interface PersonRelationshipOptions {
+  readonly domain: PersonRelationshipDomain;
+  readonly linked: readonly PersonRelationshipOption[];
+  readonly candidates: readonly PersonRelationshipOption[];
+  readonly candidate_limit: number;
+}
+
+export function getPersonRelationshipOptions(
+  publicId: string,
+  domain: PersonRelationshipDomain,
+  search = '',
+): Promise<PersonRelationshipOptions> {
+  return api.get<PersonRelationshipOptions>(
+    `/people/${encodeURIComponent(publicId)}/relationships/${domain}/options`,
+    { params: search.trim() ? { search: search.trim() } : {} },
+  );
+}
+
+export function linkPersonRelationship(
+  publicId: string,
+  domain: PersonRelationshipDomain,
+  recordId: number,
+  reason: string,
+): Promise<{ linked: boolean }> {
+  return api.post<{ linked: boolean }>(
+    `/people/${encodeURIComponent(publicId)}/relationships/${domain}/${recordId}`,
+    { reason },
+  );
+}
+
+export function unlinkPersonRelationship(
+  publicId: string,
+  domain: PersonRelationshipDomain,
+  recordId: number,
+  reason: string,
+): Promise<{ linked: boolean }> {
+  return api.delete<{ linked: boolean }>(
+    `/people/${encodeURIComponent(publicId)}/relationships/${domain}/${recordId}`,
+    { data: { reason } },
+  );
+}
+
 export interface PersonDocument {
   readonly file_id: number;
   readonly display_name_am: string | null;
