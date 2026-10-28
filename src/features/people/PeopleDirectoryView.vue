@@ -26,9 +26,9 @@ const profileLoading = ref(false);
 const contacts = ref<readonly PersonContactPoint[]>([]);
 const personRelationships = ref<readonly PersonToPersonRelationship[]>([]);
 const participations = ref<readonly PersonParticipation[]>([]);
-const contactDraft = ref<NewPersonContactPoint>({ contact_type: 'phone', label: '', contact_value: '', is_primary: false });
-const relationshipDraft = ref<NewPersonToPersonRelationship>({ related_public_id: '', relationship_type: 'household_member', reason: '' });
-const participationDraft = ref<NewPersonParticipation>({ participation_type: 'ministry', title: '', reference_code: '', reason: '' });
+const contactDraft = ref({ contact_type: 'phone' as 'email' | 'phone' | 'other', label: '', contact_value: '', is_primary: false });
+const relationshipDraft = ref({ related_public_id: '', relationship_type: 'household_member' as NewPersonToPersonRelationship['relationship_type'], reason: '' });
+const participationDraft = ref({ participation_type: 'ministry' as NewPersonParticipation['participation_type'], title: '', reference_code: '', reason: '' });
 
 const draft = ref<PersonNamePayload>({
   first_name_am: '', father_name_am: '', grandfather_name_am: '',
