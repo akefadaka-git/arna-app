@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { getPerson, getPersonRelationships, getPersonRelationshipOptions, listPersonDocuments, linkPersonDocument, linkPersonRelationship, unlinkPersonDocument, unlinkPersonRelationship, updatePerson, type PersonDocument, type PersonNamePayload, type PersonProfile, type PersonRelationshipDomain, type PersonRelationshipOptions, type PersonRelationshipSummary } from './api';
+import { createPersonContact, deactivatePersonContact, getPerson, getPersonRelationships, getPersonRelationshipOptions, listPersonContacts, listPersonDocuments, linkPersonDocument, linkPersonRelationship, unlinkPersonDocument, unlinkPersonRelationship, updatePerson, type PersonContactPoint, type PersonDocument, type PersonNamePayload, type PersonProfile, type PersonRelationshipDomain, type PersonRelationshipOptions, type PersonRelationshipSummary } from './api';
 
 const route = useRoute();
 const router = useRouter();
@@ -27,6 +27,16 @@ const relationshipSaving = ref(false);
 const relationshipError = ref('');
 const relationshipSuccess = ref('');
 const relationshipReason = ref('');
+const contacts = ref<readonly PersonContactPoint[]>([]);
+const contactsLoading = ref(false);
+const contactSaving = ref(false);
+const contactError = ref('');
+const contactSuccess = ref('');
+const contactType = ref<'email' | 'phone' | 'other'>('phone');
+const contactLabel = ref('');
+const contactValue = ref('');
+const contactPrimary = ref(false);
+const contactDeactivateReason = reactive<Record<number, string>>({});
 const documents = ref<readonly PersonDocument[]>([]);
 const documentsLoading = ref(false);
 const documentSaving = ref(false);
@@ -88,6 +98,16 @@ async function load(): Promise<void> {
         relationshipOptionsLoading.value = false;
       }
     }
+    contactsLoading.value = true;
+    contactError.value = '';
+    try {
+      contacts.value = await listPersonContacts(publicId);
+    } catch {
+      contacts.value = [];
+      contactError.value = 'የግንኙነት መረጃዎችን ማየት አልተቻለም። የPeople ፈቃድዎን ያረጋግጡ።';
+    } finally {
+      contactsLoading.value = false;
+    }
     documentsLoading.value = true;
     documentError.value = '';
     try {
@@ -139,6 +159,56 @@ async function saveProfile(): Promise<void> {
     error.value = 'ለውጡን ማስቀመጥ አልተቻለም። የመዳረሻ ፈቃድ፣ የስም መረጃ እና ምክንያቱን ያረጋግጡ።';
   } finally { saving.value = false; }
 }
+async function submitContact(): Promise<void> {
+  const publicId = String(route.params.publicId || '');
+  if (!publicId || contactSaving.value) return;
+  if (contactValue.value.trim().length < 2) {
+    contactError.value = 'የግንኙነት መረጃ ያስገቡ።';
+    return;
+  }
+  contactSaving.value = true;
+  contactError.value = '';
+  contactSuccess.value = '';
+  try {
+    await createPersonContact(publicId, {
+      contact_type: contactType.value,
+      label: contactLabel.value.trim() || null,
+      contact_value: contactValue.value.trim(),
+      is_primary: contactPrimary.value,
+    });
+    contactValue.value = '';
+    contactLabel.value = '';
+    contactPrimary.value = false;
+    contacts.value = await listPersonContacts(publicId);
+    contactSuccess.value = 'የግንኙነት መረጃው በምስጢር ተቀምጧል።';
+  } catch {
+    contactError.value = 'መረጃውን ማስቀመጥ አልተቻለም። የመረጃውን ቅርጽና ፈቃድዎን ያረጋግጡ።';
+  } finally {
+    contactSaving.value = false;
+  }
+}
+async function deactivateContact(contactId: number): Promise<void> {
+  const publicId = String(route.params.publicId || '');
+  const reasonText = (contactDeactivateReason[contactId] || '').trim();
+  if (!publicId || reasonText.length < 8 || contactSaving.value) {
+    contactError.value = 'ለማቋረጥ ቢያንስ 8 ቁምፊ ያለው ምክንያት ያስገቡ።';
+    return;
+  }
+  contactSaving.value = true;
+  contactError.value = '';
+  contactSuccess.value = '';
+  try {
+    await deactivatePersonContact(publicId, contactId, reasonText);
+    contacts.value = await listPersonContacts(publicId);
+    delete contactDeactivateReason[contactId];
+    contactSuccess.value = 'የግንኙነት መረጃው ተቋርጧል።';
+  } catch {
+    contactError.value = 'መረጃውን ማቋረጥ አልተቻለም።';
+  } finally {
+    contactSaving.value = false;
+  }
+}
+
 async function loadRelationshipOptions(domain: PersonRelationshipDomain): Promise<void> {
   const publicId = String(route.params.publicId || '');
   if (!publicId) return;
@@ -366,6 +436,49 @@ onMounted(load);
           <button type="submit" :disabled="documentSaving">{{ documentSaving ? 'በመፈጸም ላይ…' : 'ነባር ፋይል አገናኝ' }}</button>
         </form>
       </section>
+      <section class="people-profile__contacts" aria-labelledby="people-contact-title">
+        <h2 id="people-contact-title">የግንኙነት መረጃ · Contact points</h2>
+        <p class="people-profile__hint">መረጃው በመረጃ ቋት ውስጥ ተመስጥሮ ይቀመጣል። በዚህ ዝርዝር የሚታየው የተደበቀ መልክ ብቻ ነው። ማረጋገጫ ሂደት እስኪኖር ድረስ መረጃው እንደተረጋገጠ አይቆጠርም።</p>
+        <p v-if="contactError" class="people-profile__alert" role="alert">{{ contactError }}</p>
+        <p v-if="contactSuccess" class="people-profile__success" role="status">{{ contactSuccess }}</p>
+        <p v-if="contactsLoading" role="status">የግንኙነት መረጃዎች በመጫን ላይ…</p>
+        <ul v-if="contacts.length" class="people-profile__document-list">
+          <li v-for="contact in contacts" :key="contact.id">
+            <div>
+              <strong>{{ contact.label || (contact.contact_type === 'email' ? 'Email' : contact.contact_type === 'phone' ? 'Phone' : 'Other') }}</strong>
+              <p>{{ contact.masked_value }} · {{ contact.is_primary ? 'ዋና' : 'ተጨማሪ' }} · {{ contact.is_verified ? 'የተረጋገጠ' : 'ያልተረጋገጠ' }}</p>
+            </div>
+            <form v-if="contact.status === 'active'" class="people-profile__contact-deactivate" @submit.prevent="deactivateContact(contact.id)">
+              <input v-model="contactDeactivateReason[contact.id]" :aria-label="'የማቋረጥ ምክንያት ' + contact.id" minlength="8" maxlength="1000" placeholder="የማቋረጥ ምክንያት" required />
+              <button type="submit" :disabled="contactSaving">ማቋርጥ</button>
+            </form>
+          </li>
+        </ul>
+        <p v-else-if="!contactsLoading && !contactError">የተመዘገበ የግንኙነት መረጃ የለም።</p>
+        <form class="people-profile__contact-form" @submit.prevent="submitContact">
+          <label>
+            <span>ዓይነት · Type</span>
+            <select v-model="contactType" name="contact_type">
+              <option value="phone">ስልክ · Phone</option>
+              <option value="email">ኢሜይል · Email</option>
+              <option value="other">ሌላ · Other</option>
+            </select>
+          </label>
+          <label>
+            <span>መለያ · Label</span>
+            <input v-model="contactLabel" name="contact_label" maxlength="80" />
+          </label>
+          <label>
+            <span>የግንኙነት መረጃ · Contact value</span>
+            <input v-model="contactValue" name="contact_value" maxlength="320" autocomplete="off" required />
+          </label>
+          <label class="people-profile__contact-primary">
+            <input v-model="contactPrimary" type="checkbox" />
+            <span>ዋና የዚህ ዓይነት ግንኙነት ያድርጉ</span>
+          </label>
+          <button type="submit" :disabled="contactSaving">{{ contactSaving ? 'በመቀመጥ ላይ…' : 'ግንኙነት ጨምር' }}</button>
+        </form>
+      </section>
       <p class="people-profile__note">የተጠቃሚ መለያ፣ ሥራ፣ የባለአክሲዮን ወይም የአስተዳደር ግንኙነቶች ከዚህ የሰው መለያ ተለይተው ይቆጣጠራሉ። የመዳረሻ ፈቃድ በAPI ይወሰናል።</p>
     </section>
   </main>
@@ -399,6 +512,15 @@ onMounted(load);
 .people-profile__document-list p { margin: var(--mases-space-1) 0 0; color: var(--mases-color-text-secondary); overflow-wrap: anywhere; }
 .people-profile__document-form { grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); align-items: end; margin-block: var(--mases-space-4); }
 .people-profile__document-form button { justify-self: start; }
+.people-profile__contacts { display: grid; gap: var(--mases-space-3); padding: var(--mases-space-5); border: 1px solid var(--mases-color-border-subtle); border-radius: var(--mases-radius-lg); background: var(--mases-color-surface-page); }
+.people-profile__contact-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); gap: var(--mases-space-3); align-items: end; }
+.people-profile__contact-form label { display: grid; gap: var(--mases-space-1); min-width: 0; }
+.people-profile__contact-form label span { color: var(--mases-color-text-secondary); font-size: var(--mases-font-size-body-sm); }
+.people-profile__contact-form input:not([type="checkbox"]), .people-profile__contact-form select, .people-profile__contact-deactivate input { width: 100%; min-height: 2.75rem; padding: var(--mases-space-2) var(--mases-space-3); border: 1px solid var(--mases-color-border-default); border-radius: var(--mases-radius-md); background: var(--mases-color-surface-page); color: inherit; font: inherit; }
+.people-profile__contact-primary { display: flex !important; align-items: center; gap: var(--mases-space-2) !important; }
+.people-profile__contact-deactivate { display: flex; flex-wrap: wrap; gap: var(--mases-space-2); max-width: 28rem; }
+.people-profile__contact-deactivate input { flex: 1; min-width: 12rem; }
+
 
 .people-profile__note, .people-profile__alert, .people-profile__success { padding: var(--mases-space-3); border-inline-start: 3px solid var(--mases-color-border-brand); background: var(--mases-color-surface-subtle); line-height: var(--mases-line-height-body); }
 .people-profile__alert { border-color: var(--mases-color-border-danger); }
