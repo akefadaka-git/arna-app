@@ -270,3 +270,53 @@ export function deactivatePersonToPersonRelationship(
     { reason },
   );
 }
+
+export type PersonParticipationType =
+  | 'membership' | 'ministry' | 'volunteer' | 'committee'
+  | 'event_attendance' | 'training' | 'qualification' | 'other';
+
+export interface PersonParticipation {
+  readonly id: number;
+  readonly participation_type: PersonParticipationType;
+  readonly title: string;
+  readonly reference_code: string | null;
+  readonly effective_from: string | null;
+  readonly effective_to: string | null;
+  readonly status: 'active' | 'inactive' | string;
+}
+
+export interface NewPersonParticipation {
+  readonly participation_type: PersonParticipationType;
+  readonly title: string;
+  readonly reference_code?: string | null;
+  readonly effective_from?: string | null;
+  readonly effective_to?: string | null;
+  readonly reason: string;
+}
+
+export function listPersonParticipations(publicId: string): Promise<readonly PersonParticipation[]> {
+  return api.get<readonly PersonParticipation[]>(
+    `/people/${encodeURIComponent(publicId)}/participations`,
+  );
+}
+
+export function createPersonParticipation(
+  publicId: string,
+  payload: NewPersonParticipation,
+): Promise<PersonParticipation> {
+  return api.post<PersonParticipation>(
+    `/people/${encodeURIComponent(publicId)}/participations`,
+    payload,
+  );
+}
+
+export function deactivatePersonParticipation(
+  publicId: string,
+  participationId: number,
+  reason: string,
+): Promise<PersonParticipation> {
+  return api.post<PersonParticipation>(
+    `/people/${encodeURIComponent(publicId)}/participations/${participationId}/deactivate`,
+    { reason },
+  );
+}
