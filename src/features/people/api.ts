@@ -42,10 +42,11 @@ function isPeoplePageMeta(value: unknown): value is PeoplePageMeta {
   );
 }
 
-export async function listPeople(page = 1, perPage = 25): Promise<PeoplePage> {
+export async function listPeople(page = 1, perPage = 25, search = ''): Promise<PeoplePage> {
+  const query = search.trim();
   const response = await api.getWithMeta<readonly PersonProfile[]>(
     '/people',
-    { params: { page, per_page: perPage } },
+    { params: { page, per_page: perPage, ...(query ? { search: query } : {}) } },
   );
   if (!isPeoplePageMeta(response.meta)) {
     throw new Error('The People API returned an invalid pagination contract.');
