@@ -177,3 +177,44 @@ export function unlinkPersonDocument(
     { reason },
   );
 }
+
+export interface PersonContactPoint {
+  readonly id: number;
+  readonly contact_type: 'email' | 'phone' | 'other';
+  readonly label: string | null;
+  readonly masked_value: string;
+  readonly is_primary: boolean;
+  readonly is_verified: boolean;
+  readonly verified_at: string | null;
+  readonly status: 'active' | 'inactive' | string;
+  readonly created_at: string | null;
+}
+
+export type NewPersonContactPoint = {
+  readonly contact_type: 'email' | 'phone' | 'other';
+  readonly label?: string | null;
+  readonly contact_value: string;
+  readonly is_primary?: boolean;
+};
+
+export function listPersonContacts(publicId: string): Promise<readonly PersonContactPoint[]> {
+  return api.get<readonly PersonContactPoint[]>(`/people/${encodeURIComponent(publicId)}/contacts`);
+}
+
+export function createPersonContact(
+  publicId: string,
+  payload: NewPersonContactPoint,
+): Promise<PersonContactPoint> {
+  return api.post<PersonContactPoint>(`/people/${encodeURIComponent(publicId)}/contacts`, payload);
+}
+
+export function deactivatePersonContact(
+  publicId: string,
+  contactId: number,
+  reason: string,
+): Promise<PersonContactPoint> {
+  return api.post<PersonContactPoint>(
+    `/people/${encodeURIComponent(publicId)}/contacts/${contactId}/deactivate`,
+    { reason },
+  );
+}
