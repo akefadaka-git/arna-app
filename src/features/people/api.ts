@@ -131,7 +131,7 @@ export function unlinkPersonRelationship(
   recordId: number,
   reason: string,
 ): Promise<{ linked: boolean }> {
-  return api.delete<{ linked: boolean }>(
+  return api.post<{ linked: boolean }>(
     `/people/${encodeURIComponent(publicId)}/relationships/${domain}/${recordId}/unlink`,
     { reason },
   );
