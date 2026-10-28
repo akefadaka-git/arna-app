@@ -42,10 +42,11 @@ function isPeoplePageMeta(value: unknown): value is PeoplePageMeta {
   );
 }
 
-export async function listPeople(page = 1, perPage = 25): Promise<PeoplePage> {
+export async function listPeople(page = 1, perPage = 25, search = ''): Promise<PeoplePage> {
+  const query = search.trim();
   const response = await api.getWithMeta<readonly PersonProfile[]>(
     '/people',
-    { params: { page, per_page: perPage } },
+    { params: { page, per_page: perPage, ...(query ? { search: query } : {}) } },
   );
   if (!isPeoplePageMeta(response.meta)) {
     throw new Error('The People API returned an invalid pagination contract.');
@@ -173,6 +174,149 @@ export function unlinkPersonDocument(
 ): Promise<{ linked: boolean }> {
   return api.post<{ linked: boolean }>(
     `/people/${encodeURIComponent(publicId)}/documents/${fileId}/unlink`,
+    { reason },
+  );
+}
+
+export interface PersonContactPoint {
+  readonly id: number;
+  readonly contact_type: 'email' | 'phone' | 'other';
+  readonly label: string | null;
+  readonly masked_value: string;
+  readonly is_primary: boolean;
+  readonly is_verified: boolean;
+  readonly verified_at: string | null;
+  readonly status: 'active' | 'inactive' | string;
+  readonly created_at: string | null;
+}
+
+export type NewPersonContactPoint = {
+  readonly contact_type: 'email' | 'phone' | 'other';
+  readonly label?: string | null;
+  readonly contact_value: string;
+  readonly is_primary?: boolean;
+};
+
+export function listPersonContacts(publicId: string): Promise<readonly PersonContactPoint[]> {
+  return api.get<readonly PersonContactPoint[]>(`/people/${encodeURIComponent(publicId)}/contacts`);
+}
+
+export function createPersonContact(
+  publicId: string,
+  payload: NewPersonContactPoint,
+): Promise<PersonContactPoint> {
+  return api.post<PersonContactPoint>(`/people/${encodeURIComponent(publicId)}/contacts`, payload);
+}
+
+export function deactivatePersonContact(
+  publicId: string,
+  contactId: number,
+  reason: string,
+): Promise<PersonContactPoint> {
+  return api.post<PersonContactPoint>(
+    `/people/${encodeURIComponent(publicId)}/contacts/${contactId}/deactivate`,
+    { reason },
+  );
+}
+
+export type PersonRelationshipType =
+  | 'parent' | 'child' | 'guardian' | 'dependent' | 'spouse'
+  | 'sibling' | 'emergency_contact' | 'household_member' | 'other';
+
+export interface PersonToPersonRelationship {
+  readonly id: number;
+  readonly related_public_id: string | null;
+  readonly related_name_am: string | null;
+  readonly related_name_en: string | null;
+  readonly relationship_type: PersonRelationshipType;
+  readonly effective_from: string | null;
+  readonly effective_to: string | null;
+  readonly status: 'active' | 'inactive' | string;
+}
+
+export interface NewPersonToPersonRelationship {
+  readonly related_public_id: string;
+  readonly relationship_type: PersonRelationshipType;
+  readonly effective_from?: string | null;
+  readonly effective_to?: string | null;
+  readonly reason: string;
+}
+
+export function listPersonToPersonRelationships(
+  publicId: string,
+): Promise<readonly PersonToPersonRelationship[]> {
+  return api.get<readonly PersonToPersonRelationship[]>(
+    `/people/${encodeURIComponent(publicId)}/person-relationships`,
+  );
+}
+
+export function createPersonToPersonRelationship(
+  publicId: string,
+  payload: NewPersonToPersonRelationship,
+): Promise<PersonToPersonRelationship> {
+  return api.post<PersonToPersonRelationship>(
+    `/people/${encodeURIComponent(publicId)}/person-relationships`,
+    payload,
+  );
+}
+
+export function deactivatePersonToPersonRelationship(
+  publicId: string,
+  relationshipId: number,
+  reason: string,
+): Promise<PersonToPersonRelationship> {
+  return api.post<PersonToPersonRelationship>(
+    `/people/${encodeURIComponent(publicId)}/person-relationships/${relationshipId}/deactivate`,
+    { reason },
+  );
+}
+
+export type PersonParticipationType =
+  | 'membership' | 'ministry' | 'volunteer' | 'committee'
+  | 'event_attendance' | 'training' | 'qualification' | 'other';
+
+export interface PersonParticipation {
+  readonly id: number;
+  readonly participation_type: PersonParticipationType;
+  readonly title: string;
+  readonly reference_code: string | null;
+  readonly effective_from: string | null;
+  readonly effective_to: string | null;
+  readonly status: 'active' | 'inactive' | string;
+}
+
+export interface NewPersonParticipation {
+  readonly participation_type: PersonParticipationType;
+  readonly title: string;
+  readonly reference_code?: string | null;
+  readonly effective_from?: string | null;
+  readonly effective_to?: string | null;
+  readonly reason: string;
+}
+
+export function listPersonParticipations(publicId: string): Promise<readonly PersonParticipation[]> {
+  return api.get<readonly PersonParticipation[]>(
+    `/people/${encodeURIComponent(publicId)}/participations`,
+  );
+}
+
+export function createPersonParticipation(
+  publicId: string,
+  payload: NewPersonParticipation,
+): Promise<PersonParticipation> {
+  return api.post<PersonParticipation>(
+    `/people/${encodeURIComponent(publicId)}/participations`,
+    payload,
+  );
+}
+
+export function deactivatePersonParticipation(
+  publicId: string,
+  participationId: number,
+  reason: string,
+): Promise<PersonParticipation> {
+  return api.post<PersonParticipation>(
+    `/people/${encodeURIComponent(publicId)}/participations/${participationId}/deactivate`,
     { reason },
   );
 }
