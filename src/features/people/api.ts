@@ -218,3 +218,55 @@ export function deactivatePersonContact(
     { reason },
   );
 }
+
+export type PersonRelationshipType =
+  | 'parent' | 'child' | 'guardian' | 'dependent' | 'spouse'
+  | 'sibling' | 'emergency_contact' | 'household_member' | 'other';
+
+export interface PersonToPersonRelationship {
+  readonly id: number;
+  readonly related_public_id: string | null;
+  readonly related_name_am: string | null;
+  readonly related_name_en: string | null;
+  readonly relationship_type: PersonRelationshipType;
+  readonly effective_from: string | null;
+  readonly effective_to: string | null;
+  readonly status: 'active' | 'inactive' | string;
+}
+
+export interface NewPersonToPersonRelationship {
+  readonly related_public_id: string;
+  readonly relationship_type: PersonRelationshipType;
+  readonly effective_from?: string | null;
+  readonly effective_to?: string | null;
+  readonly reason: string;
+}
+
+export function listPersonToPersonRelationships(
+  publicId: string,
+): Promise<readonly PersonToPersonRelationship[]> {
+  return api.get<readonly PersonToPersonRelationship[]>(
+    `/people/${encodeURIComponent(publicId)}/person-relationships`,
+  );
+}
+
+export function createPersonToPersonRelationship(
+  publicId: string,
+  payload: NewPersonToPersonRelationship,
+): Promise<PersonToPersonRelationship> {
+  return api.post<PersonToPersonRelationship>(
+    `/people/${encodeURIComponent(publicId)}/person-relationships`,
+    payload,
+  );
+}
+
+export function deactivatePersonToPersonRelationship(
+  publicId: string,
+  relationshipId: number,
+  reason: string,
+): Promise<PersonToPersonRelationship> {
+  return api.post<PersonToPersonRelationship>(
+    `/people/${encodeURIComponent(publicId)}/person-relationships/${relationshipId}/deactivate`,
+    { reason },
+  );
+}
