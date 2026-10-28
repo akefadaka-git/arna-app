@@ -1,23 +1,30 @@
 # ARNA People Application — Phase 2 Implementation Register
 
-**Status:** Phase 2.1 UI/API integration submitted for CI review  
+**Status:** Directory, contact, relationship and participation UI implemented; verification pending  
 **Scope:** Destination repository `akefadaka-git/arna-app`  
 **Base:** `main` at `7b04286d4a20b3587249eed8b90281699492b4c7`
 
 ## P2.1 — Directory search
-- Send the search term to the API instead of searching only the currently loaded page.
-- Reset pagination when the search term changes.
-- Debounce typing to avoid issuing a request for every keystroke.
-- Preserve Amharic-first display, bilingual name matching, existing permission handling, and pagination.
-- The API remains the authority for tenant filtering and search results.
+- Send search terms to the API instead of searching only the currently loaded page.
+- Reset pagination when the search term changes and debounce typing.
+- Preserve Amharic-first display, bilingual name matching, and server-owned tenant filtering.
 
-## Next increments
-- P2.2: profile contact points and verified-contact presentation, only after the API contract exists.
-- P2.3: relationship and household UI, after API policy and privacy rules are approved.
-- P2.4: membership, ministry and volunteer participation UI, reusing canonical domain contracts.
-- P2.5: lifecycle timelines, documents and reports with accessible, responsive Amharic-first views.
+## P2.2 — Contact points
+- Added contact type, label, primary designation, masked value and verification-state presentation.
+- Added contact creation and deactivation actions.
+- Raw contact values are not returned by the API; verification remains false until the approved verification workflow is integrated.
+
+## P2.3 — Person relationships
+- Added typed person-to-person relationship entry, list and deactivation actions.
+- Related profiles are referenced by canonical public UUID, and the API enforces active tenant visibility.
+- Relationship data does not confer account, membership, employment, or governance authority.
+
+## P2.4 — Participation
+- Added ministry, volunteer, committee, event, training, qualification and general participation entry/list/deactivation UI.
+- Participation records are descriptive only and do not replace Organization or Governance authority.
 
 ## Safety and readiness
-- This increment does not introduce client-side authority decisions or expose new sensitive fields.
-- No local tests were run; validation is intended through destination GitHub CI only.
+- API permission checks remain authoritative; frontend controls do not grant permissions.
+- No local tests were run and no CI workflows were retried, per Owner instruction.
+- Contact verification integration, deeper field-level privacy, accessibility review, and destination CI verification remain pending.
 - No merge, production data change, or deployment is authorized.
