@@ -5,7 +5,7 @@ import {
   createPerson, listPeople, listPersonContacts, createPersonContact, deactivatePersonContact,
   listPersonToPersonRelationships, createPersonToPersonRelationship, deactivatePersonToPersonRelationship,
   listPersonParticipations, createPersonParticipation, deactivatePersonParticipation,
-  type PersonNamePayload, type PersonProfile, type PersonContactPoint, type NewPersonContactPoint,
+  type PersonNamePayload, type PersonProfile, type PersonContactPoint,
   type PersonToPersonRelationship, type NewPersonToPersonRelationship,
   type PersonParticipation, type NewPersonParticipation,
 } from './api';
