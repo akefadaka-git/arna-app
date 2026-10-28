@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { createPersonContact, createPersonToPersonRelationship, deactivatePersonContact, deactivatePersonToPersonRelationship, getPerson, getPersonRelationships, getPersonRelationshipOptions, listPersonContacts, listPersonDocuments, listPersonToPersonRelationships, linkPersonDocument, linkPersonRelationship, unlinkPersonDocument, unlinkPersonRelationship, updatePerson, type PersonContactPoint, type PersonDocument, type PersonNamePayload, type PersonProfile, type PersonRelationshipDomain, type PersonRelationshipOptions, type PersonRelationshipSummary, type PersonRelationshipType, type PersonToPersonRelationship } from './api';
+import { createPersonContact, createPersonParticipation, createPersonToPersonRelationship, deactivatePersonContact, deactivatePersonParticipation, deactivatePersonToPersonRelationship, getPerson, getPersonRelationships, getPersonRelationshipOptions, listPersonContacts, listPersonDocuments, listPersonParticipations, listPersonToPersonRelationships, linkPersonDocument, linkPersonRelationship, unlinkPersonDocument, unlinkPersonRelationship, updatePerson, type PersonContactPoint, type PersonDocument, type PersonNamePayload, type PersonParticipation, type PersonParticipationType, type PersonProfile, type PersonRelationshipDomain, type PersonRelationshipOptions, type PersonRelationshipSummary, type PersonRelationshipType, type PersonToPersonRelationship } from './api';
 
 const route = useRoute();
 const router = useRouter();
@@ -27,6 +27,18 @@ const relationshipSaving = ref(false);
 const relationshipError = ref('');
 const relationshipSuccess = ref('');
 const relationshipReason = ref('');
+const participations = ref<readonly PersonParticipation[]>([]);
+const participationsLoading = ref(false);
+const participationSaving = ref(false);
+const participationError = ref('');
+const participationSuccess = ref('');
+const participationType = ref<PersonParticipationType>('membership');
+const participationTitle = ref('');
+const participationReference = ref('');
+const participationStart = ref('');
+const participationEnd = ref('');
+const participationReason = ref('');
+const participationDeactivateReasons = reactive<Record<number, string>>({});
 const personRelationships = ref<readonly PersonToPersonRelationship[]>([]);
 const personRelationshipsLoading = ref(false);
 const personRelationshipSaving = ref(false);
@@ -109,6 +121,16 @@ async function load(): Promise<void> {
         relationshipOptionsLoading.value = false;
       }
     }
+    participationsLoading.value = true;
+    participationError.value = '';
+    try {
+      participations.value = await listPersonParticipations(publicId);
+    } catch {
+      participations.value = [];
+      participationError.value = 'የአባልነትና የተሳትፎ መዝገቦችን ማየት አልተቻለም።';
+    } finally {
+      participationsLoading.value = false;
+    }
     personRelationshipsLoading.value = true;
     personRelationshipError.value = '';
     try {
@@ -180,6 +202,63 @@ async function saveProfile(): Promise<void> {
     error.value = 'ለውጡን ማስቀመጥ አልተቻለም። የመዳረሻ ፈቃድ፣ የስም መረጃ እና ምክንያቱን ያረጋግጡ።';
   } finally { saving.value = false; }
 }
+async function submitParticipation(): Promise<void> {
+  const publicId = String(route.params.publicId || '');
+  if (!publicId || participationSaving.value) return;
+  if (participationTitle.value.trim().length < 2 || participationReason.value.trim().length < 8) {
+    participationError.value = 'ርዕስ እና ቢያንስ 8 ቁምፊ ያለው ምክንያት ያስገቡ።';
+    return;
+  }
+  if (participationStart.value && participationEnd.value && participationStart.value > participationEnd.value) {
+    participationError.value = 'የመጨረሻ ቀን ከመጀመሪያ ቀን በፊት መሆን አይችልም።';
+    return;
+  }
+  participationSaving.value = true;
+  participationError.value = '';
+  participationSuccess.value = '';
+  try {
+    await createPersonParticipation(publicId, {
+      participation_type: participationType.value,
+      title: participationTitle.value.trim(),
+      reference_code: participationReference.value.trim() || null,
+      effective_from: participationStart.value || null,
+      effective_to: participationEnd.value || null,
+      reason: participationReason.value.trim(),
+    });
+    participationTitle.value = '';
+    participationReference.value = '';
+    participationStart.value = '';
+    participationEnd.value = '';
+    participationReason.value = '';
+    participations.value = await listPersonParticipations(publicId);
+    participationSuccess.value = 'የተሳትፎ መዝገቡ ተመዝግቧል።';
+  } catch {
+    participationError.value = 'የተሳትፎ መዝገቡን ማስቀመጥ አልተቻለም።';
+  } finally {
+    participationSaving.value = false;
+  }
+}
+async function deactivateParticipation(id: number): Promise<void> {
+  const publicId = String(route.params.publicId || '');
+  const reasonText = (participationDeactivateReasons[id] || '').trim();
+  if (!publicId || reasonText.length < 8 || participationSaving.value) {
+    participationError.value = 'ለማቋረጥ ቢያንስ 8 ቁምፊ ያለው ምክንያት ያስገቡ።';
+    return;
+  }
+  participationSaving.value = true;
+  participationError.value = '';
+  try {
+    await deactivatePersonParticipation(publicId, id, reasonText);
+    participations.value = await listPersonParticipations(publicId);
+    delete participationDeactivateReasons[id];
+    participationSuccess.value = 'የተሳትፎ መዝገቡ ተቋርጧል።';
+  } catch {
+    participationError.value = 'የተሳትፎ መዝገቡን ማቋረጥ አልተቻለም።';
+  } finally {
+    participationSaving.value = false;
+  }
+}
+
 async function submitPersonRelationship(): Promise<void> {
   const publicId = String(route.params.publicId || '');
   const targetId = relatedPublicIdDraft.value.trim();
@@ -514,6 +593,62 @@ onMounted(load);
           <button type="submit" :disabled="documentSaving">{{ documentSaving ? 'በመፈጸም ላይ…' : 'ነባር ፋይል አገናኝ' }}</button>
         </form>
       </section>
+      <section class="people-profile__participations" aria-labelledby="people-participations-title">
+        <h2 id="people-participations-title">አባልነትና ተሳትፎ · Membership &amp; participation</h2>
+        <p class="people-profile__hint">ይህ መዝገብ የአባልነት፣ የአገልግሎት፣ የበጎ ፈቃድ፣ የኮሚቴ፣ የሥልጠና ወይም የተሳትፎ ታሪክን ይመዘግባል። በራሱ የመዳረሻ ፈቃድ ወይም ሥልጣን አይሰጥም።</p>
+        <p v-if="participationError" class="people-profile__alert" role="alert">{{ participationError }}</p>
+        <p v-if="participationSuccess" class="people-profile__success" role="status">{{ participationSuccess }}</p>
+        <p v-if="participationsLoading" role="status">የተሳትፎ መዝገቦች በመጫን ላይ…</p>
+        <ul v-if="participations.length" class="people-profile__document-list">
+          <li v-for="record in participations" :key="record.id">
+            <div>
+              <strong>{{ record.title }}</strong>
+              <p>{{ record.participation_type }} · {{ record.reference_code || '—' }} · {{ record.effective_from || '—' }} – {{ record.effective_to || '—' }}</p>
+            </div>
+            <form class="people-profile__contact-deactivate" @submit.prevent="deactivateParticipation(record.id)">
+              <input v-model="participationDeactivateReasons[record.id]" :aria-label="'የተሳትፎ ማቋረጫ ምክንያት ' + record.id" minlength="8" maxlength="1000" placeholder="የማቋረጥ ምክንያት" required />
+              <button type="submit" :disabled="participationSaving">ማቋረጥ</button>
+            </form>
+          </li>
+        </ul>
+        <p v-else-if="!participationsLoading && !participationError">የተሳትፎ መዝገብ የለም።</p>
+        <form class="people-profile__contact-form" @submit.prevent="submitParticipation">
+          <label>
+            <span>ዓይነት · Type</span>
+            <select v-model="participationType">
+              <option value="membership">አባልነት · Membership</option>
+              <option value="ministry">አገልግሎት · Ministry</option>
+              <option value="volunteer">በጎ ፈቃድ · Volunteer</option>
+              <option value="committee">ኮሚቴ · Committee</option>
+              <option value="event_attendance">የዝግጅት ተሳትፎ · Event attendance</option>
+              <option value="training">ሥልጠና · Training</option>
+              <option value="qualification">ብቃት · Qualification</option>
+              <option value="other">ሌላ · Other</option>
+            </select>
+          </label>
+          <label>
+            <span>ርዕስ · Title</span>
+            <input v-model="participationTitle" maxlength="160" required />
+          </label>
+          <label>
+            <span>የማጣቀሻ ቁጥር · Reference</span>
+            <input v-model="participationReference" maxlength="80" />
+          </label>
+          <label>
+            <span>የመጀመሪያ ቀን</span>
+            <input v-model="participationStart" type="date" />
+          </label>
+          <label>
+            <span>የመጨረሻ ቀን</span>
+            <input v-model="participationEnd" type="date" />
+          </label>
+          <label class="people-profile__relationship-reason">
+            <span>ምክንያት · Reason</span>
+            <textarea v-model="participationReason" minlength="8" maxlength="1000" rows="2" required />
+          </label>
+          <button type="submit" :disabled="participationSaving">{{ participationSaving ? 'በመመዝገብ ላይ…' : 'ተሳትፎ መዝግብ' }}</button>
+        </form>
+      </section>
       <section class="people-profile__person-relationships" aria-labelledby="people-person-relationships-title">
         <h2 id="people-person-relationships-title">የሰዎች ግንኙነት · Family &amp; person relationships</h2>
         <p class="people-profile__hint">ይህ ግንኙነት በራሱ የመግቢያ፣ የአባልነት ወይም የሥልጣን ፈቃድ አይሰጥም። የሌላውን ሰው Public UUID ያስፈልጋል።</p>
@@ -643,6 +778,7 @@ onMounted(load);
 .people-profile__document-list p { margin: var(--mases-space-1) 0 0; color: var(--mases-color-text-secondary); overflow-wrap: anywhere; }
 .people-profile__document-form { grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); align-items: end; margin-block: var(--mases-space-4); }
 .people-profile__document-form button { justify-self: start; }
+.people-profile__participations { display: grid; gap: var(--mases-space-3); padding: var(--mases-space-5); border: 1px solid var(--mases-color-border-subtle); border-radius: var(--mases-radius-lg); background: var(--mases-color-surface-page); }
 .people-profile__person-relationships { display: grid; gap: var(--mases-space-3); padding: var(--mases-space-5); border: 1px solid var(--mases-color-border-subtle); border-radius: var(--mases-radius-lg); background: var(--mases-color-surface-page); }
 .people-profile__contacts { display: grid; gap: var(--mases-space-3); padding: var(--mases-space-5); border: 1px solid var(--mases-color-border-subtle); border-radius: var(--mases-radius-lg); background: var(--mases-color-surface-page); }
 .people-profile__contact-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); gap: var(--mases-space-3); align-items: end; }
