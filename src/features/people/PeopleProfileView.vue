@@ -1,13 +1,32 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { getPerson, getPersonRelationships, listPersonDocuments, linkPersonDocument, unlinkPersonDocument, updatePerson, type PersonDocument, type PersonNamePayload, type PersonProfile, type PersonRelationshipSummary } from './api';
+import { getPerson, getPersonRelationships, getPersonRelationshipOptions, listPersonDocuments, linkPersonDocument, linkPersonRelationship, unlinkPersonDocument, unlinkPersonRelationship, updatePerson, type PersonDocument, type PersonNamePayload, type PersonProfile, type PersonRelationshipDomain, type PersonRelationshipOptions, type PersonRelationshipSummary } from './api';
 
 const route = useRoute();
 const router = useRouter();
 const person = ref<PersonProfile | null>(null);
 const relationships = ref<PersonRelationshipSummary | null>(null);
 const relationshipsLoading = ref(false);
+const relationshipDomains: ReadonlyArray<{ key: PersonRelationshipDomain; label: string }> = [
+  { key: 'employees', label: 'የሠራተኛ መዝገቦች · Employees' },
+  { key: 'shareholders', label: 'የባለአክሲዮን መዝገቦች · Individual shareholders' },
+  { key: 'governance-memberships', label: 'የአስተዳደር አባልነቶች · Governance memberships' },
+];
+const relationshipOptions = ref<Record<PersonRelationshipDomain, PersonRelationshipOptions | null>>({
+  employees: null, shareholders: null, 'governance-memberships': null,
+});
+const relationshipSearch = reactive<Record<PersonRelationshipDomain, string>>({
+  employees: '', shareholders: '', 'governance-memberships': '',
+});
+const selectedRelationship = reactive<Record<PersonRelationshipDomain, string>>({
+  employees: '', shareholders: '', 'governance-memberships': '',
+});
+const relationshipOptionsLoading = ref(false);
+const relationshipSaving = ref(false);
+const relationshipError = ref('');
+const relationshipSuccess = ref('');
+const relationshipReason = ref('');
 const documents = ref<readonly PersonDocument[]>([]);
 const documentsLoading = ref(false);
 const documentSaving = ref(false);
@@ -60,6 +79,15 @@ async function load(): Promise<void> {
     } finally {
       relationshipsLoading.value = false;
     }
+    if (relationships.value) {
+      relationshipOptionsLoading.value = true;
+      relationshipError.value = '';
+      try {
+        await Promise.all(relationshipDomains.map((domain) => loadRelationshipOptions(domain.key)));
+      } finally {
+        relationshipOptionsLoading.value = false;
+      }
+    }
     documentsLoading.value = true;
     documentError.value = '';
     try {
@@ -110,6 +138,63 @@ async function saveProfile(): Promise<void> {
   } catch {
     error.value = 'ለውጡን ማስቀመጥ አልተቻለም። የመዳረሻ ፈቃድ፣ የስም መረጃ እና ምክንያቱን ያረጋግጡ።';
   } finally { saving.value = false; }
+}
+async function loadRelationshipOptions(domain: PersonRelationshipDomain): Promise<void> {
+  const publicId = String(route.params.publicId || '');
+  if (!publicId) return;
+  try {
+    relationshipOptions.value[domain] = await getPersonRelationshipOptions(publicId, domain, relationshipSearch[domain]);
+  } catch {
+    relationshipError.value = 'የግንኙነት መዝገቦችን ማግኘት አልተቻለም። ፈቃድዎን እና የተከራይ አውዱን ያረጋግጡ።';
+  }
+}
+async function linkRelationship(domain: PersonRelationshipDomain): Promise<void> {
+  const publicId = String(route.params.publicId || '');
+  const recordId = Number(selectedRelationship[domain]);
+  if (!publicId || !Number.isSafeInteger(recordId) || recordId < 1) {
+    relationshipError.value = 'ከዝርዝሩ አንድ መዝገብ ይምረጡ።';
+    return;
+  }
+  if (relationshipReason.value.trim().length < 8) {
+    relationshipError.value = 'ለግንኙነቱ ቢያንስ 8 ቁምፊ ያለው ምክንያት ያስገቡ።';
+    return;
+  }
+  relationshipSaving.value = true;
+  relationshipError.value = '';
+  relationshipSuccess.value = '';
+  try {
+    await linkPersonRelationship(publicId, domain, recordId, relationshipReason.value.trim());
+    selectedRelationship[domain] = '';
+    relationshipReason.value = '';
+    relationshipOptions.value[domain] = await getPersonRelationshipOptions(publicId, domain, relationshipSearch[domain]);
+    relationships.value = await getPersonRelationships(publicId);
+    relationshipSuccess.value = 'የግንኙነት መዝገቡ በምክንያት እና በኦዲት ተመዝግቦ ተገናኝቷል።';
+  } catch {
+    relationshipError.value = 'መዝገቡን ማገናኘት አልተቻለም። የተከራይ ፈቃድ፣ የተጠቃሚ ማንነት ወጥነት እና የምክንያቱን መረጃ ያረጋግጡ።';
+  } finally {
+    relationshipSaving.value = false;
+  }
+}
+async function unlinkRelationship(domain: PersonRelationshipDomain, recordId: number): Promise<void> {
+  const publicId = String(route.params.publicId || '');
+  if (!publicId || relationshipReason.value.trim().length < 8) {
+    relationshipError.value = 'ለማላቀቅ ቢያንስ 8 ቁምፊ ያለው ምክንያት ያስገቡ።';
+    return;
+  }
+  relationshipSaving.value = true;
+  relationshipError.value = '';
+  relationshipSuccess.value = '';
+  try {
+    await unlinkPersonRelationship(publicId, domain, recordId, relationshipReason.value.trim());
+    relationshipReason.value = '';
+    relationshipOptions.value[domain] = await getPersonRelationshipOptions(publicId, domain, relationshipSearch[domain]);
+    relationships.value = await getPersonRelationships(publicId);
+    relationshipSuccess.value = 'የግንኙነት መዝገቡ በኦዲት ምክንያት ተመዝግቦ ተለይቷል።';
+  } catch {
+    relationshipError.value = 'መዝገቡን ማላቀቅ አልተቻለም። ፈቃድዎን እና ምክንያቱን ያረጋግጡ።';
+  } finally {
+    relationshipSaving.value = false;
+  }
 }
 async function attachDocument(): Promise<void> {
   const publicId = String(route.params.publicId || '');
@@ -214,6 +299,46 @@ onMounted(load);
           <div><dt>የሰነድ ግንኙነት</dt><dd>{{ relationships.document_count === null ? 'አልተዋቀረም' : relationships.document_count }}</dd></div>
         </dl>
       </section>
+      <section v-if="relationships || relationshipOptionsLoading" class="people-profile__relationship-manager" aria-labelledby="people-relationship-manager-title">
+        <h2 id="people-relationship-manager-title">የማንነት ግንኙነቶችን አስተዳድር · Manage identity links</h2>
+        <p>እዚህ የሚታዩ መዝገቦች በአሁኑ ተከራይ ውስጥ ያሉ፣ ንቁ እና ከሌላ የሰው መገለጫ ጋር ያልተገናኙ ናቸው። የግንኙነት ለውጦች ምክንያት ይፈልጋሉ እና በኦዲት ይመዘገባሉ።</p>
+        <p v-if="relationshipOptionsLoading" role="status">የግንኙነት ምርጫዎች በመጫን ላይ…</p>
+        <p v-if="relationshipError" class="people-profile__alert" role="alert">{{ relationshipError }}</p>
+        <p v-if="relationshipSuccess" class="people-profile__success" role="status">{{ relationshipSuccess }}</p>
+        <label class="people-profile__relationship-reason">
+          <span>ለማገናኘት ወይም ለማላቀቅ ምክንያት (required)</span>
+          <textarea v-model="relationshipReason" minlength="8" maxlength="1000" rows="2" required />
+        </label>
+        <section v-for="domain in relationshipDomains" :key="domain.key" class="people-profile__relationship-domain">
+          <h3>{{ domain.label }}</h3>
+          <ul v-if="relationshipOptions[domain.key]?.linked.length" class="people-profile__relationship-list">
+            <li v-for="record in relationshipOptions[domain.key]?.linked || []" :key="record.id">
+              <div><strong>{{ record.label }}</strong><p>{{ record.detail }}</p></div>
+              <button type="button" :disabled="relationshipSaving" @click="unlinkRelationship(domain.key, record.id)">ከመገለጫው ለይ</button>
+            </li>
+          </ul>
+          <p v-else-if="!relationshipOptionsLoading">ከዚህ መገለጫ ጋር የተገናኘ መዝገብ የለም።</p>
+          <form class="people-profile__relationship-search" @submit.prevent="loadRelationshipOptions(domain.key)">
+            <label>
+              <span>የመዝገብ ፍለጋ</span>
+              <input v-model="relationshipSearch[domain.key]" maxlength="100" />
+            </label>
+            <button type="submit" :disabled="relationshipSaving || relationshipOptionsLoading">ፈልግ</button>
+          </form>
+          <form class="people-profile__relationship-link" @submit.prevent="linkRelationship(domain.key)">
+            <label>
+              <span>የሚገናኘውን መዝገብ ይምረጡ</span>
+              <select v-model="selectedRelationship[domain.key]" required>
+                <option value="">— መዝገብ ይምረጡ —</option>
+                <option v-for="record in relationshipOptions[domain.key]?.candidates || []" :key="record.id" :value="String(record.id)">{{ record.label }} · {{ record.detail }}</option>
+              </select>
+            </label>
+            <button type="submit" :disabled="relationshipSaving || relationshipOptionsLoading || !(relationshipOptions[domain.key]?.candidates.length)">ከመገለጫው ጋር አገናኝ</button>
+            <p v-if="relationshipOptions[domain.key]?.candidates.length === 50" class="people-profile__hint">ከ50 በላይ ውጤቶች ሊኖሩ ይችላሉ፤ ዝርዝሩን ለማጥበብ ፍለጋ ይጠቀሙ።</p>
+            <p v-else-if="!relationshipOptionsLoading && relationshipOptions[domain.key]?.candidates.length === 0" class="people-profile__hint">ለዚህ ግንኙነት የሚገኝ መዝገብ የለም።</p>
+          </form>
+        </section>
+      </section>
       <section v-if="relationships || relationshipsLoading || documentsLoading || documents.length || documentError" class="people-profile__documents" aria-labelledby="people-documents-title">
         <h2 id="people-documents-title">ሰነዶች እና ፋይሎች</h2>
         <p v-if="documentsLoading" role="status">ሰነዶች በመጫን ላይ…</p>
@@ -260,6 +385,15 @@ onMounted(load);
 .people-profile dd { margin: var(--mases-space-1) 0 0; overflow-wrap: anywhere; }
 .people-profile__form input, .people-profile__form textarea, .people-profile__document-form input, .people-profile__document-form textarea { width: 100%; min-height: 2.75rem; padding: var(--mases-space-2) var(--mases-space-3); border: 1px solid var(--mases-color-border-default); border-radius: var(--mases-radius-md); background: var(--mases-color-surface-page); color: inherit; font: inherit; }
 .people-profile__reason, .people-profile__actions { grid-column: 1 / -1; }
+.people-profile__relationship-manager { display: grid; gap: var(--mases-space-4); padding: var(--mases-space-5); border: 1px solid var(--mases-color-border-subtle); border-radius: var(--mases-radius-lg); background: var(--mases-color-surface-page); }
+.people-profile__relationship-domain { display: grid; gap: var(--mases-space-3); padding-block: var(--mases-space-3); border-top: 1px solid var(--mases-color-border-subtle); }
+.people-profile__relationship-reason, .people-profile__relationship-search, .people-profile__relationship-link { display: grid; gap: var(--mases-space-2); }
+.people-profile__relationship-reason span, .people-profile__relationship-search span, .people-profile__relationship-link span { color: var(--mases-color-text-secondary); font-size: var(--mases-font-size-body-sm); }
+.people-profile__relationship-reason textarea, .people-profile__relationship-search input, .people-profile__relationship-link select { width: 100%; min-height: 2.75rem; padding: var(--mases-space-2) var(--mases-space-3); border: 1px solid var(--mases-color-border-default); border-radius: var(--mases-radius-md); background: var(--mases-color-surface-page); color: inherit; font: inherit; }
+.people-profile__relationship-search { grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
+.people-profile__relationship-list { display: grid; gap: var(--mases-space-2); padding: 0; list-style: none; }
+.people-profile__relationship-list li { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--mases-space-3); padding-block: var(--mases-space-2); border-bottom: 1px solid var(--mases-color-border-subtle); }
+.people-profile__relationship-list p, .people-profile__hint { margin: var(--mases-space-1) 0 0; color: var(--mases-color-text-secondary); overflow-wrap: anywhere; }
 .people-profile__document-list { display: grid; gap: var(--mases-space-3); padding: 0; list-style: none; }
 .people-profile__document-list li { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--mases-space-3); padding-block: var(--mases-space-3); border-bottom: 1px solid var(--mases-color-border-subtle); }
 .people-profile__document-list p { margin: var(--mases-space-1) 0 0; color: var(--mases-color-text-secondary); overflow-wrap: anywhere; }
