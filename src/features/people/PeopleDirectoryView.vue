@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { createPerson, listPeople, type PersonNamePayload, type PersonProfile } from './api';
 
@@ -44,7 +44,7 @@ async function load(): Promise<void> {
   loading.value = true;
   error.value = '';
   try {
-    const result = await listPeople(page.value);
+    const result = await listPeople(page.value, 25, search.value);
     people.value = result.data;
     lastPage.value = result.meta.last_page;
     total.value = result.meta.total;
@@ -76,6 +76,12 @@ async function submitCreate(): Promise<void> {
   }
 }
 
+let searchTimer: ReturnType<typeof setTimeout> | undefined;
+watch(search, () => {
+  page.value = 1;
+  if (searchTimer !== undefined) clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => { void load(); }, 250);
+});
 onMounted(load);
 </script>
 
