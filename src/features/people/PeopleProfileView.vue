@@ -301,7 +301,7 @@ onMounted(load);
       </section>
       <section v-if="relationships || relationshipOptionsLoading" class="people-profile__relationship-manager" aria-labelledby="people-relationship-manager-title">
         <h2 id="people-relationship-manager-title">የማንነት ግንኙነቶችን አስተዳድር · Manage identity links</h2>
-        <p>እዚህ የሚታዩ መዝገቦች በአሁኑ ተከራይ ውስጥ ያሉ፣ ንቁ እና ከሌላ የሰው መገለጫ ጋር ያልተገናኙ ናቸው። የግንኙነት ለውጦች ምክንያት ይፈልጋሉ እና በኦዲት ይመዘገባሉ።</p>
+        <p>የተገናኙ መዝገቦች ንቁና ታሪካዊ ሁኔታዎችን ያሳያሉ፤ ለአዲስ ግንኙነት የሚመረጡ መዝገቦች ግን ንቁ እና ተስማሚ መሆን አለባቸው። የግንኙነት ለውጦች ምክንያት ይፈልጋሉ እና በኦዲት ይመዘገባሉ።</p>
         <p v-if="relationshipOptionsLoading" role="status">የግንኙነት ምርጫዎች በመጫን ላይ…</p>
         <p v-if="relationshipError" class="people-profile__alert" role="alert">{{ relationshipError }}</p>
         <p v-if="relationshipSuccess" class="people-profile__success" role="status">{{ relationshipSuccess }}</p>
@@ -313,7 +313,7 @@ onMounted(load);
           <h3>{{ domain.label }}</h3>
           <ul v-if="relationshipOptions[domain.key]?.linked.length" class="people-profile__relationship-list">
             <li v-for="record in relationshipOptions[domain.key]?.linked || []" :key="record.id">
-              <div><strong>{{ record.label }}</strong><p>{{ record.detail }}</p></div>
+              <div><strong>{{ record.label }}</strong><p>{{ record.detail }} · {{ record.status === 'active' ? 'ንቁ · Active' : record.status === 'inactive' ? 'የቀድሞ · Inactive' : record.status === 'suspended' ? 'ታግዷል · Suspended' : record.status === 'ended' ? 'ተጠናቋል · Ended' : record.status === 'resigned' ? 'ለቋል · Resigned' : record.status === 'removed' ? 'ተወግዷል · Removed' : record.status === 'expired' ? 'ጊዜው አልፏል · Expired' : record.status }}</p></div>
               <button type="button" :disabled="relationshipSaving" @click="unlinkRelationship(domain.key, record.id)">ከመገለጫው ለይ</button>
             </li>
           </ul>

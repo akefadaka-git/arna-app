@@ -93,6 +93,7 @@ export interface PersonRelationshipOption {
   readonly id: number;
   readonly label: string;
   readonly detail: string;
+  readonly status: string;
 }
 
 export interface PersonRelationshipOptions {
