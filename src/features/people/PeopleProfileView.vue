@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { createPersonContact, deactivatePersonContact, getPerson, getPersonRelationships, getPersonRelationshipOptions, listPersonContacts, listPersonDocuments, linkPersonDocument, linkPersonRelationship, unlinkPersonDocument, unlinkPersonRelationship, updatePerson, type PersonContactPoint, type PersonDocument, type PersonNamePayload, type PersonProfile, type PersonRelationshipDomain, type PersonRelationshipOptions, type PersonRelationshipSummary } from './api';
+import { createPersonContact, createPersonToPersonRelationship, deactivatePersonContact, deactivatePersonToPersonRelationship, getPerson, getPersonRelationships, getPersonRelationshipOptions, listPersonContacts, listPersonDocuments, listPersonToPersonRelationships, linkPersonDocument, linkPersonRelationship, unlinkPersonDocument, unlinkPersonRelationship, updatePerson, type PersonContactPoint, type PersonDocument, type PersonNamePayload, type PersonProfile, type PersonRelationshipDomain, type PersonRelationshipOptions, type PersonRelationshipSummary, type PersonRelationshipType, type PersonToPersonRelationship } from './api';
 
 const route = useRoute();
 const router = useRouter();
@@ -27,6 +27,17 @@ const relationshipSaving = ref(false);
 const relationshipError = ref('');
 const relationshipSuccess = ref('');
 const relationshipReason = ref('');
+const personRelationships = ref<readonly PersonToPersonRelationship[]>([]);
+const personRelationshipsLoading = ref(false);
+const personRelationshipSaving = ref(false);
+const personRelationshipError = ref('');
+const personRelationshipSuccess = ref('');
+const relatedPublicIdDraft = ref('');
+const personRelationshipType = ref<PersonRelationshipType>('household_member');
+const personRelationshipReason = ref('');
+const personRelationshipStart = ref('');
+const personRelationshipEnd = ref('');
+const personRelationshipDeactivateReasons = reactive<Record<number, string>>({});
 const contacts = ref<readonly PersonContactPoint[]>([]);
 const contactsLoading = ref(false);
 const contactSaving = ref(false);
@@ -98,6 +109,16 @@ async function load(): Promise<void> {
         relationshipOptionsLoading.value = false;
       }
     }
+    personRelationshipsLoading.value = true;
+    personRelationshipError.value = '';
+    try {
+      personRelationships.value = await listPersonToPersonRelationships(publicId);
+    } catch {
+      personRelationships.value = [];
+      personRelationshipError.value = 'የቤተሰብ ወይም የሰዎች ግንኙነቶችን ማየት አልተቻለም።';
+    } finally {
+      personRelationshipsLoading.value = false;
+    }
     contactsLoading.value = true;
     contactError.value = '';
     try {
@@ -159,6 +180,63 @@ async function saveProfile(): Promise<void> {
     error.value = 'ለውጡን ማስቀመጥ አልተቻለም። የመዳረሻ ፈቃድ፣ የስም መረጃ እና ምክንያቱን ያረጋግጡ።';
   } finally { saving.value = false; }
 }
+async function submitPersonRelationship(): Promise<void> {
+  const publicId = String(route.params.publicId || '');
+  const targetId = relatedPublicIdDraft.value.trim();
+  const reasonText = personRelationshipReason.value.trim();
+  if (!publicId || personRelationshipSaving.value) return;
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(targetId)) {
+    personRelationshipError.value = 'የሌላውን ሰው ትክክለኛ Public UUID ያስገቡ።';
+    return;
+  }
+  if (reasonText.length < 8) {
+    personRelationshipError.value = 'ለግንኙነቱ ቢያንስ 8 ቁምፊ ያለው ምክንያት ያስገቡ።';
+    return;
+  }
+  personRelationshipSaving.value = true;
+  personRelationshipError.value = '';
+  personRelationshipSuccess.value = '';
+  try {
+    await createPersonToPersonRelationship(publicId, {
+      related_public_id: targetId,
+      relationship_type: personRelationshipType.value,
+      effective_from: personRelationshipStart.value || null,
+      effective_to: personRelationshipEnd.value || null,
+      reason: reasonText,
+    });
+    relatedPublicIdDraft.value = '';
+    personRelationshipReason.value = '';
+    personRelationshipStart.value = '';
+    personRelationshipEnd.value = '';
+    personRelationships.value = await listPersonToPersonRelationships(publicId);
+    personRelationshipSuccess.value = 'የሰዎች ግንኙነት ተመዝግቧል።';
+  } catch {
+    personRelationshipError.value = 'ግንኙነቱን መመዝገብ አልተቻለም። የሁለቱን ሰዎች የተከራይ መዳረሻ፣ መለያና የምክንያት መረጃ ያረጋግጡ።';
+  } finally {
+    personRelationshipSaving.value = false;
+  }
+}
+async function deactivatePersonRelationship(id: number): Promise<void> {
+  const publicId = String(route.params.publicId || '');
+  const reasonText = (personRelationshipDeactivateReasons[id] || '').trim();
+  if (!publicId || reasonText.length < 8 || personRelationshipSaving.value) {
+    personRelationshipError.value = 'ለማቋረጥ ቢያንስ 8 ቁምፊ ያለው ምክንያት ያስገቡ።';
+    return;
+  }
+  personRelationshipSaving.value = true;
+  personRelationshipError.value = '';
+  try {
+    await deactivatePersonToPersonRelationship(publicId, id, reasonText);
+    personRelationships.value = await listPersonToPersonRelationships(publicId);
+    delete personRelationshipDeactivateReasons[id];
+    personRelationshipSuccess.value = 'ግንኙነቱ ተቋርጧል።';
+  } catch {
+    personRelationshipError.value = 'ግንኙነቱን ማቋረጥ አልተቻለም።';
+  } finally {
+    personRelationshipSaving.value = false;
+  }
+}
+
 async function submitContact(): Promise<void> {
   const publicId = String(route.params.publicId || '');
   if (!publicId || contactSaving.value) return;
@@ -436,6 +514,59 @@ onMounted(load);
           <button type="submit" :disabled="documentSaving">{{ documentSaving ? 'በመፈጸም ላይ…' : 'ነባር ፋይል አገናኝ' }}</button>
         </form>
       </section>
+      <section class="people-profile__person-relationships" aria-labelledby="people-person-relationships-title">
+        <h2 id="people-person-relationships-title">የሰዎች ግንኙነት · Family &amp; person relationships</h2>
+        <p class="people-profile__hint">ይህ ግንኙነት በራሱ የመግቢያ፣ የአባልነት ወይም የሥልጣን ፈቃድ አይሰጥም። የሌላውን ሰው Public UUID ያስፈልጋል።</p>
+        <p v-if="personRelationshipError" class="people-profile__alert" role="alert">{{ personRelationshipError }}</p>
+        <p v-if="personRelationshipSuccess" class="people-profile__success" role="status">{{ personRelationshipSuccess }}</p>
+        <p v-if="personRelationshipsLoading" role="status">ግንኙነቶች በመጫን ላይ…</p>
+        <ul v-if="personRelationships.length" class="people-profile__document-list">
+          <li v-for="relationship in personRelationships" :key="relationship.id">
+            <div>
+              <strong>{{ relationship.related_name_am || relationship.related_name_en || relationship.related_public_id }}</strong>
+              <p>{{ relationship.related_name_en || '—' }} · {{ relationship.relationship_type }} · {{ relationship.effective_from || '—' }} – {{ relationship.effective_to || '—' }}</p>
+            </div>
+            <form class="people-profile__contact-deactivate" @submit.prevent="deactivatePersonRelationship(relationship.id)">
+              <input v-model="personRelationshipDeactivateReasons[relationship.id]" :aria-label="'የግንኙነት ማቋረጫ ምክንያት ' + relationship.id" minlength="8" maxlength="1000" placeholder="የማቋረጥ ምክንያት" required />
+              <button type="submit" :disabled="personRelationshipSaving">ማቋረጥ</button>
+            </form>
+          </li>
+        </ul>
+        <p v-else-if="!personRelationshipsLoading && !personRelationshipError">የተመዘገበ ግንኙነት የለም።</p>
+        <form class="people-profile__contact-form" @submit.prevent="submitPersonRelationship">
+          <label>
+            <span>የሌላው ሰው Public UUID</span>
+            <input v-model="relatedPublicIdDraft" maxlength="36" autocomplete="off" required />
+          </label>
+          <label>
+            <span>ግንኙነት · Relationship</span>
+            <select v-model="personRelationshipType">
+              <option value="parent">ወላጅ · Parent</option>
+              <option value="child">ልጅ · Child</option>
+              <option value="guardian">አሳዳጊ · Guardian</option>
+              <option value="dependent">ጥገኛ · Dependent</option>
+              <option value="spouse">ባል/ሚስት · Spouse</option>
+              <option value="sibling">ወንድም/እህት · Sibling</option>
+              <option value="emergency_contact">የአደጋ ጊዜ ተጠሪ · Emergency contact</option>
+              <option value="household_member">የቤተሰብ አባል · Household member</option>
+              <option value="other">ሌላ · Other</option>
+            </select>
+          </label>
+          <label>
+            <span>የሚጀምርበት ቀን · Effective from</span>
+            <input v-model="personRelationshipStart" type="date" />
+          </label>
+          <label>
+            <span>የሚያበቃበት ቀን · Effective to</span>
+            <input v-model="personRelationshipEnd" type="date" />
+          </label>
+          <label class="people-profile__relationship-reason">
+            <span>ምክንያት · Reason</span>
+            <textarea v-model="personRelationshipReason" minlength="8" maxlength="1000" rows="2" required />
+          </label>
+          <button type="submit" :disabled="personRelationshipSaving">{{ personRelationshipSaving ? 'በመመዝገብ ላይ…' : 'ግንኙነት መዝግብ' }}</button>
+        </form>
+      </section>
       <section class="people-profile__contacts" aria-labelledby="people-contact-title">
         <h2 id="people-contact-title">የግንኙነት መረጃ · Contact points</h2>
         <p class="people-profile__hint">መረጃው በመረጃ ቋት ውስጥ ተመስጥሮ ይቀመጣል። በዚህ ዝርዝር የሚታየው የተደበቀ መልክ ብቻ ነው። ማረጋገጫ ሂደት እስኪኖር ድረስ መረጃው እንደተረጋገጠ አይቆጠርም።</p>
@@ -512,6 +643,7 @@ onMounted(load);
 .people-profile__document-list p { margin: var(--mases-space-1) 0 0; color: var(--mases-color-text-secondary); overflow-wrap: anywhere; }
 .people-profile__document-form { grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); align-items: end; margin-block: var(--mases-space-4); }
 .people-profile__document-form button { justify-self: start; }
+.people-profile__person-relationships { display: grid; gap: var(--mases-space-3); padding: var(--mases-space-5); border: 1px solid var(--mases-color-border-subtle); border-radius: var(--mases-radius-lg); background: var(--mases-color-surface-page); }
 .people-profile__contacts { display: grid; gap: var(--mases-space-3); padding: var(--mases-space-5); border: 1px solid var(--mases-color-border-subtle); border-radius: var(--mases-radius-lg); background: var(--mases-color-surface-page); }
 .people-profile__contact-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); gap: var(--mases-space-3); align-items: end; }
 .people-profile__contact-form label { display: grid; gap: var(--mases-space-1); min-width: 0; }
