@@ -8,4 +8,10 @@ export const governanceMeetingRoutes: RouteRecordRaw[] = [
     component: () => import('./GovernanceMeetingsView.vue'),
     meta: { permission: 'governance.meeting.view' },
   },
+  {
+    path: 'governance/elections',
+    name: 'governance-elections',
+    component: () => import('./GovernanceElectionsView.vue'),
+    meta: { permission: 'governance.election.view' },
+  },
 ];
