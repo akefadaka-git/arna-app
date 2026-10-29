@@ -238,7 +238,8 @@ onMounted(() => void load());
         <p v-if="!selected.challenge_bylaw_reference || !selected.challenge_window_ends_at" role="alert">የተፈጻሚው በይፋ የጸደቀ የደንብ/ውሳኔ አንቀጽ አልተረጋገጠም። ጊዜ አትገምቱ፤ ማረጋገጫ እስኪገኝ ድረስ ውጤቱ ማጽደቅ አይቻልም።</p>
         <p v-else>ምንጭ: {{ selected.challenge_bylaw_reference }} · ማስረጃ: {{ selected.challenge_window_evidence_reference }} · የመጨረሻ ጊዜ: {{ selected.challenge_window_ends_at }} · ማረጋገጫ: {{ selected.challenge_window_verified_at ? 'ተረጋግጧል' : 'ይጠበቃል' }}</p>
         <form class="governance-elections__form" @submit.prevent="recordChallengeWindow">
-          <label>የጸደቀ ደንብ/ውሳኔ ትክክለኛ ማጣቀሻ<input v-model="challengeBylawReference" maxlength="255" required placeholder="ሰነድ መለያ፣ አንቀጽ፣ ስሪት" /></label>\n          <label>የምንጭ ማስረጃ ማጣቀሻ (የቁጥጥር ሥር ያለ ሰነድ/መዝገብ)<input v-model="challengeEvidenceReference" maxlength="500" required /></label>
+          <label>የጸደቀ ደንብ/ውሳኔ ትክክለኛ ማጣቀሻ<input v-model="challengeBylawReference" maxlength="255" required placeholder="ሰነድ መለያ፣ አንቀጽ፣ ስሪት" /></label>
+          <label>የምንጭ ማስረጃ ማጣቀሻ (የቁጥጥር ሥር ያለ ሰነድ/መዝገብ)<input v-model="challengeEvidenceReference" maxlength="500" required /></label>
           <label>በአንቀጹ መሠረት የሚያበቃበት ቀን/ሰዓት<input v-model="challengeWindowEndsAt" type="datetime-local" required /></label>
           <button type="submit" :disabled="saving">የጊዜ ምንጭ መዝግብ</button>
         </form>
