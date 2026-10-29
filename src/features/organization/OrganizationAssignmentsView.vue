@@ -43,12 +43,21 @@ const titleEn = ref('');
 const startsOn = ref(new Date().toISOString().slice(0, 10));
 const endsOn = ref('');
 const reason = ref('');
+const statusFilter = ref<'' | OrganizationAssignment['status']>('');
+const effectiveOn = ref('');
+const personFilter = ref('');
 
 async function load(): Promise<void> {
   if (unitId.value === null) { error.value = 'Invalid unit ID'; isLoading.value = false; return; }
   isLoading.value = true; error.value = '';
   try {
-    const result = await listOrganizationAssignments(unitId.value, { page: page.value, per_page: 25 });
+    const parsedPerson = Number(personFilter.value);
+    const result = await listOrganizationAssignments(unitId.value, {
+      page: page.value, per_page: 25,
+      ...(statusFilter.value ? { status: statusFilter.value } : {}),
+      ...(effectiveOn.value ? { effective_on: effectiveOn.value } : {}),
+      ...(personFilter.value && Number.isSafeInteger(parsedPerson) && parsedPerson > 0 ? { person_id: parsedPerson } : {}),
+    });
     items.value = result.data; page.value = result.current_page; lastPage.value = Math.max(1, result.last_page);
   } catch {
     error.value = labels.value.saveError;
@@ -81,6 +90,7 @@ async function transition(item: OrganizationAssignment, status: 'ended' | 'cance
     await load();
   } catch { error.value = labels.value.saveError; }
 }
+function applyFilters(): void { page.value = 1; void load(); }
 function changePage(next: number): void {
   if (next < 1 || next > lastPage.value || next === page.value) return;
   page.value = next; void load();
@@ -102,6 +112,12 @@ watch(unitId, () => { page.value = 1; void load(); });
       <label>{{ labels.end }}<input v-model="endsOn" type="date" /></label>
       <label class="organization-assignments__wide">{{ labels.reason }}<textarea v-model="reason" minlength="5" maxlength="2000" required /></label>
       <button type="submit" :disabled="isSaving">{{ isSaving ? labels.loading : labels.create }}</button>
+    </form>
+    <form class="organization-assignments__filters" @submit.prevent="applyFilters">
+      <label>{{ labels.status }}<select v-model="statusFilter"><option value="">{{ am ? 'ሁሉም ሁኔታዎች' : 'All statuses' }}</option><option value="scheduled">scheduled</option><option value="active">active</option><option value="ended">ended</option><option value="cancelled">cancelled</option></select></label>
+      <label>{{ am ? 'በተፈጻሚነት ቀን' : 'Effective on' }}<input v-model="effectiveOn" type="date" /></label>
+      <label>{{ am ? 'የሰው መለያ' : 'Person ID' }}<input v-model="personFilter" inputmode="numeric" /></label>
+      <button type="submit">{{ am ? 'ማጣሪያ ተግብር' : 'Apply filters' }}</button>
     </form>
     <p v-if="error" role="alert">{{ error }} <button type="button" @click="load">{{ labels.retry }}</button></p>
     <p v-if="isLoading" role="status">{{ labels.loading }}</p>
@@ -129,7 +145,7 @@ watch(unitId, () => { page.value = 1; void load(); });
 
 <style scoped>
 .organization-assignments { display: grid; gap: 1rem; }
-.organization-assignments__form { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: .8rem; padding: 1rem; border: 1px solid var(--border-color, #d8dee8); border-radius: .5rem; }
+.organization-assignments__filters { display: flex; flex-wrap: wrap; align-items: end; gap: .75rem; }\n.organization-assignments__filters label { display: grid; gap: .35rem; }\n.organization-assignments__form { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: .8rem; padding: 1rem; border: 1px solid var(--border-color, #d8dee8); border-radius: .5rem; }
 .organization-assignments__form label { display: grid; gap: .35rem; }
 .organization-assignments__form input, .organization-assignments__form select, .organization-assignments__form textarea { width: 100%; min-width: 0; }
 .organization-assignments__wide { grid-column: 1 / -1; }
