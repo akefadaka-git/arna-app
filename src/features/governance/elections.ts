@@ -1,6 +1,6 @@
 import { api } from '@/core/api/client';
 
-export type GovernanceElectionStatus = 'draft' | 'nominations_open' | 'nominations_closed' | 'voting_open' | 'voting_closed' | 'runoff_required' | 'rerun_required' | 'quorum_failed' | 'certified' | 'cancelled';
+export type GovernanceElectionStatus = 'draft' | 'nominations_open' | 'nominations_closed' | 'voting_open' | 'voting_closed' | 'runoff_required' | 'rerun_required' | 'runoff_selection_blocked' | 'quorum_failed' | 'certified' | 'cancelled';
 
 export interface GovernanceElection {
   readonly id: number;
