@@ -77,7 +77,7 @@ async function create(): Promise<void> {
 async function transition(item: OrganizationAssignment, status: 'ended' | 'cancelled'): Promise<void> {
   error.value = '';
   try {
-    await updateOrganizationAssignment(item.id, { status, reason: status === 'ended' ? 'Ended from Organization workspace' : 'Cancelled from Organization workspace' });
+    await updateOrganizationAssignment(item.id, { status, ...(status === 'ended' ? { ends_on: new Date().toISOString().slice(0, 10) } : {}), reason: status === 'ended' ? 'Ended from Organization workspace' : 'Cancelled from Organization workspace' });
     await load();
   } catch { error.value = labels.value.saveError; }
 }
