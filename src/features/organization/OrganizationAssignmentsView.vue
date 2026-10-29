@@ -145,7 +145,9 @@ watch(unitId, () => { page.value = 1; void load(); });
 
 <style scoped>
 .organization-assignments { display: grid; gap: 1rem; }
-.organization-assignments__filters { display: flex; flex-wrap: wrap; align-items: end; gap: .75rem; }\n.organization-assignments__filters label { display: grid; gap: .35rem; }\n.organization-assignments__form { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: .8rem; padding: 1rem; border: 1px solid var(--border-color, #d8dee8); border-radius: .5rem; }
+.organization-assignments__filters { display: flex; flex-wrap: wrap; align-items: end; gap: .75rem; }
+.organization-assignments__filters label { display: grid; gap: .35rem; }
+.organization-assignments__form { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: .8rem; padding: 1rem; border: 1px solid var(--border-color, #d8dee8); border-radius: .5rem; }
 .organization-assignments__form label { display: grid; gap: .35rem; }
 .organization-assignments__form input, .organization-assignments__form select, .organization-assignments__form textarea { width: 100%; min-width: 0; }
 .organization-assignments__wide { grid-column: 1 / -1; }
