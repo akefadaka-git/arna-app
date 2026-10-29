@@ -17,7 +17,8 @@ const selected = ref<GovernanceElection | null>(null);
 const nominations = ref<readonly GovernanceElectionNomination[]>([]);
 const voters = ref<readonly GovernanceElectionVoter[]>([]);
 const results = ref<readonly GovernanceElectionResult[]>([]);
-const audit = ref<readonly GovernanceElectionAuditEvent[]>([]);\nconst challenges = ref<readonly GovernanceElectionChallenge[]>([]);
+const audit = ref<readonly GovernanceElectionAuditEvent[]>([]);
+const challenges = ref<readonly GovernanceElectionChallenge[]>([]);
 const loading = ref(false);
 const saving = ref(false);
 const error = ref('');
@@ -34,7 +35,22 @@ const voterMembershipId = ref('');
 const nominationStatement = ref('');
 const ballotMembershipId = ref('');
 const ballotNominationId = ref('');
-const receipt = ref('');\nconst candidateConsentConfirmed = ref(false);\nconst roundClosesAt = ref('');\nconst challengeBylawReference = ref('');\nconst challengeEvidenceReference = ref('');\nconst challengeWindowEndsAt = ref('');\nconst challengeType = ref<'challenge' | 'appeal'>('challenge');\nconst challengeReason = ref('');\nconst challengeEvidence = ref('');\nconst challengeDecisionNote = ref('');\nconst electionSummary = computed<Record<string, unknown> | null>(() => {\n  const raw = selected.value?.result_summary_json;\n  if (!raw) return null;\n  if (typeof raw === 'string') { try { return JSON.parse(raw) as Record<string, unknown>; } catch { return null; } }\n  return raw as Record<string, unknown>;\n});
+const receipt = ref('');
+const candidateConsentConfirmed = ref(false);
+const roundClosesAt = ref('');
+const challengeBylawReference = ref('');
+const challengeEvidenceReference = ref('');
+const challengeWindowEndsAt = ref('');
+const challengeType = ref<'challenge' | 'appeal'>('challenge');
+const challengeReason = ref('');
+const challengeEvidence = ref('');
+const challengeDecisionNote = ref('');
+const electionSummary = computed<Record<string, unknown> | null>(() => {
+  const raw = selected.value?.result_summary_json;
+  if (!raw) return null;
+  if (typeof raw === 'string') { try { return JSON.parse(raw) as Record<string, unknown>; } catch { return null; } }
+  return raw as Record<string, unknown>;
+});
 
 async function load(): Promise<void> {
   loading.value = true; error.value = '';
@@ -186,12 +202,16 @@ onMounted(() => void load());
     </section>
     <section v-if="selected" class="governance-elections__panel">
       <header class="governance-elections__header"><h2>{{ selected.title_am || selected.title_en || ('ምርጫ #' + selected.id) }} — {{ selected.status }}</h2><button type="button" @click="selected = null">ዝጋ</button></header>
-      <p v-if="selected.frozen_eligible_voter_count" role="status">የተቀዘቀዘ የመራጮች መዝገብ: {{ selected.frozen_eligible_voter_count }} · ዙር: {{ selected.current_round || 1 }} · አሸናፊ መለያ: {{ selected.winner_nomination_id || '—' }}</p>\n      <p v-if="electionSummary" role="status">የኮረም ሁኔታ: {{ electionSummary.quorum_met ? 'ተሟልቷል' : 'አልተሟላም' }} · ውሳኔ: {{ electionSummary.disposition }}</p>\n      <div class="governance-elections__actions">
+      <p v-if="selected.frozen_eligible_voter_count" role="status">የተቀዘቀዘ የመራጮች መዝገብ: {{ selected.frozen_eligible_voter_count }} · ዙር: {{ selected.current_round || 1 }} · አሸናፊ መለያ: {{ selected.winner_nomination_id || '—' }}</p>
+      <p v-if="electionSummary" role="status">የኮረም ሁኔታ: {{ electionSummary.quorum_met ? 'ተሟልቷል' : 'አልተሟላም' }} · ውሳኔ: {{ electionSummary.disposition }}</p>
+      <div class="governance-elections__actions">
         <button v-if="selected.status === 'draft'" type="button" :disabled="saving" @click="transition('open_nominations')">እጩነት ክፈት</button>
         <button v-if="selected.status === 'nominations_open'" type="button" :disabled="saving" @click="transition('close_nominations')">እጩነት ዝጋ</button>
         <button v-if="selected.status === 'nominations_closed'" type="button" :disabled="saving" @click="transition('open_voting')">ድምፅ መስጠት ክፈት</button>
         <button v-if="selected.status === 'voting_open'" type="button" :disabled="saving" @click="transition('close_voting')">ድምፅ መስጠት ዝጋ</button>
-        <button v-if="selected.status === 'runoff_required'" type="button" :disabled="saving" @click="transition('start_runoff')">የመጨረሻ ሁለት እጩዎች ዙር ጀምር</button>\n        <button v-if="selected.status === 'rerun_required'" type="button" :disabled="saving" @click="transition('start_rerun')">የምርጫ ድጋሚ ዙር ጀምር</button>\n        <button v-if="selected.status === 'voting_closed'" type="button" :disabled="saving" @click="transition('certify')">ውጤት አረጋግጥ</button>
+        <button v-if="selected.status === 'runoff_required'" type="button" :disabled="saving" @click="transition('start_runoff')">የመጨረሻ ሁለት እጩዎች ዙር ጀምር</button>
+        <button v-if="selected.status === 'rerun_required'" type="button" :disabled="saving" @click="transition('start_rerun')">የምርጫ ድጋሚ ዙር ጀምር</button>
+        <button v-if="selected.status === 'voting_closed'" type="button" :disabled="saving" @click="transition('certify')">ውጤት አረጋግጥ</button>
         <button v-if="['draft','nominations_open','nominations_closed','voting_open'].includes(selected.status)" type="button" :disabled="saving" @click="transition('cancel')">ምርጫ ሰርዝ</button>
       </div>
       <section v-if="selected.status === 'nominations_open'">
@@ -205,7 +225,9 @@ onMounted(() => void load());
         <table v-else><thead><tr><th>የእጩነት መለያ</th><th>የአባልነት መለያ</th><th>ሁኔታ</th><th>ግምገማ</th></tr></thead><tbody><tr v-for="item in nominations" :key="item.id"><td>{{ item.id }}</td><td>{{ item.governance_membership_id }}</td><td>{{ item.status }}</td><td><button v-if="item.status === 'pending' && ['nominations_open','nominations_closed'].includes(selected.status)" type="button" @click="review(item, 'accepted')">ተቀበል</button> <button v-if="item.status === 'pending' && ['nominations_open','nominations_closed'].includes(selected.status)" type="button" @click="review(item, 'rejected')">አትቀበል</button></td></tr></tbody></table>
       </section>
       <section v-if="selected.status === 'voting_open'"><h3>ሚስጥራዊ ድምፅ መስጠት</h3><form class="governance-elections__form" @submit.prevent="castBallot"><label>የራስዎ የአባልነት መለያ<input v-model="ballotMembershipId" inputmode="numeric" required /></label><label>የተቀባይነት ያገኘ የእጩነት መለያ<input v-model="ballotNominationId" inputmode="numeric" required /></label><button type="submit">ድምፅ ስጥ</button></form><p v-if="receipt" role="status">የድምፅ ደረሰኝ: <code>{{ receipt }}</code></p></section>
-      <p v-if="selected.status === 'runoff_selection_blocked'" role="alert">የሁለተኛ ደረጃ ድምፅ መስጫ እጩዎችን በትክክል ለመለየት የሚያስፈልገው የእኩል ድምፅ ደንብ አልተወሰነም። አዲስ ደንብ እስኪጸድቅ ድረስ ቀጣይ ዙር አይከፈትም።</p>\n      <section v-if="['runoff_required','rerun_required'].includes(selected.status)"><h3>የቀጣይ ዙር ጊዜ</h3><label>የዙሩ የመዝጊያ ቀንና ሰዓት<input v-model="roundClosesAt" type="datetime-local" required /></label><p>የቀጣይ ዙር የመዝጊያ ጊዜ ከመክፈት በፊት ይወሰናል።</p></section>\n      <section v-if="['voting_closed','certified','runoff_required','rerun_required','quorum_failed'].includes(selected.status)"><h3>የድምፅ ውጤት</h3><table><thead><tr><th>እጩነት</th><th>የአባልነት መለያ</th><th>ድምፅ</th></tr></thead><tbody><tr v-for="row in results" :key="row.nomination_id"><td>{{ row.nomination_id }}</td><td>{{ row.governance_membership_id }}</td><td>{{ row.vote_count }}</td></tr></tbody></table></section>
+      <p v-if="selected.status === 'runoff_selection_blocked'" role="alert">የሁለተኛ ደረጃ ድምፅ መስጫ እጩዎችን በትክክል ለመለየት የሚያስፈልገው የእኩል ድምፅ ደንብ አልተወሰነም። አዲስ ደንብ እስኪጸድቅ ድረስ ቀጣይ ዙር አይከፈትም።</p>
+      <section v-if="['runoff_required','rerun_required'].includes(selected.status)"><h3>የቀጣይ ዙር ጊዜ</h3><label>የዙሩ የመዝጊያ ቀንና ሰዓት<input v-model="roundClosesAt" type="datetime-local" required /></label><p>የቀጣይ ዙር የመዝጊያ ጊዜ ከመክፈት በፊት ይወሰናል።</p></section>
+      <section v-if="['voting_closed','certified','runoff_required','rerun_required','quorum_failed'].includes(selected.status)"><h3>የድምፅ ውጤት</h3><table><thead><tr><th>እጩነት</th><th>የአባልነት መለያ</th><th>ድምፅ</th></tr></thead><tbody><tr v-for="row in results" :key="row.nomination_id"><td>{{ row.nomination_id }}</td><td>{{ row.governance_membership_id }}</td><td>{{ row.vote_count }}</td></tr></tbody></table></section>
       <section><h3>የተመዘገቡ መራጮች</h3>
         <p v-if="!voters.length">መራጭ አልተመዘገበም።</p>
         <table v-else><thead><tr><th>የአባልነት መለያ</th><th>መራጭ</th><th>ድምፅ ተሰጥቷል?</th></tr></thead>
@@ -241,7 +263,10 @@ onMounted(() => void load());
 .governance-elections { display: grid; gap: 1rem; }
 .governance-elections__panel { padding: 1rem; border: 1px solid var(--color-border, #e2e8f0); border-radius: .5rem; }
 .governance-elections__form { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: .8rem; }
-.governance-elections__form label { display: grid; gap: .35rem; }\n.governance-elections__form .governance-elections__check { display: flex; align-items: center; gap: .5rem; }\n.governance-elections__subpanel { margin-block: 1rem; padding: .75rem; border-inline-start: 3px solid var(--color-warning, #b45309); }\n.governance-elections textarea, .governance-elections select { max-width: 100%; min-height: 2.4rem; padding: .4rem .65rem; }
+.governance-elections__form label { display: grid; gap: .35rem; }
+.governance-elections__form .governance-elections__check { display: flex; align-items: center; gap: .5rem; }
+.governance-elections__subpanel { margin-block: 1rem; padding: .75rem; border-inline-start: 3px solid var(--color-warning, #b45309); }
+.governance-elections textarea, .governance-elections select { max-width: 100%; min-height: 2.4rem; padding: .4rem .65rem; }
 .governance-elections__form input, .governance-elections button { max-width: 100%; min-height: 2.4rem; padding: .4rem .65rem; }
 .governance-elections__header, .governance-elections__actions { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; justify-content: space-between; }
 .governance-elections table { width: 100%; border-collapse: collapse; }
