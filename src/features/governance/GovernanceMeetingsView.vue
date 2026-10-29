@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue';
 import PageTitle from '@/layouts/AppShell/PageTitle';
 import PageHeader from '@/components/patterns/PageHeader';
+import GovernanceMeetingWorkspace from './GovernanceMeetingWorkspace.vue';
 import {
   approveGovernanceMeeting,
   createGovernanceMeeting,
@@ -23,6 +24,8 @@ const bodyId = ref('');
 const scheduledAt = ref('');
 const location = ref('');
 const meetingMode = ref<'in_person' | 'remote' | 'hybrid'>('in_person');
+const selectedMeeting = ref<GovernanceMeeting | null>(null);
+function openWorkspace(meeting: GovernanceMeeting): void { selectedMeeting.value = meeting; }
 
 async function load(): Promise<void> {
   isLoading.value = true;
@@ -130,7 +133,7 @@ onMounted(() => void load());
               <td>{{ meeting.body?.name_am || meeting.body?.name_en || meeting.body?.code || meeting.governance_body_id }}</td>
               <td>{{ meeting.scheduled_at ? new Date(meeting.scheduled_at).toLocaleString() : '—' }}</td>
               <td>{{ meeting.status }}</td>
-              <td><button v-if="meeting.status === 'draft'" type="button" @click="approveMeeting(meeting)">ለማጽደቅ ላክ</button></td>
+              <td><button type="button" @click="openWorkspace(meeting)">ዝርዝር / አጀንዳ / ተሳትፎ</button> <button v-if="meeting.status === 'draft'" type="button" @click="approveMeeting(meeting)">ለማጽደቅ ላክ</button></td>
             </tr>
             <tr v-if="meetings.length === 0"><td colspan="5">ስብሰባ አልተመዘገበም።</td></tr>
           </tbody>
@@ -142,6 +145,7 @@ onMounted(() => void load());
         <button type="button" :disabled="currentPage >= lastPage || isLoading" @click="changePage(currentPage + 1)">ቀጣይ</button>
       </nav>
     </section>
+      <GovernanceMeetingWorkspace v-if="selectedMeeting" :meeting="selectedMeeting" @close="selectedMeeting = null" />
   </main>
 </template>
 
