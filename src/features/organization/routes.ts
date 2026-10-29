@@ -38,3 +38,14 @@ export const organizationWorkspaceRoutes: RouteRecordRaw[] = [
     meta: { permission: 'organization.audit.view' },
   },
 ];
+
+/** Organization-owned navigation metadata; composed with domain routes. */
+export const organizationWorkspaceNavItems = [
+  {
+    id: 'organization',
+    label: 'የድርጅት መዋቅር',
+    to: '/organization/units',
+    icon: 'building-2',
+    permission: 'organization.unit.view',
+  },
+] as const;
