@@ -1724,6 +1724,20 @@ export const authenticatedNavItems: ReadonlyArray<NavItem> = [
     icon: 'landmark',
     permission: 'governance.body.view',
   },
+  {
+    id: 'governance-meetings',
+    label: 'የአስተዳደር ስብሰባዎች',
+    to: '/governance/meetings',
+    icon: 'calendar-days',
+    permission: 'governance.meeting.view',
+  },
+  {
+    id: 'governance-elections',
+    label: 'የአስተዳደር ምርጫዎች',
+    to: '/governance/elections',
+    icon: 'vote',
+    permission: 'governance.election.view',
+  },
 ];
 
 /**
