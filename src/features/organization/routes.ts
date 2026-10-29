@@ -24,4 +24,17 @@ export const organizationWorkspaceRoutes: RouteRecordRaw[] = [
     props: { labels: organizationLabels },
     meta: { permission: 'organization.unit.view' },
   },
+
+  {
+    path: 'organization/units/:id/assignments',
+    name: 'organization-unit-assignments',
+    component: () => import('./OrganizationAssignmentsView.vue'),
+    meta: { permission: 'organization.assignment.view' },
+  },
+  {
+    path: 'organization/audit',
+    name: 'organization-audit',
+    component: () => import('./OrganizationAuditView.vue'),
+    meta: { permission: 'organization.audit.view' },
+  },
 ];
