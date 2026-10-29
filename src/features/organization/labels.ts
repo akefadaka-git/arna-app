@@ -23,6 +23,13 @@ export interface OrganizationUnitsViewLabels {
   readonly pageOf: string;
   readonly total: string;
   readonly view: string;
+  readonly detailDescription: string;
+  readonly nameAm: string;
+  readonly nameEn: string;
+  readonly reason: string;
+  readonly childrenTitle: string;
+  readonly notFound: string;
+  readonly backToList: string;
 }
 
 export const organizationUnitsViewLabelsAm: OrganizationUnitsViewLabels = {
@@ -50,6 +57,13 @@ export const organizationUnitsViewLabelsAm: OrganizationUnitsViewLabels = {
   pageOf: 'ገጽ',
   total: 'ጠቅላላ መዝገቦች',
   view: 'ዝርዝር ይመልከቱ',
+  detailDescription: 'የድርጅት ክፍል ዝርዝር መረጃ',
+  nameAm: 'ስም (አማርኛ)',
+  nameEn: 'ስም (እንግሊዝኛ)',
+  reason: 'ምክንያት',
+  childrenTitle: 'የታችኛ ክፍሎች',
+  notFound: 'መረጃውን ማግኘት አልተቻለም ወይም የሚፈለገው ክፍል የለም።',
+  backToList: 'ወደ የድርጅት ክፍሎች ዝርዝር',
 };
 
 export const organizationUnitsViewLabelsEn: OrganizationUnitsViewLabels = {
@@ -77,4 +91,11 @@ export const organizationUnitsViewLabelsEn: OrganizationUnitsViewLabels = {
   pageOf: 'Page',
   total: 'Total records',
   view: 'View details',
+  detailDescription: 'Organization unit details',
+  nameAm: 'Name (Amharic)',
+  nameEn: 'Name (English)',
+  reason: 'Reason',
+  childrenTitle: 'Child units',
+  notFound: 'The requested unit could not be found or loaded.',
+  backToList: 'Back to organization units',
 };
