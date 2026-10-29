@@ -4,7 +4,9 @@ import { RouterLink, useRoute } from 'vue-router';
 import PageTitle from '@/layouts/AppShell/PageTitle';
 import PageHeader from '@/components/patterns/PageHeader';
 import { getOrganizationUnit, type OrganizationUnit } from './api';
+import type { OrganizationUnitsViewLabels } from './labels';
 
+const props = defineProps<{ labels: OrganizationUnitsViewLabels }>();
 const route = useRoute();
 const unit = ref<OrganizationUnit | null>(null);
 const isLoading = ref(true);
@@ -13,7 +15,7 @@ const id = computed(() => {
   const value = Number(route.params.id);
   return Number.isSafeInteger(value) && value > 0 ? value : null;
 });
-const title = computed(() => unit.value?.name_am || unit.value?.name_en || unit.value?.code || 'የድርጅት ክፍል');
+const title = computed(() => unit.value?.name_am || unit.value?.name_en || unit.value?.code || props.labels.pageTitle);
 const appName = import.meta.env.VITE_APP_NAME;
 
 async function load(): Promise<void> {
@@ -39,24 +41,24 @@ onMounted(() => void load());
 <template>
   <main class="organization-unit-detail" data-testid="organization-unit-detail">
     <PageTitle :title="title" :suffix="appName" />
-    <PageHeader :title="title" description="የድርጅት ክፍል ዝርዝር መረጃ" />
+    <PageHeader :title="title"  :description="props.labels.detailDescription" />
     <p v-if="isLoading" role="status">መረጃ በመጫን ላይ…</p>
     <section v-else-if="failed || !unit" role="alert" class="organization-unit-detail__state">
-      <p>መረጃውን ማግኘት አልተቻለም ወይም የሚፈለገው ክፍል የለም።</p>
+      <p>{{ props.labels.notFound }}</p>
       <button type="button" @click="load">እንደገና ሞክር</button>
     </section>
     <template v-else>
       <dl class="organization-unit-detail__grid">
         <div><dt>ኮድ</dt><dd><code>{{ unit.code }}</code></dd></div>
         <div><dt>ዓይነት</dt><dd>{{ unit.unit_type }}</dd></div>
-        <div><dt>ስም (አማርኛ)</dt><dd>{{ unit.name_am || '—' }}</dd></div>
-        <div><dt>Name (English)</dt><dd>{{ unit.name_en || '—' }}</dd></div>
+        <div><dt>{{ props.labels.nameAm }}</dt><dd>{{ unit.name_am || '—' }}</dd></div>
+        <div><dt>{{ props.labels.nameEn }}</dt><dd>{{ unit.name_en || '—' }}</dd></div>
         <div><dt>ሁኔታ</dt><dd>{{ unit.status === 'active' ? 'ንቁ' : 'የቦዘነ' }}</dd></div>
         <div><dt>የወላጅ ክፍል</dt><dd>{{ unit.parent?.name_am || unit.parent?.name_en || unit.parent?.code || '—' }}</dd></div>
-        <div><dt>ምክንያት</dt><dd>{{ unit.lifecycle_reason || '—' }}</dd></div>
+        <div><dt>{{ props.labels.reason }}</dt><dd>{{ unit.lifecycle_reason || '—' }}</dd></div>
       </dl>
       <section v-if="unit.children?.length" class="organization-unit-detail__children">
-        <h2>የታችኛ ክፍሎች</h2>
+        <h2>{{ props.labels.childrenTitle }}</h2>
         <ul>
           <li v-for="child in unit.children" :key="child.id">
             <RouterLink :to="{ name: 'organization-unit-detail', params: { id: child.id } }">
@@ -67,7 +69,7 @@ onMounted(() => void load());
         </ul>
       </section>
     </template>
-    <RouterLink :to="{ name: 'organization-units' }">← ወደ የድርጅት ክፍሎች ዝርዝር</RouterLink>
+    <RouterLink :to="{ name: 'organization-units' }">{{ props.labels.backToList }}</RouterLink>
   </main>
 </template>
 
