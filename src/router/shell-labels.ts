@@ -1412,6 +1412,7 @@ import type {
   NavItem,
   UserMenuItem,
 } from '@/layouts/AppShell';
+import { domainWorkspaceNavItems } from '@/router/domain-workspace-routes';
 
 /**
  * Corporate / product brand identity.
@@ -1724,20 +1725,7 @@ export const authenticatedNavItems: ReadonlyArray<NavItem> = [
     icon: 'landmark',
     permission: 'governance.body.view',
   },
-  {
-    id: 'governance-meetings',
-    label: 'የአስተዳደር ስብሰባዎች',
-    to: '/governance/meetings',
-    icon: 'calendar-days',
-    permission: 'governance.meeting.view',
-  },
-  {
-    id: 'governance-elections',
-    label: 'የአስተዳደር ምርጫዎች',
-    to: '/governance/elections',
-    icon: 'vote',
-    permission: 'governance.election.view',
-  },
+  ...domainWorkspaceNavItems,
 ];
 
 /**
