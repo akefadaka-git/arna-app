@@ -1724,6 +1724,13 @@ export const authenticatedNavItems: ReadonlyArray<NavItem> = [
     icon: 'landmark',
     permission: 'governance.body.view',
   },
+  {
+    id: 'organization',
+    label: 'የድርጅት መዋቅር',
+    to: '/organization/units',
+    icon: 'building-2',
+    permission: 'organization.unit.view',
+  },
 ];
 
 /**
