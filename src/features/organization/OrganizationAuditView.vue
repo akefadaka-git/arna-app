@@ -13,6 +13,8 @@ const error = ref('');
 const subjectType = ref('');
 const subjectId = ref('');
 const action = ref('');
+const fromDate = ref('');
+const toDate = ref('');
 const page = ref(1);
 const lastPage = ref(1);
 async function load(): Promise<void> {
@@ -20,9 +22,11 @@ async function load(): Promise<void> {
   try {
     const result = await listOrganizationAuditEvents({
       page: page.value, per_page: 50,
-      ...(subjectType.value.trim() ? { subject_type: subjectType.value.trim() } : {}),
+      ...(subjectType.value === 'unit' || subjectType.value === 'assignment' ? { subject_type: subjectType.value } : {}),
       ...(subjectId.value && Number.isSafeInteger(Number(subjectId.value)) ? { subject_id: Number(subjectId.value) } : {}),
       ...(action.value.trim() ? { action: action.value.trim() } : {}),
+      ...(fromDate.value ? { from: fromDate.value } : {}),
+      ...(toDate.value ? { to: toDate.value } : {}),
     });
     events.value = result.data; page.value = result.current_page; lastPage.value = Math.max(1, result.last_page);
   } catch { error.value = am ? 'የኦዲት ታሪክን መጫን አልተቻለም።' : 'Unable to load audit history. Check your audit permission.'; }
@@ -37,9 +41,11 @@ onMounted(() => void load());
     <PageTitle :title="title" :suffix="import.meta.env.VITE_APP_NAME" />
     <PageHeader :title="title" :description="description" />
     <form class="organization-audit__filters" @submit.prevent="applyFilters">
-      <label>{{ am ? 'የመዝገብ ዓይነት' : 'Subject type' }}<input v-model="subjectType" placeholder="unit / assignment" /></label>
+      <label>{{ am ? 'የመዝገብ ዓይነት' : 'Subject type' }}<select v-model="subjectType"><option value="">{{ am ? 'ሁሉም' : 'All subjects' }}</option><option value="unit">unit</option><option value="assignment">assignment</option></select></label>
       <label>{{ am ? 'የመዝገብ መለያ' : 'Subject ID' }}<input v-model="subjectId" inputmode="numeric" /></label>
       <label>{{ am ? 'እርምጃ' : 'Action' }}<input v-model="action" placeholder="created / updated / archived" /></label>
+      <label>{{ am ? 'ከቀን' : 'From' }}<input v-model="fromDate" type="date" /></label>
+      <label>{{ am ? 'እስከ ቀን' : 'To' }}<input v-model="toDate" type="date" /></label>
       <button type="submit">{{ am ? 'ማጣሪያ ተግብር' : 'Apply filters' }}</button>
     </form>
     <p v-if="isLoading" role="status">{{ am ? 'በመጫን ላይ…' : 'Loading…' }}</p>
