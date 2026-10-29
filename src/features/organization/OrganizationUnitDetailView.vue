@@ -43,6 +43,10 @@ watch(id, () => void load());
   <main class="organization-unit-detail" data-testid="organization-unit-detail">
     <PageTitle :title="title" :suffix="appName" />
     <PageHeader :title="title"  :description="props.labels.detailDescription" />
+    <nav class="organization-unit-detail__actions" aria-label="Organization unit actions">
+      <RouterLink v-if="id !== null" :to="{ name: 'organization-unit-assignments', params: { id } }">{{ props.labels.assignmentsTitle || (props.labels.pageTitle.startsWith('የ') ? 'የሥራ ምደባዎች' : 'Assignments') }}</RouterLink>
+      <RouterLink :to="{ name: 'organization-audit' }">{{ props.labels.auditTitle || (props.labels.pageTitle.startsWith('የ') ? 'የኦዲት ታሪክ' : 'Audit history') }}</RouterLink>
+    </nav>
     <p v-if="isLoading" role="status">{{ props.labels.loading }}</p>
     <section v-else-if="failed || !unit" role="alert" class="organization-unit-detail__state">
       <p>{{ props.labels.notFound }}</p>
@@ -75,7 +79,7 @@ watch(id, () => void load());
 </template>
 
 <style scoped>
-.organization-unit-detail { display: grid; gap: 1rem; }
+.organization-unit-detail { display: grid; gap: 1rem; }\n.organization-unit-detail__actions { display: flex; flex-wrap: wrap; gap: 1rem; }
 .organization-unit-detail__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: .75rem; margin: 0; }
 .organization-unit-detail__grid > div { padding: .85rem; border: 1px solid var(--color-border, #e2e8f0); border-radius: .5rem; }
 .organization-unit-detail__grid dt { font-weight: 600; margin-bottom: .3rem; }
