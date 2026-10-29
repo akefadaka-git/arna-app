@@ -1,6 +1,6 @@
 import { api } from '@/core/api/client';
 
-export type GovernanceElectionStatus = 'draft' | 'nominations_open' | 'nominations_closed' | 'voting_open' | 'voting_closed' | 'certified' | 'cancelled';
+export type GovernanceElectionStatus = 'draft' | 'nominations_open' | 'nominations_closed' | 'voting_open' | 'voting_closed' | 'runoff_required' | 'rerun_required' | 'quorum_failed' | 'certified' | 'cancelled';
 
 export interface GovernanceElection {
   readonly id: number;
@@ -15,6 +15,12 @@ export interface GovernanceElection {
   readonly voting_open_at: string;
   readonly voting_close_at: string;
   readonly certified_at: string | null;
+  readonly frozen_eligible_voter_count?: number | null;
+  readonly current_round?: number;
+  readonly winner_nomination_id?: number | null;
+  readonly challenge_bylaw_reference?: string | null;
+  readonly challenge_window_ends_at?: string | null;
+  readonly result_summary_json?: string | Record<string, unknown> | null;
 }
 
 export interface GovernanceElectionNomination {
@@ -24,6 +30,8 @@ export interface GovernanceElectionNomination {
   readonly statement: string | null;
   readonly status: 'pending' | 'accepted' | 'rejected' | 'withdrawn';
   readonly reviewed_at: string | null;
+  readonly nomination_source?: 'self' | 'third_party';
+  readonly candidate_consent_at?: string | null;
 }
 
 export interface GovernanceElectionAuditEvent {
@@ -34,7 +42,7 @@ export interface GovernanceElectionAuditEvent {
   readonly occurred_at: string;
 }
 
-export interface GovernanceElectionResult {
+export interface GovernanceElectionChallenge {\n  readonly id: number;\n  readonly challenge_type: 'challenge' | 'appeal';\n  readonly reason: string;\n  readonly evidence_references: string[] | string | null;\n  readonly status: 'pending' | 'accepted' | 'rejected';\n  readonly decision_note: string | null;\n  readonly submitted_at: string;\n  readonly decided_at: string | null;\n}\n\nexport interface GovernanceElectionResult {
   readonly nomination_id: number;
   readonly governance_membership_id: number;
   readonly vote_count: number;
@@ -100,4 +108,17 @@ export interface GovernanceElectionVoter {
 }
 export async function listElectionVoters(id: number): Promise<readonly GovernanceElectionVoter[]> {
   return api.get<readonly GovernanceElectionVoter[]>(`/api/governance/elections/${id}/voters`);
+}
+
+export async function setElectionChallengeWindow(id: number, bylaw_reference: string, window_ends_at: string): Promise<GovernanceElection> {
+  return api.post<GovernanceElection>(`/api/governance/elections/${id}/challenge-window`, { bylaw_reference, window_ends_at });
+}
+export async function submitElectionChallenge(id: number, challenge_type: 'challenge' | 'appeal', reason: string, evidence_references: string[] = []): Promise<GovernanceElectionChallenge> {
+  return api.post<GovernanceElectionChallenge>(`/api/governance/elections/${id}/challenges`, { challenge_type, reason, evidence_references });
+}
+export async function listElectionChallenges(id: number): Promise<readonly GovernanceElectionChallenge[]> {
+  return api.get<readonly GovernanceElectionChallenge[]>(`/api/governance/elections/${id}/challenges`);
+}
+export async function resolveElectionChallenge(id: number, challengeId: number, status: 'accepted' | 'rejected', decision_note: string): Promise<GovernanceElectionChallenge> {
+  return api.patch<GovernanceElectionChallenge>(`/api/governance/elections/${id}/challenges/${challengeId}`, { status, decision_note });
 }
