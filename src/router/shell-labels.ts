@@ -1412,6 +1412,7 @@ import type {
   NavItem,
   UserMenuItem,
 } from '@/layouts/AppShell';
+import { domainWorkspaceNavItems } from '@/router/domain-workspace-routes';
 
 /**
  * Corporate / product brand identity.
@@ -1724,13 +1725,7 @@ export const authenticatedNavItems: ReadonlyArray<NavItem> = [
     icon: 'landmark',
     permission: 'governance.body.view',
   },
-  {
-    id: 'organization',
-    label: 'የድርጅት መዋቅር',
-    to: '/organization/units',
-    icon: 'building-2',
-    permission: 'organization.unit.view',
-  },
+  ...domainWorkspaceNavItems,
 ];
 
 /**
