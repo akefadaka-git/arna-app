@@ -19,7 +19,7 @@ export interface GovernanceElection {
   readonly current_round?: number;
   readonly winner_nomination_id?: number | null;
   readonly challenge_bylaw_reference?: string | null;
-  readonly challenge_window_ends_at?: string | null;
+  readonly challenge_window_ends_at?: string | null;\n  readonly challenge_window_evidence_reference?: string | null;\n  readonly challenge_window_verified_by?: number | null;\n  readonly challenge_window_verified_at?: string | null;
   readonly result_summary_json?: string | Record<string, unknown> | null;
 }
 
