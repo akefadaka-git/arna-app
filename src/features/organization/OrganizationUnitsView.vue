@@ -55,7 +55,10 @@ async function load(): Promise<void> {
 
 function applyFilters(): void {
   appliedStatus.value = draftStatus.value;
-  currentPage.value = 1;
+  if (currentPage.value !== 1) {
+    currentPage.value = 1;
+    return;
+  }
   void load();
 }
 function changePage(next: number): void {
