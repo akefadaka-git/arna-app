@@ -73,6 +73,9 @@ onMounted(() => void load());
   <main class="organization-units" data-testid="organization-units-view" :data-state="state">
     <PageTitle :title="props.labels.pageTitle" :suffix="appName" />
     <PageHeader :title="props.labels.pageTitle" :description="props.labels.description" />
+    <nav class="organization-units__domain-links" aria-label="Organization tools">
+      <RouterLink :to="{ name: 'organization-audit' }">{{ props.labels.pageTitle.startsWith('የ') ? 'የኦዲት ታሪክ' : 'Audit history' }}</RouterLink>
+    </nav>
 
     <section class="organization-units__toolbar" aria-label="Organization filters">
       <label class="organization-units__filter">
