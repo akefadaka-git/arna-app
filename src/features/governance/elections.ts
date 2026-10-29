@@ -19,7 +19,10 @@ export interface GovernanceElection {
   readonly current_round?: number;
   readonly winner_nomination_id?: number | null;
   readonly challenge_bylaw_reference?: string | null;
-  readonly challenge_window_ends_at?: string | null;\n  readonly challenge_window_evidence_reference?: string | null;\n  readonly challenge_window_verified_by?: number | null;\n  readonly challenge_window_verified_at?: string | null;
+  readonly challenge_window_ends_at?: string | null;
+  readonly challenge_window_evidence_reference?: string | null;
+  readonly challenge_window_verified_by?: number | null;
+  readonly challenge_window_verified_at?: string | null;
   readonly result_summary_json?: string | Record<string, unknown> | null;
 }
 
@@ -42,7 +45,18 @@ export interface GovernanceElectionAuditEvent {
   readonly occurred_at: string;
 }
 
-export interface GovernanceElectionChallenge {\n  readonly id: number;\n  readonly challenge_type: 'challenge' | 'appeal';\n  readonly reason: string;\n  readonly evidence_references: string[] | string | null;\n  readonly status: 'pending' | 'accepted' | 'rejected';\n  readonly decision_note: string | null;\n  readonly submitted_at: string;\n  readonly decided_at: string | null;\n}\n\nexport interface GovernanceElectionResult {
+export interface GovernanceElectionChallenge {
+  readonly id: number;
+  readonly challenge_type: 'challenge' | 'appeal';
+  readonly reason: string;
+  readonly evidence_references: string[] | string | null;
+  readonly status: 'pending' | 'accepted' | 'rejected';
+  readonly decision_note: string | null;
+  readonly submitted_at: string;
+  readonly decided_at: string | null;
+}
+
+export interface GovernanceElectionResult {
   readonly nomination_id: number;
   readonly governance_membership_id: number;
   readonly vote_count: number;
