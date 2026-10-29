@@ -44,8 +44,8 @@ watch(id, () => void load());
     <PageTitle :title="title" :suffix="appName" />
     <PageHeader :title="title"  :description="props.labels.detailDescription" />
     <nav class="organization-unit-detail__actions" aria-label="Organization unit actions">
-      <RouterLink v-if="id !== null" :to="{ name: 'organization-unit-assignments', params: { id } }">{{ props.labels.assignmentsTitle || (props.labels.pageTitle.startsWith('የ') ? 'የሥራ ምደባዎች' : 'Assignments') }}</RouterLink>
-      <RouterLink :to="{ name: 'organization-audit' }">{{ props.labels.auditTitle || (props.labels.pageTitle.startsWith('የ') ? 'የኦዲት ታሪክ' : 'Audit history') }}</RouterLink>
+      <RouterLink v-if="id !== null" :to="{ name: 'organization-unit-assignments', params: { id } }">{{ (props.labels.pageTitle.startsWith('የ') ? 'የሥራ ምደባዎች' : 'Assignments') }}</RouterLink>
+      <RouterLink :to="{ name: 'organization-audit' }">{{ (props.labels.pageTitle.startsWith('የ') ? 'የኦዲት ታሪክ' : 'Audit history') }}</RouterLink>
     </nav>
     <p v-if="isLoading" role="status">{{ props.labels.loading }}</p>
     <section v-else-if="failed || !unit" role="alert" class="organization-unit-detail__state">
