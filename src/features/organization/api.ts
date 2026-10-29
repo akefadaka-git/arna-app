@@ -117,10 +117,10 @@ export interface OrganizationAuditEvent {
   readonly subject_id: number;
   readonly action: string;
   readonly reason: string | null;
-  readonly before_json?: Record<string, unknown> | null;
-  readonly after_json?: Record<string, unknown> | null;
+  readonly before_state?: Record<string, unknown> | null;
+  readonly after_state?: Record<string, unknown> | null;
   readonly created_at: string;
-  readonly actor_id?: number | null;
+  readonly actor_user_id?: number | null;
 }
 
 export interface OrganizationAuditEventPage {
