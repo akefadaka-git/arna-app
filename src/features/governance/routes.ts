@@ -15,3 +15,21 @@ export const governanceMeetingRoutes: RouteRecordRaw[] = [
     meta: { permission: 'governance.election.view' },
   },
 ];
+
+/** Governance-owned navigation metadata; composed with domain routes. */
+export const governanceWorkspaceNavItems = [
+  {
+    id: 'governance-meetings',
+    label: 'የአስተዳደር ስብሰባዎች',
+    to: '/governance/meetings',
+    icon: 'calendar-days',
+    permission: 'governance.meeting.view',
+  },
+  {
+    id: 'governance-elections',
+    label: 'የአስተዳደር ምርጫዎች',
+    to: '/governance/elections',
+    icon: 'vote',
+    permission: 'governance.election.view',
+  },
+] as const;
