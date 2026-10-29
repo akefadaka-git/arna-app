@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import PageTitle from '@/layouts/AppShell/PageTitle';
 import PageHeader from '@/components/patterns/PageHeader';
@@ -36,25 +36,26 @@ async function load(): Promise<void> {
   }
 }
 onMounted(() => void load());
+watch(id, () => void load());
 </script>
 
 <template>
   <main class="organization-unit-detail" data-testid="organization-unit-detail">
     <PageTitle :title="title" :suffix="appName" />
     <PageHeader :title="title"  :description="props.labels.detailDescription" />
-    <p v-if="isLoading" role="status">መረጃ በመጫን ላይ…</p>
+    <p v-if="isLoading" role="status">{{ props.labels.loading }}</p>
     <section v-else-if="failed || !unit" role="alert" class="organization-unit-detail__state">
       <p>{{ props.labels.notFound }}</p>
-      <button type="button" @click="load">እንደገና ሞክር</button>
+      <button type="button" @click="load">{{ props.labels.retry }}</button>
     </section>
     <template v-else>
       <dl class="organization-unit-detail__grid">
-        <div><dt>ኮድ</dt><dd><code>{{ unit.code }}</code></dd></div>
-        <div><dt>ዓይነት</dt><dd>{{ unit.unit_type }}</dd></div>
+        <div><dt>{{ props.labels.code }}</dt><dd><code>{{ unit.code }}</code></dd></div>
+        <div><dt>{{ props.labels.type }}</dt><dd>{{ unit.unit_type }}</dd></div>
         <div><dt>{{ props.labels.nameAm }}</dt><dd>{{ unit.name_am || '—' }}</dd></div>
         <div><dt>{{ props.labels.nameEn }}</dt><dd>{{ unit.name_en || '—' }}</dd></div>
-        <div><dt>ሁኔታ</dt><dd>{{ unit.status === 'active' ? 'ንቁ' : 'የቦዘነ' }}</dd></div>
-        <div><dt>የወላጅ ክፍል</dt><dd>{{ unit.parent?.name_am || unit.parent?.name_en || unit.parent?.code || '—' }}</dd></div>
+        <div><dt>{{ props.labels.status }}</dt><dd>{{ unit.status === 'active' ? props.labels.active : props.labels.inactive }}</dd></div>
+        <div><dt>{{ props.labels.parent }}</dt><dd>{{ unit.parent?.name_am || unit.parent?.name_en || unit.parent?.code || '—' }}</dd></div>
         <div><dt>{{ props.labels.reason }}</dt><dd>{{ unit.lifecycle_reason || '—' }}</dd></div>
       </dl>
       <section v-if="unit.children?.length" class="organization-unit-detail__children">
