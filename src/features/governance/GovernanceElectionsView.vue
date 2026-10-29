@@ -4,16 +4,17 @@ import PageTitle from '@/layouts/AppShell/PageTitle';
 import PageHeader from '@/components/patterns/PageHeader';
 import {
   listGovernanceElections, createGovernanceElection, transitionGovernanceElection,
-  listElectionNominations, nominateForElection, reviewElectionNomination,
+  listElectionNominations, listElectionVoters, nominateForElection, reviewElectionNomination,
   registerElectionVoter, castElectionBallot, getElectionResults, listElectionAuditEvents,
   type GovernanceElection, type GovernanceElectionNomination, type GovernanceElectionResult,
-  type GovernanceElectionAuditEvent,
+  type GovernanceElectionAuditEvent, type GovernanceElectionVoter,
 } from './elections';
 
 const appName = import.meta.env.VITE_APP_NAME;
 const elections = ref<readonly GovernanceElection[]>([]);
 const selected = ref<GovernanceElection | null>(null);
 const nominations = ref<readonly GovernanceElectionNomination[]>([]);
+const voters = ref<readonly GovernanceElectionVoter[]>([]);
 const results = ref<readonly GovernanceElectionResult[]>([]);
 const audit = ref<readonly GovernanceElectionAuditEvent[]>([]);
 const loading = ref(false);
@@ -69,8 +70,8 @@ async function refreshSelected(): Promise<void> {
   if (!selected.value) return;
   try {
     const id = selected.value.id;
-    nominations.value = await listElectionNominations(id);
-    audit.value = await listElectionAuditEvents(id);
+    const [nominationRows, voterRows, auditRows] = await Promise.all([listElectionNominations(id), listElectionVoters(id), listElectionAuditEvents(id)]);
+    nominations.value = nominationRows; voters.value = voterRows; audit.value = auditRows;
     if (['voting_closed', 'certified'].includes(selected.value.status)) results.value = await getElectionResults(id);
     else results.value = [];
     await load();
@@ -164,6 +165,11 @@ onMounted(() => void load());
       </section>
       <section v-if="selected.status === 'voting_open'"><h3>ሚስጥራዊ ድምፅ መስጠት</h3><form class="governance-elections__form" @submit.prevent="castBallot"><label>የራስዎ የአባልነት መለያ<input v-model="ballotMembershipId" inputmode="numeric" required /></label><label>የተቀባይነት ያገኘ የእጩነት መለያ<input v-model="ballotNominationId" inputmode="numeric" required /></label><button type="submit">ድምፅ ስጥ</button></form><p v-if="receipt" role="status">የድምፅ ደረሰኝ: <code>{{ receipt }}</code></p></section>
       <section v-if="['voting_closed','certified'].includes(selected.status)"><h3>የድምፅ ውጤት</h3><table><thead><tr><th>እጩነት</th><th>የአባልነት መለያ</th><th>ድምፅ</th></tr></thead><tbody><tr v-for="row in results" :key="row.nomination_id"><td>{{ row.nomination_id }}</td><td>{{ row.governance_membership_id }}</td><td>{{ row.vote_count }}</td></tr></tbody></table></section>
+      <section><h3>የተመዘገቡ መራጮች</h3>
+        <p v-if="!voters.length">መራጭ አልተመዘገበም።</p>
+        <table v-else><thead><tr><th>የአባልነት መለያ</th><th>መራጭ</th><th>ድምፅ ተሰጥቷል?</th></tr></thead>
+          <tbody><tr v-for="voter in voters" :key="voter.id"><td>{{ voter.governance_membership_id }}</td><td>{{ voter.member_name_am || voter.member_name_en || voter.user_id || '—' }}</td><td>{{ voter.cast_at ? 'አዎ' : 'አይደለም' }}</td></tr></tbody></table>
+      </section>
       <section><h3>የምርጫ ኦዲት</h3><ol><li v-for="event in audit" :key="event.id">{{ event.occurred_at }} — {{ event.event_type }} <small>{{ event.metadata ? JSON.stringify(event.metadata) : '' }}</small></li></ol></section>
     </section>
   </main>
