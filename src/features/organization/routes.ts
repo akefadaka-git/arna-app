@@ -1,5 +1,8 @@
 import type { RouteRecordRaw } from 'vue-router';
-import { organizationUnitsViewLabelsAm } from './labels';
+import { organizationUnitsViewLabelsAm, organizationUnitsViewLabelsEn } from './labels';
+
+const language = typeof navigator === 'undefined' ? 'am' : navigator.language.toLowerCase();
+const organizationLabels = language.startsWith('am') ? organizationUnitsViewLabelsAm : organizationUnitsViewLabelsEn;
 
 /**
  * Organization-owned route definitions.
@@ -11,13 +14,14 @@ export const organizationWorkspaceRoutes: RouteRecordRaw[] = [
     path: 'organization/units',
     name: 'organization-units',
     component: () => import('./OrganizationUnitsView.vue'),
-    props: { labels: organizationUnitsViewLabelsAm },
+    props: { labels: organizationLabels },
     meta: { permission: 'organization.unit.view' },
   },
   {
     path: 'organization/units/:id',
     name: 'organization-unit-detail',
     component: () => import('./OrganizationUnitDetailView.vue'),
+    props: { labels: organizationLabels },
     meta: { permission: 'organization.unit.view' },
   },
 ];
