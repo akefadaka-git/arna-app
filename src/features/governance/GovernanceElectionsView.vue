@@ -227,7 +227,7 @@ onMounted(() => void load());
       <section v-if="selected.status === 'voting_open'"><h3>ሚስጥራዊ ድምፅ መስጠት</h3><form class="governance-elections__form" @submit.prevent="castBallot"><label>የራስዎ የአባልነት መለያ<input v-model="ballotMembershipId" inputmode="numeric" required /></label><label>የተቀባይነት ያገኘ የእጩነት መለያ<input v-model="ballotNominationId" inputmode="numeric" required /></label><button type="submit">ድምፅ ስጥ</button></form><p v-if="receipt" role="status">የድምፅ ደረሰኝ: <code>{{ receipt }}</code></p></section>
       <p v-if="selected.status === 'runoff_selection_blocked'" role="alert">የሁለተኛ ደረጃ ድምፅ መስጫ እጩዎችን በትክክል ለመለየት የሚያስፈልገው የእኩል ድምፅ ደንብ አልተወሰነም። አዲስ ደንብ እስኪጸድቅ ድረስ ቀጣይ ዙር አይከፈትም።</p>
       <section v-if="['runoff_required','rerun_required'].includes(selected.status)"><h3>የቀጣይ ዙር ጊዜ</h3><label>የዙሩ የመዝጊያ ቀንና ሰዓት<input v-model="roundClosesAt" type="datetime-local" required /></label><p>የቀጣይ ዙር የመዝጊያ ጊዜ ከመክፈት በፊት ይወሰናል።</p></section>
-      <section v-if="['voting_closed','certified','runoff_required','rerun_required','quorum_failed'].includes(selected.status)"><h3>የድምፅ ውጤት</h3><table><thead><tr><th>እጩነት</th><th>የአባልነት መለያ</th><th>ድምፅ</th></tr></thead><tbody><tr v-for="row in results" :key="row.nomination_id"><td>{{ row.nomination_id }}</td><td>{{ row.governance_membership_id }}</td><td>{{ row.vote_count }}</td></tr></tbody></table></section>
+      <section v-if="['voting_closed','certified','runoff_required','rerun_required','runoff_selection_blocked','quorum_failed'].includes(selected.status)"><h3>የድምፅ ውጤት</h3><table><thead><tr><th>እጩነት</th><th>የአባልነት መለያ</th><th>ድምፅ</th></tr></thead><tbody><tr v-for="row in results" :key="row.nomination_id"><td>{{ row.nomination_id }}</td><td>{{ row.governance_membership_id }}</td><td>{{ row.vote_count }}</td></tr></tbody></table></section>
       <section><h3>የተመዘገቡ መራጮች</h3>
         <p v-if="!voters.length">መራጭ አልተመዘገበም።</p>
         <table v-else><thead><tr><th>የአባልነት መለያ</th><th>መራጭ</th><th>ድምፅ ተሰጥቷል?</th></tr></thead>
@@ -236,9 +236,9 @@ onMounted(() => void load());
       <section v-if="selected.status === 'voting_closed'" class="governance-elections__subpanel">
         <h3>የተቃውሞ/ይግባኝ ጊዜ</h3>
         <p v-if="!selected.challenge_bylaw_reference || !selected.challenge_window_ends_at" role="alert">የተፈጻሚው በይፋ የጸደቀ የደንብ/ውሳኔ አንቀጽ አልተረጋገጠም። ጊዜ አትገምቱ፤ ማረጋገጫ እስኪገኝ ድረስ ውጤቱ ማጽደቅ አይቻልም።</p>
-        <p v-else>ምንጭ: {{ selected.challenge_bylaw_reference }} · የመጨረሻ ጊዜ: {{ selected.challenge_window_ends_at }} · ማረጋገጫ: {{ selected.challenge_window_verified_at ? 'ተረጋግጧል' : 'ይጠበቃል' }}</p>
+        <p v-else>ምንጭ: {{ selected.challenge_bylaw_reference }} · ማስረጃ: {{ selected.challenge_window_evidence_reference }} · የመጨረሻ ጊዜ: {{ selected.challenge_window_ends_at }} · ማረጋገጫ: {{ selected.challenge_window_verified_at ? 'ተረጋግጧል' : 'ይጠበቃል' }}</p>
         <form class="governance-elections__form" @submit.prevent="recordChallengeWindow">
-          <label>የጸደቀ ደንብ/ውሳኔ ትክክለኛ ማጣቀሻ<input v-model="challengeBylawReference" maxlength="255" required placeholder="ሰነድ መለያ፣ አንቀጽ፣ ስሪት" /></label>
+          <label>የጸደቀ ደንብ/ውሳኔ ትክክለኛ ማጣቀሻ<input v-model="challengeBylawReference" maxlength="255" required placeholder="ሰነድ መለያ፣ አንቀጽ፣ ስሪት" /></label>\n          <label>የምንጭ ማስረጃ ማጣቀሻ (የቁጥጥር ሥር ያለ ሰነድ/መዝገብ)<input v-model="challengeEvidenceReference" maxlength="500" required /></label>
           <label>በአንቀጹ መሠረት የሚያበቃበት ቀን/ሰዓት<input v-model="challengeWindowEndsAt" type="datetime-local" required /></label>
           <button type="submit" :disabled="saving">የጊዜ ምንጭ መዝግብ</button>
         </form>
