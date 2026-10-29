@@ -153,7 +153,7 @@ export function updateOrganizationAssignment(
 }
 
 export async function listOrganizationAuditEvents(
-  query: { readonly page?: number; readonly per_page?: number; readonly subject_type?: string; readonly subject_id?: number; readonly action?: string } = {},
+  query: { readonly page?: number; readonly per_page?: number; readonly subject_type?: 'unit' | 'assignment'; readonly subject_id?: number; readonly action?: string; readonly from?: string; readonly to?: string } = {},
 ): Promise<OrganizationAuditEventPage> {
   return api.get<OrganizationAuditEventPage>('/api/organization/audit-events', { params: query });
 }
