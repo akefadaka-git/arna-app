@@ -1,14 +1,11 @@
 import { api } from '@/core/api/client';
 
 export type OrganizationUnitType =
-  | 'enterprise'
+  | 'company'
   | 'division'
-  | 'department'
   | 'branch'
-  | 'section'
-  | 'team'
-  | 'committee'
-  | 'other';
+  | 'department'
+  | 'team';
 
 export type OrganizationUnitStatus = 'active' | 'inactive';
 
