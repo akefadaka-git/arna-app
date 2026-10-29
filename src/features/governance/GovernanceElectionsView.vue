@@ -6,7 +6,7 @@ import {
   listGovernanceElections, createGovernanceElection, transitionGovernanceElection,
   listElectionNominations, listElectionVoters, nominateForElection, reviewElectionNomination,
   registerElectionVoter, castElectionBallot, getElectionResults, listElectionAuditEvents,
-  setElectionChallengeWindow, submitElectionChallenge, listElectionChallenges, resolveElectionChallenge,
+  setElectionChallengeWindow, verifyElectionChallengeWindow, submitElectionChallenge, listElectionChallenges, resolveElectionChallenge,
   type GovernanceElection, type GovernanceElectionNomination, type GovernanceElectionResult,
   type GovernanceElectionAuditEvent, type GovernanceElectionVoter, type GovernanceElectionChallenge,
 } from './elections';
@@ -34,7 +34,7 @@ const voterMembershipId = ref('');
 const nominationStatement = ref('');
 const ballotMembershipId = ref('');
 const ballotNominationId = ref('');
-const receipt = ref('');\nconst candidateConsentConfirmed = ref(false);\nconst roundClosesAt = ref('');\nconst challengeBylawReference = ref('');\nconst challengeWindowEndsAt = ref('');\nconst challengeType = ref<'challenge' | 'appeal'>('challenge');\nconst challengeReason = ref('');\nconst challengeEvidence = ref('');\nconst challengeDecisionNote = ref('');\nconst electionSummary = computed<Record<string, unknown> | null>(() => {\n  const raw = selected.value?.result_summary_json;\n  if (!raw) return null;\n  if (typeof raw === 'string') { try { return JSON.parse(raw) as Record<string, unknown>; } catch { return null; } }\n  return raw as Record<string, unknown>;\n});
+const receipt = ref('');\nconst candidateConsentConfirmed = ref(false);\nconst roundClosesAt = ref('');\nconst challengeBylawReference = ref('');\nconst challengeEvidenceReference = ref('');\nconst challengeWindowEndsAt = ref('');\nconst challengeType = ref<'challenge' | 'appeal'>('challenge');\nconst challengeReason = ref('');\nconst challengeEvidence = ref('');\nconst challengeDecisionNote = ref('');\nconst electionSummary = computed<Record<string, unknown> | null>(() => {\n  const raw = selected.value?.result_summary_json;\n  if (!raw) return null;\n  if (typeof raw === 'string') { try { return JSON.parse(raw) as Record<string, unknown>; } catch { return null; } }\n  return raw as Record<string, unknown>;\n});
 
 async function load(): Promise<void> {
   loading.value = true; error.value = '';
@@ -116,14 +116,21 @@ async function castBallot(): Promise<void> {
 }
 async function recordChallengeWindow(): Promise<void> {
   if (!selected.value) return;
-  if (!challengeBylawReference.value.trim() || !challengeWindowEndsAt.value) {
+  if (!challengeBylawReference.value.trim() || !challengeEvidenceReference.value.trim() || !challengeWindowEndsAt.value) {
     error.value = 'Record the exact approved bylaw/resolution clause and its calculated deadline.'; return;
   }
   saving.value = true; error.value = '';
   try {
-    selected.value = await setElectionChallengeWindow(selected.value.id, challengeBylawReference.value.trim(), new Date(challengeWindowEndsAt.value).toISOString());
+    selected.value = await setElectionChallengeWindow(selected.value.id, challengeBylawReference.value.trim(), challengeEvidenceReference.value.trim(), new Date(challengeWindowEndsAt.value).toISOString());
     await refreshSelected();
   } catch { error.value = 'Challenge deadline could not be recorded. Verify the source clause, date, and permission.'; }
+  finally { saving.value = false; }
+}
+async function verifyChallengeWindow(): Promise<void> {
+  if (!selected.value) return;
+  saving.value = true; error.value = '';
+  try { selected.value = await verifyElectionChallengeWindow(selected.value.id); await refreshSelected(); }
+  catch { error.value = 'የደንብ ምንጭን ማረጋገጥ አልተቻለም። የተለየ የግምገማ ፈቃድና ከምርጫ አስተዳደር የተለየ ሰው ያስፈልጋል።'; }
   finally { saving.value = false; }
 }
 async function submitChallenge(): Promise<void> {
@@ -207,7 +214,7 @@ onMounted(() => void load());
       <section v-if="selected.status === 'voting_closed'" class="governance-elections__subpanel">
         <h3>የተቃውሞ/ይግባኝ ጊዜ</h3>
         <p v-if="!selected.challenge_bylaw_reference || !selected.challenge_window_ends_at" role="alert">የተፈጻሚው በይፋ የጸደቀ የደንብ/ውሳኔ አንቀጽ አልተረጋገጠም። ጊዜ አትገምቱ፤ ማረጋገጫ እስኪገኝ ድረስ ውጤቱ ማጽደቅ አይቻልም።</p>
-        <p v-else>ምንጭ: {{ selected.challenge_bylaw_reference }} · የመጨረሻ ጊዜ: {{ selected.challenge_window_ends_at }}</p>
+        <p v-else>ምንጭ: {{ selected.challenge_bylaw_reference }} · የመጨረሻ ጊዜ: {{ selected.challenge_window_ends_at }} · ማረጋገጫ: {{ selected.challenge_window_verified_at ? 'ተረጋግጧል' : 'ይጠበቃል' }}</p>
         <form class="governance-elections__form" @submit.prevent="recordChallengeWindow">
           <label>የጸደቀ ደንብ/ውሳኔ ትክክለኛ ማጣቀሻ<input v-model="challengeBylawReference" maxlength="255" required placeholder="ሰነድ መለያ፣ አንቀጽ፣ ስሪት" /></label>
           <label>በአንቀጹ መሠረት የሚያበቃበት ቀን/ሰዓት<input v-model="challengeWindowEndsAt" type="datetime-local" required /></label>
@@ -217,7 +224,7 @@ onMounted(() => void load());
           <label>ዓይነት<select v-model="challengeType"><option value="challenge">ተቃውሞ</option><option value="appeal">ይግባኝ</option></select></label>
           <label>ምክንያት<textarea v-model="challengeReason" minlength="10" maxlength="10000" required /></label>
           <label>የማስረጃ ማጣቀሻዎች (ኮማ የተለያዩ)<input v-model="challengeEvidence" maxlength="2000" /></label>
-          <button type="submit" :disabled="saving || !selected.challenge_window_ends_at">ተቃውሞ/ይግባኝ አስገባ</button>
+          <button type="submit" :disabled="saving || !selected.challenge_window_verified_at">ተቃውሞ/ይግባኝ አስገባ</button>
         </form>
         <h4>የተቃውሞ/ይግባኝ መዝገብ</h4>
         <p v-if="!challenges.length">የተቃውሞ መዝገብ የለም።</p>
