@@ -61,6 +61,10 @@ onMounted(() => {
           የሰዎች ዝርዝር / People directory
           <span aria-hidden="true">→</span>
         </RouterLink>
+        <RouterLink class="governance-overview__people-link" to="/governance/meetings">
+          የአስተዳደር ስብሰባዎች / Governance meetings
+          <span aria-hidden="true">→</span>
+        </RouterLink>
       </div>
 
       <div class="governance-overview__metric" aria-live="polite">
