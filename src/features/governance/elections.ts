@@ -88,3 +88,16 @@ export async function getElectionResults(id: number): Promise<readonly Governanc
 export async function listElectionAuditEvents(id: number): Promise<readonly GovernanceElectionAuditEvent[]> {
   return api.get<readonly GovernanceElectionAuditEvent[]>(`/api/governance/elections/${id}/audit-events`);
 }
+
+
+export interface GovernanceElectionVoter {
+  readonly id: number;
+  readonly governance_membership_id: number;
+  readonly cast_at: string | null;
+  readonly user_id?: number | null;
+  readonly member_name_am?: string | null;
+  readonly member_name_en?: string | null;
+}
+export async function listElectionVoters(id: number): Promise<readonly GovernanceElectionVoter[]> {
+  return api.get<readonly GovernanceElectionVoter[]>(`/api/governance/elections/${id}/voters`);
+}
