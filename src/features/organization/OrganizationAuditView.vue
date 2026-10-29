@@ -32,7 +32,13 @@ async function load(): Promise<void> {
   } catch { error.value = am ? 'የኦዲት ታሪክን መጫን አልተቻለም።' : 'Unable to load audit history. Check your audit permission.'; }
   finally { isLoading.value = false; }
 }
-function applyFilters(): void { page.value = 1; void load(); }
+function applyFilters(): void {
+  if (toDate.value && (!fromDate.value || toDate.value < fromDate.value)) {
+    error.value = am ? 'እስከ ቀን ከመጀመሪያ ቀን በኋላ መሆን አለበት።' : 'Provide a From date no later than the To date.';
+    return;
+  }
+  page.value = 1; void load();
+}
 onMounted(() => void load());
 </script>
 
