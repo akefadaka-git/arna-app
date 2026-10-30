@@ -16,6 +16,7 @@ const items = ref<AdminPublicContent[]>([]);
 const selectedId = ref<number | null>(null);
 const filter = ref<PublicContentStatus | 'all'>('pending_review');
 const reason = ref('');
+const scheduledAt = ref('');
 const loading = ref(false);
 const saving = ref(false);
 const error = ref<string | null>(null);
@@ -46,6 +47,8 @@ const labels = {
   reject: 'ውድቅ አድርግ',
   requestChanges: 'ማሻሻያ ጠይቅ',
   publish: 'አትም',
+  schedule: 'ለተወሰነ ጊዜ አስቀምጥ',
+  scheduleAt: 'የህትመት ቀንና ሰዓት',
   unpublish: 'ከህትመት አንሳ',
   reason: 'የግምገማ ማስታወሻ / ምክንያት',
   author: 'አቅራቢ',
@@ -92,9 +95,13 @@ async function decide(decision: ReviewDecision): Promise<void> {
   error.value = null;
   notice.value = null;
   try {
-    await reviewPublicContent(selected.value, decision, reason.value);
+    const schedule = decision === 'publish' && scheduledAt.value
+      ? new Date(scheduledAt.value).toISOString()
+      : undefined;
+    await reviewPublicContent(selected.value, decision, reason.value, schedule);
     notice.value = 'የግምገማ ውሳኔው ተመዝግቧል።';
     reason.value = '';
+    scheduledAt.value = '';
     await load();
   } catch {
     error.value = 'ውሳኔው አልተፈጸመም። ስሪቱ ተቀይሮ ከሆነ ዝርዝሩን ያድሱና እንደገና ይገምግሙ።';
@@ -174,13 +181,15 @@ onMounted(load);
           <div class="public-content-admin__body">{{ selected.body }}</div>
           <p v-if="selected.review_note" class="public-content-admin__note">{{ selected.review_note }}</p>
           <p v-if="selected.submitted_by === auth.userId" class="public-content-admin__message public-content-admin__message--error">{{ labels.selfReview }}</p>
+          <label v-if="selected.status === 'approved' || selected.status === 'scheduled'" class="public-content-admin__reason-label" for="publish-at">{{ labels.scheduleAt }}</label>
+          <input v-if="selected.status === 'approved' || selected.status === 'scheduled'" id="publish-at" v-model="scheduledAt" type="datetime-local" />
           <label class="public-content-admin__reason-label" for="review-reason">{{ labels.reason }}</label>
           <textarea id="review-reason" v-model="reason" rows="3" maxlength="2000" />
           <div class="public-content-admin__actions">
             <button v-if="canApproveSelected" type="button" :disabled="saving" @click="decide('approve')">{{ labels.approve }}</button>
             <button v-if="canApproveSelected" type="button" class="secondary" :disabled="saving" @click="decide('request-changes')">{{ labels.requestChanges }}</button>
             <button v-if="canApproveSelected" type="button" class="danger" :disabled="saving" @click="decide('reject')">{{ labels.reject }}</button>
-            <button v-if="selected.status === 'approved' || selected.status === 'scheduled'" type="button" :disabled="saving" @click="decide('publish')">{{ labels.publish }}</button>
+            <button v-if="selected.status === 'approved' || selected.status === 'scheduled'" type="button" :disabled="saving" @click="decide('publish')">{{ scheduledAt ? labels.schedule : labels.publish }}</button>
             <button v-if="selected.status === 'published'" type="button" class="danger" :disabled="saving" @click="decide('unpublish')">{{ labels.unpublish }}</button>
           </div>
         </section>
