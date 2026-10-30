@@ -55,6 +55,7 @@ export async function reviewPublicContent(
   item: AdminPublicContent,
   decision: ReviewDecision,
   reason?: string,
+  scheduledAt?: string,
 ): Promise<AdminPublicContent> {
   await api.csrfCookie();
   return api.post<AdminPublicContent>(
@@ -62,6 +63,7 @@ export async function reviewPublicContent(
     {
       expected_version: item.version,
       ...(reason?.trim() ? { reason: reason.trim() } : {}),
+      ...(scheduledAt ? { scheduled_at: scheduledAt } : {}),
     },
   );
 }
