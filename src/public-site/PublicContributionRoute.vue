@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 import { masesBrandLabels } from '@/router/shell-labels';
 import { api } from '@/core/api/client';
@@ -9,6 +9,11 @@ const title = ref('');
 const body = ref('');
 const authorName = ref('');
 const authorEmail = ref('');
+const verificationCode = ref('');
+const verificationChallengeId = ref('');
+const verificationToken = ref('');
+const verificationCodeSent = ref(false);
+const emailVerified = computed(() => Boolean(verificationToken.value));
 const kind = ref<SubmissionKind>('article');
 const consent = ref(false);
 const website = ref('');
@@ -19,6 +24,61 @@ const submissionReference = ref('');
 
 const endpointAvailable = computed(() => Boolean(import.meta.env.VITE_API_BASE_URL));
 
+watch(authorEmail, () => {
+  verificationChallengeId.value = '';
+  verificationToken.value = '';
+  verificationCode.value = '';
+  verificationCodeSent.value = false;
+});
+
+async function requestEmailVerification(): Promise<void> {
+  errorMessage.value = '';
+  if (!endpointAvailable.value || !authorEmail.value.trim()) {
+    errorMessage.value = 'እባክዎ ትክክለኛ ኢሜይል ያስገቡ።';
+    return;
+  }
+  submitting.value = true;
+  try {
+    await api.csrfCookie();
+    const result = await api.post<{ challenge_id: string }>(
+      '/api/public/content/verification-challenges',
+      { email: authorEmail.value.trim() },
+    );
+    verificationChallengeId.value = result.challenge_id;
+    verificationCodeSent.value = true;
+    successMessage.value = 'የማረጋገጫ ኮድ ወደ ኢሜይልዎ ተልኳል።';
+  } catch (error) {
+    errorMessage.value = error instanceof Error ? error.message : 'ኮዱን መላክ አልተቻለም።';
+  } finally {
+    submitting.value = false;
+  }
+}
+
+async function verifyEmail(): Promise<void> {
+  errorMessage.value = '';
+  if (!verificationChallengeId.value || !/^\\d{6}$/.test(verificationCode.value)) {
+    errorMessage.value = 'በኢሜይልዎ የተላከውን 6 አሃዝ ኮድ ያስገቡ።';
+    return;
+  }
+  submitting.value = true;
+  try {
+    const result = await api.post<{ verification_token: string }>(
+      '/api/public/content/verification-challenges/verify',
+      {
+        challenge_id: verificationChallengeId.value,
+        email: authorEmail.value.trim(),
+        code: verificationCode.value,
+      },
+    );
+    verificationToken.value = result.verification_token;
+    successMessage.value = 'ኢሜይልዎ ተረጋግጧል። አሁን ይዘቱን ማቅረብ ይችላሉ።';
+  } catch (error) {
+    errorMessage.value = error instanceof Error ? error.message : 'የኢሜይል ማረጋገጫ አልተሳካም።';
+  } finally {
+    submitting.value = false;
+  }
+}
+
 
 async function submitContent(): Promise<void> {
   errorMessage.value = '';
@@ -27,6 +87,11 @@ async function submitContent(): Promise<void> {
 
   if (!endpointAvailable.value) {
     errorMessage.value = 'የARNA API ግንኙነት አልተዋቀረም። እባክዎ በኋላ ይሞክሩ።';
+    return;
+  }
+
+  if (!emailVerified.value) {
+    errorMessage.value = 'ይዘት ከማቅረብዎ በፊት ኢሜይልዎን ያረጋግጡ።';
     return;
   }
 
@@ -45,7 +110,8 @@ async function submitContent(): Promise<void> {
         title: title.value.trim(),
         body: body.value.trim(),
         author_name: authorName.value.trim(),
-        author_email: authorEmail.value.trim() || null,
+        verification_challenge_id: verificationChallengeId.value,
+        verification_token: verificationToken.value,
         consent: consent.value,
         website: website.value,
       },
@@ -56,6 +122,10 @@ async function submitContent(): Promise<void> {
     body.value = '';
     authorName.value = '';
     authorEmail.value = '';
+    verificationCode.value = '';
+    verificationChallengeId.value = '';
+    verificationToken.value = '';
+    verificationCodeSent.value = false;
     consent.value = false;
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : 'ያልታወቀ ስህተት ተፈጥሯል።';
@@ -111,9 +181,18 @@ async function submitContent(): Promise<void> {
           </label>
           <label>
             ኢሜይል
-            <input v-model="authorEmail" type="email" maxlength="254" required autocomplete="email" />
+            <input v-model="authorEmail" type="email" maxlength="254" required autocomplete="email" :disabled="emailVerified" />
+            <button type="button" class="verification-button" :disabled="submitting || !authorEmail.trim() || emailVerified" @click="requestEmailVerification">
+              {{ submitting ? 'በመላክ ላይ…' : verificationCodeSent ? 'ኮዱን እንደገና ላክ' : 'የማረጋገጫ ኮድ ላክ' }}
+            </button>
           </label>
         </div>
+        <label v-if="verificationCodeSent && !emailVerified" class="verification-code-field">
+          ወደ ኢሜይልዎ የተላከው 6 አሃዝ ኮድ
+          <input v-model="verificationCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" />
+          <button type="button" class="verification-button" :disabled="submitting || verificationCode.length !== 6" @click="verifyEmail">ኢሜይልን አረጋግጥ</button>
+        </label>
+        <p v-if="emailVerified" class="contribute-status contribute-status--success" role="status">ኢሜይል ተረጋግጧል።</p>
         <label class="contribute-honeypot" aria-hidden="true">
           Leave this field empty
           <input v-model="website" tabindex="-1" autocomplete="off" />
@@ -127,7 +206,7 @@ async function submitContent(): Promise<void> {
         <p v-if="errorMessage" class="contribute-status contribute-status--error" role="alert">{{ errorMessage }}</p>
         <p v-if="successMessage" class="contribute-status contribute-status--success" role="status">{{ successMessage }} <span v-if="submissionReference">የማጣቀሻ ቁጥር: {{ submissionReference }}</span></p>
 
-        <button type="submit" :disabled="submitting || !endpointAvailable">
+        <button type="submit" :disabled="submitting || !endpointAvailable || !emailVerified">
           {{ submitting ? 'በመላክ ላይ…' : 'ለግምገማ ያቅርቡ' }}
         </button>
       </form>
@@ -166,6 +245,8 @@ async function submitContent(): Promise<void> {
 .contribute-status--success{background:#eaf7ee;color:#175b2c}
 .contribute-form button{min-height:48px;padding:.8rem 1.2rem;border:0;border-radius:3px;color:white;background:var(--arna-public-brand-anchor);font:inherit;font-weight:700;cursor:pointer}
 .contribute-form button:disabled{opacity:.5;cursor:not-allowed}
+.verification-button{min-height:38px!important;padding:.45rem .75rem!important;border:1px solid var(--arna-public-accent)!important;border-radius:3px!important;color:var(--arna-public-accent)!important;background:transparent!important;font-size:.8rem!important}
+.verification-code-field{max-width:360px}
 .contribute-footer{padding:1.5rem;text-align:center;border-top:1px solid var(--arna-line);color:var(--arna-public-text-secondary);font-size:.75rem}
 :where(.contribute-page a,.contribute-page button,.contribute-page input,.contribute-page select,.contribute-page textarea):focus-visible{outline:3px solid var(--arna-public-accent);outline-offset:3px}
 @media(max-width:640px){.contribute-form__row{grid-template-columns:1fr}.contribute-header{padding-inline:1rem}.contribute-back{font-size:.75rem}}
