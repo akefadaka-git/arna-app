@@ -1,5 +1,7 @@
 import { api } from '@/core/api/client';
 
+export type GovernanceElectionTransition = 'open_nominations' | 'close_nominations' | 'open_voting' | 'close_voting' | 'start_runoff' | 'start_rerun' | 'certify' | 'cancel';
+
 export type GovernanceElectionStatus = 'draft' | 'nominations_open' | 'nominations_closed' | 'voting_open' | 'voting_closed' | 'runoff_required' | 'rerun_required' | 'runoff_selection_blocked' | 'quorum_failed' | 'certified' | 'cancelled';
 
 export interface GovernanceElection {
@@ -86,14 +88,14 @@ export async function listGovernanceElections(page = 1): Promise<GovernanceElect
 export function createGovernanceElection(input: CreateGovernanceElectionInput): Promise<GovernanceElection> {
   return api.post<GovernanceElection>('/api/governance/elections', input);
 }
-export function transitionGovernanceElection(id: number, transition: 'open_nominations' | 'close_nominations' | 'open_voting' | 'close_voting' | 'certify' | 'cancel'): Promise<GovernanceElection> {
-  return api.post<GovernanceElection>(`/api/governance/elections/${id}/transition`, { transition });
+export function transitionGovernanceElection(id: number, transition: GovernanceElectionTransition, round_closes_at?: string): Promise<GovernanceElection> {
+  return api.post<GovernanceElection>(`/api/governance/elections/${id}/transition`, { transition, ...(round_closes_at ? { round_closes_at } : {}) });
 }
 export async function listElectionNominations(id: number): Promise<readonly GovernanceElectionNomination[]> {
   return api.get<readonly GovernanceElectionNomination[]>(`/api/governance/elections/${id}/nominations`);
 }
-export function nominateForElection(id: number, governance_membership_id: number, statement?: string): Promise<GovernanceElectionNomination> {
-  return api.post<GovernanceElectionNomination>(`/api/governance/elections/${id}/nominations`, { governance_membership_id, ...(statement ? { statement } : {}) });
+export function nominateForElection(id: number, governance_membership_id: number, statement?: string, candidate_consent_confirmed = false): Promise<GovernanceElectionNomination> {
+  return api.post<GovernanceElectionNomination>(`/api/governance/elections/${id}/nominations`, { governance_membership_id, ...(statement ? { statement } : {}), candidate_consent_confirmed });
 }
 export function reviewElectionNomination(id: number, nominationId: number, status: 'accepted' | 'rejected'): Promise<GovernanceElectionNomination> {
   return api.patch<GovernanceElectionNomination>(`/api/governance/elections/${id}/nominations/${nominationId}`, { status });
@@ -124,8 +126,11 @@ export async function listElectionVoters(id: number): Promise<readonly Governanc
   return api.get<readonly GovernanceElectionVoter[]>(`/api/governance/elections/${id}/voters`);
 }
 
-export async function setElectionChallengeWindow(id: number, bylaw_reference: string, window_ends_at: string): Promise<GovernanceElection> {
-  return api.post<GovernanceElection>(`/api/governance/elections/${id}/challenge-window`, { bylaw_reference, window_ends_at });
+export async function setElectionChallengeWindow(id: number, bylaw_reference: string, evidence_reference: string, window_ends_at: string): Promise<GovernanceElection> {
+  return api.post<GovernanceElection>(`/api/governance/elections/${id}/challenge-window`, { bylaw_reference, evidence_reference, window_ends_at });
+}
+export async function verifyElectionChallengeWindow(id: number): Promise<GovernanceElection> {
+  return api.post<GovernanceElection>(`/api/governance/elections/${id}/challenge-window/verify`);
 }
 export async function submitElectionChallenge(id: number, challenge_type: 'challenge' | 'appeal', reason: string, evidence_references: string[] = []): Promise<GovernanceElectionChallenge> {
   return api.post<GovernanceElectionChallenge>(`/api/governance/elections/${id}/challenges`, { challenge_type, reason, evidence_references });
