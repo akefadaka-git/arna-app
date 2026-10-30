@@ -2,6 +2,7 @@ import { createApp, h } from 'vue';
 import { createRouter, createWebHistory, RouterView } from 'vue-router';
 
 import PublicHome from '@/public-site/PublicHome.vue';
+import PublicContributionRoute from '@/public-site/PublicContributionRoute.vue';
 import PublicVerificationRoute from '@/router/pages/PublicVerificationRoute.vue';
 import LegalCenterRoute from '@/router/pages/LegalCenterRoute.vue';
 import LegalDocumentRoute from '@/router/pages/LegalDocumentRoute.vue';
@@ -18,6 +19,11 @@ const router = createRouter({
       path: '/',
       name: 'public-home',
       component: PublicHome,
+    },
+    {
+      path: '/contribute',
+      name: 'public-content-contribution',
+      component: PublicContributionRoute,
     },
     {
       path: '/verify',
