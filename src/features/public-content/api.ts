@@ -45,9 +45,10 @@ const endpoint = '/api/admin/public-content';
 
 export async function fetchPublicContentQueue(
   status?: PublicContentStatus | 'all',
+  page = 1,
 ): Promise<Paginated<AdminPublicContent>> {
   return api.get<Paginated<AdminPublicContent>>(endpoint, {
-    params: status && status !== 'all' ? { status } : {},
+    params: { page, ...(status && status !== 'all' ? { status } : {}) },
   });
 }
 
