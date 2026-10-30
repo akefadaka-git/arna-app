@@ -281,7 +281,7 @@ const publicationChannels = [
             <article v-for="item in publishedContent" :key="item.id" class="publication-card">
               <div class="publication-card__top"><span>ARNA JOURNAL</span><span>{{ item.type.replace('_', ' ').toUpperCase() }}</span></div>
               <h3>{{ item.title }}</h3>
-              <p class="publication-card__description">{{ item.body }}</p>
+              <p class="publication-card__description">{{ item.body.length > 220 ? `${item.body.slice(0, 220)}…` : item.body }}</p>
               <span class="publication-card__status"><span></span> {{ publishedDate(item.published_at) }} · OFFICIAL</span>
             </article>
           </div>
