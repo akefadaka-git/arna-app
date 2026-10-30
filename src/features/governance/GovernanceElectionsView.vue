@@ -89,13 +89,13 @@ async function refreshSelected(): Promise<void> {
     const id = selected.value.id;
     const [nominationRows, voterRows, auditRows] = await Promise.all([listElectionNominations(id), listElectionVoters(id), listElectionAuditEvents(id)]);
     nominations.value = nominationRows; voters.value = voterRows; audit.value = auditRows;
-    if (['voting_closed', 'certified'].includes(selected.value.status)) results.value = await getElectionResults(id);
+    if (['voting_closed', 'certified', 'runoff_required', 'rerun_required', 'runoff_selection_blocked', 'quorum_failed'].includes(selected.value.status)) results.value = await getElectionResults(id);
     else results.value = [];
     await load();
     selected.value = elections.value.find(item => item.id === selected.value?.id) || selected.value;
   } catch { error.value = 'የምርጫ ዝርዝር መጫን አልተቻለም።'; }
 }
-async function transition(action: 'open_nominations' | 'close_nominations' | 'open_voting' | 'close_voting' | 'certify' | 'cancel'): Promise<void> {
+async function transition(action: 'open_nominations' | 'close_nominations' | 'open_voting' | 'close_voting' | 'start_runoff' | 'start_rerun' | 'certify' | 'cancel'): Promise<void> {
   if (!selected.value) return;
   saving.value = true; error.value = '';
   try { selected.value = await transitionGovernanceElection(selected.value.id, action, ['start_runoff', 'start_rerun'].includes(action) ? new Date(roundClosesAt.value).toISOString() : undefined); roundClosesAt.value = ''; await refreshSelected(); }
