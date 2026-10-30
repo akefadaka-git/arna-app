@@ -23,9 +23,12 @@ const error = ref<string | null>(null);
 const notice = ref<string | null>(null);
 
 const selected = computed(() => items.value.find((item) => item.id === selectedId.value) ?? null);
+const canReviewSelected = computed(() =>
+  selected.value !== null && selected.value.submitted_by !== auth.userId,
+);
 const canApproveSelected = computed(() =>
+  canReviewSelected.value &&
   selected.value !== null &&
-  selected.value.submitted_by !== auth.userId &&
   ['pending_review', 'changes_requested'].includes(selected.value.status),
 );
 
@@ -190,7 +193,7 @@ onMounted(load);
             <button v-if="canApproveSelected" type="button" class="secondary" :disabled="saving" @click="decide('request-changes')">{{ labels.requestChanges }}</button>
             <button v-if="canApproveSelected" type="button" class="danger" :disabled="saving" @click="decide('reject')">{{ labels.reject }}</button>
             <button v-if="selected.status === 'approved' || selected.status === 'scheduled'" type="button" :disabled="saving" @click="decide('publish')">{{ scheduledAt ? labels.schedule : labels.publish }}</button>
-            <button v-if="selected.status === 'published'" type="button" class="danger" :disabled="saving" @click="decide('unpublish')">{{ labels.unpublish }}</button>
+            <button v-if="selected.status === 'published' && canReviewSelected" type="button" class="danger" :disabled="saving" @click="decide('unpublish')">{{ labels.unpublish }}</button>
           </div>
         </section>
         <div v-else class="public-content-admin__empty public-content-admin__preview">{{ labels.selectPrompt }}</div>
