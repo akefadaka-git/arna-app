@@ -17,6 +17,9 @@ const selectedId = ref<number | null>(null);
 const filter = ref<PublicContentStatus | 'all'>('pending_review');
 const reason = ref('');
 const scheduledAt = ref('');
+const currentPage = ref(1);
+const lastPage = ref(1);
+const total = ref(0);
 const loading = ref(false);
 const saving = ref(false);
 const error = ref<string | null>(null);
@@ -80,8 +83,10 @@ async function load(): Promise<void> {
   loading.value = true;
   error.value = null;
   try {
-    const page = await fetchPublicContentQueue(filter.value);
+    const page = await fetchPublicContentQueue(filter.value, currentPage.value);
     items.value = [...page.data];
+    lastPage.value = page.last_page;
+    total.value = page.total;
     if (!items.value.some((item) => item.id === selectedId.value)) {
       selectedId.value = items.value[0]?.id ?? null;
     }
@@ -90,6 +95,12 @@ async function load(): Promise<void> {
   } finally {
     loading.value = false;
   }
+}
+
+async function changePage(nextPage: number): Promise<void> {
+  if (nextPage < 1 || nextPage > lastPage.value || loading.value) return;
+  currentPage.value = nextPage;
+  await load();
 }
 
 async function decide(decision: ReviewDecision): Promise<void> {
@@ -136,7 +147,7 @@ onMounted(load);
         <h2>{{ labels.queue }}</h2>
         <div class="public-content-admin__filters">
           <label for="content-status-filter">{{ labels.all }}</label>
-          <select id="content-status-filter" v-model="filter" @change="load">
+          <select id="content-status-filter" v-model="filter" @change="currentPage = 1; load()">
             <option value="pending_review">{{ labels.pending }}</option>
             <option value="changes_requested">{{ labels.changes }}</option>
             <option value="approved">{{ labels.approved }}</option>
@@ -202,6 +213,13 @@ onMounted(load);
         </section>
         <div v-else class="public-content-admin__empty public-content-admin__preview">{{ labels.selectPrompt }}</div>
       </div>
+      <div class="public-content-admin__pagination">
+        <span>{{ total }} · {{ currentPage }} / {{ lastPage }}</span>
+        <div>
+          <button type="button" :disabled="loading || currentPage <= 1" @click="changePage(currentPage - 1)">‹</button>
+          <button type="button" :disabled="loading || currentPage >= lastPage" @click="changePage(currentPage + 1)">›</button>
+        </div>
+      </div>
     </Card>
   </div>
 </template>
@@ -232,6 +250,8 @@ onMounted(load);
 .public-content-admin__note { padding: var(--mases-space-3); background: var(--mases-color-surface-subtle); border-radius: var(--mases-radius-md); }
 .public-content-admin__reason-label { display: block; margin-bottom: var(--mases-space-2); font-weight: var(--mases-font-weight-semibold); }
 .public-content-admin textarea { width: 100%; resize: vertical; }
+.public-content-admin__pagination { display: flex; align-items: center; justify-content: space-between; margin-top: var(--mases-space-4); color: var(--mases-color-text-secondary); font-size: var(--mases-font-size-body-sm); }
+.public-content-admin__pagination div { display: flex; gap: var(--mases-space-2); }
 .public-content-admin__actions { display: flex; flex-wrap: wrap; gap: var(--mases-space-2); margin-top: var(--mases-space-3); }
 .public-content-admin__actions .secondary { background: var(--mases-color-surface-subtle); }
 .public-content-admin__actions .danger { color: var(--mases-color-text-danger); }
