@@ -46,6 +46,9 @@ test('public build emits a standalone index with existing referenced local asset
       assert.ok(existsSync(assetPath), `HTML-referenced local asset must exist: ${reference}`);
     }
   }
+  for (const section of ['businesses', 'updates', 'advertise']) {
+    assert.ok(source.includes(section), `public homepage section ${section} must be present in the built bundle`);
+  }
 });
 
 test('public JavaScript bundle contains the expected public route contract', () => {
