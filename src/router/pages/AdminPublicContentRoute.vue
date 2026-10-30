@@ -195,33 +195,33 @@ onMounted(load);
 .public-content-admin__toolbar,.public-content-admin__filters,.public-content-admin__preview-heading { display: flex; align-items: center; justify-content: space-between; gap: var(--mases-space-3); }
 .public-content-admin__toolbar h2,.public-content-admin__preview h3 { margin: 0; color: var(--mases-color-text-primary); }
 .public-content-admin__filters { flex-wrap: wrap; }
-.public-content-admin select,.public-content-admin textarea { max-width: 100%; padding: var(--mases-space-2); border: 1px solid var(--mases-color-border-default); border-radius: var(--mases-radius-md); background: var(--mases-color-surface); color: var(--mases-color-text-primary); }
-.public-content-admin button { cursor: pointer; border: 1px solid var(--mases-color-border-default); border-radius: var(--mases-radius-md); padding: var(--mases-space-2) var(--mases-space-3); color: var(--mases-color-text-primary); background: var(--mases-color-surface); }
+.public-content-admin select,.public-content-admin textarea { max-width: 100%; padding: var(--mases-space-2); border: 1px solid var(--mases-color-border-default); border-radius: var(--mases-radius-md); background: var(--mases-color-surface-raised); color: var(--mases-color-text-primary); }
+.public-content-admin button { cursor: pointer; border: 1px solid var(--mases-color-border-default); border-radius: var(--mases-radius-md); padding: var(--mases-space-2) var(--mases-space-3); color: var(--mases-color-text-primary); background: var(--mases-color-surface-raised); }
 .public-content-admin button:disabled { cursor: wait; opacity: .55; }
 .public-content-admin__workspace { display: grid; grid-template-columns: minmax(240px, .8fr) minmax(0, 1.5fr); gap: var(--mases-space-4); margin-top: var(--mases-space-4); }
 .public-content-admin__list { display: flex; flex-direction: column; gap: var(--mases-space-2); min-width: 0; }
 .public-content-admin__item { display: flex; flex-direction: column; align-items: flex-start; gap: var(--mases-space-1); text-align: start; }
 .public-content-admin__item strong { overflow-wrap: anywhere; }
-.public-content-admin__item > span:last-child,.public-content-admin__metadata,.public-content-admin__empty { color: var(--mases-color-text-secondary); font-size: var(--mases-font-size-sm); }
-.public-content-admin__item--active { border-color: var(--mases-color-primary-500); background: var(--mases-color-primary-50); }
-.public-content-admin__item-type { color: var(--mases-color-text-secondary); font-size: var(--mases-font-size-xs); text-transform: uppercase; letter-spacing: .06em; }
+.public-content-admin__item > span:last-child,.public-content-admin__metadata,.public-content-admin__empty { color: var(--mases-color-text-secondary); font-size: var(--mases-font-size-body-sm); }
+.public-content-admin__item--active { border-color: var(--mases-color-action-primary); background: var(--mases-color-state-selected); }
+.public-content-admin__item-type { color: var(--mases-color-text-secondary); font-size: var(--mases-font-size-caption); text-transform: uppercase; letter-spacing: .06em; }
 .public-content-admin__preview { min-width: 0; padding: var(--mases-space-4); border: 1px solid var(--mases-color-border-default); border-radius: var(--mases-radius-lg); }
 .public-content-admin__preview h3 { margin-top: var(--mases-space-2); overflow-wrap: anywhere; }
-.public-content-admin__status { border-radius: 999px; padding: var(--mases-space-1) var(--mases-space-2); background: var(--mases-color-surface-muted); color: var(--mases-color-text-secondary); font-size: var(--mases-font-size-xs); }
+.public-content-admin__status { border-radius: 999px; padding: var(--mases-space-1) var(--mases-space-2); background: var(--mases-color-surface-subtle); color: var(--mases-color-text-secondary); font-size: var(--mases-font-size-caption); }
 .public-content-admin__metadata { display: flex; flex-wrap: wrap; gap: var(--mases-space-4); padding: 0; }
 .public-content-admin__metadata div { min-width: 0; }
 .public-content-admin__metadata dt { font-weight: var(--mases-font-weight-semibold); }
 .public-content-admin__metadata dd { margin: 0; overflow-wrap: anywhere; }
 .public-content-admin__body { white-space: pre-wrap; overflow-wrap: anywhere; line-height: var(--mases-line-height-body); padding-block: var(--mases-space-4); }
-.public-content-admin__note { padding: var(--mases-space-3); background: var(--mases-color-surface-muted); border-radius: var(--mases-radius-md); }
+.public-content-admin__note { padding: var(--mases-space-3); background: var(--mases-color-surface-subtle); border-radius: var(--mases-radius-md); }
 .public-content-admin__reason-label { display: block; margin-bottom: var(--mases-space-2); font-weight: var(--mases-font-weight-semibold); }
 .public-content-admin textarea { width: 100%; resize: vertical; }
 .public-content-admin__actions { display: flex; flex-wrap: wrap; gap: var(--mases-space-2); margin-top: var(--mases-space-3); }
-.public-content-admin__actions .secondary { background: var(--mases-color-surface-muted); }
-.public-content-admin__actions .danger { color: var(--mases-color-danger-700); }
+.public-content-admin__actions .secondary { background: var(--mases-color-surface-subtle); }
+.public-content-admin__actions .danger { color: var(--mases-color-text-danger); }
 .public-content-admin__message { padding: var(--mases-space-3); border-radius: var(--mases-radius-md); }
-.public-content-admin__message--error { color: var(--mases-color-danger-700); background: var(--mases-color-danger-50); }
-.public-content-admin__message--success { color: var(--mases-color-success-700); background: var(--mases-color-success-50); }
+.public-content-admin__message--error { color: var(--mases-color-text-danger); background: var(--mases-color-surface-danger); }
+.public-content-admin__message--success { color: var(--mases-color-text-success); background: var(--mases-color-surface-success); }
 .public-content-admin__empty { padding: var(--mases-space-4); }
 @media (max-width: 760px) {
   .public-content-admin__toolbar,.public-content-admin__preview-heading { align-items: flex-start; flex-direction: column; }
