@@ -87,8 +87,8 @@ async function refreshSelected(): Promise<void> {
   if (!selected.value) return;
   try {
     const id = selected.value.id;
-    const [nominationRows, voterRows, auditRows] = await Promise.all([listElectionNominations(id), listElectionVoters(id), listElectionAuditEvents(id)]);
-    nominations.value = nominationRows; voters.value = voterRows; audit.value = auditRows;
+    const [nominationRows, voterRows, auditRows, challengeRows] = await Promise.all([listElectionNominations(id), listElectionVoters(id), listElectionAuditEvents(id), listElectionChallenges(id)]);
+    nominations.value = nominationRows; voters.value = voterRows; audit.value = auditRows; challenges.value = challengeRows;
     if (['voting_closed', 'certified', 'runoff_required', 'rerun_required', 'runoff_selection_blocked', 'quorum_failed'].includes(selected.value.status)) results.value = await getElectionResults(id);
     else results.value = [];
     await load();
@@ -237,6 +237,7 @@ onMounted(() => void load());
         <h3>የተቃውሞ/ይግባኝ ጊዜ</h3>
         <p v-if="!selected.challenge_bylaw_reference || !selected.challenge_window_ends_at" role="alert">የተፈጻሚው በይፋ የጸደቀ የደንብ/ውሳኔ አንቀጽ አልተረጋገጠም። ጊዜ አትገምቱ፤ ማረጋገጫ እስኪገኝ ድረስ ውጤቱ ማጽደቅ አይቻልም።</p>
         <p v-else>ምንጭ: {{ selected.challenge_bylaw_reference }} · ማስረጃ: {{ selected.challenge_window_evidence_reference }} · የመጨረሻ ጊዜ: {{ selected.challenge_window_ends_at }} · ማረጋገጫ: {{ selected.challenge_window_verified_at ? 'ተረጋግጧል' : 'ይጠበቃል' }}</p>
+        <button v-if="selected.challenge_bylaw_reference && selected.challenge_window_ends_at && !selected.challenge_window_verified_at" type="button" :disabled="saving" @click="verifyChallengeWindow">የተለየ ገምጋሚ ምንጩን አረጋግጥ</button>
         <form class="governance-elections__form" @submit.prevent="recordChallengeWindow">
           <label>የጸደቀ ደንብ/ውሳኔ ትክክለኛ ማጣቀሻ<input v-model="challengeBylawReference" maxlength="255" required placeholder="ሰነድ መለያ፣ አንቀጽ፣ ስሪት" /></label>
           <label>የምንጭ ማስረጃ ማጣቀሻ (የቁጥጥር ሥር ያለ ሰነድ/መዝገብ)<input v-model="challengeEvidenceReference" maxlength="500" required /></label>
