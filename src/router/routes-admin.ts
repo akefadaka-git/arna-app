@@ -292,6 +292,12 @@ export const routesAdmin: RouteRecordRaw[] = [
       // directly.
       // -----------------------------------------------------------------------
       {
+        path: 'admin/public-content',
+        name: 'admin-public-content',
+        component: () => import('./pages/AdminPublicContentRoute.vue'),
+        meta: { permission: 'public-content.review' },
+      },
+      {
         path: 'launcher',
         redirect: '/admin',
       },
