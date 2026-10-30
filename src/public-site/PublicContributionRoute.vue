@@ -46,6 +46,7 @@ async function submitContent(): Promise<void> {
         body: body.value.trim(),
         author_name: authorName.value.trim(),
         author_email: authorEmail.value.trim() || null,
+        consent: consent.value,
         website: website.value,
       },
     );
