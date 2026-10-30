@@ -299,6 +299,13 @@ export const adminNavItems: ReadonlyArray<NavItem> = [
     to: '/admin',
     icon: 'layout-grid',
   },
+  {
+    id: 'public-content-review',
+    label: 'ይፋዊ ይዘት ግምገማ',
+    to: '/admin/public-content',
+    icon: 'file-check',
+    permission: 'public-content.review',
+  },
 ];
 
 /**
