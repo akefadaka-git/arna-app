@@ -77,6 +77,7 @@ const offerings = [
           <a href="#principles">እሴቶቻችን</a>
           <a href="#services">አገልግሎቶች</a>
           <a href="#updates">ዜናዎች</a>
+          <RouterLink to="/contribute">ይዘት ያቅርቡ</RouterLink>
         </nav>
 
         <RouterLink class="header-action" to="/verify">
@@ -259,6 +260,7 @@ const offerings = [
               <h3 lang="am">ይፋዊ አገናኞች</h3>
               <RouterLink to="/verify">ሰነድ ማረጋገጫ</RouterLink>
               <RouterLink to="/legal">ሕጋዊ መረጃ</RouterLink>
+              <RouterLink to="/contribute">ይዘት ያቅርቡ</RouterLink>
               <a href="#updates">ዜናዎችና ማስታወቂያዎች</a>
             </div>
           </div>
