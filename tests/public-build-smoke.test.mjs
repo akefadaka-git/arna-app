@@ -54,7 +54,10 @@ test('public JavaScript bundle contains the expected public route contract', () 
   assert.ok(bundles.length > 0, 'public JavaScript bundles must exist');
 
   const source = bundles.map((file) => readFileSync(file, 'utf8')).join('\n');
-  for (const route of ['/', '/verify', '/legal', '/legal/:slug']) {
+  for (const section of ['businesses', 'updates', 'advertise']) {
+    assert.ok(source.includes(section), `public homepage section ${section} must be present in the built bundle`);
+  }
+  for (const route of ['/', '/contribute', '/verify', '/legal', '/legal/:slug']) {
     assert.ok(source.includes(route), `public route ${route} must be present in the built bundle`);
   }
 });

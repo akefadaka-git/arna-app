@@ -2,10 +2,41 @@
 import '@/styles/reset.css';
 import '@/styles/tokens.css';
 import '@/styles/public-accessibility-overrides.css';
+import { onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
+import { api } from '@/core/api/client';
 import { masesBrandLabels } from '@/router/shell-labels';
 
 const year = new Date().getFullYear();
+
+interface PublishedContent {
+  readonly id: string;
+  readonly type: 'news' | 'article' | 'announcement' | 'press_release';
+  readonly title: string;
+  readonly body: string;
+  readonly published_at: string | null;
+}
+
+const publishedContent = ref<PublishedContent[]>([]);
+
+onMounted(async () => {
+  try {
+    const page = await api.get<{ data: PublishedContent[] }>('/api/public/content', {
+      params: { per_page: 3 },
+    });
+    publishedContent.value = page.data;
+  } catch {
+    // The public homepage remains usable while the API is unavailable.
+    // No unapproved or locally fabricated content is substituted.
+    publishedContent.value = [];
+  }
+});
+
+function publishedDate(value: string | null): string {
+  if (!value) return '';
+  return new Intl.DateTimeFormat('am-ET', { dateStyle: 'medium' }).format(new Date(value));
+}
+
 
 const principles = [
   {
@@ -48,6 +79,18 @@ const offerings = [
     description: 'በደህንነትና በግልጽ መረጃ ላይ የተመሠረቱ የዲጂታል ንግድ አገልግሎቶች።',
   },
 ];
+
+const businessAreas = [
+  { number: '01', title: 'Enterprise & operations', titleAm: 'ድርጅታዊ አሠራር', description: 'የድርጅት አስተዳደርን፣ የሥራ ሂደቶችንና የተቀናጀ አገልግሎትን የሚደግፉ መፍትሄዎች።' },
+  { number: '02', title: 'People & partnerships', titleAm: 'ሰዎችና አጋርነት', description: 'ከአባላት፣ ከባለድርሻ አካላትና ከንግድ አጋሮች ጋር ግልጽ ግንኙነት ለመገንባት የሚያግዙ አቅጣጫዎች።' },
+  { number: '03', title: 'Commerce & innovation', titleAm: 'ንግድና ፈጠራ', description: 'የንግድ እድሎችን፣ የዲጂታል አገልግሎቶችንና ፈጠራን የሚያበረታቱ የወደፊት አቅጣጫዎች።' },
+];
+
+const publicationChannels = [
+  { number: '01', title: 'News', titleAm: 'ዜና', description: 'የድርጅትና የሥራ እንቅስቃሴ ዜናዎች።', label: 'NEWS' },
+  { number: '02', title: 'Insights & blog', titleAm: 'ጦማርና ሀሳቦች', description: 'ጠቃሚ ጽሑፎች፣ ትንታኔዎችና የእውቀት ልውውጥ።', label: 'INSIGHTS' },
+  { number: '03', title: 'Official notices', titleAm: 'ይፋዊ ማስታወቂያዎች', description: 'በአስተዳዳሪ የተገመገሙ ይፋዊ ማሳወቂያዎችና መግለጫዎች።', label: 'ANNOUNCEMENTS' },
+];
 </script>
 
 <template>
@@ -76,7 +119,10 @@ const offerings = [
           <a href="#about">ስለ ARNA</a>
           <a href="#principles">እሴቶቻችን</a>
           <a href="#services">አገልግሎቶች</a>
-          <a href="#updates">ዜናዎች</a>
+          <a href="#businesses">የንግድ አቅጣጫዎች</a>
+          <a href="#updates">ዜናና ጦማር</a>
+          <a href="#advertise">ማስታወቂያ</a>
+          <RouterLink to="/contribute">ይዘት ያቅርቡ</RouterLink>
         </nav>
 
         <RouterLink class="header-action" to="/verify">
@@ -201,6 +247,29 @@ const offerings = [
         </div>
       </section>
 
+
+      <section id="businesses" class="businesses-section section-pad" aria-labelledby="businesses-title">
+        <div class="site-container">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow eyebrow--dark">OUR BUSINESS LANDSCAPE</p>
+              <h2 id="businesses-title" lang="am">እድሎችን የሚያገናኙ <span>የሥራ አቅጣጫዎች።</span></h2>
+            </div>
+            <p lang="am">የተረጋገጡ የንግድ ክፍሎችና ኩባንያዎች መገለጫዎች በአስተዳዳሪ ከጸደቁ በኋላ እዚህ ይታያሉ።</p>
+          </div>
+          <div class="business-grid">
+            <article v-for="area in businessAreas" :key="area.number" class="business-card">
+              <span class="business-card__number">{{ area.number }}</span>
+              <p lang="am">{{ area.titleAm }}</p>
+              <h3>{{ area.title }}</h3>
+              <p class="business-card__description" lang="am">{{ area.description }}</p>
+              <span class="business-card__status">ዝርዝር መረጃ በማረጋገጥ ላይ</span>
+            </article>
+          </div>
+          <p class="businesses-disclaimer" lang="am">ማስታወሻ፦ ከላይ ያሉት ምድቦች የድረ ገጹን መዋቅር ያሳያሉ፤ የተረጋገጡ የሕጋዊ ኩባንያ ስሞች፣ ባለቤትነት ወይም የንግድ ጥያቄዎች አይደሉም።</p>
+        </div>
+      </section>
+
       <section id="updates" class="updates-section section-pad" aria-labelledby="updates-title">
         <div class="site-container updates-section__grid">
           <div class="updates-section__intro">
@@ -208,14 +277,38 @@ const offerings = [
             <h2 id="updates-title" lang="am">የቅርብ መረጃዎች።<br/><span>ከታመነ ምንጭ።</span></h2>
             <p lang="am">የድርጅቱ ዜናዎች፣ ማስታወቂያዎች እና ይፋዊ ማሻሻያዎች በአስተዳዳሪ ከተጸደቁ በኋላ እዚህ ይታያሉ።</p>
           </div>
-          <div class="updates-empty" role="status">
-            <div class="updates-empty__icon" aria-hidden="true">
-              <svg viewBox="0 0 48 48" fill="none"><path d="M10 8h28v32H10z" stroke="currentColor" stroke-width="1.5"/><path d="M17 18h14M17 24h14M17 30h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="36" cy="12" r="7" fill="var(--arna-public-accent)"/><path d="M36 9v6m-3-3h6" stroke="var(--arna-public-brand-anchor)" stroke-width="1.5" stroke-linecap="round"/></svg>
-            </div>
-            <p class="updates-empty__label">OFFICIAL UPDATES</p>
-            <h3 lang="am">ማስታወቂያዎች በቅርቡ ይመጣሉ</h3>
-            <p lang="am">እስካሁን ይፋ የተደረጉ ማስታወቂያዎች የሉም። ይህ ክፍል የተጸደቀ ይዘት ሲኖር ብቻ ይሞላል።</p>
-            <span class="updates-empty__status"><span></span> የይዘት ማተሚያ በመዘጋጀት ላይ</span>
+          <div v-if="publishedContent.length" class="publication-grid">
+            <article v-for="item in publishedContent" :key="item.id" class="publication-card">
+              <div class="publication-card__top"><span>ARNA JOURNAL</span><span>{{ item.type.replace('_', ' ').toUpperCase() }}</span></div>
+              <h3>{{ item.title }}</h3>
+              <p class="publication-card__description">{{ item.body.length > 220 ? `${item.body.slice(0, 220)}…` : item.body }}</p>
+              <span class="publication-card__status"><span></span> {{ publishedDate(item.published_at) }} · OFFICIAL</span>
+            </article>
+          </div>
+          <div v-else class="publication-grid">
+            <article v-for="channel in publicationChannels" :key="channel.number" class="publication-card">
+              <div class="publication-card__top"><span>{{ channel.number }}</span><span>{{ channel.label }}</span></div>
+              <h3 lang="am">{{ channel.titleAm }}</h3>
+              <p class="publication-card__english">{{ channel.title }}</p>
+              <p class="publication-card__description" lang="am">{{ channel.description }}</p>
+              <span class="publication-card__status"><span></span> የጸደቀ ይዘት ሲኖር ይታያል</span>
+            </article>
+          </div>
+        </div>
+      </section>
+
+
+      <section id="advertise" class="advertising-section" aria-labelledby="advertising-title">
+        <div class="site-container advertising-section__inner">
+          <div class="advertising-section__mark" aria-hidden="true">AD</div>
+          <div class="advertising-section__copy">
+            <p class="eyebrow">COMMERCIAL & PARTNERSHIPS</p>
+            <h2 id="advertising-title" lang="am">የንግድ እድልዎን <span>ከትክክለኛው ታዳሚ ጋር ያገናኙ።</span></h2>
+            <p lang="am">የARNA የራስ ዘመቻዎችና የተፈቀዱ የአጋር ማስታወቂያዎች በግልጽ የስፖንሰር መለያ ይቀርባሉ። የማስታወቂያ ማተሚያ በአስተዳዳሪ ፈቃድ ብቻ ይከናወናል።</p>
+          </div>
+          <div class="advertising-section__aside">
+            <span>ADVERTISING PLATFORM</span>
+            <strong>COMING IN A LATER RELEASE</strong>
           </div>
         </div>
       </section>
@@ -254,12 +347,15 @@ const offerings = [
               <a href="#about">ስለ ARNA</a>
               <a href="#principles">እሴቶቻችን</a>
               <a href="#services">አገልግሎቶች</a>
+              <a href="#businesses">የንግድ አቅጣጫዎች</a>
             </div>
             <div>
               <h3 lang="am">ይፋዊ አገናኞች</h3>
               <RouterLink to="/verify">ሰነድ ማረጋገጫ</RouterLink>
               <RouterLink to="/legal">ሕጋዊ መረጃ</RouterLink>
+              <RouterLink to="/contribute">ይዘት ያቅርቡ</RouterLink>
               <a href="#updates">ዜናዎችና ማስታወቂያዎች</a>
+              <a href="#advertise">ማስታወቂያ ያስተዋውቁ</a>
             </div>
           </div>
         </div>
@@ -510,6 +606,41 @@ const offerings = [
   .site-footer__links { gap: 1.6rem; }
   .site-footer__bottom { align-items: flex-start; flex-direction: column; justify-content: center; padding-block: 1rem; gap: .55rem; }
 }
+
+.businesses-section { background: var(--arna-public-surface-soft); }
+.business-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; }
+.business-card { min-height: 260px; display: flex; flex-direction: column; padding: 1.5rem; border: 1px solid var(--arna-line); background: var(--arna-public-page-surface); }
+.business-card__number { color: var(--arna-public-accent); font-size: .72rem; font-weight: 800; letter-spacing: .12em; }
+.business-card > p:first-of-type { margin: 1.5rem 0 .35rem; color: var(--arna-public-action); font-size: .82rem; }
+.business-card h3 { margin: 0; color: var(--arna-navy); font-size: 1.18rem; }
+.business-card__description { margin: .8rem 0 1.2rem; color: var(--arna-public-text-secondary); font-size: .83rem; line-height: 1.9; }
+.business-card__status { margin-block-start: auto; color: var(--arna-public-text-secondary); font-size: .68rem; }
+.businesses-disclaimer { margin: 1.2rem 0 0; color: var(--arna-public-text-secondary); font-size: .72rem; line-height: 1.8; }
+.publication-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: .75rem; }
+.publication-card { min-height: 270px; display: flex; flex-direction: column; padding: 1.35rem; border: 1px solid var(--arna-line); background: var(--arna-public-surface); }
+.publication-card__top { display: flex; justify-content: space-between; gap: .5rem; color: var(--arna-public-accent); font-size: .61rem; font-weight: 800; letter-spacing: .1em; }
+.publication-card h3 { margin: 1.5rem 0 .15rem; color: var(--arna-navy); font-size: 1.25rem; }
+.publication-card__english { margin: 0; color: var(--arna-public-action); font-size: .68rem; font-weight: 700; }
+.publication-card__description { margin: .8rem 0 1.1rem; color: var(--arna-public-text-secondary); font-size: .82rem; line-height: 1.85; }
+.publication-card__status { display: flex; align-items: center; gap: .45rem; margin-block-start: auto; color: var(--arna-public-text-secondary); font-size: .65rem; }
+.publication-card__status span { width: 6px; height: 6px; border-radius: 50%; background: var(--arna-public-accent); }
+.advertising-section { padding-block: clamp(2.5rem,5vw,4rem); color: var(--arna-public-page-surface); background: var(--arna-public-brand-anchor); }
+.advertising-section__inner { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1.5rem; }
+.advertising-section__mark { display: grid; place-items: center; width: 58px; height: 58px; border: 1px solid rgba(212,160,23,.65); border-radius: 50%; color: var(--arna-public-accent); font-size: .95rem; font-weight: 800; letter-spacing: .1em; }
+.advertising-section__copy .eyebrow { margin: 0 0 .45rem; font-size: .6rem; }
+.advertising-section__copy h2 { max-width: 680px; margin: 0; color: white; font-size: clamp(1.25rem,2.5vw,1.8rem); line-height: 1.6; }
+.advertising-section__copy h2 span { color: var(--arna-public-accent); }
+.advertising-section__copy > p:last-child { max-width: 680px; margin: .5rem 0 0; color: var(--arna-color-cloud-surface); font-size: .8rem; line-height: 1.9; }
+.advertising-section__aside { display: grid; gap: .4rem; min-width: 180px; padding-inline-start: 1.2rem; border-inline-start: 1px solid rgba(255,255,255,.2); }
+.advertising-section__aside span { color: var(--arna-public-accent); font-size: .58rem; letter-spacing: .1em; }
+.advertising-section__aside strong { color: white; font-size: .7rem; line-height: 1.6; }
+@media(max-width:760px) {
+ .business-grid,.publication-grid { grid-template-columns: 1fr; }
+ .business-card,.publication-card { min-height: 0; }
+ .advertising-section__inner { grid-template-columns: auto 1fr; align-items: start; }
+ .advertising-section__aside { grid-column: 1 / -1; margin-inline-start: 4.25rem; padding: .8rem 0 0; border-inline-start: 0; border-top: 1px solid rgba(255,255,255,.2); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .arna-site *, .arna-site *::before, .arna-site *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
