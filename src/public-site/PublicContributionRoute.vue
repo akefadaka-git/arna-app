@@ -110,8 +110,8 @@ async function submitContent(): Promise<void> {
             <input v-model="authorName" maxlength="120" required autocomplete="name" />
           </label>
           <label>
-            ኢሜይል (አማራጭ)
-            <input v-model="authorEmail" type="email" maxlength="254" autocomplete="email" />
+            ኢሜይል
+            <input v-model="authorEmail" type="email" maxlength="254" required autocomplete="email" />
           </label>
         </div>
         <label class="contribute-honeypot" aria-hidden="true">
