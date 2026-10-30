@@ -2,10 +2,41 @@
 import '@/styles/reset.css';
 import '@/styles/tokens.css';
 import '@/styles/public-accessibility-overrides.css';
+import { onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
+import { api } from '@/core/api/client';
 import { masesBrandLabels } from '@/router/shell-labels';
 
 const year = new Date().getFullYear();
+
+interface PublishedContent {
+  readonly id: string;
+  readonly type: 'news' | 'article' | 'announcement' | 'press_release';
+  readonly title: string;
+  readonly body: string;
+  readonly published_at: string | null;
+}
+
+const publishedContent = ref<PublishedContent[]>([]);
+
+onMounted(async () => {
+  try {
+    const page = await api.get<{ data: PublishedContent[] }>('/api/public/content', {
+      params: { per_page: 3 },
+    });
+    publishedContent.value = page.data;
+  } catch {
+    // The public homepage remains usable while the API is unavailable.
+    // No unapproved or locally fabricated content is substituted.
+    publishedContent.value = [];
+  }
+});
+
+function publishedDate(value: string | null): string {
+  if (!value) return '';
+  return new Intl.DateTimeFormat('am-ET', { dateStyle: 'medium' }).format(new Date(value));
+}
+
 
 const principles = [
   {
@@ -246,7 +277,15 @@ const publicationChannels = [
             <h2 id="updates-title" lang="am">የቅርብ መረጃዎች።<br/><span>ከታመነ ምንጭ።</span></h2>
             <p lang="am">የድርጅቱ ዜናዎች፣ ማስታወቂያዎች እና ይፋዊ ማሻሻያዎች በአስተዳዳሪ ከተጸደቁ በኋላ እዚህ ይታያሉ።</p>
           </div>
-          <div class="publication-grid">
+          <div v-if="publishedContent.length" class="publication-grid">
+            <article v-for="item in publishedContent" :key="item.id" class="publication-card">
+              <div class="publication-card__top"><span>ARNA JOURNAL</span><span>{{ item.type.replace('_', ' ').toUpperCase() }}</span></div>
+              <h3>{{ item.title }}</h3>
+              <p class="publication-card__description">{{ item.body }}</p>
+              <span class="publication-card__status"><span></span> {{ publishedDate(item.published_at) }} · OFFICIAL</span>
+            </article>
+          </div>
+          <div v-else class="publication-grid">
             <article v-for="channel in publicationChannels" :key="channel.number" class="publication-card">
               <div class="publication-card__top"><span>{{ channel.number }}</span><span>{{ channel.label }}</span></div>
               <h3 lang="am">{{ channel.titleAm }}</h3>
