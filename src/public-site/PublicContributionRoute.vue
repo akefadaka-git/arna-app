@@ -2,10 +2,9 @@
 import { computed, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import { masesBrandLabels } from '@/router/shell-labels';
+import { api } from '@/core/api/client';
 
 type SubmissionKind = 'news' | 'article' | 'announcement' | 'press-release';
-
-const submissionUrl = import.meta.env.VITE_PUBLIC_CONTENT_SUBMISSION_URL?.trim() ?? '';
 const title = ref('');
 const body = ref('');
 const authorName = ref('');
@@ -18,25 +17,16 @@ const errorMessage = ref('');
 const successMessage = ref('');
 const submissionReference = ref('');
 
-const endpointAvailable = computed(() => submissionUrl.length > 0);
+const endpointAvailable = computed(() => Boolean(import.meta.env.VITE_API_BASE_URL));
 
-function isSafeSubmissionEndpoint(value: string): boolean {
-  try {
-    const endpoint = new URL(value, window.location.origin);
-    return endpoint.protocol === 'https:' ||
-      (endpoint.protocol === 'http:' && ['localhost', '127.0.0.1'].includes(endpoint.hostname));
-  } catch {
-    return false;
-  }
-}
 
 async function submitContent(): Promise<void> {
   errorMessage.value = '';
   successMessage.value = '';
   submissionReference.value = '';
 
-  if (!endpointAvailable.value || !isSafeSubmissionEndpoint(submissionUrl)) {
-    errorMessage.value = 'የይዘት ማስገቢያ አገልግሎት ገና አልተዋቀረም። እባክዎ በኋላ ይሞክሩ።';
+  if (!endpointAvailable.value) {
+    errorMessage.value = 'የARNA API ግንኙነት አልተዋቀረም። እባክዎ በኋላ ይሞክሩ።';
     return;
   }
 
@@ -47,27 +37,18 @@ async function submitContent(): Promise<void> {
 
   submitting.value = true;
   try {
-    const response = await fetch(submissionUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      credentials: 'omit',
-      body: JSON.stringify({
-        type: kind.value,
+    await api.csrfCookie();
+    const result = await api.post<{ reference?: string | null; status: string }>(
+      '/api/public/content/submissions',
+      {
+        content_type: kind.value === 'press-release' ? 'press_release' : kind.value,
         title: title.value.trim(),
         body: body.value.trim(),
         author_name: authorName.value.trim(),
         author_email: authorEmail.value.trim() || null,
         website: website.value,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(response.status === 429
-        ? 'ብዙ ጊዜ ሞክረዋል። እባክዎ ቆይተው ይሞክሩ።'
-        : 'ማስገባት አልተሳካም። መረጃዎን አረጋግጠው እንደገና ይሞክሩ።');
-    }
-
-    const result = await response.json().catch(() => ({})) as { reference?: string };
+      },
+    );
     submissionReference.value = typeof result.reference === 'string' ? result.reference : '';
     successMessage.value = 'ይዘትዎ ተቀብሏል። ከሕዝብ ጋር ከመጋራቱ በፊት በARNA አስተዳዳሪ ይገመገማል።';
     title.value = '';
@@ -141,7 +122,7 @@ async function submitContent(): Promise<void> {
           <span>የግላዊነት መመሪያውን አንብቤ ተቀብያለሁ፤ ይዘቱ ለግምገማ እንደሚቀርብ ተረድቻለሁ።</span>
         </label>
 
-        <p v-if="!endpointAvailable" class="contribute-status contribute-status--warning" role="status">የማስገቢያ አገልግሎቱ ከARNA API ጋር እስኪገናኝ ድረስ ማስገባት አይቻልም። ይህ ገጽ ይዘትን በአካባቢው አያስቀምጥም ወይም አያትምም።</p>
+        <p v-if="!endpointAvailable" class="contribute-status contribute-status--warning" role="status">የARNA API ግንኙነት ሲኖር ማስገባት ይቻላል። የቀረበው ይዘት በአስተዳዳሪ እስኪጸድቅ ድረስ በግል ይቆያል።</p>
         <p v-if="errorMessage" class="contribute-status contribute-status--error" role="alert">{{ errorMessage }}</p>
         <p v-if="successMessage" class="contribute-status contribute-status--success" role="status">{{ successMessage }} <span v-if="submissionReference">የማጣቀሻ ቁጥር: {{ submissionReference }}</span></p>
 
