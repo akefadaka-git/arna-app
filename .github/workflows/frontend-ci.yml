@@ -12,8 +12,9 @@ permissions:
 
 jobs:
   type-check-and-build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Pin the current LTS runner image instead of the moving ubuntu-latest alias.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
