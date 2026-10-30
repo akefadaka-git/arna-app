@@ -23,9 +23,13 @@ const error = ref<string | null>(null);
 const notice = ref<string | null>(null);
 
 const selected = computed(() => items.value.find((item) => item.id === selectedId.value) ?? null);
-const canReviewSelected = computed(() =>
-  selected.value !== null && selected.value.submitted_by !== auth.userId,
-);
+const canReviewSelected = computed(() => {
+  if (!selected.value) return false;
+  const sameAccount = selected.value.submitted_by !== null && selected.value.submitted_by === auth.userId;
+  const sameEmail = Boolean(selected.value.author_email && auth.userEmail &&
+    selected.value.author_email.trim().toLowerCase() === auth.userEmail.trim().toLowerCase());
+  return !sameAccount && !sameEmail;
+});
 const canApproveSelected = computed(() =>
   canReviewSelected.value &&
   selected.value !== null &&
