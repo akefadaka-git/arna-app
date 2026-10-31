@@ -43,8 +43,8 @@ test('notification control is connected to the authenticated notification center
   assert.match(shell, /<NotificationsBell[\\s\\S]*:disabled="false"/);
   assert.match(shell, /<NotificationsCenter[\\s\\S]*:open="isNotificationsOpen"/);
   const api = readFileSync('src/features/notifications/api.ts', 'utf8');
-  assert.match(api, /notifications\\/unread-count/);
-  assert.match(api, /notifications\\/read-all/);
+  assert.ok(api.includes('/api/notifications/unread-count'));
+  assert.ok(api.includes('/api/notifications/read-all'));
 });
 
 test('brand lockup uses the approved emblem, product name, and descriptive tagline', () => {
