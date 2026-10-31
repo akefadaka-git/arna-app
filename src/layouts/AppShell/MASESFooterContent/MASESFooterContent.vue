@@ -190,6 +190,7 @@
 import { RouterLink } from 'vue-router';
 
 import { masesFooterLabels } from '@/router/shell-labels';
+import { formatCalendarDate } from '@/core/dates/calendar';
 
 // -----------------------------------------------------------------------------
 // Support destination
@@ -220,20 +221,8 @@ const SUPPORT_EMAIL = 'support@maalearna.com.et';
  * to spamming the console on every render of the footer. The value
  * remains a real year, and the string remains readable.
  */
-function resolveCurrentEthiopianYear(): string {
-  try {
-    const parts = new Intl.DateTimeFormat('en-US-u-ca-ethiopic', {
-      year: 'numeric',
-    }).formatToParts(new Date());
-
-    const year = parts.find((part) => part.type === 'year')?.value;
-    if (year !== undefined && year !== '') {
-      return year;
-    }
-  } catch {
-    /* fall through to the Gregorian fallback below */
-  }
-  return String(new Date().getFullYear());
+function resolveCurrentCalendarYear(): string {
+  return formatCalendarDate(new Date(), { year: 'numeric' });
 }
 
 /**
@@ -245,7 +234,7 @@ function resolveCurrentEthiopianYear(): string {
  */
 const copyrightText = masesFooterLabels.copyrightTemplate.replace(
   '{year}',
-  resolveCurrentEthiopianYear(),
+  resolveCurrentCalendarYear(),
 );
 </script>
 
