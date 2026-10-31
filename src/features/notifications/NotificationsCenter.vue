@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useNotificationsStore } from '@/stores/notifications';
+import { formatCalendarDate } from '@/core/dates/calendar';
 import {
   fetchNotifications,
   markAllNotificationsRead,
@@ -19,19 +20,7 @@ const labels = computed(() => locale.value === 'am'
   : { title: 'Notifications', close: 'Close', markAll: 'Mark all as read', empty: 'You are all caught up', loading: 'Loading…', retry: 'Try again', unread: 'Unread', previous: 'Previous', next: 'Next', error: 'Could not load notifications' });
 
 function formatDate(value: string): string {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return '';
-  try {
-    return new Intl.DateTimeFormat(locale.value === 'am' ? 'am-ET-u-ca-ethiopic' : 'en-ET-u-ca-ethiopic', {
-      dateStyle: 'medium',
-      timeStyle: 'short',
-    }).format(date);
-  } catch {
-    return new Intl.DateTimeFormat(locale.value === 'am' ? 'am-ET' : 'en-ET', {
-      dateStyle: 'medium',
-      timeStyle: 'short',
-    }).format(date);
-  }
+  return formatCalendarDate(value, { dateStyle: 'medium', timeStyle: 'short' });
 }
 
 async function load(targetPage = 1): Promise<void> {
