@@ -1448,6 +1448,7 @@ import type {
 export const masesBrandLabels = {
   corporateName: 'ማሌ ዓርና',
   productName: 'ማሴስ',
+  tagline: 'Lead by example • Build lasting trust',
   fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ማሴስ)',
 } as const;
 
