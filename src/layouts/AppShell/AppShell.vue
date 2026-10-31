@@ -417,6 +417,7 @@ import AppHeaderNavigation from '@/layouts/AppShell/AppHeaderNavigation/AppHeade
 import MASESBrand from '@/layouts/AppShell/MASESBrand';
 import UserMenu from '@/layouts/AppShell/UserMenu';
 import NotificationsBell from '@/layouts/AppShell/NotificationsBell';
+import NotificationsCenter from '@/features/notifications/NotificationsCenter.vue';
 import TenantSwitcher from '@/layouts/AppShell/TenantSwitcher';
 import AppSidebar from '@/layouts/AppShell/AppSidebar';
 import CalendarContext from '@/layouts/AppShell/CalendarContext';
@@ -556,6 +557,7 @@ function onTenantSelect(payload: { id: number }): void {
 // Mobile drawer open/close state (shell-owned)
 // -----------------------------------------------------------------------------
 const isMobileDrawerOpen = ref(false);
+const isNotificationsOpen = ref(false);
 
 function openMobileDrawer(): void {
   isMobileDrawerOpen.value = true;
@@ -569,7 +571,8 @@ function onUserMenuSelect(payload: { id: string }): void {
 }
 
 function onNotificationsOpen(): void {
-  emit('notifications-open');
+  isNotificationsOpen.value = !isNotificationsOpen.value;
+  if (isNotificationsOpen.value) emit('notifications-open');
 }
 
 function onMaintenanceAction(): void {
@@ -631,13 +634,8 @@ function onMaintenanceDismiss(): void {
       <template #actions>
         <slot name="header-actions" />
 
-        <!--
-          NotificationsBell is DISABLED until the §20.2 endpoints
-          exist. When they land, change `:disabled="true"` to
-          `:disabled="false"` (or remove the prop entirely).
-        -->
         <NotificationsBell
-          :disabled="true"
+          :disabled="false"
           :labels="labels.notificationsBell"
           @open="onNotificationsOpen"
         />
@@ -707,6 +705,11 @@ function onMaintenanceDismiss(): void {
         </div>
       </main>
     </div>
+
+    <NotificationsCenter
+      :open="isNotificationsOpen"
+      @close="isNotificationsOpen = false"
+    />
 
     <!-- ============================================================
          Footer
