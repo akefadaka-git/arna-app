@@ -305,6 +305,7 @@ export type { WalletStatementViewLabels } from './labels';
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
+import { formatCalendarDate } from '@/core/dates/calendar';
 import { useRoute } from 'vue-router';
 
 import PageHeader from '@/components/patterns/PageHeader';
