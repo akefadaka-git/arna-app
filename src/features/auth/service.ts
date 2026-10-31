@@ -506,7 +506,7 @@ export async function completeMfaLogin(
   }
 
   await api.csrfCookie();
-  const response = await authApi.login({
+  const response = await submitLogin({
     email: identifier,
     password,
     mfa_challenge_token: challengeToken,
