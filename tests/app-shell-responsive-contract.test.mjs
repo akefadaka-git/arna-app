@@ -76,6 +76,6 @@ test('header exposes route breadcrumbs and accessible navigation search', () => 
   assert.match(navigation, /data-testid="app-header-search-trigger"/);
   assert.match(navigation, /<dialog[\s\S]*aria-labelledby="app-header-search-title"/);
   assert.match(navigation, /results\.value|v-for="item in results"/);
-  assert.match(navigation, /router\.push\(to\)/);
+  assert.match(navigation, /router\.push\(item\.to\)/);
   assert.match(navigation, /Search covers the navigation destinations currently available/);
 });
