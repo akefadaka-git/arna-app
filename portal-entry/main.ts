@@ -74,7 +74,7 @@ export async function startPortal(): Promise<void> {
    * workspace entry point's header revision history (1.0.2) for the
    * full diagnosis.
    */
-  await bootstrapApp(pinia, { tokenStorage: 'session' });
+  await bootstrapApp(pinia, { tokenStorage: 'memory', authTransport: 'cookie' });
 
   app.use(router);
 
