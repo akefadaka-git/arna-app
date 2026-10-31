@@ -1,0 +1,258 @@
+/*
+ * ARNA Design System 2.0 — semantic theme and bilingual base layer.
+ * Primitive palette and the frozen token substrate are not modified.
+ * Theme modes: system preference by default; data-theme="light|dark"
+ * explicitly overrides the system preference.
+ */
+@import './tokens.css';
+
+:root {
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/* English is the default Latin stack; Amharic uses the Ethiopic-first stack. */
+html body {
+  font-family: var(--mases-font-family-en, "Inter", "Noto Sans Ethiopic", system-ui, sans-serif);
+  font-size: var(--mases-font-size-body, 16px);
+  line-height: var(--mases-line-height-body, 1.625);
+  color: var(--mases-color-text-primary, #141009);
+  background-color: var(--mases-color-surface-page, #fffdf7);
+  text-rendering: optimizeLegibility;
+}
+
+html[lang="en"] {
+  /* Existing components consume this family token directly. */
+  --mases-font-family-am: var(--mases-font-family-en);
+}
+
+html[lang="en"] body {
+  font-family: var(--mases-font-family-en, "Inter", "Noto Sans Ethiopic", system-ui, sans-serif);
+}
+
+html[lang="am"] body {
+  font-family: var(--mases-font-family-am, "Noto Sans Ethiopic", "Inter", system-ui, sans-serif);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: var(--mases-focus-ring-width, 3px) solid var(--mases-focus-ring-color, Highlight);
+  outline-offset: var(--mases-focus-ring-offset, 2px);
+}
+
+:where(input, select, textarea, [contenteditable="true"])[aria-invalid="true"] {
+  border-color: var(--mases-color-border-danger, currentColor);
+}
+
+:where(button, input, select, textarea):disabled {
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* All Tier-2 color roles are mapped; component contracts remain unchanged. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --mases-color-surface-page: var(--mases-color-neutral-900);
+  --mases-color-surface-raised: var(--mases-color-neutral-800);
+  --mases-color-surface-subtle: var(--mases-color-neutral-800);
+  --mases-color-surface-overlay: var(--mases-color-aubergine-800);
+  --mases-color-surface-sunken: var(--mases-color-neutral-900);
+  --mases-color-surface-inverse: var(--mases-color-neutral-900);
+  --mases-color-surface-inverse-raised: var(--mases-color-neutral-800);
+  --mases-color-surface-brand: var(--mases-color-crimson-400);
+  --mases-color-surface-accent: var(--mases-color-aubergine-700);
+  --mases-color-surface-disabled: var(--mases-color-neutral-800);
+  --mases-color-surface-success: var(--mases-color-success-900);
+  --mases-color-surface-warning: var(--mases-color-warning-900);
+  --mases-color-surface-info: var(--mases-color-info-900);
+  --mases-color-surface-danger: var(--mases-color-crimson-900);
+  --mases-color-text-primary: var(--mases-color-neutral-50);
+  --mases-color-text-secondary: var(--mases-color-neutral-200);
+  --mases-color-text-tertiary: var(--mases-color-neutral-300);
+  --mases-color-text-muted: var(--mases-color-neutral-400);
+  --mases-color-text-inverse: var(--mases-color-neutral-50);
+  --mases-color-text-inverse-secondary: var(--mases-color-neutral-200);
+  --mases-color-text-brand: var(--mases-color-crimson-300);
+  --mases-color-text-accent: var(--mases-color-gold-300);
+  --mases-color-text-success: var(--mases-color-success-100);
+  --mases-color-text-warning: var(--mases-color-warning-100);
+  --mases-color-text-info: var(--mases-color-info-100);
+  --mases-color-text-danger: var(--mases-color-crimson-100);
+  --mases-color-text-disabled: var(--mases-color-neutral-500);
+  --mases-color-border-default: var(--mases-color-neutral-600);
+  --mases-color-border-strong: var(--mases-color-neutral-500);
+  --mases-color-border-subtle: var(--mases-color-neutral-700);
+  --mases-color-border-brand: var(--mases-color-crimson-400);
+  --mases-color-border-inverse: var(--mases-color-neutral-400);
+  --mases-color-border-success: var(--mases-color-success-500);
+  --mases-color-border-warning: var(--mases-color-warning-500);
+  --mases-color-border-info: var(--mases-color-info-500);
+  --mases-color-border-danger: var(--mases-color-crimson-400);
+  --mases-color-border-focus: var(--mases-color-gold-300);
+  --mases-color-action-primary: var(--mases-color-crimson-400);
+  --mases-color-action-primary-hover: var(--mases-color-crimson-500);
+  --mases-color-action-primary-active: var(--mases-color-crimson-600);
+  --mases-color-action-primary-disabled: var(--mases-color-crimson-900);
+  --mases-color-action-secondary: var(--mases-color-aubergine-700);
+  --mases-color-action-secondary-hover: var(--mases-color-aubergine-800);
+  --mases-color-action-secondary-active: var(--mases-color-aubergine-600);
+  --mases-color-action-ghost: transparent;
+  --mases-color-action-ghost-hover: var(--mases-color-neutral-700);
+  --mases-color-action-danger: var(--mases-color-crimson-500);
+  --mases-color-action-danger-hover: var(--mases-color-crimson-600);
+  --mases-color-action-link: var(--mases-color-crimson-300);
+  --mases-color-action-link-hover: var(--mases-color-crimson-200);
+  --mases-color-icon-primary: var(--mases-color-neutral-200);
+  --mases-color-icon-secondary: var(--mases-color-neutral-400);
+  --mases-color-icon-inverse: var(--mases-color-neutral-50);
+  --mases-color-icon-brand: var(--mases-color-crimson-300);
+  --mases-color-icon-accent: var(--mases-color-gold-300);
+  --mases-color-icon-success: var(--mases-color-success-100);
+  --mases-color-icon-warning: var(--mases-color-warning-100);
+  --mases-color-icon-info: var(--mases-color-info-100);
+  --mases-color-icon-danger: var(--mases-color-crimson-200);
+  --mases-color-state-hover: var(--mases-color-neutral-700);
+  --mases-color-state-selected: var(--mases-color-crimson-900);
+  --mases-color-state-selected-accent: var(--mases-color-crimson-300);
+  --mases-color-state-disabled-bg: var(--mases-color-neutral-800);
+  --mases-color-state-disabled-text: var(--mases-color-neutral-500);
+  --mases-color-state-focus-ring: var(--mases-color-gold-300);
+  --mases-color-state-focus-ring-inverse: var(--mases-color-aubergine-900);
+  --mases-color-overlay-scrim: rgba(0, 0, 0, 0.72);
+  --mases-color-surface-auth-backdrop: var(--mases-color-neutral-900);
+  --mases-color-text-auth-attribution: var(--mases-color-neutral-400);
+
+  /* Public-site semantic roles, preserving the approved ARNA brand hues. */
+  --arna-public-page-surface: #0b1b2b;
+  --arna-public-surface: #14283b;
+  --arna-public-text-primary: #f3f6fa;
+  --arna-public-text-secondary: #c7d2de;
+  --arna-public-brand-anchor: #8bc9ff;
+  --arna-public-action: #63b3f5;
+  --arna-public-accent: #e8bc44;
+  --arna-public-border-subtle: rgba(199, 210, 222, 0.2);
+  --arna-public-brand-border: rgba(139, 201, 255, 0.28);
+  --arna-public-surface-overlay: rgba(20, 40, 59, 0.92);
+  --arna-public-surface-soft: rgba(20, 40, 59, 0.72);
+  --arna-public-accent-soft: rgba(232, 188, 68, 0.2);
+  --arna-public-accent-wash: rgba(232, 188, 68, 0.12);
+  --arna-public-action-wash: rgba(99, 179, 245, 0.12);
+  --arna-public-card-shadow: rgba(0, 0, 0, 0.24);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --mases-color-surface-page: var(--mases-color-neutral-900);
+    --mases-color-surface-raised: var(--mases-color-neutral-800);
+    --mases-color-surface-subtle: var(--mases-color-neutral-800);
+    --mases-color-surface-overlay: var(--mases-color-aubergine-800);
+    --mases-color-surface-sunken: var(--mases-color-neutral-900);
+    --mases-color-surface-inverse: var(--mases-color-neutral-900);
+    --mases-color-surface-inverse-raised: var(--mases-color-neutral-800);
+    --mases-color-surface-brand: var(--mases-color-crimson-400);
+    --mases-color-surface-accent: var(--mases-color-aubergine-700);
+    --mases-color-surface-disabled: var(--mases-color-neutral-800);
+    --mases-color-surface-success: var(--mases-color-success-900);
+    --mases-color-surface-warning: var(--mases-color-warning-900);
+    --mases-color-surface-info: var(--mases-color-info-900);
+    --mases-color-surface-danger: var(--mases-color-crimson-900);
+    --mases-color-text-primary: var(--mases-color-neutral-50);
+    --mases-color-text-secondary: var(--mases-color-neutral-200);
+    --mases-color-text-tertiary: var(--mases-color-neutral-300);
+    --mases-color-text-muted: var(--mases-color-neutral-400);
+    --mases-color-text-inverse: var(--mases-color-neutral-50);
+    --mases-color-text-inverse-secondary: var(--mases-color-neutral-200);
+    --mases-color-text-brand: var(--mases-color-crimson-300);
+    --mases-color-text-accent: var(--mases-color-gold-300);
+    --mases-color-text-success: var(--mases-color-success-100);
+    --mases-color-text-warning: var(--mases-color-warning-100);
+    --mases-color-text-info: var(--mases-color-info-100);
+    --mases-color-text-danger: var(--mases-color-crimson-100);
+    --mases-color-text-disabled: var(--mases-color-neutral-500);
+    --mases-color-border-default: var(--mases-color-neutral-600);
+    --mases-color-border-strong: var(--mases-color-neutral-500);
+    --mases-color-border-subtle: var(--mases-color-neutral-700);
+    --mases-color-border-brand: var(--mases-color-crimson-400);
+    --mases-color-border-inverse: var(--mases-color-neutral-400);
+    --mases-color-border-success: var(--mases-color-success-500);
+    --mases-color-border-warning: var(--mases-color-warning-500);
+    --mases-color-border-info: var(--mases-color-info-500);
+    --mases-color-border-danger: var(--mases-color-crimson-400);
+    --mases-color-border-focus: var(--mases-color-gold-300);
+    --mases-color-action-primary: var(--mases-color-crimson-400);
+    --mases-color-action-primary-hover: var(--mases-color-crimson-500);
+    --mases-color-action-primary-active: var(--mases-color-crimson-600);
+    --mases-color-action-primary-disabled: var(--mases-color-crimson-900);
+    --mases-color-action-secondary: var(--mases-color-aubergine-700);
+    --mases-color-action-secondary-hover: var(--mases-color-aubergine-800);
+    --mases-color-action-secondary-active: var(--mases-color-aubergine-600);
+    --mases-color-action-ghost: transparent;
+    --mases-color-action-ghost-hover: var(--mases-color-neutral-700);
+    --mases-color-action-danger: var(--mases-color-crimson-500);
+    --mases-color-action-danger-hover: var(--mases-color-crimson-600);
+    --mases-color-action-link: var(--mases-color-crimson-300);
+    --mases-color-action-link-hover: var(--mases-color-crimson-200);
+    --mases-color-icon-primary: var(--mases-color-neutral-200);
+    --mases-color-icon-secondary: var(--mases-color-neutral-400);
+    --mases-color-icon-inverse: var(--mases-color-neutral-50);
+    --mases-color-icon-brand: var(--mases-color-crimson-300);
+    --mases-color-icon-accent: var(--mases-color-gold-300);
+    --mases-color-icon-success: var(--mases-color-success-100);
+    --mases-color-icon-warning: var(--mases-color-warning-100);
+    --mases-color-icon-info: var(--mases-color-info-100);
+    --mases-color-icon-danger: var(--mases-color-crimson-200);
+    --mases-color-state-hover: var(--mases-color-neutral-700);
+    --mases-color-state-selected: var(--mases-color-crimson-900);
+    --mases-color-state-selected-accent: var(--mases-color-crimson-300);
+    --mases-color-state-disabled-bg: var(--mases-color-neutral-800);
+    --mases-color-state-disabled-text: var(--mases-color-neutral-500);
+    --mases-color-state-focus-ring: var(--mases-color-gold-300);
+    --mases-color-state-focus-ring-inverse: var(--mases-color-aubergine-900);
+    --mases-color-overlay-scrim: rgba(0, 0, 0, 0.72);
+    --mases-color-surface-auth-backdrop: var(--mases-color-neutral-900);
+    --mases-color-text-auth-attribution: var(--mases-color-neutral-400);
+    --arna-public-page-surface: #0b1b2b;
+    --arna-public-surface: #14283b;
+    --arna-public-text-primary: #f3f6fa;
+    --arna-public-text-secondary: #c7d2de;
+    --arna-public-brand-anchor: #8bc9ff;
+    --arna-public-action: #63b3f5;
+    --arna-public-accent: #e8bc44;
+    --arna-public-border-subtle: rgba(199, 210, 222, 0.2);
+    --arna-public-brand-border: rgba(139, 201, 255, 0.28);
+    --arna-public-surface-overlay: rgba(20, 40, 59, 0.92);
+    --arna-public-surface-soft: rgba(20, 40, 59, 0.72);
+    --arna-public-accent-soft: rgba(232, 188, 68, 0.2);
+    --arna-public-accent-wash: rgba(232, 188, 68, 0.12);
+    --arna-public-action-wash: rgba(99, 179, 245, 0.12);
+    --arna-public-card-shadow: rgba(0, 0, 0, 0.24);
+  }
+}
+
+/* Native forced-colors palette takes precedence over branded theme colors. */
+@media (forced-colors: active) {
+  :focus-visible {
+    outline-color: Highlight;
+  }
+}
