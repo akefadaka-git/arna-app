@@ -822,6 +822,22 @@ function onMaintenanceDismiss(): void {
   border-inline-end: 0;
 }
 
+/*
+ * Compact the persistent navigation column on tablet-width viewports.
+ * The full labels remain visible and wrap naturally; only the column
+ * width is fluid, so Amharic navigation labels remain readable and
+ * keyboard/screen-reader names are unchanged.
+ */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .app-shell__aside {
+    width: clamp(13rem, 25vw, 15rem);
+  }
+
+  .app-shell__aside-nav :deep(.app-sidebar) {
+    width: 100%;
+  }
+}
+
 .app-shell__aside-calendar {
   flex-shrink: 0;
   padding-block: var(--mases-space-3);

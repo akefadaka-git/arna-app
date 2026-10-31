@@ -106,6 +106,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 
 import App from '@/App.vue';
+import '@/styles/themes.css';
 import { createAppRouter } from '@/router';
 import { bootstrapApp } from '@/core/bootstrap';
 
