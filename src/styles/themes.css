@@ -24,7 +24,12 @@ html body {
   text-rendering: optimizeLegibility;
 }
 
-html[lang="en"] {\n  /* Existing components consume this family token directly. */\n  --mases-font-family-am: var(--mases-font-family-en);\n}\n\nhtml[lang="en"] body {
+html[lang="en"] {
+  /* Existing components consume this family token directly. */
+  --mases-font-family-am: var(--mases-font-family-en);
+}
+
+html[lang="en"] body {
   font-family: var(--mases-font-family-en, "Inter", "Noto Sans Ethiopic", system-ui, sans-serif);
 }
 
