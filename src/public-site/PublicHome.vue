@@ -6,8 +6,9 @@ import { onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import { api } from '@/core/api/client';
 import { masesBrandLabels } from '@/router/shell-labels';
+import { formatCalendarDate } from '@/core/dates/calendar';
 
-const year = new Date().getFullYear();
+const year = formatCalendarDate(new Date(), { year: 'numeric' });
 
 interface PublishedContent {
   readonly id: string;
@@ -34,7 +35,7 @@ onMounted(async () => {
 
 function publishedDate(value: string | null): string {
   if (!value) return '';
-  return new Intl.DateTimeFormat('am-ET', { dateStyle: 'medium' }).format(new Date(value));
+  return formatCalendarDate(value, { dateStyle: 'medium' });
 }
 
 
