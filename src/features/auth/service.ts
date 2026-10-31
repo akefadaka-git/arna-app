@@ -310,6 +310,12 @@ function submitLogin(payload: authApi.LoginRequest): Promise<authApi.LoginRespon
   return activeAuthTransport === 'cookie' ? authApi.spaLogin(payload) : authApi.login(payload);
 }
 
+function fetchCurrentUserByTransport(): Promise<AuthUser> {
+  return activeAuthTransport === 'cookie'
+    ? authApi.spaFetchCurrentUser()
+    : authApi.fetchCurrentUser();
+}
+
 // =============================================================================
 // Public types
 // =============================================================================
@@ -443,7 +449,7 @@ async function establishSession(response: LoginSuccessResponse): Promise<void> {
   }
 
   try {
-    const fullUser = await authApi.fetchCurrentUser();
+    const fullUser = await fetchCurrentUserByTransport();
     syncUserIntoStores(fullUser);
   } catch (err) {
     auth.clearSession();
@@ -615,7 +621,7 @@ export async function refresh(): Promise<void> {
  * Laravel's CSRF check.
  */
 export async function fetchAndSyncCurrentUser(): Promise<void> {
-  const user = await authApi.fetchCurrentUser();
+  const user = await fetchCurrentUserByTransport();
   syncUserIntoStores(user);
 }
 
