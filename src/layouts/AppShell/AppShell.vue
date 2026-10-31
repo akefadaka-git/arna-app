@@ -413,6 +413,7 @@ import { useTenantStore } from '@/stores/tenant';
 import SkipToContent from '@/layouts/AppShell/SkipToContent';
 import MaintenanceBanner from '@/layouts/AppShell/MaintenanceBanner';
 import AppHeader from '@/layouts/AppShell/AppHeader';
+import AppHeaderNavigation from '@/layouts/AppShell/AppHeaderNavigation/AppHeaderNavigation.vue';
 import MASESBrand from '@/layouts/AppShell/MASESBrand';
 import UserMenu from '@/layouts/AppShell/UserMenu';
 import NotificationsBell from '@/layouts/AppShell/NotificationsBell';
@@ -623,6 +624,7 @@ function onMaintenanceDismiss(): void {
       </template>
 
       <template #nav>
+        <AppHeaderNavigation :items="navItems" />
         <slot name="breadcrumbs" />
       </template>
 
