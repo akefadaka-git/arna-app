@@ -298,6 +298,18 @@ import { useLocaleStore } from '@/stores/locale';
 import { useLauncherStore } from '@/stores/launcher';
 import { useNotificationsStore } from '@/stores/notifications';
 
+type AuthTransport = 'token' | 'cookie';
+let activeAuthTransport: AuthTransport = 'token';
+
+/** Select the authentication transport for this independently built SPA. */
+export function setAuthTransport(transport: AuthTransport): void {
+  activeAuthTransport = transport;
+}
+
+function submitLogin(payload: authApi.LoginRequest): Promise<authApi.LoginResponse> {
+  return activeAuthTransport === 'cookie' ? authApi.spaLogin(payload) : authApi.login(payload);
+}
+
 // =============================================================================
 // Public types
 // =============================================================================
@@ -414,19 +426,21 @@ export type LoginResult =
 /** Establish a session only after the API returns an actual bearer token. */
 async function establishSession(response: LoginSuccessResponse): Promise<void> {
   const auth = useAuthStore();
-  auth.setSession({
-    token: response.token,
-    user: {
-      id: response.user.id,
-      name: response.user.name,
-      email: response.user.email,
-      locale: response.user.locale,
-      default_tenant_id: response.user.default_tenant_id,
-      roles: [],
-      permissions: [],
-      tenants: [],
-    },
-  });
+  const partialUser: AuthUser = {
+    id: response.user.id,
+    name: response.user.name,
+    email: response.user.email,
+    locale: response.user.locale,
+    default_tenant_id: response.user.default_tenant_id,
+    roles: [],
+    permissions: [],
+    tenants: [],
+  };
+  if (response.token) {
+    auth.setSession({ token: response.token, user: partialUser });
+  } else {
+    auth.setUser(partialUser);
+  }
 
   try {
     const fullUser = await authApi.fetchCurrentUser();
@@ -447,7 +461,7 @@ export async function login(
   options: { readonly tenantId?: number; readonly remember?: boolean } = {},
 ): Promise<LoginResult> {
   await api.csrfCookie();
-  const response = await authApi.login({
+  const response = await submitLogin({
     email: identifier,
     password,
     ...(options.tenantId !== undefined ? { tenant_id: options.tenantId } : {}),
@@ -527,7 +541,9 @@ export async function register(
    */
   await api.csrfCookie();
 
-  const response = await authApi.register(payload);
+  const response = activeAuthTransport === 'cookie'
+    ? await authApi.spaRegister(payload)
+    : await authApi.register(payload);
   await establishSession(response);
 }
 
@@ -546,7 +562,11 @@ export async function register(
  */
 export async function logout(): Promise<void> {
   try {
-    await authApi.logout();
+    if (activeAuthTransport === 'cookie') {
+      await authApi.spaLogout();
+    } else {
+      await authApi.logout();
+    }
   } catch {
     /* Swallowed — see the file header comment. */
   }
@@ -564,6 +584,10 @@ export async function logout(): Promise<void> {
  * CSRF cookie is present.
  */
 export async function refresh(): Promise<void> {
+  if (activeAuthTransport === 'cookie') {
+    await fetchAndSyncCurrentUser();
+    return;
+  }
   const auth = useAuthStore();
 
   const currentUser = auth.user;
