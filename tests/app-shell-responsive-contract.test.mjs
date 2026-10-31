@@ -45,3 +45,25 @@ test('notification control remains honest about the missing backend dependency',
   assert.match(shell, /<NotificationsBell[\s\S]*:disabled="true"/);
   assert.match(store, /DEPENDENCY MISSING/);
 });
+
+test('brand lockup uses the approved emblem, product name, and descriptive tagline', () => {
+  const brand = readFileSync('src/layouts/AppShell/MASESBrand/MASESBrand.vue', 'utf8');
+  assert.match(brand, /src="\/logo\.png"/);
+  assert.match(brand, /border-radius:\s*50%/);
+  assert.match(brand, /width:\s*56px/);
+  assert.match(brand, /masesBrandLabels\.productName/);
+  assert.match(brand, /Maale Arna Smart System/);
+});
+
+test('header reserves a responsive second row for breadcrumbs on narrow screens', () => {
+  const header = readFileSync('src/layouts/AppShell/AppHeader/AppHeader.vue', 'utf8');
+  assert.match(header, /flex-wrap:\s*wrap/);
+  assert.match(header, /\.app-header__nav\s*\{[^}]*flex:\s*1 1 100%/s);
+  assert.match(header, /\.app-header__nav,\s*\.app-header__actions\s*\{\s*order:\s*0/s);
+  assert.match(header, /flex-wrap:\s*nowrap/);
+});
+
+test('notification bell remains gated until its service endpoints are implemented', () => {
+  const shell = readFileSync('src/layouts/AppShell/AppShell.vue', 'utf8');
+  assert.match(shell, /<NotificationsBell\s+:disabled="true"/);
+});
