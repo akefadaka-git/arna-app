@@ -8,7 +8,9 @@ import BaseIcon from '@/components/primitives/BaseIcon';
 interface SearchNavItem {
   readonly id: string;
   readonly label: string;
-  readonly to: RouteLocationRaw;
+  readonly to?: RouteLocationRaw;
+  readonly visibleChildren?: ReadonlyArray<SearchNavItem>;
+  readonly children?: ReadonlyArray<SearchNavItem>;
 }
 
 interface Props {
@@ -20,9 +22,15 @@ const router = useRouter();
 const dialog = ref<HTMLDialogElement | null>(null);
 const query = ref('');
 
+const searchItems = computed(() => props.items.flatMap((item) =>
+  item.to ? [item] : [...(item.visibleChildren ?? item.children ?? [])],
+));
+
 const results = computed(() => {
   const term = query.value.trim().toLocaleLowerCase();
-  return props.items.filter((item) => !term || item.label.toLocaleLowerCase().includes(term));
+  return searchItems.value.filter((item) =>
+    item.to && (!term || item.label.toLocaleLowerCase().includes(term)),
+  );
 });
 
 const breadcrumbs = computed(() => route.matched
@@ -42,8 +50,9 @@ function closeSearch(): void {
   dialog.value?.close();
 }
 
-function navigate(to: RouteLocationRaw): void {
-  void router.push(to);
+function navigate(item: SearchNavItem): void {
+  if (!item.to) return;
+  void router.push(item.to);
   closeSearch();
 }
 </script>
@@ -90,7 +99,7 @@ function navigate(to: RouteLocationRaw): void {
       </label>
       <ul class="app-header-navigation__results">
         <li v-for="item in results" :key="item.id">
-          <button type="button" @click="navigate(item.to)">
+          <button type="button" @click="navigate(item)">
             <span>{{ item.label }}</span>
             <BaseIcon name="arrow-up-right" size="sm" />
           </button>
