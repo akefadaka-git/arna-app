@@ -31,6 +31,8 @@ jobs:
         run: npm run test:public-build-smoke
       - name: Verify approved ARNA palette and contrast contract
         run: npm run test:brand-palette-contract
+      - name: Verify bilingual themes and shared accessible component contracts
+        run: npm run test:design-system-theme-contract
       - name: Upload versioned static build outputs
         uses: actions/upload-artifact@v4
         with:
