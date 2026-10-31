@@ -519,7 +519,6 @@ import { masesBrandLabels } from '@/router/shell-labels';
         class="mases-brand__tagline"
         data-testid="mases-brand-tagline"
       >{{ masesBrandLabels.tagline }}</span>
-      <span class="mases-brand__tagline" data-testid="mases-brand-tagline">Maale Arna Smart System</span>
     </span>
   </span>
 </template>
@@ -644,23 +643,6 @@ import { masesBrandLabels } from '@/router/shell-labels';
   max-width: 20rem;
 }
 
-.mases-brand__tagline {
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
-  font-weight: var(--mases-font-weight-regular);
-  line-height: 1.15;
-  white-space: nowrap;
-}
-
-@media (max-width: 767px) {
-  .mases-brand__symbol-image {
-    width: 44px;
-    height: 44px;
-  }
-  .mases-brand__tagline {
-    display: none;
-  }
-}
 
 
 /* ============================================================================
