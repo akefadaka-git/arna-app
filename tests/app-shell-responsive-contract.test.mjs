@@ -39,11 +39,12 @@ test('brand lockup uses the circular corporate emblem, bilingual identity and ta
   assert.match(labels, /tagline:\s*'Lead by example • Build lasting trust'/);
 });
 
-test('notification control remains honest about the missing backend dependency', () => {
-  const shell = readFileSync('src/layouts/AppShell/AppShell.vue', 'utf8');
-  const store = readFileSync('src/stores/notifications.ts', 'utf8');
-  assert.match(shell, /<NotificationsBell[\s\S]*:disabled="true"/);
-  assert.match(store, /DEPENDENCY MISSING/);
+test('notification control is connected to the authenticated notification center', () => {
+  assert.match(shell, /<NotificationsBell[\\s\\S]*:disabled="false"/);
+  assert.match(shell, /<NotificationsCenter[\\s\\S]*:open="isNotificationsOpen"/);
+  const api = readFileSync('src/features/notifications/api.ts', 'utf8');
+  assert.match(api, /notifications\\/unread-count/);
+  assert.match(api, /notifications\\/read-all/);
 });
 
 test('brand lockup uses the approved emblem, product name, and descriptive tagline', () => {
@@ -63,9 +64,11 @@ test('header reserves a responsive second row for breadcrumbs on narrow screens'
   assert.match(header, /flex-wrap:\s*nowrap/);
 });
 
-test('notification bell remains gated until its service endpoints are implemented', () => {
-  const shell = readFileSync('src/layouts/AppShell/AppShell.vue', 'utf8');
-  assert.match(shell, /<NotificationsBell\s+:disabled="true"/);
+test('notification bell is enabled with the implemented service adapter and center', () => {
+  assert.match(shell, /<NotificationsBell\\s+:disabled="false"/);
+  const center = readFileSync('src/features/notifications/NotificationsCenter.vue', 'utf8');
+  assert.match(center, /markNotificationRead/);
+  assert.match(center, /markAllNotificationsRead/);
 });
 
 test('header exposes route breadcrumbs and accessible navigation search', () => {
