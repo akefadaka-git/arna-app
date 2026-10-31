@@ -24,7 +24,7 @@ html body {
   text-rendering: optimizeLegibility;
 }
 
-html[lang="en"] body {
+html[lang="en"] {\n  /* Existing components consume this family token directly. */\n  --mases-font-family-am: var(--mases-font-family-en);\n}\n\nhtml[lang="en"] body {
   font-family: var(--mases-font-family-en, "Inter", "Noto Sans Ethiopic", system-ui, sans-serif);
 }
 
@@ -72,8 +72,8 @@ textarea {
   --mases-color-surface-subtle: var(--mases-color-neutral-800);
   --mases-color-surface-overlay: var(--mases-color-aubergine-800);
   --mases-color-surface-sunken: var(--mases-color-neutral-900);
-  --mases-color-surface-inverse: var(--mases-color-neutral-50);
-  --mases-color-surface-inverse-raised: var(--mases-color-neutral-100);
+  --mases-color-surface-inverse: var(--mases-color-neutral-900);
+  --mases-color-surface-inverse-raised: var(--mases-color-neutral-800);
   --mases-color-surface-brand: var(--mases-color-crimson-400);
   --mases-color-surface-accent: var(--mases-color-aubergine-700);
   --mases-color-surface-disabled: var(--mases-color-neutral-800);
@@ -85,8 +85,8 @@ textarea {
   --mases-color-text-secondary: var(--mases-color-neutral-200);
   --mases-color-text-tertiary: var(--mases-color-neutral-300);
   --mases-color-text-muted: var(--mases-color-neutral-400);
-  --mases-color-text-inverse: var(--mases-color-neutral-900);
-  --mases-color-text-inverse-secondary: var(--mases-color-neutral-700);
+  --mases-color-text-inverse: var(--mases-color-neutral-50);
+  --mases-color-text-inverse-secondary: var(--mases-color-neutral-200);
   --mases-color-text-brand: var(--mases-color-crimson-300);
   --mases-color-text-accent: var(--mases-color-gold-300);
   --mases-color-text-success: var(--mases-color-success-100);
@@ -105,21 +105,21 @@ textarea {
   --mases-color-border-danger: var(--mases-color-crimson-400);
   --mases-color-border-focus: var(--mases-color-gold-300);
   --mases-color-action-primary: var(--mases-color-crimson-400);
-  --mases-color-action-primary-hover: var(--mases-color-crimson-300);
-  --mases-color-action-primary-active: var(--mases-color-crimson-500);
+  --mases-color-action-primary-hover: var(--mases-color-crimson-500);
+  --mases-color-action-primary-active: var(--mases-color-crimson-600);
   --mases-color-action-primary-disabled: var(--mases-color-crimson-900);
-  --mases-color-action-secondary: var(--mases-color-aubergine-200);
-  --mases-color-action-secondary-hover: var(--mases-color-aubergine-100);
-  --mases-color-action-secondary-active: var(--mases-color-aubergine-300);
+  --mases-color-action-secondary: var(--mases-color-aubergine-700);
+  --mases-color-action-secondary-hover: var(--mases-color-aubergine-800);
+  --mases-color-action-secondary-active: var(--mases-color-aubergine-600);
   --mases-color-action-ghost: transparent;
   --mases-color-action-ghost-hover: var(--mases-color-neutral-700);
-  --mases-color-action-danger: var(--mases-color-crimson-300);
-  --mases-color-action-danger-hover: var(--mases-color-crimson-200);
+  --mases-color-action-danger: var(--mases-color-crimson-500);
+  --mases-color-action-danger-hover: var(--mases-color-crimson-600);
   --mases-color-action-link: var(--mases-color-crimson-300);
   --mases-color-action-link-hover: var(--mases-color-crimson-200);
   --mases-color-icon-primary: var(--mases-color-neutral-200);
   --mases-color-icon-secondary: var(--mases-color-neutral-400);
-  --mases-color-icon-inverse: var(--mases-color-neutral-900);
+  --mases-color-icon-inverse: var(--mases-color-neutral-50);
   --mases-color-icon-brand: var(--mases-color-crimson-300);
   --mases-color-icon-accent: var(--mases-color-gold-300);
   --mases-color-icon-success: var(--mases-color-success-100);
@@ -163,8 +163,8 @@ textarea {
     --mases-color-surface-subtle: var(--mases-color-neutral-800);
     --mases-color-surface-overlay: var(--mases-color-aubergine-800);
     --mases-color-surface-sunken: var(--mases-color-neutral-900);
-    --mases-color-surface-inverse: var(--mases-color-neutral-50);
-    --mases-color-surface-inverse-raised: var(--mases-color-neutral-100);
+    --mases-color-surface-inverse: var(--mases-color-neutral-900);
+    --mases-color-surface-inverse-raised: var(--mases-color-neutral-800);
     --mases-color-surface-brand: var(--mases-color-crimson-400);
     --mases-color-surface-accent: var(--mases-color-aubergine-700);
     --mases-color-surface-disabled: var(--mases-color-neutral-800);
@@ -176,8 +176,8 @@ textarea {
     --mases-color-text-secondary: var(--mases-color-neutral-200);
     --mases-color-text-tertiary: var(--mases-color-neutral-300);
     --mases-color-text-muted: var(--mases-color-neutral-400);
-    --mases-color-text-inverse: var(--mases-color-neutral-900);
-    --mases-color-text-inverse-secondary: var(--mases-color-neutral-700);
+    --mases-color-text-inverse: var(--mases-color-neutral-50);
+    --mases-color-text-inverse-secondary: var(--mases-color-neutral-200);
     --mases-color-text-brand: var(--mases-color-crimson-300);
     --mases-color-text-accent: var(--mases-color-gold-300);
     --mases-color-text-success: var(--mases-color-success-100);
@@ -196,21 +196,21 @@ textarea {
     --mases-color-border-danger: var(--mases-color-crimson-400);
     --mases-color-border-focus: var(--mases-color-gold-300);
     --mases-color-action-primary: var(--mases-color-crimson-400);
-    --mases-color-action-primary-hover: var(--mases-color-crimson-300);
-    --mases-color-action-primary-active: var(--mases-color-crimson-500);
+    --mases-color-action-primary-hover: var(--mases-color-crimson-500);
+    --mases-color-action-primary-active: var(--mases-color-crimson-600);
     --mases-color-action-primary-disabled: var(--mases-color-crimson-900);
-    --mases-color-action-secondary: var(--mases-color-aubergine-200);
-    --mases-color-action-secondary-hover: var(--mases-color-aubergine-100);
-    --mases-color-action-secondary-active: var(--mases-color-aubergine-300);
+    --mases-color-action-secondary: var(--mases-color-aubergine-700);
+    --mases-color-action-secondary-hover: var(--mases-color-aubergine-800);
+    --mases-color-action-secondary-active: var(--mases-color-aubergine-600);
     --mases-color-action-ghost: transparent;
     --mases-color-action-ghost-hover: var(--mases-color-neutral-700);
-    --mases-color-action-danger: var(--mases-color-crimson-300);
-    --mases-color-action-danger-hover: var(--mases-color-crimson-200);
+    --mases-color-action-danger: var(--mases-color-crimson-500);
+    --mases-color-action-danger-hover: var(--mases-color-crimson-600);
     --mases-color-action-link: var(--mases-color-crimson-300);
     --mases-color-action-link-hover: var(--mases-color-crimson-200);
     --mases-color-icon-primary: var(--mases-color-neutral-200);
     --mases-color-icon-secondary: var(--mases-color-neutral-400);
-    --mases-color-icon-inverse: var(--mases-color-neutral-900);
+    --mases-color-icon-inverse: var(--mases-color-neutral-50);
     --mases-color-icon-brand: var(--mases-color-crimson-300);
     --mases-color-icon-accent: var(--mases-color-gold-300);
     --mases-color-icon-success: var(--mases-color-success-100);
