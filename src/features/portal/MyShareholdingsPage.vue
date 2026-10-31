@@ -93,6 +93,7 @@
 -->
 
 <script lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 import type { MyShareholdingsPageLabels } from './labels';
 export type { MyShareholdingsPageLabels };
 </script>
@@ -573,7 +574,7 @@ function formatLedgerQuantity(quantity: string): string {
               data-testid="my-shareholdings-page-ledger-table"
             >
               <template #cell:date="{ row }">
-                {{ asEntry(row).occurred_at_display }}
+                {{ formatCalendarDate(asEntry(row).occurred_at) }}
               </template>
 
               <template #cell:type="{ row }">
