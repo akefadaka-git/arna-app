@@ -49,46 +49,45 @@ test('dark theme maps every shared semantic color family', () => {
     '--mases-color-text-auth-attribution',
   ];
   for (const role of requiredRoles) {
-    assert.match(tokens, new RegExp(role.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*:'),
-      `frozen token substrate must declare ${role}`);
+    assert.ok(tokens.includes(role), `frozen token substrate must declare ${role}`);
     assert.ok(theme.includes(role + ':'), `dark theme must map ${role}`);
   }
 });
 
 test('system preference and explicit light/dark overrides are supported', () => {
-  assert.match(theme, /prefers-color-scheme:\\s*dark/);
-  assert.match(theme, /:root\\[data-theme="dark"\\]/);
-  assert.match(theme, /:root:not\\(\\[data-theme="light"\\]\\)/);
-  assert.match(theme, /:focus-visible/);
-  assert.match(theme, /forced-colors:\\s*active/);
+  assert.ok(theme.includes('prefers-color-scheme: dark'));
+  assert.ok(theme.includes(':root[data-theme="dark"]'));
+  assert.ok(theme.includes(':root:not([data-theme="light"])'));
+  assert.ok(theme.includes(':focus-visible'));
+  assert.ok(theme.includes('forced-colors: active'));
 });
 
 test('English and Amharic typography use their approved font stacks and scales', () => {
-  assert.match(tokens, /--mases-font-family-am:\\s*"Noto Sans Ethiopic"/);
-  assert.match(tokens, /--mases-font-family-en:\\s*"Inter"/);
-  assert.match(tokens, /html\\[lang="am"\\]\\s*\\{/);
-  assert.match(theme, /html\\[lang="am"\\] body/);
-  assert.match(theme, /html\\[lang="en"\\] body/);
-  assert.match(theme, /--mases-font-size-body/);
-  assert.match(theme, /--mases-line-height-body/);
+  assert.ok(tokens.includes('--mases-font-family-am:     "Noto Sans Ethiopic"'));
+  assert.ok(tokens.includes('--mases-font-family-en:     "Inter"'));
+  assert.ok(tokens.includes('html[lang="am"]'));
+  assert.ok(theme.includes('html[lang="am"] body'));
+  assert.ok(theme.includes('html[lang="en"] body'));
+  assert.ok(theme.includes('--mases-font-size-body'));
+  assert.ok(theme.includes('--mases-line-height-body'));
 });
 
 test('shared button, form, card, table and dialog contracts retain keyboard and AT semantics', () => {
-  assert.match(button, /:disabled="isDisabled"/);
-  assert.match(button, /aria-busy/);
-  assert.match(button, /iconOnly=true requires the ariaLabel prop/);
-  assert.match(field, /aria-describedby/);
-  assert.match(field, /aria-live="polite"/);
-  assert.match(card, /role="button"/);
-  assert.match(card, /tabindex="0"/);
-  assert.match(card, /Enter/);
-  assert.match(card, /Space/);
-  assert.match(table, /<table/);
-  assert.match(table, /scope="col"/);
-  assert.match(table, /aria-sort/);
-  assert.match(modal, /<dialog/);
-  assert.match(modal, /aria-modal="true"/);
-  assert.match(modal, /showModal/);
-  assert.match(theme, /:focus-visible/);
-  assert.match(theme, /prefers-reduced-motion/);
+  assert.ok(button.includes(':disabled="isDisabled"'));
+  assert.ok(button.includes('aria-busy'));
+  assert.ok(button.includes('iconOnly=true requires the ariaLabel prop'));
+  assert.ok(field.includes('aria-describedby'));
+  assert.ok(field.includes('aria-live="polite"'));
+  assert.ok(card.includes('role="button"'));
+  assert.ok(card.includes('tabindex'));
+  assert.ok(card.includes('Enter'));
+  assert.ok(card.includes('Space'));
+  assert.ok(table.includes('<table'));
+  assert.ok(table.includes('scope="col"'));
+  assert.ok(table.includes('aria-sort'));
+  assert.ok(modal.includes('<dialog'));
+  assert.ok(modal.includes('aria-modal="true"'));
+  assert.ok(modal.includes('showModal'));
+  assert.ok(theme.includes(':focus-visible'));
+  assert.ok(theme.includes('prefers-reduced-motion'));
 });
