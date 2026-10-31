@@ -67,3 +67,15 @@ test('notification bell remains gated until its service endpoints are implemente
   const shell = readFileSync('src/layouts/AppShell/AppShell.vue', 'utf8');
   assert.match(shell, /<NotificationsBell\s+:disabled="true"/);
 });
+
+test('header exposes route breadcrumbs and accessible navigation search', () => {
+  const shell = readFileSync('src/layouts/AppShell/AppShell.vue', 'utf8');
+  const navigation = readFileSync('src/layouts/AppShell/AppHeaderNavigation/AppHeaderNavigation.vue', 'utf8');
+  assert.match(shell, /<AppHeaderNavigation :items="navItems"/);
+  assert.match(navigation, /aria-label="Breadcrumb"/);
+  assert.match(navigation, /data-testid="app-header-search-trigger"/);
+  assert.match(navigation, /<dialog[\s\S]*aria-labelledby="app-header-search-title"/);
+  assert.match(navigation, /results\.value|v-for="item in results"/);
+  assert.match(navigation, /router\.push\(to\)/);
+  assert.match(navigation, /Search covers the navigation destinations currently available/);
+});
