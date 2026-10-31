@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { getPerson, getPersonRelationships, getPersonRelationshipOptions, listPersonDocuments, linkPersonDocument, linkPersonRelationship, unlinkPersonDocument, unlinkPersonRelationship, updatePerson, type PersonDocument, type PersonNamePayload, type PersonProfile, type PersonRelationshipDomain, type PersonRelationshipOptions, type PersonRelationshipSummary } from './api';
@@ -286,7 +287,7 @@ onMounted(load);
         <div><dt>የስም መለያ (Amharic)</dt><dd>{{ nameAm(person) }}</dd></div>
         <div><dt>ስም (English)</dt><dd>{{ nameEn(person) }}</dd></div>
         <div><dt>ሁኔታ</dt><dd>{{ person.status === 'active' ? 'ንቁ' : person.status }}</dd></div>
-        <div><dt>የመጀመሪያ መዝገብ ቀን</dt><dd>{{ person.created_at ? new Date(person.created_at).toLocaleDateString() : '—' }}</dd></div>
+        <div><dt>የመጀመሪያ መዝገብ ቀን</dt><dd>{{ formatCalendarDate(person.created_at, { dateStyle: 'medium' }) }}</dd></div>
       </dl>
       <section v-if="relationships || relationshipsLoading" class="people-profile__relationships" aria-labelledby="people-relationships-title">
         <h2 id="people-relationships-title">የግንኙነት ማጠቃለያ</h2>
