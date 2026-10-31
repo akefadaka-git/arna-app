@@ -187,6 +187,7 @@
 -->
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
 
 import { masesFooterLabels } from '@/router/shell-labels';
@@ -232,10 +233,10 @@ function resolveCurrentCalendarYear(): string {
  * year rollover mid-session would require a page reload to pick up,
  * which is acceptable for a footer attribution line.
  */
-const copyrightText = masesFooterLabels.copyrightTemplate.replace(
+const copyrightText = computed(() => masesFooterLabels.copyrightTemplate.replace(
   '{year}',
   resolveCurrentCalendarYear(),
-);
+));
 </script>
 
 <template>
