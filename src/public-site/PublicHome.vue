@@ -644,4 +644,75 @@ const publicationChannels = [
 @media (prefers-reduced-motion: reduce) {
   .arna-site *, .arna-site *::before, .arna-site *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* ============================================================================
+   ARNA UI enhancement — responsive navigation and intermediate-width grids
+   ----------------------------------------------------------------------------
+   Keep every public destination visible and keyboard reachable on phones.
+   The previous single-line overflow strip concealed links off-screen and
+   provided no indication that additional destinations were available.
+   ============================================================================ */
+@media (min-width: 761px) and (max-width: 1000px) {
+  .business-grid,
+  .publication-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .main-nav {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: .2rem .55rem;
+    overflow: visible;
+    padding-block: .45rem .2rem;
+  }
+
+  .main-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: .35rem .55rem;
+    border-radius: var(--mases-radius-sm, .25rem);
+    white-space: normal;
+    line-height: 1.55;
+  }
+
+  .main-nav a:hover,
+  .main-nav a:focus-visible {
+    background: var(--arna-public-surface-soft);
+  }
+}
+
+@media (max-width: 480px) {
+  .site-header__inner {
+    align-items: center;
+    column-gap: .65rem;
+  }
+
+  .main-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    gap: .2rem .4rem;
+  }
+
+  .main-nav a {
+    min-width: 0;
+    padding-inline: .35rem;
+    font-size: .72rem;
+    overflow-wrap: anywhere;
+  }
+
+  .header-action {
+    max-width: 48%;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .hero-art {
+    max-width: 100%;
+  }
+}
+
 </style>
