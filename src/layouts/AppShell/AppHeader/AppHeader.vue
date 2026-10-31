@@ -546,8 +546,9 @@ function onToggleClick(): void {
    one spacing step on desktop relative to its own pre-1.2.0 value as
    part of that extraction.
    ============================================================================ */
-.app-header {
+ .app-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--mases-space-2);
   width: 100%;
@@ -571,7 +572,17 @@ function onToggleClick(): void {
 
 /* Tablet and up: the wider desktop chrome rhythm. */
 @media (min-width: 640px) {
+  .app-header__nav,
+  .app-header__actions {
+    order: 0;
+  }
+
+  .app-header__nav {
+    flex-basis: auto;
+  }
+
   .app-header {
+    flex-wrap: nowrap;
     gap: var(--mases-space-4);
     padding-block: var(--mases-space-3);
     padding-inline: var(--mases-shell-chrome-padding-inline-tablet);
@@ -656,8 +667,10 @@ function onToggleClick(): void {
    alternative (letting it overflow visibly) would paint slot content
    over the actions cluster.
    --------------------------------------------------------------------------- */
-.app-header__nav {
+ .app-header__nav {
   display: flex;
+  order: 4;
+  flex: 1 1 100%;
   align-items: center;
   gap: var(--mases-space-2);
   flex: 1 1 auto;
@@ -676,8 +689,9 @@ function onToggleClick(): void {
    correct priority order for chrome: identity and actions are fixed,
    navigation is elastic.
    --------------------------------------------------------------------------- */
-.app-header__actions {
+ .app-header__actions {
   display: flex;
+  order: 3;
   align-items: center;
   gap: var(--mases-space-2);
   flex-shrink: 0;
