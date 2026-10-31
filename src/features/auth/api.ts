@@ -287,6 +287,11 @@ export function fetchCurrentUser(): Promise<AuthUser> {
   return api.get<AuthUser>('/api/user');
 }
 
+/** Session-only current-user endpoint for Workspace and Shareholder Portal. */
+export function spaFetchCurrentUser(): Promise<AuthUser> {
+  return api.get<AuthUser>('/api/spa/user');
+}
+
 /**
  * POST /api/password/email — public.
  *
