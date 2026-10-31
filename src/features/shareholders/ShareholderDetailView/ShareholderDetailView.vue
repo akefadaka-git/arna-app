@@ -153,6 +153,7 @@
 -->
 
 <script lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 /*
  * Exported types.
  *
@@ -622,12 +623,12 @@ function shareholderStatusVariant(active: boolean): 'success' | 'neutral' {
 
           <div class="shareholder-detail-view__identity-row">
             <dt>{{ labels.identityCreated }}</dt>
-            <dd>{{ shareholder.created_at_display }}</dd>
+            <dd>{{ formatCalendarDate(shareholder.created_at) }}</dd>
           </div>
 
           <div class="shareholder-detail-view__identity-row">
             <dt>{{ labels.identityUpdated }}</dt>
-            <dd>{{ shareholder.updated_at_display }}</dd>
+            <dd>{{ formatCalendarDate(shareholder.updated_at) }}</dd>
           </div>
         </dl>
       </Card>
@@ -715,7 +716,7 @@ function shareholderStatusVariant(active: boolean): 'success' | 'neutral' {
           </template>
 
           <template #cell:issued="{ row }">
-            {{ asCertificate(row).issued_at_display ?? '' }}
+            {{ formatCalendarDate(asCertificate(row).issued_at) }}
           </template>
 
           <template #cell:actions="{ row }">

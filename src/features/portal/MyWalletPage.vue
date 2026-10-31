@@ -185,6 +185,7 @@
 -->
 
 <script lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 /*
  * The page's labels type is imported from ./labels and re-exported here
  * for consumers that import the type from the component module. The
@@ -488,7 +489,7 @@ const hasClosedAt = computed<boolean>(
 
           <div class="my-wallet-page__row">
             <dt>{{ labels.openedAtLabel }}</dt>
-            <dd>{{ wallet.opened_at_display }}</dd>
+            <dd>{{ formatCalendarDate(wallet.opened_at) }}</dd>
           </div>
 
           <div
@@ -496,17 +497,17 @@ const hasClosedAt = computed<boolean>(
             class="my-wallet-page__row"
           >
             <dt>{{ labels.closedAtLabel }}</dt>
-            <dd>{{ wallet.closed_at_display }}</dd>
+            <dd>{{ formatCalendarDate(wallet.closed_at) }}</dd>
           </div>
 
           <div class="my-wallet-page__row">
             <dt>{{ labels.createdAtLabel }}</dt>
-            <dd>{{ wallet.created_at_display }}</dd>
+            <dd>{{ formatCalendarDate(wallet.created_at) }}</dd>
           </div>
 
           <div class="my-wallet-page__row">
             <dt>{{ labels.updatedAtLabel }}</dt>
-            <dd>{{ wallet.updated_at_display }}</dd>
+            <dd>{{ formatCalendarDate(wallet.updated_at) }}</dd>
           </div>
         </dl>
       </Card>

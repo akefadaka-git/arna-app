@@ -68,6 +68,7 @@
 -->
 
 <script lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 import type { MyCertificatesPageLabels } from './labels';
 export type { MyCertificatesPageLabels };
 </script>
@@ -279,7 +280,7 @@ function asCertificate(row: unknown): ShareCertificate {
           </template>
 
           <template #cell:issued="{ row }">
-            {{ asCertificate(row).issued_at_display ?? '' }}
+            {{ formatCalendarDate(asCertificate(row).issued_at) }}
           </template>
         </DataTable>
       </Card>

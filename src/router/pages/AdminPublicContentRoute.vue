@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 import { computed, onMounted, ref } from 'vue';
 import PageHeader from '@/components/patterns/PageHeader';
 import Card from '@/components/patterns/Card';
@@ -129,10 +130,7 @@ async function decide(decision: ReviewDecision): Promise<void> {
 }
 
 function formatDate(value: string): string {
-  return new Intl.DateTimeFormat('am-ET', {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  }).format(new Date(value));
+  return formatCalendarDate(value, { dateStyle: 'medium' });
 }
 
 onMounted(load);

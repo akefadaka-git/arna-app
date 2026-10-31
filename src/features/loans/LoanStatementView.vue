@@ -465,6 +465,7 @@
 -->
 
 <script lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 /*
  * Exported types.
  *
@@ -668,9 +669,7 @@ function lineRowKey(row: unknown): string {
  * slice".
  */
 function formatDate(iso: string | null): string {
-  if (iso === null || iso === '') return '';
-  const idx = iso.indexOf('T');
-  return idx >= 0 ? iso.slice(0, idx) : iso;
+  return formatCalendarDate(iso, { dateStyle: 'medium' });
 }
 
 // -----------------------------------------------------------------------------

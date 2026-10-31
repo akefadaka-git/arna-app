@@ -168,8 +168,9 @@ export const BADGE_MAX_DISPLAY = 99;
 </script>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useNotificationsStore } from '@/stores/notifications';
+import { fetchUnreadCount } from '@/features/notifications/api';
 import BaseButton from '@/components/primitives/BaseButton';
 import BaseIcon from '@/components/primitives/BaseIcon';
 import BaseTooltip from '@/components/primitives/BaseTooltip';
@@ -215,6 +216,15 @@ const notifications = useNotificationsStore();
 
 const unreadCount = computed<number>(() => notifications.unreadCount);
 const hasUnread = computed<boolean>(() => notifications.hasUnread);
+
+onMounted(async () => {
+  if (props.disabled) return;
+  try {
+    notifications.setUnreadCount(await fetchUnreadCount());
+  } catch (error) {
+    notifications.failFetch(error);
+  }
+});
 
 // -----------------------------------------------------------------------------
 // Derived presentation

@@ -413,9 +413,12 @@ import { useTenantStore } from '@/stores/tenant';
 import SkipToContent from '@/layouts/AppShell/SkipToContent';
 import MaintenanceBanner from '@/layouts/AppShell/MaintenanceBanner';
 import AppHeader from '@/layouts/AppShell/AppHeader';
+import AppHeaderNavigation from '@/layouts/AppShell/AppHeaderNavigation/AppHeaderNavigation.vue';
 import MASESBrand from '@/layouts/AppShell/MASESBrand';
 import UserMenu from '@/layouts/AppShell/UserMenu';
 import NotificationsBell from '@/layouts/AppShell/NotificationsBell';
+import NotificationsCenter from '@/features/notifications/NotificationsCenter.vue';
+import CalendarPreferenceControl from '@/layouts/AppShell/CalendarPreferenceControl.vue';
 import TenantSwitcher from '@/layouts/AppShell/TenantSwitcher';
 import AppSidebar from '@/layouts/AppShell/AppSidebar';
 import CalendarContext from '@/layouts/AppShell/CalendarContext';
@@ -555,6 +558,7 @@ function onTenantSelect(payload: { id: number }): void {
 // Mobile drawer open/close state (shell-owned)
 // -----------------------------------------------------------------------------
 const isMobileDrawerOpen = ref(false);
+const isNotificationsOpen = ref(false);
 
 function openMobileDrawer(): void {
   isMobileDrawerOpen.value = true;
@@ -568,7 +572,8 @@ function onUserMenuSelect(payload: { id: string }): void {
 }
 
 function onNotificationsOpen(): void {
-  emit('notifications-open');
+  isNotificationsOpen.value = !isNotificationsOpen.value;
+  if (isNotificationsOpen.value) emit('notifications-open');
 }
 
 function onMaintenanceAction(): void {
@@ -623,19 +628,17 @@ function onMaintenanceDismiss(): void {
       </template>
 
       <template #nav>
+        <AppHeaderNavigation :items="navItems" />
         <slot name="breadcrumbs" />
       </template>
 
       <template #actions>
         <slot name="header-actions" />
 
-        <!--
-          NotificationsBell is DISABLED until the §20.2 endpoints
-          exist. When they land, change `:disabled="true"` to
-          `:disabled="false"` (or remove the prop entirely).
-        -->
+        <CalendarPreferenceControl />
+
         <NotificationsBell
-          :disabled="true"
+          :disabled="false"
           :labels="labels.notificationsBell"
           @open="onNotificationsOpen"
         />
@@ -705,6 +708,11 @@ function onMaintenanceDismiss(): void {
         </div>
       </main>
     </div>
+
+    <NotificationsCenter
+      :open="isNotificationsOpen"
+      @close="isNotificationsOpen = false"
+    />
 
     <!-- ============================================================
          Footer
@@ -820,6 +828,22 @@ function onMaintenanceDismiss(): void {
 
 .app-shell__aside-nav :deep(.app-sidebar) {
   border-inline-end: 0;
+}
+
+/*
+ * Compact the persistent navigation column on tablet-width viewports.
+ * The full labels remain visible and wrap naturally; only the column
+ * width is fluid, so Amharic navigation labels remain readable and
+ * keyboard/screen-reader names are unchanged.
+ */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .app-shell__aside {
+    width: clamp(13rem, 25vw, 15rem);
+  }
+
+  .app-shell__aside-nav :deep(.app-sidebar) {
+    width: 100%;
+  }
 }
 
 .app-shell__aside-calendar {

@@ -22,7 +22,8 @@
           obligations, payments, allocations, entries ledger.
 
  1.0.1  — two corrections:
-          · Duplicate-identifier fix. The top `<script lang="ts">` block
+          · Duplicate-identifier fix. The top `<script lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';` block
             previously imported `WalletAllocation` and
             `WalletDetailViewLabels` and then re-exported both by name.
             Vue compiles the two script blocks into one module, so the
@@ -250,6 +251,7 @@ export type { WalletAllocation } from './api';
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
+import { formatCalendarDate } from '@/core/dates/calendar';
 import { useRoute, useRouter } from 'vue-router';
 
 import PageHeader from '@/components/patterns/PageHeader';
@@ -432,9 +434,7 @@ defineExpose({
 // Presentation helpers
 // -----------------------------------------------------------------------------
 function formatDate(iso: string | null | undefined): string {
-  if (iso === undefined || iso === null || iso === '') return '';
-  const idx = iso.indexOf('T');
-  return idx >= 0 ? iso.slice(0, idx) : iso;
+  return formatCalendarDate(iso, { dateStyle: 'medium' });
 }
 
 const pageTitle = computed<string>(() => {

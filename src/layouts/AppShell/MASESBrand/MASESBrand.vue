@@ -495,8 +495,8 @@ import { masesBrandLabels } from '@/router/shell-labels';
         class="mases-brand__symbol-image"
         src="/logo.png"
         alt=""
-        width="44"
-        height="44"
+        width="56"
+        height="56"
         decoding="async"
         loading="eager"
         draggable="false"
@@ -515,6 +515,10 @@ import { masesBrandLabels } from '@/router/shell-labels';
         class="mases-brand__product"
         data-testid="mases-brand-product"
       >{{ masesBrandLabels.productName }}</span>
+      <span
+        class="mases-brand__tagline"
+        data-testid="mases-brand-tagline"
+      >{{ masesBrandLabels.tagline }}</span>
     </span>
   </span>
 </template>
@@ -532,6 +536,7 @@ import { masesBrandLabels } from '@/router/shell-labels';
   align-items: center;
   gap: var(--mases-space-3);
   min-width: 0;
+  max-width: 100%;
 }
 
 /* ============================================================================
@@ -560,6 +565,12 @@ import { masesBrandLabels } from '@/router/shell-labels';
   }
 }
 
+@media (max-width: 639px) {
+  .mases-brand__tagline {
+    display: none;
+  }
+}
+
 /* ---------------------------------------------------------------------------
    Emblem image
    ---------------------------------------------------------------------------
@@ -575,9 +586,13 @@ import { masesBrandLabels } from '@/router/shell-labels';
    --------------------------------------------------------------------------- */
 .mases-brand__symbol-image {
   display: block;
-  width: 44px;
-  height: 44px;
-  object-fit: contain;
+  width: 56px;
+  height: 56px;
+  border: 1px solid var(--mases-color-border-subtle);
+  border-radius: 50%;
+  background-color: var(--mases-color-surface-raised);
+  box-shadow: var(--mases-shadow-elevation-1);
+  object-fit: cover;
 }
 
 /* ============================================================================
@@ -619,6 +634,16 @@ import { masesBrandLabels } from '@/router/shell-labels';
   font-size: var(--mases-font-size-caption);
   font-weight: var(--mases-font-weight-medium);
 }
+
+.mases-brand__tagline {
+  color: var(--mases-color-text-tertiary);
+  font-size: var(--mases-font-size-caption);
+  line-height: 1.15;
+  font-weight: var(--mases-font-weight-regular);
+  max-width: 20rem;
+}
+
+
 
 /* ============================================================================
    Reduced motion

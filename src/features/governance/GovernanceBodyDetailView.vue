@@ -185,6 +185,7 @@
 -->
 
 <script lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 /*
  * Re-export the labels type for consumers that import it from the
  * component module. The source of truth remains ./labels.
@@ -396,7 +397,7 @@ function appointmentPositionLabel(appointment: GovernanceAppointment): string {
 }
 
 function appointmentSinceLabel(appointment: GovernanceAppointment): string {
-  return appointment.effective_date_display ?? '';
+  return formatCalendarDate(appointment.effective_date);
 }
 
 function appointmentModeLabel(appointment: GovernanceAppointment): string {
@@ -641,7 +642,7 @@ function bodyStatusLabel(isActive: boolean): string {
             class="governance-body-detail-view__identity-row"
           >
             <dt>{{ labels.effectiveFromLabel }}</dt>
-            <dd>{{ detail.body.effective_from_display }}</dd>
+            <dd>{{ formatCalendarDate(detail.body.effective_from) }}</dd>
           </div>
 
           <!-- Effective until (conditional) -->
@@ -650,19 +651,19 @@ function bodyStatusLabel(isActive: boolean): string {
             class="governance-body-detail-view__identity-row"
           >
             <dt>{{ labels.effectiveUntilLabel }}</dt>
-            <dd>{{ detail.body.effective_until_display }}</dd>
+            <dd>{{ formatCalendarDate(detail.body.effective_until) }}</dd>
           </div>
 
           <!-- Created at -->
           <div class="governance-body-detail-view__identity-row">
             <dt>{{ labels.createdAtLabel }}</dt>
-            <dd>{{ detail.body.created_at_display }}</dd>
+            <dd>{{ formatCalendarDate(detail.body.created_at) }}</dd>
           </div>
 
           <!-- Updated at -->
           <div class="governance-body-detail-view__identity-row">
             <dt>{{ labels.updatedAtLabel }}</dt>
-            <dd>{{ detail.body.updated_at_display }}</dd>
+            <dd>{{ formatCalendarDate(detail.body.updated_at) }}</dd>
           </div>
         </dl>
       </Card>
@@ -691,7 +692,7 @@ function bodyStatusLabel(isActive: boolean): string {
             class="governance-body-detail-view__term-row"
           >
             <dt>{{ labels.termEffectiveFromLabel }}</dt>
-            <dd>{{ detail.currentTerm.effective_from_display }}</dd>
+            <dd>{{ formatCalendarDate(detail.currentTerm.effective_from) }}</dd>
           </div>
 
           <div
@@ -699,7 +700,7 @@ function bodyStatusLabel(isActive: boolean): string {
             class="governance-body-detail-view__term-row"
           >
             <dt>{{ labels.termEffectiveUntilLabel }}</dt>
-            <dd>{{ detail.currentTerm.effective_until_display }}</dd>
+            <dd>{{ formatCalendarDate(detail.currentTerm.effective_until) }}</dd>
           </div>
 
           <div
@@ -834,7 +835,7 @@ function bodyStatusLabel(isActive: boolean): string {
           </template>
 
           <template #cell:since="{ row }">
-            {{ asMembership(row).start_date_display }}
+            {{ formatCalendarDate(asMembership(row).start_date) }}
           </template>
 
           <template #cell:ex_officio="{ row }">

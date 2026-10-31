@@ -291,6 +291,7 @@
 -->
 
 <script lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 /*
  * Exported types.
  *
@@ -581,9 +582,7 @@ function ownerDisplay(wallet: Wallet): string {
  * future i18n layer; until then, a plain YYYY-MM-DD slice is used.
  */
 function formatDate(iso: string | undefined): string {
-  if (iso === undefined || iso === '') return '';
-  const idx = iso.indexOf('T');
-  return idx >= 0 ? iso.slice(0, idx) : iso;
+  return formatCalendarDate(iso, { dateStyle: 'medium' });
 }
 
 // -----------------------------------------------------------------------------

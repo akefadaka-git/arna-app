@@ -135,6 +135,7 @@
 -->
 
 <script lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 /*
  * Exported types.
  *
@@ -226,9 +227,7 @@ const amount = ref<string>('');
  * avoids a cross-module dependency for a three-line utility.
  */
 function formatDate(iso: string | null | undefined): string {
-  if (iso === undefined || iso === null || iso === '') return '';
-  const idx = iso.indexOf('T');
-  return idx >= 0 ? iso.slice(0, idx) : iso;
+  return formatCalendarDate(iso, { dateStyle: 'medium' });
 }
 
 /*

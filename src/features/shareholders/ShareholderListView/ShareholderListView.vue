@@ -265,6 +265,7 @@
 -->
 
 <script lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 /*
  * Exported types.
  *
@@ -776,7 +777,7 @@ async function onCreate(): Promise<void> {
 
           <!-- Created — backend-supplied localized display string. -->
           <template #cell:created="{ row }">
-            {{ asShareholder(row).created_at_display }}
+            {{ formatCalendarDate(asShareholder(row).created_at) }}
           </template>
 
           <!-- Actions -->

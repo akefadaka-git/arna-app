@@ -68,7 +68,8 @@
           period filter, four totals, entries ledger.
 
  1.0.1  — two structural corrections:
-          · The top `<script lang="ts">` block now uses pure re-export
+          · The top `<script lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';` block now uses pure re-export
             syntax (`export type { X } from '...'`). The 1.0.0 form —
             an `import type` followed by a named re-export — bound
             the identifier in module scope, which is fragile: a future
@@ -304,6 +305,7 @@ export type { WalletStatementViewLabels } from './labels';
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
+import { formatCalendarDate } from '@/core/dates/calendar';
 import { useRoute } from 'vue-router';
 
 import PageHeader from '@/components/patterns/PageHeader';
@@ -496,9 +498,7 @@ function onClear(): void {
 // Presentation helpers
 // -----------------------------------------------------------------------------
 function formatDate(iso: string | null | undefined): string {
-  if (iso === undefined || iso === null || iso === '') return '';
-  const idx = iso.indexOf('T');
-  return idx >= 0 ? iso.slice(0, idx) : iso;
+  return formatCalendarDate(iso, { dateStyle: 'medium' });
 }
 
 const currency = computed<string>(() => statement.value?.currency ?? '');
