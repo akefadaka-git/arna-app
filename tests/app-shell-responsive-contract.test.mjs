@@ -69,6 +69,8 @@ test('notification bell is enabled with the implemented service adapter and cent
   const center = readFileSync('src/features/notifications/NotificationsCenter.vue', 'utf8');
   assert.match(center, /markNotificationRead/);
   assert.match(center, /markAllNotificationsRead/);
+  const bell = readFileSync('src/layouts/AppShell/NotificationsBell/NotificationsBell.vue', 'utf8');
+  assert.match(bell, /fetchUnreadCount/);
 });
 
 test('header exposes route breadcrumbs and accessible navigation search', () => {
