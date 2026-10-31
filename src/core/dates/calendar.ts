@@ -53,6 +53,7 @@ export function formatCalendarDate(
   options: Intl.DateTimeFormatOptions = { dateStyle: 'medium' },
   locale?: string,
 ): string {
+  initialize();
   if (value === null || value === undefined || value === '') return '—';
   const date = value instanceof Date ? value : new Date(value);
   if (Number.isNaN(date.getTime())) return '—';
