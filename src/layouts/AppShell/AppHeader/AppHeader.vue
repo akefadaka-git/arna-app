@@ -551,7 +551,9 @@ function onToggleClick(): void {
   align-items: center;
   gap: var(--mases-space-2);
   width: 100%;
-  height: var(--mases-shell-header-height);
+  min-height: var(--mases-shell-header-height);
+  height: auto;
+  padding-block: var(--mases-space-2);
   padding-inline: var(--mases-shell-chrome-padding-inline-mobile);
   /*
    * A single subtle rule separates the header from the content below.
@@ -571,6 +573,7 @@ function onToggleClick(): void {
 @media (min-width: 640px) {
   .app-header {
     gap: var(--mases-space-4);
+    padding-block: var(--mases-space-3);
     padding-inline: var(--mases-shell-chrome-padding-inline-tablet);
   }
 }
@@ -678,6 +681,7 @@ function onToggleClick(): void {
   align-items: center;
   gap: var(--mases-space-2);
   flex-shrink: 0;
+  align-items: center;
 }
 
 /* ============================================================================
