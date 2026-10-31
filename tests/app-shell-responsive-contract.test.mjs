@@ -28,3 +28,20 @@ test('shell layout retains reduced-motion and forced-colors accommodations', () 
   assert.match(shell, /forced-colors:\s*active/);
   assert.match(shell, /outline-color:\s*Highlight/);
 });
+
+test('brand lockup uses the circular corporate emblem, bilingual identity and tagline', () => {
+  const brand = readFileSync('src/layouts/AppShell/MASESBrand/MASESBrand.vue', 'utf8');
+  const labels = readFileSync('src/router/shell-labels.ts', 'utf8');
+  assert.match(brand, /src="\/logo\.png"/);
+  assert.match(brand, /width="56"[\s\S]*height="56"/);
+  assert.match(brand, /border-radius:\s*50%/);
+  assert.match(brand, /masesBrandLabels\.tagline/);
+  assert.match(labels, /tagline:\s*'Lead by example • Build lasting trust'/);
+});
+
+test('notification control remains honest about the missing backend dependency', () => {
+  const shell = readFileSync('src/layouts/AppShell/AppShell.vue', 'utf8');
+  const store = readFileSync('src/stores/notifications.ts', 'utf8');
+  assert.match(shell, /<NotificationsBell[\s\S]*:disabled="true"/);
+  assert.match(store, /DEPENDENCY MISSING/);
+});
