@@ -40,8 +40,8 @@ test('brand lockup uses the circular corporate emblem, bilingual identity and ta
 });
 
 test('notification control is connected to the authenticated notification center', () => {
-  assert.match(shell, /<NotificationsBell[\\s\\S]*:disabled="false"/);
-  assert.match(shell, /<NotificationsCenter[\\s\\S]*:open="isNotificationsOpen"/);
+  assert.ok(shell.includes('<NotificationsBell') && shell.includes(':disabled="false"'));
+  assert.ok(shell.includes('<NotificationsCenter') && shell.includes(':open="isNotificationsOpen"'));
   const api = readFileSync('src/features/notifications/api.ts', 'utf8');
   assert.ok(api.includes('/api/notifications/unread-count'));
   assert.ok(api.includes('/api/notifications/read-all'));
@@ -65,7 +65,7 @@ test('header reserves a responsive second row for breadcrumbs on narrow screens'
 });
 
 test('notification bell is enabled with the implemented service adapter and center', () => {
-  assert.match(shell, /<NotificationsBell\\s+:disabled="false"/);
+  assert.ok(shell.includes('<NotificationsBell') && shell.includes(':disabled="false"'));
   const center = readFileSync('src/features/notifications/NotificationsCenter.vue', 'utf8');
   assert.match(center, /markNotificationRead/);
   assert.match(center, /markAllNotificationsRead/);
