@@ -552,4 +552,79 @@ const visibleTiles = computed<readonly TileDefinition[]>(() =>
     /* no-op placeholder — see comment above */
   }
 }
+
+/* ============================================================================
+   ARNA UI enhancement — responsive card rhythm and interaction clarity
+   ----------------------------------------------------------------------------
+   The dashboard is a navigation surface, not a fixed three-column report.
+   Let the available width determine the number of useful cards while
+   retaining a comfortable minimum width for Amharic labels.
+   ============================================================================ */
+.dashboard-view__grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  align-items: stretch;
+  gap: var(--mases-space-5);
+}
+
+.dashboard-view__tile {
+  min-height: 164px;
+  justify-content: flex-start;
+  border-color: var(--mases-color-border-subtle);
+  border-inline-start: 3px solid var(--mases-color-border-brand);
+  background-color: var(--mases-color-surface-raised);
+  box-shadow: var(--mases-shadow-elevation-1);
+}
+
+.dashboard-view__tile:hover {
+  border-color: var(--mases-color-border-brand);
+  border-inline-start-color: var(--mases-color-state-selected-accent);
+  background-color: var(--mases-color-surface-page);
+  box-shadow: var(--mases-shadow-elevation-2);
+  transform: translateY(-2px);
+}
+
+.dashboard-view__tile:active {
+  box-shadow: var(--mases-shadow-elevation-1);
+  transform: translateY(0);
+}
+
+.dashboard-view__tile.router-link-active {
+  border-color: var(--mases-color-state-selected-accent);
+  background-color: var(--mases-color-state-selected);
+}
+
+.dashboard-view__tile-icon-wrapper {
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--mases-color-border-subtle);
+  background-color: var(--mases-color-surface-accent);
+}
+
+@media (max-width: 639px) {
+  .dashboard-view {
+    gap: var(--mases-space-5);
+  }
+
+  .dashboard-view__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--mases-space-3);
+  }
+
+  .dashboard-view__tile {
+    min-height: 132px;
+    padding: var(--mases-space-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-view__tile {
+    transition: none;
+  }
+
+  .dashboard-view__tile:hover,
+  .dashboard-view__tile:active {
+    transform: none;
+  }
+}
+
 </style>
