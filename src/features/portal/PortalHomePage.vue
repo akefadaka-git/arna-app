@@ -161,6 +161,7 @@
 -->
 
 <script lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 /*
  * The page's labels type is imported from ./labels and re-exported here
  * for consumers that import the type from the component module. The
@@ -355,12 +356,12 @@ function shareholderStatusVariant(active: boolean): 'success' | 'neutral' {
 
           <div class="portal-home-page__row">
             <dt>{{ labels.identityCreated }}</dt>
-            <dd>{{ shareholder.created_at_display }}</dd>
+            <dd>{{ formatCalendarDate(shareholder.created_at) }}</dd>
           </div>
 
           <div class="portal-home-page__row">
             <dt>{{ labels.identityUpdated }}</dt>
-            <dd>{{ shareholder.updated_at_display }}</dd>
+            <dd>{{ formatCalendarDate(shareholder.updated_at) }}</dd>
           </div>
         </dl>
       </Card>
