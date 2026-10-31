@@ -1,11 +1,18 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import type { RouteLocationRaw } from 'vue-router';
 import BaseButton from '@/components/primitives/BaseButton';
 import BaseIcon from '@/components/primitives/BaseIcon';
 
+interface SearchNavItem {
+  readonly id: string;
+  readonly label: string;
+  readonly to: RouteLocationRaw;
+}
+
 interface Props {
-  items: ReadonlyArray<NavItem>;
+  items: ReadonlyArray<SearchNavItem>;
 }
 const props = defineProps<Props>();
 const route = useRoute();
@@ -35,7 +42,7 @@ function closeSearch(): void {
   dialog.value?.close();
 }
 
-function navigate(to: NavItem['to']): void {
+function navigate(to: RouteLocationRaw): void {
   void router.push(to);
   closeSearch();
 }
@@ -54,7 +61,7 @@ function navigate(to: NavItem['to']): void {
 
     <BaseButton
       type="button"
-      variant="outline"
+      variant="ghost"
       size="sm"
       class="app-header-navigation__search-trigger"
       aria-haspopup="dialog"
@@ -74,7 +81,7 @@ function navigate(to: NavItem['to']): void {
           <p>Find an available module or page</p>
         </div>
         <BaseButton type="button" variant="ghost" size="sm" aria-label="Close search" @click="closeSearch">
-          <BaseIcon name="x" size="md" />
+          <BaseIcon name="close" size="md" />
         </BaseButton>
       </form>
       <label class="app-header-navigation__input-wrap">
