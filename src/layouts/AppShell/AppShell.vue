@@ -418,6 +418,7 @@ import MASESBrand from '@/layouts/AppShell/MASESBrand';
 import UserMenu from '@/layouts/AppShell/UserMenu';
 import NotificationsBell from '@/layouts/AppShell/NotificationsBell';
 import NotificationsCenter from '@/features/notifications/NotificationsCenter.vue';
+import CalendarPreferenceControl from '@/layouts/AppShell/CalendarPreferenceControl.vue';
 import TenantSwitcher from '@/layouts/AppShell/TenantSwitcher';
 import AppSidebar from '@/layouts/AppShell/AppSidebar';
 import CalendarContext from '@/layouts/AppShell/CalendarContext';
@@ -633,6 +634,8 @@ function onMaintenanceDismiss(): void {
 
       <template #actions>
         <slot name="header-actions" />
+
+        <CalendarPreferenceControl />
 
         <NotificationsBell
           :disabled="false"
