@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { setCalendarSystem, useCalendarPreference, type CalendarSystem } from '@/core/dates/calendar';
+import { setCalendarSystem, useCalendarPreference } from '@/core/dates/calendar';
 
 const { calendarSystem } = useCalendarPreference();
 const isEnglish = computed(() => document.documentElement.lang.toLowerCase().startsWith('en'));
