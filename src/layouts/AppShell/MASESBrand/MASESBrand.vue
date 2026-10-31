@@ -515,6 +515,10 @@ import { masesBrandLabels } from '@/router/shell-labels';
         class="mases-brand__product"
         data-testid="mases-brand-product"
       >{{ masesBrandLabels.productName }}</span>
+      <span
+        class="mases-brand__tagline"
+        data-testid="mases-brand-tagline"
+      >{{ masesBrandLabels.tagline }}</span>
       <span class="mases-brand__tagline" data-testid="mases-brand-tagline">Maale Arna Smart System</span>
     </span>
   </span>
@@ -533,6 +537,7 @@ import { masesBrandLabels } from '@/router/shell-labels';
   align-items: center;
   gap: var(--mases-space-3);
   min-width: 0;
+  max-width: 100%;
 }
 
 /* ============================================================================
@@ -558,6 +563,12 @@ import { masesBrandLabels } from '@/router/shell-labels';
 @media (min-width: 640px) {
   .mases-brand__symbol {
     display: inline-flex;
+  }
+}
+
+@media (max-width: 639px) {
+  .mases-brand__tagline {
+    display: none;
   }
 }
 
@@ -623,6 +634,14 @@ import { masesBrandLabels } from '@/router/shell-labels';
   color: var(--mases-color-text-secondary);
   font-size: var(--mases-font-size-caption);
   font-weight: var(--mases-font-weight-medium);
+}
+
+.mases-brand__tagline {
+  color: var(--mases-color-text-tertiary);
+  font-size: var(--mases-font-size-caption);
+  line-height: 1.15;
+  font-weight: var(--mases-font-weight-regular);
+  max-width: 20rem;
 }
 
 .mases-brand__tagline {
