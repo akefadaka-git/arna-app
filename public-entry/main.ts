@@ -1,4 +1,5 @@
 import { createApp, h } from 'vue';
+import '@/styles/themes.css';
 import { createRouter, createWebHistory, RouterView } from 'vue-router';
 
 import PublicHome from '@/public-site/PublicHome.vue';

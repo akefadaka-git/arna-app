@@ -1,0 +1,176 @@
+/*
+ * ARNA Design System 2.0 — theme semantic layer
+ *
+ * This file deliberately overrides semantic roles only. The approved
+ * primitive palette and frozen token substrate remain unchanged.
+ * System preference is the default; data-theme="light" or "dark" can
+ * be applied by a future explicit user preference control.
+ *
+ * Contrast and component-level dark-theme acceptance remain subject to
+ * exact-head visual and accessibility verification.
+ */
+
+:root {
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --mases-color-surface-page: var(--mases-color-neutral-900);
+  --mases-color-surface-raised: var(--mases-color-neutral-800);
+  --mases-color-surface-subtle: var(--mases-color-neutral-800);
+  --mases-color-surface-overlay: var(--mases-color-aubergine-800);
+  --mases-color-surface-sunken: var(--mases-color-neutral-900);
+  --mases-color-surface-inverse: var(--mases-color-neutral-50);
+  --mases-color-surface-inverse-raised: var(--mases-color-neutral-100);
+  --mases-color-surface-brand: var(--mases-color-crimson-400);
+  --mases-color-surface-accent: var(--mases-color-aubergine-700);
+  --mases-color-surface-disabled: var(--mases-color-neutral-800);
+  --mases-color-surface-success: var(--mases-color-success-900);
+  --mases-color-surface-warning: var(--mases-color-warning-900);
+  --mases-color-surface-info: var(--mases-color-info-900);
+  --mases-color-surface-danger: var(--mases-color-crimson-900);
+
+  --mases-color-text-primary: var(--mases-color-neutral-50);
+  --mases-color-text-secondary: var(--mases-color-neutral-200);
+  --mases-color-text-tertiary: var(--mases-color-neutral-400);
+  --mases-color-text-muted: var(--mases-color-neutral-500);
+  --mases-color-text-inverse: var(--mases-color-neutral-900);
+  --mases-color-text-inverse-secondary: var(--mases-color-neutral-700);
+  --mases-color-text-brand: var(--mases-color-crimson-300);
+  --mases-color-text-accent: var(--mases-color-gold-300);
+  --mases-color-text-success: var(--mases-color-success-100);
+  --mases-color-text-warning: var(--mases-color-warning-100);
+  --mases-color-text-info: var(--mases-color-info-100);
+  --mases-color-text-danger: var(--mases-color-crimson-100);
+  --mases-color-text-disabled: var(--mases-color-neutral-500);
+
+  --mases-color-border-default: var(--mases-color-neutral-600);
+  --mases-color-border-strong: var(--mases-color-neutral-500);
+  --mases-color-border-subtle: var(--mases-color-neutral-700);
+  --mases-color-border-brand: var(--mases-color-crimson-400);
+  --mases-color-border-inverse: var(--mases-color-neutral-400);
+  --mases-color-border-success: var(--mases-color-success-500);
+  --mases-color-border-warning: var(--mases-color-warning-500);
+  --mases-color-border-info: var(--mases-color-info-500);
+  --mases-color-border-danger: var(--mases-color-crimson-400);
+  --mases-color-border-focus: var(--mases-color-gold-300);
+
+  --mases-color-action-primary: var(--mases-color-crimson-400);
+  --mases-color-action-primary-hover: var(--mases-color-crimson-300);
+  --mases-color-action-primary-active: var(--mases-color-crimson-500);
+  --mases-color-action-primary-disabled: var(--mases-color-crimson-900);
+  --mases-color-action-secondary: var(--mases-color-aubergine-200);
+  --mases-color-action-secondary-hover: var(--mases-color-aubergine-100);
+  --mases-color-action-secondary-active: var(--mases-color-aubergine-300);
+  --mases-color-action-ghost: transparent;
+  --mases-color-action-ghost-hover: var(--mases-color-neutral-700);
+  --mases-color-action-danger: var(--mases-color-crimson-300);
+  --mases-color-action-danger-hover: var(--mases-color-crimson-200);
+  --mases-color-action-link: var(--mases-color-crimson-300);
+  --mases-color-action-link-hover: var(--mases-color-crimson-200);
+
+  --mases-color-icon-brand: var(--mases-color-crimson-300);
+  --mases-color-icon-accent: var(--mases-color-gold-300);
+  --mases-color-icon-danger: var(--mases-color-crimson-200);
+  --mases-color-state-hover: var(--mases-color-neutral-700);
+  --mases-color-state-selected: var(--mases-color-crimson-900);
+  --mases-color-state-selected-accent: var(--mases-color-crimson-300);
+  --mases-color-state-disabled-bg: var(--mases-color-neutral-800);
+  --mases-color-state-disabled-text: var(--mases-color-neutral-500);
+  --mases-color-state-focus-ring: var(--mases-color-gold-300);
+  --mases-color-state-focus-ring-inverse: var(--mases-color-aubergine-900);
+
+  --mases-color-surface-auth-backdrop: var(--mases-color-neutral-900);
+  --mases-color-text-auth-attribution: var(--mases-color-neutral-400);
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) {
+    color-scheme: dark;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]),
+  html[data-theme="dark"] {
+    --mases-color-surface-page: var(--mases-color-neutral-900);
+    --mases-color-surface-raised: var(--mases-color-neutral-800);
+    --mases-color-surface-subtle: var(--mases-color-neutral-800);
+    --mases-color-surface-overlay: var(--mases-color-aubergine-800);
+    --mases-color-surface-sunken: var(--mases-color-neutral-900);
+    --mases-color-surface-inverse: var(--mases-color-neutral-50);
+    --mases-color-surface-inverse-raised: var(--mases-color-neutral-100);
+    --mases-color-surface-brand: var(--mases-color-crimson-400);
+    --mases-color-surface-accent: var(--mases-color-aubergine-700);
+    --mases-color-surface-disabled: var(--mases-color-neutral-800);
+    --mases-color-surface-success: var(--mases-color-success-900);
+    --mases-color-surface-warning: var(--mases-color-warning-900);
+    --mases-color-surface-info: var(--mases-color-info-900);
+    --mases-color-surface-danger: var(--mases-color-crimson-900);
+
+    --mases-color-text-primary: var(--mases-color-neutral-50);
+    --mases-color-text-secondary: var(--mases-color-neutral-200);
+    --mases-color-text-tertiary: var(--mases-color-neutral-400);
+    --mases-color-text-muted: var(--mases-color-neutral-500);
+    --mases-color-text-inverse: var(--mases-color-neutral-900);
+    --mases-color-text-inverse-secondary: var(--mases-color-neutral-700);
+    --mases-color-text-brand: var(--mases-color-crimson-300);
+    --mases-color-text-accent: var(--mases-color-gold-300);
+    --mases-color-text-success: var(--mases-color-success-100);
+    --mases-color-text-warning: var(--mases-color-warning-100);
+    --mases-color-text-info: var(--mases-color-info-100);
+    --mases-color-text-danger: var(--mases-color-crimson-100);
+    --mases-color-text-disabled: var(--mases-color-neutral-500);
+
+    --mases-color-border-default: var(--mases-color-neutral-600);
+    --mases-color-border-strong: var(--mases-color-neutral-500);
+    --mases-color-border-subtle: var(--mases-color-neutral-700);
+    --mases-color-border-brand: var(--mases-color-crimson-400);
+    --mases-color-border-inverse: var(--mases-color-neutral-400);
+    --mases-color-border-success: var(--mases-color-success-500);
+    --mases-color-border-warning: var(--mases-color-warning-500);
+    --mases-color-border-info: var(--mases-color-info-500);
+    --mases-color-border-danger: var(--mases-color-crimson-400);
+    --mases-color-border-focus: var(--mases-color-gold-300);
+
+    --mases-color-action-primary: var(--mases-color-crimson-400);
+    --mases-color-action-primary-hover: var(--mases-color-crimson-300);
+    --mases-color-action-primary-active: var(--mases-color-crimson-500);
+    --mases-color-action-primary-disabled: var(--mases-color-crimson-900);
+    --mases-color-action-secondary: var(--mases-color-aubergine-200);
+    --mases-color-action-secondary-hover: var(--mases-color-aubergine-100);
+    --mases-color-action-secondary-active: var(--mases-color-aubergine-300);
+    --mases-color-action-ghost: transparent;
+    --mases-color-action-ghost-hover: var(--mases-color-neutral-700);
+    --mases-color-action-danger: var(--mases-color-crimson-300);
+    --mases-color-action-danger-hover: var(--mases-color-crimson-200);
+    --mases-color-action-link: var(--mases-color-crimson-300);
+    --mases-color-action-link-hover: var(--mases-color-crimson-200);
+
+    --mases-color-icon-brand: var(--mases-color-crimson-300);
+    --mases-color-icon-accent: var(--mases-color-gold-300);
+    --mases-color-icon-danger: var(--mases-color-crimson-200);
+    --mases-color-state-hover: var(--mases-color-neutral-700);
+    --mases-color-state-selected: var(--mases-color-crimson-900);
+    --mases-color-state-selected-accent: var(--mases-color-crimson-300);
+    --mases-color-state-disabled-bg: var(--mases-color-neutral-800);
+    --mases-color-state-disabled-text: var(--mases-color-neutral-500);
+    --mases-color-state-focus-ring: var(--mases-color-gold-300);
+    --mases-color-state-focus-ring-inverse: var(--mases-color-aubergine-900);
+
+    --mases-color-surface-auth-backdrop: var(--mases-color-neutral-900);
+    --mases-color-text-auth-attribution: var(--mases-color-neutral-400);
+  }
+}
+
+@media (forced-colors: active) {
+  html[data-theme="dark"],
+  html:not([data-theme="light"]) {
+    color-scheme: dark;
+  }
+}
