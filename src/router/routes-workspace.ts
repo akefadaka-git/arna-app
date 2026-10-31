@@ -465,6 +465,7 @@
  */
 
 import type { RouteRecordRaw } from 'vue-router';
+import { domainWorkspaceRoutes } from '@/router/domain-workspace-routes';
 
 import {
   filesListViewLabels,
@@ -763,6 +764,7 @@ export const routesWorkspace: RouteRecordRaw[] = [
         component: () => import('@/features/governance/GovernancePersonProfileView.vue'),
         meta: { permission: 'governance.body.view' },
       },
+      ...domainWorkspaceRoutes,
     ],
   },
 ];
