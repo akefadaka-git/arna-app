@@ -134,7 +134,7 @@ export async function startWorkspace(): Promise<void> {
    * route to /login. See the 1.0.2 revision entry.
    * ──────────────────────────────────────────────────────────────────
    */
-  await bootstrapApp(pinia, { tokenStorage: 'session' });
+  await bootstrapApp(pinia, { tokenStorage: 'memory', authTransport: 'cookie' });
 
   app.use(router);
 
