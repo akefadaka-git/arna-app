@@ -155,19 +155,13 @@ export interface MasesNotification {
   readonly created_at: string;
 
   /**
-   * Optional navigation target — an SPA route the bell navigates to
-   * when the user activates the notification.
-   * SOURCE: master prompt §28 ("Navigation target").
+   * API-owned action descriptor. The UI resolves route_name through an
+   * explicit internal allow-list; resource_ref is never treated as a URL.
    */
-  readonly action_url?: string;
-
-  /**
-   * Optional related-resource reference. The schema of this reference
-   * is not defined by §20.2; it is left as `unknown` so consumers must
-   * narrow it before use.
-   * SOURCE: Catalog §24.18 ("Related resource").
-   */
-  readonly related_resource?: unknown;
+  readonly action?: {
+    readonly route_name: string;
+    readonly resource_ref: unknown;
+  };
 }
 
 // =============================================================================
