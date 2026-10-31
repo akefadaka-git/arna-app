@@ -281,6 +281,10 @@ export async function bootstrapApp(
 
   installAuthTokenStorage(options.tokenStorage);
   const authTransport = options.authTransport ?? 'token';
+  if (authTransport === 'cookie' && typeof sessionStorage !== 'undefined') {
+    // Remove any legacy bearer token from pre-SSO builds; cookie-mode SPAs never read or send it.
+    sessionStorage.removeItem('mases.auth_token');
+  }
   setAuthTransport(authTransport);
   installApiClientProviders(pinia, authTransport);
   wireStoreCoordinations(pinia);
