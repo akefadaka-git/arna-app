@@ -2,18 +2,18 @@
 
 This repository is the frontend for the ARNA Smart System. Contributions must preserve the frontend/backend boundary, domain ownership, approved brand identity, and Owner-governed change process.
 
-## Before changing code
+## Before changing code or documentation
 
-1. Read the [README](README.md) and the relevant document in `docs/`.
-2. Identify the owning application and domain feature.
+1. Read the [README](README.md), [documentation index](docs/README.md), and the relevant domain/architecture reference.
+2. Identify the owning application, domain, and source-of-truth contract.
 3. Confirm the change is within an explicitly authorized scope.
 4. Inspect the current `main` base and relevant open pull requests before editing.
-5. Define the acceptance criteria and verification commands before implementation.
+5. Define acceptance criteria and verification commands before implementation.
 
 ## Branch and pull-request workflow
 
 - Do not commit directly to `main`.
-- Use a focused branch, for example `feat/<domain>-<capability>`, `fix/<short-description>`, or `docs/<short-description>`.
+- Use a focused branch such as `feat/<domain>-<capability>`, `fix/<short-description>`, or `docs/<short-description>`.
 - Keep each pull request limited to one coherent change.
 - Preserve unrelated files, branches, commits, and in-progress work.
 - Do not move domain code across feature boundaries as incidental cleanup.
@@ -30,6 +30,17 @@ This repository is the frontend for the ARNA Smart System. Contributions must pr
 - The API is authoritative for authentication, tenant isolation, authorization, business rules, and workflow transitions.
 - Do not introduce secrets into source control or `VITE_*` variables.
 
+## Documentation maintenance standard
+
+- Keep `docs/README.md` as the documentation catalogue; update it whenever documents are added, renamed, or retired.
+- Distinguish approved requirements, observed source behavior, verified runtime behavior, and proposed guidance.
+- Do not silently modify approved strategy/specification decisions. Propose a versioned amendment or separate candidate.
+- Include scope, status, source references, last-reviewed commit, and known limitations in operational documents where applicable.
+- Verify relative links and command names against the current repository tree and `package.json`.
+- Do not copy environment values, secrets, tokens, personal data, or internal credentials into documentation.
+- Mark historical handoffs as historical; do not present them as current release approval.
+- Prefer concise, actionable instructions and avoid duplicate/conflicting sources of truth.
+
 ## Required verification
 
 Run the checks applicable to the changed scope and record the exact commit tested:
@@ -43,21 +54,13 @@ npm run test:public-build-smoke
 npm run test:brand-palette-contract
 ```
 
-For a domain or route change, also run the relevant route/contract tests and verify the affected application entry point. For visual changes, provide evidence for applicable desktop/mobile layouts, Amharic/English content, light/dark themes, keyboard interaction, focus states, and contrast. Do not report checks as passed unless the workflow or test output confirms them.
+For a domain or route change, also run the relevant route/contract tests and verify the affected application entry point. For visual changes, provide evidence for applicable desktop/mobile layouts, Amharic/English content, light/dark themes, keyboard interaction, focus states, and contrast. Do not report checks as passed unless workflow or test output confirms them.
+
+For documentation-only changes, verify every relative link and command reference. Do not claim application tests were run if they were not.
 
 ## Pull-request description
 
-Every pull request should state:
-
-- Purpose and scope.
-- Owning application and domain.
-- Exact base and head commits.
-- Changed-file summary.
-- API dependencies and contract assumptions.
-- Tests/builds run and links to workflow runs.
-- Accessibility, localization, responsive, and visual evidence when relevant.
-- Known limitations, unresolved items, and checks not run.
-- Risks and rollback considerations for behavior changes.
+Every pull request should state purpose and scope, owning application/domain, exact base and head commits, changed files, API dependencies, tests/builds and workflow links, relevant accessibility/localization/visual evidence, limitations, unresolved items, and risks.
 
 Use explicit evidence statuses: `VERIFIED`, `PARTIAL`, `MISSING`, `UNRESOLVED`, `UNKNOWN`, and `NOT RUN`.
 
