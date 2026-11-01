@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { formatCalendarDate } from '@/core/dates/calendar';
+import { formatCalendarDate, formatCalendarDateOnly } from '@/core/dates/calendar';
 import { createCalendarEvent, listCalendarEvents, listCalendars } from './api';
 import type { CalendarEventRecord, CalendarRecord } from './api';
 
@@ -173,7 +173,7 @@ async function saveEvent(): Promise<void> {
 }
 
 function eventDate(event: CalendarEventRecord): string {
-  if (event.all_day) return formatCalendarDate(event.starts_on, { dateStyle: 'full' });
+  if (event.all_day) return formatCalendarDateOnly(event.starts_on, { dateStyle: 'full' });
   return formatCalendarDate(event.starts_at, { dateStyle: 'medium', timeStyle: 'short' });
 }
 
