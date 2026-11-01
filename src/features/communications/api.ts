@@ -89,6 +89,8 @@ export interface CommunicationMessage {
   readonly body: string;
   readonly body_locale: 'am' | 'en';
   readonly created_at: string;
+  readonly delivered_count?: number;
+  readonly read_count?: number;
 }
 
 export function listConversations(): Promise<{ items: readonly CommunicationConversation[]; pagination: { page: number; per_page: number; total: number } }> {
