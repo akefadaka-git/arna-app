@@ -24,6 +24,7 @@ test('Calendar client uses only tenant-context API endpoints and typed event ope
 
 test('Calendar view preserves E.C.-first shared date formatting and mobile layout', () => {
   assert.match(view, /formatCalendarDate/);
+  assert.match(view, /formatCalendarDateOnly/);
   assert.match(view, /value: 'month'/);
   assert.match(view, /value: 'week'/);
   assert.match(view, /value: 'day'/);
