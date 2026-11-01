@@ -544,11 +544,13 @@ export const routesWorkspace: RouteRecordRaw[] = [
         path: 'communications/conversations',
         name: 'communication-conversations',
         component: () => import('@/features/communications/ConversationsView.vue'),
+        meta: { permission: 'communication.view' },
       },
       {
         path: 'communications/conversations/:id',
         name: 'communication-conversation',
         component: () => import('@/features/communications/ConversationDetailView.vue'),
+        meta: { permission: 'communication.view' },
         props: true,
       },
 
