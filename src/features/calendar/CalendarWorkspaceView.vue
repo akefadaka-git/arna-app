@@ -30,7 +30,7 @@ function range(): { from: string; to: string } {
   from.setHours(0, 0, 0, 0);
   const to = new Date(from);
   to.setDate(to.getDate() + 45);
-  return { from: from.toISOString(), to: to.toISOString() };
+  return { from: from.toISOString().slice(0, 19).replace('T', ' '), to: to.toISOString().slice(0, 19).replace('T', ' ') };
 }
 
 async function refresh(): Promise<void> {
