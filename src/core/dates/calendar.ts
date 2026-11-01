@@ -53,6 +53,77 @@ export function useCalendarPreference(): {
  * The UTC-noon anchor preserves the written calendar day when passed through
  * the shared Addis Ababa display formatter and the active E.C./G.C. preference.
  */
+export interface EthiopicDateParts {
+  readonly year: number;
+  readonly month: number;
+  readonly day: number;
+}
+
+function numericPart(parts: Intl.DateTimeFormatPart[], type: 'year' | 'month' | 'day'): number {
+  return Number(parts.find((part) => part.type === type)?.value ?? NaN);
+}
+
+/** Read an instant as Ethiopian calendar date fields in Addis Ababa. */
+export function getEthiopicDateParts(value: Date): EthiopicDateParts {
+  initialize();
+  const formatter = new Intl.DateTimeFormat('en-ET-u-ca-ethiopic-nu-latn', {
+    timeZone: 'Africa/Addis_Ababa',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  });
+  if (formatter.resolvedOptions().calendar !== 'ethiopic') {
+    throw new Error('The Ethiopian calendar is not supported by this browser.');
+  }
+  const parts = formatter.formatToParts(value);
+  return {
+    year: numericPart(parts, 'year'),
+    month: numericPart(parts, 'month'),
+    day: numericPart(parts, 'day'),
+  };
+}
+
+/**
+ * Convert E.C. date fields to a Gregorian date-only value. Intl supplies the
+ * calendar rules; the bounded year scan avoids maintaining a second leap-year
+ * implementation and correctly handles Pagume's 5/6-day month.
+ */
+export function ethiopicDateToGregorian(value: EthiopicDateParts): string | null {
+  initialize();
+  if (!Number.isInteger(value.year) || value.year < 1
+    || !Number.isInteger(value.month) || value.month < 1 || value.month > 13
+    || !Number.isInteger(value.day) || value.day < 1 || value.day > 30) return null;
+
+  const formatter = new Intl.DateTimeFormat('en-ET-u-ca-ethiopic-nu-latn', {
+    timeZone: 'Africa/Addis_Ababa',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  });
+  if (formatter.resolvedOptions().calendar !== 'ethiopic') {
+    throw new Error('The Ethiopian calendar is not supported by this browser.');
+  }
+
+  const start = Date.UTC(value.year + 7, 8, 1, 12);
+  for (let offset = 0; offset < 370; offset += 1) {
+    const candidate = new Date(start + offset * 86_400_000);
+    const parts = formatter.formatToParts(candidate);
+    if (numericPart(parts, 'year') !== value.year
+      || numericPart(parts, 'month') !== value.month
+      || numericPart(parts, 'day') !== value.day) continue;
+
+    const gregorian = new Intl.DateTimeFormat('en-CA-u-ca-gregory-nu-latn', {
+      timeZone: 'Africa/Addis_Ababa',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(candidate);
+    const part = (type: 'year' | 'month' | 'day') => gregorian.find((item) => item.type === type)?.value ?? '';
+    return `${part('year')}-${part('month')}-${part('day')}`;
+  }
+  return null;
+}
+
 export function formatCalendarDateOnly(
   value: string | null | undefined,
   options: Intl.DateTimeFormatOptions = { dateStyle: 'medium' },
