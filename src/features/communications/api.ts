@@ -99,7 +99,7 @@ export function createConversation(input: { type: 'direct' | 'group' | 'departme
   return api.post<{ id: string; type: string; title: string | null }>('/api/communication/conversations', input);
 }
 
-export function getConversation(id: string): Promise<{ conversation: CommunicationConversation; participants: readonly { user_id: number; role: string; joined_at: string; name: string }[] }> {
+export function getConversation(id: string): Promise<{ conversation: CommunicationConversation; participants: readonly { user_id: number; role: string; joined_at: string }[] }> {
   return api.get<{ conversation: CommunicationConversation; participants: readonly { user_id: number; role: string; joined_at: string; name: string }[] }>(`/api/communication/conversations/${encodeURIComponent(id)}`);
 }
 
