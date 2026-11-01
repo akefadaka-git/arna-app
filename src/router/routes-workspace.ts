@@ -527,6 +527,16 @@ export const routesWorkspace: RouteRecordRaw[] = [
       },
 
       // -----------------------------------------------------------------------
+      // Communication Hub — official announcements
+      // -----------------------------------------------------------------------
+      {
+        path: 'announcements',
+        name: 'announcements',
+        component: () => import('@/features/communications/AnnouncementsView.vue'),
+        meta: { permission: 'announcement.view' },
+      },
+
+      // -----------------------------------------------------------------------
       // File management
       // -----------------------------------------------------------------------
       {
