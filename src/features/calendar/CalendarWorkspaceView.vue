@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { formatCalendarDate, formatCalendarDateOnly } from '@/core/dates/calendar';
+import { ethiopicDateToGregorian, formatCalendarDate, formatCalendarDateOnly, getEthiopicDateParts, useCalendarPreference } from '@/core/dates/calendar';
 import { useAuthStore } from '@/stores/auth';
 import { createCalendarEvent, listCalendarEvents, listCalendars, listCalendarResources, reserveCalendarResource, respondToCalendarEvent, updateCalendarEvent } from './api';
 import type { CalendarEventRecord, CalendarRecord, CalendarResourceRecord } from './api';
@@ -8,6 +8,7 @@ import type { CalendarEventRecord, CalendarRecord, CalendarResourceRecord } from
 type CalendarView = 'agenda' | 'day' | 'week' | 'month' | 'timeline';
 
 const auth = useAuthStore();
+const { calendarSystem } = useCalendarPreference();
 const calendars = ref<readonly CalendarRecord[]>([]);
 const resources = ref<readonly CalendarResourceRecord[]>([]);
 const selectedEventId = ref('');
@@ -19,8 +20,14 @@ const selectedDate = ref(new Date());
 const viewMode = ref<CalendarView>('agenda');
 const title = ref('');
 const description = ref('');
-const startsAt = ref('');
-const endsAt = ref('');
+const startGregorianDate = ref(dateKey(new Date()));
+const endGregorianDate = ref(dateKey(new Date()));
+const todayEthiopic = getEthiopicDateParts(new Date());
+const startEthiopicDate = ref({ ...todayEthiopic });
+const endEthiopicDate = ref({ ...todayEthiopic });
+const startTime = ref('09:00');
+const endTime = ref('09:30');
+const ethiopicMonths = ['መስከረም', 'ጥቅምት', 'ኅዳር', 'ታኅሣሥ', 'ጥር', 'የካቲት', 'መጋቢት', 'ሚያዝያ', 'ግንቦት', 'ሰኔ', 'ሐምሌ', 'ነሐሴ', 'ጳጉሜ'];
 const loading = ref(false);
 const saving = ref(false);
 const error = ref('');
@@ -35,7 +42,11 @@ const viewOptions: readonly { value: CalendarView; label: string }[] = [
   { value: 'timeline', label: 'የጊዜ መስመር' },
 ];
 
-const canCreate = computed(() => selectedCalendar.value !== '' && title.value.trim() !== '' && startsAt.value !== '' && endsAt.value !== '');
+const canCreate = computed(() => selectedCalendar.value !== ''
+  && title.value.trim() !== ''
+  && !!dateValue(startGregorianDate.value, startEthiopicDate.value)
+  && !!dateValue(endGregorianDate.value, endEthiopicDate.value)
+  && startTime.value !== '' && endTime.value !== '');
 const periodLabel = computed(() => formatCalendarDate(selectedDate.value, { dateStyle: 'full' }));
 const selectedEvent = computed(() => events.value.find((event) => event.id === selectedEventId.value) ?? null);
 const canUpdateEvents = computed(() => auth.permissions.includes('calendar.update'));
@@ -51,6 +62,16 @@ const monthDays = computed(() => {
     return day;
   });
 });
+
+function dateValue(gregorian: string, ethiopic: { year: number; month: number; day: number }): string | null {
+  return calendarSystem.value === 'ethiopic' ? ethiopicDateToGregorian(ethiopic) : (gregorian || null);
+}
+
+function localDateTime(date: string, time: string): Date {
+  const [year, month, day] = date.split('-').map(Number);
+  const [hour, minute] = time.split(':').map(Number);
+  return new Date(year, month - 1, day, hour, minute, 0, 0);
+}
 
 function dateKey(date: Date): string {
   const pad = (part: number) => String(part).padStart(2, '0');
@@ -158,8 +179,11 @@ async function saveEvent(): Promise<void> {
   error.value = '';
   success.value = '';
   try {
-    const start = new Date(startsAt.value);
-    const end = new Date(endsAt.value);
+    const startDate = dateValue(startGregorianDate.value, startEthiopicDate.value);
+    const endDate = dateValue(endGregorianDate.value, endEthiopicDate.value);
+    if (!startDate || !endDate) throw new Error('የኢትዮጵያ ቀን ትክክለኛ አይደለም።');
+    const start = localDateTime(startDate, startTime.value);
+    const end = localDateTime(endDate, endTime.value);
     if (end <= start) throw new Error('የመጨረሻ ሰዓት ከመጀመሪያ ሰዓት በኋላ መሆን አለበት።');
     await createCalendarEvent({
       calendar_id: selectedCalendar.value,
@@ -172,8 +196,12 @@ async function saveEvent(): Promise<void> {
     });
     title.value = '';
     description.value = '';
-    startsAt.value = '';
-    endsAt.value = '';
+    startGregorianDate.value = dateKey(new Date());
+    endGregorianDate.value = dateKey(new Date());
+    startEthiopicDate.value = getEthiopicDateParts(new Date());
+    endEthiopicDate.value = getEthiopicDateParts(new Date());
+    startTime.value = '09:00';
+    endTime.value = '09:30';
     showComposer.value = false;
     success.value = 'ቀጠሮው ተመዝግቧል።';
     await refresh();
@@ -297,14 +325,32 @@ onMounted(refresh);
         <textarea v-model="description" rows="3" maxlength="20000" />
       </label>
       <div class="calendar-workspace__time-grid">
-        <label>መጀመሪያ
-          <input v-model="startsAt" type="datetime-local" required />
-        </label>
-        <label>መጨረሻ
-          <input v-model="endsAt" type="datetime-local" required />
-        </label>
+        <fieldset class="calendar-workspace__date-field">
+          <legend>መጀመሪያ</legend>
+          <template v-if="calendarSystem === 'ethiopic'">
+            <div class="calendar-workspace__ethiopic-date">
+              <label>ዓመት<input v-model.number="startEthiopicDate.year" type="number" min="1" required /></label>
+              <label>ወር<select v-model.number="startEthiopicDate.month"><option v-for="(month, index) in ethiopicMonths" :key="month" :value="index + 1">{{ month }}</option></select></label>
+              <label>ቀን<input v-model.number="startEthiopicDate.day" type="number" min="1" max="30" required /></label>
+            </div>
+          </template>
+          <label v-else>ቀን<input v-model="startGregorianDate" type="date" required /></label>
+          <label>ሰዓት<input v-model="startTime" type="time" required /></label>
+        </fieldset>
+        <fieldset class="calendar-workspace__date-field">
+          <legend>መጨረሻ</legend>
+          <template v-if="calendarSystem === 'ethiopic'">
+            <div class="calendar-workspace__ethiopic-date">
+              <label>ዓመት<input v-model.number="endEthiopicDate.year" type="number" min="1" required /></label>
+              <label>ወር<select v-model.number="endEthiopicDate.month"><option v-for="(month, index) in ethiopicMonths" :key="month" :value="index + 1">{{ month }}</option></select></label>
+              <label>ቀን<input v-model.number="endEthiopicDate.day" type="number" min="1" max="30" required /></label>
+            </div>
+          </template>
+          <label v-else>ቀን<input v-model="endGregorianDate" type="date" required /></label>
+          <label>ሰዓት<input v-model="endTime" type="time" required /></label>
+        </fieldset>
       </div>
-      <p class="calendar-workspace__hint">ሰዓቱ በአሁኑ መሣሪያ የጊዜ ዞን ይቀመጣል። የኢትዮጵያ የቀን አቆጣጠር ምርጫዎ ለማሳያ ይተገበራል።</p>
+      <p class="calendar-workspace__hint">የቀን ግቤት በተመረጠው አቆጣጠር ይታያል፤ ሰዓቱ በአሁኑ መሣሪያ የጊዜ ዞን ይቀመጣል።</p>
       <div class="calendar-workspace__actions">
         <button class="calendar-workspace__secondary" type="button" @click="showComposer = false">ሰርዝ</button>
         <button class="calendar-workspace__primary" type="submit" :disabled="!canCreate || saving">{{ saving ? 'በማስቀመጥ ላይ…' : 'አስቀምጥ' }}</button>
@@ -398,6 +444,10 @@ onMounted(refresh);
 .calendar-workspace label { display: grid; gap: .35rem; font-weight: 600; }
 .calendar-workspace input, .calendar-workspace select, .calendar-workspace textarea { width: 100%; min-height: 2.7rem; padding: .6rem .7rem; border: 1px solid var(--color-border-default, #d0d5dd); border-radius: .5rem; background: var(--color-surface-canvas, #fff); color: inherit; font: inherit; }
 .calendar-workspace__time-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem; }
+.calendar-workspace__date-field { min-width: 0; display: grid; gap: .65rem; padding: .8rem; border: 1px solid var(--color-border-default, #d0d5dd); border-radius: .6rem; }
+.calendar-workspace__date-field legend { padding: 0 .3rem; font-weight: 700; }
+.calendar-workspace__ethiopic-date { display: grid; grid-template-columns: 1fr 1.4fr .8fr; gap: .4rem; }
+
 .calendar-workspace__hint { margin: 0; color: var(--color-text-muted, #667085); font-size: .85rem; }
 .calendar-workspace__actions { display: flex; justify-content: flex-end; gap: .65rem; }
 .calendar-workspace__summary { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; padding: 1rem 1.25rem; border-radius: .85rem; background: var(--color-surface-subtle, #f2f4f7); }
