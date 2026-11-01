@@ -777,6 +777,13 @@ export const routesWorkspace: RouteRecordRaw[] = [
         component: () => import('@/features/governance/GovernancePersonProfileView.vue'),
         meta: { permission: 'governance.body.view' },
       },
+      // Calendar — Core-owned scheduling workspace. Backend permissions remain authoritative.
+      {
+        path: 'calendar',
+        name: 'calendar',
+        component: () => import('@/features/calendar/CalendarWorkspaceView.vue'),
+        meta: { permission: 'calendar.view' },
+      },
     ],
   },
 ];
