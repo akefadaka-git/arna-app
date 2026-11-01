@@ -16,7 +16,10 @@
     "TOOLING DEFERRED: lint/format/test automation and dependency automation require separate bounded changes.",
     "PUBLIC BUILD SMOKE: test:public-build-smoke verifies the independent public static build output."
   ],
-  "engines": { "node": ">=20.0.0", "npm": ">=10.0.0" },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
     "dev": "vite --mode workspace",
     "dev:portal": "vite --mode portal",
@@ -34,7 +37,8 @@
     "test:public-build-smoke": "node --test tests/public-build-smoke.test.mjs",
     "test:brand-palette-contract": "node --test tests/brand-palette-contract.test.mjs",
     "test:design-system-theme-contract": "node --test tests/design-system-theme-contract.test.mjs",
-    "test:app-shell-responsive-contract": "node --test tests/app-shell-responsive-contract.test.mjs"
+    "test:app-shell-responsive-contract": "node --test tests/app-shell-responsive-contract.test.mjs",
+    "test:calendar-workspace-contract": "node --test tests/calendar-workspace-contract.test.mjs"
   },
   "dependencies": {
     "axios": "1.7.9",
