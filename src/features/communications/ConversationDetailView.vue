@@ -54,7 +54,7 @@ onMounted(() => { void load(); });
       <p v-if="loading" class="empty">በመጫን ላይ…</p>
       <p v-else-if="messages.length === 0" class="empty">ገና መልዕክት የለም። · Start the conversation.</p>
       <article v-for="message in messages" :key="message.id" class="message">
-        <p>{{ message.body }}</p><small>{{ new Date(message.created_at).toLocaleString() }} · {{ message.body_locale }}</small>
+        <p>{{ message.body }}</p><small>{{ new Date(message.created_at).toLocaleString() }} · {{ message.body_locale }} · Delivered {{ message.delivered_count ?? 0 }} · Read {{ message.read_count ?? 0 }}</small>
       </article>
     </section>
     <form class="composer" @submit.prevent="send">
