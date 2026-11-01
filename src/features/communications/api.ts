@@ -43,3 +43,32 @@ export function approveAnnouncement(id: string): Promise<unknown> {
 export function publishAnnouncement(id: string): Promise<unknown> {
   return api.post(`/api/announcements/${encodeURIComponent(id)}/publish`);
 }
+
+
+export interface CommunicationNotification {
+  readonly id: string;
+  readonly title: string | { readonly am?: string; readonly en?: string };
+  readonly body: string | { readonly am?: string; readonly en?: string } | null;
+  readonly category: string;
+  readonly priority: string;
+  readonly is_read: boolean;
+  readonly created_at: string;
+}
+
+export interface NotificationInbox {
+  readonly items: readonly CommunicationNotification[];
+  readonly pagination: { readonly page: number; readonly per_page: number; readonly total: number };
+  readonly unread_count: number;
+}
+
+export function listNotifications(): Promise<NotificationInbox> {
+  return api.get<NotificationInbox>('/api/notifications');
+}
+
+export function markNotificationRead(id: string): Promise<{ id: string; is_read: boolean; unread_count: number }> {
+  return api.post<{ id: string; is_read: boolean; unread_count: number }>(`/api/notifications/${encodeURIComponent(id)}/read`);
+}
+
+export function markAllNotificationsRead(): Promise<{ updated: number; unread_count: number }> {
+  return api.post<{ updated: number; unread_count: number }>('/api/notifications/read-all');
+}
