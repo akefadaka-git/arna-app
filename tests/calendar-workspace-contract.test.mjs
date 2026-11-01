@@ -2,11 +2,12 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-const [route, navigation, api, view] = await Promise.all([
+const [route, navigation, api, view, dates] = await Promise.all([
   readFile(new URL('../src/router/routes-workspace.ts', import.meta.url), 'utf8'),
   readFile(new URL('../src/router/pages/shell-labels.ts', import.meta.url), 'utf8'),
   readFile(new URL('../src/features/calendar/api.ts', import.meta.url), 'utf8'),
   readFile(new URL('../src/features/calendar/CalendarWorkspaceView.vue', import.meta.url), 'utf8'),
+  readFile(new URL('../src/core/dates/calendar.ts', import.meta.url), 'utf8'),
 ]);
 
 test('Calendar workspace is registered behind the canonical view permission', () => {
@@ -28,6 +29,10 @@ test('Calendar client uses only tenant-context API endpoints and typed event ope
 test('Calendar view preserves E.C.-first shared date formatting and mobile layout', () => {
   assert.match(view, /formatCalendarDate/);
   assert.match(view, /formatCalendarDateOnly/);
+  assert.match(view, /calendarSystem === 'ethiopic'/);
+  assert.match(view, /startEthiopicDate/);
+  assert.match(dates, /ethiopicDateToGregorian/);
+  assert.match(dates, /getEthiopicDateParts/);
   assert.match(view, /value: 'month'/);
   assert.match(view, /value: 'week'/);
   assert.match(view, /value: 'day'/);
