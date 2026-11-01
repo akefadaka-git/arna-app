@@ -413,6 +413,13 @@ export const authenticatedNavItems: ReadonlyArray<NavItem> = [
     icon: 'users',
     permission: 'shareholder.view',
   },
+  {
+    id: 'calendar',
+    label: 'የቀጠሮ ሰሌዳ',
+    to: '/calendar',
+    icon: 'calendar-days',
+    permission: 'calendar.view',
+  },
 ];
 
 /**
