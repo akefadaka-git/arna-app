@@ -45,10 +45,6 @@ export function useCalendarPreference(): {
 }
 
 /**
- * Format an instant in the user's selected calendar. The default is E.C.
- * and the formatter never silently falls back to G.C. when E.C. is selected.
- */
-/**
  * Format a date-only business value without interpreting it as an instant.
  * The UTC-noon anchor preserves the written calendar day when passed through
  * the shared Addis Ababa display formatter and the active E.C./G.C. preference.
@@ -143,6 +139,10 @@ export function formatCalendarDateOnly(
   return formatCalendarDate(anchor, options, locale);
 }
 
+/**
+ * Format an instant in the user's selected calendar. The default is E.C.
+ * and the formatter never silently falls back to G.C. when E.C. is selected.
+ */
 export function formatCalendarDate(
   value: string | number | Date | null | undefined,
   options: Intl.DateTimeFormatOptions = { dateStyle: 'medium' },
