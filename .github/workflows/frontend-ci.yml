@@ -35,6 +35,8 @@ jobs:
         run: npm run test:design-system-theme-contract
       - name: Verify responsive App Shell layout and accessibility contracts
         run: npm run test:app-shell-responsive-contract
+      - name: Verify Calendar workspace route, API and responsive contracts
+        run: npm run test:calendar-workspace-contract
       - name: Upload versioned static build outputs
         uses: actions/upload-artifact@v4
         with:
