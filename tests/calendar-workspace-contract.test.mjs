@@ -19,6 +19,9 @@ test('Calendar client uses only tenant-context API endpoints and typed event ope
   assert.match(api, /\/api\/calendar\/events/);
   assert.match(api, /\/api\/calendar\/events/);
   assert.match(api, /createCalendarEvent/);
+  assert.match(api, /respondToCalendarEvent/);
+  assert.match(api, /reserveCalendarResource/);
+  assert.match(api, /updateCalendarEvent/);
   assert.doesNotMatch(api, /tenant_id\s*:/);
 });
 
@@ -32,6 +35,8 @@ test('Calendar view preserves E.C.-first shared date formatting and mobile layou
   assert.match(view, /calendar-workspace__month-grid/);
   assert.match(view, /Africa\/Addis_Ababa/);
   assert.match(view, /aria-live="polite"/);
+  assert.match(view, /ዝርዝር እይታ/);
+  assert.match(view, /ሀብት ያስይዙ/);
   assert.match(view, /@media \(max-width: 640px\)/);
   assert.match(view, /role="alert"/);
 });
