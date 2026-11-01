@@ -1,12 +1,18 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { formatCalendarDate, formatCalendarDateOnly } from '@/core/dates/calendar';
-import { createCalendarEvent, listCalendarEvents, listCalendars } from './api';
-import type { CalendarEventRecord, CalendarRecord } from './api';
+import { useAuthStore } from '@/stores/auth';
+import { createCalendarEvent, listCalendarEvents, listCalendars, listCalendarResources, reserveCalendarResource, respondToCalendarEvent, updateCalendarEvent } from './api';
+import type { CalendarEventRecord, CalendarRecord, CalendarResourceRecord } from './api';
 
 type CalendarView = 'agenda' | 'day' | 'week' | 'month' | 'timeline';
 
+const auth = useAuthStore();
 const calendars = ref<readonly CalendarRecord[]>([]);
+const resources = ref<readonly CalendarResourceRecord[]>([]);
+const selectedEventId = ref('');
+const selectedResourceId = ref('');
+const savingLifecycle = ref(false);
 const events = ref<readonly CalendarEventRecord[]>([]);
 const selectedCalendar = ref('');
 const selectedDate = ref(new Date());
@@ -31,6 +37,9 @@ const viewOptions: readonly { value: CalendarView; label: string }[] = [
 
 const canCreate = computed(() => selectedCalendar.value !== '' && title.value.trim() !== '' && startsAt.value !== '' && endsAt.value !== '');
 const periodLabel = computed(() => formatCalendarDate(selectedDate.value, { dateStyle: 'full' }));
+const selectedEvent = computed(() => events.value.find((event) => event.id === selectedEventId.value) ?? null);
+const canUpdateEvents = computed(() => auth.permissions.includes('calendar.update'));
+const canReserveResources = computed(() => auth.permissions.includes('calendar.reserve'));
 const monthDays = computed(() => {
   const first = new Date(selectedDate.value.getFullYear(), selectedDate.value.getMonth(), 1);
   const mondayOffset = (first.getDay() + 6) % 7;
@@ -100,12 +109,15 @@ async function refresh(): Promise<void> {
   loading.value = true;
   error.value = '';
   try {
-    const [calendarPage, eventPage] = await Promise.all([
+    const [calendarPage, eventPage, resourcePage] = await Promise.all([
       listCalendars(),
       (() => { const dates = range(); return listCalendarEvents(dates.from, dates.to); })(),
+      listCalendarResources(),
     ]);
     calendars.value = calendarPage.data ?? [];
     events.value = eventPage.data ?? [];
+    resources.value = resourcePage.data ?? [];
+    if (selectedEventId.value && !events.value.some((event) => event.id === selectedEventId.value)) selectedEventId.value = '';
     if (!selectedCalendar.value && calendars.value.length) selectedCalendar.value = calendars.value[0].id;
   } catch (cause) {
     error.value = cause instanceof Error ? cause.message : 'የቀን መቁጠሪያ መረጃ ማግኘት አልተቻለም።';
@@ -169,6 +181,64 @@ async function saveEvent(): Promise<void> {
     error.value = cause instanceof Error ? cause.message : 'ቀጠሮውን ማስቀመጥ አልተቻለም።';
   } finally {
     saving.value = false;
+  }
+}
+
+function myInvitationResponse(event: CalendarEventRecord): string | null {
+  const attendee = event.attendees?.find((item) => String(item.user_id) === String(auth.userId));
+  return attendee?.response ?? null;
+}
+
+function canRespond(event: CalendarEventRecord): boolean {
+  return myInvitationResponse(event) !== null;
+}
+
+async function respond(event: CalendarEventRecord, response: 'accepted' | 'declined' | 'tentative'): Promise<void> {
+  savingLifecycle.value = true;
+  error.value = '';
+  try {
+    await respondToCalendarEvent(event.id, response);
+    success.value = response === 'accepted' ? 'ግብዣውን ተቀብለዋል።' : response === 'declined' ? 'ግብዣውን አልተቀበሉም።' : 'ምላሽዎ በጊዜያዊነት ተመዝግቧል።';
+    await refresh();
+  } catch (cause) {
+    error.value = cause instanceof Error ? cause.message : 'ምላሽዎን ማስቀመጥ አልተቻለም።';
+  } finally {
+    savingLifecycle.value = false;
+  }
+}
+
+async function changeEventStatus(status: 'cancelled' | 'completed'): Promise<void> {
+  if (!selectedEvent.value || !canUpdateEvents.value) return;
+  savingLifecycle.value = true;
+  error.value = '';
+  try {
+    await updateCalendarEvent(selectedEvent.value.id, { version: selectedEvent.value.version, status });
+    success.value = status === 'completed' ? 'ቀጠሮው ተጠናቋል።' : 'ቀጠሮው ተሰርዟል።';
+    await refresh();
+  } catch (cause) {
+    error.value = cause instanceof Error ? cause.message : 'የቀጠሮ ሁኔታን ማዘመን አልተቻለም።';
+  } finally {
+    savingLifecycle.value = false;
+  }
+}
+
+async function reserveSelectedResource(): Promise<void> {
+  const event = selectedEvent.value;
+  if (!event || !selectedResourceId.value || !event.starts_at || !event.ends_at || !canReserveResources.value) return;
+  savingLifecycle.value = true;
+  error.value = '';
+  try {
+    await reserveCalendarResource({
+      resource_id: selectedResourceId.value,
+      event_id: event.id,
+      starts_at: event.starts_at,
+      ends_at: event.ends_at,
+    });
+    success.value = 'ሀብቱ ለቀጠሮው ተይዟል።';
+  } catch (cause) {
+    error.value = cause instanceof Error ? cause.message : 'ሀብቱን መያዝ አልተቻለም።';
+  } finally {
+    savingLifecycle.value = false;
   }
 }
 
@@ -269,12 +339,47 @@ onMounted(refresh);
           <h2>{{ event.title }}</h2>
           <p v-if="event.description">{{ event.description }}</p>
           <span class="calendar-workspace__status">{{ event.status === 'scheduled' ? 'የታቀደ' : event.status === 'completed' ? 'የተጠናቀቀ' : 'የተሰረዘ' }}</span>
+          <button class="calendar-workspace__detail-link" type="button" @click="selectedEventId = event.id">ዝርዝር እይታ</button>
         </div>
       </article>
       <div v-if="!loading && events.length === 0" class="calendar-workspace__empty">
         በተመረጠው ጊዜ ውስጥ የተመዘገበ ቀጠሮ የለም።
       </div>
     </div>
+
+    <aside v-if="selectedEvent" class="calendar-workspace__detail" aria-labelledby="calendar-event-detail-title">
+      <div class="calendar-workspace__detail-heading">
+        <div>
+          <p class="calendar-workspace__eyebrow">EVENT DETAIL</p>
+          <h2 id="calendar-event-detail-title">{{ selectedEvent.title }}</h2>
+        </div>
+        <button class="calendar-workspace__secondary" type="button" @click="selectedEventId = ''">ዝጋ</button>
+      </div>
+      <p>{{ eventDate(selectedEvent) }}</p>
+      <p v-if="selectedEvent.description">{{ selectedEvent.description }}</p>
+      <p class="calendar-workspace__hint">ተሳታፊዎች: {{ selectedEvent.attendees?.length ?? 0 }} · ሁኔታ: {{ selectedEvent.status }}</p>
+      <div v-if="canRespond(selectedEvent)" class="calendar-workspace__detail-actions">
+        <span>የእርስዎ ምላሽ: {{ myInvitationResponse(selectedEvent) }}</span>
+        <button class="calendar-workspace__secondary" type="button" :disabled="savingLifecycle" @click="respond(selectedEvent, 'accepted')">ተቀበል</button>
+        <button class="calendar-workspace__secondary" type="button" :disabled="savingLifecycle" @click="respond(selectedEvent, 'tentative')">ጊዜያዊ</button>
+        <button class="calendar-workspace__secondary" type="button" :disabled="savingLifecycle" @click="respond(selectedEvent, 'declined')">አትቀበል</button>
+      </div>
+      <div v-if="canReserveResources && selectedEvent.starts_at && selectedEvent.ends_at" class="calendar-workspace__resource-booking">
+        <label>ሀብት / ክፍል
+          <select v-model="selectedResourceId">
+            <option value="" disabled>ይምረጡ</option>
+            <option v-for="resource in resources.filter((item) => item.is_active)" :key="resource.id" :value="resource.id">
+              {{ resource.name }} · {{ resource.resource_type }}
+            </option>
+          </select>
+        </label>
+        <button class="calendar-workspace__primary" type="button" :disabled="!selectedResourceId || savingLifecycle" @click="reserveSelectedResource">ሀብት ያስይዙ</button>
+      </div>
+      <div v-if="canUpdateEvents && selectedEvent.status === 'scheduled'" class="calendar-workspace__detail-actions">
+        <button class="calendar-workspace__secondary" type="button" :disabled="savingLifecycle" @click="changeEventStatus('completed')">ተጠናቋል</button>
+        <button class="calendar-workspace__secondary" type="button" :disabled="savingLifecycle" @click="changeEventStatus('cancelled')">ሰርዝ</button>
+      </div>
+    </aside>
   </section>
 </template>
 
@@ -315,6 +420,12 @@ onMounted(refresh);
 .calendar-workspace__day-number { align-self: flex-start; min-width: 1.5rem; text-align: center; font-weight: 700; }
 .calendar-workspace__month-event { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: .15rem .3rem; border-radius: .25rem; background: var(--color-surface-subtle, #f2f4f7); font-size: .72rem; }
 .calendar-workspace__more-events { color: var(--color-text-muted, #667085); font-size: .7rem; }
+.calendar-workspace__detail { display: grid; gap: .7rem; padding: 1.2rem; border: 1px solid var(--color-border-default, #d0d5dd); border-radius: .85rem; background: var(--color-surface-raised, #fff); }
+.calendar-workspace__detail-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: .8rem; }
+.calendar-workspace__detail-heading h2 { margin: 0; font-size: 1.2rem; }
+.calendar-workspace__detail-actions, .calendar-workspace__resource-booking { display: flex; align-items: end; flex-wrap: wrap; gap: .55rem; }
+.calendar-workspace__resource-booking label { flex: 1 1 14rem; }
+.calendar-workspace__detail-link { align-self: flex-start; margin-top: .4rem; border: 0; padding: .25rem 0; color: var(--color-action-primary, #244b78); background: transparent; text-decoration: underline; font: inherit; cursor: pointer; }
 .calendar-workspace__list { display: grid; gap: .75rem; }
 .calendar-workspace__event { display: grid; grid-template-columns: minmax(9rem, 12rem) minmax(0, 1fr); gap: 1rem; padding: 1rem 1.2rem; border: 1px solid var(--color-border-default, #d0d5dd); border-radius: .8rem; background: var(--color-surface-raised, #fff); }
 .calendar-workspace__date { color: var(--color-text-secondary, #475467); font-weight: 600; }
