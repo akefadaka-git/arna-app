@@ -1,6 +1,6 @@
 # ARNA Enterprise Calendar — App A2 Read-only Inventory
 
-**Status:** A2 PARTIAL; read-only source review
+**Status:** A2 CLOSED for bounded source inventory; unresolved contracts remain explicit blockers
 **Repository:** akefadaka-git/arna-app
 **Main SHA:** 23b2e65d9c16b03bbb7ccb2f0783c8813e2307da
 **A1 PR:** #22; proposal commit 0c92277389cc213d0740b94fd294bb662b14dae9
@@ -66,4 +66,4 @@ Calendar reminders/invitations must originate from committed API-side events/out
 
 This is a bounded source inventory, not a full component-wide date usage audit, browser test, accessibility audit or live API verification.
 
-**A2 result: PARTIAL.** Shared date and notification foundations plus router/feature boundaries are verified. Complete date-usage inventory and UI permission matrix remain open. No A3 implementation is included.
+**A2 result: CLOSED for bounded source inventory.** Shared formatter adoption and remaining direct Gregorian rendering/native date-picker risks were identified; route/feature scope and notification integration seams were recorded. See the [consolidated disposition register and implementation strategy](https://github.com/akefadaka-git/arna-api/blob/docs/arna-enterprise-calendar-a1/docs/calendar/ARNA_ENTERPRISE_CALENDAR_A2_CONSOLIDATED_DISPOSITION_AND_IMPLEMENTATION_STRATEGY_v1.0.md) for source-to-requirement mapping, unresolved decisions and delivery sequence. Exact endpoint-level permission mapping, full migration and runtime verification remain future-phase tasks. No A3 implementation is included.
