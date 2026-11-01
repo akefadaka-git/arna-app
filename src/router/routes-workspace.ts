@@ -529,7 +529,6 @@ export const routesWorkspace: RouteRecordRaw[] = [
         path: 'communications',
         name: 'communications',
         component: () => import('@/features/communications/CommunicationHubView.vue'),
-        meta: { permission: 'communication.view' },
       },
 
       // -----------------------------------------------------------------------
@@ -539,7 +538,6 @@ export const routesWorkspace: RouteRecordRaw[] = [
         path: 'announcements',
         name: 'announcements',
         component: () => import('@/features/communications/AnnouncementsView.vue'),
-        meta: { permission: 'announcement.view' },
       },
 
       // -----------------------------------------------------------------------
