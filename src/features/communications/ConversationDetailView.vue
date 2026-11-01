@@ -17,10 +17,11 @@ async function load(): Promise<void> {
   loading.value = true;
   error.value = '';
   try {
-    const [detail, page] = await Promise.all([getConversation(id), listConversationMessages(id)]);
+    const detail = await getConversation(id);
     conversation.value = detail.conversation;
-    messages.value = page.items;
     await markConversationRead(id);
+    const page = await listConversationMessages(id);
+    messages.value = page.items;
   } catch {
     error.value = 'መልዕክቶችን ማምጣት አልተቻለም። ፈቃድዎን እና የውይይት አባልነትዎን ያረጋግጡ።';
   } finally {
