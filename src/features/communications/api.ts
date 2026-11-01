@@ -92,25 +92,25 @@ export interface CommunicationMessage {
 }
 
 export function listConversations(): Promise<{ items: readonly CommunicationConversation[]; pagination: { page: number; per_page: number; total: number } }> {
-  return api.get('/api/communication/conversations');
+  return api.get<{ items: readonly CommunicationConversation[]; pagination: { page: number; per_page: number; total: number } }>('/api/communication/conversations');
 }
 
 export function createConversation(input: { type: 'direct' | 'group' | 'department'; title: string | null; participant_ids: number[] }): Promise<{ id: string; type: string; title: string | null }> {
-  return api.post('/api/communication/conversations', input);
+  return api.post<{ id: string; type: string; title: string | null }>('/api/communication/conversations', input);
 }
 
 export function getConversation(id: string): Promise<{ conversation: CommunicationConversation; participants: readonly { user_id: number; role: string; joined_at: string; name: string }[] }> {
-  return api.get(`/api/communication/conversations/${encodeURIComponent(id)}`);
+  return api.get<{ conversation: CommunicationConversation; participants: readonly { user_id: number; role: string; joined_at: string; name: string }[] }>(`/api/communication/conversations/${encodeURIComponent(id)}`);
 }
 
 export function listConversationMessages(id: string): Promise<{ items: readonly CommunicationMessage[]; pagination: { page: number; per_page: number; total: number } }> {
-  return api.get(`/api/communication/conversations/${encodeURIComponent(id)}/messages`);
+  return api.get<{ items: readonly CommunicationMessage[]; pagination: { page: number; per_page: number; total: number } }>(`/api/communication/conversations/${encodeURIComponent(id)}/messages`);
 }
 
 export function sendConversationMessage(id: string, input: { body: string; body_locale: 'am' | 'en'; idempotency_key: string }): Promise<CommunicationMessage> {
-  return api.post(`/api/communication/conversations/${encodeURIComponent(id)}/messages`, input);
+  return api.post<CommunicationMessage>(`/api/communication/conversations/${encodeURIComponent(id)}/messages`, input);
 }
 
 export function markConversationRead(id: string): Promise<{ read_count: number }> {
-  return api.post(`/api/communication/conversations/${encodeURIComponent(id)}/read`);
+  return api.post<{ read_count: number }>(`/api/communication/conversations/${encodeURIComponent(id)}/read`);
 }
