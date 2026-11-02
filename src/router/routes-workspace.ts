@@ -777,6 +777,12 @@ export const routesWorkspace: RouteRecordRaw[] = [
         component: () => import('@/features/governance/GovernancePersonProfileView.vue'),
         meta: { permission: 'governance.body.view' },
       },
+      {
+        path: 'governance/meetings',
+        name: 'governance-meetings',
+        component: () => import('@/features/governance/MeetingAttendanceView.vue'),
+        meta: { permission: 'governance.body.view' },
+      },
     ],
   },
 ];
