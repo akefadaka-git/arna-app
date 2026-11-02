@@ -258,6 +258,9 @@ onMounted(load);
             {{ result.file?.original_name ?? `File #${result.file_id}` }}
           </button>
           <p>{{ result.full_text.slice(0, 240) }}</p>
+          <p v-for="correction in result.corrections ?? []" :key="correction.id">
+            <strong>{{ correction.corrected_text.slice(0, 240) }}</strong>
+          </p>
         </li>
       </ul>
     </section>
