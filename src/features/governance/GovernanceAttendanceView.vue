@@ -275,8 +275,8 @@ onMounted(() => { void loadMeetings(); });
             <label>Arrival time (required for present / late)
               <input v-model="attendanceForm.arrived_at" type="datetime-local" />
             </label>
-            <label class="wide">Notes / evidence reference
-              <input v-model="attendanceForm.notes" maxlength="2000" />
+            <label class="wide">Notes / permission evidence reference (required for excused absence)
+              <input v-model="attendanceForm.notes" maxlength="2000" :required="attendanceForm.attendance_status === 'excused'" />
             </label>
             <div class="form-actions"><button type="submit" :disabled="saving">Save attendance</button></div>
           </form>
