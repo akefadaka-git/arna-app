@@ -31,6 +31,6 @@ test('OCR workspace is bilingual and keeps business approval outside OCR', () =>
   assert.match(labels, /am:/);
   assert.match(labels, /en:/);
   assert.match(labels, /የሰነድ ብልህነት/);
-  assert.match(view, /OCR verification does not approve a document/);
+  assert.match(labels, /OCR verification does not approve a document/);
   assert.match(view, /verify\('verified'\)/);
 });
