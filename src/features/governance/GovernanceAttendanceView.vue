@@ -9,6 +9,10 @@ import {
   requestGovernancePenaltySettlement,
   reviewGovernanceProxy,
   submitGovernanceProxy,
+  requestAttendanceCorrection,
+  reviewAttendanceCorrection,
+  submitPenaltyDispute,
+  reviewPenaltyDispute,
   type AttendanceStatus,
   type GovernanceMeeting,
 } from '@/features/governance/attendance-api';
@@ -47,6 +51,57 @@ const proxyForm = ref({
   proxy_reference: '',
   instrument_reference: '',
 });
+
+const correctionForm = ref({ attendance_id: '', proposed_status: 'late' as AttendanceStatus, proposed_arrived_at: '', reason: '' });
+const disputeForm = ref({ penalty_id: '', reason: '', evidence_reference: '' });
+
+async function requestCorrection(): Promise<void> {
+  if (!selected.value) return;
+  saving.value = true; errorMessage.value = ''; notice.value = '';
+  try {
+    await requestAttendanceCorrection(selected.value.id, {
+      attendance_id: Number(correctionForm.value.attendance_id),
+      proposed_status: correctionForm.value.proposed_status,
+      proposed_arrived_at: correctionForm.value.proposed_arrived_at || undefined,
+      reason: correctionForm.value.reason,
+    });
+    notice.value = 'የመገኘት ማስተካከያ ለግምገማ ተልኳል / Correction submitted for independent review.';
+    correctionForm.value = { attendance_id: '', proposed_status: 'late', proposed_arrived_at: '', reason: '' };
+    await selectMeeting(selected.value.id);
+  } catch (error) { errorMessage.value = error instanceof Error ? error.message : 'Could not submit correction.'; }
+  finally { saving.value = false; }
+}
+
+async function decideCorrection(id: number, decision: 'approved' | 'rejected'): Promise<void> {
+  saving.value = true; errorMessage.value = '';
+  try {
+    await reviewAttendanceCorrection(id, decision, decision === 'approved' ? 'Verified against the signed attendance evidence.' : 'Evidence does not support the requested correction.');
+    notice.value = 'Attendance correction review saved.';
+    if (selected.value) await selectMeeting(selected.value.id);
+  } catch (error) { errorMessage.value = error instanceof Error ? error.message : 'Could not review correction.'; }
+  finally { saving.value = false; }
+}
+
+async function submitDispute(): Promise<void> {
+  saving.value = true; errorMessage.value = ''; notice.value = '';
+  try {
+    await submitPenaltyDispute(Number(disputeForm.value.penalty_id), disputeForm.value.reason, disputeForm.value.evidence_reference || undefined);
+    notice.value = 'Penalty dispute submitted. Settlement is blocked pending review.';
+    disputeForm.value = { penalty_id: '', reason: '', evidence_reference: '' };
+    if (selected.value) await selectMeeting(selected.value.id);
+  } catch (error) { errorMessage.value = error instanceof Error ? error.message : 'Could not submit dispute.'; }
+  finally { saving.value = false; }
+}
+
+async function decideDispute(id: number, decision: 'upheld' | 'waived'): Promise<void> {
+  saving.value = true; errorMessage.value = '';
+  try {
+    await reviewPenaltyDispute(id, decision, decision === 'waived' ? 'Evidence supports waiver of the penalty.' : 'Evidence does not support the dispute; penalty upheld.');
+    notice.value = 'Penalty dispute review saved.';
+    if (selected.value) await selectMeeting(selected.value.id);
+  } catch (error) { errorMessage.value = error instanceof Error ? error.message : 'Could not review dispute.'; }
+  finally { saving.value = false; }
+}
 
 const selectedLabel = computed(() => selected.value?.title_am || selected.value?.title_en || selected.value?.meeting_code || '');
 const availableBodies = computed(() => governanceBodies.value.filter((body) =>
@@ -363,6 +418,41 @@ onMounted(() => { void loadMeetings(); });
             <span>Deadline {{ new Date(proxy.deadline_at).toLocaleString() }}</span>
             <button v-if="proxy.status === 'submitted'" class="text-button" :disabled="saving" @click="reviewProxy(proxy.id, 'approved')">Approve</button>
             <button v-if="proxy.status === 'submitted'" class="text-button danger-text" :disabled="saving" @click="reviewProxy(proxy.id, 'rejected')">Reject</button>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <h3>Attendance corrections / የመገኘት ማስተካከያ</h3>
+          <form class="form-grid" @submit.prevent="requestCorrection">
+            <label>Attendance record ID <input v-model="correctionForm.attendance_id" type="number" min="1" required /></label>
+            <label>Correct status
+              <select v-model="correctionForm.proposed_status">
+                <option value="present">Present</option><option value="late">Late</option><option value="absent">Absent</option><option value="excused">Excused</option><option value="represented">Represented</option>
+              </select>
+            </label>
+            <label>Correct arrival time <input v-model="correctionForm.proposed_arrived_at" type="datetime-local" /></label>
+            <label>Reason <input v-model="correctionForm.reason" minlength="5" maxlength="2000" required /></label>
+            <div class="form-actions"><button type="submit" :disabled="saving">Request correction</button></div>
+          </form>
+          <div v-for="item in selected.corrections || []" :key="item.id" class="record-row">
+            <span>Attendance #{{ item.attendance_id }} → {{ item.proposed_status }} · {{ item.reason }}</span><strong>{{ item.status }}</strong>
+            <button v-if="item.status === 'pending'" class="text-button" :disabled="saving" @click="decideCorrection(item.id, 'approved')">Approve</button>
+            <button v-if="item.status === 'pending'" class="text-button danger-text" :disabled="saving" @click="decideCorrection(item.id, 'rejected')">Reject</button>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <h3>Penalty disputes / የቅጣት ክርክር</h3>
+          <form class="form-grid" @submit.prevent="submitDispute">
+            <label>Penalty ID <input v-model="disputeForm.penalty_id" type="number" min="1" required /></label>
+            <label>Reason <input v-model="disputeForm.reason" minlength="5" maxlength="2000" required /></label>
+            <label>Evidence reference <input v-model="disputeForm.evidence_reference" maxlength="2000" /></label>
+            <div class="form-actions"><button type="submit" :disabled="saving">Submit dispute</button></div>
+          </form>
+          <div v-for="item in selected.disputes || []" :key="item.id" class="record-row">
+            <span>Penalty #{{ item.penalty_id }} · {{ item.reason }}</span><strong>{{ item.status }}</strong>
+            <button v-if="item.status === 'pending'" class="text-button" :disabled="saving" @click="decideDispute(item.id, 'upheld')">Uphold</button>
+            <button v-if="item.status === 'pending'" class="text-button danger-text" :disabled="saving" @click="decideDispute(item.id, 'waived')">Waive</button>
           </div>
         </div>
 
