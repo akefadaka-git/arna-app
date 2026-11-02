@@ -351,6 +351,7 @@
 
 <script setup lang="ts">
 import { computed, useSlots } from 'vue';
+import ThemePreferenceControl from '@/layouts/ThemePreferenceControl.vue';
 
 /**
  * The card width variant.
@@ -491,6 +492,9 @@ const resolvedLogoAlt = computed<string>(() => {
     class="auth-layout"
     data-testid="auth-layout-root"
   >
+    <div class="auth-layout__theme">
+      <ThemePreferenceControl />
+    </div>
     <main
       class="auth-layout__main"
       :data-size="size"
@@ -581,6 +585,7 @@ const resolvedLogoAlt = computed<string>(() => {
    identical whether the tokens load or not.
    ============================================================================ */
 .auth-layout {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -608,6 +613,22 @@ const resolvedLogoAlt = computed<string>(() => {
   color: var(--mases-color-text-primary, #141009);
 
   font-family: inherit;
+}
+
+.auth-layout__theme {
+  position: absolute;
+  z-index: 1;
+  inset-block-start: max(0.75rem, env(safe-area-inset-top));
+  inset-inline-end: max(0.75rem, env(safe-area-inset-right));
+  max-width: calc(100% - 1.5rem);
+}
+
+@media (max-width: 24rem) {
+  .auth-layout__theme {
+    inset-inline: 0.75rem;
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 
 /* Tablet and up: the wider desktop padding. */
