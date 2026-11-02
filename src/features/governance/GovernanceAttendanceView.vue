@@ -77,6 +77,9 @@ async function selectMeeting(id: number): Promise<void> {
   errorMessage.value = '';
   try {
     selected.value = await getGovernanceMeeting(id);
+    const defaultSubjectType = selected.value.meeting_kind === 'board' ? 'director' : 'shareholder';
+    attendanceForm.value.subject_type = defaultSubjectType;
+    proxyForm.value.principal_type = defaultSubjectType;
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : 'የጉባኤ መረጃ አልተገኘም / Could not load meeting.';
   }
@@ -285,7 +288,7 @@ onMounted(() => { void loadMeetings(); });
                 <option value="director">Director</option>
               </select>
             </label>
-            <label>Participant ID
+            <label>Participant ID (Shareholder ID or Board membership ID)
               <input v-model="attendanceForm.subject_id" type="number" min="1" required />
             </label>
             <label>Attendance
@@ -317,7 +320,7 @@ onMounted(() => { void loadMeetings(); });
                 <option value="director">Director</option>
               </select>
             </label>
-            <label>Principal ID
+            <label>Principal ID (Shareholder ID or Board membership ID)
               <input v-model="proxyForm.principal_id" type="number" min="1" required />
             </label>
             <label>Proxy user ID (required for Board proxy)
