@@ -636,7 +636,6 @@ function onMaintenanceDismiss(): void {
       <template #actions>
         <slot name="header-actions" />
 
-        <ThemePreferenceControl />
         <CalendarPreferenceControl />
 
         <NotificationsBell
@@ -725,6 +724,9 @@ function onMaintenanceDismiss(): void {
     >
       <slot name="footer">
         <MASESFooterContent />
+        <div class="app-shell__footer-preferences">
+          <ThemePreferenceControl />
+        </div>
       </slot>
     </AppFooter>
 
@@ -747,6 +749,13 @@ function onMaintenanceDismiss(): void {
    A flex column: [maintenance?] header, body, footer. min-height forces
    the footer to the bottom of the viewport when content is short.
    ============================================================================ */
+.app-shell__footer-preferences {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding: var(--mases-space-2) var(--mases-space-4);
+}
+
 .app-shell {
   display: flex;
   flex-direction: column;
