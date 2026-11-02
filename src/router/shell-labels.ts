@@ -1736,7 +1736,7 @@ export const authenticatedNavItems: ReadonlyArray<NavItem> = [
     id: 'finance-meeting-reconciliation',
     label: 'የቅጣት ማስታረቅ',
     to: '/finance/meeting-attendance-reconciliation',
-    icon: 'scale',
+    icon: 'file',
     permission: 'finance.journal.view',
   },
 ];
