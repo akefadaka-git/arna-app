@@ -65,5 +65,5 @@ export async function approveSourceEntityMapping(id:number,reason:string):Promis
 }
 
 export async function revokeSettlementAccountMapping(id:number,reason:string):Promise<SettlementAccountMapping>{
-  return api.post(\`/api/finance/governance-settlement/account-mappings/\${id}/revoke\`,{reason});
+  return api.post(`/api/finance/governance-settlement/account-mappings/${id}/revoke`,{reason});
 }
