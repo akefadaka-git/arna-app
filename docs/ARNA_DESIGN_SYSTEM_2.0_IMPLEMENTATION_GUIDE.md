@@ -67,6 +67,7 @@ Shared primitives retain semantic contracts:
 - Interactive cards expose keyboard focus and Enter/Space activation.
 - Tables retain native table semantics, column scope and sort state.
 - Dialogs use the native dialog element, labelled title and modal semantics.
+- Authentication pages expose a first-focusable skip link targeting a focusable primary `<main>` landmark.
 
 These are implementation contracts, not a substitute for manual keyboard, screen-reader, contrast or assistive-technology testing.
 
@@ -110,7 +111,7 @@ Automated source contracts and successful builds do not establish:
 - A complete manual WCAG 2.2 AA audit.
 - Screen-reader behavior across supported assistive technologies.
 - Visual correctness at every mobile, tablet and desktop breakpoint.
-- Theme switching and preference persistence through a user-facing control.
+- Runtime application of stored theme preference on the deployed hosts.
 - Authenticated domain workflows in all four applications.
 - Production deployment parity with the current repository head.
 
