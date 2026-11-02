@@ -52,7 +52,7 @@ export interface OcrJob {
   readonly attempts: number;
   readonly failure_code: string | null;
   readonly created_at: string;
-  readonly result?: OcrResult | null;
+  readonly result?: { readonly id: number; readonly mean_confidence: number | null } | null;
 }
 
 export interface OcrJobList {
