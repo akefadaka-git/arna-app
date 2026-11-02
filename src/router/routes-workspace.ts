@@ -783,6 +783,12 @@ export const routesWorkspace: RouteRecordRaw[] = [
         component: () => import('@/features/governance/GovernancePersonProfileView.vue'),
         meta: { permission: 'governance.body.view' },
       },
+      {
+        path: 'governance/attendance-finance',
+        name: 'governance-attendance-finance',
+        component: () => import('@/features/governance/GovernanceFinanceSettlementView.vue'),
+        meta: { permission: 'finance.account.view' },
+      },
     ],
   },
 ];
