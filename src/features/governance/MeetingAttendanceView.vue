@@ -23,7 +23,7 @@ const saving = ref(false);
 const error = ref<string | null>(null);
 const success = ref<string | null>(null);
 const createForm = ref({ governance_body_id: '', finance_legal_entity_id: '', meeting_kind: 'ga', scheduled_at: '', timezone: 'Africa/Addis_Ababa', title_am: '', title_en: '' });
-const arrivalForm = ref({ membership_id: '', proxy_id: '' });
+const arrivalForm = ref({ membership_id: '', proxy_id: '', initialed_by_name: '', signature_method: 'physical', signature_reference: '', shareholder_id: '', attendee_address_snapshot: '', share_count_snapshot: '', vote_count_snapshot: '', entitlement_source_reference: '' });
 const proxyForm = ref({ principal_membership_id: '', representative_membership_id: '', representative_name: '', instrument_reference: '', appointed_at: '' });
 const excuseForm = ref({ membership_id: '', authorization_reference: '', reason: '' });
 const paymentForm = ref({ penalty_id: '', amount: '', payment_method: 'cash', receipt_reference: '' });
@@ -68,7 +68,20 @@ async function startSelected(): Promise<void> { if (selectedId.value) await runA
 async function closeSelected(): Promise<void> { if (selectedId.value) await runAction(() => closeMeeting(selectedId.value!), t('ስብሰባው ተዘግቷል፤ የቅጣት እጩዎች ለግምገማ ተፈጥረዋል።', 'Meeting closed; penalty candidates await review.')); }
 async function recordArrival(): Promise<void> {
   if (!selectedId.value) return;
-  await runAction(() => recordMeetingArrival(selectedId.value!, { membership_id: Number(arrivalForm.value.membership_id), ...(arrivalForm.value.proxy_id ? { proxy_id: Number(arrivalForm.value.proxy_id) } : {}) }), t('መገኘት ተመዝግቧል።', 'Attendance recorded.'));
+  await runAction(() => recordMeetingArrival(selectedId.value!, {
+    membership_id: Number(arrivalForm.value.membership_id),
+    ...(arrivalForm.value.proxy_id ? { proxy_id: Number(arrivalForm.value.proxy_id) } : {}),
+    initialed_by_name: arrivalForm.value.initialed_by_name,
+    signature_method: arrivalForm.value.signature_method,
+    signature_reference: arrivalForm.value.signature_reference,
+    ...(selectedMeeting.value?.meeting_kind === 'ga' ? {
+      shareholder_id: Number(arrivalForm.value.shareholder_id),
+      attendee_address_snapshot: arrivalForm.value.attendee_address_snapshot,
+      share_count_snapshot: arrivalForm.value.share_count_snapshot,
+      vote_count_snapshot: arrivalForm.value.vote_count_snapshot,
+      entitlement_source_reference: arrivalForm.value.entitlement_source_reference,
+    } : {}),
+  }), t('መገኘት ተመዝግቧል።', 'Attendance recorded.'));
 }
 async function submitProxy(): Promise<void> {
   if (!selectedId.value) return;
@@ -157,7 +170,18 @@ onMounted(() => { void loadMeetings(); });
           <form class="meeting-form" @submit.prevent="recordArrival">
             <label>{{ t('Membership ID', 'Membership ID') }}<input v-model="arrivalForm.membership_id" type="number" min="1" required /></label>
             <label>{{ t('Proxy ID (ካለ)', 'Proxy ID (optional)') }}<input v-model="arrivalForm.proxy_id" type="number" min="1" /></label>
-            <button :disabled="saving || selectedMeeting.status !== 'open'">{{ t('መገኘት መዝግብ', 'Record attendance') }}</button>
+            <label>{{ t('የፈረመ/ያስመረጠ ሰው ስም', 'Initialed by (member or proxy)') }}<input v-model="arrivalForm.initialed_by_name" required /></label>
+            <label>{{ t('የፊርማ ዘዴ', 'Signature method') }}<select v-model="arrivalForm.signature_method"><option value="physical">Physical</option><option value="digital">Digital</option></select></label>
+            <label>{{ t('የፊርማ/የመዝገብ ማጣቀሻ', 'Signature/register reference') }}<input v-model="arrivalForm.signature_reference" required /></label>
+            <template v-if="selectedMeeting.meeting_kind === 'ga'">
+              <p class="form-note">{{ t('የGA የመገኘት መዝገብ የአክሲዮን ብዛትና ድምፅ መብት ምስል ከኦፊሴላዊ መዝገብ ማጣቀሻ ጋር ይፈልጋል።', 'GA attendance requires the shareholder register, address, share count and voting entitlement source reference.') }}</p>
+              <label>{{ t('Shareholder ID', 'Shareholder ID') }}<input v-model="arrivalForm.shareholder_id" type="number" min="1" required /></label>
+              <label>{{ t('አድራሻ (በመዝገብ መሠረት)', 'Address snapshot') }}<input v-model="arrivalForm.attendee_address_snapshot" required /></label>
+              <label>{{ t('የአክሲዮን ብዛት', 'Share count') }}<input v-model="arrivalForm.share_count_snapshot" type="number" min="0" step="0.0001" required /></label>
+              <label>{{ t('የድምፅ መብት ብዛት', 'Vote count') }}<input v-model="arrivalForm.vote_count_snapshot" type="number" min="0" step="0.0001" required /></label>
+              <label>{{ t('የድምፅ መብት መዝገብ ማጣቀሻ', 'Entitlement register reference') }}<input v-model="arrivalForm.entitlement_source_reference" required /></label>
+            </template>
+            <button :disabled="saving || selectedMeeting.status === 'closed' || selectedMeeting.status === 'cancelled'">{{ t('መገኘት መዝግብ', 'Record attendance') }}</button>
           </form>
         </section>
         <section><h3>{{ t('ውክልና ማስገባት', 'Submit proxy') }}</h3>
