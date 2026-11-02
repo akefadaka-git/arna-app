@@ -22,7 +22,7 @@ export interface SettlementReconciliationRow {
   readonly journal_number: string|null; readonly journal_status: string|null; readonly legal_entity_id: number|null;
 }
 export async function listSettlementAccountMappings(legalEntityId: number): Promise<{data: SettlementAccountMapping[]}> {
-  return api.get('/api/finance/governance-settlement/account-mappings', { legal_entity_id: legalEntityId });
+  return api.get('/api/finance/governance-settlement/account-mappings', { params: { legal_entity_id: legalEntityId } });
 }
 export async function requestSettlementAccountMapping(input: {legal_entity_id:number;account_role:SettlementAccountRole;ledger_account_id:number;reason:string}): Promise<SettlementAccountMapping> {
   return api.post('/api/finance/governance-settlement/account-mappings',input);
@@ -31,7 +31,7 @@ export async function approveSettlementAccountMapping(id:number): Promise<Settle
   return api.post(`/api/finance/governance-settlement/account-mappings/${id}/approve`,{});
 }
 export async function listDividendPayables(params:{legal_entity_id?:number;shareholder_id?:number;status?:string}={}): Promise<{data:DividendPayable[]}> {
-  return api.get('/api/finance/governance-settlement/dividend-payables',params);
+  return api.get('/api/finance/governance-settlement/dividend-payables',{params});
 }
 export async function createDividendPayable(input:{legal_entity_id:number;shareholder_id:number;distribution_reference:string;declared_on:string;due_on:string;net_payable_amount:string}):Promise<DividendPayable>{
   return api.post('/api/finance/governance-settlement/dividend-payables',input);
@@ -46,5 +46,5 @@ export async function executeGovernanceDividendOffset(id:number,dividend_payable
   return api.post(`/api/finance/governance-settlement/settlements/${id}/dividend-offset`,{dividend_payable_id,effective_date,idempotency_key});
 }
 export async function getGovernanceSettlementReconciliation(legal_entity_id:number):Promise<{data:SettlementReconciliationRow[]}>{
-  return api.get('/api/finance/governance-settlement/reconciliation',{legal_entity_id});
+  return api.get('/api/finance/governance-settlement/reconciliation',{params:{legal_entity_id}});
 }
