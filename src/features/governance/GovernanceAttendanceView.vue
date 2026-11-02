@@ -271,7 +271,10 @@ onMounted(() => { void loadMeetings(); });
         <h1 id="attendance-title">የጉባኤ መገኘትና ውክልና / Meeting Attendance</h1>
         <p>የቦርድና የጠቅላላ ጉባኤ መዝገብ፣ ውክልና፣ ቅጣት እና የፋይናንስ ማስተካከያ።</p>
       </div>
-      <button type="button" class="secondary" :disabled="loading" @click="loadMeetings">Refresh</button>
+      <div class="header-actions">
+        <a class="secondary" href="/governance/attendance-finance">Finance settlement workspace</a>
+        <button type="button" class="secondary" :disabled="loading" @click="loadMeetings">Refresh</button>
+      </div>
     </header>
 
     <p v-if="notice" class="notice" role="status">{{ notice }}</p>
