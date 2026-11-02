@@ -22,7 +22,7 @@ const loading = ref(true);
 const saving = ref(false);
 const error = ref<string | null>(null);
 const success = ref<string | null>(null);
-const createForm = ref({ governance_body_id: '', meeting_kind: 'ga', scheduled_at: '', timezone: 'Africa/Addis_Ababa', title_am: '', title_en: '' });
+const createForm = ref({ governance_body_id: '', finance_legal_entity_id: '', meeting_kind: 'ga', scheduled_at: '', timezone: 'Africa/Addis_Ababa', title_am: '', title_en: '' });
 const arrivalForm = ref({ membership_id: '', proxy_id: '' });
 const proxyForm = ref({ principal_membership_id: '', representative_membership_id: '', representative_name: '', instrument_reference: '', appointed_at: '' });
 const excuseForm = ref({ membership_id: '', authorization_reference: '', reason: '' });
@@ -111,7 +111,7 @@ onMounted(() => { void loadMeetings(); });
       <Card class="meeting-card">
         <h2>{{ t('አዲስ ስብሰባ መመዝገብ', 'Create a meeting') }}</h2>
         <form class="meeting-form" @submit.prevent="submitMeeting">
-          <label>{{ t('የGovernance Body ID', 'Governance body ID') }}<input v-model="createForm.governance_body_id" type="number" min="1" required /></label>
+          <label>{{ t('የGovernance Body ID', 'Governance body ID') }}<input v-model="createForm.governance_body_id" type="number" min="1" required /></label>\n          <label>{{ t('የFinance Legal Entity ID (ለማስታረቅ)', 'Finance legal entity ID (for reconciliation)') }}<input v-model="createForm.finance_legal_entity_id" type="number" min="1" /></label>
           <label>{{ t('የስብሰባ ዓይነት', 'Meeting type') }}<select v-model="createForm.meeting_kind"><option value="ga">GA</option><option value="board">Board</option></select></label>
           <label>{{ t('የመጀመሪያ ቀንና ሰዓት', 'Scheduled date and time') }}<input v-model="createForm.scheduled_at" type="datetime-local" required /></label>
           <label>{{ t('የሰዓት ክልል', 'Timezone') }}<input v-model="createForm.timezone" required /></label>
@@ -188,6 +188,14 @@ onMounted(() => { void loadMeetings(); });
 
       <section class="meeting-section"><h3>{{ t('የመገኘት መዝገብ', 'Attendance register') }}</h3>
         <div v-for="entry in detail.attendance" :key="entry.id" class="record-row"><span>Membership #{{ entry.membership_id }}</span><span>{{ entry.status }}</span><span>{{ entry.arrived_at || '—' }}</span></div>
+      </section>
+      <section class="meeting-section"><h3>{{ t('የቅጣት ክፍያዎች', 'Penalty payments') }}</h3>
+        <div v-for="payment in detail.payments" :key="payment.id" class="record-row"><span>Payment #{{ payment.id }} · Penalty #{{ payment.penalty_id }} · {{ payment.amount }} ETB · {{ payment.receipt_reference }}</span><span>{{ payment.finance_reconciliation_status }}</span></div>
+        <p v-if="!detail.payments.length">{{ t('ክፍያ አልተመዘገበም።', 'No payments recorded.') }}</p>
+      </section>
+      <section class="meeting-section"><h3>{{ t('የዲቪደንድ ማካካሻ ጥያቄዎች', 'Dividend settlement requests') }}</h3>
+        <div v-for="settlement in detail.dividend_settlement_requests" :key="settlement.id" class="record-row"><span>Request #{{ settlement.id }} · Shareholder #{{ settlement.shareholder_id }} · {{ settlement.requested_amount }} ETB · {{ settlement.dividend_reference }}</span><span>{{ settlement.status }}</span></div>
+        <p v-if="!detail.dividend_settlement_requests.length">{{ t('የማካካሻ ጥያቄ የለም።', 'No dividend settlement requests.') }}</p>
       </section>
 
       <section class="meeting-section"><h3>{{ t('ቅጣቶችና ክፍያ', 'Penalties and payments') }}</h3>
