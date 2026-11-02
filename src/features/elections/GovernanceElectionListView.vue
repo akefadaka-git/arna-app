@@ -34,7 +34,7 @@ onMounted(() => { void load(); });
       description="የምርጫ ሂደቶችን፣ የሥልጣን ማረጋገጫን እና የመራጮች መዝገብ ሁኔታን ይከታተሉ።"
     />
     <LoadingState v-if="loading" />
-    <ErrorState v-else-if="error" :error="error" @retry="load" />
+    <ErrorState v-else-if="error" title="ምርጫዎችን ማምጣት አልተቻለም | Unable to load elections" description="እባክዎ እንደገና ይሞክሩ። Please try again." action-label="እንደገና ይሞክሩ | Retry" @action="load" />
     <section v-else aria-live="polite">
       <p class="election-list__notice">
         ዲጂታል ድምፅ አሰጣጥ አልተፈቀደም። የአካል ምርጫ ብቻ በዚህ ደረጃ ይደገፋል።
