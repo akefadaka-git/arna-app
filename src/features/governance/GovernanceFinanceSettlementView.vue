@@ -102,7 +102,7 @@ onMounted(()=>{});
     <p v-if="!settlements.length" class="muted">Load a meeting to see its settlement requests.</p>
   </section>
   <section class="panel">
-    <h2>Reconciliation</h2><div v-for="r in reconciliation" :key="r.settlement_id" class="record-row"><span>Settlement #{{r.settlement_id}} · Penalty #{{r.penalty_id}} · {{r.settlement_status}}</span><span>Journal {{r.journal_number||'MISSING'}} · {{r.journal_status||'NOT POSTED'}}</span></div>
+    <h2>Reconciliation</h2><div v-for="r in reconciliation" :key="r.settlement_id" class="record-row"><span>Settlement #{{r.settlement_id}} · Penalty #{{r.penalty_id}} · {{r.settlement_status}}</span><span>Journal {{r.journal_number||'MISSING'}} · {{r.journal_status||'NOT POSTED'}} · {{r.reconciliation_status||'UNRESOLVED'}} · balanced {{r.journal_balanced?'yes':'no'}} · amount match {{r.journal_amount_matches?'yes':'no'}}</span></div>
   </section>
 </main>
 </template>
