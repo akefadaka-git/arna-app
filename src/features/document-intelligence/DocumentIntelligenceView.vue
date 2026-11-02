@@ -81,8 +81,7 @@ async function openJob(id: number): Promise<void> {
   try {
     const job = await getOcrJob(id);
     selectedJob.value = job;
-    selectedResult.value = job.result ?? null;
-    if (job.result?.id) selectedResult.value = await getOcrResult(job.result.id);
+    selectedResult.value = job.result?.id ? await getOcrResult(job.result.id) : null;
     originalText.value = selectedResult.value?.pages[0]?.text ?? '';
     correctedText.value = originalText.value;
   } catch {
