@@ -12,7 +12,7 @@ export interface MeetingProxy {
 }
 export interface MeetingAttendance {
   id: number; membership_id: number; proxy_id: number | null; status: string;
-  arrived_at: string | null; absence_authorized: boolean;
+  arrived_at: string | null; absence_authorized: boolean;\n  shareholder_id?: number | null; attendee_name_snapshot?: string | null; attendee_address_snapshot?: string | null;\n  share_count_snapshot?: string | null; vote_count_snapshot?: string | null; initialed_by_name?: string | null;\n  initialed_at?: string | null; signature_method?: string | null; signature_reference?: string | null;
 }
 export interface MeetingPenalty {
   id: number; membership_id: number; penalty_type: 'late' | 'absence'; amount: string;
