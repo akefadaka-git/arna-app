@@ -142,3 +142,44 @@ export async function requestGovernancePenaltySettlement(
     reference,
   });
 }
+
+export interface AttendanceCorrectionInput {
+  attendance_id: number;
+  proposed_status: AttendanceStatus;
+  proposed_arrived_at?: string;
+  reason: string;
+}
+
+export async function requestAttendanceCorrection(
+  meetingId: number,
+  input: AttendanceCorrectionInput,
+): Promise<unknown> {
+  return api.post<unknown>(`/api/governance/meetings/${meetingId}/attendance/corrections`, input);
+}
+
+export async function reviewAttendanceCorrection(
+  correctionId: number,
+  decision: 'approved' | 'rejected',
+  reason: string,
+): Promise<unknown> {
+  return api.patch<unknown>(`/api/governance/attendance-corrections/${correctionId}/review`, { decision, reason });
+}
+
+export async function submitPenaltyDispute(
+  penaltyId: number,
+  reason: string,
+  evidenceReference?: string,
+): Promise<unknown> {
+  return api.post<unknown>(`/api/governance/penalties/${penaltyId}/disputes`, {
+    reason,
+    evidence_reference: evidenceReference,
+  });
+}
+
+export async function reviewPenaltyDispute(
+  disputeId: number,
+  decision: 'upheld' | 'waived',
+  reason: string,
+): Promise<unknown> {
+  return api.patch<unknown>(`/api/governance/penalty-disputes/${disputeId}/review`, { decision, reason });
+}
