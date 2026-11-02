@@ -20,7 +20,21 @@ export interface MeetingPenalty {
 }
 export interface MeetingDetail {
   meeting: GovernanceMeeting; proxies: MeetingProxy[];
-  attendance: MeetingAttendance[]; penalties: MeetingPenalty[];
+  attendance: MeetingAttendance[]; penalties: MeetingPenalty[];\n  payments: MeetingPenaltyPayment[]; dividend_settlement_requests: DividendSettlementRequest[];
+}
+export interface MeetingPenaltyPayment {
+  id: number; penalty_id: number; amount: string; currency: 'ETB'; payment_method: string;
+  receipt_reference: string; paid_at: string; finance_reconciliation_status: 'pending' | 'reconciled';
+  finance_reference: string | null;
+}
+export interface DividendSettlementRequest {
+  id: number; penalty_id: number; shareholder_id: number; dividend_reference: string;
+  requested_amount: string; currency: 'ETB'; status: string; authority_reference: string | null;
+  finance_reference: string | null;
+}
+export interface FinanceReconciliationQueue {
+  payments: Array<MeetingPenaltyPayment & { meeting_id: number; finance_legal_entity_id: number | null }>;
+  dividend_settlements: DividendSettlementRequest[];
 }
 export interface MeetingPage { data: GovernanceMeeting[]; current_page: number; last_page: number; total: number; }
 
@@ -49,3 +63,19 @@ export const recordMeetingPenaltyPayment = (id: number, penaltyId: number, paylo
   api.post<Record<string, unknown>>(`/api/governance/meetings/${id}/penalties/${penaltyId}/payments`, payload);
 export const requestMeetingDividendSettlement = (id: number, penaltyId: number, payload: Record<string, unknown>) =>
   api.post<Record<string, unknown>>(`/api/governance/meetings/${id}/penalties/${penaltyId}/dividend-settlement-requests`, payload);
+
+export const listMeetingFinanceReconciliationQueue = () =>
+  api.get<FinanceReconciliationQueue>('/api/governance/meetings/finance-reconciliation');
+export const reconcileMeetingPayment = (meetingId: number, paymentId: number, financeReference: number) =>
+  api.post<MeetingPenaltyPayment>(`/api/governance/meetings/${meetingId}/payments/${paymentId}/reconcile`, { finance_reference: financeReference });
+export const reviewMeetingDividendSettlement = (
+  meetingId: number, settlementId: number,
+  payload: { decision: 'approve' | 'reject'; authority_reference?: string; reason: string },
+) => api.post<DividendSettlementRequest>(
+  `/api/governance/meetings/${meetingId}/dividend-settlement-requests/${settlementId}/review`, payload,
+);
+export const reconcileMeetingDividendSettlement = (meetingId: number, settlementId: number, financeReference: number) =>
+  api.post<DividendSettlementRequest>(
+    `/api/governance/meetings/${meetingId}/dividend-settlement-requests/${settlementId}/reconcile`,
+    { finance_reference: financeReference },
+  );
