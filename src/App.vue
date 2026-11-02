@@ -173,6 +173,7 @@ import '@/styles/tokens.css';
 import { nextTick, onMounted, ref, watch } from 'vue';
 import { RouterView, useRoute } from 'vue-router';
 import { useLocaleStore } from '@/stores/locale';
+import { initializeThemePreference } from '@/core/theme-preference';
 
 // -----------------------------------------------------------------------------
 // Router
@@ -183,6 +184,9 @@ const route = useRoute();
 // Locale store
 // -----------------------------------------------------------------------------
 const locale = useLocaleStore();
+
+// Apply the persisted/system theme before the first application render.
+initializeThemePreference();
 
 watch(
   () => locale.locale,
