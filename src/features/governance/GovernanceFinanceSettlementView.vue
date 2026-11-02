@@ -57,7 +57,8 @@ async function submitMapping():Promise<void>{
 async function submitPayable():Promise<void>{
   await run(()=>createDividendPayable({legal_entity_id:Number(legalEntityId.value),shareholder_id:Number(payableForm.value.shareholder_id),distribution_reference:payableForm.value.distribution_reference,declared_on:payableForm.value.declared_on,due_on:payableForm.value.due_on,net_payable_amount:payableForm.value.net_payable_amount}),'Dividend payable registered as draft pending approval.');
 }
-async function approveMapping(id:number):Promise<void>{await run(()=>approveSettlementAccountMapping(id),'Account mapping approved.')}\nasync function revokeMapping(id:number):Promise<void>{await run(()=>revokeSettlementAccountMapping(id,sourceMappingReason.value),'Account mapping revoked.')}
+async function approveMapping(id:number):Promise<void>{await run(()=>approveSettlementAccountMapping(id),'Account mapping approved.')}
+async function revokeMapping(id:number):Promise<void>{await run(()=>revokeSettlementAccountMapping(id,sourceMappingReason.value),'Account mapping revoked.')}
 async function requestSourceMapping(id:number):Promise<void>{await run(()=>requestSourceEntityMapping(id,Number(legalEntityId.value),sourceMappingReason.value),'Settlement source-to-entity mapping submitted for approval.')}
 async function approveSourceMapping(id:number):Promise<void>{await run(()=>approveSourceEntityMapping(id,sourceMappingReason.value),'Settlement source-to-entity mapping approved.')}
 async function approvePayable(id:number):Promise<void>{await run(()=>approveDividendPayable(id,`Approved distribution record ${id}`),'Dividend payable approved.')}
