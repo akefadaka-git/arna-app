@@ -557,6 +557,12 @@ export const routesWorkspace: RouteRecordRaw[] = [
         props: { labels: fileDetailViewLabels },
         meta: { permission: 'file.view' },
       },
+      {
+        path: 'document-intelligence',
+        name: 'document-intelligence',
+        component: () => import('@/features/document-intelligence/DocumentIntelligenceView.vue'),
+        meta: { permission: 'ocr.job.view' },
+      },
 
       // -----------------------------------------------------------------------
       // Shareholders
