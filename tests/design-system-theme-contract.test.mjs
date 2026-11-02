@@ -104,3 +104,54 @@ test('shared button, form, card, table and dialog contracts retain keyboard and 
   assert.ok(theme.includes(':focus-visible'));
   assert.ok(theme.includes('prefers-reduced-motion'));
 });
+
+
+const themePreference = read('src/core/theme-preference.ts');
+const themeControl = read('src/layouts/ThemePreferenceControl.vue');
+const appShell = read('src/layouts/AppShell/AppShell.vue');
+const authLayout = read('src/features/auth/AuthLayout/AuthLayout.vue');
+const publicLayout = read('src/layouts/PublicSiteLayout.vue');
+const appRoot = read('src/App.vue');
+const publicEntry = read('public-entry/main.ts');
+
+test('theme preference is persisted, system-aware, and safely applied', () => {
+  assert.ok(themePreference.includes("type ThemePreference = 'system' | 'light' | 'dark'"));
+  assert.ok(themePreference.includes("const STORAGE_KEY = 'arna.theme'"));
+  assert.ok(themePreference.includes("root.removeAttribute('data-theme')"));
+  assert.ok(themePreference.includes("root.setAttribute('data-theme', preference)"));
+  assert.ok(themePreference.includes('window.localStorage.getItem(STORAGE_KEY)'));
+  assert.ok(themePreference.includes('window.localStorage.setItem(STORAGE_KEY, preference)'));
+  assert.ok(themePreference.includes('catch'));
+  assert.ok(themeControl.includes('aria-label="የማሳያ ገጽታ / Display theme"'));
+  assert.ok(themeControl.includes('value="system"'));
+  assert.ok(themeControl.includes('value="light"'));
+  assert.ok(themeControl.includes('value="dark"'));
+});
+
+test('theme preference control is available on authenticated, authentication, and public surfaces', () => {
+  assert.ok(appShell.includes('<ThemePreferenceControl />'));
+  assert.ok(authLayout.includes('<ThemePreferenceControl />'));
+  assert.ok(authLayout.includes('href="#auth-main-content"'));
+  assert.ok(authLayout.includes('id="auth-main-content"'));
+  assert.ok(authLayout.includes('tabindex="-1"'));
+  assert.ok(publicLayout.includes('<ThemePreferenceControl />'));
+  assert.ok(appShell.includes("import ThemePreferenceControl"));
+  assert.ok(authLayout.includes("import ThemePreferenceControl"));
+  assert.ok(publicLayout.includes("import ThemePreferenceControl"));
+  assert.ok(appRoot.includes('initializeThemePreference()'));
+  assert.ok(publicEntry.includes('initializeThemePreference()'));
+});
+
+test('all application entry documents default to Amharic and runtime locale updates document language', () => {
+  for (const entry of [
+    'workspace-entry/index.html',
+    'portal-entry/index.html',
+    'admin-entry/index.html',
+    'public-entry/index.html',
+  ]) {
+    assert.match(read(entry), /<html\s+lang="am"/, `${entry} must default to Amharic`);
+  }
+  assert.ok(appRoot.includes('document.documentElement.lang = value'));
+  assert.ok(theme.includes('html[lang="am"] body'));
+  assert.ok(theme.includes('html[lang="en"] body'));
+});

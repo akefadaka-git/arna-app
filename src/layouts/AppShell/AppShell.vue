@@ -419,6 +419,7 @@ import UserMenu from '@/layouts/AppShell/UserMenu';
 import NotificationsBell from '@/layouts/AppShell/NotificationsBell';
 import NotificationsCenter from '@/features/notifications/NotificationsCenter.vue';
 import CalendarPreferenceControl from '@/layouts/AppShell/CalendarPreferenceControl.vue';
+import ThemePreferenceControl from '@/layouts/ThemePreferenceControl.vue';
 import TenantSwitcher from '@/layouts/AppShell/TenantSwitcher';
 import AppSidebar from '@/layouts/AppShell/AppSidebar';
 import CalendarContext from '@/layouts/AppShell/CalendarContext';
@@ -723,6 +724,9 @@ function onMaintenanceDismiss(): void {
     >
       <slot name="footer">
         <MASESFooterContent />
+        <div class="app-shell__footer-preferences">
+          <ThemePreferenceControl />
+        </div>
       </slot>
     </AppFooter>
 
@@ -745,6 +749,13 @@ function onMaintenanceDismiss(): void {
    A flex column: [maintenance?] header, body, footer. min-height forces
    the footer to the bottom of the viewport when content is short.
    ============================================================================ */
+.app-shell__footer-preferences {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding: var(--mases-space-2) var(--mases-space-4);
+}
+
 .app-shell {
   display: flex;
   flex-direction: column;

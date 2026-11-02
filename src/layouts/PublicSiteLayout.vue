@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
 import { masesBrandLabels } from '@/router/shell-labels';
+import ThemePreferenceControl from '@/layouts/ThemePreferenceControl.vue';
 
 const appName: string = import.meta.env.VITE_APP_NAME || 'ARNA';
 </script>
@@ -14,6 +15,7 @@ const appName: string = import.meta.env.VITE_APP_NAME || 'ARNA';
         <div class="public-site-layout__links">
           <RouterLink to="/verify">ሰነድ ማረጋገጫ</RouterLink>
           <RouterLink to="/legal">ሕጋዊ መረጃ</RouterLink>
+          <ThemePreferenceControl />
         </div>
       </nav>
     </header>
