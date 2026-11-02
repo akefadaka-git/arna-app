@@ -57,6 +57,10 @@ onMounted(() => {
           {{ labels.browseBodies }}
           <span aria-hidden="true">↗</span>
         </RouterLink>
+        <RouterLink class="governance-overview__people-link" to="/governance/attendance">
+          የጉባኤ መገኘትና ውክልና / Meeting attendance
+          <span aria-hidden="true">→</span>
+        </RouterLink>
         <RouterLink class="governance-overview__people-link" to="/governance/people">
           የሰዎች ዝርዝር / People directory
           <span aria-hidden="true">→</span>
