@@ -7,7 +7,7 @@ import ErrorState from '@/components/composites/ErrorState';
 import PageTitle from '@/layouts/AppShell/PageTitle';
 import {
   authorizeMeetingAbsence, closeMeeting, createMeeting, getMeeting, listMeetings,
-  recordMeetingArrival, recordMeetingPenaltyPayment, requestMeetingDividendSettlement,
+  recordMeetingArrival, recordMeetingPenaltyPayment, requestMeetingDividendSettlement, disputeMeetingPenalty,
   reviewMeetingPenalty, reviewMeetingProxy, startMeeting, submitMeetingProxy,
 } from './meetings-api';
 import type { GovernanceMeeting, MeetingDetail } from './meetings-api';
@@ -26,7 +26,7 @@ const createForm = ref({ governance_body_id: '', meeting_kind: 'ga', scheduled_a
 const arrivalForm = ref({ membership_id: '', proxy_id: '' });
 const proxyForm = ref({ principal_membership_id: '', representative_membership_id: '', representative_name: '', instrument_reference: '', appointed_at: '' });
 const excuseForm = ref({ membership_id: '', authorization_reference: '', reason: '' });
-const paymentForm = ref({ penalty_id: '', amount: '', payment_method: 'cash', receipt_reference: '' });
+const paymentForm = ref({ penalty_id: '', amount: '', payment_method: 'cash', receipt_reference: '' });\nconst disputeForm = ref({ penalty_id: '', reason: '' });
 const offsetForm = ref({ penalty_id: '', shareholder_id: '', dividend_reference: '', requested_amount: '' });
 const selectedMeeting = computed(() => detail.value?.meeting ?? null);
 
@@ -87,6 +87,9 @@ async function authorizeAbsence(): Promise<void> {
 }
 async function reviewPenalty(id: number, decision: 'assess' | 'waive'): Promise<void> {
   if (selectedId.value) await runAction(() => reviewMeetingPenalty(selectedId.value!, id, { decision, reason: decision === 'assess' ? 'Attendance evidence reviewed.' : 'Waived by authorized reviewer.' }), t('የቅጣት ውሳኔ ተመዝግቧል።', 'Penalty decision recorded.'));
+}
+async function disputePenalty(): Promise<void> {
+  if (selectedId.value) await runAction(() => disputeMeetingPenalty(selectedId.value!, Number(disputeForm.value.penalty_id), { reason: disputeForm.value.reason }), t('የቅጣት ተቃውሞ ተመዝግቧል።', 'Penalty dispute recorded.'));
 }
 async function recordPayment(): Promise<void> {
   if (selectedId.value) await runAction(() => recordMeetingPenaltyPayment(selectedId.value!, Number(paymentForm.value.penalty_id), { amount: Number(paymentForm.value.amount), payment_method: paymentForm.value.payment_method, receipt_reference: paymentForm.value.receipt_reference }), t('ክፍያው ተመዝግቧል፤ የFinance ማስታረቅ ይጠብቃል።', 'Payment recorded; Finance reconciliation is pending.'));
@@ -193,7 +196,13 @@ onMounted(() => { void loadMeetings(); });
           <span v-if="penalty.status === 'pending_review'" class="inline-actions"><button @click="reviewPenalty(penalty.id, 'assess')">{{ t('አጽድቅ', 'Assess') }}</button><button class="button-muted" @click="reviewPenalty(penalty.id, 'waive')">{{ t('ሰርዝ', 'Waive') }}</button></span>
         </div>
         <p v-if="!detail.penalties.length">{{ t('ቅጣት አልተመዘገበም።', 'No penalty candidates.') }}</p>
-        <div class="meeting-grid meeting-grid--two">
+        <div class="meeting-grid meeting-grid--three">
+          <form class="meeting-form" @submit.prevent="disputePenalty">
+            <h4>{{ t('ቅጣት መቃወም', 'Dispute a penalty') }}</h4>
+            <label>{{ t('Penalty ID', 'Penalty ID') }}<input v-model="disputeForm.penalty_id" type="number" min="1" required /></label>
+            <label>{{ t('የተቃውሞ ምክንያት', 'Dispute reason') }}<input v-model="disputeForm.reason" required /></label>
+            <button :disabled="saving">{{ t('ተቃውሞ አስገባ', 'Submit dispute') }}</button>
+          </form>
           <form class="meeting-form" @submit.prevent="recordPayment">
             <h4>{{ t('በዚያው ቀን ክፍያ', 'Same-day payment') }}</h4>
             <label>{{ t('Penalty ID', 'Penalty ID') }}<input v-model="paymentForm.penalty_id" type="number" min="1" required /></label>
