@@ -1,5 +1,6 @@
 import { createApp, h } from 'vue';
 import '@/styles/themes.css';
+import { initializeThemePreference } from '@/core/theme-preference';
 import { createRouter, createWebHistory, RouterView } from 'vue-router';
 
 import PublicHome from '@/public-site/PublicHome.vue';
@@ -13,6 +14,8 @@ import LegalDocumentRoute from '@/router/pages/LegalDocumentRoute.vue';
  * It deliberately does not import the authenticated application router,
  * guards, workspace shell, or session bootstrap.
  */
+initializeThemePreference();
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
