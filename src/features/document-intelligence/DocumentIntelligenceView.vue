@@ -38,6 +38,7 @@ const errorMessage = ref('');
 const statusMessage = ref('');
 
 const previewFile = computed(() => files.value.find((file) => file.id === selectedResult.value?.file_id));
+const previewName = computed(() => previewFile.value?.original_name ?? searchResults.value.find((item) => item.id === selectedResult.value?.id)?.file?.original_name ?? `File #${selectedResult.value?.file_id ?? ''}`);
 const previewLabels = computed(() => ({
   loading: labels.value.loading,
   error: labels.value.previewError,
@@ -310,7 +311,7 @@ onUnmounted(() => {
           <section class="ocr-original-preview" aria-label="Original document">
             <h3>{{ labels.originalDocument }}</h3>
             <FilePreview
-              v-if="originalPreviewUrl && previewFile"
+              v-if="originalPreviewUrl"
               :src="originalPreviewUrl"
               :name="previewFile.original_name"
               :mime-type="previewFile.mime_type"
