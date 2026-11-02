@@ -752,6 +752,12 @@ export const routesWorkspace: RouteRecordRaw[] = [
       // backend.
       // -----------------------------------------------------------------------
       {
+        path: 'governance/attendance',
+        name: 'governance-attendance',
+        component: () => import('@/features/governance/GovernanceAttendanceView.vue'),
+        meta: { permission: 'governance.body.view' },
+      },
+      {
         path: 'governance/bodies',
         name: 'governance-bodies',
         component: () => import('@/features/governance/GovernanceBodyListView.vue'),
@@ -776,6 +782,12 @@ export const routesWorkspace: RouteRecordRaw[] = [
         name: 'governance-person-profile',
         component: () => import('@/features/governance/GovernancePersonProfileView.vue'),
         meta: { permission: 'governance.body.view' },
+      },
+      {
+        path: 'governance/attendance-finance',
+        name: 'governance-attendance-finance',
+        component: () => import('@/features/governance/GovernanceFinanceSettlementView.vue'),
+        meta: { permission: 'finance.account.view' },
       },
     ],
   },
