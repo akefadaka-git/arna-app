@@ -752,6 +752,12 @@ export const routesWorkspace: RouteRecordRaw[] = [
       // backend.
       // -----------------------------------------------------------------------
       {
+        path: 'governance/attendance',
+        name: 'governance-attendance',
+        component: () => import('@/features/governance/GovernanceAttendanceView.vue'),
+        meta: { permission: 'governance.body.view' },
+      },
+      {
         path: 'governance/bodies',
         name: 'governance-bodies',
         component: () => import('@/features/governance/GovernanceBodyListView.vue'),
