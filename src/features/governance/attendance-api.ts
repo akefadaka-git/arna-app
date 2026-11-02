@@ -183,3 +183,21 @@ export async function reviewPenaltyDispute(
 ): Promise<unknown> {
   return api.patch<unknown>(`/api/governance/penalty-disputes/${disputeId}/review`, { decision, reason });
 }
+
+export interface AttendanceCorrectionRecord {
+  readonly id: number;
+  readonly attendance_id: number;
+  readonly proposed_status: AttendanceStatus;
+  readonly proposed_arrived_at: string | null;
+  readonly reason: string;
+  readonly status: 'pending' | 'approved' | 'rejected';
+  readonly requested_by: number;
+}
+export interface PenaltyDisputeRecord {
+  readonly id: number;
+  readonly penalty_id: number;
+  readonly reason: string;
+  readonly evidence_reference: string | null;
+  readonly status: 'pending' | 'upheld' | 'waived';
+  readonly submitted_by: number;
+}
