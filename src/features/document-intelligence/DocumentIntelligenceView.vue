@@ -92,6 +92,21 @@ async function openJob(id: number): Promise<void> {
   }
 }
 
+async function openResult(id: number): Promise<void> {
+  busy.value = true;
+  errorMessage.value = '';
+  try {
+    selectedResult.value = await getOcrResult(id);
+    selectedJob.value = jobs.value.find((job) => job.id === selectedResult.value?.job_id) ?? null;
+    originalText.value = selectedResult.value.pages[0]?.text ?? '';
+    correctedText.value = originalText.value;
+  } catch {
+    errorMessage.value = labels.value.error;
+  } finally {
+    busy.value = false;
+  }
+}
+
 async function retry(id: number): Promise<void> {
   busy.value = true;
   errorMessage.value = '';
@@ -124,14 +139,10 @@ async function verify(decision: 'verified' | 'rejected'): Promise<void> {
   errorMessage.value = '';
   try {
     await verifyOcrResult(selectedResult.value.id, decision);
-    await openJob(selectedResult.value.id);
+    selectedResult.value = await getOcrResult(selectedResult.value.id);
+    await load();
   } catch {
-    // A job id and result id are different identifiers; refresh the selected result directly.
-    try {
-      selectedResult.value = await getOcrResult(selectedResult.value.id);
-    } catch {
-      errorMessage.value = labels.value.error;
-    }
+    errorMessage.value = labels.value.error;
   } finally {
     busy.value = false;
   }
@@ -213,7 +224,7 @@ onMounted(load);
           </thead>
           <tbody>
             <tr v-for="job in jobs" :key="job.id">
-              <td>#{{ job.file_id }} · v{{ job.file_version }}</td>
+              <td>{{ job.file?.original_name ?? `File #${job.file_id}` }} · v{{ job.file_version }}</td>
               <td><span class="ocr-badge">{{ job.status }}</span></td>
               <td>{{ new Date(job.created_at).toLocaleString() }}</td>
               <td class="ocr-actions">
@@ -235,7 +246,7 @@ onMounted(load);
       </form>
       <ul v-if="searchResults.length" class="ocr-search-results">
         <li v-for="result in searchResults" :key="result.id">
-          <button type="button" class="text-button" @click="selectedResult = null; openJob(result.id)">
+          <button type="button" class="text-button" @click="openResult(result.id)">
             {{ result.file?.original_name ?? `File #${result.file_id}` }}
           </button>
           <p>{{ result.full_text.slice(0, 240) }}</p>
