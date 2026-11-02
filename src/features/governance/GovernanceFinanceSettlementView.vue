@@ -32,7 +32,7 @@ async function load():Promise<void>{
       getGovernanceSettlementReconciliation(Number(legalEntityId.value)),
       listSourceEntityMappings('pending'),
     ]);
-    mappings.value=m.data;payables.value=p.data;reconciliation.value=r.data;sourceMappings.value=sm.data.filter(x=>x.source_type==='governance_penalty_settlement');
+    mappings.value=m.data;payables.value=p.data;reconciliation.value=r;sourceMappings.value=sm.data.filter(x=>x.source_type==='governance_penalty_settlement');
   }catch(e){error.value=e instanceof Error?e.message:'Finance settlement data could not be loaded.'}
   finally{busy.value=false}
 }
@@ -40,7 +40,7 @@ async function loadMeeting():Promise<void>{
   if(!meetingId.value)return;
   busy.value=true;error.value='';
   try{
-    const meeting=await api.get<{settlements?:typeof settlements}>(`/api/governance/meetings/${Number(meetingId.value)}`);
+    const meeting=await api.get<{settlements?:Array<{id:number;penalty_id:number;method:string;amount_cents:number;currency:string;status:string}>}>(`/api/governance/meetings/${Number(meetingId.value)}`);
     settlements.value=meeting.settlements||[];
   }catch(e){error.value=e instanceof Error?e.message:'Meeting settlements could not be loaded.'}
   finally{busy.value=false}
