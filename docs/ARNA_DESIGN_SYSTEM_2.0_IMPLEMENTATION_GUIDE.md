@@ -40,7 +40,7 @@ The theme layer supports:
 - Explicit `data-theme="light"` and `data-theme="dark"` overrides on the document root.
 - Native `color-scheme` hints for browser controls.
 
-The stylesheet provides theme capability; it does not by itself prove that every application exposes a user-facing theme selector or persists a user preference. Such controls must use the approved application preference mechanism and must not create a competing theme state.
+The shared `ThemePreferenceControl` is now rendered in the authenticated AppShell, authentication layout, and public-site navigation. It exposes three explicit choices: System, Light, and Dark. The preference is persisted per origin under `arna.theme`; System removes the explicit `data-theme` attribute so the operating-system media query remains authoritative. If browser storage is unavailable, the selection still applies to the current page but cannot be persisted.
 
 ## 4. Bilingual typography
 
@@ -94,7 +94,17 @@ The frontend CI workflow runs the following Phase 1-relevant checks:
 
 The design-system contract also checks that all four entry points import the shared theme stylesheet.
 
-## 8. Known acceptance limitations
+## 8. Phase 1 A3 remediation
+
+- `src/core/theme-preference.ts` owns the shared System/Light/Dark preference and per-origin persistence.
+- `src/layouts/ThemePreferenceControl.vue` provides a labelled, keyboard-operable native select with Amharic and English option names.
+- The control is composed in AppShell, AuthLayout and PublicSiteLayout, covering authenticated pages, login/recovery pages and the public site.
+- Authenticated applications initialize the preference before the first route render through App.vue; the independent public entry initializes it before mounting.
+- The four HTML entry documents default to `lang="am"`; App.vue synchronizes the language attribute with the active locale store.
+- The theme preference is intentionally per-origin. No cross-subdomain cookie or shared preference service is introduced.
+- The font stacks remain token declarations. This change does not bundle font binaries; actual font availability and computed glyph rendering still require production-browser confirmation.
+
+## 9. Known acceptance limitations
 
 Automated source contracts and successful builds do not establish:
 - A complete manual WCAG 2.2 AA audit.
