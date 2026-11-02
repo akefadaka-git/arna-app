@@ -1732,6 +1732,13 @@ export const authenticatedNavItems: ReadonlyArray<NavItem> = [
     icon: 'calendar-days',
     permission: 'governance.body.view',
   },
+  {
+    id: 'finance-meeting-reconciliation',
+    label: 'የቅጣት ማስታረቅ',
+    to: '/finance/meeting-attendance-reconciliation',
+    icon: 'scale',
+    permission: 'finance.journal.view',
+  },
 ];
 
 /**
