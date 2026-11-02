@@ -43,6 +43,8 @@ export const authorizeMeetingAbsence = (id: number, payload: Record<string, unkn
 export const closeMeeting = (id: number) => api.post<GovernanceMeeting>(`/api/governance/meetings/${id}/close`);
 export const reviewMeetingPenalty = (id: number, penaltyId: number, payload: { decision: 'assess' | 'waive'; reason: string }) =>
   api.post<MeetingPenalty>(`/api/governance/meetings/${id}/penalties/${penaltyId}/review`, payload);
+export const disputeMeetingPenalty = (id: number, penaltyId: number, payload: { reason: string }) =>
+  api.post<MeetingPenalty>(`/api/governance/meetings/${id}/penalties/${penaltyId}/dispute`, payload);
 export const recordMeetingPenaltyPayment = (id: number, penaltyId: number, payload: Record<string, unknown>) =>
   api.post<Record<string, unknown>>(`/api/governance/meetings/${id}/penalties/${penaltyId}/payments`, payload);
 export const requestMeetingDividendSettlement = (id: number, penaltyId: number, payload: Record<string, unknown>) =>
