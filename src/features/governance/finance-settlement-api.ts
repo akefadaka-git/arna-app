@@ -19,7 +19,8 @@ export interface SettlementExecution {
 export interface SettlementReconciliationRow {
   readonly settlement_id: number; readonly penalty_id: number; readonly amount_cents: number;
   readonly currency: string; readonly settlement_status: string; readonly journal_id: number|null;
-  readonly journal_number: string|null; readonly journal_status: string|null; readonly legal_entity_id: number|null;\n  readonly debit_total?: string|null; readonly credit_total?: string|null; readonly journal_balanced?: boolean; readonly journal_amount_matches?: boolean; readonly source_journal_count?: number; readonly reconciliation_status?: 'PENDING'|'VERIFIED'|'UNRESOLVED';
+  readonly journal_number: string|null; readonly journal_status: string|null; readonly legal_entity_id: number|null;
+  readonly debit_total?: string|null; readonly credit_total?: string|null; readonly journal_balanced?: boolean; readonly journal_amount_matches?: boolean; readonly source_journal_count?: number; readonly reconciliation_status?: 'PENDING'|'VERIFIED'|'UNRESOLVED';
 }
 export async function listSettlementAccountMappings(legalEntityId: number): Promise<{data: SettlementAccountMapping[]}> {
   return api.get<{data:SettlementAccountMapping[]}>('/api/finance/governance-settlement/account-mappings', { params: { legal_entity_id: legalEntityId } });
