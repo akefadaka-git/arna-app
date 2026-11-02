@@ -2,13 +2,26 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
-const tokens = readFileSync('src/styles/tokens.css', 'utf8');
-const theme = readFileSync('src/styles/themes.css', 'utf8');
-const button = readFileSync('src/components/primitives/BaseButton/BaseButton.vue', 'utf8');
-const field = readFileSync('src/components/composites/FormField/FormField.vue', 'utf8');
-const card = readFileSync('src/components/patterns/Card/Card.vue', 'utf8');
-const table = readFileSync('src/components/patterns/DataTable/DataTable.vue', 'utf8');
-const modal = readFileSync('src/components/composites/Modal/Modal.vue', 'utf8');
+const read = (path) => readFileSync(path, 'utf8');
+const tokens = read('src/styles/tokens.css');
+const theme = read('src/styles/themes.css');
+const button = read('src/components/primitives/BaseButton/BaseButton.vue');
+const field = read('src/components/composites/FormField/FormField.vue');
+const card = read('src/components/patterns/Card/Card.vue');
+const table = read('src/components/patterns/DataTable/DataTable.vue');
+const modal = read('src/components/composites/Modal/Modal.vue');
+
+test('all four application entry points import the shared theme layer', () => {
+  for (const entry of [
+    'workspace-entry/main.ts',
+    'portal-entry/main.ts',
+    'admin-entry/main.ts',
+    'public-entry/main.ts',
+  ]) {
+    assert.match(read(entry), /import\s+['"]@\/styles\/themes\.css['"]/,
+      `${entry} must import the shared theme layer`);
+  }
+});
 
 test('dark theme maps every shared semantic color family', () => {
   const requiredRoles = [
