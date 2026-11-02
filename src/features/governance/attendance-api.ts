@@ -17,6 +17,8 @@ export interface GovernanceMeeting {
   readonly attendance?: readonly AttendanceRecord[];
   readonly proxies?: readonly ProxyRecord[];
   readonly penalties?: readonly PenaltyRecord[];
+  readonly corrections?: readonly AttendanceCorrectionRecord[];
+  readonly disputes?: readonly PenaltyDisputeRecord[];
 }
 
 export interface AttendanceRecord {
