@@ -759,6 +759,12 @@ export const routesWorkspace: RouteRecordRaw[] = [
         meta: { permission: 'governance.election.view' },
       },
       {
+        path: 'governance/elections/:id/committee',
+        name: 'governance-election-committee',
+        component: () => import('@/features/elections/ElectionCommitteeWorkspace.vue'),
+        meta: { permission: 'governance.election.manage' },
+      },
+      {
         path: 'governance/bodies',
         name: 'governance-bodies',
         component: () => import('@/features/governance/GovernanceBodyListView.vue'),
