@@ -335,8 +335,8 @@ onMounted(() => { void loadMeetings(); });
           <div v-for="penalty in selected.penalties" :key="penalty.id" class="record-row penalty-row">
             <span>{{ penalty.penalty_type === 'late' ? 'Late arrival' : 'Unjustified absence' }} · ETB {{ (penalty.amount_cents / 100).toFixed(2) }}</span>
             <strong>{{ penalty.status }}</strong>
-            <button :disabled="saving" class="text-button" @click="requestSettlement(penalty.id, penalty.amount_cents, 'cash')">Record cash payment</button>
-            <button :disabled="saving" class="text-button" @click="requestSettlement(penalty.id, penalty.amount_cents, 'dividend_offset')">Request dividend offset</button>
+            <button :disabled="saving" class="text-button" @click="requestSettlement(penalty.id, penalty.amount_cents, 'cash')">Request cash receipt posting</button>
+            <button :disabled="saving" class="text-button" @click="requestSettlement(penalty.id, penalty.amount_cents, 'dividend_offset')">Request dividend offset review</button>
           </div>
           <p class="muted">Settlement requests remain pending Finance review. Dividend offsets are not automatically deducted or posted to the ledger.</p>
         </div>
