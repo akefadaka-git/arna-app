@@ -149,7 +149,7 @@ test('all application entry documents default to Amharic and runtime locale upda
     'admin-entry/index.html',
     'public-entry/index.html',
   ]) {
-    assert.match(read(entry), /<html\\s+lang="am"/, `${entry} must default to Amharic`);
+    assert.match(read(entry), /<html\s+lang="am"/, `${entry} must default to Amharic`);
   }
   assert.ok(appRoot.includes('document.documentElement.lang = value'));
   assert.ok(theme.includes('html[lang="am"] body'));
