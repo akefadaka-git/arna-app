@@ -131,6 +131,9 @@ test('theme preference is persisted, system-aware, and safely applied', () => {
 test('theme preference control is available on authenticated, authentication, and public surfaces', () => {
   assert.ok(appShell.includes('<ThemePreferenceControl />'));
   assert.ok(authLayout.includes('<ThemePreferenceControl />'));
+  assert.ok(authLayout.includes('href="#auth-main-content"'));
+  assert.ok(authLayout.includes('id="auth-main-content"'));
+  assert.ok(authLayout.includes('tabindex="-1"'));
   assert.ok(publicLayout.includes('<ThemePreferenceControl />'));
   assert.ok(appShell.includes("import ThemePreferenceControl"));
   assert.ok(authLayout.includes("import ThemePreferenceControl"));
