@@ -63,3 +63,7 @@ export async function requestSourceEntityMapping(sourceId:number,legalEntityId:n
 export async function approveSourceEntityMapping(id:number,reason:string):Promise<SourceEntityMapping>{
   return api.post(`/api/finance/source-mappings/${id}/approve`,{reason});
 }
+
+export async function revokeSettlementAccountMapping(id:number,reason:string):Promise<SettlementAccountMapping>{
+  return api.post(\`/api/finance/governance-settlement/account-mappings/\${id}/revoke\`,{reason});
+}
