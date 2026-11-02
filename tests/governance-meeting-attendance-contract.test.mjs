@@ -35,10 +35,9 @@ test('meeting API client uses the canonical shared transport and attendance endp
   ]) assert.ok(api.includes(endpoint), `Missing endpoint contract: ${endpoint}`);
 });
 
-test('workspace displays the statutory flat late fine and absence fine only through API-backed records', async () => {
-  const backend = await read('../../arna-api/mases_core/src/Domains/Governance/Services/MeetingAttendanceService.php').catch(() => '');
-  // The API source is maintained in its own repository; this UI contract
-  // asserts the user-facing amounts are not duplicated as local business logic.
-  assert.equal(backend, '');
-  assert.ok((await read('../src/features/governance/MeetingAttendanceView.vue')).includes('ETB'));
+test('penalty amounts remain server-owned rather than duplicated as frontend business logic', async () => {
+  const view = await read('../src/features/governance/MeetingAttendanceView.vue');
+  assert.ok(view.includes('ETB'));
+  assert.ok(!view.includes('amount = 50'));
+  assert.ok(!view.includes('amount = 300'));
 });
