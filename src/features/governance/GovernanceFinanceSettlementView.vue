@@ -5,7 +5,7 @@ import {
   approveDividendPayable, approveSettlementAccountMapping, createDividendPayable,
   executeGovernanceCashSettlement, executeGovernanceDividendOffset,
   getGovernanceSettlementReconciliation, listDividendPayables, listSettlementAccountMappings,
-  requestSettlementAccountMapping, type DividendPayable, type SettlementAccountMapping,
+  requestSettlementAccountMapping, listSourceEntityMappings, requestSourceEntityMapping, approveSourceEntityMapping, type SourceEntityMapping, type DividendPayable, type SettlementAccountMapping,
   type SettlementReconciliationRow, type SettlementAccountRole,
 } from '@/features/governance/finance-settlement-api';
 
@@ -14,6 +14,8 @@ const meetingId=ref('');
 const mappings=ref<SettlementAccountMapping[]>([]);
 const payables=ref<DividendPayable[]>([]);
 const reconciliation=ref<SettlementReconciliationRow[]>([]);
+const sourceMappings=ref<SourceEntityMapping[]>([]);
+const sourceMappingReason=ref('');
 const settlements=ref<Array<{id:number;penalty_id:number;method:string;amount_cents:number;currency:string;status:string}>>([]);
 const busy=ref(false), error=ref(''), notice=ref('');
 const mappingForm=ref({account_role:'fine_receivable' as SettlementAccountRole,ledger_account_id:'',reason:''});
@@ -24,12 +26,13 @@ async function load():Promise<void>{
   if(!legalEntityId.value)return;
   busy.value=true;error.value='';
   try{
-    const [m,p,r]=await Promise.all([
+    const [m,p,r,sm]=await Promise.all([
       listSettlementAccountMappings(Number(legalEntityId.value)),
       listDividendPayables({legal_entity_id:Number(legalEntityId.value)}),
       getGovernanceSettlementReconciliation(Number(legalEntityId.value)),
+      listSourceEntityMappings('pending'),
     ]);
-    mappings.value=m.data;payables.value=p.data;reconciliation.value=r.data;
+    mappings.value=m.data;payables.value=p.data;reconciliation.value=r.data;sourceMappings.value=sm.data.filter(x=>x.source_type==='governance_penalty_settlement');
   }catch(e){error.value=e instanceof Error?e.message:'Finance settlement data could not be loaded.'}
   finally{busy.value=false}
 }
@@ -55,6 +58,8 @@ async function submitPayable():Promise<void>{
   await run(()=>createDividendPayable({legal_entity_id:Number(legalEntityId.value),shareholder_id:Number(payableForm.value.shareholder_id),distribution_reference:payableForm.value.distribution_reference,declared_on:payableForm.value.declared_on,due_on:payableForm.value.due_on,net_payable_amount:payableForm.value.net_payable_amount}),'Dividend payable registered as draft pending approval.');
 }
 async function approveMapping(id:number):Promise<void>{await run(()=>approveSettlementAccountMapping(id),'Account mapping approved.')}
+async function requestSourceMapping(id:number):Promise<void>{await run(()=>requestSourceEntityMapping(id,Number(legalEntityId.value),sourceMappingReason.value),'Settlement source-to-entity mapping submitted for approval.')}
+async function approveSourceMapping(id:number):Promise<void>{await run(()=>approveSourceEntityMapping(id,sourceMappingReason.value),'Settlement source-to-entity mapping approved.')}
 async function approvePayable(id:number):Promise<void>{await run(()=>approveDividendPayable(id,`Approved distribution record ${id}`),'Dividend payable approved.')}
 async function cash(s:{id:number}):Promise<void>{await run(()=>executeGovernanceCashSettlement(s.id,execution.value.effective_date,execution.value.idempotency_key),`Cash settlement #${s.id} posted to Finance.`)}
 async function offset(s:{id:number}):Promise<void>{await run(()=>executeGovernanceDividendOffset(s.id,Number(execution.value.dividend_payable_id),execution.value.effective_date,execution.value.idempotency_key),`Dividend offset for settlement #${s.id} posted.`)}
@@ -90,7 +95,9 @@ onMounted(()=>{});
   <section class="panel">
     <h2>Pending settlement execution</h2><form class="form-grid" @submit.prevent="loadMeeting"><label>Governance meeting ID<input v-model="meetingId" type="number" min="1" required></label><button :disabled="busy">Load meeting settlements</button></form>
     <div class="form-grid"><label>Effective date<input v-model="execution.effective_date" type="date" required></label><label>Idempotency key<input v-model="execution.idempotency_key" required maxlength="128" placeholder="Unique payment reference"></label><label>Dividend payable ID (offset only)<input v-model="execution.dividend_payable_id" type="number" min="1"></label></div>
-    <div v-for="s in settlements" :key="s.id" class="record-row"><span>Settlement #{{s.id}} · Penalty #{{s.penalty_id}} · ETB {{(s.amount_cents/100).toFixed(2)}} · {{s.status}}</span><span v-if="s.status==='pending_finance'||s.status==='pending_legal_finance_review'"><button :disabled="busy" @click="cash(s)">Post cash receipt</button><button :disabled="busy||!execution.dividend_payable_id" @click="offset(s)">Offset approved dividend</button></span></div>
+    <label>Source mapping reason<input v-model="sourceMappingReason" required minlength="5"></label>
+    <div v-for="s in settlements" :key="s.id" class="record-row"><span>Settlement #{{s.id}} · Penalty #{{s.penalty_id}} · ETB {{(s.amount_cents/100).toFixed(2)}} · {{s.status}}</span><span v-if="s.status==='pending_finance'||s.status==='pending_legal_finance_review'"><button :disabled="busy||!legalEntityId||!sourceMappingReason" @click="requestSourceMapping(s.id)">Request source mapping</button><button :disabled="busy" @click="cash(s)">Post cash receipt</button><button :disabled="busy||!execution.dividend_payable_id" @click="offset(s)">Offset approved dividend</button></span></div>
+    <div v-for="sm in sourceMappings" :key="sm.id" class="record-row"><span>Source mapping #{{sm.id}} · settlement {{sm.source_id}} · {{sm.status}}</span><button :disabled="busy||!sourceMappingReason" @click="approveSourceMapping(sm.id)">Approve source mapping</button></div>
     <p v-if="!settlements.length" class="muted">Load a meeting to see its settlement requests.</p>
   </section>
   <section class="panel">
