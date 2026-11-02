@@ -1687,7 +1687,7 @@ export const authenticatedNavItems: ReadonlyArray<NavItem> = [
     id: 'document-intelligence',
     label: 'የሰነድ ብልህነት',
     to: '/document-intelligence',
-    icon: 'scan-text',
+    icon: 'file-search',
     permission: 'ocr.job.view',
   },
   {
