@@ -97,7 +97,16 @@ async function openResult(id: number): Promise<void> {
   errorMessage.value = '';
   try {
     selectedResult.value = await getOcrResult(id);
-    selectedJob.value = jobs.value.find((job) => job.id === selectedResult.value?.job_id) ?? null;
+    selectedJob.value = jobs.value.find((job) => job.id === selectedResult.value?.job_id) ?? {
+      id: selectedResult.value.job_id,
+      file_id: selectedResult.value.file_id,
+      file_version: selectedResult.value.file_version,
+      languages: selectedResult.value.languages,
+      status: 'awaiting_review',
+      attempts: 0,
+      failure_code: null,
+      created_at: '',
+    };
     originalText.value = selectedResult.value.pages[0]?.text ?? '';
     correctedText.value = originalText.value;
   } catch {
