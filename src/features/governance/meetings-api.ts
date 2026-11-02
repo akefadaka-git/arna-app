@@ -42,7 +42,7 @@ export const listMeetings = (query: Record<string, string | number> = {}) =>
   api.get<MeetingPage>('/api/governance/meetings', { params: query });
 export const getMeeting = (id: number) => api.get<MeetingDetail>(`/api/governance/meetings/${id}`);
 export const createMeeting = (payload: {
-  governance_body_id: number; meeting_kind: MeetingKind; scheduled_at: string;
+  governance_body_id: number; finance_legal_entity_id?: number; meeting_kind: MeetingKind; scheduled_at: string;
   timezone?: string; title_am?: string; title_en?: string;
 }) => api.post<GovernanceMeeting>('/api/governance/meetings', payload);
 export const startMeeting = (id: number) => api.post<GovernanceMeeting>(`/api/governance/meetings/${id}/start`);
