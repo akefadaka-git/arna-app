@@ -71,7 +71,7 @@ onMounted(()=>{});
   <section class="panel">
     <h2>Settlement account configuration</h2><p>Each role requires an active posting account in this legal entity. A different officer must approve the request.</p>
     <form class="form-grid" @submit.prevent="submitMapping">
-      <label>Role<select v-model="mappingForm.account_role"><option value="fine_receivable">Fine receivable (asset / debit)</option><option value="cash_bank">Cash / bank (asset / debit)</option><option value="dividend_payable">Dividend payable (liability / credit)</option></select></label>
+      <label>Role<select v-model="mappingForm.account_role"><option value="fine_receivable">Fine receivable (asset / debit)</option><option value="cash_bank">Cash / bank (asset / debit)</option><option value="dividend_payable">Dividend payable (liability / credit)</option><option value="penalty_income">Penalty income (revenue / credit)</option></select></label>
       <label>Ledger account ID<input v-model="mappingForm.ledger_account_id" type="number" min="1" required></label>
       <label class="wide">Reason<input v-model="mappingForm.reason" minlength="5" required></label><button :disabled="busy||!legalEntityId">Request mapping</button>
     </form>
