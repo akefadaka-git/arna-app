@@ -1725,6 +1725,13 @@ export const authenticatedNavItems: ReadonlyArray<NavItem> = [
     icon: 'landmark',
     permission: 'governance.body.view',
   },
+  {
+    id: 'governance-meetings',
+    label: 'የጉባኤ ስብሰባዎች',
+    to: '/governance/meetings',
+    icon: 'calendar-days',
+    permission: 'governance.body.view',
+  },
 ];
 
 /**
