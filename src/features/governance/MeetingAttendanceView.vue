@@ -26,7 +26,8 @@ const createForm = ref({ governance_body_id: '', finance_legal_entity_id: '', me
 const arrivalForm = ref({ membership_id: '', proxy_id: '' });
 const proxyForm = ref({ principal_membership_id: '', representative_membership_id: '', representative_name: '', instrument_reference: '', appointed_at: '' });
 const excuseForm = ref({ membership_id: '', authorization_reference: '', reason: '' });
-const paymentForm = ref({ penalty_id: '', amount: '', payment_method: 'cash', receipt_reference: '' });\nconst disputeForm = ref({ penalty_id: '', reason: '' });
+const paymentForm = ref({ penalty_id: '', amount: '', payment_method: 'cash', receipt_reference: '' });
+const disputeForm = ref({ penalty_id: '', reason: '' });
 const offsetForm = ref({ penalty_id: '', shareholder_id: '', dividend_reference: '', requested_amount: '' });
 const selectedMeeting = computed(() => detail.value?.meeting ?? null);
 
@@ -111,7 +112,8 @@ onMounted(() => { void loadMeetings(); });
       <Card class="meeting-card">
         <h2>{{ t('አዲስ ስብሰባ መመዝገብ', 'Create a meeting') }}</h2>
         <form class="meeting-form" @submit.prevent="submitMeeting">
-          <label>{{ t('የGovernance Body ID', 'Governance body ID') }}<input v-model="createForm.governance_body_id" type="number" min="1" required /></label>\n          <label>{{ t('የFinance Legal Entity ID (ለማስታረቅ)', 'Finance legal entity ID (for reconciliation)') }}<input v-model="createForm.finance_legal_entity_id" type="number" min="1" /></label>
+          <label>{{ t('የGovernance Body ID', 'Governance body ID') }}<input v-model="createForm.governance_body_id" type="number" min="1" required /></label>
+          <label>{{ t('የFinance Legal Entity ID (ለማስታረቅ)', 'Finance legal entity ID (for reconciliation)') }}<input v-model="createForm.finance_legal_entity_id" type="number" min="1" /></label>
           <label>{{ t('የስብሰባ ዓይነት', 'Meeting type') }}<select v-model="createForm.meeting_kind"><option value="ga">GA</option><option value="board">Board</option></select></label>
           <label>{{ t('የመጀመሪያ ቀንና ሰዓት', 'Scheduled date and time') }}<input v-model="createForm.scheduled_at" type="datetime-local" required /></label>
           <label>{{ t('የሰዓት ክልል', 'Timezone') }}<input v-model="createForm.timezone" required /></label>
