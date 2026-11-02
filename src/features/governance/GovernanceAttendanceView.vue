@@ -42,6 +42,9 @@ const proxyForm = ref({
   principal_type: 'shareholder' as 'shareholder' | 'director',
   principal_id: '',
   proxy_user_id: '',
+  proxy_name_am: '',
+  proxy_name_en: '',
+  proxy_reference: '',
   instrument_reference: '',
 });
 
@@ -135,12 +138,18 @@ async function saveProxy(): Promise<void> {
     await submitGovernanceProxy(selected.value.id, {
       principal_type: proxyForm.value.principal_type,
       principal_id: Number(proxyForm.value.principal_id),
-      proxy_user_id: Number(proxyForm.value.proxy_user_id),
+      proxy_user_id: proxyForm.value.proxy_user_id ? Number(proxyForm.value.proxy_user_id) : undefined,
+      proxy_name_am: proxyForm.value.proxy_name_am || undefined,
+      proxy_name_en: proxyForm.value.proxy_name_en || undefined,
+      proxy_reference: proxyForm.value.proxy_reference || undefined,
       instrument_reference: proxyForm.value.instrument_reference || undefined,
     });
     notice.value = 'የውክልና ጥያቄ ተልኳል / Proxy submitted for review.';
     proxyForm.value.principal_id = '';
     proxyForm.value.proxy_user_id = '';
+    proxyForm.value.proxy_name_am = '';
+    proxyForm.value.proxy_name_en = '';
+    proxyForm.value.proxy_reference = '';
     await selectMeeting(selected.value.id);
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : 'ውክልናውን መመዝገብ አልተቻለም / Could not submit proxy.';
@@ -311,8 +320,17 @@ onMounted(() => { void loadMeetings(); });
             <label>Principal ID
               <input v-model="proxyForm.principal_id" type="number" min="1" required />
             </label>
-            <label>Proxy user ID
-              <input v-model="proxyForm.proxy_user_id" type="number" min="1" required />
+            <label>Proxy user ID (required for Board proxy)
+              <input v-model="proxyForm.proxy_user_id" type="number" min="1" :required="proxyForm.principal_type === 'director'" />
+            </label>
+            <label>Proxy name in Amharic (GA may use a non-user representative)
+              <input v-model="proxyForm.proxy_name_am" maxlength="150" />
+            </label>
+            <label>Proxy name in English
+              <input v-model="proxyForm.proxy_name_en" maxlength="150" />
+            </label>
+            <label>Proxy identity reference
+              <input v-model="proxyForm.proxy_reference" maxlength="100" />
             </label>
             <label>Instrument / document reference
               <input v-model="proxyForm.instrument_reference" maxlength="2000" />
@@ -337,7 +355,7 @@ onMounted(() => { void loadMeetings(); });
           <h3>Proxy register</h3>
           <div v-if="!selected.proxies?.length" class="empty">No proxies submitted.</div>
           <div v-for="proxy in selected.proxies" :key="proxy.id" class="record-row">
-            <span>{{ proxy.principal_type }} #{{ proxy.principal_id }} → user #{{ proxy.proxy_user_id }}</span>
+            <span>{{ proxy.principal_type }} #{{ proxy.principal_id }} → {{ proxy.proxy_user_id ? 'user #' + proxy.proxy_user_id : (proxy.proxy_name_am || proxy.proxy_name_en || 'external proxy') }}</span>
             <strong>{{ proxy.status }}</strong>
             <span>Deadline {{ new Date(proxy.deadline_at).toLocaleString() }}</span>
             <button v-if="proxy.status === 'submitted'" class="text-button" :disabled="saving" @click="reviewProxy(proxy.id, 'approved')">Approve</button>
