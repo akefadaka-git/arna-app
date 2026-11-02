@@ -20,7 +20,8 @@ export interface MeetingPenalty {
 }
 export interface MeetingDetail {
   meeting: GovernanceMeeting; proxies: MeetingProxy[];
-  attendance: MeetingAttendance[]; penalties: MeetingPenalty[];\n  payments: MeetingPenaltyPayment[]; dividend_settlement_requests: DividendSettlementRequest[];
+  attendance: MeetingAttendance[]; penalties: MeetingPenalty[];
+  payments: MeetingPenaltyPayment[]; dividend_settlement_requests: DividendSettlementRequest[];
 }
 export interface MeetingPenaltyPayment {
   id: number; penalty_id: number; amount: string; currency: 'ETB'; payment_method: string;
