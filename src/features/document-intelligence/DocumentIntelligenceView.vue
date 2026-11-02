@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
+import FilePreview from '@/components/patterns/FilePreview';
+import { downloadFile } from '@/features/files/api';
 import { useLocaleStore } from '@/stores/locale';
 import { listFiles } from '@/features/files/api';
 import type { FileResource } from '@/features/files/api';
@@ -24,6 +26,8 @@ const selectedFileId = ref<number | null>(null);
 const languages = ref<'amh' | 'eng' | 'amh+eng'>('amh+eng');
 const selectedJob = ref<OcrJob | null>(null);
 const selectedResult = ref<OcrResult | null>(null);
+const originalPreviewUrl = ref<string | null>(null);
+const previewGeneration = ref(0);
 const searchQuery = ref('');
 const searchResults = ref<readonly OcrSearchResult[]>([]);
 const originalText = ref('');
@@ -33,6 +37,13 @@ const busy = ref(false);
 const errorMessage = ref('');
 const statusMessage = ref('');
 
+const previewFile = computed(() => files.value.find((file) => file.id === selectedResult.value?.file_id));
+const previewLabels = computed(() => ({
+  loading: labels.value.loading,
+  error: labels.value.previewError,
+  unsupported: labels.value.previewUnsupported,
+  pdfFallback: labels.value.previewError,
+}));
 const selectedFileName = computed(() =>
   files.value.find((file) => file.id === selectedFileId.value)?.original_name ?? '',
 );
@@ -55,6 +66,23 @@ async function load(): Promise<void> {
     errorMessage.value = labels.value.error;
   } finally {
     busy.value = false;
+  }
+}
+
+async function loadOriginalPreview(fileId: number): Promise<void> {
+  const generation = ++previewGeneration.value;
+  if (originalPreviewUrl.value) URL.revokeObjectURL(originalPreviewUrl.value);
+  originalPreviewUrl.value = null;
+  try {
+    const blob = await downloadFile(fileId);
+    const url = URL.createObjectURL(blob);
+    if (generation !== previewGeneration.value) {
+      URL.revokeObjectURL(url);
+      return;
+    }
+    originalPreviewUrl.value = url;
+  } catch {
+    if (generation === previewGeneration.value) originalPreviewUrl.value = null;
   }
 }
 
@@ -96,6 +124,7 @@ async function openResult(id: number): Promise<void> {
   errorMessage.value = '';
   try {
     selectedResult.value = await getOcrResult(id);
+    await loadOriginalPreview(selectedResult.value.file_id);
     selectedJob.value = jobs.value.find((job) => job.id === selectedResult.value?.job_id) ?? {
       id: selectedResult.value.job_id,
       file_id: selectedResult.value.file_id,
@@ -177,6 +206,10 @@ async function saveCorrection(): Promise<void> {
 }
 
 onMounted(load);
+onUnmounted(() => {
+  previewGeneration.value += 1;
+  if (originalPreviewUrl.value) URL.revokeObjectURL(originalPreviewUrl.value);
+});
 </script>
 
 <template>
@@ -273,9 +306,25 @@ onMounted(load);
           {{ labels.confidence }}:
           {{ selectedResult.mean_confidence === null ? '—' : `${selectedResult.mean_confidence.toFixed(1)}%` }}
         </p>
-        <div v-for="page in selectedResult.pages" :key="page.id" class="ocr-page">
-          <h3>Page {{ page.page_number }}</h3>
-          <pre>{{ page.text }}</pre>
+        <div class="ocr-result-grid">
+          <section class="ocr-original-preview" aria-label="Original document">
+            <h3>{{ labels.originalDocument }}</h3>
+            <FilePreview
+              v-if="originalPreviewUrl && previewFile"
+              :src="originalPreviewUrl"
+              :name="previewFile.original_name"
+              :mime-type="previewFile.mime_type"
+              :labels="previewLabels"
+              size="lg"
+            />
+            <p v-else class="ocr-muted">{{ labels.previewError }}</p>
+          </section>
+          <section class="ocr-recognized-pages" aria-label="Recognized text">
+            <div v-for="page in selectedResult.pages" :key="page.id" class="ocr-page">
+              <h3>Page {{ page.page_number }}</h3>
+              <pre>{{ page.text }}</pre>
+            </div>
+          </section>
         </div>
         <div class="ocr-review-actions">
           <button type="button" class="primary-button" :disabled="busy" @click="verify('verified')">{{ labels.verify }}</button>
@@ -327,6 +376,9 @@ button:disabled { opacity: .55; cursor: not-allowed; }
 .ocr-search input { flex: 1; }
 .ocr-search-results { padding-inline-start: 1.25rem; }
 .ocr-search-results p { margin: .25rem 0 .8rem; color: var(--text-secondary, #667085); }
+.ocr-result-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; align-items: start; }
+.ocr-original-preview, .ocr-recognized-pages { min-width: 0; }
+.ocr-original-preview h3 { margin-top: 0; }
 .ocr-page { margin: 1rem 0; }
 .ocr-page pre { white-space: pre-wrap; overflow-wrap: anywhere; border: 1px solid var(--border-subtle, #d0d5dd); border-radius: .5rem; padding: .9rem; font: inherit; line-height: 1.7; }
 .ocr-review-actions { display: flex; gap: .75rem; flex-wrap: wrap; }
@@ -335,5 +387,5 @@ button:disabled { opacity: .55; cursor: not-allowed; }
 .ocr-corrections { display: grid; gap: .5rem; }
 .ocr-corrections li { display: flex; gap: .75rem; flex-wrap: wrap; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-@media (max-width: 700px) { .ocr-form-grid { grid-template-columns: 1fr; } .ocr-search { align-items: stretch; flex-direction: column; } .ocr-search button { width: 100%; } }
+@media (max-width: 700px) { .ocr-form-grid, .ocr-result-grid { grid-template-columns: 1fr; } .ocr-search { align-items: stretch; flex-direction: column; } .ocr-search button { width: 100%; } }
 </style>
