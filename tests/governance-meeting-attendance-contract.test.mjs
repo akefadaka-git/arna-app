@@ -35,6 +35,22 @@ test('meeting API client uses the canonical shared transport and attendance endp
   ]) assert.ok(api.includes(endpoint), `Missing endpoint contract: ${endpoint}`);
 });
 
+test('Finance reconciliation is separated behind Finance permissions and posted-journal references', async () => {
+  const routes = await read('../src/router/routes-workspace.ts');
+  const navigation = await read('../src/router/shell-labels.ts');
+  const view = await read('../src/features/governance/FinanceMeetingReconciliationView.vue');
+  const api = await read('../src/features/governance/meetings-api.ts');
+
+  assert.ok(routes.includes("path: 'finance/meeting-attendance-reconciliation'"));
+  assert.ok(routes.includes("meta: { permission: 'finance.journal.view' }"));
+  assert.ok(navigation.includes("permission: 'finance.journal.view'"));
+  assert.ok(view.includes('posted Finance journal ID'));
+  assert.ok(view.includes('authority reference'));
+  assert.ok(view.includes('no automatic dividend deduction'));
+  assert.ok(api.includes('listMeetingFinanceReconciliationQueue'));
+  assert.ok(api.includes('reconcileMeetingDividendSettlement'));
+});
+
 test('penalty amounts remain server-owned rather than duplicated as frontend business logic', async () => {
   const view = await read('../src/features/governance/MeetingAttendanceView.vue');
   assert.ok(view.includes('ETB'));
