@@ -1719,6 +1719,13 @@ export const authenticatedNavItems: ReadonlyArray<NavItem> = [
     permission: 'loan_product.view',
   },
   {
+    id: 'governance-elections',
+    label: 'የቦርድ ምርጫ',
+    to: '/governance/elections',
+    icon: 'landmark',
+    permission: 'governance.election.view',
+  },
+  {
     id: 'governance',
     label: 'የአስተዳደር ማዕከል',
     to: '/governance',

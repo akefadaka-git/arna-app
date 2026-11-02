@@ -494,6 +494,7 @@ import {
   governanceBodyDetailViewLabels,
 } from '@/features/governance/labels';
 
+
 /**
  * The workspace build's top-level route. A single parent
  * (AuthenticatedLayout) with all authenticated children nested under
@@ -751,6 +752,18 @@ export const routesWorkspace: RouteRecordRaw[] = [
       // 78) and applied to the governance body read routes on the
       // backend.
       // -----------------------------------------------------------------------
+      {
+        path: 'governance/elections',
+        name: 'governance-elections',
+        component: () => import('@/features/elections/GovernanceElectionListView.vue'),
+        meta: { permission: 'governance.election.view' },
+      },
+      {
+        path: 'governance/elections/:id/committee',
+        name: 'governance-election-committee',
+        component: () => import('@/features/elections/ElectionCommitteeWorkspace.vue'),
+        meta: { permission: 'governance.election.manage' },
+      },
       {
         path: 'governance/bodies',
         name: 'governance-bodies',
