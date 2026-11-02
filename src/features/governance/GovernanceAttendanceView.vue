@@ -12,8 +12,11 @@ import {
   type AttendanceStatus,
   type GovernanceMeeting,
 } from '@/features/governance/attendance-api';
+import { listGovernanceBodies } from '@/features/governance/service';
+import type { GovernanceBody } from '@/features/governance/api';
 
 const meetings = ref<readonly GovernanceMeeting[]>([]);
+const governanceBodies = ref<readonly GovernanceBody[]>([]);
 const selected = ref<GovernanceMeeting | null>(null);
 const loading = ref(false);
 const saving = ref(false);
@@ -43,12 +46,20 @@ const proxyForm = ref({
 });
 
 const selectedLabel = computed(() => selected.value?.title_am || selected.value?.title_en || selected.value?.meeting_code || '');
+const availableBodies = computed(() => governanceBodies.value.filter((body) =>
+  body.body_type === (createForm.value.meeting_kind === 'board' ? 'board' : 'assembly'),
+));
 
 async function loadMeetings(): Promise<void> {
   loading.value = true;
   errorMessage.value = '';
   try {
-    meetings.value = await listGovernanceMeetings();
+    const [meetingRows, bodyRows] = await Promise.all([
+      listGovernanceMeetings(),
+      listGovernanceBodies({ per_page: 200 }),
+    ]);
+    meetings.value = meetingRows;
+    governanceBodies.value = bodyRows.items;
     if (selected.value) {
       await selectMeeting(selected.value.id);
     }
@@ -202,8 +213,13 @@ onMounted(() => { void loadMeetings(); });
     <section class="panel">
       <h2>ጉባኤ መመዝገብ / Create meeting</h2>
       <form class="form-grid" @submit.prevent="createMeeting">
-        <label>Governance body ID
-          <input v-model="createForm.governance_body_id" type="number" min="1" required />
+        <label>Governance body
+          <select v-model="createForm.governance_body_id" required>
+            <option value="" disabled>Select the registered body</option>
+            <option v-for="body in availableBodies" :key="body.id" :value="String(body.id)">
+              {{ body.display_name }} · {{ body.code }}
+            </option>
+          </select>
         </label>
         <label>Meeting code
           <input v-model="createForm.meeting_code" maxlength="64" required />
