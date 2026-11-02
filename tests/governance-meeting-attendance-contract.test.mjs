@@ -44,8 +44,8 @@ test('Finance reconciliation is separated behind Finance permissions and posted-
   assert.ok(routes.includes("path: 'finance/meeting-attendance-reconciliation'"));
   assert.ok(routes.includes("meta: { permission: 'finance.journal.view' }"));
   assert.ok(navigation.includes("permission: 'finance.journal.view'"));
-  assert.ok(view.includes('posted Finance journal ID'));
-  assert.ok(view.includes('authority reference'));
+  assert.ok(view.includes('Posted journal ID'));
+  assert.ok(view.includes('Authority reference'));
   assert.ok(view.includes('no automatic dividend deduction'));
   assert.ok(api.includes('listMeetingFinanceReconciliationQueue'));
   assert.ok(api.includes('reconcileMeetingDividendSettlement'));
