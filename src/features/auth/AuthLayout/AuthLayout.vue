@@ -492,12 +492,17 @@ const resolvedLogoAlt = computed<string>(() => {
     class="auth-layout"
     data-testid="auth-layout-root"
   >
+    <a class="auth-layout__skip-link" href="#auth-main-content">
+      ወደ ዋናው ይዘት ዝለል
+    </a>
     <div class="auth-layout__theme">
       <ThemePreferenceControl />
     </div>
     <main
+      id="auth-main-content"
       class="auth-layout__main"
       :data-size="size"
+      tabindex="-1"
       data-testid="auth-layout-main"
     >
       <!-- Logo (optional) -->
@@ -613,6 +618,25 @@ const resolvedLogoAlt = computed<string>(() => {
   color: var(--mases-color-text-primary, #141009);
 
   font-family: inherit;
+}
+
+.auth-layout__skip-link {
+  position: absolute;
+  z-index: 2;
+  inset-block-start: 0.5rem;
+  inset-inline-start: 0.5rem;
+  padding: 0.65rem 0.9rem;
+  border: 2px solid var(--mases-color-border-focus, currentColor);
+  border-radius: var(--mases-radius-sm, 4px);
+  color: var(--mases-color-text-inverse, #FFFDF7);
+  background: var(--mases-color-surface-inverse, #24132E);
+  transform: translateY(calc(-100% - 1rem));
+}
+
+.auth-layout__skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 3px solid var(--mases-color-state-focus-ring, #D4A017);
+  outline-offset: 2px;
 }
 
 .auth-layout__theme {
