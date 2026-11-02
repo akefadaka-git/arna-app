@@ -68,6 +68,7 @@ export interface OcrSearchResult {
   readonly full_text: string;
   readonly mean_confidence: number | null;
   readonly file?: { readonly original_name: string };
+  readonly corrections?: readonly OcrCorrection[];
 }
 
 export function listOcrJobs(): Promise<OcrJobList> {
