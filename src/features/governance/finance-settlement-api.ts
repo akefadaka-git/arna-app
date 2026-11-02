@@ -22,7 +22,7 @@ export interface SettlementReconciliationRow {
   readonly journal_number: string|null; readonly journal_status: string|null; readonly legal_entity_id: number|null;
 }
 export async function listSettlementAccountMappings(legalEntityId: number): Promise<{data: SettlementAccountMapping[]}> {
-  return api.get('/api/finance/governance-settlement/account-mappings', { params: { legal_entity_id: legalEntityId } });
+  return api.get<{data:SettlementAccountMapping[]}>('/api/finance/governance-settlement/account-mappings', { params: { legal_entity_id: legalEntityId } });
 }
 export async function requestSettlementAccountMapping(input: {legal_entity_id:number;account_role:SettlementAccountRole;ledger_account_id:number;reason:string}): Promise<SettlementAccountMapping> {
   return api.post('/api/finance/governance-settlement/account-mappings',input);
@@ -31,7 +31,7 @@ export async function approveSettlementAccountMapping(id:number): Promise<Settle
   return api.post(`/api/finance/governance-settlement/account-mappings/${id}/approve`,{});
 }
 export async function listDividendPayables(params:{legal_entity_id?:number;shareholder_id?:number;status?:string}={}): Promise<{data:DividendPayable[]}> {
-  return api.get('/api/finance/governance-settlement/dividend-payables',{params});
+  return api.get<{data:DividendPayable[]}>('/api/finance/governance-settlement/dividend-payables',{params});
 }
 export async function createDividendPayable(input:{legal_entity_id:number;shareholder_id:number;distribution_reference:string;declared_on:string;due_on:string;net_payable_amount:string}):Promise<DividendPayable>{
   return api.post('/api/finance/governance-settlement/dividend-payables',input);
@@ -45,8 +45,8 @@ export async function executeGovernanceCashSettlement(id:number,effective_date:s
 export async function executeGovernanceDividendOffset(id:number,dividend_payable_id:number,effective_date:string,idempotency_key:string):Promise<SettlementExecution>{
   return api.post(`/api/finance/governance-settlement/settlements/${id}/dividend-offset`,{dividend_payable_id,effective_date,idempotency_key});
 }
-export async function getGovernanceSettlementReconciliation(legal_entity_id:number):Promise<{data:SettlementReconciliationRow[]}>{
-  return api.get('/api/finance/governance-settlement/reconciliation',{params:{legal_entity_id}});
+export async function getGovernanceSettlementReconciliation(legal_entity_id:number):Promise<SettlementReconciliationRow[]>{
+  return api.get<SettlementReconciliationRow[]>('/api/finance/governance-settlement/reconciliation',{params:{legal_entity_id}});
 }
 
 
@@ -55,7 +55,7 @@ export interface SourceEntityMapping {
   readonly status:'pending'|'approved'|'revoked'; readonly mapping_reason:string;
 }
 export async function listSourceEntityMappings(status?:string):Promise<{data:SourceEntityMapping[]}>{
-  return api.get('/api/finance/source-mappings',{params:{source_type:'governance_penalty_settlement',status}});
+  return api.get<{data:SourceEntityMapping[]}>('/api/finance/source-mappings',{params:{status}});
 }
 export async function requestSourceEntityMapping(sourceId:number,legalEntityId:number,reason:string):Promise<SourceEntityMapping>{
   return api.post('/api/finance/source-mappings',{source_type:'governance_penalty_settlement',source_id:String(sourceId),legal_entity_id:legalEntityId,reason});
