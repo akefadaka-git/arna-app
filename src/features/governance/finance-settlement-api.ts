@@ -48,3 +48,18 @@ export async function executeGovernanceDividendOffset(id:number,dividend_payable
 export async function getGovernanceSettlementReconciliation(legal_entity_id:number):Promise<{data:SettlementReconciliationRow[]}>{
   return api.get('/api/finance/governance-settlement/reconciliation',{params:{legal_entity_id}});
 }
+
+
+export interface SourceEntityMapping {
+  readonly id:number; readonly source_type:string; readonly source_id:string; readonly legal_entity_id:number;
+  readonly status:'pending'|'approved'|'revoked'; readonly mapping_reason:string;
+}
+export async function listSourceEntityMappings(status?:string):Promise<{data:SourceEntityMapping[]}>{
+  return api.get('/api/finance/source-mappings',{params:{source_type:'governance_penalty_settlement',status}});
+}
+export async function requestSourceEntityMapping(sourceId:number,legalEntityId:number,reason:string):Promise<SourceEntityMapping>{
+  return api.post('/api/finance/source-mappings',{source_type:'governance_penalty_settlement',source_id:String(sourceId),legal_entity_id:legalEntityId,reason});
+}
+export async function approveSourceEntityMapping(id:number,reason:string):Promise<SourceEntityMapping>{
+  return api.post(`/api/finance/source-mappings/${id}/approve`,{reason});
+}
