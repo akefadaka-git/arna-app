@@ -32,7 +32,9 @@ export interface ProxyRecord {
   readonly id: number;
   readonly principal_type: 'shareholder' | 'director';
   readonly principal_id: number;
-  readonly proxy_user_id: number;
+  readonly proxy_user_id: number | null;
+  readonly proxy_name_am: string | null;
+  readonly proxy_name_en: string | null;
   readonly submitted_at: string;
   readonly deadline_at: string;
   readonly status: 'submitted' | 'approved' | 'rejected';
@@ -97,7 +99,10 @@ export async function submitGovernanceProxy(
   input: {
     principal_type: 'shareholder' | 'director';
     principal_id: number;
-    proxy_user_id: number;
+    proxy_user_id?: number;
+    proxy_name_am?: string;
+    proxy_name_en?: string;
+    proxy_reference?: string;
     instrument_reference?: string;
   },
 ): Promise<ProxyRecord> {
