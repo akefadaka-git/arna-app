@@ -57,3 +57,50 @@ export function getGovernanceElection(id: number): Promise<GovernanceElection> {
 export function createGovernanceElection(input: CreateGovernanceElectionInput): Promise<GovernanceElection> {
   return api.post<GovernanceElection>('/api/governance/elections', input);
 }
+
+
+export interface ElectionNominationSubmissionInput {
+  readonly candidate_person_id: number;
+  readonly self_nomination?: boolean;
+  readonly statement?: string;
+}
+export interface ElectionCandidate {
+  readonly id: number;
+  readonly candidate_person_id: number | null;
+  readonly candidate_name_snapshot: string | null;
+  readonly nomination_statement: string | null;
+  readonly committee_status: string;
+}
+export interface ElectionCommitteeQueue {
+  readonly submissions: readonly Record<string, unknown>[];
+  readonly candidates: readonly ElectionCandidate[];
+}
+export interface CandidateReviewFeedbackInput {
+  readonly rating: number;
+  readonly comment?: string;
+}
+export interface CommitteeDecisionInput {
+  readonly decision: 'approved' | 'rejected' | 'returned';
+  readonly reason: string;
+  readonly meeting_reference?: string;
+  readonly evidence_reference?: string;
+  readonly final_ballot_approved?: boolean;
+}
+export function submitElectionNomination(electionId: number, input: ElectionNominationSubmissionInput): Promise<{ submitted: boolean }> {
+  return api.post(`/api/governance/elections/${electionId}/nominations`, input);
+}
+export function getElectionCandidateReview(electionId: number): Promise<readonly ElectionCandidate[]> {
+  return api.get<readonly ElectionCandidate[]>(`/api/governance/elections/${electionId}/candidate-review`);
+}
+export function submitCandidateFeedback(electionId: number, nominationId: number, input: CandidateReviewFeedbackInput): Promise<{ saved: boolean; binding: false }> {
+  return api.post(`/api/governance/elections/${electionId}/candidates/${nominationId}/feedback`, input);
+}
+export function saveCandidatePreference(electionId: number, nominationId: number): Promise<{ saved: boolean; binding: false }> {
+  return api.post(`/api/governance/elections/${electionId}/candidates/${nominationId}/preference`);
+}
+export function getElectionCommitteeQueue(electionId: number): Promise<ElectionCommitteeQueue> {
+  return api.get<ElectionCommitteeQueue>(`/api/governance/elections/${electionId}/committee/queue`);
+}
+export function decideElectionNomination(electionId: number, nominationId: number, input: CommitteeDecisionInput): Promise<ElectionCandidate> {
+  return api.post(`/api/governance/elections/${electionId}/committee/candidates/${nominationId}/decision`, input);
+}
