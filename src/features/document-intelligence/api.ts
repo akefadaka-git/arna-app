@@ -46,6 +46,7 @@ export interface OcrJob {
   readonly id: number;
   readonly file_id: number;
   readonly file_version: number;
+  readonly file?: { readonly original_name: string; readonly version: number };
   readonly languages: string;
   readonly status: string;
   readonly attempts: number;
@@ -61,6 +62,7 @@ export interface OcrJobList {
 
 export interface OcrSearchResult {
   readonly id: number;
+  readonly job_id: number;
   readonly file_id: number;
   readonly file_version: number;
   readonly full_text: string;
