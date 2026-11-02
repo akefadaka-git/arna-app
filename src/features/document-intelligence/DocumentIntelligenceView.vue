@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import FilePreview from '@/components/patterns/FilePreview';
-import { downloadFile } from '@/features/files/api';
+import { downloadFile, listFiles } from '@/features/files/api';
 import { useLocaleStore } from '@/stores/locale';
-import { listFiles } from '@/features/files/api';
 import type { FileResource } from '@/features/files/api';
 import {
   correctOcrText,
@@ -111,6 +110,8 @@ async function openJob(id: number): Promise<void> {
     const job = await getOcrJob(id);
     selectedJob.value = job;
     selectedResult.value = job.result?.id ? await getOcrResult(job.result.id) : null;
+    if (selectedResult.value) await loadOriginalPreview(selectedResult.value.file_id);
+    else if (originalPreviewUrl.value) { URL.revokeObjectURL(originalPreviewUrl.value); originalPreviewUrl.value = null; }
     originalText.value = selectedResult.value?.pages[0]?.text ?? '';
     correctedText.value = originalText.value;
   } catch {
