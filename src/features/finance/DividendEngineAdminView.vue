@@ -14,6 +14,7 @@ import {
   cancelDividendTaxRemittance,
   createDividendDistribution,
   createDividendPaymentBatch,
+  cancelDividendPaymentBatch,
   createDividendTaxRemittance,
   failDividendPayment,
   listDividendDistributions,
@@ -93,6 +94,7 @@ const reconciliationForm = reactive({
 const failureReasons = ref<Record<number, string>>({});
 const cancellationReasons = ref<Record<number, string>>({});
 const remittanceCancellationReasons = ref<Record<number, string>>({});
+const batchCancellationReasons = ref<Record<number, string>>({});
 
 const sortedDistributions = computed(() => [...distributions.value].sort((a, b) => b.id - a.id));
 
@@ -332,6 +334,10 @@ onMounted(refresh);
         </div>
         <div class="actions">
           <button v-if="batch.status === 'draft'" class="secondary" :disabled="busyKey !== ''" @click="runAction('batch-approve-'+batch.id, () => approveDividendPaymentBatch(batch.id), 'Payment batch approved.')">Approve batch / አጽድቅ</button>
+          <template v-if="['draft','approved','failed'].includes(batch.status)">
+            <input v-model="batchCancellationReasons[batch.id]" aria-label="Payment batch cancellation reason" placeholder="Cancellation reason">
+            <button class="secondary" :disabled="busyKey !== '' || !batchCancellationReasons[batch.id]" @click="runAction('batch-cancel-'+batch.id, () => cancelDividendPaymentBatch(batch.id, batchCancellationReasons[batch.id] ?? ''), 'Unpaid payment batch cancelled and reservations released.')">Cancel batch</button>
+          </template>
         </div>
         <div v-for="item in batch.items ?? []" :key="item.id" class="payment-item">
           <span>Shareholder {{ item.shareholder_id }} · {{ money(item.amount, batch.currency) }} · {{ item.status }}</span>
