@@ -7,6 +7,7 @@ import { RouterLink } from 'vue-router';
 import { api } from '@/core/api/client';
 import { masesBrandLabels } from '@/router/shell-labels';
 import { formatCalendarDate } from '@/core/dates/calendar';
+import { fetchCorporateHome, type CorporateSitePage, type CorporateSiteSection } from '@/features/public-site/api';
 
 const year = formatCalendarDate(new Date(), { year: 'numeric' });
 
@@ -19,8 +20,20 @@ interface PublishedContent {
 }
 
 const publishedContent = ref<PublishedContent[]>([]);
+const corporateHome = ref<CorporateSitePage | null>(null);
+
+function sectionText(section: CorporateSiteSection, field: string): string {
+  const value = section.content[field];
+  return typeof value === 'string' ? value : '';
+}
 
 onMounted(async () => {
+  try {
+    corporateHome.value = await fetchCorporateHome('am');
+  } catch {
+    corporateHome.value = null;
+  }
+
   try {
     const page = await api.get<{ data: PublishedContent[] }>('/api/public/content', {
       params: { per_page: 3 },
@@ -136,6 +149,18 @@ const publicationChannels = [
     </header>
 
     <main id="main-content">
+      <section v-if="corporateHome" class="corporate-home-published" aria-labelledby="corporate-home-title">
+        <div class="site-container">
+          <h1 id="corporate-home-title">{{ corporateHome.title }}</h1>
+          <p v-if="corporateHome.summary">{{ corporateHome.summary }}</p>
+          <div v-if="corporateHome.sections.length" class="corporate-home-published__sections">
+            <article v-for="(section, index) in corporateHome.sections" :key="section.id ?? index">
+              <h2 v-if="sectionText(section, 'title')">{{ sectionText(section, 'title') }}</h2>
+              <p v-if="sectionText(section, 'body')">{{ sectionText(section, 'body') }}</p>
+            </article>
+          </div>
+        </div>
+      </section>
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero__glow hero__glow--one" aria-hidden="true"></div>
         <div class="hero__glow hero__glow--two" aria-hidden="true"></div>
