@@ -508,7 +508,8 @@ const publicationChannels = [
             <label>ስልክ <input v-model="inquiry.phone" maxlength="50" /></label>
             <label>ርዕስ <input v-model="inquiry.subject" required maxlength="200" /></label>
             <label>መልዕክት <textarea v-model="inquiry.message" required maxlength="10000" rows="4" /></label>
-            <label class="public-opportunity-form__consent"><input v-model="inquiry.consent" type="checkbox" required /> የመልዕክቴን መረጃ ለጥያቄዬ ምላሽ ለመስጠት እንዲጠቀሙበት እስማማለሁ።</label>\n            <label class="public-opportunity-form__trap" aria-hidden="true">Website <input v-model="inquiry.website" tabindex="-1" autocomplete="off" /></label>
+            <label class="public-opportunity-form__consent"><input v-model="inquiry.consent" type="checkbox" required /> የመልዕክቴን መረጃ ለጥያቄዬ ምላሽ ለመስጠት እንዲጠቀሙበት እስማማለሁ።</label>
+            <label class="public-opportunity-form__trap" aria-hidden="true">Website <input v-model="inquiry.website" tabindex="-1" autocomplete="off" /></label>
             <button type="submit" :disabled="submitting || !inquiry.consent">መልዕክብ ይላኩ</button>
             <p role="status" aria-live="polite">{{ inquiryStatus }}</p>
           </form>
@@ -580,7 +581,9 @@ const publicationChannels = [
 .public-opportunity-form label { display: grid; gap: .3rem; font-weight: 600; }
 .public-opportunity-form input, .public-opportunity-form select, .public-opportunity-form textarea { width: 100%; min-width: 0; padding: .65rem; border: 1px solid var(--arna-line); border-radius: .4rem; background: var(--arna-paper); color: var(--arna-ink); }
 .public-opportunity-form button { min-height: 44px; padding: .65rem 1rem; border: 0; border-radius: .4rem; background: var(--arna-navy); color: white; }
-.public-opportunity-form__consent { grid-column: 1 / -1; display: flex !important; align-items: flex-start; gap: .6rem !important; font-weight: 400 !important; line-height: 1.6; }\n.public-opportunity-form__consent input { width: auto; margin-top: .25rem; }\n.public-opportunity-form__trap { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.public-opportunity-form__consent { grid-column: 1 / -1; display: flex !important; align-items: flex-start; gap: .6rem !important; font-weight: 400 !important; line-height: 1.6; }
+.public-opportunity-form__consent input { width: auto; margin-top: .25rem; }
+.public-opportunity-form__trap { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 @media (max-width: 680px) { .public-opportunity-form { grid-template-columns: 1fr; } }
 .arna-site {
   --arna-navy: var(--arna-public-brand-anchor);
