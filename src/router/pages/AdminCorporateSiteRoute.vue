@@ -9,6 +9,7 @@ import {
   listCorporateInquiries,
   reviewCorporatePage,
   reviewCorporateEntry,
+  scanCorporateMedia,
   updateCorporateInquiry,
   type CorporatePageRecord,
   type CorporateEntryRecord,
@@ -121,6 +122,18 @@ async function createEntry(): Promise<void> {
   finally { saving.value = false; }
 }
 
+
+async function scanEntry(entry: CorporateEntryRecord): Promise<void> {
+  saving.value = true; error.value = '';
+  try {
+    const result = await scanCorporateMedia(entry);
+    notice.value = \`Media scan verdict: \${result.scan_status}.\`;
+    await refresh();
+  } catch {
+    error.value = 'Scanner unavailable or asset invalid. The media remains quarantined and cannot be published.';
+  } finally { saving.value = false; }
+}
+
 async function entryAction(entry: CorporateEntryRecord, decision: 'approve' | 'publish' | 'reject' | 'unpublish'): Promise<void> {
   saving.value = true;
   error.value = '';
@@ -200,6 +213,7 @@ onMounted(() => void refresh());
           <li v-for="entry in entries" :key="entry.id">
             <div><strong>{{ entry.translations?.am?.title ?? entry.entry_type }}</strong><small>{{ entry.entry_type }} · {{ entry.status }} · v{{ entry.version }}</small></div>
             <div class="corporate-admin__actions">
+              <button v-if="entry.entry_type === 'media' && entry.status === 'draft'" type="button" :disabled="saving" @click="scanEntry(entry)">Run media scan</button>
               <button v-if="entry.status === 'draft'" type="button" :disabled="saving" @click="entryAction(entry, 'approve')">Approve</button>
               <button v-if="entry.status === 'approved'" type="button" :disabled="saving" @click="entryAction(entry, 'publish')">Publish</button>
               <button v-if="['draft', 'approved'].includes(entry.status)" type="button" :disabled="saving" @click="entryAction(entry, 'reject')">Reject</button>
