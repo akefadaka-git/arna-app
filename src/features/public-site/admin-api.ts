@@ -83,7 +83,7 @@ export async function listCorporateEntries(): Promise<CorporateEntryRecord[]> {
   return result.data;
 }
 export function scanCorporateMedia(entry: CorporateEntryRecord): Promise<{ public_id: string; scan_status: string; version: number }> {
-  return api.post(`${base}/entries/${entry.id}/scan`, {});
+  return api.post(`${base}/entries/${entry.id}/scan`, { expected_version: entry.version });
 }
 export function reviewCorporateEntry(entry: CorporateEntryRecord, decision: 'approve' | 'publish' | 'reject' | 'unpublish', note?: string): Promise<CorporateEntryRecord> {
   return api.post(`${base}/entries/${entry.id}/${decision}`, {
