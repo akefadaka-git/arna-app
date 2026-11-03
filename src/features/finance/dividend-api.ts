@@ -317,6 +317,7 @@ export interface CreateShareSubscriptionBalancePayload {
   subscribed_share_quantity: number;
   price_per_share: string;
   original_amount: string;
+  outstanding_amount: string;
   occurred_on: string;
   evidence_reference: string;
 }
