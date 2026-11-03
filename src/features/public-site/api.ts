@@ -26,21 +26,14 @@ export interface CorporateSitePage {
   readonly published_at: string | null;
 }
 
-interface ApiEnvelope<T> {
-  readonly success: boolean;
-  readonly data: T;
-}
-
 export async function fetchCorporateHome(locale: CorporateLocale = 'am'): Promise<CorporateSitePage | null> {
-  const response = await api.get<ApiEnvelope<CorporateSitePage | null>>('/api/public/site/home', {
+  return api.get<CorporateSitePage | null>('/api/public/site/home', {
     params: { locale },
   });
-  return response;
 }
 
 export async function fetchCorporatePage(locale: CorporateLocale, slug: string): Promise<CorporateSitePage> {
-  const response = await api.get<ApiEnvelope<CorporateSitePage>>(
+  return api.get<CorporateSitePage>(
     `/api/public/site/pages/${locale}/${encodeURIComponent(slug)}`,
   );
-  return response;
 }
