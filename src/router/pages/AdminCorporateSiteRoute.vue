@@ -160,7 +160,7 @@ async function scanEntry(entry: CorporateEntryRecord): Promise<void> {
   saving.value = true; error.value = '';
   try {
     const result = await scanCorporateMedia(entry);
-    notice.value = \`Media scan verdict: \${result.scan_status}.\`;
+    notice.value = `Media scan verdict: ${result.scan_status}.`;
     await refresh();
   } catch {
     error.value = 'Scanner unavailable or asset invalid. The media remains quarantined and cannot be published.';
