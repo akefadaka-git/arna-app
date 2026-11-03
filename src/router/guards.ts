@@ -675,9 +675,15 @@ function authGuard(
    * may render it to tell the caller which route they tried to reach.
    * It is not consumed by the guard.
    */
-  const permission = to.meta.permission;
-  if (permission !== undefined) {
-    const mode: 'any' | 'all' = to.meta.permissionMode ?? 'any';
+  // Check every matched record, not only the merged to.meta object.
+  // Vue Router's non-recursive meta merge lets a child permission replace
+  // a parent permission; iterating matched records preserves both the
+  // Admin application boundary and each feature's granular permission.
+  for (const record of to.matched) {
+    const permission = record.meta.permission;
+    if (permission === undefined) continue;
+
+    const mode: 'any' | 'all' = record.meta.permissionMode ?? 'any';
     if (!checkPermission(auth, permission, mode)) {
       return {
         path: ACCESS_DENIED_PATH,
