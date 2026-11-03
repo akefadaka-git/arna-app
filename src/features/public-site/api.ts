@@ -35,12 +35,12 @@ export async function fetchCorporateHome(locale: CorporateLocale = 'am'): Promis
   const response = await api.get<ApiEnvelope<CorporateSitePage | null>>('/api/public/site/home', {
     params: { locale },
   });
-  return response.data;
+  return response;
 }
 
 export async function fetchCorporatePage(locale: CorporateLocale, slug: string): Promise<CorporateSitePage> {
   const response = await api.get<ApiEnvelope<CorporateSitePage>>(
     `/api/public/site/pages/${locale}/${encodeURIComponent(slug)}`,
   );
-  return response.data;
+  return response;
 }
