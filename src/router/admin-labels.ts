@@ -306,6 +306,13 @@ export const adminNavItems: ReadonlyArray<NavItem> = [
     icon: 'file-check',
     permission: 'public-content.review',
   },
+  {
+    id: 'dividend-engine',
+    label: 'የዲቪደንድ አስተዳደር',
+    to: '/admin/dividend-engine',
+    icon: 'landmark',
+    permission: 'finance.entity.view',
+  },
 ];
 
 /**
