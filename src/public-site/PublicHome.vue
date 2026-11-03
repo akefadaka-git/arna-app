@@ -485,14 +485,14 @@ const publicationChannels = [
             <p v-if="!corporateCareers.length && !corporateMarket.length" lang="am">በአሁኑ ጊዜ የታተመ እድል የለም። አዲስ ዝርዝሮች ከግምገማ በኋላ ይታያሉ።</p>
           </div>
           <form class="public-opportunity-form" @submit.prevent="sendOpportunity">
-            <h3 lang="am">የሥራ፣ የማስታወቂያ ወይም የገበያ ማቅረቢያ</h3>
-            <label>ምድብ <select v-model="opportunity.type"><option value="career">ሥራ</option><option value="opportunity">እድል</option><option value="advertisement">ማስታወቂያ</option><option value="marketplace">የገበያ ዝርዝር</option></select></label>
-            <label>ስም <input v-model="opportunity.name" required maxlength="160" /></label>
-            <label>ኢሜይል <input v-model="opportunity.email" required type="email" maxlength="190" /></label>
-            <label>ድርጅት <input v-model="opportunity.organization" maxlength="180" /></label>
-            <label>ርዕስ <input v-model="opportunity.title" required maxlength="180" /></label>
-            <label>ዝርዝር <textarea v-model="opportunity.description" required maxlength="12000" rows="3" /></label>
-            <button type="submit" :disabled="submitting">ለግምገማ ያቅርቡ</button>
+            <h3>{{ locale === 'am' ? 'የሥራ፣ የማስታወቂያ ወይም የገበያ ማቅረቢያ' : 'Submit a career, advertising or marketplace listing' }}</h3>
+            <label>{{ locale === 'am' ? 'ምድብ' : 'Category' }} <select v-model="opportunity.type"><option value="career">ሥራ</option><option value="opportunity">እድል</option><option value="advertisement">ማስታወቂያ</option><option value="marketplace">የገበያ ዝርዝር</option></select></label>
+            <label>{{ locale === 'am' ? 'ስም' : 'Name' }} <input v-model="opportunity.name" required maxlength="160" /></label>
+            <label>{{ locale === 'am' ? 'ኢሜይል' : 'Email' }} <input v-model="opportunity.email" required type="email" maxlength="190" /></label>
+            <label>{{ locale === 'am' ? 'ድርጅት' : 'Organization' }} <input v-model="opportunity.organization" maxlength="180" /></label>
+            <label>{{ locale === 'am' ? 'ርዕስ' : 'Title' }} <input v-model="opportunity.title" required maxlength="180" /></label>
+            <label>{{ locale === 'am' ? 'ዝርዝር' : 'Description' }} <textarea v-model="opportunity.description" required maxlength="12000" rows="3" /></label>
+            <button type="submit" :disabled="submitting"{{ locale === 'am' ? 'ለግምገማ ያቅርቡ' : 'Submit for review' }}</button>
             <p role="status" aria-live="polite">{{ opportunityStatus }}</p>
           </form>
         </div>
@@ -500,17 +500,17 @@ const publicationChannels = [
 
       <section id="contact" class="section-pad" aria-labelledby="contact-title">
         <div class="site-container">
-          <div class="section-heading"><div><p class="eyebrow eyebrow--dark">CONTACT · INQUIRIES</p><h2 id="contact-title" lang="am">ከእኛ ጋር <span>ይገናኙ።</span></h2></div></div>
+          <div class="section-heading"><div><p class="eyebrow eyebrow--dark">CONTACT · INQUIRIES</p><h2 id="contact-title">{{ locale === 'am' ? 'ከእኛ ጋር ይገናኙ።' : 'Get in touch with ARNA.' }}</h2></div></div>
           <form class="public-opportunity-form" @submit.prevent="sendInquiry">
-            <label>ምድብ <select v-model="inquiry.inquiry_type"><option value="general">አጠቃላይ</option><option value="investor">ባለአክሲዮን / ኢንቨስተር</option><option value="partnership">አጋርነት</option><option value="media">ሚዲያ</option><option value="career">ሥራ</option><option value="advertising">ማስታወቂያ</option><option value="marketplace">ገበያ</option></select></label>
-            <label>ስም <input v-model="inquiry.name" required maxlength="160" /></label>
-            <label>ኢሜይል <input v-model="inquiry.email" required type="email" maxlength="190" /></label>
-            <label>ስልክ <input v-model="inquiry.phone" maxlength="50" /></label>
-            <label>ርዕስ <input v-model="inquiry.subject" required maxlength="200" /></label>
-            <label>መልዕክት <textarea v-model="inquiry.message" required maxlength="10000" rows="4" /></label>
+            <label>{{ locale === 'am' ? 'ምድብ' : 'Inquiry type' }} <select v-model="inquiry.inquiry_type"><option value="general">አጠቃላይ</option><option value="investor">ባለአክሲዮን / ኢንቨስተር</option><option value="partnership">አጋርነት</option><option value="media">ሚዲያ</option><option value="career">ሥራ</option><option value="advertising">ማስታወቂያ</option><option value="marketplace">ገበያ</option></select></label>
+            <label>{{ locale === 'am' ? 'ስም' : 'Name' }} <input v-model="inquiry.name" required maxlength="160" /></label>
+            <label>{{ locale === 'am' ? 'ኢሜይል' : 'Email' }} <input v-model="inquiry.email" required type="email" maxlength="190" /></label>
+            <label>{{ locale === 'am' ? 'ስልክ' : 'Phone' }} <input v-model="inquiry.phone" maxlength="50" /></label>
+            <label>{{ locale === 'am' ? 'ርዕስ' : 'Subject' }} <input v-model="inquiry.subject" required maxlength="200" /></label>
+            <label>{{ locale === 'am' ? 'መልዕክት' : 'Message' }} <textarea v-model="inquiry.message" required maxlength="10000" rows="4" /></label>
             <label class="public-opportunity-form__consent"><input v-model="inquiry.consent" type="checkbox" required /> የመልዕክቴን መረጃ ለጥያቄዬ ምላሽ ለመስጠት እንዲጠቀሙበት እስማማለሁ።</label>
             <label class="public-opportunity-form__trap" aria-hidden="true">Website <input v-model="inquiry.website" tabindex="-1" autocomplete="off" /></label>
-            <button type="submit" :disabled="submitting || !inquiry.consent">መልዕክብ ይላኩ</button>
+            <button type="submit" :disabled="submitting || !inquiry.consent"{{ locale === 'am' ? 'መልዕክብ ይላኩ' : 'Send inquiry' }}</button>
             <p role="status" aria-live="polite">{{ inquiryStatus }}</p>
           </form>
         </div>
