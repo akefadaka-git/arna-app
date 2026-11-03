@@ -68,7 +68,7 @@ export function reviewCorporatePage(page: CorporatePageRecord, decision: 'approv
     ...(scheduledAt ? { scheduled_at: scheduledAt } : {}),
   });
 }
-export async function listCorporateEntries(): Promise<CorporateEntryRecord[]> {
+export async function createCorporateEntry(draft: { entry_type: string; slug_am?: string; slug_en?: string; translations: Record<string, { title: string; body?: string }>; seo?: Record<string, Record<string, string>> }): Promise<CorporateEntryRecord> {\n  return api.post(`${base}/entries`, draft);\n}\nexport async function listCorporateEntries(): Promise<CorporateEntryRecord[]> {
   const result = await api.get<{ data: CorporateEntryRecord[] }>(`${base}/entries`);
   return result.data;
 }
