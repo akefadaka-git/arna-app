@@ -13,6 +13,7 @@ export interface CorporateSitePage {
   readonly page_key: string;
   readonly locale: CorporateLocale;
   readonly slug: string | null;
+  readonly alternate_slug: string | null;
   readonly title: string;
   readonly summary: string;
   readonly sections: readonly CorporateSiteSection[];
