@@ -74,6 +74,7 @@ export interface ElectionCandidate {
 export interface ElectionCommitteeQueue {
   readonly submissions: readonly Record<string, unknown>[];
   readonly candidates: readonly ElectionCandidate[];
+  readonly members: readonly ElectionCommitteeMember[];
 }
 export interface CandidateReviewFeedbackInput {
   readonly rating: number;
