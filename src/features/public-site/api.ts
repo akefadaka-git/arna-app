@@ -65,6 +65,7 @@ export interface CorporateInquiryDraft {
   readonly phone?: string;
   readonly subject: string;
   readonly message: string;
+  readonly consent: boolean;
   readonly website?: string;
 }
 
