@@ -100,5 +100,5 @@ export async function uploadCorporateMedia(title: string, description: string, f
   form.append('description', description);
   form.append('locale', locale);
   form.append('file', file);
-  return api.post(`${base}/../site/media`, form);
+  return api.post('/api/public/site/media', form);
 }
