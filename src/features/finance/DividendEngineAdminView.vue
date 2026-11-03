@@ -104,9 +104,10 @@ async function refresh(): Promise<void> {
   loading.value = true;
   error.value = '';
   try {
-    const [nextDistributions, nextBatches] = await Promise.all([
+    const [nextDistributions, nextBatches, nextRemittances] = await Promise.all([
       listDividendDistributions(),
       listDividendPaymentBatches(),
+      listDividendTaxRemittances(),
     ]);
     distributions.value = nextDistributions;
     batches.value = nextBatches;
