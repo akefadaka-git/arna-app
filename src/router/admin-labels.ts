@@ -306,6 +306,34 @@ export const adminNavItems: ReadonlyArray<NavItem> = [
     icon: 'file-check',
     permission: 'public-content.review',
   },
+  {
+    id: 'tenant-directory',
+    label: 'ቴናንቶች',
+    to: '/admin/tenants',
+    icon: 'building-2',
+    permission: 'tenant.list',
+  },
+  {
+    id: 'identity-directory',
+    label: 'የተጠቃሚ መለያዎች',
+    to: '/admin/users',
+    icon: 'users',
+    permission: 'user.list',
+  },
+  {
+    id: 'role-directory',
+    label: 'ሚናዎች',
+    to: '/admin/roles',
+    icon: 'shield-check',
+    permission: 'role.list',
+  },
+  {
+    id: 'permission-directory',
+    label: 'ፈቃዶች',
+    to: '/admin/permissions',
+    icon: 'key-round',
+    permission: 'permission.list',
+  },
 ];
 
 /**
