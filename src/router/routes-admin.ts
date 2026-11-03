@@ -304,6 +304,30 @@ export const routesAdmin: RouteRecordRaw[] = [
         meta: { permission: 'public-content.review' },
       },
       {
+        path: 'admin/tenants',
+        name: 'admin-tenants',
+        component: () => import('./pages/AdminFoundationListRoute.vue'),
+        meta: { permission: 'tenant.list' },
+      },
+      {
+        path: 'admin/users',
+        name: 'admin-users',
+        component: () => import('./pages/AdminFoundationListRoute.vue'),
+        meta: { permission: 'user.list' },
+      },
+      {
+        path: 'admin/roles',
+        name: 'admin-roles',
+        component: () => import('./pages/AdminFoundationListRoute.vue'),
+        meta: { permission: 'role.list' },
+      },
+      {
+        path: 'admin/permissions',
+        name: 'admin-permissions',
+        component: () => import('./pages/AdminFoundationListRoute.vue'),
+        meta: { permission: 'permission.list' },
+      },
+      {
         path: 'launcher',
         redirect: '/admin',
       },
