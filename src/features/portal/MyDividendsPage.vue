@@ -82,6 +82,9 @@ function statusLabel(status: string | null): string {
           <div><dt>{{ labels.grossLabel }}</dt><dd>{{ money(row.gross_amount, row.currency) }}</dd></div>
           <div><dt>{{ labels.taxLabel }}</dt><dd>{{ money(row.withholding_amount, row.currency) }}</dd></div>
           <div><dt>{{ labels.netLabel }}</dt><dd>{{ money(row.net_amount, row.currency) }}</dd></div>
+          <div><dt>በጥሬ ገንዘብ የተከፈለ</dt><dd>{{ money(row.cash_paid_amount, row.currency) }}</dd></div>
+          <div><dt>በቅጣት የተቀነሰ</dt><dd>{{ money(row.penalty_offset_amount, row.currency) }}</dd></div>
+          <div><dt>ቀሪ የሚከፈል</dt><dd>{{ money(row.remaining_payable_amount, row.currency) }}</dd></div>
           <div><dt>{{ labels.dueLabel }}</dt><dd>{{ row.payment_due_on }}</dd></div>
           <div><dt>{{ labels.statusLabel }}</dt><dd>{{ statusLabel(row.payable_status) }}</dd></div>
         </dl>
