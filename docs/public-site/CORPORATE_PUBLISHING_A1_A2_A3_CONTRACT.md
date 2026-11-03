@@ -1,39 +1,43 @@
-# ARNA Public Corporate Website — A1/A2 Reconciliation and A3/A4 Contract
+# ARNA Public Corporate Website — A1/A2 Reconciliation and A3 Delivery Contract
 
-Status: A1 reconciled; A2 contract baseline. Implementation branch: feat/public-corporate-platform.
+**Status:** A1/A2 reconciled; A3 implementation delivered on the feature branch; A4 verification remains separate.
 
 ## Existing app findings
 
-- PublicHome.vue contains a mostly static corporate landing page and a small API-backed public news feed.
-- PublicContributionRoute.vue already submits user-contributed editorial content through email verification and server-side moderation.
-- src/features/public-content/api.ts contains an admin moderation client for the existing PublicContent API.
-- The public build is an independent static Vite build (build:public); production hosting serves static files, so content must be fetched from the configured HTTPS API origin.
-- Do not add a second CMS, local content store, or client-side publication authority.
+- The public site is an independent Vite static build. It must fetch published content from the configured HTTPS API origin.
+- `PublicContributionRoute.vue` and the existing PublicContent domain already provide contributor email verification and editorial moderation. That workflow remains intact.
+- The homepage has a designed Amharic corporate presentation. A3 connects CMS-managed homepage content, localized published navigation and live editorial/business/service/career/marketplace/media feeds without treating client-side content as authoritative.
+- Do not create a competing local content store or bypass server-side publication approval.
 
-## A3 app scope
+## A3 delivered
 
-- Replace hard-coded corporate sections with typed, locale-aware API data while retaining a safe loading/error/empty state.
-- Build public routes for About/governance/organization, businesses/subsidiaries/services, news/announcements/publications, media/gallery, careers/opportunities, contact and advertising/marketplace information.
-- Keep published content only on public routes. Admin authoring/review routes require authenticated permission checks and server-side authorization.
-- Add Amharic/English locale selection and locale-aware navigation, slugs, page metadata and SEO tags. Do not silently substitute unreviewed translations.
-- Add responsive accessible media cards/gallery with alt text, captions and keyboard operation.
-- Add contact inquiry submission with consent, validation, rate-limit feedback and opaque reference.
-- Advertising/marketplace public displays must show approved, active listings only; no client-side ad approval or payment assumptions.
-- Add structured page metadata, canonical URL, OpenGraph/Twitter metadata, robots directives and sitemap integration appropriate to static hosting and API-driven content.
-- Preserve the existing contribution flow and its security semantics.
+- Typed API clients for corporate pages, editorial entries, localized lists, inquiries, opportunities and admin moderation.
+- Public routes for bilingual corporate pages and localized editorial details.
+- Homepage locale selection, published CMS navigation, CMS-managed homepage sections, localized content feeds, contact and opportunity submission forms.
+- Corporate CMS administration route for page creation/editing, independent review, publish/unpublish/schedule; bilingual editorial authoring/editing and moderation; quarantined media upload and scan; and contact inquiry triage.
+- Public display feeds for businesses/subsidiaries, services, news, announcements, publications, media/gallery, careers/opportunities and marketplace entries. Only server-published records are displayed.
+- Explicit consent before contact inquiry submission, a honeypot field, API throttling and opaque inquiry reference.
+- Page/editorial metadata application for title, description, canonical URL, robots and Open Graph title where provided.
+- Responsive layouts, labelled controls, skip links, keyboard focus styling and graceful loading/error/empty states.
+
+## A3 security boundary
+
+- Public reads are published-only. Client-side UI never approves or publishes content.
+- CMS admin route uses the existing `public-content.review` permission; server endpoints independently enforce Sanctum and that permission.
+- Page/entry edits are optimistic-version checked. Page authors and entry submitters cannot review their own records.
+- Contact inquiries are private and are exposed only to the protected administration queue.
+- Media uploads use the authenticated admin route and private quarantine storage. A trusted HTTPS malware scanner must return a clean verdict before media publication; missing/unavailable scanner means fail-closed.
+- Organization records remain tenant-scoped. Public structure and subsidiary information is published from approved corporate CMS pages/business entries, not exposed by querying internal Organization rows directly.
 
 ## API contract
 
-Use the API contract in the API repository at docs/public-site/CORPORATE_PUBLISHING_A1_A2_A3_CONTRACT.md. Public data comes from /api/public/site/* and editorial news continues to use the existing /api/public/content endpoints until the unified response contract is implemented. All API errors must degrade gracefully without inventing corporate facts.
+The API contract is documented in the API repository at `docs/public-site/CORPORATE_PUBLISHING_FOUNDATION_A3.md`. Public data comes from `/api/public/site/*`; existing contributor content remains available through `/api/public/content`.
 
-## A4 acceptance
+## A4 acceptance still required
 
-- npm run type-check
-- npm run build:public
-- npm run test:public-build-smoke
-- route and locale contract tests
-- Amharic/English content and metadata checks
-- keyboard, screen-reader, contrast, reduced-motion and WCAG 2.2 AA review
-- mobile/tablet/desktop responsive checks
-- verify no draft/private fields or unapproved assets appear in public responses
-- record exact branch SHA and evidence; no production deployment in A4.
+- API clean-install MySQL migration gate and corporate publishing feature tests.
+- App type-check, all application builds, public-entry build smoke and route/locale contract tests on the final exact PR head.
+- Scanner clean/infected/unavailable path tests and runtime scanner configuration validation.
+- Verify no draft/private fields or unapproved assets appear in public responses.
+- Manual Amharic/English review, keyboard and screen-reader review, contrast and WCAG 2.2 AA assessment, reduced-motion review, and mobile/tablet/desktop acceptance.
+- Record exact branch SHAs and evidence. No production deployment is included.
