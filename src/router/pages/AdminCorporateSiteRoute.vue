@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue';
 import PageHeader from '@/components/patterns/PageHeader';
 import Card from '@/components/patterns/Card';
 import {
-  createCorporatePage,
+  createCorporatePage,\n  createCorporateEntry,
   listCorporatePages,
   listCorporateEntries,
   listCorporateInquiries,
@@ -33,7 +33,7 @@ const summaryEn = ref('');
 const bodyAm = ref('');
 const bodyEn = ref('');
 const selectedPage = ref<CorporatePageRecord | null>(null);
-const scheduleAt = ref('');
+const scheduleAt = ref('');\nconst entryType = ref('news');\nconst entrySlugAm = ref('');\nconst entrySlugEn = ref('');\nconst entryTitleAm = ref('');\nconst entryTitleEn = ref('');\nconst entryBodyAm = ref('');\nconst entryBodyEn = ref('');
 
 async function refresh(): Promise<void> {
   loading.value = true;
@@ -97,6 +97,28 @@ async function pageAction(page: CorporatePageRecord, decision: 'approve' | 'publ
   } finally {
     saving.value = false;
   }
+}
+
+
+async function createEntry(): Promise<void> {
+  saving.value = true; error.value = ''; notice.value = '';
+  try {
+    await createCorporateEntry({
+      entry_type: entryType.value,
+      slug_am: entrySlugAm.value.trim(),
+      slug_en: entrySlugEn.value.trim(),
+      translations: {
+        am: { title: entryTitleAm.value.trim(), body: entryBodyAm.value.trim() },
+        en: { title: entryTitleEn.value.trim(), body: entryBodyEn.value.trim() },
+      },
+      seo: { am: { title: entryTitleAm.value.trim() }, en: { title: entryTitleEn.value.trim() } },
+    });
+    notice.value = 'Bilingual editorial draft created. It requires independent approval.';
+    entrySlugAm.value = ''; entrySlugEn.value = ''; entryTitleAm.value = ''; entryTitleEn.value = '';
+    entryBodyAm.value = ''; entryBodyEn.value = '';
+    await refresh();
+  } catch { error.value = 'Could not create this draft. Check slugs, bilingual titles and your permissions.'; }
+  finally { saving.value = false; }
 }
 
 async function entryAction(entry: CorporateEntryRecord, decision: 'approve' | 'publish' | 'reject' | 'unpublish'): Promise<void> {
@@ -172,7 +194,7 @@ onMounted(() => void refresh());
       </section>
 
       <section v-else-if="tab === 'editorial'" aria-labelledby="editorial-heading">
-        <h2 id="editorial-heading">Editorial and listing moderation</h2>
+        <h2 id="editorial-heading">Editorial and listing moderation</h2>\n        <form class="corporate-admin__form" @submit.prevent="createEntry">\n          <label>Content type <select v-model="entryType"><option value="news">News</option><option value="announcement">Announcement</option><option value="publication">Publication</option><option value="media">Media metadata</option><option value="career">Career</option><option value="opportunity">Opportunity</option><option value="business">Business / subsidiary</option><option value="service">Service</option><option value="advertisement">Advertisement</option><option value="marketplace">Marketplace</option></select></label>\n          <label>Amharic slug <input v-model="entrySlugAm" required /></label><label>English slug <input v-model="entrySlugEn" required /></label>\n          <label>Amharic title <input v-model="entryTitleAm" required /></label><label>English title <input v-model="entryTitleEn" required /></label>\n          <label>Amharic body <textarea v-model="entryBodyAm" rows="3" /></label><label>English body <textarea v-model="entryBodyEn" rows="3" /></label>\n          <button type="submit" :disabled="saving">Create draft</button>\n        </form>
         <p>News, announcements, publications, media, careers, opportunities, business/service profiles, advertising and marketplace submissions share the moderation queue.</p>
         <ul class="corporate-admin__list">
           <li v-for="entry in entries" :key="entry.id">
