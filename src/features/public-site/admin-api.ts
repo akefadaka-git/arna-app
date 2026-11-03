@@ -70,11 +70,17 @@ export function reviewCorporatePage(page: CorporatePageRecord, decision: 'approv
     ...(scheduledAt ? { scheduled_at: scheduledAt } : {}),
   });
 }
-export async function createCorporateEntry(draft: { entry_type: string; slug_am?: string; slug_en?: string; translations: Record<string, { title: string; body?: string }>; seo?: Record<string, Record<string, string>> }): Promise<CorporateEntryRecord> {\n  return api.post(`${base}/entries`, draft);\n}\nexport async function listCorporateEntries(): Promise<CorporateEntryRecord[]> {
+export async function createCorporateEntry(draft: { entry_type: string; slug_am?: string; slug_en?: string; translations: Record<string, { title: string; body?: string }>; seo?: Record<string, Record<string, string>> }): Promise<CorporateEntryRecord> {
+  return api.post(`${base}/entries`, draft);
+}
+export async function listCorporateEntries(): Promise<CorporateEntryRecord[]> {
   const result = await api.get<{ data: CorporateEntryRecord[] }>(`${base}/entries`);
   return result.data;
 }
-export function scanCorporateMedia(entry: CorporateEntryRecord): Promise<{ public_id: string; scan_status: string; version: number }> {\n  return api.post(`${base}/entries/${entry.id}/scan`, {});\n}\nexport function reviewCorporateEntry(entry: CorporateEntryRecord, decision: 'approve' | 'publish' | 'reject' | 'unpublish', note?: string): Promise<CorporateEntryRecord> {
+export function scanCorporateMedia(entry: CorporateEntryRecord): Promise<{ public_id: string; scan_status: string; version: number }> {
+  return api.post(`${base}/entries/${entry.id}/scan`, {});
+}
+export function reviewCorporateEntry(entry: CorporateEntryRecord, decision: 'approve' | 'publish' | 'reject' | 'unpublish', note?: string): Promise<CorporateEntryRecord> {
   return api.post(`${base}/entries/${entry.id}/${decision}`, {
     expected_version: entry.version,
     moderation_note: note,
