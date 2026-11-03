@@ -210,7 +210,8 @@ const publicationChannels = [
           <a href="#principles">እሴቶቻችን</a>
           <a href="#services">አገልግሎቶች</a>
           <a href="#businesses">የንግድ አቅጣጫዎች</a>
-          <a href="#updates">ዜናና ጦማር</a>\n          <a href="#gallery">ሚዲያ</a>
+          <a href="#updates">ዜናና ጦማር</a>
+          <a href="#gallery">ሚዲያ</a>
           <a href="#advertise">ማስታወቂያ</a>
           <RouterLink to="/contribute">ይዘት ያቅርቡ</RouterLink>
         </nav>
@@ -547,7 +548,8 @@ const publicationChannels = [
               <RouterLink to="/legal">ሕጋዊ መረጃ</RouterLink>
               <RouterLink to="/contribute">ይዘት ያቅርቡ</RouterLink>
               <a href="#updates">ዜናዎችና ማስታወቂያዎች</a>
-              <a href="#advertise">ማስታወቂያ ያስተዋውቁ</a>\n              <a href="#publications">ህትመቶች</a>
+              <a href="#advertise">ማስታወቂያ ያስተዋውቁ</a>
+              <a href="#publications">ህትመቶች</a>
               <a href="#opportunities">የሥራና የገበያ እድሎች</a>
               <a href="#contact">ያግኙን</a>
             </div>
