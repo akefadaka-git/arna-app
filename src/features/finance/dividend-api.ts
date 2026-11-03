@@ -184,6 +184,10 @@ export function approveDividendTaxRemittance(id: number): Promise<DividendTaxRem
   return api.post(`/api/finance/dividend-tax-remittances/${id}/approve`, {});
 }
 
+export function cancelDividendTaxRemittance(id: number, reason: string): Promise<DividendTaxRemittance> {
+  return api.post(`/api/finance/dividend-tax-remittances/${id}/cancel`, { reason });
+}
+
 export function confirmDividendTaxRemittance(
   id: number,
   payload: { bank_reference: string; evidence_reference: string; paid_on: string },
