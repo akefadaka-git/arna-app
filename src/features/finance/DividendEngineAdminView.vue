@@ -47,9 +47,9 @@ const taxForm = reactive({
   distribution_id: 0,
   shareholder_id: 0,
   recipient_type: 'individual' as 'individual' | 'company' | 'other',
-  tax_residency: 'resident' as 'resident' | 'non_resident' | 'unknown',
+  tax_residency: 'resident' as 'resident' | 'non_resident',
   treatment: 'statutory' as 'statutory' | 'treaty' | 'exempt' | 'special',
-  withholding_rate_bps: 0,
+  withholding_rate_bps: 1500,
   legal_basis: '',
   evidence_reference: '',
   effective_from: '',
@@ -221,7 +221,7 @@ onMounted(refresh);
         <label>Distribution ID<input v-model.number="taxForm.distribution_id" type="number" min="1" required></label>
         <label>Shareholder ID<input v-model.number="taxForm.shareholder_id" type="number" min="1" required></label>
         <label>Recipient type<select v-model="taxForm.recipient_type"><option value="individual">Individual</option><option value="company">Company</option><option value="other">Other</option></select></label>
-        <label>Tax residency<select v-model="taxForm.tax_residency"><option value="resident">Resident</option><option value="non_resident">Non-resident</option><option value="unknown">Unknown</option></select></label>
+        <label>Tax residency<select v-model="taxForm.tax_residency"><option value="resident">Resident</option><option value="non_resident">Non-resident</option></select></label>
         <label>Treatment<select v-model="taxForm.treatment"><option value="statutory">Statutory</option><option value="treaty">Treaty</option><option value="exempt">Exempt</option><option value="special">Special</option></select></label>
         <label>Withholding rate (basis points)<input v-model.number="taxForm.withholding_rate_bps" type="number" min="0" max="10000" required></label>
         <label>Effective from<input v-model="taxForm.effective_from" type="date" required></label>
