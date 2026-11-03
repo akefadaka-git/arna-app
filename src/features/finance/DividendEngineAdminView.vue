@@ -3,6 +3,7 @@ import { computed, onMounted, reactive, ref } from 'vue';
 import {
   approveDividendDistribution,
   approveDividendPaymentBatch,
+  approveDividendShareClassWeight,
   assessDividendRecipientTax,
   calculateDividendDistribution,
   certifyDividendProfit,
@@ -13,14 +14,18 @@ import {
   failDividendPayment,
   listDividendDistributions,
   listDividendPaymentBatches,
+  listDividendShareClassWeights,
   reconcileDividendPaymentBatch,
+  requestDividendShareClassWeight,
   type CreateDividendDistributionPayload,
   type DividendDistribution,
   type DividendPaymentBatch,
+  type DividendShareClassWeight,
 } from './dividend-api';
 
 const distributions = ref<readonly DividendDistribution[]>([]);
 const batches = ref<readonly DividendPaymentBatch[]>([]);
+const classWeights = ref<readonly DividendShareClassWeight[]>([]);
 const loading = ref(false);
 const submitting = ref(false);
 const error = ref('');
@@ -57,6 +62,8 @@ const taxForm = reactive({
   evidence_expires_on: '',
 });
 
+const weightForm = reactive({ distribution_id: 0, share_class_id: 0, weight_bps: 10000, evidence_reference: '' });
+
 const batchForm = reactive({
   legal_entity_id: 0,
   distribution_id: 0,
@@ -78,6 +85,12 @@ const cancellationReasons = ref<Record<number, string>>({});
 
 const sortedDistributions = computed(() => [...distributions.value].sort((a, b) => b.id - a.id));
 
+async function loadWeights(): Promise<void> {
+  if (!weightForm.distribution_id) { classWeights.value = []; return; }
+  try { classWeights.value = await listDividendShareClassWeights(weightForm.distribution_id); }
+  catch { classWeights.value = []; }
+}
+
 async function refresh(): Promise<void> {
   loading.value = true;
   error.value = '';
@@ -88,6 +101,7 @@ async function refresh(): Promise<void> {
     ]);
     distributions.value = nextDistributions;
     batches.value = nextBatches;
+    if (weightForm.distribution_id) await loadWeights();
   } catch {
     error.value = 'Unable to load dividend records. Verify Finance permissions and API availability.';
   } finally {
@@ -132,6 +146,19 @@ async function submitTaxAssessment(): Promise<void> {
     () => assessDividendRecipientTax(taxForm.distribution_id, taxForm.shareholder_id, payload),
     'Recipient tax assessment saved.',
   );
+}
+
+async function submitWeight(): Promise<void> {
+  await runAction('class-weight', () => requestDividendShareClassWeight(
+    weightForm.distribution_id,
+    { share_class_id: Number(weightForm.share_class_id), weight_bps: Number(weightForm.weight_bps), evidence_reference: weightForm.evidence_reference },
+  ), 'Share-class weighting request submitted for independent approval.');
+  await loadWeights();
+}
+
+async function approveWeight(weightId: number): Promise<void> {
+  await runAction('class-weight-approve-'+weightId, () => approveDividendShareClassWeight(weightForm.distribution_id, weightId), 'Share-class weight approved.');
+  await loadWeights();
 }
 
 async function submitBatch(): Promise<void> {
@@ -218,6 +245,25 @@ onMounted(refresh);
             <button class="secondary" :disabled="busyKey !== '' || !cancellationReasons[row.id]" @click="runAction('cancel-'+row.id, () => cancelDividendDistribution(row.id, cancellationReasons[row.id] ?? ''), 'Distribution cancelled and accrual reversed.')">Cancel before payment deadline / ከመክፈያ ቀን በፊት ሰርዝ</button>
           </template>
         </div>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="class-weight-title">
+      <h2 id="class-weight-title">Share-class dividend rights / የአክሲዮን ክፍል የዲቪደንድ መብት</h2>
+      <p class="hint">For distributions with multiple share classes, every class must have a GA-evidenced weight approved by an independent Finance officer. 10,000 basis points represents 1.0x.</p>
+      <form class="form-grid" @submit.prevent="submitWeight">
+        <label>Draft distribution ID<input v-model.number="weightForm.distribution_id" type="number" min="1" required></label>
+        <label>Share class ID<input v-model.number="weightForm.share_class_id" type="number" min="1" required></label>
+        <label>Dividend weight (basis points)<input v-model.number="weightForm.weight_bps" type="number" min="1" max="100000" required></label>
+        <label>GA resolution / class-rights evidence<input v-model="weightForm.evidence_reference" required maxlength="500"></label>
+        <div class="form-actions">
+          <button type="submit" :disabled="busyKey !== ''">Request weight / ክብደት ጠይቅ</button>
+          <button type="button" class="secondary" :disabled="busyKey !== '' || !weightForm.distribution_id" @click="loadWeights">Load weights</button>
+        </div>
+      </form>
+      <div v-for="weight in classWeights" :key="weight.id" class="record-heading">
+        <span>Class {{ weight.share_class_id }} · {{ weight.weight_bps }} bps · {{ weight.status }} · {{ weight.evidence_reference }}</span>
+        <button v-if="weight.status === 'pending'" class="secondary" :disabled="busyKey !== ''" @click="approveWeight(weight.id)">Approve independently / በተለየ አጽድቅ</button>
       </div>
     </section>
 
