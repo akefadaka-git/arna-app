@@ -71,7 +71,7 @@ export interface CreateDividendDistributionPayload {
   approved_balance_sheet_reference: string;
   distributable_profit_amount: string;
   resolution_evidence_reference: string;
-  payment_method: 'bank_transfer' | 'cheque' | 'other_approved';
+  payment_method: 'bank_transfer' | 'cheque' | 'nbe_authorized_payment';
   accounting_framework: 'ifrs' | 'ifrs_sme' | 'other_aabe_approved';
 }
 
@@ -109,6 +109,10 @@ export function assessDividendRecipientTax(
     `/api/finance/dividend-distributions/${distributionId}/shareholders/${shareholderId}/tax-assessment`,
     payload,
   );
+}
+
+export function cancelDividendDistribution(id: number, reason: string): Promise<DividendDistribution> {
+  return api.post(`/api/finance/dividend-distributions/${id}/cancel`, { reason });
 }
 
 export function calculateDividendDistribution(id: number): Promise<DividendDistribution> {
