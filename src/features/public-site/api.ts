@@ -76,3 +76,10 @@ export async function submitCorporateOpportunity(type: 'career' | 'opportunity' 
 }): Promise<{ reference: string; status: string }> {
   return api.post(`/api/public/site/submissions/${type}`, draft);
 }
+
+export async function fetchCorporateEntry(type: string, locale: CorporateLocale, slug: string): Promise<CorporatePublicEntry> {
+  return api.get<CorporatePublicEntry>(
+    `/api/public/site/content/${encodeURIComponent(type)}/${encodeURIComponent(slug)}`,
+    { params: { locale } },
+  );
+}
