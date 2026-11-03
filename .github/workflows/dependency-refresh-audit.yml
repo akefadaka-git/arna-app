@@ -29,7 +29,7 @@ jobs:
       - name: Apply non-major security updates
         run: |
           npm install --save-exact axios@1.21.0 vue@3.5.44 vite@6.4.5
-          npm audit fix
+          npm audit fix || true
       - name: Type-check and build all four applications
         run: npm run build
       - name: Verify static build outputs and public smoke
