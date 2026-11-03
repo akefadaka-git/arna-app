@@ -111,10 +111,10 @@ async function sendInquiry(): Promise<void> {
   inquiryStatus.value = '';
   try {
     const result = await submitCorporateInquiry(inquiry.value);
-    inquiryStatus.value = `ጥያቄዎ ተቀብሏል። የማጣቀሻ ቁጥር: ${result.reference}`;
+    inquiryStatus.value = locale.value === 'am' ? `ጥያቄዎ ተቀብሏል። የማጣቀሻ ቁጥር: ${result.reference}` : `Your inquiry was received. Reference: ${result.reference}`;
     inquiry.value = { inquiry_type: 'general', name: '', email: '', phone: '', subject: '', message: '', consent: false, website: '' };
   } catch {
-    inquiryStatus.value = 'ጥያቄው አልተላከም። እባክዎ መረጃውን ያረጋግጡና እንደገና ይሞክሩ።';
+    inquiryStatus.value = locale.value === 'am' ? 'ጥያቄው አልተላከም። እባክዎ መረጃውን ያረጋግጡና እንደገና ይሞክሩ።' : 'The inquiry could not be sent. Check the details and try again.';
   } finally { submitting.value = false; }
 }
 
@@ -123,10 +123,10 @@ async function sendOpportunity(): Promise<void> {
   opportunityStatus.value = '';
   try {
     const result = await submitCorporateOpportunity(opportunity.value.type, { ...opportunity.value, locale: 'am' });
-    opportunityStatus.value = `ጥያቄዎ ተቀብሏል። የማጣቀሻ ቁጥር: ${result.reference}`;
+    opportunityStatus.value = locale.value === 'am' ? `ማቅረቢያዎ ተቀብሏል። የማጣቀሻ ቁጥር: ${result.reference}` : `Your submission was received. Reference: ${result.reference}`;
     opportunity.value = { type: 'career', name: '', email: '', title: '', description: '', organization: '' };
   } catch {
-    opportunityStatus.value = 'ማቅረቢያው አልተላከም። እባክዎ መረጃውን ያረጋግጡ።';
+    opportunityStatus.value = locale.value === 'am' ? 'ማቅረቢያው አልተላከም። እባክዎ መረጃውን ያረጋግጡ።' : 'The submission could not be sent. Check the details and try again.';
   } finally { submitting.value = false; }
 }
 
@@ -508,7 +508,7 @@ const publicationChannels = [
             <label>{{ locale === 'am' ? 'ስልክ' : 'Phone' }} <input v-model="inquiry.phone" maxlength="50" /></label>
             <label>{{ locale === 'am' ? 'ርዕስ' : 'Subject' }} <input v-model="inquiry.subject" required maxlength="200" /></label>
             <label>{{ locale === 'am' ? 'መልዕክት' : 'Message' }} <textarea v-model="inquiry.message" required maxlength="10000" rows="4" /></label>
-            <label class="public-opportunity-form__consent"><input v-model="inquiry.consent" type="checkbox" required /> የመልዕክቴን መረጃ ለጥያቄዬ ምላሽ ለመስጠት እንዲጠቀሙበት እስማማለሁ።</label>
+            <label class="public-opportunity-form__consent"><input v-model="inquiry.consent" type="checkbox" required /> {{ locale === 'am' ? 'የመልዕክቴን መረጃ ለጥያቄዬ ምላሽ ለመስጠት እንዲጠቀሙበት እስማማለሁ።' : 'I consent to ARNA using this information to respond to my inquiry.' }}</label>
             <label class="public-opportunity-form__trap" aria-hidden="true">Website <input v-model="inquiry.website" tabindex="-1" autocomplete="off" /></label>
             <button type="submit" :disabled="submitting || !inquiry.consent"{{ locale === 'am' ? 'መልዕክብ ይላኩ' : 'Send inquiry' }}</button>
             <p role="status" aria-live="polite">{{ inquiryStatus }}</p>
