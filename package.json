@@ -37,7 +37,8 @@
     "test:public-build-smoke": "node --test tests/public-build-smoke.test.mjs",
     "test:brand-palette-contract": "node --test tests/brand-palette-contract.test.mjs",
     "test:design-system-theme-contract": "node --test tests/design-system-theme-contract.test.mjs",
-    "test:app-shell-responsive-contract": "node --test tests/app-shell-responsive-contract.test.mjs"
+    "test:app-shell-responsive-contract": "node --test tests/app-shell-responsive-contract.test.mjs",
+    "test:wallet-open-form-contract": "node --test tests/wallet-open-form-contract.test.mjs"
   },
   "dependencies": {
     "axios": "1.21.0",
