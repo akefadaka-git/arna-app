@@ -321,7 +321,7 @@ onMounted(() => void refresh());
             <div class="corporate-admin__actions">
               <button type="button" :disabled="saving" @click="editEntry(entry)">Edit</button>
               <button v-if="entry.entry_type === 'media' && entry.status === 'draft'" type="button" :disabled="saving" @click="scanEntry(entry)">Run media scan</button>
-              <button v-if="entry.status === 'draft'" type="button" :disabled="saving" @click="entryAction(entry, 'approve')">Approve</button>
+              <button v-if="entry.status === 'draft' && entry.translations.am?.title && entry.translations.en?.title && entry.slug_am && entry.slug_en" type="button" :disabled="saving" @click="entryAction(entry, 'approve')">Approve</button>
               <button v-if="entry.status === 'approved'" type="button" :disabled="saving" @click="entryAction(entry, 'publish')">Publish</button>
               <button v-if="['draft', 'approved'].includes(entry.status)" type="button" :disabled="saving" @click="entryAction(entry, 'reject')">Reject</button>
               <button v-if="entry.status === 'published'" type="button" :disabled="saving" @click="entryAction(entry, 'unpublish')">Unpublish</button>
