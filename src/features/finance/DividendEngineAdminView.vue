@@ -3,28 +3,34 @@ import { computed, onMounted, reactive, ref } from 'vue';
 import {
   approveDividendDistribution,
   approveDividendPaymentBatch,
+  approveDividendTaxRemittance,
   approveDividendShareClassWeight,
   assessDividendRecipientTax,
   calculateDividendDistribution,
   certifyDividendProfit,
   cancelDividendDistribution,
   confirmDividendPayment,
+  confirmDividendTaxRemittance,
   createDividendDistribution,
   createDividendPaymentBatch,
+  createDividendTaxRemittance,
   failDividendPayment,
   listDividendDistributions,
   listDividendPaymentBatches,
+  listDividendTaxRemittances,
   listDividendShareClassWeights,
   reconcileDividendPaymentBatch,
   requestDividendShareClassWeight,
   type CreateDividendDistributionPayload,
   type DividendDistribution,
   type DividendPaymentBatch,
+  type DividendTaxRemittance,
   type DividendShareClassWeight,
 } from './dividend-api';
 
 const distributions = ref<readonly DividendDistribution[]>([]);
 const batches = ref<readonly DividendPaymentBatch[]>([]);
+const remittances = ref<readonly DividendTaxRemittance[]>([]);
 const classWeights = ref<readonly DividendShareClassWeight[]>([]);
 const loading = ref(false);
 const submitting = ref(false);
@@ -61,6 +67,9 @@ const taxForm = reactive({
   effective_from: '',
   evidence_expires_on: '',
 });
+
+const remittanceForm = reactive({ legal_entity_id: 0, distribution_id: 0, remittance_reference: '', tax_authority_reference: '', amount: '' });
+const remittancePaymentForm = reactive({ bank_reference: '', evidence_reference: '', paid_on: '' });
 
 const weightForm = reactive({ distribution_id: 0, share_class_id: 0, weight_bps: 10000, evidence_reference: '' });
 
@@ -101,6 +110,7 @@ async function refresh(): Promise<void> {
     ]);
     distributions.value = nextDistributions;
     batches.value = nextBatches;
+    remittances.value = nextRemittances;
     if (weightForm.distribution_id) await loadWeights();
   } catch {
     error.value = 'Unable to load dividend records. Verify Finance permissions and API availability.';
@@ -169,6 +179,24 @@ async function submitBatch(): Promise<void> {
     batch_reference: batchForm.batch_reference,
     payable_ids: payableIds,
   }), 'Payment batch created and payables reserved.');
+}
+
+async function submitRemittance(): Promise<void> {
+  await runAction('tax-remittance-create', () => createDividendTaxRemittance({
+    legal_entity_id: Number(remittanceForm.legal_entity_id),
+    distribution_id: Number(remittanceForm.distribution_id),
+    remittance_reference: remittanceForm.remittance_reference,
+    tax_authority_reference: remittanceForm.tax_authority_reference,
+    amount: remittanceForm.amount,
+  }), 'Tax remittance draft created and liability amount reserved.');
+}
+
+async function approveRemittance(id: number): Promise<void> {
+  await runAction('tax-remittance-approve-'+id, () => approveDividendTaxRemittance(id), 'Tax remittance approved.');
+}
+
+async function confirmRemittance(id: number): Promise<void> {
+  await runAction('tax-remittance-confirm-'+id, () => confirmDividendTaxRemittance(id, { ...remittancePaymentForm }), 'Tax remittance payment and clearing journal confirmed.');
 }
 
 function money(value: string | null | undefined, currency = 'ETB'): string {
@@ -321,6 +349,34 @@ onMounted(refresh);
           <button type="submit" class="secondary" :disabled="busyKey !== '' || batch.reconciliation_status === 'reconciled'">Reconcile statement</button>
         </form>
         <p v-if="batch.bank_statement_reference" class="hint">Statement: {{ batch.bank_statement_reference }} · {{ money(batch.bank_statement_amount, batch.currency) }}</p>
+      </div>
+    </section>
+    <section class="panel" aria-labelledby="tax-remittance-title">
+      <h2 id="tax-remittance-title">Withholding tax remittance / የተቀናሽ ታክስ ማስተላለፍ</h2>
+      <p class="hint">Remittances are reserved against the distribution's withholding liability. Confirmation requires a bank reference and tax-authority evidence, and posts the liability-clearing journal.</p>
+      <form class="form-grid" @submit.prevent="submitRemittance">
+        <label>Legal entity ID<input v-model.number="remittanceForm.legal_entity_id" type="number" min="1" required></label>
+        <label>Distribution ID<input v-model.number="remittanceForm.distribution_id" type="number" min="1" required></label>
+        <label>Remittance reference<input v-model="remittanceForm.remittance_reference" required maxlength="100"></label>
+        <label>Tax authority reference<input v-model="remittanceForm.tax_authority_reference" required maxlength="200"></label>
+        <label>Remittance amount (ETB)<input v-model="remittanceForm.amount" inputmode="decimal" required></label>
+        <div class="form-actions"><button type="submit" :disabled="busyKey !== ''">Create remittance / ማስተላለፍ ፍጠር</button></div>
+      </form>
+      <div v-for="row in remittances" :key="row.id" class="record">
+        <div class="record-heading">
+          <div><strong>{{ row.remittance_reference }}</strong><span>Distribution {{ row.distribution_id }} · {{ money(row.amount, row.currency) }} · {{ row.tax_authority_reference }}</span></div>
+          <span class="status">{{ statusText(row.status) }}</span>
+        </div>
+        <div class="actions">
+          <button v-if="row.status === 'draft'" class="secondary" :disabled="busyKey !== ''" @click="approveRemittance(row.id)">Approve / አጽድቅ</button>
+          <template v-if="row.status === 'approved'">
+            <input v-model="remittancePaymentForm.bank_reference" aria-label="Tax remittance bank reference" placeholder="Bank reference">
+            <input v-model="remittancePaymentForm.evidence_reference" aria-label="Tax authority payment evidence" placeholder="Tax receipt / evidence">
+            <input v-model="remittancePaymentForm.paid_on" type="date" aria-label="Tax remittance paid on">
+            <button :disabled="busyKey !== ''" @click="confirmRemittance(row.id)">Confirm remitted / ተላልፏል አረጋግጥ</button>
+          </template>
+          <span v-if="row.journal_reference">Journal: {{ row.journal_reference }}</span>
+        </div>
       </div>
     </section>
   </main>
