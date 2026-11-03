@@ -34,6 +34,7 @@ const corporateBusinesses = ref<CorporatePublicEntry[]>([]);
 const corporateServices = ref<CorporatePublicEntry[]>([]);
 const corporateCareers = ref<CorporatePublicEntry[]>([]);
 const corporateMarket = ref<CorporatePublicEntry[]>([]);
+const corporateAds = ref<CorporatePublicEntry[]>([]);
 const inquiry = ref({ inquiry_type: 'general' as const, name: '', email: '', phone: '', subject: '', message: '', consent: false, website: '' });
 const inquiryStatus = ref('');
 const opportunity = ref({ type: 'career' as 'career' | 'opportunity' | 'advertisement' | 'marketplace', name: '', email: '', title: '', description: '', organization: '' });
@@ -66,7 +67,7 @@ async function loadPublicContent(): Promise<void> {
   } catch { corporateHome.value = null; }
 
   try {
-    const [news, announcements, publications, media, businesses, services, careers, market] = await Promise.all([
+    const [news, announcements, publications, media, businesses, services, careers, market, ads] = await Promise.all([
       fetchCorporateEntries('news', locale.value),
       fetchCorporateEntries('announcement', locale.value),
       fetchCorporateEntries('publication', locale.value),
@@ -75,6 +76,7 @@ async function loadPublicContent(): Promise<void> {
       fetchCorporateEntries('service', locale.value),
       fetchCorporateEntries('career', locale.value),
       fetchCorporateEntries('marketplace', locale.value),
+      fetchCorporateEntries('advertisement', locale.value),
     ]);
     corporateNews.value = news;
     corporateAnnouncements.value = announcements;
@@ -84,6 +86,7 @@ async function loadPublicContent(): Promise<void> {
     corporateServices.value = services;
     corporateCareers.value = careers;
     corporateMarket.value = market;
+    corporateAds.value = ads;
   } catch {
     corporateNews.value = [];
     corporateAnnouncements.value = []; corporatePublications.value = []; corporateMedia.value = [];
@@ -91,6 +94,7 @@ async function loadPublicContent(): Promise<void> {
     corporateServices.value = [];
     corporateCareers.value = [];
     corporateMarket.value = [];
+    corporateAds.value = [];
   }
 
   try {
@@ -434,12 +438,12 @@ const publicationChannels = [
           <div class="advertising-section__mark" aria-hidden="true">AD</div>
           <div class="advertising-section__copy">
             <p class="eyebrow">COMMERCIAL & PARTNERSHIPS</p>
-            <h2 id="advertising-title" lang="am">የንግድ እድልዎን <span>ከትክክለኛው ታዳሚ ጋር ያገናኙ።</span></h2>
-            <p lang="am">የማስታወቂያ ጥያቄዎች ለግምገማ ማቅረብ ይችላሉ። ማንኛውም ማስታወቂያ በግልጽ የስፖንሰር መለያ እና በአስተዳዳሪ ፈቃድ ብቻ ይታተማል።</p>
+            <h2 id="advertising-title">{{ locale === 'am' ? 'የንግድ እድልዎን ከትክክለኛው ታዳሚ ጋር ያገናኙ።' : 'Reach the right audience with your business.' }}</h2>
+            <p>{{ locale === 'am' ? 'የማስታወቂያ ጥያቄዎች ለግምገማ ማቅረብ ይችላሉ። ማንኛውም ማስታወቂያ በግልጽ የስፖንሰር መለያ እና በአስተዳዳሪ ፈቃድ ብቻ ይታተማል።' : 'Advertising submissions are reviewed before publication. Approved ads are clearly labelled as sponsored.' }}</p>
           </div>
           <div class="advertising-section__aside">
             <span>ADVERTISING PLATFORM</span>
-            <strong>SUBMISSIONS OPEN · PUBLISHING BY APPROVAL</strong>
+            <strong>{{ locale === 'am' ? 'ማቅረቢያ ክፍት · ከፈቃድ በኋላ ህትመት' : 'SUBMISSIONS OPEN · PUBLISHING BY APPROVAL' }}</strong>
           </div>
         </div>
       </section>
