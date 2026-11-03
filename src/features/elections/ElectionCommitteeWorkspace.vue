@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { appointElectionCommitteeMember, decideElectionNomination, getElectionCommitteeQueue, type ElectionCandidate, type ElectionCommitteeQueue } from './api';
+import { appointElectionCommitteeMember, decideElectionNomination, getElectionCommitteeQueue, recuseElectionCommitteeMember, type ElectionCandidate, type ElectionCommitteeQueue } from './api';
 
 const route = useRoute();
 const electionId = Number(route.params.id);
-const queue = ref<ElectionCommitteeQueue>({ submissions: [], candidates: [] });
+const queue = ref<ElectionCommitteeQueue>({ submissions: [], candidates: [], members: [] });
 const busy = ref(false);
 const error = ref('');
 const reasons = ref<Record<number, string>>({});
@@ -31,8 +31,20 @@ async function appointMember() {
     await appointElectionCommitteeMember(electionId, { ...appointment.value, person_id: personId, user_id: userId, appointment_reference: appointment.value.appointment_reference.trim() });
     appointmentNotice.value = 'የኮሚቴ ሹመት ተመዝግቧል | Committee appointment recorded.';
     appointment.value = { person_id: '', user_id: '', member_role: 'committee_member', ex_officio: false, appointment_reference: '' };
+    await load();
   } catch { error.value = 'ሹመቱ አልተመዘገበም። ፈቃድና የተደጋጋሚ ሹመት ሁኔታ ያረጋግጡ። | Appointment failed; verify permission and duplicate membership.'; }
   finally { busy.value = false; }
+}
+async function recuseMember(memberId: number) {
+  const scope = window.prompt('Recusal scope / የማግለል ወሰን (e.g. candidate nomination ID)');
+  if (!scope?.trim()) return;
+  busy.value = true; error.value = '';
+  try {
+    await recuseElectionCommitteeMember(electionId, memberId, scope.trim());
+    await load();
+  } catch {
+    error.value = 'ማግለሉ አልተመዘገበም | Unable to record committee recusal.';
+  } finally { busy.value = false; }
 }
 async function decide(candidate: ElectionCandidate, decision: 'approved' | 'rejected' | 'returned') {
   const reason = reasons.value[candidate.id]?.trim() ?? '';
@@ -62,6 +74,14 @@ onMounted(() => { if (Number.isSafeInteger(electionId) && electionId > 0) void l
       </div>
       <label class="inline-check"><input v-model="appointment.ex_officio" type="checkbox" /> Ex officio appointment</label>
       <button :disabled="busy" @click="appointMember">ሹም | Appoint member</button><p v-if="appointmentNotice" role="status">{{ appointmentNotice }}</p>
+    </section>
+    <section><h2>የኮሚቴ አባላት | Committee roster</h2>
+      <p v-if="!queue.members.length">No committee members recorded.</p>
+      <ul><li v-for="member in queue.members" :key="member.id">
+        Person #{{ member.person_id }} · {{ member.member_role }} · {{ member.status }}
+        <span v-if="member.recused_at"> · Recused: {{ member.recusal_scope }}</span>
+        <button v-else :disabled="busy || member.status !== 'active'" @click="recuseMember(member.id)">Record recusal</button>
+      </li></ul>
     </section>
     <section><h2>የእጩነት ማመልከቻዎች | Nomination submissions</h2>
       <p v-if="!queue.submissions.length">ማመልከቻ የለም | No submissions.</p>
