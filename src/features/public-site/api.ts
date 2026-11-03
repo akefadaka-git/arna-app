@@ -43,6 +43,7 @@ export interface CorporatePublicEntry {
   readonly public_id: string;
   readonly type: string;
   readonly slug: string | null;
+  readonly alternate_slug: string | null;
   readonly title: string;
   readonly summary: string;
   readonly body: string;
