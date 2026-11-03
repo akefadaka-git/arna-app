@@ -38,3 +38,41 @@ export async function fetchCorporatePage(locale: CorporateLocale, slug: string):
     `/api/public/site/pages/${locale}/${encodeURIComponent(slug)}`,
   );
 }
+
+export interface CorporatePublicEntry {
+  readonly public_id: string;
+  readonly type: string;
+  readonly slug: string | null;
+  readonly title: string;
+  readonly summary: string;
+  readonly body: string;
+  readonly asset_url: string | null;
+  readonly published_at: string | null;
+}
+
+export async function fetchCorporateEntries(type: string, locale: CorporateLocale = 'am'): Promise<CorporatePublicEntry[]> {
+  const result = await api.get<{ items: CorporatePublicEntry[] }>(`/api/public/site/content/${encodeURIComponent(type)}`, {
+    params: { locale, per_page: 12 },
+  });
+  return result.items;
+}
+
+export interface CorporateInquiryDraft {
+  readonly inquiry_type: 'general' | 'investor' | 'partnership' | 'media' | 'career' | 'advertising' | 'marketplace';
+  readonly name: string;
+  readonly email: string;
+  readonly phone?: string;
+  readonly subject: string;
+  readonly message: string;
+  readonly website?: string;
+}
+
+export async function submitCorporateInquiry(draft: CorporateInquiryDraft): Promise<{ reference: string; status: string }> {
+  return api.post('/api/public/site/inquiries', draft);
+}
+
+export async function submitCorporateOpportunity(type: 'career' | 'opportunity' | 'advertisement' | 'marketplace' | 'business' | 'service', draft: {
+  name: string; email: string; phone?: string; title: string; description: string; organization?: string; locale: CorporateLocale;
+}): Promise<{ reference: string; status: string }> {
+  return api.post(`/api/public/site/submissions/${type}`, draft);
+}
