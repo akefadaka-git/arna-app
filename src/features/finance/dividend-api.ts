@@ -212,6 +212,10 @@ export function createDividendPaymentBatch(payload: {
   return api.post('/api/finance/dividend-payment-batches', payload);
 }
 
+export function cancelDividendPaymentBatch(id: number, reason: string): Promise<DividendPaymentBatch> {
+  return api.post(`/api/finance/dividend-payment-batches/${id}/cancel`, { reason });
+}
+
 export function approveDividendPaymentBatch(id: number): Promise<DividendPaymentBatch> {
   return api.post(`/api/finance/dividend-payment-batches/${id}/approve`, {});
 }
