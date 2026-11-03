@@ -29,29 +29,42 @@ jobs:
       - name: Analyze unused files, exports and dependencies from all four app roots
         shell: bash
         run: |
-          cat > "$RUNNER_TEMP/knip.json" <<'JSON'
-          {
-            "entry": [
-              "workspace-entry/main.ts",
-              "portal-entry/main.ts",
-              "admin-entry/main.ts",
-              "public-entry/main.ts",
-              "tests/**/*.mjs",
-              "scripts/**/*.mjs"
+          cat > "$GITHUB_WORKSPACE/knip.config.mjs" <<'JS'
+          import { parse, compileScript } from '@vue/compiler-sfc';
+
+          const compileVue = (source, filename) => {
+            const { descriptor, errors } = parse(source, { filename });
+            if (errors.length || (!descriptor.script && !descriptor.scriptSetup)) return '';
+            try {
+              return compileScript(descriptor, { id: filename }).content;
+            } catch {
+              return [descriptor.script?.content, descriptor.scriptSetup?.content].filter(Boolean).join('\\n');
+            }
+          };
+
+          export default {
+            entry: [
+              'workspace-entry/main.ts',
+              'portal-entry/main.ts',
+              'admin-entry/main.ts',
+              'public-entry/main.ts',
+              'tests/**/*.mjs',
+              'scripts/**/*.mjs'
             ],
-            "project": [
-              "src/**/*.{ts,vue}",
-              "workspace-entry/**/*.{ts,vue}",
-              "portal-entry/**/*.{ts,vue}",
-              "admin-entry/**/*.{ts,vue}",
-              "public-entry/**/*.{ts,vue}",
-              "tests/**/*.mjs",
-              "scripts/**/*.mjs",
-              "vite.config.ts"
-            ]
-          }
-          JSON
-          npx --yes knip --config "$RUNNER_TEMP/knip.json" --reporter compact --no-progress > "$RUNNER_TEMP/knip-report.txt" 2>&1 || true
+            project: [
+              'src/**/*.{ts,vue}',
+              'workspace-entry/**/*.{ts,vue}',
+              'portal-entry/**/*.{ts,vue}',
+              'admin-entry/**/*.{ts,vue}',
+              'public-entry/**/*.{ts,vue}',
+              'tests/**/*.mjs',
+              'scripts/**/*.mjs',
+              'vite.config.ts'
+            ],
+            compilers: { '.vue': compileVue }
+          };
+          JS
+          npx --yes knip --config "$GITHUB_WORKSPACE/knip.config.mjs" --reporter compact --no-progress > "$RUNNER_TEMP/knip-report.txt" 2>&1 || true
           cat "$RUNNER_TEMP/knip-report.txt"
       - name: Upload source reachability report
         uses: actions/upload-artifact@v4
