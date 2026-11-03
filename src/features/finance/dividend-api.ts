@@ -96,7 +96,7 @@ export function assessDividendRecipientTax(
   shareholderId: number,
   payload: {
     recipient_type: 'individual' | 'company' | 'other';
-    tax_residency: 'resident' | 'non_resident' | 'unknown';
+    tax_residency: 'resident' | 'non_resident';
     treatment: 'statutory' | 'treaty' | 'exempt' | 'special';
     withholding_rate_bps: number;
     legal_basis: string;
