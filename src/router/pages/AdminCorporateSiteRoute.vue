@@ -6,6 +6,7 @@ import {
   createCorporatePage,
   updateCorporatePage,
   createCorporateEntry,
+  updateCorporateEntry,
   listCorporatePages,
   listCorporateEntries,
   listCorporateInquiries,
@@ -49,6 +50,7 @@ const entryTitleAm = ref('');
 const entryTitleEn = ref('');
 const entryBodyAm = ref('');
 const entryBodyEn = ref('');
+const selectedEntry = ref<CorporateEntryRecord | null>(null);
 const mediaTitle = ref('');
 const mediaDescription = ref('');
 const mediaFile = ref<File | null>(null);
@@ -151,7 +153,7 @@ async function pageAction(page: CorporatePageRecord, decision: 'approve' | 'publ
 async function createEntry(): Promise<void> {
   saving.value = true; error.value = ''; notice.value = '';
   try {
-    await createCorporateEntry({
+    const draft = {
       entry_type: entryType.value,
       slug_am: entrySlugAm.value.trim(),
       slug_en: entrySlugEn.value.trim(),
@@ -160,8 +162,11 @@ async function createEntry(): Promise<void> {
         en: { title: entryTitleEn.value.trim(), body: entryBodyEn.value.trim() },
       },
       seo: { am: { title: entryTitleAm.value.trim() }, en: { title: entryTitleEn.value.trim() } },
-    });
-    notice.value = 'Bilingual editorial draft created. It requires independent approval.';
+    };
+    if (selectedEntry.value) await updateCorporateEntry(selectedEntry.value, draft);
+    else await createCorporateEntry({ entry_type: entryType.value, ...draft });
+    selectedEntry.value = null;
+    notice.value = 'Bilingual editorial draft saved. It requires independent approval.';
     entrySlugAm.value = ''; entrySlugEn.value = ''; entryTitleAm.value = ''; entryTitleEn.value = '';
     entryBodyAm.value = ''; entryBodyEn.value = '';
     await refresh();
@@ -174,6 +179,18 @@ async function createEntry(): Promise<void> {
 function selectMediaFile(event: Event): void {
   const target = event.target;
   mediaFile.value = target instanceof HTMLInputElement ? target.files?.[0] ?? null : null;
+}
+
+
+function editEntry(entry: CorporateEntryRecord): void {
+  selectedEntry.value = entry;
+  entryType.value = entry.entry_type;
+  entrySlugAm.value = entry.slug_am ?? '';
+  entrySlugEn.value = entry.slug_en ?? '';
+  entryTitleAm.value = entry.translations.am?.title ?? '';
+  entryTitleEn.value = entry.translations.en?.title ?? '';
+  entryBodyAm.value = entry.translations.am?.body ?? '';
+  entryBodyEn.value = entry.translations.en?.body ?? '';
 }
 
 async function uploadMedia(): Promise<void> {
@@ -294,7 +311,7 @@ onMounted(() => void refresh());
           <label>Amharic slug <input v-model="entrySlugAm" required /></label><label>English slug <input v-model="entrySlugEn" required /></label>
           <label>Amharic title <input v-model="entryTitleAm" required /></label><label>English title <input v-model="entryTitleEn" required /></label>
           <label>Amharic body <textarea v-model="entryBodyAm" rows="3" /></label><label>English body <textarea v-model="entryBodyEn" rows="3" /></label>
-          <button type="submit" :disabled="saving">Create draft</button>
+          <button type="submit" :disabled="saving">{{ selectedEntry ? "Update draft" : "Create draft" }}</button>\n          <button v-if="selectedEntry" type="button" :disabled="saving" @click="selectedEntry = null">Cancel edit</button>
         </form>
         <p>News, announcements, publications, media, careers, opportunities, business/service profiles, advertising and marketplace submissions share the moderation queue.</p>
         <ul class="corporate-admin__list">
