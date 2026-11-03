@@ -61,3 +61,9 @@ The public entry intentionally uses its own route table and does not boot the au
 ## Preservation requirements
 
 Keep all four independent application surfaces, static deployment boundaries, historical UI/domain evidence, unrelated branch work, and existing production behavior. No bulk branch deletion or mass PR closure is authorized by this audit.
+
+## Current disposition snapshot (2026-11-04)
+
+- Current branches: 28 (includes this isolated audit branch).
+- Current open PRs: 22 (includes audit PR #38).
+- Six branches without an open PR remain untouched pending ancestry/age review.
