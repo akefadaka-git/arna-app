@@ -77,6 +77,11 @@ export interface CreateDividendDistributionPayload {
   replacement_reason?: string;
 }
 
+export async function getDividendDistribution(id: number): Promise<DividendDistribution> {
+  const response = await api.get<{ data: DividendDistribution }>(`/api/finance/dividend-distributions/${id}`);
+  return response.data;
+}
+
 export async function listDividendDistributions(): Promise<readonly DividendDistribution[]> {
   const response = await api.get<{ data: readonly DividendDistribution[] }>(
     '/api/finance/dividend-distributions',
