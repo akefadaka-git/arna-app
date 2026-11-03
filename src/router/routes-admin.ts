@@ -233,7 +233,7 @@ export const routesAdmin: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('@/layouts/AdminLayout'),
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, permission: 'app.admin.access' },
     children: [
       // -----------------------------------------------------------------------
       // Subdomain root — / → /admin
