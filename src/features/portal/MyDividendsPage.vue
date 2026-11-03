@@ -85,6 +85,10 @@ function statusLabel(status: string | null): string {
           <div v-if="row.tax_legal_basis"><dt>የታክስ ሕጋዊ መሠረት / Tax legal basis</dt><dd>{{ row.tax_legal_basis }}</dd></div>
           <div><dt>{{ labels.netLabel }}</dt><dd>{{ money(row.net_amount, row.currency) }}</dd></div>
           <div><dt>በጥሬ ገንዘብ የተከፈለ</dt><dd>{{ money(row.cash_paid_amount, row.currency) }}</dd></div>
+          <div><dt>ወደ አክሲዮን የተመለሰ / Reinvested</dt><dd>{{ money(row.reinvested_amount, row.currency) }}</dd></div>
+          <div><dt>በአዲስ ወይም በተላለፈ አክሲዮን የተገኘ</dt><dd>{{ row.reinvested_share_quantity }}</dd></div>
+          <div><dt>የአክሲዮን ክፍያ ዕዳ የተቀነሰ</dt><dd>{{ money(row.subscription_balance_applied_amount, row.currency) }}</dd></div>
+          <div><dt>ገና ያልተመደበ የዳግም ኢንቨስትመንት</dt><dd>{{ money(row.reinvestment_unapplied_amount, row.currency) }}</dd></div>
           <div><dt>በቅጣት የተቀነሰ</dt><dd>{{ money(row.penalty_offset_amount, row.currency) }}</dd></div>
           <div><dt>ቀሪ የሚከፈል</dt><dd>{{ money(row.remaining_payable_amount, row.currency) }}</dd></div>
           <div><dt>{{ labels.dueLabel }}</dt><dd>{{ row.payment_due_on }}</dd></div>
