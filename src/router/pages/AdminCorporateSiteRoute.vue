@@ -36,6 +36,10 @@ const summaryAm = ref('');
 const summaryEn = ref('');
 const bodyAm = ref('');
 const bodyEn = ref('');
+const sectionTitleAm = ref('');
+const sectionTitleEn = ref('');
+const sectionBodyAm = ref('');
+const sectionBodyEn = ref('');
 const selectedPage = ref<CorporatePageRecord | null>(null);
 const scheduleAt = ref('');
 const entryType = ref('news');
@@ -81,7 +85,7 @@ async function createPage(): Promise<void> {
         am: { title: titleAm.value.trim(), summary: summaryAm.value.trim(), body: bodyAm.value.trim() },
         en: { title: titleEn.value.trim(), summary: summaryEn.value.trim(), body: bodyEn.value.trim() },
       },
-      sections: [],
+      sections: sectionTitleAm.value.trim() || sectionTitleEn.value.trim() || sectionBodyAm.value.trim() || sectionBodyEn.value.trim() ? [{ type: 'text', content: { am: { title: sectionTitleAm.value.trim(), body: sectionBodyAm.value.trim() }, en: { title: sectionTitleEn.value.trim(), body: sectionBodyEn.value.trim() } } }] : [],
       seo: {
         am: { title: titleAm.value.trim(), description: summaryAm.value.trim() },
         en: { title: titleEn.value.trim(), description: summaryEn.value.trim() },
@@ -93,7 +97,7 @@ async function createPage(): Promise<void> {
     selectedPage.value = null;
     pageKey.value = ''; slugAm.value = ''; slugEn.value = '';
     titleAm.value = ''; titleEn.value = ''; summaryAm.value = ''; summaryEn.value = '';
-    bodyAm.value = ''; bodyEn.value = '';
+    bodyAm.value = ''; bodyEn.value = ''; sectionTitleAm.value = ''; sectionTitleEn.value = ''; sectionBodyAm.value = ''; sectionBodyEn.value = ''; sectionTitleAm.value = ''; sectionTitleEn.value = ''; sectionBodyAm.value = ''; sectionBodyEn.value = '';
     await refresh();
   } catch {
     error.value = 'Draft could not be saved. Check unique slugs, required fields and your permission.';
@@ -113,7 +117,7 @@ function editPage(page: CorporatePageRecord): void {
   summaryAm.value = page.translations.am?.summary ?? '';
   summaryEn.value = page.translations.en?.summary ?? '';
   bodyAm.value = page.translations.am?.body ?? '';
-  bodyEn.value = page.translations.en?.body ?? '';
+  bodyEn.value = page.translations.en?.body ?? '';\n  const section = page.sections?.[0] as { content?: Record<string, { title?: string; body?: string }> } | undefined;\n  sectionTitleAm.value = section?.content?.am?.title ?? '';\n  sectionTitleEn.value = section?.content?.en?.title ?? '';\n  sectionBodyAm.value = section?.content?.am?.body ?? '';\n  sectionBodyEn.value = section?.content?.en?.body ?? '';
 }
 
 function clearPageEditor(): void {
@@ -246,6 +250,11 @@ onMounted(() => void refresh());
           <label>English summary <textarea v-model="summaryEn" rows="2" maxlength="500" /></label>
           <label>Amharic body <textarea v-model="bodyAm" rows="4" maxlength="12000" /></label>
           <label>English body <textarea v-model="bodyEn" rows="4" maxlength="12000" /></label>
+          <h3>Homepage / page content section (optional)</h3>
+          <label>Section title — Amharic <input v-model="sectionTitleAm" maxlength="180" /></label>
+          <label>Section title — English <input v-model="sectionTitleEn" maxlength="180" /></label>
+          <label>Section body — Amharic <textarea v-model="sectionBodyAm" rows="3" maxlength="12000" /></label>
+          <label>Section body — English <textarea v-model="sectionBodyEn" rows="3" maxlength="12000" /></label>
           <button type="submit" :disabled="saving">{{ selectedPage ? "Update draft" : "Save draft" }}</button>
           <button v-if="selectedPage" type="button" :disabled="saving" @click="clearPageEditor">Cancel edit</button>
         </form>
