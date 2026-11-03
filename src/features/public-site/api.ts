@@ -84,3 +84,7 @@ export async function fetchCorporateEntry(type: string, locale: CorporateLocale,
     { params: { locale } },
   );
 }
+
+export async function fetchCorporatePages(locale: CorporateLocale = 'am'): Promise<CorporateSitePage[]> {
+  return api.get<CorporateSitePage[]>('/api/public/site/pages', { params: { locale } });
+}
