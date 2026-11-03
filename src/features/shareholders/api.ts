@@ -654,6 +654,12 @@ export interface MyDividendStatement {
   readonly penalty_offset_amount: string | null;
   readonly remaining_payable_amount: string;
   readonly payable_status: string | null;
+  readonly tax_rate_bps: number | null;
+  readonly tax_treatment: string | null;
+  readonly tax_legal_basis: string | null;
+  readonly tax_certificate_number: string | null;
+  readonly certificate_issued_at: string | null;
+  readonly certificate_status: string | null;
 }
 
 /** GET /api/shareholders/me/dividends — server-resolved self-service history. */
