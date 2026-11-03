@@ -102,6 +102,9 @@ export function saveCandidatePreference(electionId: number, nominationId: number
 export function getElectionCommitteeQueue(electionId: number): Promise<ElectionCommitteeQueue> {
   return api.get<ElectionCommitteeQueue>(`/api/governance/elections/${electionId}/committee/queue`);
 }
+export function decideElectionNominationSubmission(electionId: number, submissionId: number, input: Omit<CommitteeDecisionInput, 'final_ballot_approved'>): Promise<{ submission_id: number; decision: string }> {
+  return api.post(`/api/governance/elections/${electionId}/committee/submissions/${submissionId}/decision`, input);
+}
 export function decideElectionNomination(electionId: number, nominationId: number, input: CommitteeDecisionInput): Promise<ElectionCandidate> {
   return api.post(`/api/governance/elections/${electionId}/committee/candidates/${nominationId}/decision`, input);
 }
