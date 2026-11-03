@@ -55,6 +55,8 @@ const distributionForm = reactive<CreateDividendDistributionPayload>({
   resolution_evidence_reference: '',
   payment_method: 'bank_transfer',
   accounting_framework: 'ifrs_sme',
+  replaces_distribution_id: undefined as number | undefined,
+  replacement_reason: '',
 });
 
 const taxForm = reactive({
@@ -248,6 +250,8 @@ onMounted(refresh);
         <label>GA resolution evidence<input v-model="distributionForm.resolution_evidence_reference" required maxlength="500"></label>
         <label>Payment method<select v-model="distributionForm.payment_method"><option value="bank_transfer">Bank transfer</option><option value="cheque">Cheque</option><option value="nbe_authorized_payment">NBE-authorized payment system</option></select></label>
         <label>Accounting framework<select v-model="distributionForm.accounting_framework"><option value="ifrs">IFRS</option><option value="ifrs_sme">IFRS for SMEs</option><option value="other_aabe_approved">Other AABE-approved</option></select></label>
+        <label>Replaces cancelled distribution ID (optional)<input v-model.number="distributionForm.replaces_distribution_id" type="number" min="1"></label>
+        <label>Replacement reason<input v-model="distributionForm.replacement_reason" maxlength="500" placeholder="Required when replacing a cancelled distribution"></label>
         <div class="form-actions"><button type="submit" :disabled="submitting || busyKey !== ''">Create draft / ረቂቅ ፍጠር</button></div>
       </form>
       <p class="hint">Dates are submitted as ISO Gregorian dates. Tax rates must be entered with their verified legal basis and recipient evidence; no blanket annual rate is applied.</p>
