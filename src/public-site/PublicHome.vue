@@ -2,11 +2,15 @@
 import '@/styles/reset.css';
 import '@/styles/tokens.css';
 import '@/styles/public-accessibility-overrides.css';
-import { onMounted, ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { computed, onMounted, ref, watch } from 'vue';
+import { RouterLink, useRoute } from 'vue-router';
 import { api } from '@/core/api/client';
 import { masesBrandLabels } from '@/router/shell-labels';
 import { formatCalendarDate } from '@/core/dates/calendar';
+import { fetchCorporateHome, fetchCorporateEntries, fetchCorporatePages, submitCorporateInquiry, submitCorporateOpportunity, type CorporateSitePage, type CorporateSiteSection, type CorporatePublicEntry } from '@/features/public-site/api';
+
+const route = useRoute();
+const locale = ref<'am' | 'en'>(route.query.locale === 'en' ? 'en' : 'am');
 
 const year = formatCalendarDate(new Date(), { year: 'numeric' });
 
@@ -19,19 +23,116 @@ interface PublishedContent {
 }
 
 const publishedContent = ref<PublishedContent[]>([]);
+const corporateHome = ref<CorporateSitePage | null>(null);
+const corporatePages = ref<CorporateSitePage[]>([]);
+const navigationPages = computed(() => corporatePages.value.filter((page) => page.page_key !== 'home' && page.slug));
+const corporateNews = ref<CorporatePublicEntry[]>([]);
+const corporateAnnouncements = ref<CorporatePublicEntry[]>([]);
+const corporatePublications = ref<CorporatePublicEntry[]>([]);
+const corporateMedia = ref<CorporatePublicEntry[]>([]);
+const corporateBusinesses = ref<CorporatePublicEntry[]>([]);
+const corporateServices = ref<CorporatePublicEntry[]>([]);
+const corporateCareers = ref<CorporatePublicEntry[]>([]);
+const corporateMarket = ref<CorporatePublicEntry[]>([]);
+const corporateAds = ref<CorporatePublicEntry[]>([]);
+const inquiry = ref({ inquiry_type: 'general' as const, name: '', email: '', phone: '', subject: '', message: '', consent: false, website: '' });
+const inquiryStatus = ref('');
+const opportunity = ref({ type: 'career' as 'career' | 'opportunity' | 'advertisement' | 'marketplace', name: '', email: '', title: '', description: '', organization: '' });
+const opportunityStatus = ref('');
+const submitting = ref(false);
 
-onMounted(async () => {
+function sectionText(section: CorporateSiteSection, field: string): string {
+  const localeContent = section.content[locale.value];
+  if (typeof localeContent !== 'object' || localeContent === null) return '';
+  const value = (localeContent as Record<string, unknown>)[field];
+  return typeof value === 'string' ? value : '';
+}
+
+async function loadPublicContent(): Promise<void> {
+  document.documentElement.lang = locale.value;
+  document.title = locale.value === 'am' ? 'ARNA | ይፋዊ ድረ ገጽ' : 'ARNA | Official Website';
+  let description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+  if (!description) { description = document.createElement('meta'); description.name = 'description'; document.head.append(description); }
+  description.content = locale.value === 'am'
+    ? 'የARNA ይፋዊ ድረ ገጽ። ስለ ድርጅቱ፣ አገልግሎቶች፣ ዜናዎችና እድሎች ይወቁ።'
+    : 'ARNA official corporate website: organization, services, news, opportunities and publications.';
+
+  try { corporatePages.value = await fetchCorporatePages(locale.value); }
+  catch { corporatePages.value = []; }
+
   try {
-    const page = await api.get<{ data: PublishedContent[] }>('/api/public/content', {
-      params: { per_page: 3 },
-    });
-    publishedContent.value = page.data;
+    corporateHome.value = await fetchCorporateHome(locale.value);
+    if (corporateHome.value?.seo?.title) document.title = corporateHome.value.seo.title;
+    if (corporateHome.value?.seo?.description && description) description.content = corporateHome.value.seo.description;
+  } catch { corporateHome.value = null; }
+
+  try {
+    const [news, announcements, publications, media, businesses, services, careers, market, ads] = await Promise.all([
+      fetchCorporateEntries('news', locale.value),
+      fetchCorporateEntries('announcement', locale.value),
+      fetchCorporateEntries('publication', locale.value),
+      fetchCorporateEntries('media', locale.value),
+      fetchCorporateEntries('business', locale.value),
+      fetchCorporateEntries('service', locale.value),
+      fetchCorporateEntries('career', locale.value),
+      fetchCorporateEntries('marketplace', locale.value),
+      fetchCorporateEntries('advertisement', locale.value),
+    ]);
+    corporateNews.value = news;
+    corporateAnnouncements.value = announcements;
+    corporatePublications.value = publications;
+    corporateMedia.value = media;
+    corporateBusinesses.value = businesses;
+    corporateServices.value = services;
+    corporateCareers.value = careers;
+    corporateMarket.value = market;
+    corporateAds.value = ads;
   } catch {
-    // The public homepage remains usable while the API is unavailable.
-    // No unapproved or locally fabricated content is substituted.
-    publishedContent.value = [];
+    corporateNews.value = [];
+    corporateAnnouncements.value = []; corporatePublications.value = []; corporateMedia.value = [];
+    corporateBusinesses.value = [];
+    corporateServices.value = [];
+    corporateCareers.value = [];
+    corporateMarket.value = [];
+    corporateAds.value = [];
   }
+
+  try {
+    const page = await api.get<{ data: PublishedContent[] }>('/api/public/content', { params: { per_page: 3 } });
+    publishedContent.value = page.data;
+  } catch { publishedContent.value = []; }
+}
+
+onMounted(() => void loadPublicContent());
+watch(() => route.query.locale, (next) => {
+  locale.value = next === 'en' ? 'en' : 'am';
+  void loadPublicContent();
 });
+
+
+async function sendInquiry(): Promise<void> {
+  submitting.value = true;
+  inquiryStatus.value = '';
+  try {
+    const result = await submitCorporateInquiry(inquiry.value);
+    inquiryStatus.value = locale.value === 'am' ? `ጥያቄዎ ተቀብሏል። የማጣቀሻ ቁጥር: ${result.reference}` : `Your inquiry was received. Reference: ${result.reference}`;
+    inquiry.value = { inquiry_type: 'general', name: '', email: '', phone: '', subject: '', message: '', consent: false, website: '' };
+  } catch {
+    inquiryStatus.value = locale.value === 'am' ? 'ጥያቄው አልተላከም። እባክዎ መረጃውን ያረጋግጡና እንደገና ይሞክሩ።' : 'The inquiry could not be sent. Check the details and try again.';
+  } finally { submitting.value = false; }
+}
+
+async function sendOpportunity(): Promise<void> {
+  submitting.value = true;
+  opportunityStatus.value = '';
+  try {
+    const result = await submitCorporateOpportunity(opportunity.value.type, { ...opportunity.value, locale: 'am' });
+    opportunityStatus.value = locale.value === 'am' ? `ማቅረቢያዎ ተቀብሏል። የማጣቀሻ ቁጥር: ${result.reference}` : `Your submission was received. Reference: ${result.reference}`;
+    opportunity.value = { type: 'career', name: '', email: '', title: '', description: '', organization: '' };
+  } catch {
+    opportunityStatus.value = locale.value === 'am' ? 'ማቅረቢያው አልተላከም። እባክዎ መረጃውን ያረጋግጡ።' : 'The submission could not be sent. Check the details and try again.';
+  } finally { submitting.value = false; }
+}
 
 function publishedDate(value: string | null): string {
   if (!value) return '';
@@ -101,8 +202,8 @@ const publicationChannels = [
     <div class="announcement-bar">
       <div class="site-container announcement-bar__inner">
         <span class="announcement-bar__pulse" aria-hidden="true"></span>
-        <p lang="am">የARNA ይፋዊ ድረ ገጽ እየተዘጋጀ ነው። የጸደቀ መረጃ በዚህ ይታተማል።</p>
-        <span class="announcement-bar__english">OFFICIAL WEBSITE · IN DEVELOPMENT</span>
+        <p lang="am">የARNA ይፋዊ ድረ ገጽ። የተጸደቀ መረጃ ብቻ እዚህ ይታያል።</p>
+        <span class="announcement-bar__english">OFFICIAL CORPORATE WEBSITE</span>
       </div>
     </div>
 
@@ -118,14 +219,17 @@ const publicationChannels = [
 
         <nav class="main-nav" aria-label="ዋና አሰሳ">
           <a href="#about">ስለ ARNA</a>
+          <RouterLink v-for="page in navigationPages" :key="page.public_id" :to="`/${locale}/${page.slug}`">{{ page.title }}</RouterLink>
           <a href="#principles">እሴቶቻችን</a>
           <a href="#services">አገልግሎቶች</a>
           <a href="#businesses">የንግድ አቅጣጫዎች</a>
           <a href="#updates">ዜናና ጦማር</a>
+          <a href="#gallery">ሚዲያ</a>
           <a href="#advertise">ማስታወቂያ</a>
           <RouterLink to="/contribute">ይዘት ያቅርቡ</RouterLink>
         </nav>
 
+        <RouterLink class="header-action" :to="{ path: '/', query: { locale: locale === 'am' ? 'en' : 'am' } }">{{ locale === 'am' ? 'English' : 'አማርኛ' }}</RouterLink>
         <RouterLink class="header-action" to="/verify">
           <span>ሰነድ ያረጋግጡ</span>
           <svg aria-hidden="true" viewBox="0 0 20 20" fill="none">
@@ -136,6 +240,18 @@ const publicationChannels = [
     </header>
 
     <main id="main-content">
+      <section v-if="corporateHome" class="corporate-home-published" aria-labelledby="corporate-home-title">
+        <div class="site-container">
+          <h1 id="corporate-home-title">{{ corporateHome.title }}</h1>
+          <p v-if="corporateHome.summary">{{ corporateHome.summary }}</p>
+          <div v-if="corporateHome.sections.length" class="corporate-home-published__sections">
+            <article v-for="(section, index) in corporateHome.sections" :key="section.id ?? index">
+              <h2 v-if="sectionText(section, 'title')">{{ sectionText(section, 'title') }}</h2>
+              <p v-if="sectionText(section, 'body')">{{ sectionText(section, 'body') }}</p>
+            </article>
+          </div>
+        </div>
+      </section>
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero__glow hero__glow--one" aria-hidden="true"></div>
         <div class="hero__glow hero__glow--two" aria-hidden="true"></div>
@@ -235,7 +351,13 @@ const publicationChannels = [
             </div>
             <p lang="am">ዝርዝር የአገልግሎት መረጃዎች በይፋ ከጸደቁ በኋላ በዚህ ይታያሉ።</p>
           </div>
-          <div class="service-grid">
+          <div v-if="corporateServices.length" class="service-grid">
+            <article v-for="service in corporateServices" :key="service.public_id" class="service-card">
+              <div class="service-card__top"><span>ARNA</span><span aria-hidden="true">↗</span></div>
+              <h3>{{ service.title }}</h3><p class="service-card__description">{{ service.summary || service.body }}</p>
+            </article>
+          </div>
+          <div v-else class="service-grid">
             <article v-for="offering in offerings" :key="offering.number" class="service-card">
               <div class="service-card__top"><span>{{ offering.number }}</span><span aria-hidden="true">↗</span></div>
               <p class="service-card__label" lang="am">{{ offering.label }}</p>
@@ -258,7 +380,12 @@ const publicationChannels = [
             </div>
             <p lang="am">የተረጋገጡ የንግድ ክፍሎችና ኩባንያዎች መገለጫዎች በአስተዳዳሪ ከጸደቁ በኋላ እዚህ ይታያሉ።</p>
           </div>
-          <div class="business-grid">
+          <div v-if="corporateBusinesses.length" class="business-grid">
+            <article v-for="business in corporateBusinesses" :key="business.public_id" class="business-card">
+              <span class="business-card__number">ARNA</span><h3>{{ business.title }}</h3><p class="business-card__description">{{ business.summary || business.body }}</p>
+            </article>
+          </div>
+          <div v-else class="business-grid">
             <article v-for="area in businessAreas" :key="area.number" class="business-card">
               <span class="business-card__number">{{ area.number }}</span>
               <p lang="am">{{ area.titleAm }}</p>
@@ -278,7 +405,14 @@ const publicationChannels = [
             <h2 id="updates-title" lang="am">የቅርብ መረጃዎች።<br/><span>ከታመነ ምንጭ።</span></h2>
             <p lang="am">የድርጅቱ ዜናዎች፣ ማስታወቂያዎች እና ይፋዊ ማሻሻያዎች በአስተዳዳሪ ከተጸደቁ በኋላ እዚህ ይታያሉ።</p>
           </div>
-          <div v-if="publishedContent.length" class="publication-grid">
+          <div v-if="corporateNews.length" class="publication-grid">
+            <article v-for="item in corporateNews" :key="item.public_id" class="publication-card">
+              <div class="publication-card__top"><span>ARNA</span><span>NEWS</span></div>
+              <h3>{{ item.title }}</h3><p class="publication-card__description">{{ item.summary || item.body }}</p>
+              <span class="publication-card__status">{{ publishedDate(item.published_at) }}</span>
+            </article>
+          </div>
+          <div v-else-if="publishedContent.length" class="publication-grid">
             <article v-for="item in publishedContent" :key="item.id" class="publication-card">
               <div class="publication-card__top"><span>ARNA JOURNAL</span><span>{{ item.type.replace('_', ' ').toUpperCase() }}</span></div>
               <h3>{{ item.title }}</h3>
@@ -304,13 +438,85 @@ const publicationChannels = [
           <div class="advertising-section__mark" aria-hidden="true">AD</div>
           <div class="advertising-section__copy">
             <p class="eyebrow">COMMERCIAL & PARTNERSHIPS</p>
-            <h2 id="advertising-title" lang="am">የንግድ እድልዎን <span>ከትክክለኛው ታዳሚ ጋር ያገናኙ።</span></h2>
-            <p lang="am">የARNA የራስ ዘመቻዎችና የተፈቀዱ የአጋር ማስታወቂያዎች በግልጽ የስፖንሰር መለያ ይቀርባሉ። የማስታወቂያ ማተሚያ በአስተዳዳሪ ፈቃድ ብቻ ይከናወናል።</p>
+            <h2 id="advertising-title">{{ locale === 'am' ? 'የንግድ እድልዎን ከትክክለኛው ታዳሚ ጋር ያገናኙ።' : 'Reach the right audience with your business.' }}</h2>
+            <p>{{ locale === 'am' ? 'የማስታወቂያ ጥያቄዎች ለግምገማ ማቅረብ ይችላሉ። ማንኛውም ማስታወቂያ በግልጽ የስፖንሰር መለያ እና በአስተዳዳሪ ፈቃድ ብቻ ይታተማል።' : 'Advertising submissions are reviewed before publication. Approved ads are clearly labelled as sponsored.' }}</p>
           </div>
           <div class="advertising-section__aside">
             <span>ADVERTISING PLATFORM</span>
-            <strong>COMING IN A LATER RELEASE</strong>
+            <strong>{{ locale === 'am' ? 'ማቅረቢያ ክፍት · ከፈቃድ በኋላ ህትመት' : 'SUBMISSIONS OPEN · PUBLISHING BY APPROVAL' }}</strong>
           </div>
+        </div>
+      </section>
+
+
+
+      <section id="gallery" class="section-pad" aria-labelledby="gallery-title">
+        <div class="site-container">
+          <div class="section-heading"><div><p class="eyebrow eyebrow--dark">MEDIA · GALLERY</p><h2 id="gallery-title" lang="am">የARNA ሚዲያ <span>ማዕከል።</span></h2></div><p lang="am">ፎቶዎችና ህትመቶች ከማረጋገጫና ከአስተዳዳሪ ፈቃድ በኋላ ብቻ ይታያሉ።</p></div>
+          <div class="publication-grid">
+            <article v-for="item in corporateMedia" :key="item.public_id" class="publication-card">
+              <img v-if="item.asset_url" :src="item.asset_url" :alt="item.title" loading="lazy" />
+              <h3>{{ item.title }}</h3><p>{{ item.summary || item.body }}</p>
+            </article>
+            <p v-if="!corporateMedia.length" lang="am">በአሁኑ ጊዜ የታተመ ሚዲያ የለም።</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="publications" class="section-pad" aria-labelledby="publications-title">
+        <div class="site-container">
+          <div class="section-heading"><div><p class="eyebrow eyebrow--dark">PUBLICATIONS · OFFICIAL NOTICES</p><h2 id="publications-title" lang="am">ህትመቶችና <span>ይፋዊ ማስታወቂያዎች።</span></h2></div></div>
+          <div class="publication-grid">
+            <article v-for="item in [...corporateAnnouncements, ...corporatePublications]" :key="item.public_id" class="publication-card">
+              <div class="publication-card__top"><span>{{ item.type.toUpperCase() }}</span><span>{{ publishedDate(item.published_at) }}</span></div>
+              <h3>{{ item.title }}</h3><p class="publication-card__description">{{ item.summary || item.body }}</p>
+            </article>
+            <p v-if="!corporateAnnouncements.length && !corporatePublications.length" lang="am">በአሁኑ ጊዜ የታተሙ ህትመቶች የሉም።</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="opportunities" class="section-pad" aria-labelledby="opportunities-title">
+        <div class="site-container">
+          <div class="section-heading">
+            <div><p class="eyebrow eyebrow--dark">CAREERS · OPPORTUNITIES · MARKETPLACE</p><h2 id="opportunities-title" lang="am">የሚቀጥለውን እድል <span>ከዚህ ይጀምሩ።</span></h2></div>
+            <p lang="am">የተጸደቁ የሥራ እድሎች፣ የንግድ ማስታወቂያዎችና የገበያ ዝርዝሮች እዚህ ይታያሉ።</p>
+          </div>
+          <div class="business-grid">
+            <article v-for="item in [...corporateCareers, ...corporateMarket]" :key="item.public_id" class="business-card">
+              <span class="business-card__number">{{ item.type.toUpperCase() }}</span><h3>{{ item.title }}</h3><p class="business-card__description">{{ item.summary || item.body }}</p>
+            </article>
+            <p v-if="!corporateCareers.length && !corporateMarket.length" lang="am">በአሁኑ ጊዜ የታተመ እድል የለም። አዲስ ዝርዝሮች ከግምገማ በኋላ ይታያሉ።</p>
+          </div>
+          <form class="public-opportunity-form" @submit.prevent="sendOpportunity">
+            <h3>{{ locale === 'am' ? 'የሥራ፣ የማስታወቂያ ወይም የገበያ ማቅረቢያ' : 'Submit a career, advertising or marketplace listing' }}</h3>
+            <label>{{ locale === 'am' ? 'ምድብ' : 'Category' }} <select v-model="opportunity.type"><option value="career">{{ locale === 'am' ? 'ሥራ' : 'Career' }}</option><option value="opportunity">{{ locale === 'am' ? 'እድል' : 'Opportunity' }}</option><option value="advertisement">{{ locale === 'am' ? 'ማስታወቂያ' : 'Advertisement' }}</option><option value="marketplace">{{ locale === 'am' ? 'የገበያ ዝርዝር' : 'Marketplace listing' }}</option></select></label>
+            <label>{{ locale === 'am' ? 'ስም' : 'Name' }} <input v-model="opportunity.name" required maxlength="160" /></label>
+            <label>{{ locale === 'am' ? 'ኢሜይል' : 'Email' }} <input v-model="opportunity.email" required type="email" maxlength="190" /></label>
+            <label>{{ locale === 'am' ? 'ድርጅት' : 'Organization' }} <input v-model="opportunity.organization" maxlength="180" /></label>
+            <label>{{ locale === 'am' ? 'ርዕስ' : 'Title' }} <input v-model="opportunity.title" required maxlength="180" /></label>
+            <label>{{ locale === 'am' ? 'ዝርዝር' : 'Description' }} <textarea v-model="opportunity.description" required maxlength="12000" rows="3" /></label>
+            <button type="submit" :disabled="submitting">{{ locale === 'am' ? 'ለግምገማ ያቅርቡ' : 'Submit for review' }}</button>
+            <p role="status" aria-live="polite">{{ opportunityStatus }}</p>
+          </form>
+        </div>
+      </section>
+
+      <section id="contact" class="section-pad" aria-labelledby="contact-title">
+        <div class="site-container">
+          <div class="section-heading"><div><p class="eyebrow eyebrow--dark">CONTACT · INQUIRIES</p><h2 id="contact-title">{{ locale === 'am' ? 'ከእኛ ጋር ይገናኙ።' : 'Get in touch with ARNA.' }}</h2></div></div>
+          <form class="public-opportunity-form" @submit.prevent="sendInquiry">
+            <label>{{ locale === 'am' ? 'ምድብ' : 'Inquiry type' }} <select v-model="inquiry.inquiry_type"><option value="general">አጠቃላይ</option><option value="investor">ባለአክሲዮን / ኢንቨስተር</option><option value="partnership">አጋርነት</option><option value="media">ሚዲያ</option><option value="career">ሥራ</option><option value="advertising">ማስታወቂያ</option><option value="marketplace">ገበያ</option></select></label>
+            <label>{{ locale === 'am' ? 'ስም' : 'Name' }} <input v-model="inquiry.name" required maxlength="160" /></label>
+            <label>{{ locale === 'am' ? 'ኢሜይል' : 'Email' }} <input v-model="inquiry.email" required type="email" maxlength="190" /></label>
+            <label>{{ locale === 'am' ? 'ስልክ' : 'Phone' }} <input v-model="inquiry.phone" maxlength="50" /></label>
+            <label>{{ locale === 'am' ? 'ርዕስ' : 'Subject' }} <input v-model="inquiry.subject" required maxlength="200" /></label>
+            <label>{{ locale === 'am' ? 'መልዕክት' : 'Message' }} <textarea v-model="inquiry.message" required maxlength="10000" rows="4" /></label>
+            <label class="public-opportunity-form__consent"><input v-model="inquiry.consent" type="checkbox" required /> {{ locale === 'am' ? 'የመልዕክቴን መረጃ ለጥያቄዬ ምላሽ ለመስጠት እንዲጠቀሙበት እስማማለሁ።' : 'I consent to ARNA using this information to respond to my inquiry.' }}</label>
+            <label class="public-opportunity-form__trap" aria-hidden="true">Website <input v-model="inquiry.website" tabindex="-1" autocomplete="off" /></label>
+            <button type="submit" :disabled="submitting || !inquiry.consent">{{ locale === 'am' ? 'መልዕክብ ይላኩ' : 'Send inquiry' }}</button>
+            <p role="status" aria-live="polite">{{ inquiryStatus }}</p>
+          </form>
         </div>
       </section>
 
@@ -357,6 +563,9 @@ const publicationChannels = [
               <RouterLink to="/contribute">ይዘት ያቅርቡ</RouterLink>
               <a href="#updates">ዜናዎችና ማስታወቂያዎች</a>
               <a href="#advertise">ማስታወቂያ ያስተዋውቁ</a>
+              <a href="#publications">ህትመቶች</a>
+              <a href="#opportunities">የሥራና የገበያ እድሎች</a>
+              <a href="#contact">ያግኙን</a>
             </div>
           </div>
         </div>
@@ -371,6 +580,15 @@ const publicationChannels = [
 </template>
 
 <style scoped>
+.public-opportunity-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; max-width: 820px; margin-block: 1.5rem; padding: 1.25rem; border: 1px solid var(--arna-line); border-radius: .75rem; background: var(--arna-public-page-surface); }
+.public-opportunity-form h3, .public-opportunity-form > p, .public-opportunity-form button { grid-column: 1 / -1; }
+.public-opportunity-form label { display: grid; gap: .3rem; font-weight: 600; }
+.public-opportunity-form input, .public-opportunity-form select, .public-opportunity-form textarea { width: 100%; min-width: 0; padding: .65rem; border: 1px solid var(--arna-line); border-radius: .4rem; background: var(--arna-paper); color: var(--arna-ink); }
+.public-opportunity-form button { min-height: 44px; padding: .65rem 1rem; border: 0; border-radius: .4rem; background: var(--arna-navy); color: white; }
+.public-opportunity-form__consent { grid-column: 1 / -1; display: flex !important; align-items: flex-start; gap: .6rem !important; font-weight: 400 !important; line-height: 1.6; }
+.public-opportunity-form__consent input { width: auto; margin-top: .25rem; }
+.public-opportunity-form__trap { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+@media (max-width: 680px) { .public-opportunity-form { grid-template-columns: 1fr; } }
 .arna-site {
   --arna-navy: var(--arna-public-brand-anchor);
   --arna-deep: var(--arna-color-enterprise-blue);
