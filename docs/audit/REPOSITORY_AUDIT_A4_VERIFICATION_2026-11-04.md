@@ -4,13 +4,12 @@ Date: 2026-11-04
 Repository: `akefadaka-git/arna-app`  
 Audit branch: `audit/arna-repository-consolidation-2026-11-04`  
 Pull request: #38  
-Verified code SHA: `22eddb9f37fe9cdb324929184cf691bc5c0f0e7e`  
-Current PR head: `970338a1ac9ac3078a0e87d0783f7fb2e78c4e9c` (subsequent audit-report documentation only)  
+Verified head SHA: `a9896ffe555cb3c0243bd385928471943cb3e1d1`  
 Base SHA: `ca97c1ac0152c9b2a5dcf562b52575c0070b1d30`
 
 ## Verification evidence
 
-**PASS** — GitHub Actions run [41733471475](https://github.com/akefadaka-git/arna-app/actions/runs/41733471475) completed successfully against the verified code SHA.
+**PASS** — GitHub Actions run [41733743589](https://github.com/akefadaka-git/arna-app/actions/runs/41733743589) completed successfully against the exact PR head SHA.
 
 All 17 verification steps passed, including:
 
