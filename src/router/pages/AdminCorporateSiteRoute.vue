@@ -87,7 +87,7 @@ async function createPage(): Promise<void> {
         am: { title: titleAm.value.trim(), summary: summaryAm.value.trim(), body: bodyAm.value.trim() },
         en: { title: titleEn.value.trim(), summary: summaryEn.value.trim(), body: bodyEn.value.trim() },
       },
-      sections: sectionTitleAm.value.trim() || sectionTitleEn.value.trim() || sectionBodyAm.value.trim() || sectionBodyEn.value.trim() ? [{ type: 'text', content: { am: { title: sectionTitleAm.value.trim(), body: sectionBodyAm.value.trim() }, en: { title: sectionTitleEn.value.trim(), body: sectionBodyEn.value.trim() } } }] : [],
+      sections: sectionTitleAm.value.trim() || sectionTitleEn.value.trim() || sectionBodyAm.value.trim() || sectionBodyEn.value.trim() ? [{ type: 'text', content: { am: { title: sectionTitleAm.value.trim(), body: sectionBodyAm.value.trim() }, en: { title: sectionTitleEn.value.trim(), body: sectionBodyEn.value.trim() } } }, ...(selectedPage.value?.sections?.slice(1) ?? [])] : (selectedPage.value?.sections ?? []),
       seo: {
         am: { title: titleAm.value.trim(), description: summaryAm.value.trim() },
         en: { title: titleEn.value.trim(), description: summaryEn.value.trim() },
