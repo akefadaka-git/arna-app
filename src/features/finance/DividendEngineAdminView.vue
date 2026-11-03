@@ -17,6 +17,7 @@ import {
   cancelDividendPaymentBatch,
   createDividendTaxRemittance,
   failDividendPayment,
+  getDividendDistribution,
   listDividendDistributions,
   listDividendPaymentBatches,
   listDividendTaxRemittances,
@@ -34,6 +35,8 @@ const distributions = ref<readonly DividendDistribution[]>([]);
 const batches = ref<readonly DividendPaymentBatch[]>([]);
 const remittances = ref<readonly DividendTaxRemittance[]>([]);
 const classWeights = ref<readonly DividendShareClassWeight[]>([]);
+const distributionDetails = ref<DividendDistribution | null>(null);
+const loadedDistributionId = ref(0);
 const loading = ref(false);
 const submitting = ref(false);
 const error = ref('');
@@ -99,6 +102,32 @@ const remittanceCancellationReasons = ref<Record<number, string>>({});
 const batchCancellationReasons = ref<Record<number, string>>({});
 
 const sortedDistributions = computed(() => [...distributions.value].sort((a, b) => b.id - a.id));
+
+async function loadDistributionDetails(id: number): Promise<void> {
+  if (!id) return;
+  error.value = '';
+  try {
+    distributionDetails.value = await getDividendDistribution(id);
+    loadedDistributionId.value = id;
+  } catch {
+    distributionDetails.value = null;
+    loadedDistributionId.value = 0;
+    error.value = 'Unable to load shareholder allocations for this distribution.';
+  }
+}
+
+async function loadTaxRecipients(): Promise<void> {
+  await loadDistributionDetails(Number(taxForm.distribution_id));
+}
+
+async function loadBatchPayables(): Promise<void> {
+  await loadDistributionDetails(Number(batchForm.distribution_id));
+  if (loadedDistributionId.value !== Number(batchForm.distribution_id)) return;
+  batchForm.payable_ids = (distributionDetails.value?.items ?? [])
+    .map(item => item.payable_id)
+    .filter((id): id is number => id !== null)
+    .join(', ');
+}
 
 async function loadWeights(): Promise<void> {
   if (!weightForm.distribution_id) { classWeights.value = []; return; }
@@ -308,7 +337,11 @@ onMounted(refresh);
       <h2 id="tax-title">Recipient tax assessment / የተቀባይ ታክስ ግምገማ</h2>
       <form class="form-grid" @submit.prevent="submitTaxAssessment">
         <label>Distribution ID<input v-model.number="taxForm.distribution_id" type="number" min="1" required></label>
-        <label>Shareholder ID<input v-model.number="taxForm.shareholder_id" type="number" min="1" required></label>
+        <label>Shareholder<select v-model.number="taxForm.shareholder_id" required>
+          <option :value="0" disabled>Select a loaded shareholder</option>
+          <option v-for="item in (distributionDetails?.id === taxForm.distribution_id ? distributionDetails.items ?? [] : [])" :key="item.shareholder_id" :value="item.shareholder_id">Shareholder #{{ item.shareholder_id }}</option>
+        </select></label>
+        <div class="form-actions"><button type="button" class="secondary" :disabled="busyKey !== '' || !taxForm.distribution_id" @click="loadTaxRecipients">Load recipients / ባለአክሲዮኖችን ጫን</button></div>
         <label>Recipient type<select v-model="taxForm.recipient_type"><option value="individual">Individual</option><option value="company">Company</option><option value="other">Other</option></select></label>
         <label>Tax residency<select v-model="taxForm.tax_residency"><option value="resident">Resident</option><option value="non_resident">Non-resident</option></select></label>
         <label>Treatment<select v-model="taxForm.treatment"><option value="statutory">Statutory</option><option value="treaty">Treaty</option><option value="exempt">Exempt</option><option value="special">Special</option></select></label>
@@ -328,7 +361,10 @@ onMounted(refresh);
         <label>Approved distribution ID<input v-model.number="batchForm.distribution_id" type="number" min="1" required></label>
         <label>Batch reference<input v-model="batchForm.batch_reference" required maxlength="100"></label>
         <label>Payable IDs (comma-separated)<input v-model="batchForm.payable_ids" placeholder="101, 102, 103" required></label>
-        <div class="form-actions"><button type="submit" :disabled="busyKey !== ''">Create batch / ባች ፍጠር</button></div>
+        <div class="form-actions">
+          <button type="button" class="secondary" :disabled="busyKey !== '' || !batchForm.distribution_id" @click="loadBatchPayables">Load eligible payables</button>
+          <button type="submit" :disabled="busyKey !== ''">Create batch / ባች ፍጠር</button>
+        </div>
       </form>
 
       <div v-for="batch in batches" :key="batch.id" class="record">
