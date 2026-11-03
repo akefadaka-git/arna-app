@@ -9,6 +9,7 @@ interface PermissionOption {
   readonly name_am?: string | null;
   readonly name_en?: string | null;
   readonly is_system?: boolean;
+  readonly scope?: string;
 }
 
 interface RoleOption {
@@ -240,7 +241,7 @@ async function createRole(): Promise<void> {
 function editRolePermissions(row: AdminDirectoryRow): void {
   selectedRoleId.value = row.id;
   selectedPermissionIds.value = (row.permissions ?? [])
-    .filter((permission) => !permission.is_system)
+    .filter((permission) => !permission.is_system && permission.scope === 'tenant')
     .map((permission) => permission.id);
 }
 
@@ -380,7 +381,7 @@ watch(resource, () => {
     <section v-if="selectedRoleId !== null" class="admin-foundation__panel" aria-labelledby="role-permission-editor">
       <h2 id="role-permission-editor">የሚና ፈቃዶች</h2>
       <p>System ፈቃዶች ከዚህ ማያ ገጽ ሊቀየሩ አይችሉም።</p>
-      <label v-for="permission in permissionOptions.filter((item) => !item.is_system)" :key="permission.id" class="admin-foundation__check">
+      <label v-for="permission in permissionOptions.filter((item) => !item.is_system && item.scope === 'tenant')" :key="permission.id" class="admin-foundation__check">
         <input v-model="selectedPermissionIds" type="checkbox" :value="permission.id" />
         <span>{{ permission.name_am || permission.name_en || permission.slug }} <small>{{ permission.slug }}</small></span>
       </label>
