@@ -64,6 +64,7 @@ const errorMessage = ref('');
 const actionMessage = ref('');
 const total = ref<number | null>(null);
 const membershipReason = ref('Administrative membership review');
+const existingUserId = ref('');
 const selectedUserId = ref<number | null>(null);
 const selectedRoleIds = ref<number[]>([]);
 const selectedRoleId = ref<number | null>(null);
@@ -173,6 +174,45 @@ async function createUser(): Promise<void> {
     await load();
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : 'መለያውን መፍጠር አልተቻለም።';
+  } finally {
+    submitting.value = false;
+  }
+}
+
+async function addExistingMembership(): Promise<void> {
+  const id = Number(existingUserId.value);
+  if (!Number.isInteger(id) || id < 1) {
+    errorMessage.value = 'ትክክለኛ የተጠቃሚ መለያ ቁጥር ያስገቡ።';
+    return;
+  }
+  submitting.value = true;
+  errorMessage.value = '';
+  try {
+    await api.post(`/api/admin/identity/users/${id}/membership`, {
+      reason: membershipReason.value,
+    });
+    existingUserId.value = '';
+    actionMessage.value = 'ተጠቃሚው ወደ ቴናንቱ ተጨምሯል።';
+    await load();
+  } catch (error) {
+    errorMessage.value = error instanceof Error ? error.message : 'አባልነቱን መጨመር አልተቻለም።';
+  } finally {
+    submitting.value = false;
+  }
+}
+
+async function revokeMembership(row: AdminDirectoryRow): Promise<void> {
+  if (!window.confirm('ይህን አባልነት በቋሚነት ማቋረጥ ይፈልጋሉ? እንደገና ማንቃት አይቻልም።')) return;
+  submitting.value = true;
+  errorMessage.value = '';
+  try {
+    await api.post(`/api/admin/identity/users/${row.id}/membership/revoke`, {
+      reason: membershipReason.value,
+    });
+    actionMessage.value = 'አባልነቱ በቋሚነት ተቋርጧል።';
+    await load();
+  } catch (error) {
+    errorMessage.value = error instanceof Error ? error.message : 'አባልነቱን ማቋረጥ አልተቻለም።';
   } finally {
     submitting.value = false;
   }
@@ -314,6 +354,12 @@ watch(resource, () => {
       ለአባልነት ለውጥ ምክንያት
       <input v-model.trim="membershipReason" type="text" minlength="10" maxlength="500" />
     </label>
+    <form v-if="resource === 'users'" class="admin-foundation__add-membership" @submit.prevent="addExistingMembership">
+      <label>ነባር የመለያ ቁጥር
+        <input v-model.trim="existingUserId" type="number" min="1" required />
+      </label>
+      <button class="admin-foundation__button" type="submit" :disabled="submitting">ወደ ቴናንቱ ጨምር</button>
+    </form>
 
     <p v-if="loading" class="admin-foundation__state" role="status">መረጃ በመጫን ላይ…</p>
     <p v-else-if="rows.length === 0" class="admin-foundation__state" role="status">
@@ -357,6 +403,7 @@ watch(resource, () => {
                   {{ row.memberships?.[0]?.status === 'active' ? 'አባልነት አግድ' : 'አባልነት አንቃ' }}
                 </button>
                 <button class="admin-foundation__button admin-foundation__button--small" type="button" @click="editUserRoles(row)">ሚናዎች</button>
+                <button class="admin-foundation__button admin-foundation__button--small" type="button" :disabled="submitting || row.memberships?.[0]?.status === 'revoked'" @click="revokeMembership(row)">በቋሚነት አቋርጥ</button>
               </template>
               <template v-else>
                 <button class="admin-foundation__button admin-foundation__button--small" type="button" :disabled="row.scope !== 'tenant'" @click="editRolePermissions(row)">ፈቃዶች</button>
@@ -411,6 +458,8 @@ watch(resource, () => {
 .admin-foundation input:not([type=checkbox]) { width: 100%; min-width: 0; border: 1px solid var(--mases-color-border-default); border-radius: .45rem; background: var(--mases-color-surface); color: var(--mases-color-text-primary); padding: .65rem .7rem; }
 .admin-foundation input:focus-visible { outline: 3px solid var(--mases-focus-ring-color); outline-offset: 2px; }
 .admin-foundation__reason { max-width: 36rem; }
+.admin-foundation__add-membership { display: flex; align-items: end; flex-wrap: wrap; gap: .75rem; }
+.admin-foundation__add-membership label { display: grid; gap: .35rem; color: var(--mases-color-text-secondary); font-size: .9rem; }
 .admin-foundation table { width: 100%; border-collapse: collapse; text-align: start; }
 .admin-foundation th, .admin-foundation td { border-bottom: 1px solid var(--mases-color-border-default); padding: .75rem .5rem; vertical-align: top; }
 .admin-foundation th { color: var(--mases-color-text-secondary); font-size: .8rem; font-weight: 600; }
