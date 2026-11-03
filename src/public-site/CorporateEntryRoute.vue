@@ -27,7 +27,10 @@ async function load(): Promise<void> {
     let meta = document.querySelector<HTMLMetaElement>('meta[name="description"]');
     if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.append(meta); }
     meta.content = entry.value.seo?.description ?? description;
-    let ogTitle = document.querySelector<HTMLMetaElement>('meta[property=\"og:title\"]');\n    if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.append(ogTitle); }\n    ogTitle.content = document.title;\n    let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    let ogTitle = document.querySelector<HTMLMetaElement>('meta[property=\"og:title\"]');
+    if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.append(ogTitle); }
+    ogTitle.content = document.title;
+    let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.append(canonical); }
     canonical.href = entry.value.seo?.canonical_url ?? window.location.href;
   } catch { entry.value = null; failed.value = true; }
