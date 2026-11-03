@@ -26,10 +26,32 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci
-      - name: Analyze unused files, exports and dependencies
+      - name: Analyze unused files, exports and dependencies from all four app roots
         shell: bash
         run: |
-          npx --yes knip --reporter compact --no-progress > "$RUNNER_TEMP/knip-report.txt" 2>&1 || true
+          cat > "$RUNNER_TEMP/knip.json" <<'JSON'
+          {
+            "entry": [
+              "workspace-entry/main.ts",
+              "portal-entry/main.ts",
+              "admin-entry/main.ts",
+              "public-entry/main.ts",
+              "tests/**/*.mjs",
+              "scripts/**/*.mjs"
+            ],
+            "project": [
+              "src/**/*.{ts,vue}",
+              "workspace-entry/**/*.{ts,vue}",
+              "portal-entry/**/*.{ts,vue}",
+              "admin-entry/**/*.{ts,vue}",
+              "public-entry/**/*.{ts,vue}",
+              "tests/**/*.mjs",
+              "scripts/**/*.mjs",
+              "vite.config.ts"
+            ]
+          }
+          JSON
+          npx --yes knip --config "$RUNNER_TEMP/knip.json" --reporter compact --no-progress > "$RUNNER_TEMP/knip-report.txt" 2>&1 || true
           cat "$RUNNER_TEMP/knip-report.txt"
       - name: Upload source reachability report
         uses: actions/upload-artifact@v4
