@@ -6,6 +6,7 @@ import {
   assessDividendRecipientTax,
   calculateDividendDistribution,
   certifyDividendProfit,
+  cancelDividendDistribution,
   confirmDividendPayment,
   createDividendDistribution,
   createDividendPaymentBatch,
@@ -73,6 +74,7 @@ const reconciliationForm = reactive({
   statement_amount: '',
 });
 const failureReasons = ref<Record<number, string>>({});
+const cancellationReasons = ref<Record<number, string>>({});
 
 const sortedDistributions = computed(() => [...distributions.value].sort((a, b) => b.id - a.id));
 
@@ -184,7 +186,7 @@ onMounted(refresh);
         <label>Distributable net profit (ETB)<input v-model="distributionForm.distributable_profit_amount" inputmode="decimal" required></label>
         <label>Approved balance-sheet evidence<input v-model="distributionForm.approved_balance_sheet_reference" required maxlength="200"></label>
         <label>GA resolution evidence<input v-model="distributionForm.resolution_evidence_reference" required maxlength="500"></label>
-        <label>Payment method<select v-model="distributionForm.payment_method"><option value="bank_transfer">Bank transfer</option><option value="cheque">Cheque</option><option value="other_approved">Other approved</option></select></label>
+        <label>Payment method<select v-model="distributionForm.payment_method"><option value="bank_transfer">Bank transfer</option><option value="cheque">Cheque</option><option value="nbe_authorized_payment">NBE-authorized payment system</option></select></label>
         <label>Accounting framework<select v-model="distributionForm.accounting_framework"><option value="ifrs">IFRS</option><option value="ifrs_sme">IFRS for SMEs</option><option value="other_aabe_approved">Other AABE-approved</option></select></label>
         <div class="form-actions"><button type="submit" :disabled="submitting || busyKey !== ''">Create draft / ረቂቅ ፍጠር</button></div>
       </form>
@@ -211,6 +213,10 @@ onMounted(refresh);
           <button v-if="row.status === 'draft'" class="secondary" :disabled="busyKey !== ''" @click="runAction('certify-'+row.id, () => certifyDividendProfit(row.id), 'Profit certification recorded.')">Certify profit / ትርፍ አረጋግጥ</button>
           <button v-if="row.status === 'draft'" class="secondary" :disabled="busyKey !== ''" @click="runAction('calculate-'+row.id, () => calculateDividendDistribution(row.id), 'Shareholder snapshot calculated.')">Calculate / አስላ</button>
           <button v-if="row.status === 'calculated'" :disabled="busyKey !== ''" @click="runAction('approve-'+row.id, () => approveDividendDistribution(row.id), 'Distribution approved and accrual journal posted.')">Approve & post accrual / አጽድቅ</button>
+          <template v-if="row.status === 'approved'">
+            <input v-model="cancellationReasons[row.id]" aria-label="Dividend cancellation reason" placeholder="Cancellation reason">
+            <button class="secondary" :disabled="busyKey !== '' || !cancellationReasons[row.id]" @click="runAction('cancel-'+row.id, () => cancelDividendDistribution(row.id, cancellationReasons[row.id] ?? ''), 'Distribution cancelled and accrual reversed.')">Cancel before payment deadline / ከመክፈያ ቀን በፊት ሰርዝ</button>
+          </template>
         </div>
       </div>
     </section>
