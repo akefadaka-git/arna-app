@@ -87,6 +87,35 @@ export function createDividendDistribution(payload: CreateDividendDistributionPa
   return api.post('/api/finance/dividend-distributions', payload);
 }
 
+export interface DividendShareClassWeight {
+  readonly id: number;
+  readonly distribution_id: number;
+  readonly share_class_id: number;
+  readonly weight_bps: number;
+  readonly evidence_reference: string;
+  readonly status: 'pending' | 'approved';
+  readonly approved_by: number | null;
+  readonly approved_at: string | null;
+}
+
+export async function listDividendShareClassWeights(distributionId: number): Promise<readonly DividendShareClassWeight[]> {
+  const response = await api.get<{ data: readonly DividendShareClassWeight[] }>(
+    `/api/finance/dividend-distributions/${distributionId}/share-class-weights`,
+  );
+  return response.data;
+}
+
+export function requestDividendShareClassWeight(
+  distributionId: number,
+  payload: { share_class_id: number; weight_bps: number; evidence_reference: string },
+): Promise<DividendShareClassWeight> {
+  return api.post(`/api/finance/dividend-distributions/${distributionId}/share-class-weights`, payload);
+}
+
+export function approveDividendShareClassWeight(distributionId: number, weightId: number): Promise<DividendShareClassWeight> {
+  return api.post(`/api/finance/dividend-distributions/${distributionId}/share-class-weights/${weightId}/approve`, {});
+}
+
 export function certifyDividendProfit(id: number): Promise<DividendDistribution> {
   return api.post(`/api/finance/dividend-distributions/${id}/certify-profit`, {});
 }
