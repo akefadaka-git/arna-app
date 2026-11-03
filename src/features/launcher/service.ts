@@ -233,34 +233,3 @@ export function useLauncherFetchState(): LauncherFetchState {
 // Internal helpers
 // =============================================================================
 
-/**
- * Duck-typed check for a NormalizedApiError with category 'not-found'.
- *
- * Deliberately not `err instanceof NormalizedApiError`.
- *
- * The class is exported from @/core/api/client, but instanceof checks
- * are fragile under bundler chunk duplication — a class re-exported
- * into two code-split chunks has two distinct constructor identities
- * and an instanceof against one fails for instances of the other.
- *
- * The duck-typed check on the `category` field is what the
- * shareholders feature's page-level error classifiers already use (see
- * ShareholderDetailView.vue's isNotFoundError and ShareholderForm.vue's
- * isNotFoundError, both frozen). Following the same pattern here
- * keeps the codebase's error-classification approach uniform and
- * immune to the chunk-duplication hazard.
- *
- * The check is intentionally narrow: it accepts any object whose
- * `category` field is the literal string 'not-found'. It does not
- * require any other field to be present, because the caller only
- * cares about this one distinction. A future NormalizedApiError
- * category rename is a single grep in the frozen error-classifier
- * call sites.
- */
-function isNotFoundError(err: unknown): boolean {
-  return (
-    typeof err === 'object' &&
-    err !== null &&
-    (err as { category?: unknown }).category === 'not-found'
-  );
-}
