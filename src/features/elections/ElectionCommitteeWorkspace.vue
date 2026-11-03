@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { decideElectionNomination, getElectionCommitteeQueue, type ElectionCandidate, type ElectionCommitteeQueue } from './api';
+import { appointElectionCommitteeMember, decideElectionNomination, getElectionCommitteeQueue, type ElectionCandidate, type ElectionCommitteeQueue } from './api';
 
 const route = useRoute();
 const electionId = Number(route.params.id);
@@ -10,11 +10,28 @@ const busy = ref(false);
 const error = ref('');
 const reasons = ref<Record<number, string>>({});
 const notices = ref<Record<number, string>>({});
+const appointment = ref({ person_id: '', user_id: '', member_role: 'committee_member' as 'committee_member' | 'legal_advisor' | 'supervisory_member', ex_officio: false, appointment_reference: '' });
+const appointmentNotice = ref('');
 
 async function load() {
   busy.value = true; error.value = '';
   try { queue.value = await getElectionCommitteeQueue(electionId); }
   catch { error.value = 'የኮሚቴ ዝርዝር ማምጣት አልተቻለም | Unable to load committee queue.'; }
+  finally { busy.value = false; }
+}
+async function appointMember() {
+  const personId = Number(appointment.value.person_id);
+  const userId = Number(appointment.value.user_id);
+  if (!Number.isSafeInteger(personId) || personId < 1 || !Number.isSafeInteger(userId) || userId < 1 || appointment.value.appointment_reference.trim().length < 3) {
+    error.value = 'የሰው እና የተጠቃሚ መለያ፣ የሹመት ማጣቀሻ ያስገቡ | Enter valid person/user IDs and an appointment reference.';
+    return;
+  }
+  busy.value = true; error.value = ''; appointmentNotice.value = '';
+  try {
+    await appointElectionCommitteeMember(electionId, { ...appointment.value, person_id: personId, user_id: userId, appointment_reference: appointment.value.appointment_reference.trim() });
+    appointmentNotice.value = 'የኮሚቴ ሹመት ተመዝግቧል | Committee appointment recorded.';
+    appointment.value = { person_id: '', user_id: '', member_role: 'committee_member', ex_officio: false, appointment_reference: '' };
+  } catch { error.value = 'ሹመቱ አልተመዘገበም። ፈቃድና የተደጋጋሚ ሹመት ሁኔታ ያረጋግጡ። | Appointment failed; verify permission and duplicate membership.'; }
   finally { busy.value = false; }
 }
 async function decide(candidate: ElectionCandidate, decision: 'approved' | 'rejected' | 'returned') {
@@ -35,6 +52,17 @@ onMounted(() => { if (Number.isSafeInteger(electionId) && electionId > 0) void l
   <main class="election-workspace">
     <header><p>ARNA · አስመራጭ ኮሚቴ</p><h1>የኮሚቴ አስተዳደር | Electoral Committee</h1><p>እጩዎችን ይመርምሩ፣ ማስረጃ ያስመዝግቡ፣ ምክንያታዊ ውሳኔ ይስጡ።</p></header>
     <p v-if="error" role="alert">{{ error }}</p><p v-if="busy" aria-live="polite">በመጫን ላይ | Loading…</p>
+    <section><h2>የኮሚቴ አባል ሹም | Appoint Committee member</h2>
+      <p>ሹመቱ በአስተዳዳሪ ፈቃድ ይጠበቃል፤ የሕግ አማካሪ የድምፅ መብት እስኪረጋገጥ ድረስ አይገመትም። | Appointment is permission-controlled; Legal Advisor voting eligibility is not assumed.</p>
+      <div class="appointment-grid">
+        <label>የሰው መለያ | Person ID<input v-model="appointment.person_id" inputmode="numeric" /></label>
+        <label>የተጠቃሚ መለያ | User ID<input v-model="appointment.user_id" inputmode="numeric" /></label>
+        <label>ሚና | Role<select v-model="appointment.member_role"><option value="committee_member">Committee member</option><option value="legal_advisor">Legal Advisor (ex officio)</option><option value="supervisory_member">Supervisory member</option></select></label>
+        <label>የሹመት ማጣቀሻ | Appointment reference<input v-model="appointment.appointment_reference" maxlength="160" /></label>
+      </div>
+      <label class="inline-check"><input v-model="appointment.ex_officio" type="checkbox" /> Ex officio appointment</label>
+      <button :disabled="busy" @click="appointMember">ሹም | Appoint member</button><p v-if="appointmentNotice" role="status">{{ appointmentNotice }}</p>
+    </section>
     <section><h2>የእጩነት ማመልከቻዎች | Nomination submissions</h2>
       <p v-if="!queue.submissions.length">ማመልከቻ የለም | No submissions.</p>
       <ul><li v-for="(item, index) in queue.submissions" :key="String(item.id ?? index)">{{ item.candidate_person_id }} · {{ item.status }} · {{ item.statement }}</li></ul>
@@ -56,5 +84,5 @@ onMounted(() => { if (Number.isSafeInteger(electionId) && electionId > 0) void l
   </main>
 </template>
 <style scoped>
-.election-workspace{display:grid;gap:1.25rem;max-width:70rem;margin:auto}.election-workspace section,.election-workspace article{border:1px solid var(--mases-color-border-subtle);border-radius:var(--mases-radius-md);padding:1rem}.election-workspace article{margin-block:.75rem}.election-workspace label,.election-workspace textarea{display:block;width:100%;margin-block:.5rem}.actions{display:flex;flex-wrap:wrap;gap:.5rem}.actions button{min-height:2.75rem;padding:.5rem .8rem}.notice{background:var(--mases-color-surface-subtle);padding:1rem}@media(max-width:640px){.actions{display:grid}.actions button{width:100%}}
+.election-workspace{display:grid;gap:1.25rem;max-width:70rem;margin:auto}.election-workspace section,.election-workspace article{border:1px solid var(--mases-color-border-subtle);border-radius:var(--mases-radius-md);padding:1rem}.election-workspace article{margin-block:.75rem}.appointment-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:.75rem}.appointment-grid label{display:grid;gap:.35rem}.appointment-grid input,.appointment-grid select{min-height:2.75rem;width:100%}.inline-check{display:flex;align-items:center;gap:.5rem;margin-block:.75rem}.inline-check input{width:auto}.election-workspace label,.election-workspace textarea{display:block;width:100%;margin-block:.5rem}.actions{display:flex;flex-wrap:wrap;gap:.5rem}.actions button{min-height:2.75rem;padding:.5rem .8rem}.notice{background:var(--mases-color-surface-subtle);padding:1rem}@media(max-width:640px){.actions{display:grid}.actions button{width:100%}}
 </style>
