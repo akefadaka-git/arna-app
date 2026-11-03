@@ -1,4 +1,4 @@
-name: Isolated public browser contract integration with corrected brand locator
+name: Isolated public browser contract integration after card contrast correction
 
 on:
   push:
