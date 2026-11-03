@@ -1,0 +1,39 @@
+name: Isolated frontend source reachability audit
+
+on:
+  push:
+    branches:
+      - audit/arna-repository-consolidation-2026-11-04
+    paths:
+      - .github/workflows/source-usage-audit.yml
+
+permissions:
+  contents: read
+
+jobs:
+  knip-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact audit branch
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Analyze unused files, exports and dependencies
+        shell: bash
+        run: |
+          npx --yes knip --reporter compact --no-progress > "$RUNNER_TEMP/knip-report.txt" 2>&1 || true
+          cat "$RUNNER_TEMP/knip-report.txt"
+      - name: Upload source reachability report
+        uses: actions/upload-artifact@v4
+        with:
+          name: arna-app-source-reachability-report
+          path: ${{ runner.temp }}/knip-report.txt
+          if-no-files-found: error
