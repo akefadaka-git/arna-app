@@ -48,6 +48,10 @@ jobs:
               'portal-entry/main.ts',
               'admin-entry/main.ts',
               'public-entry/main.ts',
+              'src/router/routes-base.ts',
+              'src/router/routes-workspace.ts',
+              'src/router/routes-portal.ts',
+              'src/router/routes-admin.ts',
               'tests/**/*.mjs',
               'scripts/**/*.mjs'
             ],
@@ -61,6 +65,7 @@ jobs:
               'scripts/**/*.mjs',
               'vite.config.ts'
             ],
+            paths: { '@/*': ['src/*'] },
             compilers: { '.vue': compileVue }
           };
           JS
