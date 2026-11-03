@@ -514,7 +514,7 @@ const publicationChannels = [
             <label>{{ locale === 'am' ? 'መልዕክት' : 'Message' }} <textarea v-model="inquiry.message" required maxlength="10000" rows="4" /></label>
             <label class="public-opportunity-form__consent"><input v-model="inquiry.consent" type="checkbox" required /> {{ locale === 'am' ? 'የመልዕክቴን መረጃ ለጥያቄዬ ምላሽ ለመስጠት እንዲጠቀሙበት እስማማለሁ።' : 'I consent to ARNA using this information to respond to my inquiry.' }}</label>
             <label class="public-opportunity-form__trap" aria-hidden="true">Website <input v-model="inquiry.website" tabindex="-1" autocomplete="off" /></label>
-            <button type="submit" :disabled="submitting || !inquiry.consent"{{ locale === 'am' ? 'መልዕክብ ይላኩ' : 'Send inquiry' }}</button>
+            <button type="submit" :disabled="submitting || !inquiry.consent">{{ locale === 'am' ? 'መልዕክብ ይላኩ' : 'Send inquiry' }}</button>
             <p role="status" aria-live="polite">{{ inquiryStatus }}</p>
           </form>
         </div>
