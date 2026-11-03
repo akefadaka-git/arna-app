@@ -265,6 +265,10 @@ export interface DividendReinvestment {
   readonly share_quantity: number | null;
   readonly transaction_reference: string;
   readonly occurred_on: string;
+  readonly journal_reference: string | null;
+  readonly seller_settlement_status: 'not_applicable' | 'payable' | 'settled';
+  readonly seller_bank_reference: string | null;
+  readonly seller_journal_reference: string | null;
 }
 
 export interface CreateDividendReinvestmentPayload {
@@ -319,4 +323,11 @@ export interface CreateShareSubscriptionBalancePayload {
 
 export function createShareSubscriptionBalance(payload: CreateShareSubscriptionBalancePayload): Promise<unknown> {
   return api.post('/api/finance/dividend-share-subscription-balances', payload);
+}
+
+export function settleDividendReinvestmentSeller(
+  id: number,
+  payload: { bank_reference: string; evidence_reference: string; paid_on: string },
+): Promise<DividendReinvestment> {
+  return api.post(`/api/finance/dividend-reinvestments/${id}/settle-seller`, payload);
 }
