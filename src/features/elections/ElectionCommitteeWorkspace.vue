@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { appointElectionCommitteeMember, decideElectionNomination, getElectionCommitteeQueue, recuseElectionCommitteeMember, type ElectionCandidate, type ElectionCommitteeQueue } from './api';
+import { appointElectionCommitteeMember, decideElectionNomination, decideElectionNominationSubmission, getElectionCommitteeQueue, recuseElectionCommitteeMember, type ElectionCandidate, type ElectionCommitteeQueue } from './api';
 
 const route = useRoute();
 const electionId = Number(route.params.id);
@@ -34,6 +34,22 @@ async function appointMember() {
     await load();
   } catch { error.value = 'ሹመቱ አልተመዘገበም። ፈቃድና የተደጋጋሚ ሹመት ሁኔታ ያረጋግጡ። | Appointment failed; verify permission and duplicate membership.'; }
   finally { busy.value = false; }
+}
+async function decideSubmission(item: Record<string, unknown>, decision: 'approved' | 'rejected' | 'returned') {
+  const submissionId = Number(item.id);
+  const reason = reasons.value[submissionId]?.trim() ?? '';
+  if (!Number.isSafeInteger(submissionId) || submissionId < 1 || reason.length < 10) {
+    error.value = 'የማመልከቻ መለያና ቢያንስ 10 ፊደላት ያሉት ምክንያት ያስገቡ | Valid submission ID and a reason of at least 10 characters are required.';
+    return;
+  }
+  busy.value = true; error.value = '';
+  try {
+    await decideElectionNominationSubmission(electionId, submissionId, { decision, reason });
+    notices.value[submissionId] = 'ውሳኔው ተመዝግቧል | Decision recorded.';
+    await load();
+  } catch {
+    error.value = 'የማመልከቻ ውሳኔ አልተመዘገበም | Submission decision failed; verify authority, quorum and recusal.';
+  } finally { busy.value = false; }
 }
 async function recuseMember(memberId: number) {
   const scope = window.prompt('Recusal scope / የማግለል ወሰን (e.g. candidate nomination ID)');
@@ -85,7 +101,18 @@ onMounted(() => { if (Number.isSafeInteger(electionId) && electionId > 0) void l
     </section>
     <section><h2>የእጩነት ማመልከቻዎች | Nomination submissions</h2>
       <p v-if="!queue.submissions.length">ማመልከቻ የለም | No submissions.</p>
-      <ul><li v-for="(item, index) in queue.submissions" :key="String(item.id ?? index)">{{ item.candidate_person_id }} · {{ item.status }} · {{ item.statement }}</li></ul>
+      <article v-for="(item, index) in queue.submissions" :key="String(item.id ?? index)">
+        <h3>Person #{{ item.candidate_person_id }} · {{ item.status }}</h3>
+        <p>{{ item.statement }}</p>
+        <label :for="'submission-reason-' + item.id">የውሳኔ ምክንያት | Decision rationale</label>
+        <textarea :id="'submission-reason-' + item.id" v-model="reasons[Number(item.id)]" rows="2" maxlength="10000" />
+        <div class="actions">
+          <button :disabled="busy || item.status !== 'submitted'" @click="decideSubmission(item, 'approved')">Approve candidate</button>
+          <button :disabled="busy || item.status !== 'submitted'" @click="decideSubmission(item, 'returned')">Return</button>
+          <button :disabled="busy || item.status !== 'submitted'" @click="decideSubmission(item, 'rejected')">Reject</button>
+        </div>
+        <p v-if="notices[Number(item.id)]" role="status">{{ notices[Number(item.id)] }}</p>
+      </article>
     </section>
     <section><h2>የኮሚቴ እጩዎች | Committee candidates</h2>
       <article v-for="candidate in queue.candidates" :key="candidate.id">
