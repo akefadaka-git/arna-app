@@ -20,6 +20,7 @@ import {
   createDividendReinvestment,
   approveDividendReinvestment,
   postDividendReinvestment,
+  settleDividendReinvestmentSeller,
   createShareSubscriptionBalance,
   failDividendPayment,
   getDividendDistribution,
@@ -121,6 +122,11 @@ const reconciliationForm = reactive({
   statement_reference: '',
   statement_amount: '',
 });
+const sellerSettlementForms = reactive<Record<number, { bank_reference: string; evidence_reference: string; paid_on: string }>>({});
+function sellerSettlementForm(id: number) {
+  sellerSettlementForms[id] ??= { bank_reference: '', evidence_reference: '', paid_on: '' };
+  return sellerSettlementForms[id];
+}
 const failureReasons = ref<Record<number, string>>({});
 const cancellationReasons = ref<Record<number, string>>({});
 const remittanceCancellationReasons = ref<Record<number, string>>({});
@@ -519,7 +525,15 @@ onMounted(refresh);
         </div>
         <div class="actions">
           <button v-if="row.status === 'pending'" class="secondary" :disabled="busyKey !== ''" @click="runAction('reinvestment-approve-'+row.id, () => approveDividendReinvestment(row.id), 'Reinvestment approved by independent checker.')">Approve</button>
-          <button v-if="row.status === 'approved'" :disabled="busyKey !== ''" @click="runAction('reinvestment-post-'+row.id, () => postDividendReinvestment(row.id), 'Reinvestment posted to the share or subscription ledger.')">Post</button>
+          <button v-if="row.status === 'approved'" :disabled="busyKey !== ''" @click="runAction('reinvestment-post-'+row.id, () => postDividendReinvestment(row.id), 'Reinvestment and its balanced Finance journal posted.')">Post</button>
+          <span v-if="row.journal_reference">GL journal: {{ row.journal_reference }}</span>
+          <template v-if="row.seller_settlement_status === 'payable'">
+            <input v-model="sellerSettlementForm(row.id).bank_reference" aria-label="Seller bank reference" placeholder="Seller bank reference">
+            <input v-model="sellerSettlementForm(row.id).evidence_reference" aria-label="Seller payment evidence" placeholder="Seller payment evidence">
+            <input v-model="sellerSettlementForm(row.id).paid_on" type="date" aria-label="Seller paid on">
+            <button class="secondary" :disabled="busyKey !== '' || !sellerSettlementForm(row.id).bank_reference || !sellerSettlementForm(row.id).evidence_reference || !sellerSettlementForm(row.id).paid_on" @click="runAction('reinvestment-seller-'+row.id, () => settleDividendReinvestmentSeller(row.id, { ...sellerSettlementForm(row.id) }), 'Seller consideration settled and journal posted.')">Settle seller consideration</button>
+          </template>
+          <span v-if="row.seller_settlement_status === 'settled'">Seller settled · {{ row.seller_bank_reference }} · {{ row.seller_journal_reference }}</span>
         </div>
       </div>
     </section>
