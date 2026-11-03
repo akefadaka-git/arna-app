@@ -130,6 +130,7 @@ function clearPageEditor(): void {
   pageKey.value = ''; slugAm.value = ''; slugEn.value = '';
   titleAm.value = ''; titleEn.value = ''; summaryAm.value = ''; summaryEn.value = '';
   bodyAm.value = ''; bodyEn.value = '';
+  sectionTitleAm.value = ''; sectionTitleEn.value = ''; sectionBodyAm.value = ''; sectionBodyEn.value = '';
 }
 
 async function pageAction(page: CorporatePageRecord, decision: 'approve' | 'publish' | 'schedule' | 'unpublish'): Promise<void> {
