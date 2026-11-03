@@ -4,7 +4,8 @@ Date: 2026-11-04
 Repository: `akefadaka-git/arna-app`  
 Audit branch: `audit/arna-repository-consolidation-2026-11-04`  
 Pull request: #38  
-Verified head SHA: `a9896ffe555cb3c0243bd385928471943cb3e1d1`  
+Verified code SHA: `a9896ffe555cb3c0243bd385928471943cb3e1d1`  
+Current PR head: `bbd66d1ee91f950a284773cfbfdcdd72befbac6e` (A4 report documentation only)  
 Base SHA: `ca97c1ac0152c9b2a5dcf562b52575c0070b1d30`
 
 ## Verification evidence
