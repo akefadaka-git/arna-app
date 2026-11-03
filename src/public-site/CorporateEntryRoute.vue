@@ -47,7 +47,7 @@ onMounted(() => void load());
       <RouterLink class="brand" to="/"><img class="public-home__emblem" src="/logo.png" alt="" width="43" height="43" /><span class="brand__wordmark"><strong>{{ masesBrandLabels.corporateName }}</strong><small>{{ masesBrandLabels.productName }}</small></span></RouterLink>
       <nav class="main-nav" :aria-label="locale === 'am' ? 'ዋና አሰሳ' : 'Main navigation'">
         <RouterLink to="/">{{ locale === 'am' ? 'መነሻ' : 'Home' }}</RouterLink>
-        <RouterLink :to="`/${locale === 'am' ? 'en' : 'am'}/content/${String(route.params.type)}/${entry?.slug ?? String(route.params.slug)}`">{{ locale === 'am' ? 'English' : 'አማርኛ' }}</RouterLink>
+        <RouterLink :to="`/${locale === 'am' ? 'en' : 'am'}/content/${String(route.params.type)}/${entry?.alternate_slug ?? String(route.params.slug)}`">{{ locale === 'am' ? 'English' : 'አማርኛ' }}</RouterLink>
       </nav>
     </div></header>
     <main id="entry-content" class="site-container" aria-live="polite">
