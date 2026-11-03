@@ -25,6 +25,9 @@ interface PublishedContent {
 const publishedContent = ref<PublishedContent[]>([]);
 const corporateHome = ref<CorporateSitePage | null>(null);
 const corporateNews = ref<CorporatePublicEntry[]>([]);
+const corporateAnnouncements = ref<CorporatePublicEntry[]>([]);
+const corporatePublications = ref<CorporatePublicEntry[]>([]);
+const corporateMedia = ref<CorporatePublicEntry[]>([]);
 const corporateBusinesses = ref<CorporatePublicEntry[]>([]);
 const corporateServices = ref<CorporatePublicEntry[]>([]);
 const corporateCareers = ref<CorporatePublicEntry[]>([]);
@@ -55,20 +58,27 @@ async function loadPublicContent(): Promise<void> {
   catch { corporateHome.value = null; }
 
   try {
-    const [news, businesses, services, careers, market] = await Promise.all([
+    const [news, announcements, publications, media, businesses, services, careers, market] = await Promise.all([
       fetchCorporateEntries('news', locale.value),
+      fetchCorporateEntries('announcement', locale.value),
+      fetchCorporateEntries('publication', locale.value),
+      fetchCorporateEntries('media', locale.value),
       fetchCorporateEntries('business', locale.value),
       fetchCorporateEntries('service', locale.value),
       fetchCorporateEntries('career', locale.value),
       fetchCorporateEntries('marketplace', locale.value),
     ]);
     corporateNews.value = news;
+    corporateAnnouncements.value = announcements;
+    corporatePublications.value = publications;
+    corporateMedia.value = media;
     corporateBusinesses.value = businesses;
     corporateServices.value = services;
     corporateCareers.value = careers;
     corporateMarket.value = market;
   } catch {
     corporateNews.value = [];
+    corporateAnnouncements.value = []; corporatePublications.value = []; corporateMedia.value = [];
     corporateBusinesses.value = [];
     corporateServices.value = [];
     corporateCareers.value = [];
@@ -200,7 +210,7 @@ const publicationChannels = [
           <a href="#principles">እሴቶቻችን</a>
           <a href="#services">አገልግሎቶች</a>
           <a href="#businesses">የንግድ አቅጣጫዎች</a>
-          <a href="#updates">ዜናና ጦማር</a>
+          <a href="#updates">ዜናና ጦማር</a>\n          <a href="#gallery">ሚዲያ</a>
           <a href="#advertise">ማስታወቂያ</a>
           <RouterLink to="/contribute">ይዘት ያቅርቡ</RouterLink>
         </nav>
@@ -425,6 +435,33 @@ const publicationChannels = [
       </section>
 
 
+
+      <section id="gallery" class="section-pad" aria-labelledby="gallery-title">
+        <div class="site-container">
+          <div class="section-heading"><div><p class="eyebrow eyebrow--dark">MEDIA · GALLERY</p><h2 id="gallery-title" lang="am">የARNA ሚዲያ <span>ማዕከል።</span></h2></div><p lang="am">ፎቶዎችና ህትመቶች ከማረጋገጫና ከአስተዳዳሪ ፈቃድ በኋላ ብቻ ይታያሉ።</p></div>
+          <div class="publication-grid">
+            <article v-for="item in corporateMedia" :key="item.public_id" class="publication-card">
+              <img v-if="item.asset_url" :src="item.asset_url" :alt="item.title" loading="lazy" />
+              <h3>{{ item.title }}</h3><p>{{ item.summary || item.body }}</p>
+            </article>
+            <p v-if="!corporateMedia.length" lang="am">በአሁኑ ጊዜ የታተመ ሚዲያ የለም።</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="publications" class="section-pad" aria-labelledby="publications-title">
+        <div class="site-container">
+          <div class="section-heading"><div><p class="eyebrow eyebrow--dark">PUBLICATIONS · OFFICIAL NOTICES</p><h2 id="publications-title" lang="am">ህትመቶችና <span>ይፋዊ ማስታወቂያዎች።</span></h2></div></div>
+          <div class="publication-grid">
+            <article v-for="item in [...corporateAnnouncements, ...corporatePublications]" :key="item.public_id" class="publication-card">
+              <div class="publication-card__top"><span>{{ item.type.toUpperCase() }}</span><span>{{ publishedDate(item.published_at) }}</span></div>
+              <h3>{{ item.title }}</h3><p class="publication-card__description">{{ item.summary || item.body }}</p>
+            </article>
+            <p v-if="!corporateAnnouncements.length && !corporatePublications.length" lang="am">በአሁኑ ጊዜ የታተሙ ህትመቶች የሉም።</p>
+          </div>
+        </div>
+      </section>
+
       <section id="opportunities" class="section-pad" aria-labelledby="opportunities-title">
         <div class="site-container">
           <div class="section-heading">
@@ -510,7 +547,7 @@ const publicationChannels = [
               <RouterLink to="/legal">ሕጋዊ መረጃ</RouterLink>
               <RouterLink to="/contribute">ይዘት ያቅርቡ</RouterLink>
               <a href="#updates">ዜናዎችና ማስታወቂያዎች</a>
-              <a href="#advertise">ማስታወቂያ ያስተዋውቁ</a>
+              <a href="#advertise">ማስታወቂያ ያስተዋውቁ</a>\n              <a href="#publications">ህትመቶች</a>
               <a href="#opportunities">የሥራና የገበያ እድሎች</a>
               <a href="#contact">ያግኙን</a>
             </div>
