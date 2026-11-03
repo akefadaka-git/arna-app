@@ -21,14 +21,15 @@ async function load(): Promise<void> {
   loading.value = true; failed.value = false;
   try {
     entry.value = await fetchCorporateEntry(type, locale.value, slug);
-    document.title = entry.value.title;
+    document.title = entry.value.seo?.title ?? entry.value.title;
+    document.documentElement.lang = locale.value;
     const description = entry.value.summary || entry.value.body.slice(0, 160);
     let meta = document.querySelector<HTMLMetaElement>('meta[name="description"]');
     if (!meta) { meta = document.createElement('meta'); meta.name = 'description'; document.head.append(meta); }
-    meta.content = description;
-    let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    meta.content = entry.value.seo?.description ?? description;
+    let ogTitle = document.querySelector<HTMLMetaElement>('meta[property=\"og:title\"]');\n    if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.append(ogTitle); }\n    ogTitle.content = document.title;\n    let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.append(canonical); }
-    canonical.href = window.location.href;
+    canonical.href = entry.value.seo?.canonical_url ?? window.location.href;
   } catch { entry.value = null; failed.value = true; }
   finally { loading.value = false; }
 }
