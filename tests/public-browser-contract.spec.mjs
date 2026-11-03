@@ -5,7 +5,7 @@ const baseUrl = process.env.PUBLIC_SITE_URL ?? 'http://127.0.0.1:4173/';
 
 async function expectNoSeriousAccessibilityViolations(page, routeLabel) {
   const results = await new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
     .analyze();
   const serious = results.violations.filter((violation) =>
     violation.impact === 'serious' || violation.impact === 'critical',
