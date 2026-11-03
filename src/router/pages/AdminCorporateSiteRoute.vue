@@ -3,7 +3,8 @@ import { onMounted, ref } from 'vue';
 import PageHeader from '@/components/patterns/PageHeader';
 import Card from '@/components/patterns/Card';
 import {
-  createCorporatePage,\n  createCorporateEntry,
+  createCorporatePage,
+  updateCorporatePage,\n  createCorporateEntry,
   listCorporatePages,
   listCorporateEntries,
   listCorporateInquiries,
@@ -60,7 +61,7 @@ async function createPage(): Promise<void> {
   error.value = '';
   notice.value = '';
   try {
-    await createCorporatePage({
+    const draft = {
       page_key: pageKey.value.trim(),
       slug_am: slugAm.value.trim(),
       slug_en: slugEn.value.trim(),
@@ -73,8 +74,11 @@ async function createPage(): Promise<void> {
         am: { title: titleAm.value.trim(), description: summaryAm.value.trim() },
         en: { title: titleEn.value.trim(), description: summaryEn.value.trim() },
       },
-    });
+    };
+    if (selectedPage.value) await updateCorporatePage(selectedPage.value, draft);
+    else await createCorporatePage(draft);
     notice.value = 'Draft saved. A separate reviewer must approve it before publication.';
+    selectedPage.value = null;
     pageKey.value = ''; slugAm.value = ''; slugEn.value = '';
     titleAm.value = ''; titleEn.value = ''; summaryAm.value = ''; summaryEn.value = '';
     bodyAm.value = ''; bodyEn.value = '';
@@ -84,6 +88,27 @@ async function createPage(): Promise<void> {
   } finally {
     saving.value = false;
   }
+}
+
+
+function editPage(page: CorporatePageRecord): void {
+  selectedPage.value = page;
+  pageKey.value = page.page_key;
+  slugAm.value = page.slug_am ?? '';
+  slugEn.value = page.slug_en ?? '';
+  titleAm.value = page.translations.am?.title ?? '';
+  titleEn.value = page.translations.en?.title ?? '';
+  summaryAm.value = page.translations.am?.summary ?? '';
+  summaryEn.value = page.translations.en?.summary ?? '';
+  bodyAm.value = page.translations.am?.body ?? '';
+  bodyEn.value = page.translations.en?.body ?? '';
+}
+
+function clearPageEditor(): void {
+  selectedPage.value = null;
+  pageKey.value = ''; slugAm.value = ''; slugEn.value = '';
+  titleAm.value = ''; titleEn.value = ''; summaryAm.value = ''; summaryEn.value = '';
+  bodyAm.value = ''; bodyEn.value = '';
 }
 
 async function pageAction(page: CorporatePageRecord, decision: 'approve' | 'publish' | 'schedule' | 'unpublish'): Promise<void> {
@@ -191,15 +216,19 @@ onMounted(() => void refresh());
           <label>English summary <textarea v-model="summaryEn" rows="2" maxlength="500" /></label>
           <label>Amharic body <textarea v-model="bodyAm" rows="4" maxlength="12000" /></label>
           <label>English body <textarea v-model="bodyEn" rows="4" maxlength="12000" /></label>
-          <button type="submit" :disabled="saving">Save draft</button>
+          <button type="submit" :disabled="saving">{{ selectedPage ? "Update draft" : "Save draft" }}</button>
+          <button v-if="selectedPage" type="button" :disabled="saving" @click="clearPageEditor">Cancel edit</button>
         </form>
         <h2>Page register</h2>
         <ul class="corporate-admin__list">
           <li v-for="page in pages" :key="page.id">
             <div><strong>{{ page.translations?.am?.title ?? page.page_key }}</strong><small>{{ page.slug_en }} · v{{ page.version }} · {{ page.status }}</small></div>
             <div class="corporate-admin__actions">
+              <button type="button" :disabled="saving" @click="editPage(page)">Edit</button>
               <button v-if="page.status === 'draft'" type="button" :disabled="saving" @click="pageAction(page, 'approve')">Approve</button>
               <button v-if="page.status === 'approved'" type="button" :disabled="saving" @click="pageAction(page, 'publish')">Publish</button>
+              <input v-if="page.status === 'approved'" v-model="scheduleAt" aria-label="Schedule date and time" type="datetime-local" />
+              <button v-if="page.status === 'approved'" type="button" :disabled="saving || !scheduleAt" @click="pageAction(page, 'schedule')">Schedule</button>
               <button v-if="page.status === 'published' || page.status === 'scheduled'" type="button" :disabled="saving" @click="pageAction(page, 'unpublish')">Unpublish</button>
             </div>
           </li>
