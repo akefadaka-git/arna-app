@@ -117,7 +117,12 @@ function editPage(page: CorporatePageRecord): void {
   summaryAm.value = page.translations.am?.summary ?? '';
   summaryEn.value = page.translations.en?.summary ?? '';
   bodyAm.value = page.translations.am?.body ?? '';
-  bodyEn.value = page.translations.en?.body ?? '';\n  const section = page.sections?.[0] as { content?: Record<string, { title?: string; body?: string }> } | undefined;\n  sectionTitleAm.value = section?.content?.am?.title ?? '';\n  sectionTitleEn.value = section?.content?.en?.title ?? '';\n  sectionBodyAm.value = section?.content?.am?.body ?? '';\n  sectionBodyEn.value = section?.content?.en?.body ?? '';
+  bodyEn.value = page.translations.en?.body ?? '';
+  const section = page.sections?.[0] as { content?: Record<string, { title?: string; body?: string }> } | undefined;
+  sectionTitleAm.value = section?.content?.am?.title ?? '';
+  sectionTitleEn.value = section?.content?.en?.title ?? '';
+  sectionBodyAm.value = section?.content?.am?.body ?? '';
+  sectionBodyEn.value = section?.content?.en?.body ?? '';
 }
 
 function clearPageEditor(): void {
