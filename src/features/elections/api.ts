@@ -104,3 +104,27 @@ export function getElectionCommitteeQueue(electionId: number): Promise<ElectionC
 export function decideElectionNomination(electionId: number, nominationId: number, input: CommitteeDecisionInput): Promise<ElectionCandidate> {
   return api.post(`/api/governance/elections/${electionId}/committee/candidates/${nominationId}/decision`, input);
 }
+
+export interface AppointElectionCommitteeMemberInput {
+  readonly person_id: number;
+  readonly user_id: number;
+  readonly member_role: 'committee_member' | 'legal_advisor' | 'supervisory_member';
+  readonly ex_officio?: boolean;
+  readonly appointment_reference: string;
+}
+export interface ElectionCommitteeMember {
+  readonly id: number;
+  readonly person_id: number;
+  readonly user_id: number;
+  readonly member_role: AppointElectionCommitteeMemberInput['member_role'];
+  readonly status: string;
+  readonly recused_at: string | null;
+  readonly recusal_scope: string | null;
+  readonly appointment_reference: string;
+}
+export function appointElectionCommitteeMember(electionId: number, input: AppointElectionCommitteeMemberInput): Promise<ElectionCommitteeMember> {
+  return api.post(`/api/governance/elections/${electionId}/committee/members`, input);
+}
+export function recuseElectionCommitteeMember(electionId: number, memberId: number, recusalScope: string): Promise<{ recused: boolean }> {
+  return api.post(`/api/governance/elections/${electionId}/committee/members/${memberId}/recusal`, { recusal_scope: recusalScope });
+}
