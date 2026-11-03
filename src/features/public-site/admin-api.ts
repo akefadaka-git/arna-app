@@ -49,6 +49,7 @@ export interface CorporateInquiryRecord {
   readonly subject: string;
   readonly message: string;
   readonly status: string;
+  readonly version: number;
   readonly created_at: string;
 }
 
@@ -84,5 +85,5 @@ export async function listCorporateInquiries(): Promise<CorporateInquiryRecord[]
   return result.data;
 }
 export function updateCorporateInquiry(inquiry: CorporateInquiryRecord, status: string): Promise<CorporateInquiryRecord> {
-  return api.put(`${base}/inquiries/${inquiry.id}`, { status });
+  return api.put(`${base}/inquiries/${inquiry.id}`, { status, expected_version: inquiry.version });
 }
