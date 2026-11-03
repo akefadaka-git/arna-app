@@ -311,13 +311,15 @@ onMounted(() => void refresh());
           <label>Amharic slug <input v-model="entrySlugAm" required /></label><label>English slug <input v-model="entrySlugEn" required /></label>
           <label>Amharic title <input v-model="entryTitleAm" required /></label><label>English title <input v-model="entryTitleEn" required /></label>
           <label>Amharic body <textarea v-model="entryBodyAm" rows="3" /></label><label>English body <textarea v-model="entryBodyEn" rows="3" /></label>
-          <button type="submit" :disabled="saving">{{ selectedEntry ? "Update draft" : "Create draft" }}</button>\n          <button v-if="selectedEntry" type="button" :disabled="saving" @click="selectedEntry = null">Cancel edit</button>
+          <button type="submit" :disabled="saving">{{ selectedEntry ? "Update draft" : "Create draft" }}</button>
+          <button v-if="selectedEntry" type="button" :disabled="saving" @click="selectedEntry = null">Cancel edit</button>
         </form>
         <p>News, announcements, publications, media, careers, opportunities, business/service profiles, advertising and marketplace submissions share the moderation queue.</p>
         <ul class="corporate-admin__list">
           <li v-for="entry in entries" :key="entry.id">
             <div><strong>{{ entry.translations?.am?.title ?? entry.entry_type }}</strong><small>{{ entry.entry_type }} · {{ entry.status }} · v{{ entry.version }}</small></div>
             <div class="corporate-admin__actions">
+              <button type="button" :disabled="saving" @click="editEntry(entry)">Edit</button>
               <button v-if="entry.entry_type === 'media' && entry.status === 'draft'" type="button" :disabled="saving" @click="scanEntry(entry)">Run media scan</button>
               <button v-if="entry.status === 'draft'" type="button" :disabled="saving" @click="entryAction(entry, 'approve')">Approve</button>
               <button v-if="entry.status === 'approved'" type="button" :disabled="saving" @click="entryAction(entry, 'publish')">Publish</button>
