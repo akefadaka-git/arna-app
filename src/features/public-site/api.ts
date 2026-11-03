@@ -47,6 +47,7 @@ export interface CorporatePublicEntry {
   readonly summary: string;
   readonly body: string;
   readonly asset_url: string | null;
+  readonly seo?: { readonly title?: string; readonly description?: string; readonly canonical_url?: string; readonly robots?: string; readonly og_image?: string } | null;
   readonly published_at: string | null;
 }
 
