@@ -71,7 +71,11 @@ export interface CreateDividendDistributionPayload {
   approved_balance_sheet_reference: string;
   distributable_profit_amount: string;
   resolution_evidence_reference: string;
-  payment_method: 'bank_transfer' | 'account_payee_cheque' | 'account_payee_bank_draft' | 'nbe_authorized_payment';
+  payment_method: 'bank_transfer' | 'account_payee_cheque' | 'account_payee_bank_draft' | 'nbe_authorized_payment' | 'reinvestment_only';
+  is_historical?: boolean;
+  historical_source_category?: 'internal_revenue' | 'other';
+  historical_evidence_reference?: string;
+  historical_import_reason?: string;
   accounting_framework: 'ifrs' | 'ifrs_sme' | 'other_aabe_approved';
   replaces_distribution_id?: number;
   replacement_reason?: string;
