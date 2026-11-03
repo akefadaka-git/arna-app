@@ -31,6 +31,7 @@ interface AdminDirectoryRow {
   readonly is_active?: boolean;
   readonly is_system?: boolean;
   readonly email?: string;
+  readonly phone?: string;
   readonly locale?: string;
   readonly scope?: string;
   readonly category?: string;
