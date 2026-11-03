@@ -25,6 +25,7 @@ Thumbs.db
 !.env.workspace
 !.env.portal
 !.env.admin
+!.env.public
 
 # Plesk deployment marker
 /public/git/plesk-git/
