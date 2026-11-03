@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useMyShareholder } from './useMyShareholder';
 import { getMyDividendStatements } from '@/features/shareholders/api';
 import type { MyDividendStatement } from '@/features/shareholders/api';
@@ -36,10 +36,6 @@ async function retry(): Promise<void> {
 watch(identityState, async (state) => {
   if (state === 'linked') await load();
 }, { immediate: true });
-
-onMounted(() => {
-  if (identityState.value === 'linked') void load();
-});
 
 function money(value: string | null | undefined, currency = 'ETB'): string {
   if (value === null || value === undefined) return '—';
