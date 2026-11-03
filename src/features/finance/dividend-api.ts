@@ -245,3 +245,74 @@ export function reconcileDividendPaymentBatch(
 ): Promise<DividendPaymentBatch> {
   return api.post(`/api/finance/dividend-payment-batches/${id}/reconcile`, payload);
 }
+
+
+export interface DividendReinvestment {
+  readonly id: number;
+  readonly distribution_id: number;
+  readonly distribution_item_id: number;
+  readonly shareholder_id: number;
+  readonly settlement_type: 'subscription_balance' | 'new_company_allotment' | 'existing_share_transfer';
+  readonly source_category: 'internal_revenue' | 'other';
+  readonly entitlement_amount: string;
+  readonly applied_amount: string;
+  readonly unapplied_amount: string;
+  readonly status: 'pending' | 'approved' | 'posted';
+  readonly share_quantity: number | null;
+  readonly transaction_reference: string;
+  readonly occurred_on: string;
+}
+
+export interface CreateDividendReinvestmentPayload {
+  distribution_id: number;
+  distribution_item_id: number;
+  shareholder_id: number;
+  settlement_type: 'subscription_balance' | 'new_company_allotment' | 'existing_share_transfer';
+  source_category: 'internal_revenue' | 'other';
+  entitlement_amount: string;
+  subscription_balance_id?: number;
+  share_class_id?: number;
+  share_quantity?: number;
+  price_per_share?: string;
+  seller_shareholder_id?: number;
+  occurred_on: string;
+  transaction_reference: string;
+  evidence_reference: string;
+  idempotency_key: string;
+}
+
+export async function listDividendReinvestments(): Promise<readonly DividendReinvestment[]> {
+  const response = await api.get<{ data: readonly DividendReinvestment[] }>(
+    '/api/finance/dividend-reinvestments',
+    { params: { per_page: 100 } },
+  );
+  return response.data;
+}
+
+export function createDividendReinvestment(payload: CreateDividendReinvestmentPayload): Promise<DividendReinvestment> {
+  return api.post('/api/finance/dividend-reinvestments', payload);
+}
+
+export function approveDividendReinvestment(id: number): Promise<DividendReinvestment> {
+  return api.post(`/api/finance/dividend-reinvestments/${id}/approve`, {});
+}
+
+export function postDividendReinvestment(id: number): Promise<DividendReinvestment> {
+  return api.post(`/api/finance/dividend-reinvestments/${id}/post`, {});
+}
+
+export interface CreateShareSubscriptionBalancePayload {
+  legal_entity_id: number;
+  shareholder_id: number;
+  share_class_id: number;
+  subscription_reference: string;
+  subscribed_share_quantity: number;
+  price_per_share: string;
+  original_amount: string;
+  occurred_on: string;
+  evidence_reference: string;
+}
+
+export function createShareSubscriptionBalance(payload: CreateShareSubscriptionBalancePayload): Promise<unknown> {
+  return api.post('/api/finance/dividend-share-subscription-balances', payload);
+}
