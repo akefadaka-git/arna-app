@@ -190,8 +190,8 @@ const publicationChannels = [
     <div class="announcement-bar">
       <div class="site-container announcement-bar__inner">
         <span class="announcement-bar__pulse" aria-hidden="true"></span>
-        <p lang="am">የARNA ይፋዊ ድረ ገጽ እየተዘጋጀ ነው። የጸደቀ መረጃ በዚህ ይታተማል።</p>
-        <span class="announcement-bar__english">OFFICIAL WEBSITE · IN DEVELOPMENT</span>
+        <p lang="am">የARNA ይፋዊ ድረ ገጽ። የተጸደቀ መረጃ ብቻ እዚህ ይታያል።</p>
+        <span class="announcement-bar__english">OFFICIAL CORPORATE WEBSITE</span>
       </div>
     </div>
 
@@ -426,11 +426,11 @@ const publicationChannels = [
           <div class="advertising-section__copy">
             <p class="eyebrow">COMMERCIAL & PARTNERSHIPS</p>
             <h2 id="advertising-title" lang="am">የንግድ እድልዎን <span>ከትክክለኛው ታዳሚ ጋር ያገናኙ።</span></h2>
-            <p lang="am">የARNA የራስ ዘመቻዎችና የተፈቀዱ የአጋር ማስታወቂያዎች በግልጽ የስፖንሰር መለያ ይቀርባሉ። የማስታወቂያ ማተሚያ በአስተዳዳሪ ፈቃድ ብቻ ይከናወናል።</p>
+            <p lang="am">የማስታወቂያ ጥያቄዎች ለግምገማ ማቅረብ ይችላሉ። ማንኛውም ማስታወቂያ በግልጽ የስፖንሰር መለያ እና በአስተዳዳሪ ፈቃድ ብቻ ይታተማል።</p>
           </div>
           <div class="advertising-section__aside">
             <span>ADVERTISING PLATFORM</span>
-            <strong>COMING IN A LATER RELEASE</strong>
+            <strong>SUBMISSIONS OPEN · PUBLISHING BY APPROVAL</strong>
           </div>
         </div>
       </section>
