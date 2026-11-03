@@ -2,12 +2,12 @@
 import '@/styles/reset.css';
 import '@/styles/tokens.css';
 import '@/styles/public-accessibility-overrides.css';
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import { api } from '@/core/api/client';
 import { masesBrandLabels } from '@/router/shell-labels';
 import { formatCalendarDate } from '@/core/dates/calendar';
-import { fetchCorporateHome, fetchCorporateEntries, submitCorporateInquiry, submitCorporateOpportunity, type CorporateSitePage, type CorporateSiteSection, type CorporatePublicEntry } from '@/features/public-site/api';
+import { fetchCorporateHome, fetchCorporateEntries, fetchCorporatePages, submitCorporateInquiry, submitCorporateOpportunity, type CorporateSitePage, type CorporateSiteSection, type CorporatePublicEntry } from '@/features/public-site/api';
 
 const route = useRoute();
 const locale = ref<'am' | 'en'>(route.query.locale === 'en' ? 'en' : 'am');
@@ -24,6 +24,8 @@ interface PublishedContent {
 
 const publishedContent = ref<PublishedContent[]>([]);
 const corporateHome = ref<CorporateSitePage | null>(null);
+const corporatePages = ref<CorporateSitePage[]>([]);
+const navigationPages = computed(() => corporatePages.value.filter((page) => page.page_key !== 'home' && page.slug));
 const corporateNews = ref<CorporatePublicEntry[]>([]);
 const corporateAnnouncements = ref<CorporatePublicEntry[]>([]);
 const corporatePublications = ref<CorporatePublicEntry[]>([]);
@@ -210,6 +212,7 @@ const publicationChannels = [
 
         <nav class="main-nav" aria-label="ዋና አሰሳ">
           <a href="#about">ስለ ARNA</a>
+          <RouterLink v-for="page in navigationPages" :key="page.public_id" :to="`/${locale}/${page.slug}`">{{ page.title }}</RouterLink>
           <a href="#principles">እሴቶቻችን</a>
           <a href="#services">አገልግሎቶች</a>
           <a href="#businesses">የንግድ አቅጣጫዎች</a>
