@@ -16,6 +16,11 @@ import {
   createDividendPaymentBatch,
   cancelDividendPaymentBatch,
   createDividendTaxRemittance,
+  listDividendReinvestments,
+  createDividendReinvestment,
+  approveDividendReinvestment,
+  postDividendReinvestment,
+  createShareSubscriptionBalance,
   failDividendPayment,
   getDividendDistribution,
   listDividendDistributions,
@@ -29,11 +34,13 @@ import {
   type DividendPaymentBatch,
   type DividendTaxRemittance,
   type DividendShareClassWeight,
+  type DividendReinvestment,
 } from './dividend-api';
 
 const distributions = ref<readonly DividendDistribution[]>([]);
 const batches = ref<readonly DividendPaymentBatch[]>([]);
 const remittances = ref<readonly DividendTaxRemittance[]>([]);
+const reinvestments = ref<readonly DividendReinvestment[]>([]);
 const classWeights = ref<readonly DividendShareClassWeight[]>([]);
 const distributionDetails = ref<DividendDistribution | null>(null);
 const loadedDistributionId = ref(0);
@@ -77,6 +84,20 @@ const taxForm = reactive({
 
 const remittanceForm = reactive({ legal_entity_id: 0, distribution_id: 0, remittance_reference: '', tax_authority_reference: '', amount: '' });
 const remittancePaymentForm = reactive({ bank_reference: '', evidence_reference: '', paid_on: '' });
+
+const reinvestmentForm = reactive({
+  distribution_id: 0, distribution_item_id: 0, shareholder_id: 0,
+  settlement_type: 'subscription_balance' as 'subscription_balance' | 'new_company_allotment' | 'existing_share_transfer',
+  source_category: 'internal_revenue' as 'internal_revenue' | 'other',
+  entitlement_amount: '', subscription_balance_id: 0, share_class_id: 0,
+  share_quantity: 0, price_per_share: '', seller_shareholder_id: 0,
+  occurred_on: '', transaction_reference: '', evidence_reference: '', idempotency_key: '',
+});
+const subscriptionBalanceForm = reactive({
+  legal_entity_id: 0, shareholder_id: 0, share_class_id: 0,
+  subscription_reference: '', subscribed_share_quantity: 0,
+  price_per_share: '', original_amount: '', occurred_on: '', evidence_reference: '',
+});
 
 const weightForm = reactive({ distribution_id: 0, share_class_id: 0, weight_bps: 10000, evidence_reference: '' });
 
@@ -139,14 +160,16 @@ async function refresh(): Promise<void> {
   loading.value = true;
   error.value = '';
   try {
-    const [nextDistributions, nextBatches, nextRemittances] = await Promise.all([
+    const [nextDistributions, nextBatches, nextRemittances, nextReinvestments] = await Promise.all([
       listDividendDistributions(),
       listDividendPaymentBatches(),
       listDividendTaxRemittances(),
+      listDividendReinvestments(),
     ]);
     distributions.value = nextDistributions;
     batches.value = nextBatches;
     remittances.value = nextRemittances;
+    reinvestments.value = nextReinvestments;
     if (weightForm.distribution_id) await loadWeights();
   } catch {
     error.value = 'Unable to load dividend records. Verify Finance permissions and API availability.';
@@ -174,6 +197,29 @@ async function submitDistribution(): Promise<void> {
   submitting.value = true;
   await runAction('create-distribution', () => createDividendDistribution({ ...distributionForm }), 'Distribution draft created.');
   submitting.value = false;
+}
+
+
+async function submitReinvestment(): Promise<void> {
+  const payload = { ...reinvestmentForm };
+  await runAction('reinvestment-create', () => createDividendReinvestment({
+    ...payload,
+    ...(payload.settlement_type === 'subscription_balance'
+      ? { subscription_balance_id: payload.subscription_balance_id }
+      : {
+          share_class_id: payload.share_class_id,
+          share_quantity: payload.share_quantity,
+          price_per_share: payload.price_per_share,
+          ...(payload.settlement_type === 'existing_share_transfer'
+            ? { seller_shareholder_id: payload.seller_shareholder_id } : {}),
+        }),
+  }), 'Dividend reinvestment recorded for independent approval.');
+}
+
+async function submitSubscriptionBalance(): Promise<void> {
+  await runAction('subscription-balance-create', () => createShareSubscriptionBalance({
+    ...subscriptionBalanceForm,
+  }), 'Outstanding share subscription balance recorded.');
 }
 
 async function submitTaxAssessment(): Promise<void> {
@@ -398,6 +444,63 @@ onMounted(refresh);
           <button type="submit" class="secondary" :disabled="busyKey !== '' || batch.reconciliation_status === 'reconciled'">Reconcile statement</button>
         </form>
         <p v-if="batch.bank_statement_reference" class="hint">Statement: {{ batch.bank_statement_reference }} · {{ money(batch.bank_statement_amount, batch.currency) }}</p>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="reinvestment-title">
+      <h2 id="reinvestment-title">Historical dividend reinvestment / የታሪክ ዲቪደንድ ዳግም ኢንቨስትመንት</h2>
+      <p class="hint">Records reinvestment of the approved net dividend. Select one route: settle an outstanding share subscription, issue new company shares, or transfer existing shares from another shareholder. Source classification is separate from recipient tax assessment.</p>
+      <form class="form-grid" @submit.prevent="submitSubscriptionBalance">
+        <label>Legal entity ID<input v-model.number="subscriptionBalanceForm.legal_entity_id" type="number" min="1" required></label>
+        <label>Shareholder ID<input v-model.number="subscriptionBalanceForm.shareholder_id" type="number" min="1" required></label>
+        <label>Share class ID<input v-model.number="subscriptionBalanceForm.share_class_id" type="number" min="1" required></label>
+        <label>Subscription reference<input v-model="subscriptionBalanceForm.subscription_reference" required maxlength="120"></label>
+        <label>Subscribed shares<input v-model.number="subscriptionBalanceForm.subscribed_share_quantity" type="number" min="1" required></label>
+        <label>Price per share (ETB)<input v-model="subscriptionBalanceForm.price_per_share" inputmode="decimal" required></label>
+        <label>Outstanding subscription amount (ETB)<input v-model="subscriptionBalanceForm.original_amount" inputmode="decimal" required></label>
+        <label>Original subscription date<input v-model="subscriptionBalanceForm.occurred_on" type="date" required></label>
+        <label class="wide">Subscription evidence<input v-model="subscriptionBalanceForm.evidence_reference" required maxlength="500"></label>
+        <div class="form-actions"><button type="submit" :disabled="busyKey !== ''">Record unpaid share value / ያልተከፈለ የአክሲዮን ዋጋ መዝግብ</button></div>
+      </form>
+      <form class="form-grid" @submit.prevent="submitReinvestment">
+        <label>Distribution ID<input v-model.number="reinvestmentForm.distribution_id" type="number" min="1" required></label>
+        <label>Distribution item ID<input v-model.number="reinvestmentForm.distribution_item_id" type="number" min="1" required></label>
+        <label>Shareholder ID<input v-model.number="reinvestmentForm.shareholder_id" type="number" min="1" required></label>
+        <label>Reinvestment route
+          <select v-model="reinvestmentForm.settlement_type">
+            <option value="subscription_balance">Settle unpaid share subscription</option>
+            <option value="new_company_allotment">New company share allotment</option>
+            <option value="existing_share_transfer">Purchase existing shareholder shares</option>
+          </select>
+        </label>
+        <label>Source category
+          <select v-model="reinvestmentForm.source_category"><option value="internal_revenue">Internal revenue</option><option value="other">Other documented source</option></select>
+        </label>
+        <label>Net dividend amount allocated (ETB)<input v-model="reinvestmentForm.entitlement_amount" inputmode="decimal" required></label>
+        <template v-if="reinvestmentForm.settlement_type === 'subscription_balance'">
+          <label>Subscription balance ID<input v-model.number="reinvestmentForm.subscription_balance_id" type="number" min="1" required></label>
+        </template>
+        <template v-else>
+          <label>Share class ID<input v-model.number="reinvestmentForm.share_class_id" type="number" min="1" required></label>
+          <label>Whole shares<input v-model.number="reinvestmentForm.share_quantity" type="number" min="1" required></label>
+          <label>Agreed price per share (ETB)<input v-model="reinvestmentForm.price_per_share" inputmode="decimal" required></label>
+          <label v-if="reinvestmentForm.settlement_type === 'existing_share_transfer'">Selling shareholder ID<input v-model.number="reinvestmentForm.seller_shareholder_id" type="number" min="1" required></label>
+        </template>
+        <label>Historical transaction date<input v-model="reinvestmentForm.occurred_on" type="date" required></label>
+        <label>Transaction reference<input v-model="reinvestmentForm.transaction_reference" required maxlength="150"></label>
+        <label>Idempotency key<input v-model="reinvestmentForm.idempotency_key" required maxlength="100"></label>
+        <label class="wide">Resolution / transfer / payment evidence reference<input v-model="reinvestmentForm.evidence_reference" required maxlength="500"></label>
+        <div class="form-actions"><button type="submit" :disabled="busyKey !== ''">Record reinvestment / ዳግም ኢንቨስትመንት መዝግብ</button></div>
+      </form>
+      <div v-for="row in reinvestments" :key="row.id" class="record">
+        <div class="record-heading">
+          <div><strong>{{ row.transaction_reference }}</strong><span>Distribution {{ row.distribution_id }} · Shareholder {{ row.shareholder_id }} · {{ row.settlement_type }} · {{ money(row.applied_amount) }} applied · {{ money(row.unapplied_amount) }} unallocated</span></div>
+          <span class="status">{{ statusText(row.status) }}</span>
+        </div>
+        <div class="actions">
+          <button v-if="row.status === 'pending'" class="secondary" :disabled="busyKey !== ''" @click="runAction('reinvestment-approve-'+row.id, () => approveDividendReinvestment(row.id), 'Reinvestment approved by independent checker.')">Approve</button>
+          <button v-if="row.status === 'approved'" :disabled="busyKey !== ''" @click="runAction('reinvestment-post-'+row.id, () => postDividendReinvestment(row.id), 'Reinvestment posted to the share or subscription ledger.')">Post</button>
+        </div>
       </div>
     </section>
     <section class="panel" aria-labelledby="tax-remittance-title">
