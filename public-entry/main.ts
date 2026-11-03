@@ -4,6 +4,7 @@ import { initializeThemePreference } from '@/core/theme-preference';
 import { createRouter, createWebHistory, RouterView } from 'vue-router';
 
 import PublicHome from '@/public-site/PublicHome.vue';
+import CorporatePageRoute from '@/public-site/CorporatePageRoute.vue';
 import PublicContributionRoute from '@/public-site/PublicContributionRoute.vue';
 import PublicVerificationRoute from '@/router/pages/PublicVerificationRoute.vue';
 import LegalCenterRoute from '@/router/pages/LegalCenterRoute.vue';
@@ -44,6 +45,11 @@ const router = createRouter({
       path: '/legal/:slug',
       name: 'public-legal-document',
       component: LegalDocumentRoute,
+    },
+    {
+      path: '/:locale(am|en)/:slug',
+      name: 'public-corporate-page',
+      component: CorporatePageRoute,
     },
     {
       path: '/:pathMatch(.*)*',
