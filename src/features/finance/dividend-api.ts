@@ -73,6 +73,8 @@ export interface CreateDividendDistributionPayload {
   resolution_evidence_reference: string;
   payment_method: 'bank_transfer' | 'cheque' | 'nbe_authorized_payment';
   accounting_framework: 'ifrs' | 'ifrs_sme' | 'other_aabe_approved';
+  replaces_distribution_id?: number;
+  replacement_reason?: string;
 }
 
 export async function listDividendDistributions(): Promise<readonly DividendDistribution[]> {
