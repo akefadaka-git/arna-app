@@ -52,6 +52,8 @@ jobs:
         run: npm run test:app-shell-responsive-contract
       - name: Verify wallet opening form integration
         run: npm run test:wallet-open-form-contract
+      - name: Verify workspace dashboard route integration
+        run: npm run test:workspace-dashboard-route-contract
       - name: Upload versioned static build outputs
         uses: actions/upload-artifact@v4
         with:
