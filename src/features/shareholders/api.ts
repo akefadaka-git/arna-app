@@ -653,6 +653,10 @@ export interface MyDividendStatement {
   readonly cash_paid_amount: string | null;
   readonly penalty_offset_amount: string | null;
   readonly remaining_payable_amount: string;
+  readonly reinvested_amount: string;
+  readonly reinvested_share_quantity: string;
+  readonly subscription_balance_applied_amount: string;
+  readonly reinvestment_unapplied_amount: string;
   readonly payable_status: string | null;
   readonly tax_rate_bps: number | null;
   readonly tax_treatment: string | null;
