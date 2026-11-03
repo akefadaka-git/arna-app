@@ -8,7 +8,7 @@ on:
       - .github/workflows/dependency-refresh-audit.yml
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   refresh-and-verify:
@@ -18,7 +18,7 @@ jobs:
       - name: Checkout exact audit branch
         uses: actions/checkout@v4
         with:
-          persist-credentials: false
+          persist-credentials: true
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -52,6 +52,18 @@ jobs:
               console.log(JSON.stringify({ name, severity: item.severity, isDirect: item.isDirect, range: item.range, via, fixAvailable: item.fixAvailable }));
             }
           '
+      - name: Commit verified dependency manifests to the isolated audit branch
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          if git diff --cached --quiet; then
+            echo "No dependency manifest changes to commit."
+          else
+            git commit -m "fix(deps): update high-severity frontend advisories"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
       - name: Upload candidate dependency manifests and audit report
         uses: actions/upload-artifact@v4
         with:
