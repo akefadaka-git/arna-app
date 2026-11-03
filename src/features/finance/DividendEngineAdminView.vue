@@ -291,7 +291,7 @@ onMounted(refresh);
       <form class="form-grid" @submit.prevent="submitWeight">
         <label>Draft distribution ID<input v-model.number="weightForm.distribution_id" type="number" min="1" required></label>
         <label>Share class ID<input v-model.number="weightForm.share_class_id" type="number" min="1" required></label>
-        <label>Dividend weight (basis points)<input v-model.number="weightForm.weight_bps" type="number" min="1" max="100000" required></label>
+        <label>Dividend weight (basis points)<input v-model.number="weightForm.weight_bps" type="number" min="0" max="100000" required></label>
         <label>GA resolution / class-rights evidence<input v-model="weightForm.evidence_reference" required maxlength="500"></label>
         <div class="form-actions">
           <button type="submit" :disabled="busyKey !== ''">Request weight / ክብደት ጠይቅ</button>
