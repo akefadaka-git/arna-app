@@ -1,4 +1,4 @@
-name: Isolated public browser contract integration
+name: Isolated public browser contract integration after accessibility fixes
 
 on:
   push:
