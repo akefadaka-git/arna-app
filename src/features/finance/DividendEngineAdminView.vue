@@ -201,19 +201,29 @@ async function submitDistribution(): Promise<void> {
 
 
 async function submitReinvestment(): Promise<void> {
-  const payload = { ...reinvestmentForm };
-  await runAction('reinvestment-create', () => createDividendReinvestment({
-    ...payload,
-    ...(payload.settlement_type === 'subscription_balance'
-      ? { subscription_balance_id: payload.subscription_balance_id }
-      : {
-          share_class_id: payload.share_class_id,
-          share_quantity: payload.share_quantity,
-          price_per_share: payload.price_per_share,
-          ...(payload.settlement_type === 'existing_share_transfer'
-            ? { seller_shareholder_id: payload.seller_shareholder_id } : {}),
-        }),
-  }), 'Dividend reinvestment recorded for independent approval.');
+  const base = {
+    distribution_id: reinvestmentForm.distribution_id,
+    distribution_item_id: reinvestmentForm.distribution_item_id,
+    shareholder_id: reinvestmentForm.shareholder_id,
+    settlement_type: reinvestmentForm.settlement_type,
+    source_category: reinvestmentForm.source_category,
+    entitlement_amount: reinvestmentForm.entitlement_amount,
+    occurred_on: reinvestmentForm.occurred_on,
+    transaction_reference: reinvestmentForm.transaction_reference,
+    evidence_reference: reinvestmentForm.evidence_reference,
+    idempotency_key: reinvestmentForm.idempotency_key,
+  };
+  const payload = reinvestmentForm.settlement_type === 'subscription_balance'
+    ? { ...base, subscription_balance_id: reinvestmentForm.subscription_balance_id }
+    : {
+        ...base,
+        share_class_id: reinvestmentForm.share_class_id,
+        share_quantity: reinvestmentForm.share_quantity,
+        price_per_share: reinvestmentForm.price_per_share,
+        ...(reinvestmentForm.settlement_type === 'existing_share_transfer'
+          ? { seller_shareholder_id: reinvestmentForm.seller_shareholder_id } : {}),
+      };
+  await runAction('reinvestment-create', () => createDividendReinvestment(payload), 'Dividend reinvestment recorded for independent approval.');
 }
 
 async function submitSubscriptionBalance(): Promise<void> {
