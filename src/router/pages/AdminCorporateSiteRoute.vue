@@ -12,6 +12,7 @@ import {
   reviewCorporatePage,
   reviewCorporateEntry,
   scanCorporateMedia,
+  uploadCorporateMedia,
   updateCorporateInquiry,
   type CorporatePageRecord,
   type CorporateEntryRecord,
@@ -44,6 +45,9 @@ const entryTitleAm = ref('');
 const entryTitleEn = ref('');
 const entryBodyAm = ref('');
 const entryBodyEn = ref('');
+const mediaTitle = ref('');
+const mediaDescription = ref('');
+const mediaFile = ref<File | null>(null);
 
 async function refresh(): Promise<void> {
   loading.value = true;
@@ -156,6 +160,24 @@ async function createEntry(): Promise<void> {
 }
 
 
+
+function selectMediaFile(event: Event): void {
+  const target = event.target;
+  mediaFile.value = target instanceof HTMLInputElement ? target.files?.[0] ?? null : null;
+}
+
+async function uploadMedia(): Promise<void> {
+  if (!mediaFile.value) return;
+  saving.value = true; error.value = ''; notice.value = '';
+  try {
+    const result = await uploadCorporateMedia(mediaTitle.value.trim(), mediaDescription.value.trim(), mediaFile.value, 'am');
+    notice.value = `Media received: ${result.reference}. It is quarantined pending scan and approval.`;
+    mediaTitle.value = ''; mediaDescription.value = ''; mediaFile.value = null;
+    await refresh();
+  } catch { error.value = 'Media upload failed. Allowed formats: JPG, PNG, WebP, PDF or MP4; maximum 10 MB.'; }
+  finally { saving.value = false; }
+}
+
 async function scanEntry(entry: CorporateEntryRecord): Promise<void> {
   saving.value = true; error.value = '';
   try {
@@ -245,6 +267,13 @@ onMounted(() => void refresh());
 
       <section v-else-if="tab === 'editorial'" aria-labelledby="editorial-heading">
         <h2 id="editorial-heading">Editorial and listing moderation</h2>
+        <form class="corporate-admin__form" @submit.prevent="uploadMedia">
+          <h3>Upload media to private quarantine</h3>
+          <label>Media title <input v-model="mediaTitle" required maxlength="180" /></label>
+          <label>Description <textarea v-model="mediaDescription" rows="2" maxlength="2000" /></label>
+          <label>Asset file <input required type="file" accept=".jpg,.jpeg,.png,.webp,.pdf,.mp4" @change="selectMediaFile" /></label>
+          <button type="submit" :disabled="saving || !mediaFile">Upload for review</button>
+        </form>
         <form class="corporate-admin__form" @submit.prevent="createEntry">
           <label>Content type <select v-model="entryType"><option value="news">News</option><option value="announcement">Announcement</option><option value="publication">Publication</option><option value="media">Media metadata</option><option value="career">Career</option><option value="opportunity">Opportunity</option><option value="business">Business / subsidiary</option><option value="service">Service</option><option value="advertisement">Advertisement</option><option value="marketplace">Marketplace</option></select></label>
           <label>Amharic slug <input v-model="entrySlugAm" required /></label><label>English slug <input v-model="entrySlugEn" required /></label>
