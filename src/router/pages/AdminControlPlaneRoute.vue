@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
 import { api } from '@/core/api/client';
 
 type Row = Record<string, unknown>;
@@ -13,6 +14,7 @@ interface PageResult<T> {
 type Section = 'users' | 'roles' | 'permissions' | 'tenants';
 
 const route = useRoute();
+const authStore = useAuthStore();
 const rows = ref<Row[]>([]);
 const loading = ref(false);
 const errorMessage = ref('');
@@ -114,10 +116,10 @@ watch(section, () => { page.value = 1; search.value = ''; void load(); });
     </header>
 
     <nav class="section-nav" aria-label="Administration sections">
-      <RouterLink v-if="$route.name !== 'admin-identity-users'" to="/admin/identity/users">{{ labels.users }}</RouterLink>
-      <RouterLink v-if="$route.name !== 'admin-rbac-roles'" to="/admin/rbac/roles">{{ labels.roles }}</RouterLink>
-      <RouterLink v-if="$route.name !== 'admin-rbac-permissions'" to="/admin/rbac/permissions">{{ labels.permissions }}</RouterLink>
-      <RouterLink v-if="$route.name !== 'admin-tenants'" to="/admin/tenants">{{ labels.tenants }}</RouterLink>
+      <RouterLink v-if="authStore.hasPermission('platform.identity.read') && $route.name !== 'admin-identity-users'" to="/admin/identity/users">{{ labels.users }}</RouterLink>
+      <RouterLink v-if="authStore.hasPermission('platform.rbac.read') && $route.name !== 'admin-rbac-roles'" to="/admin/rbac/roles">{{ labels.roles }}</RouterLink>
+      <RouterLink v-if="authStore.hasPermission('platform.rbac.read') && $route.name !== 'admin-rbac-permissions'" to="/admin/rbac/permissions">{{ labels.permissions }}</RouterLink>
+      <RouterLink v-if="authStore.hasPermission('platform.tenancy.read') && $route.name !== 'admin-tenants'" to="/admin/tenants">{{ labels.tenants }}</RouterLink>
     </nav>
 
     <p class="result-count">{{ labels.total }}: {{ total }}</p>
