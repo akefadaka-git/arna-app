@@ -64,6 +64,10 @@ const distributionForm = reactive<CreateDividendDistributionPayload>({
   distributable_profit_amount: '',
   resolution_evidence_reference: '',
   payment_method: 'bank_transfer',
+  is_historical: false,
+  historical_source_category: 'internal_revenue' as 'internal_revenue' | 'other',
+  historical_evidence_reference: '',
+  historical_import_reason: '',
   accounting_framework: 'ifrs_sme',
   replaces_distribution_id: undefined as number | undefined,
   replacement_reason: '',
@@ -333,7 +337,13 @@ onMounted(refresh);
         <label>Distributable net profit (ETB)<input v-model="distributionForm.distributable_profit_amount" inputmode="decimal" required></label>
         <label>Approved balance-sheet evidence<input v-model="distributionForm.approved_balance_sheet_reference" required maxlength="200"></label>
         <label>GA resolution evidence<input v-model="distributionForm.resolution_evidence_reference" required maxlength="500"></label>
-        <label>Payment method<select v-model="distributionForm.payment_method"><option value="bank_transfer">Bank transfer</option><option value="account_payee_cheque">Account-payee cheque</option><option value="account_payee_bank_draft">Account-payee bank draft</option><option value="nbe_authorized_payment">NBE-authorized payment system</option></select></label>
+        <label>Historical dividend record<input v-model="distributionForm.is_historical" type="checkbox"></label>
+        <label>Payment method<select v-model="distributionForm.payment_method"><option value="bank_transfer">Bank transfer</option><option value="account_payee_cheque">Account-payee cheque</option><option value="account_payee_bank_draft">Account-payee bank draft</option><option value="nbe_authorized_payment">NBE-authorized payment system</option><option v-if="distributionForm.is_historical" value="reinvestment_only">Reinvestment only — no cash taken</option></select></label>
+        <template v-if="distributionForm.is_historical">
+          <label>Historical source category<select v-model="distributionForm.historical_source_category"><option value="internal_revenue">Internal revenue</option><option value="other">Other documented source</option></select></label>
+          <label class="wide">Historical evidence reference<input v-model="distributionForm.historical_evidence_reference" required maxlength="500"></label>
+          <label class="wide">Historical import reason / timing explanation<input v-model="distributionForm.historical_import_reason" required maxlength="500"></label>
+        </template>
         <label>Accounting framework<select v-model="distributionForm.accounting_framework"><option value="ifrs">IFRS</option><option value="ifrs_sme">IFRS for SMEs</option><option value="other_aabe_approved">Other AABE-approved</option></select></label>
         <label>Replaces cancelled distribution ID (optional)<input v-model.number="distributionForm.replaces_distribution_id" type="number" min="1"></label>
         <label>Replacement reason<input v-model="distributionForm.replacement_reason" maxlength="500" placeholder="Required when replacing a cancelled distribution"></label>
