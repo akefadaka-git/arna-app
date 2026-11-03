@@ -75,7 +75,10 @@ export function reviewCorporatePage(page: CorporatePageRecord, decision: 'approv
 export async function createCorporateEntry(draft: { entry_type: string; slug_am?: string; slug_en?: string; translations: Record<string, { title: string; body?: string }>; seo?: Record<string, Record<string, string>> }): Promise<CorporateEntryRecord> {
   return api.post(`${base}/entries`, draft);
 }
-export function updateCorporateEntry(entry: CorporateEntryRecord, draft: { slug_am?: string; slug_en?: string; translations: Record<string, { title: string; body?: string }> }): Promise<CorporateEntryRecord> {\n  return api.put(`${base}/entries/${entry.id}`, { ...draft, expected_version: entry.version });\n}\nexport async function listCorporateEntries(): Promise<CorporateEntryRecord[]> {
+export function updateCorporateEntry(entry: CorporateEntryRecord, draft: { slug_am?: string; slug_en?: string; translations: Record<string, { title: string; body?: string }> }): Promise<CorporateEntryRecord> {
+  return api.put(`${base}/entries/${entry.id}`, { ...draft, expected_version: entry.version });
+}
+export async function listCorporateEntries(): Promise<CorporateEntryRecord[]> {
   const result = await api.get<{ data: CorporateEntryRecord[] }>(`${base}/entries`);
   return result.data;
 }
