@@ -494,6 +494,8 @@ import {
   governanceBodyDetailViewLabels,
 } from '@/features/governance/labels';
 
+import { dashboardViewLabels } from '@/features/dashboard/labels';
+
 /**
  * The workspace build's top-level route. A single parent
  * (AuthenticatedLayout) with all authenticated children nested under
@@ -515,6 +517,16 @@ export const routesWorkspace: RouteRecordRaw[] = [
         path: '',
         name: 'home',
         redirect: { name: 'launcher' },
+      },
+
+      // -----------------------------------------------------------------------
+      // Workspace dashboard — first navigation leaf
+      // -----------------------------------------------------------------------
+      {
+        path: 'dashboard',
+        name: 'dashboard',
+        component: () => import('@/features/dashboard/DashboardView.vue'),
+        props: { labels: dashboardViewLabels },
       },
 
       // -----------------------------------------------------------------------
