@@ -50,3 +50,13 @@ lucide-vue-next 0.468.0 emits an upstream deprecation warning in npm ci, but it 
 - Component import graph: NOT YET FULLY AUTOMATED.
 - Build/type/tests: NOT RUN in A2.
 - Production deployment: NOT RUN.
+
+## Final Vue-aware source reachability reconciliation
+
+A Knip run configured with all four application entry points, workspace/portal/admin route roots, the `@` alias, and `@vue/compiler-sfc` SFC parsing completed after the feature integrations and direct test dependency registration.
+
+- 45 file-level unused candidates remain. They are confined to reusable component-library primitives/composites/patterns and the two standalone AppShell components `AbstractBackground` and `LanguageSelector`. They are intentionally retained as reusable design-system assets; no unreferenced feature page or feature service file remains.
+- 30 unused exports and 126 unused exported types were reported. The majority are reusable component contracts, test helpers, and service/API operations. These are retained pending domain-owner confirmation rather than deleting potential public module contracts.
+- Unlisted dependencies: 0; unresolved imports: 0.
+- Added exact dev dependencies for the existing tests: `@vue/compiler-sfc@3.5.44`, `@playwright/test@1.64.1`, and `@axe-core/playwright@4.14.0`. Added `test:public-browser` and wired the browser/Axe suite into CI.
+
