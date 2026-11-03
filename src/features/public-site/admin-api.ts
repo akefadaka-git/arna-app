@@ -27,27 +27,61 @@ export interface CorporatePageRecord extends CorporatePageDraft {
   readonly scheduled_at: string | null;
 }
 
-const base = '/api/admin/corporate-site/pages';
+export interface CorporateEntryRecord {
+  readonly id: number;
+  readonly public_id: string;
+  readonly entry_type: string;
+  readonly status: string;
+  readonly version: number;
+  readonly translations: Partial<Record<CorporateLocale, { title?: string; body?: string }>>;
+  readonly created_at: string;
+  readonly moderation_note: string | null;
+}
+
+export interface CorporateInquiryRecord {
+  readonly id: number;
+  readonly public_id: string;
+  readonly inquiry_type: string;
+  readonly name: string;
+  readonly email: string;
+  readonly phone: string | null;
+  readonly subject: string;
+  readonly message: string;
+  readonly status: string;
+  readonly created_at: string;
+}
+
+const base = '/api/admin/corporate-site';
 
 export function listCorporatePages(): Promise<{ data: CorporatePageRecord[]; current_page: number; last_page: number; total: number }> {
-  return api.get(base);
+  return api.get('/api/admin/corporate-site/pages');
 }
-
 export function createCorporatePage(draft: CorporatePageDraft): Promise<CorporatePageRecord> {
-  return api.post(base, draft);
+  return api.post('/api/admin/corporate-site/pages', draft);
 }
-
 export function updateCorporatePage(page: CorporatePageRecord, draft: Partial<CorporatePageDraft>): Promise<CorporatePageRecord> {
-  return api.put(`${base}/${page.id}`, { ...draft, expected_version: page.version });
+  return api.put(`/api/admin/corporate-site/pages/${page.id}`, { ...draft, expected_version: page.version });
 }
-
-export function reviewCorporatePage(
-  page: CorporatePageRecord,
-  decision: 'approve' | 'publish' | 'schedule' | 'unpublish',
-  scheduledAt?: string,
-): Promise<CorporatePageRecord> {
-  return api.post(`${base}/${page.id}/${decision}`, {
+export function reviewCorporatePage(page: CorporatePageRecord, decision: 'approve' | 'publish' | 'schedule' | 'unpublish', scheduledAt?: string): Promise<CorporatePageRecord> {
+  return api.post(`/api/admin/corporate-site/pages/${page.id}/${decision}`, {
     expected_version: page.version,
     ...(scheduledAt ? { scheduled_at: scheduledAt } : {}),
   });
+}
+export async function listCorporateEntries(): Promise<CorporateEntryRecord[]> {
+  const result = await api.get<{ data: CorporateEntryRecord[] }>(`${base}/entries`);
+  return result.data;
+}
+export function reviewCorporateEntry(entry: CorporateEntryRecord, decision: 'approve' | 'publish' | 'reject' | 'unpublish', note?: string): Promise<CorporateEntryRecord> {
+  return api.post(`${base}/entries/${entry.id}/${decision}`, {
+    expected_version: entry.version,
+    moderation_note: note,
+  });
+}
+export async function listCorporateInquiries(): Promise<CorporateInquiryRecord[]> {
+  const result = await api.get<{ data: CorporateInquiryRecord[] }>(`${base}/inquiries`);
+  return result.data;
+}
+export function updateCorporateInquiry(inquiry: CorporateInquiryRecord, status: string): Promise<CorporateInquiryRecord> {
+  return api.put(`${base}/inquiries/${inquiry.id}`, { status });
 }
