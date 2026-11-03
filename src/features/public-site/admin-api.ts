@@ -35,7 +35,7 @@ export interface CorporateEntryRecord {
   readonly version: number;
   readonly translations: Partial<Record<CorporateLocale, { title?: string; body?: string }>>;
   readonly created_at: string;
-  readonly moderation_note: string | null;
+  readonly moderation_note: string | null;\n  readonly payload?: { readonly scan_status?: string };
 }
 
 export interface CorporateInquiryRecord {
@@ -72,7 +72,7 @@ export async function createCorporateEntry(draft: { entry_type: string; slug_am?
   const result = await api.get<{ data: CorporateEntryRecord[] }>(`${base}/entries`);
   return result.data;
 }
-export function reviewCorporateEntry(entry: CorporateEntryRecord, decision: 'approve' | 'publish' | 'reject' | 'unpublish', note?: string): Promise<CorporateEntryRecord> {
+export function scanCorporateMedia(entry: CorporateEntryRecord): Promise<{ public_id: string; scan_status: string; version: number }> {\n  return api.post(`${base}/entries/${entry.id}/scan`, {});\n}\nexport function reviewCorporateEntry(entry: CorporateEntryRecord, decision: 'approve' | 'publish' | 'reject' | 'unpublish', note?: string): Promise<CorporateEntryRecord> {
   return api.post(`${base}/entries/${entry.id}/${decision}`, {
     expected_version: entry.version,
     moderation_note: note,
