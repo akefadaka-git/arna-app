@@ -101,7 +101,7 @@ const reinvestmentForm = reactive({
 const subscriptionBalanceForm = reactive({
   legal_entity_id: 0, shareholder_id: 0, share_class_id: 0,
   subscription_reference: '', subscribed_share_quantity: 0,
-  price_per_share: '', original_amount: '', occurred_on: '', evidence_reference: '',
+  price_per_share: '', original_amount: '', outstanding_amount: '', occurred_on: '', evidence_reference: '',
 });
 
 const weightForm = reactive({ distribution_id: 0, share_class_id: 0, weight_bps: 10000, evidence_reference: '' });
@@ -487,7 +487,8 @@ onMounted(refresh);
         <label>Subscription reference<input v-model="subscriptionBalanceForm.subscription_reference" required maxlength="120"></label>
         <label>Subscribed shares<input v-model.number="subscriptionBalanceForm.subscribed_share_quantity" type="number" min="1" required></label>
         <label>Price per share (ETB)<input v-model="subscriptionBalanceForm.price_per_share" inputmode="decimal" required></label>
-        <label>Outstanding subscription amount (ETB)<input v-model="subscriptionBalanceForm.original_amount" inputmode="decimal" required></label>
+        <label>Total original subscription value (ETB)<input v-model="subscriptionBalanceForm.original_amount" inputmode="decimal" required></label>
+        <label>Remaining unpaid share value (ETB)<input v-model="subscriptionBalanceForm.outstanding_amount" inputmode="decimal" required></label>
         <label>Original subscription date<input v-model="subscriptionBalanceForm.occurred_on" type="date" required></label>
         <label class="wide">Subscription evidence<input v-model="subscriptionBalanceForm.evidence_reference" required maxlength="500"></label>
         <div class="form-actions"><button type="submit" :disabled="busyKey !== ''">Record unpaid share value / ያልተከፈለ የአክሲዮን ዋጋ መዝግብ</button></div>
