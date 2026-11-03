@@ -1,4 +1,4 @@
-name: Isolated frontend source reachability audit (post-integration)
+name: Isolated frontend source reachability audit (post-dependency registration)
 
 on:
   push:
