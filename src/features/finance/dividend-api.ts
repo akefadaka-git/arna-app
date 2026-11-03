@@ -13,16 +13,16 @@ export interface DividendDistributionItem {
 
 export interface DividendDistribution {
   readonly id: number;
-  readonly legal_entity_id: number;
-  readonly distribution_reference: string;
-  readonly financial_year: string;
-  readonly resolution_reference: string;
-  readonly resolution_date: string;
-  readonly declared_on: string;
-  readonly record_date: string;
-  readonly payment_due_on: string;
+  legal_entity_id: number;
+  distribution_reference: string;
+  financial_year: string;
+  resolution_reference: string;
+  resolution_date: string;
+  declared_on: string;
+  record_date: string;
+  payment_due_on: string;
   readonly currency: string;
-  readonly declared_amount: string;
+  declared_amount: string;
   readonly distributable_profit_amount: string | null;
   readonly status: string;
   readonly snapshot_row_count: number;
@@ -46,7 +46,7 @@ export interface DividendPaymentBatchItem {
 
 export interface DividendPaymentBatch {
   readonly id: number;
-  readonly legal_entity_id: number;
+  legal_entity_id: number;
   readonly distribution_id: number;
   readonly batch_reference: string;
   readonly currency: string;
@@ -59,20 +59,20 @@ export interface DividendPaymentBatch {
 }
 
 export interface CreateDividendDistributionPayload {
-  readonly legal_entity_id: number;
-  readonly distribution_reference: string;
-  readonly financial_year: string;
-  readonly resolution_reference: string;
-  readonly resolution_date: string;
-  readonly declared_on: string;
-  readonly record_date: string;
-  readonly payment_due_on: string;
-  readonly declared_amount: string;
-  readonly approved_balance_sheet_reference: string;
-  readonly distributable_profit_amount: string;
-  readonly resolution_evidence_reference: string;
-  readonly payment_method: 'bank_transfer' | 'cheque' | 'other_approved';
-  readonly accounting_framework: 'ifrs' | 'ifrs_sme' | 'other_aabe_approved';
+  legal_entity_id: number;
+  distribution_reference: string;
+  financial_year: string;
+  resolution_reference: string;
+  resolution_date: string;
+  declared_on: string;
+  record_date: string;
+  payment_due_on: string;
+  declared_amount: string;
+  approved_balance_sheet_reference: string;
+  distributable_profit_amount: string;
+  resolution_evidence_reference: string;
+  payment_method: 'bank_transfer' | 'cheque' | 'other_approved';
+  accounting_framework: 'ifrs' | 'ifrs_sme' | 'other_aabe_approved';
 }
 
 export async function listDividendDistributions(): Promise<readonly DividendDistribution[]> {
