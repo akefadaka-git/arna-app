@@ -287,7 +287,7 @@ onMounted(() => void refresh());
             <div><strong>{{ page.translations?.am?.title ?? page.page_key }}</strong><small>{{ page.slug_en }} · v{{ page.version }} · {{ page.status }}</small></div>
             <div class="corporate-admin__actions">
               <button type="button" :disabled="saving" @click="editPage(page)">Edit</button>
-              <button v-if="page.status === 'draft'" type="button" :disabled="saving" @click="pageAction(page, 'approve')">Approve</button>
+              <button v-if="page.status === 'draft' && page.translations.am?.title && page.translations.en?.title && page.slug_am && page.slug_en" type="button" :disabled="saving" @click="pageAction(page, 'approve')">Approve</button>
               <button v-if="page.status === 'approved'" type="button" :disabled="saving" @click="pageAction(page, 'publish')">Publish</button>
               <input v-if="page.status === 'approved'" v-model="scheduleAt" aria-label="Schedule date and time" type="datetime-local" />
               <button v-if="page.status === 'approved'" type="button" :disabled="saving || !scheduleAt" @click="pageAction(page, 'schedule')">Schedule</button>
