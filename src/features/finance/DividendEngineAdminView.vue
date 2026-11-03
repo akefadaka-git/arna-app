@@ -124,8 +124,7 @@ const reconciliationForm = reactive({
 });
 const sellerSettlementForms = reactive<Record<number, { bank_reference: string; evidence_reference: string; paid_on: string }>>({});
 function sellerSettlementForm(id: number) {
-  sellerSettlementForms[id] ??= { bank_reference: '', evidence_reference: '', paid_on: '' };
-  return sellerSettlementForms[id];
+  return sellerSettlementForms[id]!;
 }
 const failureReasons = ref<Record<number, string>>({});
 const cancellationReasons = ref<Record<number, string>>({});
@@ -180,6 +179,11 @@ async function refresh(): Promise<void> {
     batches.value = nextBatches;
     remittances.value = nextRemittances;
     reinvestments.value = nextReinvestments;
+    for (const row of nextReinvestments) {
+      if (row.seller_settlement_status === 'payable' && !sellerSettlementForms[row.id]) {
+        sellerSettlementForms[row.id] = { bank_reference: '', evidence_reference: '', paid_on: '' };
+      }
+    }
     if (weightForm.distribution_id) await loadWeights();
   } catch {
     error.value = 'Unable to load dividend records. Verify Finance permissions and API availability.';
