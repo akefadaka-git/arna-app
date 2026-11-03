@@ -298,6 +298,12 @@ export const routesAdmin: RouteRecordRaw[] = [
         meta: { permission: 'public-content.review' },
       },
       {
+        path: 'admin/dividend-engine',
+        name: 'admin-dividend-engine',
+        component: () => import('@/features/finance/DividendEngineAdminView.vue'),
+        meta: { permission: 'finance.entity.view' },
+      },
+      {
         path: 'launcher',
         redirect: '/admin',
       },
