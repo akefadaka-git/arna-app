@@ -35,7 +35,8 @@ export interface CorporateEntryRecord {
   readonly version: number;
   readonly translations: Partial<Record<CorporateLocale, { title?: string; body?: string }>>;
   readonly created_at: string;
-  readonly moderation_note: string | null;\n  readonly payload?: { readonly scan_status?: string };
+  readonly moderation_note: string | null;
+  readonly payload?: { readonly scan_status?: string };
 }
 
 export interface CorporateInquiryRecord {
