@@ -152,6 +152,45 @@ export function approveDividendDistribution(id: number): Promise<DividendDistrib
   return api.post(`/api/finance/dividend-distributions/${id}/approve`, {});
 }
 
+export interface DividendTaxRemittance {
+  readonly id: number;
+  readonly legal_entity_id: number;
+  readonly distribution_id: number;
+  readonly remittance_reference: string;
+  readonly tax_authority_reference: string;
+  readonly amount: string;
+  readonly currency: string;
+  readonly status: string;
+  readonly bank_reference: string | null;
+  readonly journal_reference: string | null;
+}
+
+export async function listDividendTaxRemittances(): Promise<readonly DividendTaxRemittance[]> {
+  const response = await api.get<{ data: readonly DividendTaxRemittance[] }>('/api/finance/dividend-tax-remittances', { params: { per_page: 100 } });
+  return response.data;
+}
+
+export function createDividendTaxRemittance(payload: {
+  legal_entity_id: number;
+  distribution_id: number;
+  remittance_reference: string;
+  tax_authority_reference: string;
+  amount: string;
+}): Promise<DividendTaxRemittance> {
+  return api.post('/api/finance/dividend-tax-remittances', payload);
+}
+
+export function approveDividendTaxRemittance(id: number): Promise<DividendTaxRemittance> {
+  return api.post(`/api/finance/dividend-tax-remittances/${id}/approve`, {});
+}
+
+export function confirmDividendTaxRemittance(
+  id: number,
+  payload: { bank_reference: string; evidence_reference: string; paid_on: string },
+): Promise<DividendTaxRemittance> {
+  return api.post(`/api/finance/dividend-tax-remittances/${id}/confirm`, payload);
+}
+
 export async function listDividendPaymentBatches(): Promise<readonly DividendPaymentBatch[]> {
   const response = await api.get<{ data: readonly DividendPaymentBatch[] }>(
     '/api/finance/dividend-payment-batches',
