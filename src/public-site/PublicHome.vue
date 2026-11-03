@@ -3,11 +3,14 @@ import '@/styles/reset.css';
 import '@/styles/tokens.css';
 import '@/styles/public-accessibility-overrides.css';
 import { onMounted, ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRoute } from 'vue-router';
 import { api } from '@/core/api/client';
 import { masesBrandLabels } from '@/router/shell-labels';
 import { formatCalendarDate } from '@/core/dates/calendar';
 import { fetchCorporateHome, fetchCorporateEntries, submitCorporateInquiry, submitCorporateOpportunity, type CorporateSitePage, type CorporateSiteSection, type CorporatePublicEntry } from '@/features/public-site/api';
+
+const route = useRoute();
+const locale = ref<'am' | 'en'>(route.query.locale === 'en' ? 'en' : 'am');
 
 const year = formatCalendarDate(new Date(), { year: 'numeric' });
 
@@ -30,8 +33,14 @@ function sectionText(section: CorporateSiteSection, field: string): string {
 }
 
 onMounted(async () => {
+  document.documentElement.lang = locale.value;
+  document.title = locale.value === 'am' ? 'ARNA | ይፋዊ ድረ ገጽ' : 'ARNA | Official Website';
+  let description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+  if (!description) { description = document.createElement('meta'); description.name = 'description'; document.head.append(description); }
+  description.content = locale.value === 'am' ? 'የARNA ይፋዊ ድረ ገጽ። ስለ ድርጅቱ፣ አገልግሎቶች፣ ዜናዎችና እድሎች ይወቁ።' : 'ARNA official corporate website: organization, services, news, opportunities and publications.';
+
   try {
-    corporateHome.value = await fetchCorporateHome('am');
+    corporateHome.value = await fetchCorporateHome(locale.value);
   } catch {
     corporateHome.value = null;
   }
@@ -166,6 +175,7 @@ const publicationChannels = [
           <RouterLink to="/contribute">ይዘት ያቅርቡ</RouterLink>
         </nav>
 
+        <RouterLink class="header-action" :to="{ path: '/', query: { locale: locale === 'am' ? 'en' : 'am' } }">{{ locale === 'am' ? 'English' : 'አማርኛ' }}</RouterLink>
         <RouterLink class="header-action" to="/verify">
           <span>ሰነድ ያረጋግጡ</span>
           <svg aria-hidden="true" viewBox="0 0 20 20" fill="none">
