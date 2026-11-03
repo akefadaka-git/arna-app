@@ -248,7 +248,7 @@ onMounted(refresh);
         <label>Distributable net profit (ETB)<input v-model="distributionForm.distributable_profit_amount" inputmode="decimal" required></label>
         <label>Approved balance-sheet evidence<input v-model="distributionForm.approved_balance_sheet_reference" required maxlength="200"></label>
         <label>GA resolution evidence<input v-model="distributionForm.resolution_evidence_reference" required maxlength="500"></label>
-        <label>Payment method<select v-model="distributionForm.payment_method"><option value="bank_transfer">Bank transfer</option><option value="cheque">Cheque</option><option value="nbe_authorized_payment">NBE-authorized payment system</option></select></label>
+        <label>Payment method<select v-model="distributionForm.payment_method"><option value="bank_transfer">Bank transfer</option><option value="account_payee_cheque">Account-payee cheque</option><option value="account_payee_bank_draft">Account-payee bank draft</option><option value="nbe_authorized_payment">NBE-authorized payment system</option></select></label>
         <label>Accounting framework<select v-model="distributionForm.accounting_framework"><option value="ifrs">IFRS</option><option value="ifrs_sme">IFRS for SMEs</option><option value="other_aabe_approved">Other AABE-approved</option></select></label>
         <label>Replaces cancelled distribution ID (optional)<input v-model.number="distributionForm.replaces_distribution_id" type="number" min="1"></label>
         <label>Replacement reason<input v-model="distributionForm.replacement_reason" maxlength="500" placeholder="Required when replacing a cancelled distribution"></label>
