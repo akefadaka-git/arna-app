@@ -490,13 +490,13 @@ const publicationChannels = [
           </div>
           <form class="public-opportunity-form" @submit.prevent="sendOpportunity">
             <h3>{{ locale === 'am' ? 'የሥራ፣ የማስታወቂያ ወይም የገበያ ማቅረቢያ' : 'Submit a career, advertising or marketplace listing' }}</h3>
-            <label>{{ locale === 'am' ? 'ምድብ' : 'Category' }} <select v-model="opportunity.type"><option value="career">ሥራ</option><option value="opportunity">እድል</option><option value="advertisement">ማስታወቂያ</option><option value="marketplace">የገበያ ዝርዝር</option></select></label>
+            <label>{{ locale === 'am' ? 'ምድብ' : 'Category' }} <select v-model="opportunity.type"><option value="career">{{ locale === 'am' ? 'ሥራ' : 'Career' }}</option><option value="opportunity">{{ locale === 'am' ? 'እድል' : 'Opportunity' }}</option><option value="advertisement">{{ locale === 'am' ? 'ማስታወቂያ' : 'Advertisement' }}</option><option value="marketplace">{{ locale === 'am' ? 'የገበያ ዝርዝር' : 'Marketplace listing' }}</option></select></label>
             <label>{{ locale === 'am' ? 'ስም' : 'Name' }} <input v-model="opportunity.name" required maxlength="160" /></label>
             <label>{{ locale === 'am' ? 'ኢሜይል' : 'Email' }} <input v-model="opportunity.email" required type="email" maxlength="190" /></label>
             <label>{{ locale === 'am' ? 'ድርጅት' : 'Organization' }} <input v-model="opportunity.organization" maxlength="180" /></label>
             <label>{{ locale === 'am' ? 'ርዕስ' : 'Title' }} <input v-model="opportunity.title" required maxlength="180" /></label>
             <label>{{ locale === 'am' ? 'ዝርዝር' : 'Description' }} <textarea v-model="opportunity.description" required maxlength="12000" rows="3" /></label>
-            <button type="submit" :disabled="submitting"{{ locale === 'am' ? 'ለግምገማ ያቅርቡ' : 'Submit for review' }}</button>
+            <button type="submit" :disabled="submitting">{{ locale === 'am' ? 'ለግምገማ ያቅርቡ' : 'Submit for review' }}</button>
             <p role="status" aria-live="polite">{{ opportunityStatus }}</p>
           </form>
         </div>
