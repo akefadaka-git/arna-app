@@ -93,3 +93,12 @@ export async function listCorporateInquiries(): Promise<CorporateInquiryRecord[]
 export function updateCorporateInquiry(inquiry: CorporateInquiryRecord, status: string): Promise<CorporateInquiryRecord> {
   return api.put(`${base}/inquiries/${inquiry.id}`, { status, expected_version: inquiry.version });
 }
+
+export async function uploadCorporateMedia(title: string, description: string, file: File, locale: CorporateLocale = 'am'): Promise<{ reference: string; status: string; message: string }> {
+  const form = new FormData();
+  form.append('title', title);
+  form.append('description', description);
+  form.append('locale', locale);
+  form.append('file', file);
+  return api.post(`${base}/../site/media`, form);
+}
