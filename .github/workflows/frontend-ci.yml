@@ -36,6 +36,8 @@ jobs:
               console.log(JSON.stringify({ name, severity: item.severity, isDirect: item.isDirect, range: item.range, via, fixAvailable: item.fixAvailable }));
             }
           '
+      - name: Block high and critical dependency advisories
+        run: npm audit --audit-level=high
       - name: Type-check and build all applications
         run: npm run build
       - name: Verify root entry points, local assets, and deployment policy
