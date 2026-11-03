@@ -298,6 +298,12 @@ export const routesAdmin: RouteRecordRaw[] = [
         meta: { permission: 'public-content.review' },
       },
       {
+        path: 'admin/corporate-site',
+        name: 'admin-corporate-site',
+        component: () => import('./pages/AdminCorporateSiteRoute.vue'),
+        meta: { permission: 'public-content.review' },
+      },
+      {
         path: 'launcher',
         redirect: '/admin',
       },
