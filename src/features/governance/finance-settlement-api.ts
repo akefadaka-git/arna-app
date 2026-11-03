@@ -1,6 +1,6 @@
 import { api } from '@/core/api/client';
 
-export type SettlementAccountRole = 'fine_receivable' | 'cash_bank' | 'dividend_payable' | 'penalty_income';
+export type SettlementAccountRole = 'fine_receivable' | 'cash_bank' | 'dividend_payable' | 'penalty_income' | 'dividend_equity' | 'withholding_tax_payable' | 'share_subscription_receivable' | 'share_capital' | 'share_transfer_payable';
 export interface SettlementAccountMapping {
   readonly id: number; readonly legal_entity_id: number; readonly account_role: SettlementAccountRole;
   readonly ledger_account_id: number; readonly status: 'pending'|'approved'|'revoked';

@@ -80,8 +80,17 @@ function statusLabel(status: string | null): string {
           <div><dt>{{ labels.referenceLabel }}</dt><dd>{{ row.resolution_reference }}</dd></div>
           <div><dt>{{ labels.sharesLabel }}</dt><dd>{{ row.eligible_share_quantity }}</dd></div>
           <div><dt>{{ labels.grossLabel }}</dt><dd>{{ money(row.gross_amount, row.currency) }}</dd></div>
-          <div><dt>{{ labels.taxLabel }}</dt><dd>{{ money(row.withholding_amount, row.currency) }}</dd></div>
+          <div><dt>{{ labels.taxLabel }}</dt><dd>{{ money(row.withholding_amount, row.currency) }}<span v-if="row.tax_rate_bps !== null"> · {{ (row.tax_rate_bps / 100).toFixed(2) }}%</span></dd></div>
+          <div v-if="row.tax_certificate_number"><dt>የታክስ ማረጋገጫ ቁጥር / Tax certificate</dt><dd>{{ row.tax_certificate_number }} · {{ row.certificate_status }}</dd></div>
+          <div v-if="row.tax_legal_basis"><dt>የታክስ ሕጋዊ መሠረት / Tax legal basis</dt><dd>{{ row.tax_legal_basis }}</dd></div>
           <div><dt>{{ labels.netLabel }}</dt><dd>{{ money(row.net_amount, row.currency) }}</dd></div>
+          <div><dt>በጥሬ ገንዘብ የተከፈለ</dt><dd>{{ money(row.cash_paid_amount, row.currency) }}</dd></div>
+          <div><dt>ወደ አክሲዮን የተመለሰ / Reinvested</dt><dd>{{ money(row.reinvested_amount, row.currency) }}</dd></div>
+          <div><dt>በአዲስ ወይም በተላለፈ አክሲዮን የተገኘ</dt><dd>{{ row.reinvested_share_quantity }}</dd></div>
+          <div><dt>የአክሲዮን ክፍያ ዕዳ የተቀነሰ</dt><dd>{{ money(row.subscription_balance_applied_amount, row.currency) }}</dd></div>
+          <div><dt>ገና ያልተመደበ የዳግም ኢንቨስትመንት</dt><dd>{{ money(row.reinvestment_unapplied_amount, row.currency) }}</dd></div>
+          <div><dt>በቅጣት የተቀነሰ</dt><dd>{{ money(row.penalty_offset_amount, row.currency) }}</dd></div>
+          <div><dt>ቀሪ የሚከፈል</dt><dd>{{ money(row.remaining_payable_amount, row.currency) }}</dd></div>
           <div><dt>{{ labels.dueLabel }}</dt><dd>{{ row.payment_due_on }}</dd></div>
           <div><dt>{{ labels.statusLabel }}</dt><dd>{{ statusLabel(row.payable_status) }}</dd></div>
         </dl>

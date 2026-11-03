@@ -1,0 +1,51 @@
+name: ARNA Dividend App Acceptance
+
+on:
+  push:
+    branches:
+      - feat/dividend-portal-a1-a4-completion
+  pull_request:
+    branches:
+      - feat/annual-shareholder-dividend-portal
+
+permissions:
+  contents: read
+
+concurrency:
+  group: arna-dividend-app-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend-acceptance:
+    name: Type-check, four static builds and UI contract tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out exact target commit
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Type-check and build all four applications
+        run: npm run build:all
+
+      - name: Verify static build outputs
+        run: npm run verify:build
+
+      - name: Run public build smoke test
+        run: npm run test:public-build-smoke
+
+      - name: Run design system theme contract tests
+        run: npm run test:design-system-theme-contract
+
+      - name: Run app shell responsive contract tests
+        run: npm run test:app-shell-responsive-contract
+
+      - name: Run brand palette contract tests
+        run: npm run test:brand-palette-contract
