@@ -652,6 +652,7 @@ export interface MyDividendStatement {
   readonly net_amount: string;
   readonly cash_paid_amount: string | null;
   readonly penalty_offset_amount: string | null;
+  readonly remaining_payable_amount: string;
   readonly payable_status: string | null;
 }
 
