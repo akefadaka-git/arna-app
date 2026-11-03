@@ -72,7 +72,8 @@ test('public home consumes shared semantic roles instead of its previous local p
 test('public branding uses approved emblem and shared semantic roles', () => {
   assert.match(publicHome, /src="\/logo\.png"/);
   assert.match(publicHome, /masesBrandLabels\.corporateName/);
-  assert.match(publicHome, /masesBrandLabels\.productName/);
+  assert.match(publicHome, /<strong>ARNA<\/strong>/);
+  assert.doesNotMatch(publicHome, /masesBrandLabels\.productName/);
   assert.match(publicLayout, /masesBrandLabels\.fullCorporateIdentity/);
   assert.match(publicHome, /class="public-home__emblem"/);
   assert.match(publicLayout, /--arna-public-page-surface/);
