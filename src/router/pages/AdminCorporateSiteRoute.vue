@@ -163,8 +163,8 @@ async function createEntry(): Promise<void> {
       },
       seo: { am: { title: entryTitleAm.value.trim() }, en: { title: entryTitleEn.value.trim() } },
     };
-    if (selectedEntry.value) await updateCorporateEntry(selectedEntry.value, draft);
-    else await createCorporateEntry({ entry_type: entryType.value, ...draft });
+    if (selectedEntry.value) await updateCorporateEntry(selectedEntry.value, { slug_am: draft.slug_am, slug_en: draft.slug_en, translations: draft.translations, seo: draft.seo });
+    else await createCorporateEntry(draft);
     selectedEntry.value = null;
     notice.value = 'Bilingual editorial draft saved. It requires independent approval.';
     entrySlugAm.value = ''; entrySlugEn.value = ''; entryTitleAm.value = ''; entryTitleEn.value = '';
