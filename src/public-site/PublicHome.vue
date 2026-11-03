@@ -23,7 +23,9 @@ const publishedContent = ref<PublishedContent[]>([]);
 const corporateHome = ref<CorporateSitePage | null>(null);
 
 function sectionText(section: CorporateSiteSection, field: string): string {
-  const value = section.content[field];
+  const localeContent = section.content['am'];
+  if (typeof localeContent !== 'object' || localeContent === null) return '';
+  const value = (localeContent as Record<string, unknown>)[field];
   return typeof value === 'string' ? value : '';
 }
 
