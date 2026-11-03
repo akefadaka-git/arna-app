@@ -148,7 +148,7 @@ function money(value: string | null | undefined, currency = 'ETB'): string {
 }
 
 function statusText(value: string): string {
-  return value.replaceAll('_', ' ');
+  return value.replace(/_/g, ' ');
 }
 
 onMounted(refresh);
@@ -258,7 +258,7 @@ onMounted(refresh);
             <input v-model="paymentForm.paid_on" type="date" aria-label="Paid on">
             <button :disabled="busyKey !== ''" @click="runAction('confirm-'+item.id, () => confirmDividendPayment(batch.id, item.id, { ...paymentForm }), 'Bank payment confirmation recorded.')">Confirm paid</button>
             <input v-model="failureReasons[item.id]" aria-label="Failure reason" placeholder="Failure reason">
-            <button class="secondary" :disabled="busyKey !== '' || !failureReasons[item.id]" @click="runAction('fail-'+item.id, () => failDividendPayment(batch.id, item.id, failureReasons[item.id]), 'Payment marked failed; payable released for a new batch.')">Mark failed</button>
+            <button class="secondary" :disabled="busyKey !== '' || !failureReasons[item.id]" @click="runAction('fail-'+item.id, () => failDividendPayment(batch.id, item.id, failureReasons[item.id] ?? ''), 'Payment marked failed; payable released for a new batch.')">Mark failed</button>
           </template>
           <small v-if="item.journal_reference">Journal: {{ item.journal_reference }}</small>
           <small v-if="item.failure_reason">{{ item.failure_reason }}</small>
