@@ -11,6 +11,7 @@ import {
   cancelDividendDistribution,
   confirmDividendPayment,
   confirmDividendTaxRemittance,
+  cancelDividendTaxRemittance,
   createDividendDistribution,
   createDividendPaymentBatch,
   createDividendTaxRemittance,
@@ -91,6 +92,7 @@ const reconciliationForm = reactive({
 });
 const failureReasons = ref<Record<number, string>>({});
 const cancellationReasons = ref<Record<number, string>>({});
+const remittanceCancellationReasons = ref<Record<number, string>>({});
 
 const sortedDistributions = computed(() => [...distributions.value].sort((a, b) => b.id - a.id));
 
@@ -370,6 +372,10 @@ onMounted(refresh);
         </div>
         <div class="actions">
           <button v-if="row.status === 'draft'" class="secondary" :disabled="busyKey !== ''" @click="approveRemittance(row.id)">Approve / አጽድቅ</button>
+          <template v-if="['draft','approved'].includes(row.status)">
+            <input v-model="remittanceCancellationReasons[row.id]" aria-label="Tax remittance cancellation reason" placeholder="Cancellation reason">
+            <button class="secondary" :disabled="busyKey !== '' || !remittanceCancellationReasons[row.id]" @click="runAction('tax-remittance-cancel-'+row.id, () => cancelDividendTaxRemittance(row.id, remittanceCancellationReasons[row.id] ?? ''), 'Unpaid tax remittance cancelled and reservation released.')">Cancel remittance</button>
+          </template>
           <template v-if="row.status === 'approved'">
             <input v-model="remittancePaymentForm.bank_reference" aria-label="Tax remittance bank reference" placeholder="Bank reference">
             <input v-model="remittancePaymentForm.evidence_reference" aria-label="Tax authority payment evidence" placeholder="Tax receipt / evidence">
