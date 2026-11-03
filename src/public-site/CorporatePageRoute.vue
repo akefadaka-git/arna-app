@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
 import { useRoute, RouterLink } from 'vue-router';
-import { fetchCorporatePage, type CorporateLocale, type CorporateSitePage } from '@/features/public-site/api';
+import { fetchCorporatePage, type CorporateLocale, type CorporateSitePage, type CorporateSiteSection } from '@/features/public-site/api';
 import { masesBrandLabels } from '@/router/shell-labels';
 
 const route = useRoute();
@@ -9,6 +9,13 @@ const page = ref<CorporateSitePage | null>(null);
 const loading = ref(true);
 const failed = ref(false);
 const locale = ref<CorporateLocale>('am');
+
+function sectionText(section: CorporateSiteSection, field: string): string {
+  const localized = section.content[locale.value];
+  if (typeof localized !== 'object' || localized === null) return '';
+  const value = (localized as Record<string, unknown>)[field];
+  return typeof value === 'string' ? value : '';
+}
 
 async function loadPage(): Promise<void> {
   const routeLocale = route.params.locale;
@@ -73,8 +80,8 @@ onMounted(() => void loadPage());
         <h1>{{ page.title }}</h1>
         <p v-if="page.summary">{{ page.summary }}</p>
         <section v-for="(section, index) in page.sections" :key="section.id ?? index">
-          <h2 v-if="typeof section.content[locale] === 'object' && section.content[locale] && 'title' in section.content[locale]">{{ String((section.content[locale] as Record<string, unknown>).title ?? '') }}</h2>
-          <p v-if="typeof section.content[locale] === 'object' && section.content[locale] && 'body' in section.content[locale]">{{ String((section.content[locale] as Record<string, unknown>).body ?? '') }}</p>
+          <h2 v-if="sectionText(section, 'title')">{{ sectionText(section, 'title') }}</h2>
+          <p v-if="sectionText(section, 'body')">{{ sectionText(section, 'body') }}</p>
         </section>
       </article>
     </main>
