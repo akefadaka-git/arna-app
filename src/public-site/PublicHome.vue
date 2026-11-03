@@ -112,7 +112,7 @@ async function sendInquiry(): Promise<void> {
   try {
     const result = await submitCorporateInquiry(inquiry.value);
     inquiryStatus.value = `ጥያቄዎ ተቀብሏል። የማጣቀሻ ቁጥር: ${result.reference}`;
-    inquiry.value = { inquiry_type: 'general', name: '', email: '', phone: '', subject: '', message: '', website: '' };
+    inquiry.value = { inquiry_type: 'general', name: '', email: '', phone: '', subject: '', message: '', consent: false, website: '' };
   } catch {
     inquiryStatus.value = 'ጥያቄው አልተላከም። እባክዎ መረጃውን ያረጋግጡና እንደገና ይሞክሩ።';
   } finally { submitting.value = false; }
