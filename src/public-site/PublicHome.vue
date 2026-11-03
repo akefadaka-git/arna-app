@@ -2,7 +2,7 @@
 import '@/styles/reset.css';
 import '@/styles/tokens.css';
 import '@/styles/public-accessibility-overrides.css';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import { api } from '@/core/api/client';
 import { masesBrandLabels } from '@/router/shell-labels';
@@ -23,38 +23,68 @@ interface PublishedContent {
 }
 
 const publishedContent = ref<PublishedContent[]>([]);
-const corporateHome = ref<CorporateSitePage | null>(null);\nconst corporateNews = ref<CorporatePublicEntry[]>([]);\nconst corporateBusinesses = ref<CorporatePublicEntry[]>([]);\nconst corporateServices = ref<CorporatePublicEntry[]>([]);\nconst corporateCareers = ref<CorporatePublicEntry[]>([]);\nconst corporateMarket = ref<CorporatePublicEntry[]>([]);\nconst inquiry = ref({ inquiry_type: 'general' as const, name: '', email: '', phone: '', subject: '', message: '', website: '' });\nconst inquiryStatus = ref('');\nconst opportunity = ref({ type: 'career' as 'career' | 'opportunity' | 'advertisement' | 'marketplace', name: '', email: '', title: '', description: '', organization: '' });\nconst opportunityStatus = ref('');\nconst submitting = ref(false);
+const corporateHome = ref<CorporateSitePage | null>(null);
+const corporateNews = ref<CorporatePublicEntry[]>([]);
+const corporateBusinesses = ref<CorporatePublicEntry[]>([]);
+const corporateServices = ref<CorporatePublicEntry[]>([]);
+const corporateCareers = ref<CorporatePublicEntry[]>([]);
+const corporateMarket = ref<CorporatePublicEntry[]>([]);
+const inquiry = ref({ inquiry_type: 'general' as const, name: '', email: '', phone: '', subject: '', message: '', website: '' });
+const inquiryStatus = ref('');
+const opportunity = ref({ type: 'career' as 'career' | 'opportunity' | 'advertisement' | 'marketplace', name: '', email: '', title: '', description: '', organization: '' });
+const opportunityStatus = ref('');
+const submitting = ref(false);
 
 function sectionText(section: CorporateSiteSection, field: string): string {
-  const localeContent = section.content['am'];
+  const localeContent = section.content[locale.value];
   if (typeof localeContent !== 'object' || localeContent === null) return '';
   const value = (localeContent as Record<string, unknown>)[field];
   return typeof value === 'string' ? value : '';
 }
 
-onMounted(async () => {
+async function loadPublicContent(): Promise<void> {
   document.documentElement.lang = locale.value;
   document.title = locale.value === 'am' ? 'ARNA | ይፋዊ ድረ ገጽ' : 'ARNA | Official Website';
   let description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
   if (!description) { description = document.createElement('meta'); description.name = 'description'; document.head.append(description); }
-  description.content = locale.value === 'am' ? 'የARNA ይፋዊ ድረ ገጽ። ስለ ድርጅቱ፣ አገልግሎቶች፣ ዜናዎችና እድሎች ይወቁ።' : 'ARNA official corporate website: organization, services, news, opportunities and publications.';
+  description.content = locale.value === 'am'
+    ? 'የARNA ይፋዊ ድረ ገጽ። ስለ ድርጅቱ፣ አገልግሎቶች፣ ዜናዎችና እድሎች ይወቁ።'
+    : 'ARNA official corporate website: organization, services, news, opportunities and publications.';
+
+  try { corporateHome.value = await fetchCorporateHome(locale.value); }
+  catch { corporateHome.value = null; }
 
   try {
-    corporateHome.value = await fetchCorporateHome(locale.value);
+    const [news, businesses, services, careers, market] = await Promise.all([
+      fetchCorporateEntries('news', locale.value),
+      fetchCorporateEntries('business', locale.value),
+      fetchCorporateEntries('service', locale.value),
+      fetchCorporateEntries('career', locale.value),
+      fetchCorporateEntries('marketplace', locale.value),
+    ]);
+    corporateNews.value = news;
+    corporateBusinesses.value = businesses;
+    corporateServices.value = services;
+    corporateCareers.value = careers;
+    corporateMarket.value = market;
   } catch {
-    corporateHome.value = null;
+    corporateNews.value = [];
+    corporateBusinesses.value = [];
+    corporateServices.value = [];
+    corporateCareers.value = [];
+    corporateMarket.value = [];
   }
 
   try {
-    const page = await api.get<{ data: PublishedContent[] }>('/api/public/content', {
-      params: { per_page: 3 },
-    });
+    const page = await api.get<{ data: PublishedContent[] }>('/api/public/content', { params: { per_page: 3 } });
     publishedContent.value = page.data;
-  } catch {
-    // The public homepage remains usable while the API is unavailable.
-    // No unapproved or locally fabricated content is substituted.
-    publishedContent.value = [];
-  }
+  } catch { publishedContent.value = []; }
+}
+
+onMounted(() => void loadPublicContent());
+watch(() => route.query.locale, (next) => {
+  locale.value = next === 'en' ? 'en' : 'am';
+  void loadPublicContent();
 });
 
 
@@ -297,7 +327,13 @@ const publicationChannels = [
             </div>
             <p lang="am">ዝርዝር የአገልግሎት መረጃዎች በይፋ ከጸደቁ በኋላ በዚህ ይታያሉ።</p>
           </div>
-          <div v-if="corporateServices.length" class="service-grid">\n            <article v-for="service in corporateServices" :key="service.public_id" class="service-card">\n              <div class="service-card__top"><span>ARNA</span><span aria-hidden="true">↗</span></div>\n              <h3>{{ service.title }}</h3><p class="service-card__description">{{ service.summary || service.body }}</p>\n            </article>\n          </div>\n          <div v-else class="service-grid">
+          <div v-if="corporateServices.length" class="service-grid">
+            <article v-for="service in corporateServices" :key="service.public_id" class="service-card">
+              <div class="service-card__top"><span>ARNA</span><span aria-hidden="true">↗</span></div>
+              <h3>{{ service.title }}</h3><p class="service-card__description">{{ service.summary || service.body }}</p>
+            </article>
+          </div>
+          <div v-else class="service-grid">
             <article v-for="offering in offerings" :key="offering.number" class="service-card">
               <div class="service-card__top"><span>{{ offering.number }}</span><span aria-hidden="true">↗</span></div>
               <p class="service-card__label" lang="am">{{ offering.label }}</p>
@@ -320,7 +356,12 @@ const publicationChannels = [
             </div>
             <p lang="am">የተረጋገጡ የንግድ ክፍሎችና ኩባንያዎች መገለጫዎች በአስተዳዳሪ ከጸደቁ በኋላ እዚህ ይታያሉ።</p>
           </div>
-          <div v-if="corporateBusinesses.length" class="business-grid">\n            <article v-for="business in corporateBusinesses" :key="business.public_id" class="business-card">\n              <span class="business-card__number">ARNA</span><h3>{{ business.title }}</h3><p class="business-card__description">{{ business.summary || business.body }}</p>\n            </article>\n          </div>\n          <div v-else class="business-grid">
+          <div v-if="corporateBusinesses.length" class="business-grid">
+            <article v-for="business in corporateBusinesses" :key="business.public_id" class="business-card">
+              <span class="business-card__number">ARNA</span><h3>{{ business.title }}</h3><p class="business-card__description">{{ business.summary || business.body }}</p>
+            </article>
+          </div>
+          <div v-else class="business-grid">
             <article v-for="area in businessAreas" :key="area.number" class="business-card">
               <span class="business-card__number">{{ area.number }}</span>
               <p lang="am">{{ area.titleAm }}</p>
@@ -340,7 +381,14 @@ const publicationChannels = [
             <h2 id="updates-title" lang="am">የቅርብ መረጃዎች።<br/><span>ከታመነ ምንጭ።</span></h2>
             <p lang="am">የድርጅቱ ዜናዎች፣ ማስታወቂያዎች እና ይፋዊ ማሻሻያዎች በአስተዳዳሪ ከተጸደቁ በኋላ እዚህ ይታያሉ።</p>
           </div>
-          <div v-if="corporateNews.length" class="publication-grid">\n            <article v-for="item in corporateNews" :key="item.public_id" class="publication-card">\n              <div class="publication-card__top"><span>ARNA</span><span>NEWS</span></div>\n              <h3>{{ item.title }}</h3><p class="publication-card__description">{{ item.summary || item.body }}</p>\n              <span class="publication-card__status">{{ publishedDate(item.published_at) }}</span>\n            </article>\n          </div>\n          <div v-else-if="publishedContent.length" class="publication-grid">
+          <div v-if="corporateNews.length" class="publication-grid">
+            <article v-for="item in corporateNews" :key="item.public_id" class="publication-card">
+              <div class="publication-card__top"><span>ARNA</span><span>NEWS</span></div>
+              <h3>{{ item.title }}</h3><p class="publication-card__description">{{ item.summary || item.body }}</p>
+              <span class="publication-card__status">{{ publishedDate(item.published_at) }}</span>
+            </article>
+          </div>
+          <div v-else-if="publishedContent.length" class="publication-grid">
             <article v-for="item in publishedContent" :key="item.id" class="publication-card">
               <div class="publication-card__top"><span>ARNA JOURNAL</span><span>{{ item.type.replace('_', ' ').toUpperCase() }}</span></div>
               <h3>{{ item.title }}</h3>
@@ -462,7 +510,9 @@ const publicationChannels = [
               <RouterLink to="/legal">ሕጋዊ መረጃ</RouterLink>
               <RouterLink to="/contribute">ይዘት ያቅርቡ</RouterLink>
               <a href="#updates">ዜናዎችና ማስታወቂያዎች</a>
-              <a href="#advertise">ማስታወቂያ ያስተዋውቁ</a>\n              <a href="#opportunities">የሥራና የገበያ እድሎች</a>\n              <a href="#contact">ያግኙን</a>
+              <a href="#advertise">ማስታወቂያ ያስተዋውቁ</a>
+              <a href="#opportunities">የሥራና የገበያ እድሎች</a>
+              <a href="#contact">ያግኙን</a>
             </div>
           </div>
         </div>
@@ -477,7 +527,14 @@ const publicationChannels = [
 </template>
 
 <style scoped>
-.public-opportunity-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; max-width: 820px; margin-block: 1.5rem; padding: 1.25rem; border: 1px solid var(--arna-line); border-radius: .75rem; background: var(--arna-public-page-surface); }\n.public-opportunity-form h3, .public-opportunity-form > p, .public-opportunity-form button { grid-column: 1 / -1; }\n.public-opportunity-form label { display: grid; gap: .3rem; font-weight: 600; }\n.public-opportunity-form input, .public-opportunity-form select, .public-opportunity-form textarea { width: 100%; min-width: 0; padding: .65rem; border: 1px solid var(--arna-line); border-radius: .4rem; background: var(--arna-paper); color: var(--arna-ink); }\n.public-opportunity-form button { min-height: 44px; padding: .65rem 1rem; border: 0; border-radius: .4rem; background: var(--arna-navy); color: white; }\n.public-opportunity-form__trap { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }\n@media (max-width: 680px) { .public-opportunity-form { grid-template-columns: 1fr; } }\n.arna-site {
+.public-opportunity-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; max-width: 820px; margin-block: 1.5rem; padding: 1.25rem; border: 1px solid var(--arna-line); border-radius: .75rem; background: var(--arna-public-page-surface); }
+.public-opportunity-form h3, .public-opportunity-form > p, .public-opportunity-form button { grid-column: 1 / -1; }
+.public-opportunity-form label { display: grid; gap: .3rem; font-weight: 600; }
+.public-opportunity-form input, .public-opportunity-form select, .public-opportunity-form textarea { width: 100%; min-width: 0; padding: .65rem; border: 1px solid var(--arna-line); border-radius: .4rem; background: var(--arna-paper); color: var(--arna-ink); }
+.public-opportunity-form button { min-height: 44px; padding: .65rem 1rem; border: 0; border-radius: .4rem; background: var(--arna-navy); color: white; }
+.public-opportunity-form__trap { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+@media (max-width: 680px) { .public-opportunity-form { grid-template-columns: 1fr; } }
+.arna-site {
   --arna-navy: var(--arna-public-brand-anchor);
   --arna-deep: var(--arna-color-enterprise-blue);
   --arna-blue: var(--arna-public-action);
