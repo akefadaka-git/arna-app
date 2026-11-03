@@ -39,7 +39,7 @@ test.describe('ARNA public site browser contract', () => {
   });
 
   test('gives the public brand a visible accessible name and keeps navigation within public routes', async ({ page }) => {
-    await page.goto(new URL('/verify', baseUrl).toString());
+    await page.goto(baseUrl);
     const header = page.locator('.site-header');
     const brand = header.locator('.site-header__inner > a.brand');
     const navigation = header.getByRole('navigation', { name: 'ዋና አሰሳ' });
