@@ -68,7 +68,7 @@ const taxForm = reactive({
   withholding_rate_bps: 1500,
   legal_basis: '',
   evidence_reference: '',
-  effective_from: '',
+  effective_from: '2025-08-07',
   evidence_expires_on: '',
 });
 
