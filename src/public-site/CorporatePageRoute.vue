@@ -33,7 +33,7 @@ async function loadPage(): Promise<void> {
     page.value = await fetchCorporatePage(locale.value, slug);
     const seo = page.value.seo;
     if (seo?.title) document.title = seo.title;
-    if (seo?.description) {
+    document.documentElement.lang = locale.value;\n    if (seo?.robots) {\n      let robots = document.querySelector<HTMLMetaElement>('meta[name=\"robots\"]');\n      if (!robots) { robots = document.createElement('meta'); robots.name = 'robots'; document.head.append(robots); }\n      robots.content = seo.robots;\n    }\n    if (seo?.canonical_url) {\n      let canonical = document.querySelector<HTMLLinkElement>('link[rel=\"canonical\"]');\n      if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.append(canonical); }\n      canonical.href = seo.canonical_url;\n    }\n    if (seo?.title) {\n      let ogTitle = document.querySelector<HTMLMetaElement>('meta[property=\"og:title\"]');\n      if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.append(ogTitle); }\n      ogTitle.content = seo.title;\n    }\n    if (seo?.description) {
       let description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
       if (!description) {
         description = document.createElement('meta');
