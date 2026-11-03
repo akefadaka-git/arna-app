@@ -66,6 +66,14 @@ const total = ref<number | null>(null);
 const membershipReason = ref('Administrative membership review');
 const existingUserId = ref('');
 const selectedUserId = ref<number | null>(null);
+const selectedProfile = ref<{
+  id: number;
+  email: string;
+  first_name_am: string;
+  first_name_en: string;
+  phone: string;
+  locale: string;
+} | null>(null);
 const selectedRoleIds = ref<number[]>([]);
 const selectedRoleId = ref<number | null>(null);
 const selectedPermissionIds = ref<number[]>([]);
@@ -238,6 +246,34 @@ async function changeMembership(row: AdminDirectoryRow): Promise<void> {
   }
 }
 
+function editUserProfile(row: AdminDirectoryRow): void {
+  selectedProfile.value = {
+    id: row.id,
+    email: row.email ?? '',
+    first_name_am: row.first_name_am ?? '',
+    first_name_en: row.first_name_en ?? '',
+    phone: row.phone ?? '',
+    locale: row.locale ?? 'am',
+  };
+}
+
+async function saveUserProfile(): Promise<void> {
+  if (selectedProfile.value === null) return;
+  submitting.value = true;
+  errorMessage.value = '';
+  try {
+    const { id, ...profile } = selectedProfile.value;
+    await api.patch(`/api/admin/identity/users/${id}`, profile);
+    selectedProfile.value = null;
+    actionMessage.value = 'የተጠቃሚው መገለጫ ተዘምኗል።';
+    await load();
+  } catch (error) {
+    errorMessage.value = error instanceof Error ? error.message : 'መገለጫውን ማዘመን አልተቻለም።';
+  } finally {
+    submitting.value = false;
+  }
+}
+
 function editUserRoles(row: AdminDirectoryRow): void {
   selectedUserId.value = row.id;
   selectedRoleIds.value = (row.roles ?? [])
@@ -402,6 +438,7 @@ watch(resource, () => {
                 <button class="admin-foundation__button admin-foundation__button--small" type="button" :disabled="submitting || row.memberships?.[0]?.status === 'revoked'" @click="changeMembership(row)">
                   {{ row.memberships?.[0]?.status === 'active' ? 'አባልነት አግድ' : 'አባልነት አንቃ' }}
                 </button>
+                <button class="admin-foundation__button admin-foundation__button--small" type="button" @click="editUserProfile(row)">መገለጫ</button>
                 <button class="admin-foundation__button admin-foundation__button--small" type="button" @click="editUserRoles(row)">ሚናዎች</button>
                 <button class="admin-foundation__button admin-foundation__button--small" type="button" :disabled="submitting || row.memberships?.[0]?.status === 'revoked'" @click="revokeMembership(row)">በቋሚነት አቋርጥ</button>
               </template>
@@ -412,6 +449,24 @@ watch(resource, () => {
           </tr>
         </tbody>
       </table>
+    </section>
+
+    <section v-if="selectedProfile !== null" class="admin-foundation__panel" aria-labelledby="user-profile-editor">
+      <h2 id="user-profile-editor">የተጠቃሚ መገለጫ ማስተካከያ</h2>
+      <form class="admin-foundation__form" @submit.prevent="saveUserProfile">
+        <label>ኢሜይል<input v-model.trim="selectedProfile.email" type="email" required /></label>
+        <label>ስም (አማርኛ)<input v-model.trim="selectedProfile.first_name_am" type="text" /></label>
+        <label>ስም (English)<input v-model.trim="selectedProfile.first_name_en" type="text" /></label>
+        <label>ስልክ<input v-model.trim="selectedProfile.phone" type="tel" /></label>
+        <label>ቋንቋ
+          <select v-model="selectedProfile.locale">
+            <option value="am">አማርኛ</option>
+            <option value="en">English</option>
+          </select>
+        </label>
+        <button class="admin-foundation__button" type="submit" :disabled="submitting">መገለጫ አስቀምጥ</button>
+      </form>
+      <button class="admin-foundation__text-button" type="button" @click="selectedProfile = null">ዝጋ</button>
     </section>
 
     <section v-if="selectedUserId !== null" class="admin-foundation__panel" aria-labelledby="user-role-editor">
@@ -455,8 +510,8 @@ watch(resource, () => {
 .admin-foundation__summary { margin-bottom: .75rem; color: var(--mases-color-text-secondary); font-size: .875rem; }
 .admin-foundation__form { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: .8rem; margin-top: 1rem; }
 .admin-foundation__form label, .admin-foundation__reason { display: grid; gap: .35rem; color: var(--mases-color-text-secondary); font-size: .9rem; }
-.admin-foundation input:not([type=checkbox]) { width: 100%; min-width: 0; border: 1px solid var(--mases-color-border-default); border-radius: .45rem; background: var(--mases-color-surface); color: var(--mases-color-text-primary); padding: .65rem .7rem; }
-.admin-foundation input:focus-visible { outline: 3px solid var(--mases-focus-ring-color); outline-offset: 2px; }
+.admin-foundation input:not([type=checkbox]), .admin-foundation select { width: 100%; min-width: 0; border: 1px solid var(--mases-color-border-default); border-radius: .45rem; background: var(--mases-color-surface); color: var(--mases-color-text-primary); padding: .65rem .7rem; }
+.admin-foundation input:focus-visible, .admin-foundation select:focus-visible { outline: 3px solid var(--mases-focus-ring-color); outline-offset: 2px; }
 .admin-foundation__reason { max-width: 36rem; }
 .admin-foundation__add-membership { display: flex; align-items: end; flex-wrap: wrap; gap: .75rem; }
 .admin-foundation__add-membership label { display: grid; gap: .35rem; color: var(--mases-color-text-secondary); font-size: .9rem; }
