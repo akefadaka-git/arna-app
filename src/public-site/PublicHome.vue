@@ -56,6 +56,9 @@ async function loadPublicContent(): Promise<void> {
     ? 'የARNA ይፋዊ ድረ ገጽ። ስለ ድርጅቱ፣ አገልግሎቶች፣ ዜናዎችና እድሎች ይወቁ።'
     : 'ARNA official corporate website: organization, services, news, opportunities and publications.';
 
+  try { corporatePages.value = await fetchCorporatePages(locale.value); }
+  catch { corporatePages.value = []; }
+
   try {
     corporateHome.value = await fetchCorporateHome(locale.value);
     if (corporateHome.value?.seo?.title) document.title = corporateHome.value.seo.title;
