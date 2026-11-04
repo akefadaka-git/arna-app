@@ -557,6 +557,11 @@ export const routesBase: RouteRecordRaw[] = [
     name: 'access-denied',
     component: () => import('./pages/ErrorRoute.vue'),
   },
+  {
+    path: '/server-error',
+    name: 'server-error',
+    component: () => import('./pages/ErrorRoute.vue'),
+  },
 ];
 
 /**
