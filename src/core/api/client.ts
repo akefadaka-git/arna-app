@@ -618,6 +618,12 @@ export class NormalizedApiError extends Error {
    */
   readonly cancelled: boolean;
 
+  /** Governed backend severity, when supplied by the API. */
+  readonly severity: 'info' | 'warning' | 'error' | 'critical' | 'fatal' | undefined;
+
+  /** Whether the operation may be retried safely, as classified by the API. */
+  readonly retryable: boolean | undefined;
+
   constructor(init: {
     code: string;
     httpStatus: number;
@@ -627,6 +633,8 @@ export class NormalizedApiError extends Error {
     fieldErrors?: Record<string, string[]>;
     requestId?: string;
     timestamp?: string;
+    severity?: 'info' | 'warning' | 'error' | 'critical' | 'fatal';
+    retryable?: boolean;
   }) {
     super(init.message);
     this.name = 'NormalizedApiError';
@@ -637,6 +645,8 @@ export class NormalizedApiError extends Error {
     this.fieldErrors = init.fieldErrors;
     this.requestId = init.requestId;
     this.timestamp = init.timestamp;
+    this.severity = init.severity;
+    this.retryable = init.retryable;
 
     /*
      * Restore the prototype chain. Required when the emitted target
@@ -1389,6 +1399,8 @@ function normalizeError(error: unknown): NormalizedApiError {
     fieldErrors: errorBlock?.validation_errors,
     requestId: errorBlock?.request_id,
     timestamp: errorBlock?.timestamp,
+    severity: errorBlock?.severity,
+    retryable: errorBlock?.retryable,
   });
 }
 
@@ -1402,6 +1414,8 @@ interface ErrorEnvelope {
     readonly message?: string;
     readonly request_id?: string;
     readonly timestamp?: string;
+    readonly severity?: 'info' | 'warning' | 'error' | 'critical' | 'fatal';
+    readonly retryable?: boolean;
     readonly validation_errors?: Record<string, string[]>;
   };
 }
