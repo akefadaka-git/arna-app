@@ -300,6 +300,13 @@ export const adminNavItems: ReadonlyArray<NavItem> = [
     icon: 'layout-grid',
   },
   {
+    id: 'audit-security-center',
+    label: 'ኦዲት እና ደህንነት',
+    to: '/admin/audit-security',
+    icon: 'shield-check',
+    permission: 'audit.view',
+  },
+  {
     id: 'public-content-review',
     label: 'ይፋዊ ይዘት ግምገማ',
     to: '/admin/public-content',
