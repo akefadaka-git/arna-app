@@ -675,9 +675,13 @@ function authGuard(
    * may render it to tell the caller which route they tried to reach.
    * It is not consumed by the guard.
    */
-  const permission = to.meta.permission;
-  if (permission !== undefined) {
-    const mode: 'any' | 'all' = to.meta.permissionMode ?? 'any';
+  // Evaluate each matched route record so a child feature permission
+  // cannot overwrite the Admin application's parent access boundary.
+  for (const record of to.matched) {
+    const permission = record.meta.permission;
+    if (permission === undefined) continue;
+
+    const mode: 'any' | 'all' = record.meta.permissionMode ?? 'any';
     if (!checkPermission(auth, permission, mode)) {
       return {
         path: ACCESS_DENIED_PATH,
