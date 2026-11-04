@@ -1,4 +1,11 @@
 /* Public-site contrast corrections: preserve the approved gold/navy palette while meeting WCAG text contrast on light surfaces. */
+.arna-site .eyebrow--dark {
+  color: #694d0a !important;
+}
+.arna-site .business-card__number,
+.arna-site .publication-card__top > span {
+  color: #694d0a !important;
+}
 .arna-site .hero .eyebrow,
 .arna-site .intro-section .eyebrow,
 .arna-site .principles-section .eyebrow,
