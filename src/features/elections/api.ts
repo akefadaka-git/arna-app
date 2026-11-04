@@ -132,3 +132,43 @@ export function appointElectionCommitteeMember(electionId: number, input: Appoin
 export function recuseElectionCommitteeMember(electionId: number, memberId: number, recusalScope: string): Promise<{ recused: boolean }> {
   return api.post(`/api/governance/elections/${electionId}/committee/members/${memberId}/recusal`, { recusal_scope: recusalScope });
 }
+
+export interface ElectionAuthorityVerificationInput { readonly authority_reference: string }
+export interface ElectionScheduleInput { readonly rule_version?: string; readonly opens_at: string; readonly closes_at: string }
+export interface ElectionObjectionInput {
+  readonly nomination_id?: number;
+  readonly category: 'eligibility' | 'nomination' | 'procedure' | 'ballot' | 'counting' | 'other';
+  readonly grounds: string;
+  readonly evidence_reference?: string;
+}
+export interface ElectionAppealInput { readonly grounds: string; readonly evidence_reference?: string }
+export interface ElectionCertificationInput {
+  readonly tally_id: number;
+  readonly certifying_authority: string;
+  readonly certification_reference: string;
+  readonly evidence_sha256: string;
+}
+export function verifyElectionAuthority(electionId: number, input: ElectionAuthorityVerificationInput): Promise<GovernanceElection> {
+  return api.post(`/api/governance/elections/${electionId}/authority/verify`, input);
+}
+export function openElectionNominations(electionId: number, input: Required<ElectionScheduleInput>): Promise<GovernanceElection> {
+  return api.post(`/api/governance/elections/${electionId}/nominations/open`, input);
+}
+export function openPhysicalElectionVoting(electionId: number, input: Omit<ElectionScheduleInput, 'rule_version'>): Promise<GovernanceElection> {
+  return api.post(`/api/governance/elections/${electionId}/voting/open-physical`, input);
+}
+export function closeElectionVoting(electionId: number): Promise<GovernanceElection> {
+  return api.post(`/api/governance/elections/${electionId}/voting/close`);
+}
+export function submitElectionObjection(electionId: number, input: ElectionObjectionInput): Promise<{ objection_id: number; status: string }> {
+  return api.post(`/api/governance/elections/${electionId}/objections`, input);
+}
+export function submitElectionAppeal(electionId: number, objectionId: number, input: ElectionAppealInput): Promise<{ appeal_id: number; status: string }> {
+  return api.post(`/api/governance/elections/${electionId}/objections/${objectionId}/appeals`, input);
+}
+export function certifyGovernanceElection(electionId: number, input: ElectionCertificationInput): Promise<{ certification_id: number; status: string }> {
+  return api.post(`/api/governance/elections/${electionId}/certification`, input);
+}
+export function ratifyGovernanceElection(electionId: number, ratification_reference: string): Promise<{ status: string; ratified_at: string }> {
+  return api.post(`/api/governance/elections/${electionId}/ratification`, { ratification_reference });
+}
