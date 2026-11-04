@@ -233,7 +233,7 @@ export const routesAdmin: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('@/layouts/AdminLayout'),
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, permission: 'app.admin.access' },
     children: [
       // -----------------------------------------------------------------------
       // Subdomain root — / → /admin
@@ -302,6 +302,12 @@ export const routesAdmin: RouteRecordRaw[] = [
         name: 'admin-corporate-site',
         component: () => import('./pages/AdminCorporateSiteRoute.vue'),
         meta: { permission: 'public-content.review' },
+      },
+      {
+        path: 'admin/audit-security',
+        name: 'admin-audit-security',
+        component: () => import('./pages/AdminAuditSecurityRoute.vue'),
+        meta: { permission: ['audit.view', 'security-event.view'], permissionMode: 'any' },
       },
       {
         path: 'launcher',
