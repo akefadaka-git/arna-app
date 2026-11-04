@@ -44,5 +44,7 @@ test('shared error routes include 403, 404, 500, and 503 presentations', () => {
   assert.match(errorRoute, /:status="500"/);
   assert.match(errorRoute, /:status="503"/);
   assert.match(baseRoutes, /path: '\/server-error'/);
+  const guards = readFileSync('src/router/guards.ts', 'utf8');
+  assert.match(guards, /'\/server-error'/);
   assert.match(errorLabels, /errorServerTitle/);
 });
