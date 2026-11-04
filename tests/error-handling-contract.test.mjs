@@ -21,3 +21,27 @@ test('frontend contract does not require raw exception details for user messagin
   assert.match(contract, /Never display raw stack traces, SQL, tokens, or server exception messages/);
   assert.match(contract, /requestId/);
 });
+
+const errorRoute = readFileSync('src/router/pages/ErrorRoute.vue', 'utf8');
+const errorLabels = readFileSync('src/router/error-labels.ts', 'utf8');
+const baseRoutes = readFileSync('src/router/routes-base.ts', 'utf8');
+
+test('shared error pages provide back, home, report, contact, and safe retry actions', () => {
+  assert.match(errorRoute, /function onBack\(\): void/);
+  assert.match(errorRoute, /window\.history\.state\?\.back/);
+  assert.match(errorRoute, /router\.push\('\/launcher'\)/);
+  assert.match(errorRoute, /errorCommonActionLabels\.report/);
+  assert.match(errorRoute, /errorCommonActionLabels\.contact/);
+  assert.match(errorRoute, /window\.location\.reload\(\)/);
+  assert.match(errorRoute, /mailto:\$\{SUPPORT_EMAIL\}/);
+  assert.match(errorRoute, /No password, token, stack trace, or private form data is included/);
+});
+
+test('shared error routes include 403, 404, 500, and 503 presentations', () => {
+  assert.match(errorRoute, /:status="403"/);
+  assert.match(errorRoute, /:status="404"/);
+  assert.match(errorRoute, /:status="500"/);
+  assert.match(errorRoute, /:status="503"/);
+  assert.match(baseRoutes, /path: '\/server-error'/);
+  assert.match(errorLabels, /errorServerTitle/);
+});
