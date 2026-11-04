@@ -209,11 +209,11 @@ const publicationChannels = [
 
     <header class="site-header">
       <div class="site-container site-header__inner">
-        <RouterLink class="brand" to="/" :aria-label="masesBrandLabels.corporateName">
+        <RouterLink class="brand" to="/">
           <img class="public-home__emblem" src="/logo.png" alt="" width="43" height="43" />
           <span class="brand__wordmark">
-            <strong>{{ masesBrandLabels.corporateName }}</strong>
-            <small>{{ masesBrandLabels.productName }}</small>
+            <strong>ARNA</strong>
+            <small>{{ masesBrandLabels.corporateName }}</small>
           </span>
         </RouterLink>
 
@@ -542,9 +542,9 @@ const publicationChannels = [
       <div class="site-container">
         <div class="site-footer__main">
           <div class="site-footer__brand">
-            <RouterLink class="brand brand--footer" to="/" :aria-label="masesBrandLabels.corporateName">
+            <RouterLink class="brand brand--footer" to="/">
               <img class="public-home__emblem" src="/logo.png" alt="" width="43" height="43" />
-              <span class="brand__wordmark"><strong>{{ masesBrandLabels.corporateName }}</strong><small>{{ masesBrandLabels.productName }}</small></span>
+              <span class="brand__wordmark"><strong>ARNA</strong><small>{{ masesBrandLabels.corporateName }}</small></span>
             </RouterLink>
             <p lang="am">በመተማመን የሚገነባ የጋራ እድገት።</p>
           </div>

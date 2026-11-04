@@ -16,7 +16,10 @@
     "TOOLING DEFERRED: lint/format/test automation and dependency automation require separate bounded changes.",
     "PUBLIC BUILD SMOKE: test:public-build-smoke verifies the independent public static build output."
   ],
-  "engines": { "node": ">=20.0.0", "npm": ">=10.0.0" },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
     "dev": "vite --mode workspace",
     "dev:portal": "vite --mode portal",
@@ -35,20 +38,26 @@
     "test:brand-palette-contract": "node --test tests/brand-palette-contract.test.mjs",
     "test:design-system-theme-contract": "node --test tests/design-system-theme-contract.test.mjs",
     "test:app-shell-responsive-contract": "node --test tests/app-shell-responsive-contract.test.mjs",
+    "test:wallet-open-form-contract": "node --test tests/wallet-open-form-contract.test.mjs",
+    "test:workspace-dashboard-route-contract": "node --test tests/workspace-dashboard-route-contract.test.mjs",
+    "test:public-browser": "playwright test tests/public-browser-contract.spec.mjs",
     "test:error-handling-contract": "node --test tests/error-handling-contract.test.mjs"
   },
   "dependencies": {
-    "axios": "1.7.9",
+    "axios": "1.21.0",
     "lucide-vue-next": "0.468.0",
     "pinia": "2.3.0",
-    "vue": "3.5.13",
+    "vue": "3.5.44",
     "vue-router": "4.5.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@playwright/test": "1.64.1",
     "@types/node": "22.10.2",
     "@vitejs/plugin-vue": "5.2.1",
+    "@vue/compiler-sfc": "3.5.44",
     "typescript": "5.7.2",
-    "vite": "6.0.5",
+    "vite": "6.4.5",
     "vue-tsc": "2.1.10"
   }
 }

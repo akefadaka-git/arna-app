@@ -328,6 +328,8 @@ import ErrorState from '@/components/composites/ErrorState';
 import BaseSelect from '@/components/primitives/BaseSelect';
 import PrimaryButton from '@/components/primitives/PrimaryButton';
 import PageTitle from '@/layouts/AppShell/PageTitle';
+import WalletOpenForm from './WalletOpenForm.vue';
+import { walletOpenFormLabels } from './labels';
 
 import { listWallets, formatAmount } from '@/features/wallet/service';
 import type {
@@ -394,6 +396,7 @@ const loadError = ref<unknown | null>(null);
 const search = ref<string>('');
 const activeFilter = ref<string>('all');
 const currentPage = ref<number>(1);
+const isOpenFormOpen = ref<boolean>(false);
 
 // -----------------------------------------------------------------------------
 // Derived state
@@ -629,13 +632,22 @@ async function onRowAction(wallet: Wallet, actionKey: string): Promise<void> {
 // -----------------------------------------------------------------------------
 // Primary action
 // -----------------------------------------------------------------------------
-async function onOpen(): Promise<void> {
-  /*
-   * The "open wallet" dialog is delivered in WF-7. Until it exists,
-   * this handler is a no-op. When WF-7 lands, this function opens the
-   * dialog component via a local ref.
-   */
-  void router;
+function onOpen(): void {
+  isOpenFormOpen.value = true;
+}
+
+/*
+ * A successful wallet creation closes the form and refreshes the first
+ * page so the newly-created wallet is visible. If the operator was
+ * already on page one, reload explicitly; otherwise the currentPage
+ * watcher performs the single reload when it changes back to one.
+ */
+function onWalletOpened(): void {
+  const alreadyOnFirstPage = currentPage.value === 1;
+  currentPage.value = 1;
+  if (alreadyOnFirstPage) {
+    void load();
+  }
 }
 </script>
 
@@ -841,6 +853,12 @@ async function onOpen(): Promise<void> {
         </div>
       </template>
     </Card>
+
+    <WalletOpenForm
+      v-model:open="isOpenFormOpen"
+      :labels="walletOpenFormLabels"
+      @submitted="onWalletOpened"
+    />
   </div>
 </template>
 

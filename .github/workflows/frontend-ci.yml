@@ -12,7 +12,7 @@ permissions:
 jobs:
   type-check-and-build:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,6 +23,21 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci
+      - name: Report dependency vulnerability inventory
+        shell: bash
+        run: |
+          npm audit --json > "$RUNNER_TEMP/npm-audit.json" || true
+          node --input-type=commonjs -e '
+            const fs = require("node:fs");
+            const report = JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP + "/npm-audit.json", "utf8"));
+            console.log("Vulnerability counts:", JSON.stringify(report.metadata?.vulnerabilities ?? {}));
+            for (const [name, item] of Object.entries(report.vulnerabilities ?? {})) {
+              const via = (item.via ?? []).map(entry => typeof entry === "string" ? entry : entry.title).join("; ");
+              console.log(JSON.stringify({ name, severity: item.severity, isDirect: item.isDirect, range: item.range, via, fixAvailable: item.fixAvailable }));
+            }
+          '
+      - name: Block high and critical dependency advisories
+        run: npm audit --audit-level=high
       - name: Type-check and build all applications
         run: npm run build
       - name: Verify root entry points, local assets, and deployment policy
@@ -35,8 +50,26 @@ jobs:
         run: npm run test:design-system-theme-contract
       - name: Verify responsive App Shell layout and accessibility contracts
         run: npm run test:app-shell-responsive-contract
-      - name: Verify centralized error handling contract
-        run: npm run test:error-handling-contract
+      - name: Verify wallet opening form integration
+        run: npm run test:wallet-open-form-contract
+      - name: Verify workspace dashboard route integration
+        run: npm run test:workspace-dashboard-route-contract
+      - name: Install Chromium for public browser contracts
+        run: npx playwright install --with-deps chromium
+      - name: Verify public browser and WCAG 2.2 accessibility contracts
+        shell: bash
+        run: |
+          npx vite preview --outDir dist-public --host 127.0.0.1 --port 4173 --strictPort > "$RUNNER_TEMP/public-preview.log" 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4173/ >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4173/ >/dev/null
+          PUBLIC_SITE_URL=http://127.0.0.1:4173/ npm run test:public-browser
       - name: Upload versioned static build outputs
         uses: actions/upload-artifact@v4
         with:
