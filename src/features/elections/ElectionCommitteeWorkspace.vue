@@ -44,8 +44,8 @@ async function decideSubmission(item: Record<string, unknown>, decision: 'approv
   }
   busy.value = true; error.value = '';
   try {
-    await decideElectionNominationSubmission(electionId, submissionId, { decision, reason });
-    notices.value[submissionId] = 'ውሳኔው ተመዝግቧል | Decision recorded.';
+    const result = await decideElectionNominationSubmission(electionId, submissionId, { decision, reason });
+    notices.value[submissionId] = result.status === 'awaiting_committee_majority' ? 'ድምፅዎ ተመዝግቧል፤ የኮሚቴ አብላጫ ውሳኔ ይጠበቃል | Vote recorded; committee majority pending.' : 'ውሳኔው ተመዝግቧል | Committee decision recorded.';
     await load();
   } catch {
     error.value = 'የማመልከቻ ውሳኔ አልተመዘገበም | Submission decision failed; verify authority, quorum and recusal.';
