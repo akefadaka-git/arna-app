@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { RouterLink, useRoute, useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import PublicSiteLayout from '@/layouts/PublicSiteLayout.vue';
 import ErrorShell from '@/components/patterns/ErrorShell';
