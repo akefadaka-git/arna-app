@@ -25,6 +25,7 @@ test('frontend contract does not require raw exception details for user messagin
 const errorRoute = readFileSync('src/router/pages/ErrorRoute.vue', 'utf8');
 const errorLabels = readFileSync('src/router/error-labels.ts', 'utf8');
 const baseRoutes = readFileSync('src/router/routes-base.ts', 'utf8');
+const accessDeniedPage = readFileSync('src/components/patterns/AccessDeniedPage/AccessDeniedPage.vue', 'utf8');
 
 test('shared error pages provide back, home, report, contact, and safe retry actions', () => {
   assert.match(errorRoute, /function onBack\(\): void/);
@@ -38,7 +39,7 @@ test('shared error pages provide back, home, report, contact, and safe retry act
 });
 
 test('shared error routes include 403, 404, 500, and 503 presentations', () => {
-  assert.match(errorRoute, /:status="403"/);
+  assert.match(accessDeniedPage, /:status="403"/);
   assert.match(errorRoute, /:status="404"/);
   assert.match(errorRoute, /:status="500"/);
   assert.match(errorRoute, /:status="503"/);
