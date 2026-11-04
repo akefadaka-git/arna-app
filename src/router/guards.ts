@@ -497,6 +497,7 @@ const BLOCKED_REDIRECT_TARGETS: ReadonlySet<string> = new Set([
   ACCESS_DENIED_PATH,
   '/not-found',
   '/maintenance',
+  '/server-error',
 ]);
 
 // =============================================================================
