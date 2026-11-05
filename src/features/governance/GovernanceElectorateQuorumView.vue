@@ -62,7 +62,7 @@ async function createSnapshot(): Promise<void> {
     snapshot.value = await createGovernanceElectorateSnapshot(
       meetingId,
       sourceRegisterVersion.value.trim(),
-      new Date(cutoffAt.value).toISOString(),
+      cutoffAt.value,
     );
     evaluation.value = null;
     notice.value = 'Electorate snapshot captured as a draft. It is not yet approved for quorum evaluation.';
@@ -110,8 +110,8 @@ async function createRule(): Promise<void> {
       quorum_numerator: quorumNumerator.value,
       quorum_denominator: quorumDenominator.value,
       share_class_weights: weights,
-      effective_from: new Date(effectiveFrom.value).toISOString(),
-      effective_until: effectiveUntil.value ? new Date(effectiveUntil.value).toISOString() : undefined,
+      effective_from: effectiveFrom.value,
+      effective_until: effectiveUntil.value ? effectiveUntil.value : undefined,
     }) as { id?: number };
     ruleId.value = result.id ?? null;
     notice.value = ruleId.value
