@@ -203,3 +203,44 @@ export interface PenaltyDisputeRecord {
   readonly status: 'pending' | 'upheld' | 'waived';
   readonly submitted_by: number;
 }
+
+
+export interface GovernanceAgendaItem {
+  readonly id: number;
+  readonly tenant_id: number;
+  readonly meeting_id: number;
+  readonly item_number: number;
+  readonly title_am: string | null;
+  readonly title_en: string | null;
+  readonly description: string | null;
+  readonly duration_minutes: number | null;
+  readonly status: 'draft';
+  readonly version: number;
+}
+
+export interface GovernanceAgendaItemInput {
+  item_number: number;
+  title_am?: string;
+  title_en?: string;
+  description?: string;
+  duration_minutes?: number;
+}
+
+export async function listGovernanceAgenda(meetingId: number): Promise<readonly GovernanceAgendaItem[]> {
+  return api.get<readonly GovernanceAgendaItem[]>(`/api/governance/meetings/${meetingId}/agenda`);
+}
+
+export async function createGovernanceAgendaItem(
+  meetingId: number,
+  input: GovernanceAgendaItemInput,
+): Promise<GovernanceAgendaItem> {
+  return api.post<GovernanceAgendaItem>(`/api/governance/meetings/${meetingId}/agenda`, input);
+}
+
+export async function updateGovernanceAgendaItem(
+  itemId: number,
+  version: number,
+  input: Partial<GovernanceAgendaItemInput>,
+): Promise<GovernanceAgendaItem> {
+  return api.patch<GovernanceAgendaItem>(`/api/governance/agenda-items/${itemId}`, { ...input, version });
+}
