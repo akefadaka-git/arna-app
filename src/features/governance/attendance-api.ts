@@ -254,13 +254,14 @@ export async function updateGovernanceAgendaItem(
 
 
 export interface ProxyHistoryVerification {
-  readonly status: 'PASS' | 'FAIL';
+  readonly status: 'PASS' | 'FAIL' | 'BLOCKED';
   readonly proxy_id: number;
   readonly event_count: number;
   readonly verified_through_event_id: number | null;
   readonly failed_event_id: number | null;
   readonly chain_root: string | null;
   readonly integrity_verified: boolean;
+  readonly current_status_matches_chain: boolean;
   readonly note: string;
 }
 
