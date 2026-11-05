@@ -8,6 +8,8 @@ import {
   recordGovernanceAttendance,
   requestGovernancePenaltySettlement,
   reviewGovernanceProxy,
+  revokeGovernanceProxy,
+  verifyGovernanceProxyHistory,
   submitGovernanceProxy,
   requestAttendanceCorrection,
   reviewAttendanceCorrection,
@@ -240,6 +242,33 @@ async function reviewProxy(proxyId: number, decision: 'approved' | 'rejected'): 
   }
 }
 
+async function revokeProxy(proxyId: number): Promise<void> {
+  saving.value = true;
+  errorMessage.value = '';
+  try {
+    await revokeGovernanceProxy(proxyId, 'Proxy submitter requested revocation before representation was used.');
+    notice.value = 'Proxy revocation recorded in the evidence history.';
+    if (selected.value) await selectMeeting(selected.value.id);
+  } catch (error) {
+    errorMessage.value = error instanceof Error ? error.message : 'Could not revoke proxy.';
+  } finally {
+    saving.value = false;
+  }
+}
+
+async function verifyProxyHistory(proxyId: number): Promise<void> {
+  saving.value = true;
+  errorMessage.value = '';
+  try {
+    const result = await verifyGovernanceProxyHistory(proxyId);
+    notice.value = result.status + ' · Proxy evidence history · ' + result.event_count + ' events · ' + result.note;
+  } catch (error) {
+    errorMessage.value = error instanceof Error ? error.message : 'Could not verify proxy evidence history.';
+  } finally {
+    saving.value = false;
+  }
+}
+
 async function assessPenalty(attendanceId: number, type: 'late' | 'absence'): Promise<void> {
   if (!selected.value) return;
   saving.value = true;
@@ -444,6 +473,8 @@ onMounted(() => { void loadMeetings(); });
             <span>Deadline {{ new Date(proxy.deadline_at).toLocaleString() }}</span>
             <button v-if="proxy.status === 'submitted'" class="text-button" :disabled="saving" @click="reviewProxy(proxy.id, 'approved')">Approve</button>
             <button v-if="proxy.status === 'submitted'" class="text-button danger-text" :disabled="saving" @click="reviewProxy(proxy.id, 'rejected')">Reject</button>
+            <button v-if="proxy.status === 'submitted' || proxy.status === 'approved'" class="text-button danger-text" :disabled="saving" @click="revokeProxy(proxy.id)">Revoke (submitter only)</button>
+            <button class="text-button" :disabled="saving" @click="verifyProxyHistory(proxy.id)">Verify evidence chain</button>
           </div>
         </div>
 
