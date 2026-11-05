@@ -345,6 +345,8 @@ onMounted(() => { void loadMeetings(); });
 
       <section v-if="selected" class="panel meeting-detail">
         <h2>{{ selectedLabel }}</h2>
+        <p><a :href="'/governance/meetings/' + selected.id + '/agenda'">Agenda</a> ·
+          <a :href="'/governance/meetings/' + selected.id + '/electorate'">Electorate &amp; quorum</a></p>
         <p class="muted">{{ selected.meeting_code }} · {{ selected.meeting_kind }} · {{ new Date(selected.starts_at).toLocaleString() }}</p>
 
         <div class="section-block">
