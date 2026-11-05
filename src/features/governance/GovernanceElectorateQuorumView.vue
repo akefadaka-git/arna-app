@@ -26,6 +26,7 @@ const sourceRegisterVersion = ref('');
 const cutoffAt = ref('');
 const snapshotApprovalReference = ref('');
 const meetingKind = ref<'general_assembly' | 'board'>('general_assembly');
+const meetingCategory = ref<'' | 'ordinary' | 'extraordinary'>('');
 const ruleCode = ref('');
 const legalBasis = ref('');
 const quorumNumerator = ref(0);
@@ -97,6 +98,10 @@ async function createRule(): Promise<void> {
     errorMessage.value = 'Share-class weights must be valid JSON, keyed by share_class_id. Do not enter assumed weights.';
     return;
   }
+  if (meetingKind.value === 'general_assembly' && !meetingCategory.value) {
+    errorMessage.value = 'Select whether this is an ordinary or extraordinary General Assembly rule.';
+    return;
+  }
   if (!effectiveFrom.value) {
     errorMessage.value = 'An effective-from date is required.';
     return;
@@ -105,6 +110,7 @@ async function createRule(): Promise<void> {
   try {
     const result = await createGovernanceQuorumRule({
       meeting_kind: meetingKind.value,
+      meeting_category: meetingKind.value === 'general_assembly' ? meetingCategory.value : undefined,
       rule_code: ruleCode.value.trim(),
       legal_basis: legalBasis.value.trim(),
       quorum_numerator: quorumNumerator.value,
@@ -220,6 +226,13 @@ onMounted(() => {
         <select v-model="meetingKind">
           <option value="general_assembly">General Assembly</option>
           <option value="board">Board</option>
+        </select>
+      </label>
+      <label v-if="meetingKind === 'general_assembly'">General Assembly category
+        <select v-model="meetingCategory">
+          <option value="" disabled>Select ordinary or extraordinary</option>
+          <option value="ordinary">Ordinary General Assembly</option>
+          <option value="extraordinary">Extraordinary General Assembly</option>
         </select>
       </label>
       <label>Rule code<input v-model="ruleCode" maxlength="80"></label>
