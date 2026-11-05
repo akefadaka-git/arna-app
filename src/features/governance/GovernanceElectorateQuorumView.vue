@@ -28,8 +28,8 @@ const snapshotApprovalReference = ref('');
 const meetingKind = ref<'general_assembly' | 'board'>('general_assembly');
 const ruleCode = ref('');
 const legalBasis = ref('');
-const quorumNumerator = ref(1);
-const quorumDenominator = ref(4);
+const quorumNumerator = ref(0);
+const quorumDenominator = ref(0);
 const shareClassWeightsJson = ref('');
 const effectiveFrom = ref('');
 const effectiveUntil = ref('');
@@ -229,7 +229,7 @@ onMounted(() => {
         <label>Quorum denominator<input v-model.number="quorumDenominator" type="number" min="1"></label>
       </div>
       <label>Share-class voting weights (JSON keyed by share_class_id)
-        <textarea v-model="shareClassWeightsJson" rows="3" placeholder='{"1":"1.0000","2":"1.0000"}'></textarea>
+        <textarea v-model="shareClassWeightsJson" rows="3" placeholder='{"<share_class_id>":"<approved_weight>"}'></textarea>
       </label>
       <div class="two">
         <label>Effective from<input v-model="effectiveFrom" type="datetime-local"></label>
