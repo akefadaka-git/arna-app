@@ -30,6 +30,7 @@ const meetingCategory = ref<'' | 'ordinary' | 'extraordinary'>('');
 const meetingRound = ref<0 | 1 | 2 | 3>(0);
 const ruleCode = ref('');
 const legalBasis = ref('');
+const quorumMode = ref<'' | 'capital_threshold' | 'no_capital_threshold'>('');
 const quorumNumerator = ref(0);
 const quorumDenominator = ref(0);
 const shareClassWeightsJson = ref('');
@@ -103,6 +104,14 @@ async function createRule(): Promise<void> {
     errorMessage.value = 'Select whether this is an ordinary or extraordinary General Assembly rule.';
     return;
   }
+  if (!quorumMode.value) {
+    errorMessage.value = 'Select the quorum mode explicitly from the legally approved rule.';
+    return;
+  }
+  if (quorumMode.value === 'capital_threshold' && (!quorumNumerator.value || !quorumDenominator.value || quorumNumerator.value > quorumDenominator.value)) {
+    errorMessage.value = 'Enter a valid approved quorum fraction.';
+    return;
+  }
   if (!meetingRound.value || (meetingCategory.value === 'ordinary' && meetingRound.value > 2)) {
     errorMessage.value = 'Select a valid meeting round for the chosen General Assembly category.';
     return;
@@ -119,8 +128,9 @@ async function createRule(): Promise<void> {
       meeting_round: meetingRound.value as 1 | 2 | 3,
       rule_code: ruleCode.value.trim(),
       legal_basis: legalBasis.value.trim(),
-      quorum_numerator: quorumNumerator.value,
-      quorum_denominator: quorumDenominator.value,
+      quorum_mode: quorumMode.value as 'capital_threshold' | 'no_capital_threshold',
+      quorum_numerator: quorumMode.value === 'capital_threshold' ? quorumNumerator.value : undefined,
+      quorum_denominator: quorumMode.value === 'capital_threshold' ? quorumDenominator.value : undefined,
       share_class_weights: weights,
       effective_from: effectiveFrom.value,
       effective_until: effectiveUntil.value ? effectiveUntil.value : undefined,
@@ -250,7 +260,14 @@ onMounted(() => {
       </label>
       <label>Rule code<input v-model="ruleCode" maxlength="80"></label>
       <label>Legal basis and exact authority reference<textarea v-model="legalBasis" rows="2" maxlength="1000"></textarea></label>
-      <div class="two">
+      <label>Quorum calculation mode
+        <select v-model="quorumMode">
+          <option value="" disabled>Select the mode stated in the approved legal rule</option>
+          <option value="capital_threshold">Capital threshold (fraction)</option>
+          <option value="no_capital_threshold">No capital threshold (explicitly approved)</option>
+        </select>
+      </label>
+      <div v-if="quorumMode === 'capital_threshold'" class="two">
         <label>Quorum numerator<input v-model.number="quorumNumerator" type="number" min="1"></label>
         <label>Quorum denominator<input v-model.number="quorumDenominator" type="number" min="1"></label>
       </div>
