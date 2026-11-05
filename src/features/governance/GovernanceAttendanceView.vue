@@ -39,6 +39,9 @@ const attendanceForm = ref({
   subject_type: 'shareholder' as 'shareholder' | 'director',
   subject_id: '',
   attendance_status: 'present' as AttendanceStatus,
+  proxy_id: '',
+  represented_by_user_id: '',
+  represented_by_name: '',
   arrived_at: '',
   notes: '',
 });
@@ -173,6 +176,9 @@ async function saveAttendance(): Promise<void> {
     await recordGovernanceAttendance(selected.value.id, {
       subject_type: attendanceForm.value.subject_type,
       subject_id: Number(attendanceForm.value.subject_id),
+      proxy_id: attendanceForm.value.proxy_id ? Number(attendanceForm.value.proxy_id) : undefined,
+      represented_by_user_id: attendanceForm.value.represented_by_user_id ? Number(attendanceForm.value.represented_by_user_id) : undefined,
+      represented_by_name: attendanceForm.value.represented_by_name || undefined,
       attendance_status: attendanceForm.value.attendance_status,
       arrived_at: attendanceForm.value.arrived_at || undefined,
       notes: attendanceForm.value.notes || undefined,
@@ -220,7 +226,11 @@ async function reviewProxy(proxyId: number, decision: 'approved' | 'rejected'): 
   saving.value = true;
   errorMessage.value = '';
   try {
-    await reviewGovernanceProxy(proxyId, decision);
+    await reviewGovernanceProxy(
+      proxyId,
+      decision,
+      decision === 'approved' ? 'Proxy identity and authority evidence reviewed.' : 'Submitted evidence does not establish valid proxy authority.',
+    );
     notice.value = decision === 'approved' ? 'ውክልናው ጸድቋል / Proxy approved.' : 'ውክልናው ውድቅ ተደርጓል / Proxy rejected.';
     if (selected.value) await selectMeeting(selected.value.id);
   } catch (error) {
@@ -358,9 +368,20 @@ onMounted(() => { void loadMeetings(); });
                 <option value="represented">Represented</option>
               </select>
             </label>
-            <label>Arrival time (required for present / late)
-              <input v-model="attendanceForm.arrived_at" type="datetime-local" />
+            <label>Arrival time (required for present / late / represented)
+              <input v-model="attendanceForm.arrived_at" type="datetime-local" :required="['present', 'late', 'represented'].includes(attendanceForm.attendance_status)" />
             </label>
+            <template v-if="attendanceForm.attendance_status === 'represented'">
+              <label>Approved proxy record ID
+                <input v-model="attendanceForm.proxy_id" type="number" min="1" required />
+              </label>
+              <label>Attending proxy user ID (when proxy has an ARNA account)
+                <input v-model="attendanceForm.represented_by_user_id" type="number" min="1" />
+              </label>
+              <label class="wide">Attending external proxy name (must match approved instrument)
+                <input v-model="attendanceForm.represented_by_name" maxlength="150" />
+              </label>
+            </template>
             <label class="wide">Notes / permission evidence reference (required for excused absence)
               <input v-model="attendanceForm.notes" maxlength="2000" :required="attendanceForm.attendance_status === 'excused'" />
             </label>
