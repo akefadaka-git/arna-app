@@ -34,6 +34,7 @@ const createForm = ref({
   meeting_code: '',
   meeting_kind: 'general_assembly' as 'general_assembly' | 'board',
   meeting_category: '' as '' | 'ordinary' | 'extraordinary',
+  meeting_round: 0 as 0 | 1 | 2 | 3,
   title_am: '',
   title_en: '',
   starts_at: '',
@@ -156,6 +157,7 @@ async function createMeeting(): Promise<void> {
       meeting_code: createForm.value.meeting_code.trim(),
       meeting_kind: createForm.value.meeting_kind,
       meeting_category: createForm.value.meeting_kind === 'general_assembly' ? (createForm.value.meeting_category || undefined) : undefined,
+      meeting_round: createForm.value.meeting_kind === 'general_assembly' ? (createForm.value.meeting_round || undefined) : undefined,
       title_am: createForm.value.title_am || undefined,
       title_en: createForm.value.title_en || undefined,
       starts_at: createForm.value.starts_at,
@@ -352,6 +354,14 @@ onMounted(() => { void loadMeetings(); });
             <option value="extraordinary">Extraordinary General Assembly</option>
           </select>
         </label>
+        <label v-if="createForm.meeting_kind === 'general_assembly'">Meeting round
+          <select v-model.number="createForm.meeting_round" required>
+            <option :value="0" disabled>Select first, second or third</option>
+            <option :value="1">First meeting</option>
+            <option :value="2">Second meeting</option>
+            <option v-if="createForm.meeting_category === 'extraordinary'" :value="3">Third meeting</option>
+          </select>
+        </label>
         <label>Meeting date and start time
           <input v-model="createForm.starts_at" type="datetime-local" required />
         </label>
@@ -381,7 +391,7 @@ onMounted(() => { void loadMeetings(); });
           @click="selectMeeting(meeting.id)"
         >
           <strong>{{ meeting.title_am || meeting.title_en || meeting.meeting_code }}</strong>
-          <span>{{ meeting.meeting_kind === 'board' ? 'Board' : (meeting.meeting_category === 'extraordinary' ? 'Extraordinary GA' : 'Ordinary GA') }} · {{ new Date(meeting.starts_at).toLocaleString() }}</span>
+          <span>{{ meeting.meeting_kind === 'board' ? 'Board' : (meeting.meeting_category === 'extraordinary' ? 'Extraordinary GA' : 'Ordinary GA') + ' · Meeting ' + meeting.meeting_round }} · {{ new Date(meeting.starts_at).toLocaleString() }}</span>
         </button>
       </aside>
 
