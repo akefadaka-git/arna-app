@@ -27,6 +27,9 @@ export interface AttendanceRecord {
   readonly subject_type: 'shareholder' | 'director';
   readonly subject_id: number;
   readonly attendance_status: AttendanceStatus;
+  readonly proxy_id?: number | null;
+  readonly represented_by_user_id?: number | null;
+  readonly represented_by_name?: string | null;
   readonly arrived_at: string | null;
   readonly notes: string | null;
 }
@@ -89,6 +92,9 @@ export async function recordGovernanceAttendance(
     subject_type: 'shareholder' | 'director';
     subject_id: number;
     user_id?: number;
+    proxy_id?: number;
+    represented_by_user_id?: number;
+    represented_by_name?: string;
     attendance_status: AttendanceStatus;
     arrived_at?: string;
     notes?: string;
