@@ -341,8 +341,9 @@ export interface CreateQuorumRuleInput {
   meeting_round: 1 | 2 | 3;
   rule_code: string;
   legal_basis: string;
-  quorum_numerator: number;
-  quorum_denominator: number;
+  quorum_mode: 'capital_threshold' | 'no_capital_threshold';
+  quorum_numerator?: number;
+  quorum_denominator?: number;
   share_class_weights: Record<string, string>;
   effective_from: string;
   effective_until?: string;
