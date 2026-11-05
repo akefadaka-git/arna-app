@@ -11,6 +11,7 @@ export interface GovernanceMeeting {
   readonly title_am: string | null;
   readonly title_en: string | null;
   readonly meeting_kind: MeetingKind;
+  readonly meeting_category: 'ordinary' | 'extraordinary' | null;
   readonly starts_at: string;
   readonly ends_at: string | null;
   readonly status: string;
@@ -70,6 +71,7 @@ export interface CreateMeetingInput {
   title_am?: string;
   title_en?: string;
   meeting_kind: MeetingKind;
+  meeting_category?: 'ordinary' | 'extraordinary';
   starts_at: string;
   ends_at?: string;
 }
@@ -333,6 +335,7 @@ export async function approveGovernanceElectorateSnapshot(
 
 export interface CreateQuorumRuleInput {
   meeting_kind: 'general_assembly' | 'board';
+  meeting_category?: 'ordinary' | 'extraordinary';
   rule_code: string;
   legal_basis: string;
   quorum_numerator: number;
