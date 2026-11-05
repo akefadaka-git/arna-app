@@ -197,6 +197,10 @@ async function saveAttendance(): Promise<void> {
 
 async function saveProxy(): Promise<void> {
   if (!selected.value) return;
+  if (!proxyForm.value.instrument_reference.trim()) {
+    errorMessage.value = 'A proxy instrument evidence reference is required before submission.';
+    return;
+  }
   saving.value = true;
   errorMessage.value = '';
   notice.value = '';
@@ -446,7 +450,7 @@ onMounted(() => { void loadMeetings(); });
               <input v-model="proxyForm.proxy_reference" maxlength="100" />
             </label>
             <label>Instrument / document reference
-              <input v-model="proxyForm.instrument_reference" maxlength="2000" />
+              <input v-model="proxyForm.instrument_reference" maxlength="2000" required />
             </label>
             <div class="form-actions"><button type="submit" :disabled="saving">Submit proxy</button></div>
           </form>
