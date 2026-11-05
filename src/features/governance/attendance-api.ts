@@ -19,6 +19,7 @@ export interface GovernanceMeeting {
   readonly penalties?: readonly PenaltyRecord[];
   readonly corrections?: readonly AttendanceCorrectionRecord[];
   readonly disputes?: readonly PenaltyDisputeRecord[];
+  readonly proxy_events?: readonly ProxyEventRecord[];
 }
 
 export interface AttendanceRecord {
@@ -39,7 +40,7 @@ export interface ProxyRecord {
   readonly proxy_name_en: string | null;
   readonly submitted_at: string;
   readonly deadline_at: string;
-  readonly status: 'submitted' | 'approved' | 'rejected';
+  readonly status: 'submitted' | 'approved' | 'rejected' | 'revoked';
 }
 
 export interface PenaltyRecord {
@@ -243,4 +244,108 @@ export async function updateGovernanceAgendaItem(
   input: Partial<GovernanceAgendaItemInput>,
 ): Promise<GovernanceAgendaItem> {
   return api.patch<GovernanceAgendaItem>(`/api/governance/agenda-items/${itemId}`, { ...input, version });
+}
+
+
+export interface ProxyEventRecord {
+  readonly id: number;
+  readonly proxy_id: number;
+  readonly event_type: string;
+  readonly previous_status: string | null;
+  readonly next_status: string | null;
+  readonly actor_id: number;
+  readonly reason: string | null;
+  readonly previous_event_hash: string | null;
+  readonly event_hash: string;
+  readonly occurred_at: string;
+}
+
+export async function revokeGovernanceProxy(proxyId: number, reason: string): Promise<ProxyRecord> {
+  return api.patch<ProxyRecord>(`/api/governance/proxies/${proxyId}/revoke`, { reason });
+}
+
+export interface ElectorateSnapshot {
+  readonly id: number;
+  readonly meeting_id: number;
+  readonly version: number;
+  readonly source_register_version: string;
+  readonly cutoff_at: string;
+  readonly entry_count: number;
+  readonly source_hash: string;
+  readonly status: 'draft' | 'approved' | 'superseded';
+  readonly approval_reference: string | null;
+}
+
+export interface QuorumEvaluation {
+  readonly status: 'PASS' | 'FAIL' | 'BLOCKED';
+  readonly reason_code?: string;
+  readonly meeting_id: number;
+  readonly electorate_snapshot_id: number | null;
+  readonly quorum_rule_id: number | null;
+  readonly present_voting_units?: string;
+  readonly total_eligible_voting_units?: string;
+  readonly threshold?: string;
+  readonly can_open_business: boolean;
+  readonly evaluation_id?: number;
+}
+
+export async function createGovernanceElectorateSnapshot(
+  meetingId: number,
+  sourceRegisterVersion: string,
+  cutoffAt: string,
+): Promise<ElectorateSnapshot> {
+  return api.post<ElectorateSnapshot>(`/api/governance/meetings/${meetingId}/electorate-snapshots`, {
+    source_register_version: sourceRegisterVersion,
+    cutoff_at: cutoffAt,
+  });
+}
+
+export async function approveGovernanceElectorateSnapshot(
+  snapshotId: number,
+  approvalReference: string,
+): Promise<ElectorateSnapshot> {
+  return api.post<ElectorateSnapshot>(`/api/governance/electorate-snapshots/${snapshotId}/approve`, {
+    approval_reference: approvalReference,
+  });
+}
+
+export interface CreateQuorumRuleInput {
+  meeting_kind: 'general_assembly' | 'board';
+  rule_code: string;
+  legal_basis: string;
+  quorum_numerator: number;
+  quorum_denominator: number;
+  share_class_weights: Record<string, string>;
+  effective_from: string;
+  effective_until?: string;
+}
+
+export async function createGovernanceQuorumRule(input: CreateQuorumRuleInput): Promise<unknown> {
+  return api.post<unknown>('/api/governance/quorum-rules', input);
+}
+
+export async function approveGovernanceQuorumRule(
+  ruleId: number,
+  approvalReference: string,
+  approvalDocumentHash: string,
+): Promise<unknown> {
+  return api.post<unknown>(`/api/governance/quorum-rules/${ruleId}/approve`, {
+    approval_reference: approvalReference,
+    approval_document_hash: approvalDocumentHash,
+  });
+}
+
+export async function verifyGovernanceQuorumRule(
+  ruleId: number,
+  verificationReference: string,
+  verificationDocumentHash: string,
+): Promise<unknown> {
+  return api.post<unknown>(`/api/governance/quorum-rules/${ruleId}/verify-legal`, {
+    legal_verification_reference: verificationReference,
+    legal_verification_document_hash: verificationDocumentHash,
+  });
+}
+
+export async function evaluateGovernanceQuorum(meetingId: number): Promise<QuorumEvaluation> {
+  return api.post<QuorumEvaluation>(`/api/governance/meetings/${meetingId}/quorum/evaluate`, {});
 }
