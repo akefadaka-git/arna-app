@@ -253,6 +253,21 @@ export async function updateGovernanceAgendaItem(
 }
 
 
+export interface ProxyHistoryVerification {
+  readonly status: 'PASS' | 'FAIL';
+  readonly proxy_id: number;
+  readonly event_count: number;
+  readonly verified_through_event_id: number | null;
+  readonly failed_event_id: number | null;
+  readonly chain_root: string | null;
+  readonly integrity_verified: boolean;
+  readonly note: string;
+}
+
+export async function verifyGovernanceProxyHistory(proxyId: number): Promise<ProxyHistoryVerification> {
+  return api.get<ProxyHistoryVerification>(`/api/governance/proxies/${proxyId}/verify-history`);
+}
+
 export interface ProxyEventRecord {
   readonly id: number;
   readonly proxy_id: number;
