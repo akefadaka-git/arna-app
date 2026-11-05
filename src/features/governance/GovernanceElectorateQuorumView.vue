@@ -27,6 +27,7 @@ const cutoffAt = ref('');
 const snapshotApprovalReference = ref('');
 const meetingKind = ref<'general_assembly'>('general_assembly');
 const meetingCategory = ref<'' | 'ordinary' | 'extraordinary'>('');
+const meetingRound = ref<0 | 1 | 2 | 3>(0);
 const ruleCode = ref('');
 const legalBasis = ref('');
 const quorumNumerator = ref(0);
@@ -102,6 +103,10 @@ async function createRule(): Promise<void> {
     errorMessage.value = 'Select whether this is an ordinary or extraordinary General Assembly rule.';
     return;
   }
+  if (!meetingRound.value || (meetingCategory.value === 'ordinary' && meetingRound.value > 2)) {
+    errorMessage.value = 'Select a valid meeting round for the chosen General Assembly category.';
+    return;
+  }
   if (!effectiveFrom.value) {
     errorMessage.value = 'An effective-from date is required.';
     return;
@@ -110,7 +115,8 @@ async function createRule(): Promise<void> {
   try {
     const result = await createGovernanceQuorumRule({
       meeting_kind: meetingKind.value,
-      meeting_category: meetingKind.value === 'general_assembly' ? meetingCategory.value : undefined,
+      meeting_category: meetingCategory.value as 'ordinary' | 'extraordinary',
+      meeting_round: meetingRound.value as 1 | 2 | 3,
       rule_code: ruleCode.value.trim(),
       legal_basis: legalBasis.value.trim(),
       quorum_numerator: quorumNumerator.value,
@@ -232,6 +238,14 @@ onMounted(() => {
           <option value="" disabled>Select ordinary or extraordinary</option>
           <option value="ordinary">Ordinary General Assembly</option>
           <option value="extraordinary">Extraordinary General Assembly</option>
+        </select>
+      </label>
+      <label>Meeting round
+        <select v-model.number="meetingRound">
+          <option :value="0" disabled>Select meeting round</option>
+          <option :value="1">First meeting</option>
+          <option :value="2">Second meeting</option>
+          <option v-if="meetingCategory === 'extraordinary'" :value="3">Third meeting</option>
         </select>
       </label>
       <label>Rule code<input v-model="ruleCode" maxlength="80"></label>
