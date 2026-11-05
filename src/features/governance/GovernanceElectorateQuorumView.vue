@@ -25,7 +25,7 @@ const ruleId = ref<number | null>(null);
 const sourceRegisterVersion = ref('');
 const cutoffAt = ref('');
 const snapshotApprovalReference = ref('');
-const meetingKind = ref<'general_assembly' | 'board'>('general_assembly');
+const meetingKind = ref<'general_assembly'>('general_assembly');
 const meetingCategory = ref<'' | 'ordinary' | 'extraordinary'>('');
 const ruleCode = ref('');
 const legalBasis = ref('');
@@ -225,7 +225,6 @@ onMounted(() => {
       <label>Meeting type
         <select v-model="meetingKind">
           <option value="general_assembly">General Assembly</option>
-          <option value="board">Board</option>
         </select>
       </label>
       <label v-if="meetingKind === 'general_assembly'">General Assembly category
