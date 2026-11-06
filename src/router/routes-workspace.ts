@@ -712,7 +712,7 @@ export const routesWorkspace: RouteRecordRaw[] = [
         name: 'loan-products',
         component: () => import('@/features/loans/LoanProductListView.vue'),
         props: { labels: loanProductListViewLabels },
-        meta: { permission: 'loan_product.view' },
+        meta: { permission: 'loan.view' },
       },
 
       // -----------------------------------------------------------------------
