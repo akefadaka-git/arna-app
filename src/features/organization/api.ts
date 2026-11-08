@@ -44,7 +44,7 @@ export interface ListOrganizationUnitsQuery {
 export async function listOrganizationUnits(
   query: ListOrganizationUnitsQuery = {},
 ): Promise<OrganizationUnitPage> {
-  return api.get<OrganizationUnitPage>('/api/organization/units', { params: query });
+  return api.get<OrganizationUnitPage>('/api/organization/units', { params: { ...query } });
 }
 
 export async function getOrganizationUnit(id: number): Promise<OrganizationUnit> {
