@@ -8,6 +8,7 @@ import {
   listOrganizationAssignments,
   updateOrganizationAssignment,
   type OrganizationAssignment,
+  type OrganizationAssignmentType,
 } from './api';
 
 const route = useRoute();
@@ -37,7 +38,7 @@ const error = ref('');
 const page = ref(1);
 const lastPage = ref(1);
 const personId = ref('');
-const assignmentType = ref('primary');
+const assignmentType = ref<OrganizationAssignmentType>('primary');
 const titleAm = ref('');
 const titleEn = ref('');
 const startsOn = ref(new Date().toISOString().slice(0, 10));
