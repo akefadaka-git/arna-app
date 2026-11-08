@@ -314,8 +314,8 @@ onUnmounted(() => {
             <FilePreview
               v-if="originalPreviewUrl"
               :src="originalPreviewUrl"
-              :name="previewFile.original_name"
-              :mime-type="previewFile.mime_type"
+              :name="previewName"
+              :mime-type="previewFile?.mime_type ?? 'application/octet-stream'"
               :labels="previewLabels"
               size="lg"
             />
