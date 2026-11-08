@@ -135,7 +135,7 @@ export async function listOrganizationAssignments(
   unitId: number,
   query: OrganizationAssignmentQuery = {},
 ): Promise<OrganizationAssignmentPage> {
-  return api.get<OrganizationAssignmentPage>(`/api/organization/units/${unitId}/assignments`, { params: query });
+  return api.get<OrganizationAssignmentPage>(`/api/organization/units/${unitId}/assignments`, { params: { ...query } });
 }
 
 export function createOrganizationAssignment(
@@ -155,5 +155,5 @@ export function updateOrganizationAssignment(
 export async function listOrganizationAuditEvents(
   query: { readonly page?: number; readonly per_page?: number; readonly subject_type?: 'unit' | 'assignment'; readonly subject_id?: number; readonly action?: string; readonly from?: string; readonly to?: string } = {},
 ): Promise<OrganizationAuditEventPage> {
-  return api.get<OrganizationAuditEventPage>('/api/organization/audit-events', { params: query });
+  return api.get<OrganizationAuditEventPage>('/api/organization/audit-events', { params: { ...query } });
 }
