@@ -5,6 +5,7 @@ import PageHeader from '@/components/patterns/PageHeader';
 import { listOrganizationAuditEvents, type OrganizationAuditEvent } from './api';
 
 const am = typeof navigator !== 'undefined' && navigator.language.toLowerCase().startsWith('am');
+const appName = import.meta.env.VITE_APP_NAME;
 const title = am ? 'የድርጅት የኦዲት ታሪክ' : 'Organization audit history';
 const description = am ? 'የድርጅት ምደባና መዋቅር ለውጦችን ይመልከቱ።' : 'Review append-only organization lifecycle events.';
 const events = ref<readonly OrganizationAuditEvent[]>([]);
@@ -44,7 +45,7 @@ onMounted(() => void load());
 
 <template>
   <main class="organization-audit">
-    <PageTitle :title="title" :suffix="import.meta.env.VITE_APP_NAME" />
+    <PageTitle :title="title" :suffix="appName" />
     <PageHeader :title="title" :description="description" />
     <form class="organization-audit__filters" @submit.prevent="applyFilters">
       <label>{{ am ? 'የመዝገብ ዓይነት' : 'Subject type' }}<select v-model="subjectType"><option value="">{{ am ? 'ሁሉም' : 'All subjects' }}</option><option value="unit">unit</option><option value="assignment">assignment</option></select></label>
