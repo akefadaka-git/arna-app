@@ -12,6 +12,7 @@ import {
 } from './api';
 
 const route = useRoute();
+const appName = import.meta.env.VITE_APP_NAME;
 const language = typeof navigator === 'undefined' ? 'am' : navigator.language.toLowerCase();
 const am = language.startsWith('am');
 const labels = computed(() => am ? {
@@ -102,7 +103,7 @@ watch(unitId, () => { page.value = 1; void load(); });
 
 <template>
   <main class="organization-assignments">
-    <PageTitle :title="labels.title" :suffix="import.meta.env.VITE_APP_NAME" />
+    <PageTitle :title="labels.title" :suffix="appName" />
     <PageHeader :title="labels.title" :description="labels.description" />
     <form class="organization-assignments__form" @submit.prevent="create">
       <label>{{ labels.person }}<input v-model="personId" inputmode="numeric" required /></label>
