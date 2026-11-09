@@ -19,7 +19,7 @@
 The entry permission does not grant access to underlying domain data. Each widget must independently enforce the owning domain's existing backend policy, tenant scope, authorized legal-entity scope, and any resource-level restrictions. Examples:
 - Finance metrics: existing Finance policy and `finance.report.view`; `finance_manager` receives only the Finance widgets it is already authorized to read.
 - Governance, shareholder, People, Organization, Files, Notifications and Calendar: require their own verified canonical permissions and backend policy. No inferred grants.
-- If a permission slug, policy, source contract, role grant, or entity scope is unverified, omit the widget and record the reason; never return data on the strength of `dashboard.executive.view` alone.
+- If a permission slug, policy, source contract, role grant, or entity scope is unverified, omit the widget and record the reason only in protected server-side audit/security records. Never expose the omitted widget, domain, permission, count, or denial reason in the client response, and never return data on the strength of `dashboard.executive.view` alone.
 
 ### 4. Scope and isolation
 - Resolve tenant from trusted authenticated server context, never from a client-supplied tenant identifier.
