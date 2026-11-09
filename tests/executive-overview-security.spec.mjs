@@ -39,7 +39,7 @@ test.describe('Executive Overview authenticated browser security', () => {
   test('logout clears loaded figures and a non-cancellable late result cannot restore them', async ({ page }) => {
     await page.goto(baseUrl);
     await expect.poll(() => page.evaluate(() => window.__a4.requests.length)).toBe(1);
-    await page.evaluate((data) => window.__a4.resolveRequest(0, data), envelope('LOADED-LOGOUT-DATA'));
+    await page.evaluate((data) => window.__a4.resolveRequest(0, data), envelope('LOADED-LOGOUT-DATA').data);
     await expect(page.getByText('LOADED-LOGOUT-DATA').first()).toBeVisible();
 
     await page.evaluate(() => window.__a4.auth.setUser(window.__a4.makeUser({ name: 'Refreshed session' })));
@@ -48,7 +48,7 @@ test.describe('Executive Overview authenticated browser security', () => {
     await expect(page.getByTestId('executive-overview-root')).not.toContainText('LOADED-LOGOUT-DATA');
 
     // The deferred service intentionally ignores AbortSignal and completes anyway.
-    await page.evaluate((data) => window.__a4.resolveRequest(1, data), envelope('STALE-LOGOUT-DATA'));
+    await page.evaluate((data) => window.__a4.resolveRequest(1, data), envelope('STALE-LOGOUT-DATA').data);
     await expect(page.getByTestId('executive-overview-root')).not.toContainText('STALE-LOGOUT-DATA');
     await expect(page.getByTestId('executive-overview-root')).not.toContainText('LOADED-LOGOUT-DATA');
   });
@@ -98,10 +98,10 @@ test.describe('Executive Overview authenticated browser security', () => {
     await expect.poll(() => page.evaluate(() => window.__a4.requests.length)).toBe(1);
     await page.evaluate(() => window.__a4.tenant.setActiveTenant(202));
     await expect.poll(() => page.evaluate(() => window.__a4.requests.length)).toBe(2);
-    await page.evaluate((data) => window.__a4.resolveRequest(1, data), envelope('TENANT-B-CURRENT'));
+    await page.evaluate((data) => window.__a4.resolveRequest(1, data), envelope('TENANT-B-CURRENT').data);
     await expect(page.getByText('TENANT-B-CURRENT').first()).toBeVisible();
 
-    await page.evaluate((data) => window.__a4.resolveRequest(0, data), envelope('TENANT-A-LATE'));
+    await page.evaluate((data) => window.__a4.resolveRequest(0, data), envelope('TENANT-A-LATE').data);
     await expect(page.getByText('TENANT-B-CURRENT').first()).toBeVisible();
     await expect(page.getByTestId('executive-overview-root')).not.toContainText('TENANT-A-LATE');
     const identities = await page.evaluate(() => window.__a4.requests.map((request) => request.tenantId));
@@ -117,11 +117,11 @@ test.describe('Executive Overview authenticated browser security', () => {
     await page.evaluate(() => window.__a4.tenant.setActiveTenant(101));
     await expect.poll(() => page.evaluate(() => window.__a4.requests.length)).toBe(3);
 
-    await page.evaluate((data) => window.__a4.resolveRequest(1, data), envelope('TENANT-B-INTERMEDIATE'));
-    await page.evaluate((data) => window.__a4.resolveRequest(2, data), envelope('TENANT-A-FINAL'));
+    await page.evaluate((data) => window.__a4.resolveRequest(1, data), envelope('TENANT-B-INTERMEDIATE').data);
+    await page.evaluate((data) => window.__a4.resolveRequest(2, data), envelope('TENANT-A-FINAL').data);
     await expect(page.getByText('TENANT-A-FINAL').first()).toBeVisible();
 
-    await page.evaluate((data) => window.__a4.resolveRequest(0, data), envelope('TENANT-A-FIRST-SESSION-LATE'));
+    await page.evaluate((data) => window.__a4.resolveRequest(0, data), envelope('TENANT-A-FIRST-SESSION-LATE').data);
     await expect(page.getByText('TENANT-A-FINAL').first()).toBeVisible();
     await expect(page.getByTestId('executive-overview-root')).not.toContainText('TENANT-A-FIRST-SESSION-LATE');
     const identities = await page.evaluate(() => window.__a4.requests.map((request) => request.tenantId));
