@@ -39,8 +39,8 @@ Use a test account and synthetic data only. Do not use production financial data
 ## Exact-HEAD evidence
 
 - A4 branch HEAD: `07a382e1fe5e3d60adb06baea8688386f78bc68a`
-- Targeted A4 frontend workflow: [run](https://github.com/akefadaka-git/arna-app/actions/runs/42680470447) — **PASS**, job `129373309115`.
-- Full frontend verification: [run](https://github.com/akefadaka-git/arna-app/actions/runs/42680482722) — **PASS**, job `129373352033`.
+- Targeted A4 frontend workflow: [run #42680971372](https://github.com/akefadaka-git/arna-app/actions/runs/42680971372) — **PASS**.
+- Full frontend verification: [run #42680981735](https://github.com/akefadaka-git/arna-app/actions/runs/42680981735) — **PASS**.
 - Type-check, all four production builds, route/metadata contracts, workspace dashboard route integration, Chromium installation, and existing public browser/WCAG 2.2 suite passed.
 - The public browser suite does not exercise the authenticated Executive Overview session transitions. The scenarios in the matrix above remain runtime NOT RUN.
 
