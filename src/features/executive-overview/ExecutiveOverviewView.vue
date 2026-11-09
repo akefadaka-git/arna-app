@@ -7,6 +7,7 @@ import LoadingState from '@/components/composites/LoadingState';
 import ErrorState from '@/components/composites/ErrorState';
 import PageTitle from '@/layouts/AppShell/PageTitle';
 import { useTenantStore } from '@/stores/tenant';
+import { formatCalendarDate } from '@/core/dates/calendar';
 import { useLocaleStore } from '@/stores/locale';
 
 import { getExecutiveOverview } from './service';
@@ -132,7 +133,7 @@ onBeforeUnmount(() => {
         </dl>
 
         <p class="executive-overview__as-of">
-          {{ labels.asOfLabel }}: {{ widget.as_of }}
+          {{ labels.asOfLabel }}: {{ formatCalendarDate(widget.as_of, { dateStyle: 'medium' }) }}
         </p>
       </Card>
     </section>
@@ -148,7 +149,7 @@ onBeforeUnmount(() => {
     </section>
 
     <p v-if="overview !== null" class="executive-overview__generated">
-      {{ labels.generatedAtLabel }}: {{ overview.generated_at }}
+      {{ labels.generatedAtLabel }}: {{ formatCalendarDate(overview.generated_at, { dateStyle: 'medium', timeStyle: 'short' }) }}
     </p>
   </main>
 </template>
