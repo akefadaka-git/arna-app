@@ -19,7 +19,9 @@ data class AndroidLoginRequest(
     val client_type: String = "android",
     val device_installation_id: String,
     val device_label: String,
-    val app_version: String
+    val app_version: String,
+    val mfa_challenge_token: String? = null,
+    val mfa_code: String? = null
 )
 
 data class LoginData(
