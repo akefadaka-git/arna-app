@@ -1,9 +1,10 @@
 # ARNA Executive Overview — A4 Frontend Security Verification
 
 **Stage:** A4 — verification  
-**Status:** AUTOMATED FRONTEND A4 PASS; independent security sign-off still pending  
+**Status:** R3 REMEDIATION IMPLEMENTED; exact-HEAD CI and R5 technical retest PENDING  
 **A3 parent:** `fc5d87fd4ed97a2b5102ffefbad894c261f0d6f2`  
-**A4 branch:** `verify/executive-overview-a4`
+**A4 baseline branch:** `verify/executive-overview-a4`  
+**R3 remediation branch:** `remediate/executive-overview-a4-r3`
 
 ## Scope and controls
 
@@ -14,7 +15,7 @@ This branch verifies the Owner-approved Executive Overview implementation. It pr
 - The route and view require authentication, `dashboard.executive.view`, and one of the frozen roles: CEO, President, or Finance Manager.
 - Auth user snapshot changes clear sensitive view state synchronously.
 - Tenant changes clear prior-scope data, abort outstanding requests, and reload only when the current auth context remains eligible.
-- Request sequencing prevents late responses from overwriting newer state.
+- Request sequencing prevents late responses from overwriting newer state, including when the underlying operation ignores AbortSignal and resolves after a session/tenant transition.
 - Component unmount aborts outstanding requests.
 - 403, unavailable, generic error, empty, and partial-data states are distinct and do not expose internal permission/widget metadata.
 
@@ -25,12 +26,12 @@ All tests use synthetic identities, tenant IDs, and financial values. No product
 | Scenario | Procedure | Expected result | Evidence |
 |---|---|---|---|
 | Initial authorized load | Open overview as approved role with entry permission | Only API-authorized widgets render | PASS — browser test |
-| Logout while loaded | Load figures, then clear the session while a request is pending | Figures disappear; late response cannot restore them | PASS — browser test |
+| Logout while loaded | First load and assert synthetic figures, trigger a second deferred request, clear the session, then resolve that operation despite AbortSignal | Loaded figures clear immediately; late result cannot restore old or new figures | IMPLEMENTED — R3; CI pending |
 | Session expiry | Load figures, then return HTTP 401 on the next request | Unauthorized handler clears auth state and figures disappear | PASS — browser test |
 | Permission revocation | Refresh auth snapshot without entry permission | Figures clear immediately | PASS — browser test |
-| Rapid tenant switching | Switch tenant A → B while A's request is delayed | Only tenant B's response may render | PASS — browser test |
-| Out-of-order responses | Resolve tenant B before delayed tenant A | Tenant A cannot overwrite tenant B | PASS — browser test |
-| Request abort | Change auth/tenant context while request is pending | Previous request is aborted and ignored | PASS — browser test |
+| Tenant switch with non-cancellable operation | Switch A → B, resolve B, then resolve old A operation despite AbortSignal | Only tenant B's data remains | IMPLEMENTED — R3; CI pending |
+| A → B → A | Resolve final A session, then resolve first A session late | First A operation cannot overwrite final A despite identical tenant ID | IMPLEMENTED — R3; CI pending |
+| Request abort | Change auth/tenant context while request is pending | Browser request is aborted; sequence guard independently rejects late completion | IMPLEMENTED — R3; CI pending |
 | Unmount | Navigate away while request is pending | Request is aborted; component is removed | PASS — browser test |
 | Forbidden response | Return 403 | Generic forbidden state; no hidden metadata | PASS — browser test |
 | Unavailable response | Return 503 | Generic unavailable state; no stale figures | PASS — browser test |
