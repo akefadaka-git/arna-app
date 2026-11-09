@@ -93,7 +93,7 @@ The A3 implementation currently accepts only:
 
 - `as_of`: optional `YYYY-MM-DD` date, validated server-side and passed to the Finance report service.
 
-The following are not accepted or implemented in this A3 slice: `period`, `entity_ref`, `calendar`, and `include`. They remain future contract decisions. The API does not accept `tenant_id`, `user_id`, raw permission lists, arbitrary SQL filters or unbounded date ranges. Tenant and entity scope are resolved and authorized server-side.
+The following are not accepted or implemented as API query parameters in this A3 slice: `period`, `entity_ref`, `calendar`, and `include`. Calendar display uses the existing App calendar preference (`src/core/dates/calendar.ts`), whose default is E.C.; G.C. is shown only when the user has selected it. This is presentation-only and does not alter stored dates or accounting semantics. The API does not accept `tenant_id`, `user_id`, raw permission lists, arbitrary SQL filters or unbounded date ranges. Tenant and entity scope are resolved and authorized server-side.
 
 ### 4.4 Response contract
 
@@ -138,7 +138,7 @@ Rules:
 - The current A3 slice emits only `available` widgets. Future `partial`, `stale`, or `unavailable` states require their own verified source/freshness semantics.
 - Unauthorized widgets MUST be absent. The API MUST NOT return hidden widget keys, inaccessible domains, denial reasons, permission slugs, counts, or other metadata that reveals restricted data. Authorization denials belong only in protected server-side security/audit records.
 - An empty widget list means no currently authorized and implemented widgets are available. It is not a synthetic zero. A legal entity with no chart-of-accounts rows is omitted rather than represented as a zero-balance widget.
-- Every Finance widget states currency, authorized legal-entity identity and as-of date.
+- Every Finance widget states currency, authorized legal-entity identity and as-of date. The App renders dates through the canonical E.C.-first calendar formatter; the frontend does not invent a separate date conversion.
 - Every metric carries source domain, report key, calculation/adapter version and as-of date.
 - A3 does not return drill-down links. Any future drill-down route must reauthorize at its destination.
 - API errors use the existing standardized error envelope; do not introduce a second error convention.
