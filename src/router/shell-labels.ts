@@ -1634,7 +1634,7 @@ export const portalUserMenuItems: ReadonlyArray<UserMenuItem> = [
 /**
  * The workspace build's sidebar navigation tree.
  *
- * The tree is flat: nine leaves, no groups. See the file header
+ * The tree is flat: ten leaves, no groups. See the file header
  * comment §"Flat nav tree — deliberate" for the reasoning and for the
  * note about the sidebar's group-support code being pre-work.
  *
@@ -1645,9 +1645,9 @@ export const portalUserMenuItems: ReadonlyArray<UserMenuItem> = [
  * file header for why its unpermissioned status reinforces its
  * position at the top.
  *
- * The `governance-bodies` leaf (1.8.0, G3 amendment) sits at the END
- * of the tree, after `loan-products`. It carries
- * `permission: 'governance.body.view'`.
+ * The `governance` leaf (1.8.0, G3 amendment) and the `executive-overview`
+ * leaf (A3) are independently permission-gated siblings. The latter
+ * requires `dashboard.executive.view`; its API remains the security boundary.
  *
  * The `shareholders` and `share-classes` items are siblings because
  * they are distinct destinations — a user may hold `shareholder.view`
