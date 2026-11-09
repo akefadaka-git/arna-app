@@ -17,7 +17,7 @@ test('Executive Overview is a separate permission-gated workspace route', () => 
 });
 
 test('Executive Overview navigation is independently permission-filtered', () => {
-  assert.match(shell, /id:\s*'executive-overview'[\s\S]*?to:\s*'\/executive-overview'[\s\S]*?permission:\s*'finance\.report\.view'/);
+  assert.match(shell, /id:\s*'executive-overview'[\s\S]*?to:\s*'\/executive-overview'[\s\S]*?permission:\s*\['finance\.entity\.view',\s*'finance\.report\.view'\][\s\S]*?permissionMode:\s*'all'/);
 });
 
 test('Executive Overview reads the authoritative dashboard API and preserves decimal strings', () => {
