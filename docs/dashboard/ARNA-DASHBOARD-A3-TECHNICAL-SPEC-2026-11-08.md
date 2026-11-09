@@ -137,7 +137,7 @@ Rules:
 - Monetary values are decimal strings; never IEEE-754 floating point.
 - The current A3 slice emits only `available` widgets. Future `partial`, `stale`, or `unavailable` states require their own verified source/freshness semantics.
 - Unauthorized widgets MUST be absent. The API MUST NOT return hidden widget keys, inaccessible domains, denial reasons, permission slugs, counts, or other metadata that reveals restricted data. Authorization denials belong only in protected server-side security/audit records.
-- An empty widget list means no currently authorized and implemented widgets are available. It is not a synthetic zero.
+- An empty widget list means no currently authorized and implemented widgets are available. It is not a synthetic zero. A legal entity with no chart-of-accounts rows is omitted rather than represented as a zero-balance widget.
 - Every Finance widget states currency, authorized legal-entity identity and as-of date.
 - Every metric carries source domain, report key, calculation/adapter version and as-of date.
 - A3 does not return drill-down links. Any future drill-down route must reauthorize at its destination.
