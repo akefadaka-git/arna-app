@@ -128,13 +128,19 @@ test.describe('Executive Overview authenticated browser security', () => {
     expect(identities).toEqual([101, 202, 101]);
   });
 
-  test('unmount aborts an outstanding overview request', async ({ page }) => {
+  test('unmount aborts an outstanding real API request', async ({ page }) => {
     let release;
     const delayed = new Promise((resolve) => { release = resolve; });
     let requestFailed = false;
     page.on('requestfailed', (request) => {
       if (request.url().includes('/api/dashboard/v1/overview')) requestFailed = true;
     });
+
+    await page.goto(baseUrl);
+    await expect.poll(() => page.evaluate(() => window.__a4.requests.length)).toBe(1);
+    await page.evaluate((data) => window.__a4.resolveRequest(0, data), envelope('INITIAL-UNMOUNT-DATA').data);
+    await expect(page.getByText('INITIAL-UNMOUNT-DATA').first()).toBeVisible();
+
     await page.route(endpoint, async (route) => {
       await delayed;
       try {
@@ -147,15 +153,16 @@ test.describe('Executive Overview authenticated browser security', () => {
         // Expected after AbortController cancellation.
       }
     });
-
-    const initialRequest = page.waitForRequest((request) => request.url().includes('/api/dashboard/v1/overview'));
-    await page.goto(baseUrl);
-    await initialRequest;
+    const pendingRequest = page.waitForRequest((request) => request.url().includes('/api/dashboard/v1/overview'));
+    await page.evaluate(() => {
+      window.__a4.useRealRequestExecutor();
+      window.__a4.auth.setUser(window.__a4.makeUser({ name: 'Unmount refresh' }));
+    });
+    await pendingRequest;
     await page.evaluate(() => window.__a4.unmount());
     await expect(page.getByTestId('executive-overview-root')).toHaveCount(0);
     release();
-    await page.waitForTimeout(100);
-    expect(requestFailed).toBe(true);
+    await expect.poll(() => requestFailed).toBe(true);
   });
 
   test('forbidden and unavailable responses render separate non-disclosing states', async ({ page }) => {
