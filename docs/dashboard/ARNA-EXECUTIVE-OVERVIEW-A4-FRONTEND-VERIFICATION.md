@@ -40,7 +40,7 @@ All tests use synthetic identities, tenant IDs, and financial values. No product
 
 - Authenticated A4 browser suite: [run #42684079707](https://github.com/akefadaka-git/arna-app/actions/runs/42684079707) — **PASS**, 8/8 tests on code/test SHA `7e978aaa5ff2f5d168641c6a1a1ac407d12d6b77`.
 - Full frontend type-check/build, route contracts, workspace route, and public Chromium/WCAG 2.2 suite passed in the same workflow.
-- The final evidence-documentation update is documentation-only; the next targeted workflow run verifies the resulting branch HEAD.
+- The final evidence-documentation update is documentation-only; the targeted workflow runs again on the resulting branch HEAD.
 
 ## CI acceptance
 
