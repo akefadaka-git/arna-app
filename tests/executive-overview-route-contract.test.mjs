@@ -83,3 +83,13 @@ test('partial-data notice is driven only by the explicit response status', async
   assert.match(view, /overview\.status === 'partial'/);
   assert.match(view, /labels\.partialDataMessage/);
 });
+
+
+test('Loan-product launcher and route use the API canonical loan.view permission', async () => {
+  const routes = await read('../src/router/routes-workspace.ts');
+  const dashboard = await read('../src/features/dashboard/DashboardView.vue');
+  assert.match(routes, /name: 'loan-products'[\s\S]*?meta: \{ permission: 'loan\.view' \}/);
+  assert.match(dashboard, /permissions: \['loan\.view'\]/);
+  assert.doesNotMatch(routes, /loan_product\.view/);
+  assert.doesNotMatch(dashboard, /loan_product\.view/);
+});
