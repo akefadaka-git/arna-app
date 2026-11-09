@@ -1,20 +1,20 @@
 # ARNA Executive Overview — A3 Technical Specification
 
-**Document status:** Proposed technical specification; Owner/domain approval required before implementation  
+**Document status:** Owner-approved governing A3 technical specification; A3 implementation separately authorized  
 **Prepared:** 2026-11-08  
 **A1/A2 baseline:** App `76fb67a421b1a54e0529a3479e551a1d1e0c0d0f`; API `ff290b353f1290cc91534fd4d694544e83c58d82`  
-**Scope:** Documentation only. This document does not authorize source-code changes, database migrations, permission changes, merge, deployment, or production data access.
+**Scope:** Governing A3 design and implementation contract. A3 source implementation is authorized on isolated feature branches. This document does not authorize merge, deployment, production role-grant changes, or production data access.
 
 ## 1. Purpose and decision summary
 
 Deliver a tenant-aware Executive Overview for authorized management users while preserving the existing Workspace `/dashboard` feature launcher. The overview is a read-only presentation/aggregation surface. Domain systems remain authoritative for accounting, shareholder, governance, people, documents, calendar, task and notification facts.
 
-**Architecture decision proposed:** add a separate child route under the existing authenticated workspace layout:
+**Approved architecture decision:** add a separate child route under the existing authenticated workspace layout:
 
 - UI path: `/executive-overview`
 - Vue route name: `executive-overview`
 - Component boundary: `src/features/executive-overview/ExecutiveOverviewView.vue`
-- API namespace proposed: `/api/dashboard/v1`
+- API namespace: `/api/dashboard/v1`
 - No replacement or semantic change to existing `/dashboard`.
 - No client-side calculation of authoritative business metrics.
 - API aggregation is read-only and delegates to domain-owned query/report services.
@@ -138,9 +138,6 @@ Illustrative schema; names and versioning are proposed, not a statement of a dep
           "resource_ref": "opaque-report-ref"
         }
       }
-    ],
-    "omitted_widgets": [
-      { "key": "shareholder.dividend_position", "reason": "not_authorized" }
     ]
   }
 }
@@ -148,7 +145,7 @@ Illustrative schema; names and versioning are proposed, not a statement of a dep
 
 Rules:
 - Use decimal strings for monetary values; never IEEE-754 floating point for money.
-- `status` enum: `available | partial | stale | unavailable`. Authorization-denied widgets should normally be omitted, not included with revealing detail.
+- `status` enum: `available | partial | stale | unavailable`. Unauthorized widgets MUST be absent from the response. The API MUST NOT return hidden widget keys, denial reasons, permission slugs, counts, or other metadata that reveals inaccessible domains. Authorization denials belong only in protected server-side security/audit records.
 - A missing value is `null` with a typed reason; never silently coerce missing to zero.
 - Every monetary widget states currency and entity scope. Cross-currency totals are forbidden without approved FX rate source, valuation timestamp and consolidation policy.
 - Every metric carries source domain, report/calculation version and `as_of`.
@@ -236,7 +233,7 @@ Permission names marked **candidate** are proposals, not verified catalogue entr
 
 | Widget | Existing source permission/evidence | Proposed additional gate | Visibility rule |
 |---|---|---|---|
-| Executive route | No canonical executive dashboard slug verified | `dashboard.executive.view` (candidate) | Requires Owner/RBAC approval |
+| Executive route | `dashboard.executive.view` (tenant-scoped; canonical catalogue addition in A3) | Role-fenced to `ceo`, `president`, `finance_manager`; wildcard inheritance explicitly excluded | Entry only; does not grant domain data |
 | M01 trial balance | `finance.report.view` | None if domain policy is sufficient | Hide unless finance report access for selected entity |
 | M02–M08 financial metrics | `finance.report.view` plus relevant entity scope | Metric-specific only if domain owner defines | Hide metric if source permission absent |
 | M09 budget variance | Budget read permission not verified | Must be selected from canonical Finance RBAC catalogue | Hide until permission and budget API verified |
@@ -430,7 +427,17 @@ Verification must be run against one frozen App SHA and one frozen API SHA, reco
 
 ## 13. Owner decisions and approval gates
 
-### Required before A3 implementation
+### Superseding Owner decisions recorded 2026-11-09
+- The separate `/executive-overview` route is approved; existing `/dashboard` remains unchanged.
+- `dashboard.executive.view` is approved as a tenant-scoped entry permission.
+- Initial role audience is exactly `ceo`, `president`, `finance_manager`; no other role is included.
+- Finance widgets independently require the existing Finance permissions and entity policy. `finance_manager` currently has `finance.report.view`; `ceo` and `president` do not receive that permission in the canonical grant map.
+- The entry permission is explicitly removed from all non-approved role grant results after wildcard resolution, protecting `super_admin`, `platform_admin`, and `tenant_admin` from inherited access.
+- The controller additionally checks an approved tenant-bound role, so a direct user permission grant alone cannot bypass the audience boundary.
+- Unauthorized widget names and denial metadata are never serialized to clients.
+- These decisions supersede conflicting candidate/proposed wording below. The remaining domain-owner decisions continue to govern which future metrics may be added.
+
+### Historical decision checklist (superseded where noted)
 1. Approve the separate `/executive-overview` route while retaining `/dashboard`.
 2. Confirm initial audience and role grants (recommended: executive/management roles with entity-scoped access).
 3. Approve or reject candidate `dashboard.executive.view`; if rejected, specify the domain-permission-only model.
@@ -451,6 +458,28 @@ Verification must be run against one frozen App SHA and one frozen API SHA, reco
 
 ## 14. A3 specification disposition
 
-**Status: READY FOR OWNER / DOMAIN REVIEW — NOT IMPLEMENTATION-AUTHORIZED.**
+**Status: OWNER-APPROVED A3 GOVERNING SPECIFICATION — IMPLEMENTATION AUTHORIZED; NOT RELEASE-APPROVED.**
 
-This document is a proposed contract. All proposed routes, response schemas, candidate permission slugs and unverified metric definitions must be reconciled against current API code and canonical RBAC data before implementation. No source code, migrations, permissions, workflows, merge, deployment or production data were changed or accessed in preparing this specification.
+The approved audience/permission policy is implemented on isolated feature branches. Canonical role and permission definitions have been reconciled from source catalogues; production database assignments have not been queried or changed. The response contract excludes unauthorized widget metadata. A4 exact-HEAD testing and independent security review remain required. Merge, production role-grant application, deployment and production data access remain separately gated.
+
+
+## 15. A3 implementation reconciliation — 2026-11-09
+
+### Canonical RBAC source findings
+- The API canonical role catalogue contains ceo, president, and finance_manager.
+- ceo and president are tenant-scoped roles. finance_manager is application-scoped to Finance and tenant-bound.
+- The canonical Finance grant map gives finance_manager finance.report.view and finance.entity.view. The ceo and president grants include Finance application access only; they do not include finance.report.view or finance.entity.view.
+- dashboard.executive.view is a tenant-scoped, non-system permission. It is granted only to the three approved roles.
+- The role grant resolver's wildcard results are filtered to remove this permission from every role outside the approved audience. This is required because the existing super_admin wildcard and platform_admin / tenant_admin tenant-scope wildcards would otherwise inherit it.
+- Runtime access also requires an approved tenant-bound role. A direct user permission assignment or platform role alone is insufficient.
+
+### Implemented initial data surface
+- GET /api/dashboard/v1/overview is inside the existing authenticated tenant-membership route group and requires dashboard.executive.view.
+- Finance widgets independently require finance.report.view and pass the existing LegalEntityPolicy (finance.entity.view) before calling FinancialReportService::trialBalance.
+- The report is emitted separately per authorized legal entity; no cross-entity or cross-currency aggregation is performed.
+- Users without Finance reporting and entity permissions receive an empty widgets array. The response does not disclose omitted widget names, inaccessible domains, permission slugs, or denial reasons.
+- Financial responses use Cache-Control: private, no-store.
+- The App adds a separately permission-gated /executive-overview route and matching sidebar item. Existing /dashboard remains a separate feature launcher.
+
+### Verification boundary
+These findings establish source-catalogue and implementation intent, not the contents of any live production database. The current feature branch has not yet passed exact-HEAD API/App test execution, A4 tenant-isolation/cache tests, independent security review, or production configuration verification.
