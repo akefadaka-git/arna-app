@@ -7,6 +7,7 @@ import LoadingState from '@/components/composites/LoadingState';
 import ErrorState from '@/components/composites/ErrorState';
 import PageTitle from '@/layouts/AppShell/PageTitle';
 import { useTenantStore } from '@/stores/tenant';
+import { useAuthStore } from '@/stores/auth';
 import { formatCalendarDate } from '@/core/dates/calendar';
 import { useLocaleStore } from '@/stores/locale';
 
@@ -22,22 +23,55 @@ interface Props {
 const props = defineProps<Props>();
 const appName: string = import.meta.env.VITE_APP_NAME;
 const tenant = useTenantStore();
+const auth = useAuthStore();
 const locale = useLocaleStore();
 const labels = computed(() => locale.locale === 'en' ? executiveOverviewEnglishLabels : props.labels);
 const isLoading = ref(true);
-const loadError = ref<unknown | null>(null);
+const loadErrorKind = ref<'forbidden' | 'unavailable' | 'generic' | null>(null);
 const overview = ref<ExecutiveOverviewResponse | null>(null);
 let activeController: AbortController | null = null;
 let requestSequence = 0;
 
+function canViewOverview(): boolean {
+  return auth.isAuthenticated
+    && auth.hasPermission('dashboard.executive.view')
+    && ['ceo', 'president', 'finance_manager'].some((role) => auth.hasRole(role));
+}
+
+function clearSensitiveViewState(): void {
+  requestSequence += 1;
+  activeController?.abort();
+  activeController = null;
+  overview.value = null;
+  loadErrorKind.value = null;
+  isLoading.value = false;
+}
+
+function classifyLoadError(error: unknown): 'forbidden' | 'unavailable' | 'generic' {
+  if (typeof error !== 'object' || error === null) return 'generic';
+  const failure = error as { httpStatus?: unknown; status?: unknown; category?: unknown };
+  const status = typeof failure.httpStatus === 'number'
+    ? failure.httpStatus
+    : typeof failure.status === 'number' ? failure.status : 0;
+
+  if (status === 403) return 'forbidden';
+  if (status === 404 || status >= 500 || failure.category === 'network') return 'unavailable';
+  return 'generic';
+}
+
 async function load(): Promise<void> {
+  if (!canViewOverview()) {
+    clearSensitiveViewState();
+    return;
+  }
+
   activeController?.abort();
   const controller = new AbortController();
   activeController = controller;
   const sequence = ++requestSequence;
 
   isLoading.value = true;
-  loadError.value = null;
+  loadErrorKind.value = null;
   overview.value = null;
 
   try {
@@ -45,7 +79,8 @@ async function load(): Promise<void> {
     if (sequence === requestSequence) overview.value = result;
   } catch (error) {
     if (sequence === requestSequence && !controller.signal.aborted) {
-      loadError.value = error;
+      overview.value = null;
+      loadErrorKind.value = classifyLoadError(error);
     }
   } finally {
     if (sequence === requestSequence) isLoading.value = false;
@@ -53,11 +88,22 @@ async function load(): Promise<void> {
 }
 
 watch(
+  () => auth.user,
+  (user) => {
+    // A refreshed identity/role/permission snapshot is an authorization-context
+    // change. Clear sensitive figures immediately and reload only if still eligible.
+    clearSensitiveViewState();
+    if (user !== null && canViewOverview()) void load();
+  },
+  { flush: 'sync' },
+);
+
+watch(
   () => tenant.effectiveTenantId,
   () => {
     // Remove prior-tenant figures before requesting the newly selected scope.
-    overview.value = null;
-    void load();
+    clearSensitiveViewState();
+    if (canViewOverview()) void load();
   },
 );
 
@@ -84,13 +130,24 @@ onBeforeUnmount(() => {
       data-testid="executive-overview-loading"
     />
 
-    <ErrorState
-      v-else-if="loadError !== null"
-      :title="labels.errorTitle"
-      :action-label="labels.retryLabel"
-      @action="load"
+    <section
+      v-else-if="loadErrorKind !== null"
+      class="executive-overview__empty"
+      role="alert"
       data-testid="executive-overview-error"
-    />
+    >
+      <h2>
+        {{ loadErrorKind === 'forbidden' ? labels.forbiddenTitle
+          : loadErrorKind === 'unavailable' ? labels.unavailableTitle : labels.errorTitle }}
+      </h2>
+      <p>
+        {{ loadErrorKind === 'forbidden' ? labels.forbiddenDescription
+          : loadErrorKind === 'unavailable' ? labels.unavailableDescription : labels.errorDescription }}
+      </p>
+      <button type="button" class="executive-overview__retry" @click="load">
+        {{ labels.retryLabel }}
+      </button>
+    </section>
 
     <section
       v-else-if="overview !== null && overview.widgets.length > 0"
@@ -98,6 +155,9 @@ onBeforeUnmount(() => {
       aria-label="Authorized executive metrics"
       data-testid="executive-overview-widgets"
     >
+      <p v-if="overview.status === 'partial'" role="status" data-testid="executive-overview-partial">
+        {{ labels.partialDataMessage }}
+      </p>
       <Card
         v-for="(widget, index) in overview.widgets"
         :key="widget.key + ':' + widget.entity.code + ':' + index"
