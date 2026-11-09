@@ -23,4 +23,7 @@ test('Executive Overview UI consumes only returned authorized widgets', async ()
   assert.doesNotMatch(api, /omitted_widgets|unavailable_widgets/);
   assert.match(view, /effectiveTenantId/);
   assert.match(view, /overview\.value = null/);
+  assert.match(view, /useLocaleStore/);
+  const labels = await read('../src/features/executive-overview/labels.ts');
+  assert.match(labels, /executiveOverviewEnglishLabels/);
 });
