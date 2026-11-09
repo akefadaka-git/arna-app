@@ -645,7 +645,9 @@ function authGuard(
    * question.
    */
   const requiresAuth =
-    to.meta.requiresAuth === true || to.meta.permission !== undefined;
+    to.meta.requiresAuth === true
+    || to.meta.permission !== undefined
+    || to.meta.requiredRoles !== undefined;
 
   if (!requiresAuth) {
     return true;
