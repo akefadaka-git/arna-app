@@ -119,6 +119,7 @@ test.describe('Executive Overview authenticated browser security', () => {
     await expect.poll(() => page.evaluate(() => window.__a4.requests.length)).toBe(3);
 
     await page.evaluate((data) => window.__a4.resolveRequest(1, data), envelope('TENANT-B-INTERMEDIATE').data);
+    await expect(page.getByTestId('executive-overview-root')).not.toContainText('TENANT-B-INTERMEDIATE');
     await page.evaluate((data) => window.__a4.resolveRequest(2, data), envelope('TENANT-A-FINAL').data);
     await expect(page.getByText('TENANT-A-FINAL').first()).toBeVisible();
 
