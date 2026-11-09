@@ -1,7 +1,7 @@
 # ARNA Executive Overview — A3 Policy-to-Implementation Reconciliation
 
 **Date:** 2026-11-09  
-**Status:** Implemented on isolated feature branches; exact-HEAD verification pending  
+**Status:** Implemented on isolated feature branches; A3-targeted exact-HEAD tests PASS; broader MySQL gate still running  
 **Authority:** Owner-frozen A3 audience and permission policy, 2026-11-09  
 **Release boundary:** No merge, production role grant, deployment, or production data access authorized.
 
@@ -109,8 +109,13 @@ Documentation:
 | Unauthorized metadata disclosure correction | IMPLEMENTED |
 | App route and navigation gating | IMPLEMENTED — permission and approved-role UX gates; contract test added, not yet run |
 | Existing /dashboard preservation | PASS — route/component not replaced |
-| Exact-HEAD API test execution | NOT RUN |
-| Exact-HEAD App test/build execution | NOT RUN |
+| Exact-HEAD API PHP syntax and route/auth verification | PASS — API head `80ef85ac300e6cbb677b38aceb30fb2ab6156cc7` |
+| Exact-HEAD API canonical RBAC/wildcard MySQL regression | PASS — workflow run `42567821271`, step 24 |
+| Exact-HEAD API authenticated route/metadata-disclosure MySQL regression | PASS — workflow run `42567821271`, step 25 |
+| Exact-HEAD API tenant isolation and bounded authorization checks | PASS — workflow runs `42567821215` and `42567821224` |
+| Exact-HEAD App type-check/build | PASS — head `daf8a83b6feb8ea4a4b74839f4dac9ed2e1cdbfd`, workflow runs `42567326277` and `42567321378` |
+| Full API disposable-MySQL clean-install/security gate | IN PROGRESS — run `42567821271`; remaining Finance/Governance and migration checks not yet complete |
+| Exact-HEAD App test/build execution | PASS — type-check and production build workflows succeeded |
 | A4 cross-tenant, entity and cache-isolation verification | NOT STARTED |
 | Independent security review | NOT STARTED |
 | Production database role/grant inspection | NOT PERFORMED |
@@ -118,4 +123,4 @@ Documentation:
 
 ## 8. Required next step
 
-Run API and App verification against the final exact branch heads. Fix all failures, then perform A4 negative authorization, tenant/entity isolation, cache transition and response-disclosure tests. Do not enable production access by running seeders or applying migrations until A4 evidence is accepted and production rollout is separately authorized.
+Complete the remaining API disposable-MySQL clean-install/security gate. Then perform A4 negative authorization, tenant/entity isolation, cache transition and response-disclosure tests, plus independent security review. Do not enable production access by running seeders or applying migrations until A4 evidence is accepted and production rollout is separately authorized.
