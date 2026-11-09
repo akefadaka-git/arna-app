@@ -42,7 +42,7 @@ test('tenant changes clear prior-scope figures and abort superseded overview req
   assert.match(view, /activeController\?\.abort\(\)/);
   assert.match(view, /const controller = new AbortController\(\)/);
   assert.match(view, /getExecutiveOverview\(\{ signal: controller\.signal \}\)/);
-  assert.match(view, /watch\([\s\S]*?tenant\.effectiveTenantId[\s\S]*?overview\.value = null[\s\S]*?void load\(\)/);
+  assert.match(view, /watch\([\s\S]*?tenant\.effectiveTenantId[\s\S]*?clearSensitiveViewState\(\)[\s\S]*?void load\(\)/);
   assert.match(view, /sequence === requestSequence/);
   assert.match(view, /!controller\.signal\.aborted/);
 });
