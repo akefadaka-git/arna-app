@@ -1676,6 +1676,7 @@ export const authenticatedNavItems: ReadonlyArray<NavItem> = [
     to: '/executive-overview',
     icon: 'line-chart',
     permission: 'dashboard.executive.view',
+    requiredRoles: ['ceo', 'president', 'finance_manager'],
   },
   {
     id: 'launcher',
