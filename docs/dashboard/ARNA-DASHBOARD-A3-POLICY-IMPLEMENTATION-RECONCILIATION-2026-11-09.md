@@ -1,7 +1,7 @@
 # ARNA Executive Overview — A3 Policy-to-Implementation Reconciliation
 
 **Date:** 2026-11-09  
-**Status:** Implemented on isolated feature branches; A3-targeted exact-HEAD tests PASS; broader MySQL gate still running  
+**Status:** Implemented on isolated feature branches; A3-targeted tests PASS on prior API HEAD; final exact-HEAD rerun is queued after a permission-catalogue count assertion was corrected  
 **Authority:** Owner-frozen A3 audience and permission policy, 2026-11-09  
 **Release boundary:** No merge, production role grant, deployment, or production data access authorized.
 
@@ -114,7 +114,9 @@ Documentation:
 | Exact-HEAD API authenticated route/metadata-disclosure MySQL regression | PASS — workflow run `42567821271`, step 25 |
 | Exact-HEAD API tenant isolation and bounded authorization checks | PASS — workflow runs `42567821215` and `42567821224` |
 | Exact-HEAD App type-check/build | PASS — head `daf8a83b6feb8ea4a4b74839f4dac9ed2e1cdbfd`, workflow runs `42567326277` and `42567321378` |
-| Full API disposable-MySQL clean-install/security gate | IN PROGRESS — run `42567821271`; remaining Finance/Governance and migration checks not yet complete |
+| Prior API disposable-MySQL gate | PARTIAL — A3 RBAC and metadata tests passed; a pre-existing catalogue-count assertion expected 60 and correctly failed after adding the 61st permission |
+| Catalogue-count regression correction | PASS — test now expects 61 rows and documents the new dashboard permission |
+| Final API exact-HEAD CI | QUEUED/IN PROGRESS — SHA `473280a1d254e283cbf843eae30c97d9f499da38`; MySQL run `42568110671`, exact-head regression `42568110850`, tenant isolation `42568110823`, authorization `42568110740` |
 | Exact-HEAD App test/build execution | PASS — type-check and production build workflows succeeded |
 | A4 cross-tenant, entity and cache-isolation verification | NOT STARTED |
 | Independent security review | NOT STARTED |
@@ -123,4 +125,4 @@ Documentation:
 
 ## 8. Required next step
 
-Complete the remaining API disposable-MySQL clean-install/security gate. Then perform A4 negative authorization, tenant/entity isolation, cache transition and response-disclosure tests, plus independent security review. Do not enable production access by running seeders or applying migrations until A4 evidence is accepted and production rollout is separately authorized.
+Complete the final exact-HEAD API CI rerun at `473280a1d254e283cbf843eae30c97d9f499da38`, including clean MySQL migration and security gates. Then perform A4 negative authorization, tenant/entity isolation, cache transition and response-disclosure tests, plus independent security review. Do not enable production access by running seeders or applying migrations until A4 evidence is accepted and production rollout is separately authorized.
