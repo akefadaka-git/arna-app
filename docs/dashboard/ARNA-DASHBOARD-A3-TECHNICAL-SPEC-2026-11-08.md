@@ -471,7 +471,7 @@ The approved audience/permission policy is implemented on isolated feature branc
 - The canonical Finance grant map gives finance_manager finance.report.view and finance.entity.view. The ceo and president grants include Finance application access only; they do not include finance.report.view or finance.entity.view.
 - dashboard.executive.view is a tenant-scoped, non-system permission. It is granted only to the three approved roles.
 - The role grant resolver's wildcard results are filtered to remove this permission from every role outside the approved audience. This is required because the existing super_admin wildcard and platform_admin / tenant_admin tenant-scope wildcards would otherwise inherit it.
-- Runtime access also requires an approved tenant-bound role. A direct user permission assignment or platform role alone is insufficient.
+- Runtime access also requires an approved tenant-bound role. The caller must hold dashboard.executive.view through the approved role's role_has_permissions pivot. A direct user permission assignment cannot substitute for that role grant, and a platform role alone is insufficient.
 
 ### Implemented initial data surface
 - GET /api/dashboard/v1/overview is inside the existing authenticated tenant-membership route group and requires dashboard.executive.view.
