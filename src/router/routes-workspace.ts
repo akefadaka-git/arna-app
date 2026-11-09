@@ -495,6 +495,7 @@ import {
 } from '@/features/governance/labels';
 
 import { dashboardViewLabels } from '@/features/dashboard/labels';
+import { executiveOverviewLabels } from '@/features/executive-overview/labels';
 
 /**
  * The workspace build's top-level route. A single parent
@@ -527,6 +528,15 @@ export const routesWorkspace: RouteRecordRaw[] = [
         name: 'dashboard',
         component: () => import('@/features/dashboard/DashboardView.vue'),
         props: { labels: dashboardViewLabels },
+      },
+
+      // Executive metrics are a separate, permission-gated surface.
+      {
+        path: 'executive-overview',
+        name: 'executive-overview',
+        component: () => import('@/features/executive-overview/ExecutiveOverviewView.vue'),
+        props: { labels: executiveOverviewLabels },
+        meta: { permission: 'dashboard.executive.view' },
       },
 
       // -----------------------------------------------------------------------
