@@ -69,73 +69,63 @@ Proposed child of the existing authenticated workspace layout:
 | Component | `@/features/executive-overview/ExecutiveOverviewView.vue` |
 | Auth | Existing `requiresAuth: true` parent |
 | Tenant | Existing authenticated tenant context; never query/body-selected |
-| Permission | New canonical `dashboard.executive.view` candidate, subject to Owner/API RBAC approval |
+| Permission | Owner-approved tenant-scoped `dashboard.executive.view`; role-fenced to the frozen three-role audience |
 | Navigation | New Executive Overview leaf, only shown to users with approved permission |
 | Existing dashboard | Keep `dashboard` route and launcher unchanged |
 
 Do not create a parallel authentication guard. The route meta permission is a UX gate; API authorization remains decisive.
 
-### 4.2 Backend route contract (proposed; not implemented)
+### 4.2 Backend route contract (A3 implementation boundary)
 
-Base prefix: `/api/dashboard/v1`. Route group must use the same established API stack for Sanctum authentication and tenant membership as other authenticated tenant domain routes. Exact middleware registration is to be verified during implementation.
+Base prefix: `/api/dashboard/v1`. The implemented overview route is inside the established `auth:sanctum` and `tenant.membership` group, requires `auth.permission:dashboard.executive.view`, and applies `throttle:60,1`.
 
-| Method and path | Purpose | Authorization |
+| Method and path | A3 status | Authorization |
 |---|---|---|
-| GET `/overview` | Summary payload for permitted widgets | `dashboard.executive.view` plus per-widget/domain authorization |
-| GET `/metrics/{metricKey}` | Optional metric detail/time-series payload | Executive view plus metric-specific domain permission |
-| GET `/metadata` | Supported periods, freshness and available widget descriptors | Executive view; metadata must not disclose inaccessible domains |
+| GET `/overview` | IMPLEMENTED | Entry permission plus the runtime approved-role fence and per-widget/domain authorization |
+| GET `/metrics/{metricKey}` | NOT IMPLEMENTED; future detail endpoint | Must require Executive view plus metric-specific domain permission |
+| GET `/metadata` | NOT IMPLEMENTED; no metadata endpoint is exposed in A3 | If added, metadata must not disclose inaccessible domains or widget descriptors |
 
-The API must not return a widget merely because the caller can access the overview route. Each metric provider independently authorizes access and scopes its query. If no approved generic dashboard permission is created, the API may instead authorize via existing domain permissions; that alternative must be explicitly selected before implementation.
+The API must not return a widget merely because the caller can access the overview route. Each metric provider independently authorizes access and scopes its query. The Owner-approved generic entry permission is `dashboard.executive.view`; it is not a domain-data grant.
 
 ### 4.3 Query parameters
 
-For `GET /overview`:
+The A3 implementation currently accepts only:
 
-- `period`: allow-listed reporting period key (e.g. `month_to_date`, `quarter_to_date`, `year_to_date`, `previous_month`); defaults must be defined by Finance/reporting owner.
-- `as_of`: optional ISO-8601 instant or date, only where domain report supports historical as-of queries.
-- `entity_ref`: opaque legal-entity reference, accepted only after server-side membership and `finance.entity.view` authorization; never treated as proof of access.
-- `calendar`: `EC` or `GC` display preference only. It must not alter stored instants or accounting period semantics.
-- `include`: optional allow-listed widget keys; unknown keys return validation error.
-- No `tenant_id`, `user_id`, raw permission list, arbitrary SQL filter or unbounded date range.
+- `as_of`: optional `YYYY-MM-DD` date, validated server-side and passed to the Finance report service.
+
+The following are not accepted or implemented in this A3 slice: `period`, `entity_ref`, `calendar`, and `include`. They remain future contract decisions. The API does not accept `tenant_id`, `user_id`, raw permission lists, arbitrary SQL filters or unbounded date ranges. Tenant and entity scope are resolved and authorized server-side.
 
 ### 4.4 Response contract
 
-Illustrative schema; names and versioning are proposed, not a statement of a deployed API.
+The implemented A3 `GET /overview` response is deliberately smaller than the future full dashboard contract. It contains only the following fields:
 
 ```json
 {
   "success": true,
   "data": {
     "contract_version": "1.0",
-    "generated_at": "2026-11-08T10:00:00Z",
-    "tenant_context": { "display_name": "Current organization" },
-    "scope": {
-      "entity_refs": ["opaque-entity-ref"],
-      "period": { "key": "month_to_date", "start": "2026-11-01", "end": "2026-11-08" },
-      "calendar_display": "EC"
-    },
+    "generated_at": "2026-11-09T05:00:00Z",
     "widgets": [
       {
         "key": "finance.trial_balance",
         "status": "available",
-        "value": {
-          "debit_total": "125000.00",
-          "credit_total": "125000.00",
-          "currency": "ETB"
-        },
-        "comparison": null,
-        "series": [],
-        "unit": "currency",
         "source": {
           "domain": "finance",
           "report_key": "trial_balance",
           "calculation_version": "1"
         },
-        "as_of": "2026-11-08T09:55:00Z",
-        "freshness": "current",
-        "drilldown": {
-          "route_name": "finance-trial-balance",
-          "resource_ref": "opaque-report-ref"
+        "entity": {
+          "code": "ENTITY-CODE",
+          "name_am": "የሕጋዊ አካል ስም",
+          "name_en": "Legal entity name"
+        },
+        "as_of": "2026-11-09",
+        "currency": "ETB",
+        "value": {
+          "total_debits": "125000.0000",
+          "total_credits": "125000.0000",
+          "difference": "0.0000",
+          "is_balanced": true
         }
       }
     ]
@@ -144,18 +134,19 @@ Illustrative schema; names and versioning are proposed, not a statement of a dep
 ```
 
 Rules:
-- Use decimal strings for monetary values; never IEEE-754 floating point for money.
-- `status` enum: `available | partial | stale | unavailable`. Unauthorized widgets MUST be absent from the response. The API MUST NOT return hidden widget keys, denial reasons, permission slugs, counts, or other metadata that reveals inaccessible domains. Authorization denials belong only in protected server-side security/audit records.
-- A missing value is `null` with a typed reason; never silently coerce missing to zero.
-- Every monetary widget states currency and entity scope. Cross-currency totals are forbidden without approved FX rate source, valuation timestamp and consolidation policy.
-- Every metric carries source domain, report/calculation version and `as_of`.
-- Drill-down is an allow-listed internal route name plus opaque reference. Destination API must reauthorize.
+- Monetary values are decimal strings; never IEEE-754 floating point.
+- The current A3 slice emits only `available` widgets. Future `partial`, `stale`, or `unavailable` states require their own verified source/freshness semantics.
+- Unauthorized widgets MUST be absent. The API MUST NOT return hidden widget keys, inaccessible domains, denial reasons, permission slugs, counts, or other metadata that reveals restricted data. Authorization denials belong only in protected server-side security/audit records.
+- An empty widget list means no currently authorized and implemented widgets are available. It is not a synthetic zero.
+- Every Finance widget states currency, authorized legal-entity identity and as-of date.
+- Every metric carries source domain, report key, calculation/adapter version and as-of date.
+- A3 does not return drill-down links. Any future drill-down route must reauthorize at its destination.
 - API errors use the existing standardized error envelope; do not introduce a second error convention.
 - Do not expose internal database IDs, sensitive shareholder/person fields or raw exception details.
 
 ### 4.5 Metric detail response
 
-Proposed `GET /metrics/{metricKey}`:
+Not implemented in A3. Any future `GET /metrics/{metricKey}` must follow this contract:
 
 ```json
 {
