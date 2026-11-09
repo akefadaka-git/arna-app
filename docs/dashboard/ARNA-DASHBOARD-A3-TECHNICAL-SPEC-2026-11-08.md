@@ -225,7 +225,7 @@ Permission names marked **candidate** are proposals, not verified catalogue entr
 | Widget | Existing source permission/evidence | Proposed additional gate | Visibility rule |
 |---|---|---|---|
 | Executive route | `dashboard.executive.view` (tenant-scoped; canonical catalogue addition in A3) | Role-fenced to `ceo`, `president`, `finance_manager`; wildcard inheritance explicitly excluded | Entry only; does not grant domain data |
-| M01 trial balance | `finance.report.view` | None if domain policy is sufficient | Hide unless finance report access for selected entity |
+| M01 trial balance | `finance.report.view` plus `finance.entity.view` through `LegalEntityPolicy` | No additional grant | Hide unless both Finance report and legal-entity view authorization pass |
 | M02–M08 financial metrics | `finance.report.view` plus relevant entity scope | Metric-specific only if domain owner defines | Hide metric if source permission absent |
 | M09 budget variance | Budget read permission not verified | Must be selected from canonical Finance RBAC catalogue | Hide until permission and budget API verified |
 | M10 entity comparison | `finance.entity.view` and `finance.report.view` | Optional consolidation permission only if policy requires | Each entity independently authorized |
@@ -431,7 +431,7 @@ Verification must be run against one frozen App SHA and one frozen API SHA, reco
 ### Historical decision checklist (superseded where noted)
 1. Approve the separate `/executive-overview` route while retaining `/dashboard`.
 2. Confirm initial audience and role grants (recommended: executive/management roles with entity-scoped access).
-3. Approve or reject candidate `dashboard.executive.view`; if rejected, specify the domain-permission-only model.
+3. RESOLVED 2026-11-09: approved `dashboard.executive.view` as a tenant-scoped entry permission, restricted to the frozen `ceo`, `president`, `finance_manager` audience.
 4. Confirm Finance actuals, period, entity comparison, consolidation, FX and currency display semantics.
 5. Confirm shareholder aggregate visibility and privacy thresholds.
 6. Confirm the exact Governance lifecycle facts eligible for display.
