@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 import PageHeader from '@/components/patterns/PageHeader';
 import Card from '@/components/patterns/Card';
@@ -10,7 +10,7 @@ import { useAuthStore } from '@/stores/auth';
 import { formatCalendarDate } from '@/core/dates/calendar';
 import { useLocaleStore } from '@/stores/locale';
 
-import { getExecutiveOverview } from './service';
+import { executiveOverviewRequestKey, getExecutiveOverview } from './service';
 import type { ExecutiveOverviewResponse } from './api';
 import { executiveOverviewEnglishLabels } from './labels';
 import type { ExecutiveOverviewLabels } from './labels';
@@ -25,6 +25,9 @@ const tenant = useTenantStore();
 const auth = useAuthStore();
 const locale = useLocaleStore();
 const labels = computed(() => locale.locale === 'en' ? executiveOverviewEnglishLabels : props.labels);
+// Injectable request boundary lets deterministic tests resolve a completed operation
+// after AbortSignal cancellation; production defaults to the real API client.
+const requestOverview = inject(executiveOverviewRequestKey, getExecutiveOverview);
 const isLoading = ref(true);
 const loadErrorKind = ref<'forbidden' | 'unavailable' | 'generic' | null>(null);
 const overview = ref<ExecutiveOverviewResponse | null>(null);
@@ -74,7 +77,7 @@ async function load(): Promise<void> {
   overview.value = null;
 
   try {
-    const result = await getExecutiveOverview({ signal: controller.signal });
+    const result = await requestOverview({ signal: controller.signal });
     if (sequence === requestSequence) overview.value = result;
   } catch (error) {
     if (sequence === requestSequence && !controller.signal.aborted) {
