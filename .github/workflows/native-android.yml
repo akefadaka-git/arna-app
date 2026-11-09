@@ -58,7 +58,7 @@ jobs:
             echo "Waiting for Android framework package manager to become available..."
             ready=0
             for attempt in $(seq 1 120); do
-              booted="$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\\r' || true)"
+              booted="$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r' || true)"
               package_service="$(adb shell service check package 2>/dev/null || true)"
               if [ "$booted" = "1" ] && echo "$package_service" | grep -q "found"; then
                 ready=1
