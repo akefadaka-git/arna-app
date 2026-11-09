@@ -1,0 +1,60 @@
+name: ARNA Executive Overview A4 frontend verification
+
+on:
+  push:
+    branches: ["verify/**"]
+    paths:
+      - ".github/workflows/executive-overview-a4-app.yml"
+      - "src/features/executive-overview/**"
+      - "src/router/**"
+      - "src/stores/auth*"
+      - "src/stores/tenant*"
+      - "tests/executive-overview-route-contract.test.mjs"
+      - "docs/dashboard/ARNA-EXECUTIVE-OVERVIEW-A4-FRONTEND-VERIFICATION.md"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: executive-overview-a4-app-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  frontend-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Verify exact checkout
+        run: |
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+          echo "A4 target SHA: ${GITHUB_SHA}"
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Run type-check and all production builds
+        run: npm run build
+      - name: Verify Executive Overview frontend authorization and metadata contracts
+        run: node --test tests/executive-overview-route-contract.test.mjs
+      - name: Verify workspace dashboard route integration
+        run: npm run test:workspace-dashboard-route-contract
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Verify public browser and WCAG 2.2 contracts
+        shell: bash
+        run: |
+          npx vite preview --outDir dist-public --host 127.0.0.1 --port 4173 --strictPort > "$RUNNER_TEMP/public-preview.log" 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4173/ >/dev/null
+          PUBLIC_SITE_URL=http://127.0.0.1:4173/ npm run test:public-browser
