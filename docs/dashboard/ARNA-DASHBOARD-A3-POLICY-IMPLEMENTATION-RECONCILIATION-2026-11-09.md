@@ -62,6 +62,7 @@ No other role grant or domain permission is widened.
 - The route and sidebar item both require dashboard.executive.view.
 - The existing /dashboard feature launcher remains separate and is not repurposed.
 - The page renders only widgets returned by the API.
+- As-of and generated timestamps use the shared `formatCalendarDate` utility; E.C. is the default and G.C. is displayed only under the user's existing calendar preference.
 - The client clears the current overview before reloading on tenant change, cancels superseded requests and aborts on unmount.
 - No inaccessible widget metadata is represented in the frontend contract.
 
