@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 
 const baseUrl = process.env.EXECUTIVE_OVERVIEW_TEST_URL ?? 'http://127.0.0.1:4174/tests/fixtures/executive-overview-harness.html';
 const endpoint = '**/api/dashboard/v1/overview';
+const deferredUrl = `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}deferred=1`;
 
 function envelope(entityCode = 'A4-ENTITY', status = 'complete') {
   return {
@@ -37,7 +38,7 @@ test.describe('Executive Overview authenticated browser security', () => {
   });
 
   test('logout clears loaded figures and a non-cancellable late result cannot restore them', async ({ page }) => {
-    await page.goto(baseUrl);
+    await page.goto(deferredUrl);
     await expect.poll(() => page.evaluate(() => window.__a4.requests.length)).toBe(1);
     await page.evaluate((data) => window.__a4.resolveRequest(0, data), envelope('LOADED-LOGOUT-DATA').data);
     await expect(page.getByText('LOADED-LOGOUT-DATA').first()).toBeVisible();
@@ -94,7 +95,7 @@ test.describe('Executive Overview authenticated browser security', () => {
   });
 
   test('tenant switch rejects a non-cancellable old-tenant operation after the new tenant loads', async ({ page }) => {
-    await page.goto(baseUrl);
+    await page.goto(deferredUrl);
     await expect.poll(() => page.evaluate(() => window.__a4.requests.length)).toBe(1);
     await page.evaluate(() => window.__a4.tenant.setActiveTenant(202));
     await expect.poll(() => page.evaluate(() => window.__a4.requests.length)).toBe(2);
@@ -109,7 +110,7 @@ test.describe('Executive Overview authenticated browser security', () => {
   });
 
   test('A to B to A transition rejects the first A session after the final A session loads', async ({ page }) => {
-    await page.goto(baseUrl);
+    await page.goto(deferredUrl);
     await expect.poll(() => page.evaluate(() => window.__a4.requests.length)).toBe(1);
 
     await page.evaluate(() => window.__a4.tenant.setActiveTenant(202));
@@ -136,7 +137,7 @@ test.describe('Executive Overview authenticated browser security', () => {
       if (request.url().includes('/api/dashboard/v1/overview')) requestFailed = true;
     });
 
-    await page.goto(baseUrl);
+    await page.goto(deferredUrl);
     await expect.poll(() => page.evaluate(() => window.__a4.requests.length)).toBe(1);
     await page.evaluate((data) => window.__a4.resolveRequest(0, data), envelope('INITIAL-UNMOUNT-DATA').data);
     await expect(page.getByText('INITIAL-UNMOUNT-DATA').first()).toBeVisible();
