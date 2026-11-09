@@ -50,7 +50,7 @@ This section records how the frozen policy is enforced by the A3 source implemen
 ### Wildcard and direct-grant protections
 - Existing super_admin wildcard and platform_admin / tenant_admin scope:tenant grants would inherit any new tenant permission if no exception were applied.
 - RolePermissionSeeder therefore removes dashboard.executive.view from resolved grant IDs for every role outside the frozen three-role allowlist, after wildcard resolution.
-- ExecutiveOverviewAccessPolicy additionally requires an active approved role whose tenant_id equals the trusted resolved tenant. A direct user-level grant or platform role alone cannot admit a caller.
+- ExecutiveOverviewAccessPolicy additionally requires an active approved role whose tenant_id equals the trusted resolved tenant. The caller must hold dashboard.executive.view through the approved role's role_has_permissions pivot. A direct user-level grant cannot substitute for that role grant, and a platform role alone cannot admit a caller.
 - No existing domain permission was added to any role. No wildcard, global, app.admin.access, or platform-administration grant is used as a substitute.
 
 ### API and frontend enforcement
