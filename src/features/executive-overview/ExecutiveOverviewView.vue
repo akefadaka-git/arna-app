@@ -4,7 +4,6 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import PageHeader from '@/components/patterns/PageHeader';
 import Card from '@/components/patterns/Card';
 import LoadingState from '@/components/composites/LoadingState';
-import ErrorState from '@/components/composites/ErrorState';
 import PageTitle from '@/layouts/AppShell/PageTitle';
 import { useTenantStore } from '@/stores/tenant';
 import { useAuthStore } from '@/stores/auth';
