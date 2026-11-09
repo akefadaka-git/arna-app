@@ -149,14 +149,7 @@ onMounted(() => {
             {{ isRefreshing ? label('loadingMessage') : label('refreshLabel') }}
           </button>
         </form>
-
-        <ErrorState
-          v-if="loadError !== null"
-          :title="label('loadErrorTitle')"
-          :action-label="label('retryLabel')"
-          @action="refresh"
-        />
-
+\n
         <Card v-else-if="trialBalance" class="executive-overview__report">
           <div class="executive-overview__report-header">
             <div>
@@ -286,8 +279,8 @@ onMounted(() => {
 }
 
 .executive-overview__status[data-balanced='false'] {
-  border-color: var(--mases-color-state-danger-border);
-  color: var(--mases-color-state-danger-text);
+  border-color: var(--mases-color-border-danger);
+  color: var(--mases-color-text-danger);
 }
 
 .executive-overview__metrics {
