@@ -6,6 +6,7 @@ import { executiveOverviewEnglishLabels } from '../../src/features/executive-ove
 import { useAuthStore } from '../../src/stores/auth';
 import { useTenantStore, createInMemoryTenantIdStorage, setTenantIdStorage } from '../../src/stores/tenant';
 import { useLocaleStore, createInMemoryLocaleStorage, setLocaleStorage } from '../../src/stores/locale';
+import { setAuthHeaderProvider, setTenantHeaderProvider, setUnauthorizedHandler } from '../../src/core/api/client';
 
 setTenantIdStorage(createInMemoryTenantIdStorage());
 setLocaleStorage(createInMemoryLocaleStorage());
@@ -36,6 +37,10 @@ const makeUser = (overrides = {}) => ({
 auth.setUser(makeUser());
 tenant.setActiveTenant(101);
 locale.setLocale('en');
+
+setAuthHeaderProvider(() => auth.token);
+setTenantHeaderProvider(() => tenant.effectiveTenantId);
+setUnauthorizedHandler(() => auth.clearSession());
 
 app.mount('#app');
 
