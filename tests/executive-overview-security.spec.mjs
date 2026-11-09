@@ -33,7 +33,7 @@ test.describe('Executive Overview authenticated browser security', () => {
 
     await page.goto(baseUrl);
     await expect(page.getByTestId('executive-overview-widgets')).toBeVisible();
-    await expect(page.getByText('A4-ENTITY')).toBeVisible();
+    await expect(page.getByText('A4-ENTITY').first()).toBeVisible();
   });
 
   test('logout clears loaded figures and a delayed response cannot restore them', async ({ page }) => {
@@ -75,7 +75,7 @@ test.describe('Executive Overview authenticated browser security', () => {
     }));
 
     await page.goto(baseUrl);
-    await expect(page.getByText('REVOKED-FINANCE-DATA')).toBeVisible();
+    await expect(page.getByText('REVOKED-FINANCE-DATA').first()).toBeVisible();
     await page.evaluate(() => window.__a4.auth.setUser(window.__a4.makeUser({ permissions: [] })));
     await expect(page.getByTestId('executive-overview-root')).not.toContainText('REVOKED-FINANCE-DATA');
   });
@@ -115,10 +115,10 @@ test.describe('Executive Overview authenticated browser security', () => {
       && request.headers()['x-tenant-id'] === '202');
     await page.evaluate(() => window.__a4.tenant.setActiveTenant(202));
     await tenantBRequest;
-    await expect(page.getByText('TENANT-B-CURRENT')).toBeVisible();
+    await expect(page.getByText('TENANT-B-CURRENT').first()).toBeVisible();
     releaseTenantA();
     await page.waitForTimeout(100);
-    await expect(page.getByText('TENANT-B-CURRENT')).toBeVisible();
+    await expect(page.getByText('TENANT-B-CURRENT').first()).toBeVisible();
     await expect(page.getByTestId('executive-overview-root')).not.toContainText('TENANT-A-STALE');
   });
 
@@ -180,6 +180,6 @@ test.describe('Executive Overview authenticated browser security', () => {
     }));
     await page.goto(baseUrl);
     await expect(page.getByTestId('executive-overview-partial')).toBeVisible();
-    await expect(page.getByText('A4-PARTIAL-ENTITY')).toBeVisible();
+    await expect(page.getByText('A4-PARTIAL-ENTITY').first()).toBeVisible();
   });
 });
