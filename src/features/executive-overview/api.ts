@@ -1,7 +1,6 @@
 import { api } from '@/core/api/client';
 
 export interface ExecutiveOverviewEntity {
-  readonly id: number;
   readonly code: string;
   readonly name_am: string | null;
   readonly name_en: string | null;
@@ -50,16 +49,30 @@ export interface ExecutiveOverviewPayload {
 }
 
 export async function listExecutiveOverviewEntities(): Promise<readonly ExecutiveOverviewEntity[]> {
-  const page = await api.get<EntityPage>('/api/finance/entities', {
-    params: { per_page: 100 },
-  });
+  const entities: ExecutiveOverviewEntity[] = [];
+  let pageNumber = 1;
+  let lastPage = 1;
 
-  if (!page || !Array.isArray(page.data)) {
-    throw new Error('The Finance entity endpoint returned an invalid page.');
-  }
+  do {
+    const page = await api.get<EntityPage>('/api/finance/entities', {
+      params: { page: pageNumber, per_page: 100 },
+    });
 
-  return page.data.filter((entity) =>
-    Number.isInteger(entity.id) &&
+    if (
+      !page ||
+      !Array.isArray(page.data) ||
+      !Number.isInteger(page.last_page) ||
+      page.last_page < pageNumber
+    ) {
+      throw new Error('The Finance entity endpoint returned an invalid page.');
+    }
+
+    entities.push(...page.data);
+    lastPage = page.last_page;
+    pageNumber += 1;
+  } while (pageNumber <= lastPage);
+
+  return entities.filter((entity) =>
     typeof entity.code === 'string' &&
     typeof entity.base_currency === 'string',
   );
