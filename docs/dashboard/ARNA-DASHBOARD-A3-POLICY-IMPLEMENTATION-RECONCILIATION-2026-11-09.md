@@ -39,7 +39,7 @@ A naive tenant-scoped permission addition would have widened access through exis
 
 The API RolePermissionSeeder now filters dashboard.executive.view out of resolved grants for every role outside the frozen three-role allowlist, after wildcard resolution. This keeps the existing wildcard behavior for all other permissions while enforcing the dashboard-specific exception.
 
-The API ExecutiveOverviewAccessPolicy also requires an active approved role whose role tenant_id matches the trusted resolved tenant. A direct user-level grant or platform role alone cannot bypass the audience restriction.
+The API ExecutiveOverviewAccessPolicy requires an active approved role whose role tenant_id matches the trusted resolved tenant AND whose role_has_permissions pivot contains the active tenant-scoped dashboard.executive.view permission. A direct user-level grant cannot substitute for the role grant; a platform role alone cannot bypass the audience restriction.
 
 No other role grant or domain permission is widened.
 
@@ -47,7 +47,7 @@ No other role grant or domain permission is widened.
 
 - GET /api/dashboard/v1/overview is registered inside the existing auth:sanctum and tenant.membership route group.
 - The route requires auth.permission:dashboard.executive.view and is rate-limited.
-- The controller checks the approved tenant-bound audience again, preventing direct-grant and wildcard-only bypasses.
+- The controller checks the approved tenant-bound role and its role_has_permissions pivot again, preventing direct-user-grant and wildcard-only bypasses.
 - Finance widget output independently requires finance.report.view.
 - Each legal entity is checked through the existing LegalEntityPolicy, which enforces finance.entity.view and the current tenant boundary.
 - Authorized entities are reported separately using the existing FinancialReportService::trialBalance implementation.
