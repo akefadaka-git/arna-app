@@ -536,7 +536,10 @@ export const routesWorkspace: RouteRecordRaw[] = [
         name: 'executive-overview',
         component: () => import('@/features/executive-overview/ExecutiveOverviewView.vue'),
         props: { labels: executiveOverviewLabels },
-        meta: { permission: 'dashboard.executive.view' },
+        meta: {
+          permission: 'dashboard.executive.view',
+          requiredRoles: ['ceo', 'president', 'finance_manager'],
+        },
       },
 
       // -----------------------------------------------------------------------
