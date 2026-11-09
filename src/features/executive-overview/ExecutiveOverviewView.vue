@@ -57,11 +57,11 @@ function entityName(entity: ExecutiveOverviewEntity): string {
 }
 
 function formatDecimal(value: string): string {
-  if (!/^-?\\d+(?:\\.\\d+)?$/.test(value)) return value;
+  if (!/^-?\d+(?:\.\d+)?$/.test(value)) return value;
   const [integer, fraction] = value.split('.');
   const sign = integer.startsWith('-') ? '-' : '';
   const digits = sign ? integer.slice(1) : integer;
-  const grouped = digits.replace(/\\B(?=(\\d{3})+(?!\\d))/g, ',');
+  const grouped = digits.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return `${sign}${grouped}${fraction === undefined ? '' : `.${fraction}`}`;
 }
 
