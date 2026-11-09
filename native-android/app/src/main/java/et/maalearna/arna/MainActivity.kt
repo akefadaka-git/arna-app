@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.weight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -18,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -64,7 +66,7 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
         Text("እንኳን ወደ ARNA በደህና መጡ", style = MaterialTheme.typography.titleLarge)
         Text("One Intelligence. Infinite Possibilities.")
         OutlinedTextField(identifier, { identifier = it }, label = { Text("Email / Phone") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(password, { password = it }, label = { Text("Password") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(password, { password = it }, label = { Text("Password") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth())
         OutlinedTextField(tenantId, { tenantId = it.filter(Char::isDigit) }, label = { Text("Tenant ID") }, modifier = Modifier.fillMaxWidth())
         if (challenge != null) {
             OutlinedTextField(mfaCode, { mfaCode = it }, label = { Text("MFA code") }, modifier = Modifier.fillMaxWidth())
@@ -123,7 +125,7 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
             }) { Text("Devices") }
         }
         Text("Device sessions", style = MaterialTheme.typography.titleMedium)
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        LazyColumn(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             items(sessions, key = { it.session_id }) { item ->
                 SessionRow(item) {
                     scope.launch {
