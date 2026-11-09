@@ -33,3 +33,21 @@ export const executiveOverviewLabels: ExecutiveOverviewLabels = {
   asOfLabel: 'እስከ',
   generatedAtLabel: 'የተፈጠረበት ጊዜ',
 };
+
+export const executiveOverviewEnglishLabels: ExecutiveOverviewLabels = {
+  pageTitle: 'Executive Overview',
+  pageDescription: 'Verified metrics within the organization scope you are authorized to access.',
+  loadingMessage: 'Loading verified metrics…',
+  errorTitle: 'The Executive Overview could not be loaded.',
+  retryLabel: 'Retry',
+  emptyTitle: 'No verified metrics are currently available',
+  emptyDescription: 'Authorized, verified metrics will appear here when their source contracts are available.',
+  financeTitle: 'Trial Balance',
+  debitLabel: 'Total debits',
+  creditLabel: 'Total credits',
+  differenceLabel: 'Difference',
+  balancedLabel: 'Balanced',
+  unbalancedLabel: 'Out of balance',
+  asOfLabel: 'As of',
+  generatedAtLabel: 'Generated at',
+};
