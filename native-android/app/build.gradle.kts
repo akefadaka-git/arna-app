@@ -14,7 +14,7 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "0.1.0"
-        buildConfigField("String", "ARNA_API_BASE_URL", "\\\"https://api.maalearna.com.et\\\"")
+        buildConfigField("String", "ARNA_API_BASE_URL", "\"https://api.maalearna.com.et\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
