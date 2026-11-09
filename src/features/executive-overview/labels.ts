@@ -3,6 +3,12 @@ export interface ExecutiveOverviewLabels {
   readonly pageDescription: string;
   readonly loadingMessage: string;
   readonly errorTitle: string;
+  readonly errorDescription: string;
+  readonly forbiddenTitle: string;
+  readonly forbiddenDescription: string;
+  readonly unavailableTitle: string;
+  readonly unavailableDescription: string;
+  readonly partialDataMessage: string;
   readonly retryLabel: string;
   readonly emptyTitle: string;
   readonly emptyDescription: string;
@@ -21,6 +27,12 @@ export const executiveOverviewLabels: ExecutiveOverviewLabels = {
   pageDescription: 'በእርስዎ የተፈቀደ የድርጅት ወሰን ውስጥ ያሉ የተረጋገጡ መለኪያዎች።',
   loadingMessage: 'መለኪያዎችን በመጫን ላይ…',
   errorTitle: 'አጠቃላይ እይታውን ማምጣት አልተቻለም።',
+  errorDescription: 'እባክዎ እንደገና ይሞክሩ።',
+  forbiddenTitle: 'ይህን እይታ ለማግኘት ፈቃድ የለዎትም።',
+  forbiddenDescription: 'የመዳረሻ ፈቃድዎን ያረጋግጡ።',
+  unavailableTitle: 'አገልግሎቱ ለጊዜው አይገኝም።',
+  unavailableDescription: 'እባክዎ ቆይተው እንደገና ይሞክሩ።',
+  partialDataMessage: 'አንዳንድ የተረጋገጡ መረጃዎች ብቻ ይታያሉ።',
   retryLabel: 'እንደገና ይሞክሩ',
   emptyTitle: 'አሁን የሚታዩ የተረጋገጡ መለኪያዎች የሉም',
   emptyDescription: 'ለእርስዎ የተፈቀደ እና የተረጋገጠ መረጃ ሲኖር እዚህ ይታያል።',
@@ -39,6 +51,12 @@ export const executiveOverviewEnglishLabels: ExecutiveOverviewLabels = {
   pageDescription: 'Verified metrics within the organization scope you are authorized to access.',
   loadingMessage: 'Loading verified metrics…',
   errorTitle: 'The Executive Overview could not be loaded.',
+  errorDescription: 'Please try again.',
+  forbiddenTitle: 'You are not authorized to view this overview.',
+  forbiddenDescription: 'Check your access with an authorized administrator.',
+  unavailableTitle: 'The service is temporarily unavailable.',
+  unavailableDescription: 'Please try again later.',
+  partialDataMessage: 'Only some verified information is currently available.',
   retryLabel: 'Retry',
   emptyTitle: 'No verified metrics are currently available',
   emptyDescription: 'Authorized, verified metrics will appear here when their source contracts are available.',
