@@ -56,8 +56,9 @@ test.describe('Executive Overview authenticated browser security', () => {
       }
     });
 
+    const initialRequest = page.waitForRequest((request) => request.url().includes('/api/dashboard/v1/overview'));
     await page.goto(baseUrl);
-    await page.waitForRequest((request) => request.url().includes('/api/dashboard/v1/overview'));
+    await initialRequest;
     await page.evaluate(() => window.__a4.auth.clearSession());
     await expect(page.getByTestId('executive-overview-root')).not.toContainText('STALE-LOGOUT-DATA');
     release();
@@ -104,11 +105,16 @@ test.describe('Executive Overview authenticated browser security', () => {
       });
     });
 
-    await page.goto(baseUrl);
-    await page.waitForRequest((request) =>
+    const tenantARequest = page.waitForRequest((request) =>
       request.url().includes('/api/dashboard/v1/overview')
       && request.headers()['x-tenant-id'] === '101');
+    await page.goto(baseUrl);
+    await tenantARequest;
+    const tenantBRequest = page.waitForRequest((request) =>
+      request.url().includes('/api/dashboard/v1/overview')
+      && request.headers()['x-tenant-id'] === '202');
     await page.evaluate(() => window.__a4.tenant.setActiveTenant(202));
+    await tenantBRequest;
     await expect(page.getByText('TENANT-B-CURRENT')).toBeVisible();
     releaseTenantA();
     await page.waitForTimeout(100);
@@ -136,8 +142,9 @@ test.describe('Executive Overview authenticated browser security', () => {
       }
     });
 
+    const initialRequest = page.waitForRequest((request) => request.url().includes('/api/dashboard/v1/overview'));
     await page.goto(baseUrl);
-    await page.waitForRequest((request) => request.url().includes('/api/dashboard/v1/overview'));
+    await initialRequest;
     await page.evaluate(() => window.__a4.unmount());
     await expect(page.getByTestId('executive-overview-root')).toHaveCount(0);
     release();
