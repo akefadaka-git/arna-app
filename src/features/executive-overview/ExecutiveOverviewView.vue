@@ -75,18 +75,18 @@ onBeforeUnmount(() => {
   <PageTitle :title="labels.pageTitle" :suffix="appName" />
 
   <main class="executive-overview" data-testid="executive-overview-root">
-    <PageHeader :title="props.labels.pageTitle" :description="props.labels.pageDescription" />
+    <PageHeader :title="labels.pageTitle" :description="labels.pageDescription" />
 
     <LoadingState
       v-if="isLoading"
-      :message="props.labels.loadingMessage"
+      :message="labels.loadingMessage"
       data-testid="executive-overview-loading"
     />
 
     <ErrorState
       v-else-if="loadError !== null"
-      :title="props.labels.errorTitle"
-      :action-label="props.labels.retryLabel"
+      :title="labels.errorTitle"
+      :action-label="labels.retryLabel"
       @action="load"
       data-testid="executive-overview-error"
     />
@@ -104,7 +104,7 @@ onBeforeUnmount(() => {
       >
         <div class="executive-overview__card-heading">
           <div>
-            <p class="executive-overview__eyebrow">{{ props.labels.financeTitle }}</p>
+            <p class="executive-overview__eyebrow">{{ labels.financeTitle }}</p>
             <h2>{{ widget.entity.name_am || widget.entity.name_en }}</h2>
             <p class="executive-overview__entity-code">{{ widget.entity.code }}</p>
           </div>
@@ -112,27 +112,27 @@ onBeforeUnmount(() => {
             class="executive-overview__status"
             :data-balanced="widget.value.is_balanced"
           >
-            {{ widget.value.is_balanced ? props.labels.balancedLabel : props.labels.unbalancedLabel }}
+            {{ widget.value.is_balanced ? labels.balancedLabel : labels.unbalancedLabel }}
           </span>
         </div>
 
         <dl class="executive-overview__metrics">
           <div>
-            <dt>{{ props.labels.debitLabel }}</dt>
+            <dt>{{ labels.debitLabel }}</dt>
             <dd>{{ widget.value.total_debits }} {{ widget.currency }}</dd>
           </div>
           <div>
-            <dt>{{ props.labels.creditLabel }}</dt>
+            <dt>{{ labels.creditLabel }}</dt>
             <dd>{{ widget.value.total_credits }} {{ widget.currency }}</dd>
           </div>
           <div>
-            <dt>{{ props.labels.differenceLabel }}</dt>
+            <dt>{{ labels.differenceLabel }}</dt>
             <dd>{{ widget.value.difference }} {{ widget.currency }}</dd>
           </div>
         </dl>
 
         <p class="executive-overview__as-of">
-          {{ props.labels.asOfLabel }}: {{ widget.as_of }}
+          {{ labels.asOfLabel }}: {{ widget.as_of }}
         </p>
       </Card>
     </section>
@@ -143,12 +143,12 @@ onBeforeUnmount(() => {
       role="status"
       data-testid="executive-overview-empty"
     >
-      <h2>{{ props.labels.emptyTitle }}</h2>
-      <p>{{ props.labels.emptyDescription }}</p>
+      <h2>{{ labels.emptyTitle }}</h2>
+      <p>{{ labels.emptyDescription }}</p>
     </section>
 
     <p v-if="overview !== null" class="executive-overview__generated">
-      {{ props.labels.generatedAtLabel }}: {{ overview.generated_at }}
+      {{ labels.generatedAtLabel }}: {{ overview.generated_at }}
     </p>
   </main>
 </template>
