@@ -105,7 +105,7 @@ onBeforeUnmount(() => {
         <div class="executive-overview__card-heading">
           <div>
             <p class="executive-overview__eyebrow">{{ labels.financeTitle }}</p>
-            <h2>{{ widget.entity.name_am || widget.entity.name_en }}</h2>
+            <h2>{{ locale.locale === 'en' ? (widget.entity.name_en || widget.entity.name_am) : (widget.entity.name_am || widget.entity.name_en) }}</h2>
             <p class="executive-overview__entity-code">{{ widget.entity.code }}</p>
           </div>
           <span
