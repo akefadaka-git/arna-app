@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 import PageHeader from '@/components/patterns/PageHeader';
 import Card from '@/components/patterns/Card';
@@ -7,9 +7,11 @@ import LoadingState from '@/components/composites/LoadingState';
 import ErrorState from '@/components/composites/ErrorState';
 import PageTitle from '@/layouts/AppShell/PageTitle';
 import { useTenantStore } from '@/stores/tenant';
+import { useLocaleStore } from '@/stores/locale';
 
 import { getExecutiveOverview } from './service';
 import type { ExecutiveOverviewResponse } from './api';
+import { executiveOverviewEnglishLabels } from './labels';
 import type { ExecutiveOverviewLabels } from './labels';
 
 interface Props {
@@ -19,6 +21,8 @@ interface Props {
 const props = defineProps<Props>();
 const appName: string = import.meta.env.VITE_APP_NAME;
 const tenant = useTenantStore();
+const locale = useLocaleStore();
+const labels = computed(() => locale.locale === 'en' ? executiveOverviewEnglishLabels : props.labels);
 const isLoading = ref(true);
 const loadError = ref<unknown | null>(null);
 const overview = ref<ExecutiveOverviewResponse | null>(null);
@@ -68,7 +72,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <PageTitle :title="props.labels.pageTitle" :suffix="appName" />
+  <PageTitle :title="labels.pageTitle" :suffix="appName" />
 
   <main class="executive-overview" data-testid="executive-overview-root">
     <PageHeader :title="props.labels.pageTitle" :description="props.labels.pageDescription" />
