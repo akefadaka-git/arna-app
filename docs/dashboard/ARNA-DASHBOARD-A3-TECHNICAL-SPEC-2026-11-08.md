@@ -73,7 +73,7 @@ Proposed child of the existing authenticated workspace layout:
 | Navigation | New Executive Overview leaf, only shown to users with approved permission |
 | Existing dashboard | Keep `dashboard` route and launcher unchanged |
 
-Do not create a parallel authentication guard. The route meta permission is a UX gate; API authorization remains decisive.
+Do not create a parallel authentication guard. Route `permission` and `requiredRoles` metadata are UX gates; the API's current-tenant role, permission-pivot and domain-policy checks remain decisive.
 
 ### 4.2 Backend route contract (A3 implementation boundary)
 
