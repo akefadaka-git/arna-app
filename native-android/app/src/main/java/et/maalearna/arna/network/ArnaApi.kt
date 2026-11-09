@@ -4,6 +4,7 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -77,6 +78,7 @@ class ArnaApiFactory(
             .build()
         return Retrofit.Builder()
             .baseUrl(baseUrl.trimEnd('/') + "/api/")
+            .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
             .create(ArnaApi::class.java)
