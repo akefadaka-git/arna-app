@@ -7,7 +7,9 @@ This is a standalone Kotlin/Jetpack Compose Android application foundation. It i
 - ARNA API contract: `docs/mobile/ARNA_MOBILE_DEVICE_SESSION_API_A3_v1.0.md` in `arna-api`.
 - API login sends `client_type=android`, a random per-installation identifier, device label, and app version.
 - Bearer token storage uses AES-GCM with a non-exportable Android Keystore key and a no-backup private file.
-- API client exposes login, session listing, per-device revoke, and refresh.
+- Compose UI includes login, MFA challenge entry, session listing, per-device revocation, and same-device refresh.
+- Repository wiring saves the returned bearer token only through the Keystore-backed session store.
+- Retrofit/Gson response decoding is configured; API base URL defaults to the current ARNA API host and can be changed in Gradle configuration.
 - Amharic-first Compose shell is present.
 
 ## Build
