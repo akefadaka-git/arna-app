@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 
 import ExecutiveOverviewView from '../../src/features/executive-overview/ExecutiveOverviewView.vue';
+import { executiveOverviewRequestKey, getExecutiveOverview } from '../../src/features/executive-overview/service';
 import { executiveOverviewEnglishLabels } from '../../src/features/executive-overview/labels';
 import { useAuthStore } from '../../src/stores/auth';
 import { useTenantStore, createInMemoryTenantIdStorage, setTenantIdStorage } from '../../src/stores/tenant';
@@ -18,6 +19,19 @@ app.use(pinia);
 const auth = useAuthStore(pinia);
 const tenant = useTenantStore(pinia);
 const locale = useLocaleStore(pinia);
+
+// Deferred request executor intentionally ignores AbortSignal. Tests can resolve
+// an old operation after logout or tenant changes to prove sequence/scope guards.
+const requests = [];
+const requestExecutor = (options = {}) => new Promise((resolve, reject) => {
+  requests.push({
+    tenantId: tenant.effectiveTenantId,
+    signal: options.signal,
+    resolve,
+    reject,
+  });
+});
+app.provide(executiveOverviewRequestKey, requestExecutor);
 
 const makeUser = (overrides = {}) => ({
   id: 9001,
@@ -48,5 +62,7 @@ window.__a4 = {
   auth,
   tenant,
   makeUser,
+  requests,
+  resolveRequest: (index, result) => requests[index]?.resolve(result),
   unmount: () => app.unmount(),
 };
