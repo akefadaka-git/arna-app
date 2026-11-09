@@ -1,7 +1,7 @@
 # ARNA Executive Overview — A4 Frontend Security Verification
 
 **Stage:** A4 — verification  
-**Status:** IN PROGRESS; not production-cleared  
+**Status:** AUTOMATED FRONTEND A4 PASS; independent security sign-off still pending  
 **A3 parent:** `fc5d87fd4ed97a2b5102ffefbad894c261f0d6f2`  
 **A4 branch:** `verify/executive-overview-a4`
 
@@ -24,8 +24,8 @@ Use a test account and synthetic data only. Do not use production financial data
 
 | Scenario | Procedure | Expected result | Current evidence |
 |---|---|---|---|
-| Initial authorized load | Open overview as approved role with entry permission | Only API-authorized widgets render | Existing source contract; runtime NOT RUN |
-| Logout while loaded | Load figures, then log out without navigating | Figures disappear immediately; no late response restores them | NOT RUN |
+| Initial authorized load | Open overview as approved role with entry permission | Only API-authorized widgets render | Runtime PASS — A4 browser suite |
+| Logout while loaded | Load figures, then log out without navigating | Figures disappear immediately; no late response restores them | PASS — A4 browser suite |
 | Session expiry during request | Delay overview response, expire session, then release response | Sensitive state remains cleared | NOT RUN |
 | Permission revocation | Refresh auth snapshot after removing entry permission | Figures clear; route becomes inaccessible or denied | NOT RUN |
 | Rapid tenant switching | Switch A → B → A while requests are delayed | Only current tenant's response may render | Source contract; runtime NOT RUN |
@@ -44,13 +44,19 @@ Use a test account and synthetic data only. Do not use production financial data
 - Type-check, all four production builds, route/metadata contracts, workspace dashboard route integration, Chromium installation, and existing public browser/WCAG 2.2 suite passed.
 - The public browser suite does not exercise the authenticated Executive Overview session transitions. The scenarios in the matrix above remain runtime NOT RUN.
 
+## Exact-HEAD evidence
+
+- A4 authenticated browser security suite: [run #42684079707](https://github.com/akefadaka-git/arna-app/actions/runs/42684079707) — **PASS**, 8/8 browser tests on `7e978aaa5ff2f5d168641c6a1a1ac407d12d6b77`.
+- Full frontend type-check/build, route contracts, workspace route, and public Chromium/WCAG 2.2 suite also passed in the same workflow.
+- Browser tests cover authorized rendering, logout during a pending request, session expiry (401), permission revocation, rapid tenant switching with stale response suppression, unmount/abort, forbidden/unavailable states, and partial-data rendering.
+
 ## A4 CI acceptance
 
 - Run the full frontend CI on the exact A4 branch HEAD.
 - Ensure type-check, all four builds, route/permission contracts, and accessibility checks pass.
-- Add executable real-browser coverage for the session and concurrency scenarios above. Existing static source-pattern tests do not establish runtime correctness.
+- Keep the authenticated browser suite in the exact-HEAD CI gate; the test harness uses synthetic identities, tenant IDs and financial values only.
 - Record workflow URL, job IDs, exact tested SHA and complete result.
 
 ## Closure rule
 
-A4 frontend verification remains PARTIAL until runtime browser tests pass on the exact branch HEAD and the API A4 isolation tests pass. Independent human application-security review is a separate required sign-off. A4 closure does not authorize merge or deployment.
+Automated A4 frontend verification is PASS. Overall A4 security closure remains PARTIAL until the API adversarial matrix is independently reconciled and an independent human application-security review is recorded. A4 closure does not authorize merge or deployment.
