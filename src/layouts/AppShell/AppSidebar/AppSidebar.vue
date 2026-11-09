@@ -223,6 +223,8 @@ export interface NavLeaf {
    * all of the listed permissions.
    */
   readonly permissionMode?: NavPermissionMode;
+  /** UX-level audience hint; backend authorization remains authoritative. */
+  readonly requiredRoles?: readonly string[];
 }
 
 /**
@@ -249,6 +251,8 @@ export interface NavGroup {
    */
   readonly permission?: string | readonly string[];
   readonly permissionMode?: NavPermissionMode;
+  /** UX-level audience hint; backend authorization remains authoritative. */
+  readonly requiredRoles?: readonly string[];
 }
 
 /**
@@ -357,8 +361,13 @@ function passesPermissionCheck(
     : auth.hasAnyPermission(permission);
 }
 
+function passesRoleCheck(requiredRoles: readonly string[] | undefined): boolean {
+  return requiredRoles === undefined || requiredRoles.some((role) => auth.hasRole(role));
+}
+
 function isLeafVisible(leaf: NavLeaf): boolean {
-  return passesPermissionCheck(leaf.permission, leaf.permissionMode);
+  return passesPermissionCheck(leaf.permission, leaf.permissionMode)
+    && passesRoleCheck(leaf.requiredRoles);
 }
 
 /*
@@ -371,7 +380,10 @@ function groupVisibleChildren(group: NavGroup): ReadonlyArray<NavLeaf> {
 }
 
 function isGroupVisible(group: NavGroup): boolean {
-  if (!passesPermissionCheck(group.permission, group.permissionMode)) {
+  if (
+    !passesPermissionCheck(group.permission, group.permissionMode)
+    || !passesRoleCheck(group.requiredRoles)
+  ) {
     return false;
   }
   return groupVisibleChildren(group).length > 0;
