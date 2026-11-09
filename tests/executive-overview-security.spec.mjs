@@ -64,7 +64,7 @@ test.describe('Executive Overview authenticated browser security', () => {
     release();
     await page.waitForTimeout(100);
     await expect(page.getByTestId('executive-overview-root')).not.toContainText('STALE-LOGOUT-DATA');
-    expect(requestFailed).toBe(true);
+    await expect.poll(() => requestFailed).toBe(true);
   });
 
   test('permission revocation clears previously rendered financial figures', async ({ page }) => {
