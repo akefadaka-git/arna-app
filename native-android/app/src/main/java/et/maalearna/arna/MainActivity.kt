@@ -64,7 +64,7 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
         Text("ARNA", style = MaterialTheme.typography.headlineLarge)
         Text("እንኳን ወደ ARNA በደህና መጡ", style = MaterialTheme.typography.titleLarge)
         Text("One Intelligence. Infinite Possibilities.")
-        OutlinedTextField(identifier, { identifier = it }, label = { Text("Email / Phone") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(identifier, { identifier = it }, label = { Text("Email / Phone / Username") }, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(password, { password = it }, label = { Text("Password") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth())
         OutlinedTextField(tenantId, { tenantId = it.filter(Char::isDigit) }, label = { Text("Tenant ID") }, modifier = Modifier.fillMaxWidth())
         if (challenge != null) {
@@ -152,8 +152,13 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
 private fun SessionRow(session: DeviceSessionDto, onRevoke: () -> Unit) {
     Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
         Text(session.device_label ?: session.platform)
-        Text(if (session.is_current) "Current device" else "Other device")
+        Text(when {
+            session.revoked_at != null -> "Revoked"
+            session.is_current -> "Current device"
+            else -> "Other device"
+        })
         Text(session.last_seen_at ?: "Last activity unavailable", style = MaterialTheme.typography.bodySmall)
-        Button(onClick = onRevoke) { Text("Revoke session") }
+        Text(session.expires_at ?: "Expiry unavailable", style = MaterialTheme.typography.bodySmall)
+        Button(enabled = session.revoked_at == null, onClick = onRevoke) { Text("Revoke session") }
     }
 }
