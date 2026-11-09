@@ -53,3 +53,33 @@ test('unmount invalidates pending responses and aborts the active request', asyn
   assert.match(view, /if \(sequence === requestSequence\) overview\.value = result/);
   assert.match(view, /if \(sequence === requestSequence\) isLoading\.value = false/);
 });
+
+
+test('authorization-context changes immediately clear sensitive overview state', async () => {
+  const view = await read('../src/features/executive-overview/ExecutiveOverviewView.vue');
+  assert.match(view, /const auth = useAuthStore\(\)/);
+  assert.match(view, /watch\([\s\S]*?\(\) => auth\.user[\s\S]*?clearSensitiveViewState\(\)/);
+  assert.match(view, /activeController\?\.abort\(\)/);
+  assert.match(view, /auth\.hasPermission\('dashboard\.executive\.view'\)/);
+  assert.match(view, /\['ceo', 'president', 'finance_manager'\]\.some\(\(role\) => auth\.hasRole\(role\)\)/);
+});
+
+test('forbidden and unavailable responses have distinct non-disclosing user states', async () => {
+  const view = await read('../src/features/executive-overview/ExecutiveOverviewView.vue');
+  const labels = await read('../src/features/executive-overview/labels.ts');
+  assert.match(view, /status === 403[\s\S]*?return 'forbidden'/);
+  assert.match(view, /status === 404 \|\| status >= 500 \|\| failure\.category === 'network'/);
+  assert.match(view, /labels\.forbiddenDescription/);
+  assert.match(view, /labels\.unavailableDescription/);
+  assert.doesNotMatch(view, /permission slug|omitted_widgets|inaccessible widget/i);
+  assert.match(labels, /forbiddenTitle/);
+  assert.match(labels, /unavailableTitle/);
+});
+
+test('partial-data notice is driven only by the explicit response status', async () => {
+  const view = await read('../src/features/executive-overview/ExecutiveOverviewView.vue');
+  const api = await read('../src/features/executive-overview/api.ts');
+  assert.match(api, /status\?: 'complete' \| 'partial'/);
+  assert.match(view, /overview\.status === 'partial'/);
+  assert.match(view, /labels\.partialDataMessage/);
+});
