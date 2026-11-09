@@ -451,7 +451,7 @@
  * -----------------------------------------------------------------------------
  * The permission-less design — a review note
  * -----------------------------------------------------------------------------
- * The workspace's other seven leaves all carry a `permission` field.
+ * The workspace's other leaves carry their own `permission` fields.
  * The dashboard is the first leaf in the workspace tree WITHOUT one.
  *
  * The reasoning, recorded here for the reviewer:
