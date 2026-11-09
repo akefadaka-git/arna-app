@@ -153,7 +153,11 @@ onMounted(() => {
             {{ isRefreshing ? label('loadingMessage') : label('refreshLabel') }}
           </button>
         </form>
-\n
+
+        <p class="executive-overview__as-of">
+          <span>{{ label('asOfLabel') }}:</span> {{ formattedAsOf }}
+        </p>
+
         <Card v-else-if="trialBalance" class="executive-overview__report">
           <div class="executive-overview__report-header">
             <div>
