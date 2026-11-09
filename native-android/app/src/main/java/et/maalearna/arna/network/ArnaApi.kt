@@ -45,7 +45,8 @@ data class DeviceSessionDto(
     val is_current: Boolean
 )
 
-data class SessionListData(val sessions: List<DeviceSessionDto>)
+data class SessionListData(val sessions: List<DeviceSessionDto> )
+data class RevokeSessionData(val revoked: Boolean)
 
 interface ArnaApi {
     @POST("login")
@@ -55,7 +56,7 @@ interface ArnaApi {
     suspend fun sessions(): ApiEnvelope<SessionListData>
 
     @DELETE("auth/sessions/{sessionId}")
-    suspend fun revokeSession(@Path("sessionId") sessionId: String): retrofit2.Response<Unit>
+    suspend fun revokeSession(@Path("sessionId") sessionId: String): ApiEnvelope<RevokeSessionData>
 
     @POST("token/refresh")
     suspend fun refresh(): ApiEnvelope<LoginData>
