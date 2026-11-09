@@ -26,6 +26,10 @@ The component now has an injectable request boundary for deterministic adversari
 | 403 / 503 | Return forbidden and unavailable responses | Separate generic states; no internal permission metadata | Existing A4 baseline PASS; R4 rerun pending |
 | Partial response | Return explicit partial status | Partial-data notice appears without fabricated values | Existing A4 baseline PASS; R4 rerun pending |
 
+## R4 verification target
+
+R4 target: this verification branch is intended to run on the exact current App commit; the workflow itself must confirm GITHUB_SHA.
+
 ## Baseline evidence — not R3 evidence
 
 - Targeted A4 App workflow [#42685209063](https://github.com/akefadaka-git/arna-app/actions/runs/42685209063): PASS on baseline App SHA `ea2c432ecf1d8d0f02ee7f58984bf8341f8a2bf7`; authenticated browser suite 8/8.
