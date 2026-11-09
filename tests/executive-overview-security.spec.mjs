@@ -67,6 +67,34 @@ test.describe('Executive Overview authenticated browser security', () => {
     await expect.poll(() => requestFailed).toBe(true);
   });
 
+
+  test('session expiry clears previously loaded figures after the API returns 401', async ({ page }) => {
+    let requestCount = 0;
+    await page.route(endpoint, (route) => {
+      requestCount += 1;
+      if (requestCount === 1) {
+        return route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(envelope('SESSION-EXPIRY-DATA')),
+        });
+      }
+      return route.fulfill({
+        status: 401,
+        contentType: 'application/json',
+        body: JSON.stringify({ success: false, error: { code: 'UNAUTHENTICATED', message: 'Unauthenticated.' } }),
+      });
+    });
+
+    await page.goto(baseUrl);
+    await expect(page.getByText('SESSION-EXPIRY-DATA').first()).toBeVisible();
+    const secondRequest = page.waitForRequest((request) => request.url().includes('/api/dashboard/v1/overview') && requestCount >= 1);
+    await page.evaluate(() => window.__a4.auth.setUser(window.__a4.makeUser({ name: 'Refreshed session snapshot' })));
+    await secondRequest;
+    await expect(page.getByTestId('executive-overview-root')).not.toContainText('SESSION-EXPIRY-DATA');
+    await expect.poll(() => page.evaluate(() => window.__a4.auth.isAuthenticated)).toBe(false);
+  });
+
   test('permission revocation clears previously rendered financial figures', async ({ page }) => {
     await page.route(endpoint, (route) => route.fulfill({
       status: 200,
