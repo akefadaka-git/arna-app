@@ -49,7 +49,7 @@ test('tenant changes clear prior-scope figures and abort superseded overview req
 
 test('unmount invalidates pending responses and aborts the active request', async () => {
   const view = await read('../src/features/executive-overview/ExecutiveOverviewView.vue');
-  assert.match(view, /onBeforeUnmount\(\)[\s\S]*?requestSequence \+= 1[\s\S]*?activeController\?\.abort\(\)[\s\S]*?activeController = null/);
+  assert.match(view, /onBeforeUnmount\(\(\) => \{[\s\S]*?requestSequence \+= 1[\s\S]*?activeController\?\.abort\(\)[\s\S]*?activeController = null[\s\S]*?\}\)/);
   assert.match(view, /if \(sequence === requestSequence\) overview\.value = result/);
   assert.match(view, /if \(sequence === requestSequence\) isLoading\.value = false/);
 });
