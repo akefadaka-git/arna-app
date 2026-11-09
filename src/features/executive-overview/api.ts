@@ -10,6 +10,11 @@ export interface ExecutiveOverviewFinanceValue {
 export interface ExecutiveOverviewFinanceWidget {
   readonly key: 'finance.trial_balance';
   readonly status: 'available';
+  readonly source: {
+    readonly domain: 'finance';
+    readonly report_key: 'trial_balance';
+    readonly calculation_version: string;
+  };
   readonly entity: {
     readonly code: string;
     readonly name_am: string;
