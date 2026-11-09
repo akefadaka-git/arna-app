@@ -6,6 +6,8 @@ import Card from '@/components/patterns/Card';
 import LoadingState from '@/components/composites/LoadingState';
 import ErrorState from '@/components/composites/ErrorState';
 import PageTitle from '@/layouts/AppShell/PageTitle';
+import { useLocaleStore } from '@/stores/locale';
+import { formatCalendarDate, useCalendarPreference } from '@/core/dates/calendar';
 
 import {
   fetchExecutiveOverview,
@@ -20,6 +22,8 @@ interface Props {
 
 const props = defineProps<Props>();
 const appName = import.meta.env.VITE_APP_NAME;
+const localeStore = useLocaleStore();
+const { calendarSystem } = useCalendarPreference();
 const entities = ref<readonly ExecutiveOverviewEntity[]>([]);
 const selectedEntityCode = ref('');
 const asOf = ref(localDate());
@@ -28,11 +32,11 @@ const isLoading = ref(true);
 const isRefreshing = ref(false);
 const loadError = ref<unknown | null>(null);
 
-const locale = computed<'am' | 'en'>(() =>
-  typeof document !== 'undefined' && document.documentElement.lang.toLowerCase().startsWith('en')
-    ? 'en'
-    : 'am',
-);
+const locale = computed<'am' | 'en'>(() => localeStore.locale);
+const formattedAsOf = computed(() => {
+  void calendarSystem.value;
+  return formatCalendarDate(`${asOf.value}T12:00:00+03:00`, { dateStyle: 'medium' }, locale.value);
+});
 const selectedEntity = computed(() =>
   entities.value.find((entity) => entity.code === selectedEntityCode.value) ?? null,
 );
@@ -43,10 +47,14 @@ function label(key: keyof ExecutiveOverviewLabels): string {
 }
 
 function localDate(): string {
-  const now = new Date();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  return `${now.getFullYear()}-${month}-${day}`;
+  const parts = new Intl.DateTimeFormat('en', {
+    timeZone: 'Africa/Addis_Ababa',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(new Date());
+  const part = (type: string): string => parts.find((item) => item.type === type)?.value ?? '';
+  return `${part('year')}-${part('month')}-${part('day')}`;
 }
 
 function entityName(entity: ExecutiveOverviewEntity): string {
@@ -141,10 +149,6 @@ onMounted(() => {
               </option>
             </select>
           </label>
-          <label>
-            <span>{{ label('asOfLabel') }}</span>
-            <input v-model="asOf" type="date" required />
-          </label>
           <button type="submit" :disabled="isRefreshing">
             {{ isRefreshing ? label('loadingMessage') : label('refreshLabel') }}
           </button>
@@ -212,8 +216,7 @@ onMounted(() => {
   font-size: var(--mases-font-size-body-sm);
 }
 
-.executive-overview__filters select,
-.executive-overview__filters input {
+.executive-overview__filters select {
   width: 100%;
   min-height: 2.75rem;
   padding: var(--mases-space-2) var(--mases-space-3);
@@ -239,6 +242,16 @@ onMounted(() => {
 .executive-overview__filters button:disabled {
   opacity: 0.65;
   cursor: wait;
+}
+
+.executive-overview__as-of {
+  margin: calc(-1 * var(--mases-space-4)) 0 0;
+  color: var(--mases-color-text-secondary);
+  font-size: var(--mases-font-size-body-sm);
+}
+
+.executive-overview__as-of span {
+  font-weight: var(--mases-font-weight-semibold);
 }
 
 .executive-overview__report {
@@ -331,7 +344,7 @@ onMounted(() => {
 
 @media (min-width: 42rem) {
   .executive-overview__filters {
-    grid-template-columns: minmax(0, 2fr) minmax(12rem, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
   .executive-overview__metrics {
