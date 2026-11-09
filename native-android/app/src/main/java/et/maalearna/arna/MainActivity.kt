@@ -114,7 +114,6 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
                 busy = true
                 scope.launch {
                     try {
-                        repository.listSessions()
                         sessions = repository.listSessions()
                         status = "የመሣሪያ ክፍለ ጊዜዎች"
                     } catch (error: Exception) {
@@ -130,9 +129,14 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
                     scope.launch {
                         try {
                             repository.revokeSession(item.session_id)
-                            if (item.is_current) repository.clearSession()
-                            sessions = repository.listSessions()
-                            status = "የመሣሪያ ክፍለ ጊዜ ተሰርዟል"
+                            if (item.is_current) {
+                                repository.clearSession()
+                                sessions = emptyList()
+                                status = "ከዚህ መሣሪያ ወጥተዋል"
+                            } else {
+                                sessions = repository.listSessions()
+                                status = "የመሣሪያ ክፍለ ጊዜ ተሰርዟል"
+                            }
                         } catch (error: Exception) {
                             status = "ክፍለ ጊዜውን መሰረዝ አልተቻለም"
                         }
