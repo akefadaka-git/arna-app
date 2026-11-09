@@ -23,7 +23,7 @@ const locale = useLocaleStore(pinia);
 // Deferred request executor intentionally ignores AbortSignal. Tests can resolve
 // an old operation after logout or tenant changes to prove sequence/scope guards.
 const requests = [];
-let requestExecutor = (options = {}) => new Promise((resolve, reject) => {
+const deferredRequestExecutor = (options = {}) => new Promise((resolve, reject) => {
   requests.push({
     tenantId: tenant.effectiveTenantId,
     signal: options.signal,
@@ -31,7 +31,10 @@ let requestExecutor = (options = {}) => new Promise((resolve, reject) => {
     reject,
   });
 });
-app.provide(executiveOverviewRequestKey, requestExecutor);
+let requestExecutor = new URLSearchParams(window.location.search).get('deferred') === '1'
+  ? deferredRequestExecutor
+  : getExecutiveOverview;
+app.provide(executiveOverviewRequestKey, (options) => requestExecutor(options));
 
 const makeUser = (overrides = {}) => ({
   id: 9001,
