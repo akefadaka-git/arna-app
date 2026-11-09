@@ -50,9 +50,9 @@ No other role grant or domain permission is widened.
 - The controller checks the approved tenant-bound role and its role_has_permissions pivot again, preventing direct-user-grant and wildcard-only bypasses. The policy also requires the Finance application to be active and the permission record to be global-catalogue or scoped to the trusted tenant.
 - Finance widget output independently requires finance.report.view.
 - Each legal entity is checked through the existing LegalEntityPolicy, which enforces finance.entity.view and the current tenant boundary.
-- Authorized entities are reported separately using the existing FinancialReportService::trialBalance implementation.
+- Authorized entities are reported separately using the existing FinancialReportService::trialBalance implementation. Entities with no chart-of-accounts rows are omitted; the dashboard does not manufacture a zero-balance widget for an unconfigured ledger.
 - No cross-entity aggregation, cross-currency conversion, or client-side accounting calculation is introduced.
-- Users without Finance report and entity permissions receive an empty widgets array.
+- Users without Finance report and entity permissions receive an empty widgets array. Finance widgets carry source domain, report key and calculation/adapter version; entities without a chart of accounts are omitted rather than displayed as synthetic zeroes.
 - The response contains no omitted_widgets field and does not expose hidden widget keys, inaccessible domains, permission slugs, counts, or denial reasons.
 - Financial responses use Cache-Control: private, no-store.
 
@@ -104,7 +104,7 @@ Documentation:
 | Wildcard inheritance exclusion | IMPLEMENTED — tests added, not yet run |
 | Direct-grant/platform-role audience fence | IMPLEMENTED — tests added, not yet run |
 | API route and controller | IMPLEMENTED — tests added, not yet run |
-| Finance report/entity authorization | IMPLEMENTED — uses existing service and policy |
+| Finance report/entity authorization | IMPLEMENTED — uses existing service and policy; unconfigured ledgers omitted |
 | Unauthorized metadata disclosure correction | IMPLEMENTED |
 | App route and navigation gating | IMPLEMENTED — contract test added, not yet run |
 | Existing /dashboard preservation | PASS — route/component not replaced |
