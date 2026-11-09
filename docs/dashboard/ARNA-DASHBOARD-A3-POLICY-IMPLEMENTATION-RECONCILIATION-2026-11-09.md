@@ -47,7 +47,7 @@ No other role grant or domain permission is widened.
 
 - GET /api/dashboard/v1/overview is registered inside the existing auth:sanctum and tenant.membership route group.
 - The route requires auth.permission:dashboard.executive.view and is rate-limited.
-- The controller checks the approved tenant-bound role and its role_has_permissions pivot again, preventing direct-user-grant and wildcard-only bypasses.
+- The controller checks the approved tenant-bound role and its role_has_permissions pivot again, preventing direct-user-grant and wildcard-only bypasses. The policy also requires the Finance application to be active and the permission record to be global-catalogue or scoped to the trusted tenant.
 - Finance widget output independently requires finance.report.view.
 - Each legal entity is checked through the existing LegalEntityPolicy, which enforces finance.entity.view and the current tenant boundary.
 - Authorized entities are reported separately using the existing FinancialReportService::trialBalance implementation.
