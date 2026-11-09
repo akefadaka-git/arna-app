@@ -123,7 +123,7 @@
  *   view its schedule and its statement. The backend's LoanPolicy
  *   (A.52) re-enforces the ownership check on the request.
  *
- *   The catalogue route carries `meta.permission = 'loan_product.view'`.
+ *   The catalogue route carries `meta.permission = 'loan.view'`.
  *   See the block §"The catalogue permission — please verify" below.
  *
  *   All three routes pass labels via `props: { labels: ... }`, matching
@@ -153,7 +153,7 @@
  * permission for a distinct resource, dot-notation scoped by the
  * resource noun.
  *
- * Applying that pattern, I am using `loan_product.view`. If the actual
+ * Applying that pattern, I am using `loan.view`. If the actual
  * permission string on the backend's LoanProductController is
  * different (e.g. `loan.product.view`, or a broader loan-domain read),
  * this is a one-line change to the catalogue route's meta block. The
@@ -335,7 +335,7 @@
  *            loan-detail route. Both sub-resources are read-only
  *            projections of a loan aggregate.
  *          · The catalogue route carries `meta.permission =
- *            'loan_product.view'`. See the CR-LW3 block §"The
+ *            'loan.view'`. See the CR-LW3 block §"The
  *            catalogue permission — please verify".
  *          · All three routes pass `props: { labels: ... }`, matching
  *            every pure view in this tree. See the CR-LW3 block §"The
@@ -725,7 +725,7 @@ export const routesWorkspace: RouteRecordRaw[] = [
         name: 'loan-products',
         component: () => import('@/features/loans/LoanProductListView.vue'),
         props: { labels: loanProductListViewLabels },
-        meta: { permission: 'loan_product.view' },
+        meta: { permission: 'loan.view' },
       },
 
       // -----------------------------------------------------------------------
