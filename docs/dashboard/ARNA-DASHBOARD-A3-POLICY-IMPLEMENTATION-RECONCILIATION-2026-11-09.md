@@ -59,7 +59,7 @@ No other role grant or domain permission is widened.
 ## 5. App implementation
 
 - A separate /executive-overview route is added under the existing authenticated workspace layout.
-- The route and sidebar item both require dashboard.executive.view.
+- The route and sidebar item both require dashboard.executive.view and the approved role allowlist as UX gates; the backend remains authoritative for the tenant-bound role assignment.
 - The existing /dashboard feature launcher remains separate and is not repurposed.
 - The page renders only widgets returned by the API.
 - As-of and generated timestamps use the shared `formatCalendarDate` utility; E.C. is the default and G.C. is displayed only under the user's existing calendar preference.
@@ -107,7 +107,7 @@ Documentation:
 | API route and controller | IMPLEMENTED — tests added, not yet run |
 | Finance report/entity authorization | IMPLEMENTED — uses existing service and policy; unconfigured ledgers omitted |
 | Unauthorized metadata disclosure correction | IMPLEMENTED |
-| App route and navigation gating | IMPLEMENTED — contract test added, not yet run |
+| App route and navigation gating | IMPLEMENTED — permission and approved-role UX gates; contract test added, not yet run |
 | Existing /dashboard preservation | PASS — route/component not replaced |
 | Exact-HEAD API test execution | NOT RUN |
 | Exact-HEAD App test/build execution | NOT RUN |
