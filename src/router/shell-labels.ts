@@ -1674,7 +1674,7 @@ export const authenticatedNavItems: ReadonlyArray<NavItem> = [
     id: 'executive-overview',
     label: 'የአስፈጻሚ እይታ',
     to: '/executive-overview',
-    icon: 'chart-no-axes-combined',
+    icon: 'line-chart',
     permission: 'finance.report.view',
   },
   {
