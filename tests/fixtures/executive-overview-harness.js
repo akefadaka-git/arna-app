@@ -2,7 +2,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 
 import ExecutiveOverviewView from '../../src/features/executive-overview/ExecutiveOverviewView.vue';
-import { executiveOverviewRequestKey, getExecutiveOverview } from '../../src/features/executive-overview/service';
+import { executiveOverviewRequestKey } from '../../src/features/executive-overview/service';
 import { executiveOverviewEnglishLabels } from '../../src/features/executive-overview/labels';
 import { useAuthStore } from '../../src/stores/auth';
 import { useTenantStore, createInMemoryTenantIdStorage, setTenantIdStorage } from '../../src/stores/tenant';
