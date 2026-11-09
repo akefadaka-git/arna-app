@@ -10,6 +10,9 @@ on:
       - "src/stores/auth*"
       - "src/stores/tenant*"
       - "tests/executive-overview-route-contract.test.mjs"
+      - "tests/executive-overview-security.spec.mjs"
+      - "tests/fixtures/executive-overview-harness.html"
+      - "tests/fixtures/executive-overview-harness.js"
       - "docs/dashboard/ARNA-EXECUTIVE-OVERVIEW-A4-FRONTEND-VERIFICATION.md"
 
 permissions:
@@ -58,3 +61,15 @@ jobs:
           done
           curl --fail --silent http://127.0.0.1:4173/ >/dev/null
           PUBLIC_SITE_URL=http://127.0.0.1:4173/ npm run test:public-browser
+      - name: Run authenticated Executive Overview session and isolation browser tests
+        shell: bash
+        run: |
+          VITE_API_BASE_URL=http://127.0.0.1:4174 npm run dev -- --host 127.0.0.1 --port 4174 --strictPort > "$RUNNER_TEMP/workspace-preview.log" 2>&1 &
+          WORKSPACE_PID=$!
+          trap 'kill "$WORKSPACE_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4174/tests/fixtures/executive-overview-harness.html >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4174/tests/fixtures/executive-overview-harness.html >/dev/null
+          EXECUTIVE_OVERVIEW_TEST_URL=http://127.0.0.1:4174/tests/fixtures/executive-overview-harness.html npx playwright test tests/executive-overview-security.spec.mjs
