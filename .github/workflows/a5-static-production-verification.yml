@@ -58,3 +58,41 @@ jobs:
           npm run test:wallet-open-form-contract
           npm run test:workspace-dashboard-route-contract
           npm run test:error-handling-contract
+
+      # Short-lived CI handoff packages for the four independently hosted sites.
+      # Hidden files are included because each verified output contains its required .htaccess.
+      - name: Package Workspace static site
+        uses: actions/upload-artifact@v4
+        with:
+          name: arna-workspace-static
+          path: dist/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Package Shareholder Portal static site
+        uses: actions/upload-artifact@v4
+        with:
+          name: arna-shareholder-portal-static
+          path: dist-portal/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Package Administration static site
+        uses: actions/upload-artifact@v4
+        with:
+          name: arna-administration-static
+          path: dist-admin/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Package Public Website static site
+        uses: actions/upload-artifact@v4
+        with:
+          name: arna-public-website-static
+          path: dist-public/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1
