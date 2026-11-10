@@ -328,7 +328,7 @@ const props = withDefaults(defineProps<Props>(), {
 defineSlots<{
   default(props: {
     id: string;
-    'aria-describedby': string | undefined;
+    ariaDescribedby: string | undefined;
     invalid: boolean;
     required: boolean;
     disabled: boolean;
@@ -486,7 +486,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
     >
       <slot
         :id="htmlFor"
-        :aria-describedby="ariaDescribedBy"
+        :ariaDescribedby="ariaDescribedBy"
         :invalid="resolvedInvalid"
         :required="required"
         :disabled="disabled"
