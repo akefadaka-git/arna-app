@@ -1,0 +1,50 @@
+name: ARNA App vue-tsc 3 dependency remediation
+
+on:
+  push:
+    branches:
+      - maintenance/vue-tsc-3-audit-fix
+    paths:
+      - "package.json"
+      - ".github/workflows/vue-tsc-3-audit-fix.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: vue-tsc-3-audit-fix
+  cancel-in-progress: false
+
+jobs:
+  lock-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.12.0"
+          cache: npm
+      - name: Regenerate the npm lockfile from exact manifest pins
+        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+      - name: Commit lockfile only when it changes
+        run: |
+          if ! git diff --quiet -- package-lock.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add package-lock.json
+            git commit -m "chore(deps): refresh lockfile for vue-tsc 3"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          else
+            echo "Lockfile already matches package.json."
+          fi
+      - name: Install exact locked dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Require no moderate or higher npm advisories
+        run: npm audit --audit-level=moderate
+      - name: Vue and TypeScript type check
+        run: npm run type-check
+      - name: Verify all four production builds
+        run: npm run build:all
