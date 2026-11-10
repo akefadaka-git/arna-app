@@ -41,7 +41,8 @@ test('tenant changes clear prior-scope figures and abort superseded overview req
   const view = await read('../src/features/executive-overview/ExecutiveOverviewView.vue');
   assert.match(view, /activeController\?\.abort\(\)/);
   assert.match(view, /const controller = new AbortController\(\)/);
-  assert.match(view, /getExecutiveOverview\(\{ signal: controller\.signal \}\)/);
+  assert.match(view, /requestOverview\(\{ signal: controller\.signal \}\)/);
+  assert.match(view, /inject\(executiveOverviewRequestKey, getExecutiveOverview\)/);
   assert.match(view, /watch\([\s\S]*?tenant\.effectiveTenantId[\s\S]*?clearSensitiveViewState\(\)[\s\S]*?void load\(\)/);
   assert.match(view, /sequence === requestSequence/);
   assert.match(view, /!controller\.signal\.aborted/);

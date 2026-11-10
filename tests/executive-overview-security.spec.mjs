@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 
 const baseUrl = process.env.EXECUTIVE_OVERVIEW_TEST_URL ?? 'http://127.0.0.1:4174/tests/fixtures/executive-overview-harness.html';
 const endpoint = '**/api/dashboard/v1/overview';
+const deferredUrl = `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}deferred=1`;
 
 function envelope(entityCode = 'A4-ENTITY', status = 'complete') {
   return {
@@ -36,37 +37,22 @@ test.describe('Executive Overview authenticated browser security', () => {
     await expect(page.getByText('A4-ENTITY').first()).toBeVisible();
   });
 
-  test('logout clears loaded figures and a delayed response cannot restore them', async ({ page }) => {
-    let release;
-    const delayed = new Promise((resolve) => { release = resolve; });
-    let requestFailed = false;
-    page.on('requestfailed', (request) => {
-      if (request.url().includes('/api/dashboard/v1/overview')) requestFailed = true;
-    });
-    await page.route(endpoint, async (route) => {
-      await delayed;
-      try {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify(envelope('STALE-LOGOUT-DATA')),
-        });
-      } catch {
-        // An aborted browser request is the expected result.
-      }
-    });
+  test('logout clears loaded figures and a non-cancellable late result cannot restore them', async ({ page }) => {
+    await page.goto(deferredUrl);
+    await expect.poll(() => page.evaluate(() => window.__a4.requests.length)).toBe(1);
+    await page.evaluate((data) => window.__a4.resolveRequest(0, data), envelope('LOADED-LOGOUT-DATA').data);
+    await expect(page.getByText('LOADED-LOGOUT-DATA').first()).toBeVisible();
 
-    const initialRequest = page.waitForRequest((request) => request.url().includes('/api/dashboard/v1/overview'));
-    await page.goto(baseUrl);
-    await initialRequest;
+    await page.evaluate(() => window.__a4.auth.setUser(window.__a4.makeUser({ name: 'Refreshed session' })));
+    await expect.poll(() => page.evaluate(() => window.__a4.requests.length)).toBe(2);
     await page.evaluate(() => window.__a4.auth.clearSession());
-    await expect(page.getByTestId('executive-overview-root')).not.toContainText('STALE-LOGOUT-DATA');
-    release();
-    await page.waitForTimeout(100);
-    await expect(page.getByTestId('executive-overview-root')).not.toContainText('STALE-LOGOUT-DATA');
-    await expect.poll(() => requestFailed).toBe(true);
-  });
+    await expect(page.getByTestId('executive-overview-root')).not.toContainText('LOADED-LOGOUT-DATA');
 
+    // The deferred service intentionally ignores AbortSignal and completes anyway.
+    await page.evaluate((data) => window.__a4.resolveRequest(1, data), envelope('STALE-LOGOUT-DATA').data);
+    await expect(page.getByTestId('executive-overview-root')).not.toContainText('STALE-LOGOUT-DATA');
+    await expect(page.getByTestId('executive-overview-root')).not.toContainText('LOADED-LOGOUT-DATA');
+  });
 
   test('session expiry clears previously loaded figures after the API returns 401', async ({ page }) => {
     let requestCount = 0;
@@ -108,55 +94,55 @@ test.describe('Executive Overview authenticated browser security', () => {
     await expect(page.getByTestId('executive-overview-root')).not.toContainText('REVOKED-FINANCE-DATA');
   });
 
-  test('rapid tenant switching ignores an older response that resolves after the new tenant', async ({ page }) => {
-    let releaseTenantA;
-    const tenantAGate = new Promise((resolve) => { releaseTenantA = resolve; });
-    await page.route(endpoint, async (route) => {
-      const tenantId = route.request().headers()['x-tenant-id'];
-      if (tenantId === '101') {
-        await tenantAGate;
-        try {
-          await route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify(envelope('TENANT-A-STALE')),
-          });
-        } catch {
-          // The tenant transition should abort the previous request.
-        }
-        return;
-      }
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify(envelope('TENANT-B-CURRENT')),
-      });
-    });
-
-    const tenantARequest = page.waitForRequest((request) =>
-      request.url().includes('/api/dashboard/v1/overview')
-      && request.headers()['x-tenant-id'] === '101');
-    await page.goto(baseUrl);
-    await tenantARequest;
-    const tenantBRequest = page.waitForRequest((request) =>
-      request.url().includes('/api/dashboard/v1/overview')
-      && request.headers()['x-tenant-id'] === '202');
+  test('tenant switch rejects a non-cancellable old-tenant operation after the new tenant loads', async ({ page }) => {
+    await page.goto(deferredUrl);
+    await expect.poll(() => page.evaluate(() => window.__a4.requests.length)).toBe(1);
     await page.evaluate(() => window.__a4.tenant.setActiveTenant(202));
-    await tenantBRequest;
+    await expect.poll(() => page.evaluate(() => window.__a4.requests.length)).toBe(2);
+    await page.evaluate((data) => window.__a4.resolveRequest(1, data), envelope('TENANT-B-CURRENT').data);
     await expect(page.getByText('TENANT-B-CURRENT').first()).toBeVisible();
-    releaseTenantA();
-    await page.waitForTimeout(100);
+
+    await page.evaluate((data) => window.__a4.resolveRequest(0, data), envelope('TENANT-A-LATE').data);
     await expect(page.getByText('TENANT-B-CURRENT').first()).toBeVisible();
-    await expect(page.getByTestId('executive-overview-root')).not.toContainText('TENANT-A-STALE');
+    await expect(page.getByTestId('executive-overview-root')).not.toContainText('TENANT-A-LATE');
+    const identities = await page.evaluate(() => window.__a4.requests.map((request) => request.tenantId));
+    expect(identities).toEqual([101, 202]);
   });
 
-  test('unmount aborts an outstanding overview request', async ({ page }) => {
+  test('A to B to A transition rejects the first A session after the final A session loads', async ({ page }) => {
+    await page.goto(deferredUrl);
+    await expect.poll(() => page.evaluate(() => window.__a4.requests.length)).toBe(1);
+
+    await page.evaluate(() => window.__a4.tenant.setActiveTenant(202));
+    await expect.poll(() => page.evaluate(() => window.__a4.requests.length)).toBe(2);
+    await page.evaluate(() => window.__a4.tenant.setActiveTenant(101));
+    await expect.poll(() => page.evaluate(() => window.__a4.requests.length)).toBe(3);
+
+    await page.evaluate((data) => window.__a4.resolveRequest(1, data), envelope('TENANT-B-INTERMEDIATE').data);
+    await expect(page.getByTestId('executive-overview-root')).not.toContainText('TENANT-B-INTERMEDIATE');
+    await page.evaluate((data) => window.__a4.resolveRequest(2, data), envelope('TENANT-A-FINAL').data);
+    await expect(page.getByText('TENANT-A-FINAL').first()).toBeVisible();
+
+    await page.evaluate((data) => window.__a4.resolveRequest(0, data), envelope('TENANT-A-FIRST-SESSION-LATE').data);
+    await expect(page.getByText('TENANT-A-FINAL').first()).toBeVisible();
+    await expect(page.getByTestId('executive-overview-root')).not.toContainText('TENANT-A-FIRST-SESSION-LATE');
+    const identities = await page.evaluate(() => window.__a4.requests.map((request) => request.tenantId));
+    expect(identities).toEqual([101, 202, 101]);
+  });
+
+  test('unmount aborts an outstanding real API request', async ({ page }) => {
     let release;
     const delayed = new Promise((resolve) => { release = resolve; });
     let requestFailed = false;
     page.on('requestfailed', (request) => {
       if (request.url().includes('/api/dashboard/v1/overview')) requestFailed = true;
     });
+
+    await page.goto(deferredUrl);
+    await expect.poll(() => page.evaluate(() => window.__a4.requests.length)).toBe(1);
+    await page.evaluate((data) => window.__a4.resolveRequest(0, data), envelope('INITIAL-UNMOUNT-DATA').data);
+    await expect(page.getByText('INITIAL-UNMOUNT-DATA').first()).toBeVisible();
+
     await page.route(endpoint, async (route) => {
       await delayed;
       try {
@@ -169,15 +155,16 @@ test.describe('Executive Overview authenticated browser security', () => {
         // Expected after AbortController cancellation.
       }
     });
-
-    const initialRequest = page.waitForRequest((request) => request.url().includes('/api/dashboard/v1/overview'));
-    await page.goto(baseUrl);
-    await initialRequest;
+    const pendingRequest = page.waitForRequest((request) => request.url().includes('/api/dashboard/v1/overview'));
+    await page.evaluate(() => {
+      window.__a4.useRealRequestExecutor();
+      window.__a4.auth.setUser(window.__a4.makeUser({ name: 'Unmount refresh' }));
+    });
+    await pendingRequest;
     await page.evaluate(() => window.__a4.unmount());
     await expect(page.getByTestId('executive-overview-root')).toHaveCount(0);
     release();
-    await page.waitForTimeout(100);
-    expect(requestFailed).toBe(true);
+    await expect.poll(() => requestFailed).toBe(true);
   });
 
   test('forbidden and unavailable responses render separate non-disclosing states', async ({ page }) => {
