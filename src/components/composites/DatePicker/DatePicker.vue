@@ -914,7 +914,7 @@ function onCellClick(cell: GridCell): void {
       />
 
       <button
-        ref="triggerRef"
+        :ref="triggerRef"
         type="button"
         :disabled="disabled"
         :aria-label="labels.openCalendar"
@@ -935,7 +935,7 @@ function onCellClick(cell: GridCell): void {
     <div
       v-if="isOpen"
       :id="popupId"
-      ref="popupRef"
+      :ref="popupRef"
       role="dialog"
       :aria-modal="'false'"
       :aria-label="headerLabel"
