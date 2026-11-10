@@ -1,0 +1,60 @@
+name: A5 static production artifact verification
+
+on:
+  pull_request:
+    branches: [ "feat/executive-overview-a3" ]
+    paths:
+      - "docs/operations/A5-STATIC-PRODUCTION-HOSTING-BASELINE.md"
+      - ".github/workflows/a5-static-production-verification.yml"
+      - "scripts/verify-static-build.mjs"
+      - "vite.config.ts"
+      - ".env.workspace"
+      - ".env.portal"
+      - ".env.admin"
+      - ".env.public"
+  push:
+    branches: [ "hardening/**" ]
+    paths:
+      - "docs/operations/A5-STATIC-PRODUCTION-HOSTING-BASELINE.md"
+      - ".github/workflows/a5-static-production-verification.yml"
+      - "scripts/verify-static-build.mjs"
+      - "vite.config.ts"
+      - ".env.workspace"
+      - ".env.portal"
+      - ".env.admin"
+      - ".env.public"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: a5-app-static-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  static-production:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Type-check and build all four applications
+        run: npm run build
+      - name: Verify production static artifacts and host policy
+        run: npm run verify:build
+      - name: Run static artifact smoke and security contracts
+        run: |
+          npm run test:public-build-smoke
+          npm run test:brand-palette-contract
+          npm run test:design-system-theme-contract
+          npm run test:app-shell-responsive-contract
+          npm run test:wallet-open-form-contract
+          npm run test:workspace-dashboard-route-contract
+          npm run test:error-handling-contract
