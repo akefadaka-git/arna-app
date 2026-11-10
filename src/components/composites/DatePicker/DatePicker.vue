@@ -426,6 +426,10 @@ const rootRef = ref<HTMLElement | null>(null);
 const inputRef = ref<HTMLInputElement | null>(null);
 const triggerRef = ref<HTMLButtonElement | null>(null);
 const popupRef = ref<HTMLElement | null>(null);
+
+// Template string refs are not counted as script references by vue-tsc.
+void triggerRef;
+void popupRef;
 const gridRef = ref<HTMLTableElement | null>(null);
 
 // -----------------------------------------------------------------------------
@@ -914,7 +918,7 @@ function onCellClick(cell: GridCell): void {
       />
 
       <button
-        :ref="triggerRef"
+        ref="triggerRef"
         type="button"
         :disabled="disabled"
         :aria-label="labels.openCalendar"
@@ -935,7 +939,7 @@ function onCellClick(cell: GridCell): void {
     <div
       v-if="isOpen"
       :id="popupId"
-      :ref="popupRef"
+      ref="popupRef"
       role="dialog"
       :aria-modal="'false'"
       :aria-label="headerLabel"
