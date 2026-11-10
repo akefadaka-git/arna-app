@@ -9,6 +9,11 @@ on:
       - "package-lock.json"
       - ".github/workflows/vue-tsc-3-audit-fix.yml"
       - ".github/workflows/vue-tsc-3-pr-verification.yml"
+      - "src/components/composites/DatePicker/DatePicker.vue"
+      - "src/components/composites/FormField/FormField.vue"
+      - "src/components/composites/FormField/index.ts"
+      - "src/components/patterns/ErrorPage/ErrorPage.vue"
+      - "src/features/wallet/WalletStatementView.vue"
 
 permissions:
   contents: read
