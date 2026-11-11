@@ -191,6 +191,22 @@ test.describe('ARNA Calendar E.C. browser verification', () => {
     expect(captured.cancel).toEqual({ original_starts_on_ec: { year: 2016, month: 1, day: 1 } });
   });
 
+  test('builds the month grid from the selected 13-month E.C. civil month', async ({ page }) => {
+    await installCalendarApi(page);
+    await mountCalendar(page);
+    const expectedDays = await page.evaluate(async () => {
+      const { getEthiopicDateParts, ethiopicDateToGregorian } = await import('/src/core/dates/calendar.ts');
+      const selected = getEthiopicDateParts(new Date());
+      const dayThirty = ethiopicDateToGregorian({ year: selected.year, month: selected.month, day: 30 });
+      const daySix = ethiopicDateToGregorian({ year: selected.year, month: 13, day: 6 });
+      const dayFive = ethiopicDateToGregorian({ year: selected.year, month: 13, day: 5 });
+      return selected.month === 13 ? (daySix ? 6 : dayFive ? 5 : 0) : (dayThirty ? 30 : 0);
+    });
+    await page.getByRole('button', { name: 'ወር', exact: true }).click();
+    await expect(page.locator('.calendar-workspace__month-day')).toHaveCount(42);
+    await expect.poll(() => page.locator('.calendar-workspace__month-day:not(.is-outside)').count()).toBe(expectedDays);
+  });
+
   test('keeps the Calendar workspace usable at mobile widths and has no serious accessibility violations', async ({ page }) => {
     await installCalendarApi(page);
     for (const viewport of [{ width: 390, height: 844 }, { width: 320, height: 740 }]) {
