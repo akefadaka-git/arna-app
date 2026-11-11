@@ -52,6 +52,39 @@ class AndroidSecureStorageInstrumentedTest {
     }
 
     @Test
+    fun tenantSelectionIsEncryptedAtRestAndPersistsAcrossInstances() {
+        val store = TenantSelectionStore(context)
+        val file = File(context.noBackupFilesDir, "arna-tenant.enc")
+        store.clear()
+
+        store.save(481L)
+
+        assertTrue(file.exists())
+        assertFalse(String(file.readBytes(), Charsets.UTF_8).contains("481"))
+        assertEquals(481L, TenantSelectionStore(context).read())
+
+        store.clear()
+        assertFalse(file.exists())
+        assertNull(store.read())
+    }
+
+    @Test
+    fun tamperedTenantSelectionIsRejectedAndRemoved() {
+        val store = TenantSelectionStore(context)
+        val file = File(context.noBackupFilesDir, "arna-tenant.enc")
+        store.clear()
+        store.save(927L)
+
+        val payload = Base64.decode(file.readBytes(), Base64.NO_WRAP)
+        assertTrue(payload.size > 12)
+        payload[payload.lastIndex] = (payload.last().toInt() xor 0x01).toByte()
+        file.writeBytes(Base64.encode(payload, Base64.NO_WRAP))
+
+        assertNull(store.read())
+        assertFalse(file.exists())
+    }
+
+    @Test
     fun installationIdentityPersistsAcrossInstancesAndHasExpectedEntropyLength() {
         val first = DeviceIdentity(context).getOrCreate()
         val second = DeviceIdentity(context).getOrCreate()

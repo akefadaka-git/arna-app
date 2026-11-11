@@ -1,4 +1,5 @@
 name: Native Android verification
+# A3 includes authenticated tenant selection and the native launcher workspace.
 
 on:
   pull_request:
