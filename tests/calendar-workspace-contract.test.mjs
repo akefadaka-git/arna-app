@@ -45,3 +45,34 @@ test('Calendar view preserves E.C.-first shared date formatting and mobile layou
   assert.match(view, /@media \(max-width: 640px\)/);
   assert.match(view, /role="alert"/);
 });
+
+
+test('E.C. API contract uses native civil-date input, output and range filters', () => {
+  assert.match(api, /starts_on_ec/);
+  assert.match(api, /ends_on_ec/);
+  assert.match(api, /starts_at_ec/);
+  assert.match(api, /ends_at_ec/);
+  assert.match(api, /from_ec/);
+  assert.match(api, /to_ec/);
+  assert.match(api, /until_ec/);
+  assert.match(api, /calendar_system/);
+  assert.match(view, /starts_on_ec/);
+  assert.match(view, /ethiopian_time/);
+  assert.match(view, /listCalendarEvents\(range\(\)\)/);
+  assert.match(view, /from_ec/);
+  assert.match(view, /allDay/);
+  assert.match(view, /calendarSystem\.value === 'ethiopic'/);
+});
+
+test('E.C. recurrence exceptions use the authenticated Calendar API', () => {
+  assert.match(api, /listCalendarOccurrences/);
+  assert.match(api, /occurrences\/cancel/);
+  assert.match(api, /occurrences\/move/);
+  assert.match(view, /listCalendarOccurrences/);
+  assert.match(view, /cancelCalendarOccurrence/);
+  assert.match(view, /moveCalendarOccurrence/);
+  assert.match(view, /original_starts_on_ec/);
+  assert.match(view, /override_starts_on_ec/);
+  assert.match(view, /override_ends_on_ec/);
+  assert.match(view, /hasRecurrenceUntil/);
+});
