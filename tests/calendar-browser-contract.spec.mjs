@@ -129,9 +129,9 @@ test.describe('ARNA Calendar E.C. browser verification', () => {
     }
     await composer.getByLabel('ድግግሞሽ').selectOption('monthly');
     await composer.getByLabel('የመጨረሻ ቀን ይግለጹ').check();
-    await composer.getByLabel('መጨሻ ዓመት').fill('2016');
-    await composer.getByLabel('መጨሻ ወር').selectOption('2');
-    await composer.getByLabel('መጨሻ ቀን').fill('1');
+    await composer.getByLabel('መጨረሻ ዓመት').fill('2016');
+    await composer.getByLabel('መጨረሻ ወር').selectOption('2');
+    await composer.getByLabel('መጨረሻ ቀን').fill('1');
     await composer.getByRole('button', { name: 'አስቀምጥ' }).click();
 
     await expect.poll(() => captured.create).not.toBeNull();
