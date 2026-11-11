@@ -1,8 +1,11 @@
 package et.maalearna.arna
 
 import android.os.Bundle
+import android.content.Intent
+import android.net.Uri
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import et.maalearna.arna.network.ArnaRepository
 import et.maalearna.arna.network.DeviceSessionDto
@@ -308,7 +312,18 @@ private fun LauncherApplicationCard(application: LauncherApplicationDto, locale:
     val amharic = locale.lowercase().startsWith("am")
     val name = if (amharic) application.name_am else application.name_en
     val description = if (amharic) application.description_am else application.description_en
-    Card(modifier = Modifier.fillMaxWidth()) {
+    val context = LocalContext.current
+    val launchUri = application.domain?.let { domain ->
+        Uri.parse("https://" + domain).takeIf {
+            it.scheme == "https" && it.host == domain.lowercase() &&
+                it.host?.endsWith(".maalearna.com.et") == true
+        }
+    }
+    Card(
+        modifier = Modifier.fillMaxWidth().clickable(enabled = launchUri != null) {
+            launchUri?.let { context.startActivity(Intent(Intent.ACTION_VIEW, it)) }
+        }
+    ) {
         Column(modifier = Modifier.fillMaxWidth().padding(14.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(application.icon_key ?: "▦", style = MaterialTheme.typography.titleLarge)
@@ -321,7 +336,7 @@ private fun LauncherApplicationCard(application: LauncherApplicationDto, locale:
                 Text(it, style = MaterialTheme.typography.bodyMedium)
             }
             application.domain?.takeIf { it.isNotBlank() }?.let {
-                Text(it, style = MaterialTheme.typography.bodySmall)
+                Text(it + if (launchUri != null) " · Open" else "", style = MaterialTheme.typography.bodySmall)
             }
         }
     }
