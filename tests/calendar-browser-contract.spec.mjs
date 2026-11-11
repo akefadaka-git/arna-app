@@ -81,6 +81,7 @@ test.describe('ARNA Calendar E.C. browser verification', () => {
   test.use({ timezoneId: 'Africa/Addis_Ababa' });
 
   test('converts E.C. civil dates, Pagume leap/common boundaries, and locale formatting in Chromium', async ({ page }) => {
+    await installCalendarApi(page);
     await mountCalendar(page);
     const result = await page.evaluate(async () => {
       const calendar = await import('/src/core/dates/calendar.ts');
@@ -105,7 +106,7 @@ test.describe('ARNA Calendar E.C. browser verification', () => {
   test('renders authoritative E.C. event dates and Ethiopian time; submits E.C. all-day recurrence', async ({ page }) => {
     const captured = await installCalendarApi(page);
     await mountCalendar(page);
-    await expect(page.getByText('መስከረም 1 2016', { exact: false })).toBeVisible();
+    await expect(page.getByText('መስከረም 1 2016', { exact: false }).first()).toBeVisible();
     await expect(page.getByText(/03:00/)).toBeVisible();
 
     const initialFilter = captured.eventFilters[0];
@@ -152,10 +153,11 @@ test.describe('ARNA Calendar E.C. browser verification', () => {
   });
 
   test('renders E.C. dates in English when the document locale is English', async ({ page }) => {
-    await page.addInitScript(() => { document.documentElement.lang = 'en'; });
     await installCalendarApi(page);
     await mountCalendar(page);
-    await expect(page.getByText('Meskerem 1, 2016', { exact: false })).toBeVisible();
+    await page.evaluate(() => { document.documentElement.lang = 'en'; });
+    await page.getByRole('button', { name: 'አድስ' }).click();
+    await expect(page.getByText('Meskerem 1, 2016', { exact: false }).first()).toBeVisible();
     await expect(page.getByRole('heading', { name: 'የቀን መቁጠሪያ' })).toBeVisible();
   });
 
@@ -172,9 +174,9 @@ test.describe('ARNA Calendar E.C. browser verification', () => {
     await moveForm.getByLabel('አዲስ ዓመት').fill('2016');
     await moveForm.getByLabel('አዲስ ወር').selectOption('1');
     await moveForm.getByLabel('አዲስ ቀን').fill('2');
-    await moveForm.getByLabel('መጨሻ ዓመት').fill('2016');
-    await moveForm.getByLabel('መጨሻ ወር').selectOption('1');
-    await moveForm.getByLabel('መጨሻ ቀን').fill('2');
+    await moveForm.getByLabel('መጨረሻ ዓመት').fill('2016');
+    await moveForm.getByLabel('መጨረሻ ወር').selectOption('1');
+    await moveForm.getByLabel('መጨረሻ ቀን').fill('2');
     await moveForm.getByRole('button', { name: 'ቀኑን አዘምን' }).click();
     await expect.poll(() => captured.move).not.toBeNull();
     expect(captured.move).toMatchObject({
