@@ -1,8 +1,10 @@
 package et.maalearna.arna.network
 
+import com.google.gson.Gson
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
@@ -10,7 +12,6 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
-import retrofit2.http.Header
 
 data class AndroidLoginRequest(
     val email: String,
@@ -34,6 +35,9 @@ data class LoginData(
 )
 
 data class ApiEnvelope<T>(val success: Boolean, val data: T? = null)
+data class ApiErrorEnvelope(val error: ApiErrorDto? = null)
+data class ApiErrorDto(val code: String? = null, val message: String? = null)
+data class LogoutData(val logged_out: Boolean? = null)
 
 data class DeviceSessionDto(
     val session_id: String,
@@ -47,8 +51,69 @@ data class DeviceSessionDto(
     val is_current: Boolean
 )
 
-data class SessionListData(val sessions: List<DeviceSessionDto> )
+data class SessionListData(val sessions: List<DeviceSessionDto>)
 data class RevokeSessionData(val revoked: Boolean)
+
+class ArnaApiException(
+    val httpStatus: Int,
+    val errorCode: String?,
+    val safeMessage: String
+) : Exception(safeMessage)
+
+class ArnaNetworkException(cause: Throwable) :
+    Exception("ARNA network request failed.", cause)
+
+internal fun HttpException.toArnaApiException(): ArnaApiException {
+    val payload = try {
+        response()?.errorBody()?.string()?.let {
+            Gson().fromJson(it, ApiErrorEnvelope::class.java)
+        }
+    } catch (_: Exception) {
+        null
+    }
+    val statusMessage = when (code()) {
+        401 -> "Authentication is required or the session has expired."
+        403 -> "You are not authorized to perform this action."
+        404 -> "The requested ARNA resource was not found."
+        409 -> "The request conflicts with the current session state."
+        422 -> "Some submitted information is invalid."
+        429 -> "Too many requests. Please wait and try again."
+        in 500..599 -> "ARNA is temporarily unavailable. Please try again later."
+        else -> "The request could not be completed."
+    }
+    val message = payload?.error?.message
+        ?.takeIf { it.isNotBlank() && it.length <= 240 }
+        ?: statusMessage
+    return ArnaApiException(code(), payload?.error?.code, message)
+}
+
+/**
+ * Retry only idempotent GET calls after transport failures. Authentication,
+ * MFA, refresh, revoke and logout POST/DELETE requests are never replayed.
+ */
+private class SafeGetRetryInterceptor(private val retries: Int = 2) : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
+        val request = chain.request()
+        if (request.method != "GET") return chain.proceed(request)
+
+        var attempt = 0
+        while (true) {
+            try {
+                return chain.proceed(request)
+            } catch (error: java.io.IOException) {
+                if (attempt >= retries) throw error
+                val delayMillis = 250L * (1L shl attempt)
+                try {
+                    Thread.sleep(delayMillis)
+                } catch (interrupted: InterruptedException) {
+                    Thread.currentThread().interrupt()
+                    throw java.io.IOException("Request retry interrupted.", interrupted)
+                }
+                attempt += 1
+            }
+        }
+    }
+}
 
 interface ArnaApi {
     @POST("login")
@@ -62,6 +127,9 @@ interface ArnaApi {
 
     @POST("token/refresh")
     suspend fun refresh(): ApiEnvelope<LoginData>
+
+    @POST("logout")
+    suspend fun logout(): ApiEnvelope<LogoutData>
 }
 
 class ArnaApiFactory(
@@ -77,7 +145,9 @@ class ArnaApiFactory(
             chain.proceed(request.build())
         }
         val client = OkHttpClient.Builder()
+            .retryOnConnectionFailure(false)
             .addInterceptor(auth)
+            .addInterceptor(SafeGetRetryInterceptor())
             .build()
         return Retrofit.Builder()
             .baseUrl(baseUrl.trimEnd('/') + "/api/")
