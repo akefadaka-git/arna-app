@@ -76,7 +76,16 @@ const selectedEvent = computed(() => events.value.find((event) => event.id === s
 const canUpdateEvents = computed(() => auth.permissions.includes('calendar.update'));
 const canReserveResources = computed(() => auth.permissions.includes('calendar.reserve'));
 const monthDays = computed(() => {
-  const first = new Date(selectedDate.value.getFullYear(), selectedDate.value.getMonth(), 1);
+  let first: Date;
+  if (calendarSystem.value === 'ethiopic') {
+    const selected = getEthiopicDateParts(selectedDate.value);
+    const gregorianFirst = ethiopicDateToGregorian({ year: selected.year, month: selected.month, day: 1 });
+    if (!gregorianFirst) return [];
+    const [year, month, day] = gregorianFirst.split('-').map(Number);
+    first = new Date(year, month - 1, day);
+  } else {
+    first = new Date(selectedDate.value.getFullYear(), selectedDate.value.getMonth(), 1);
+  }
   const mondayOffset = (first.getDay() + 6) % 7;
   const start = new Date(first);
   start.setDate(first.getDate() - mondayOffset);
@@ -86,6 +95,16 @@ const monthDays = computed(() => {
     return day;
   });
 });
+
+function isOutsideMonth(day: Date): boolean {
+  if (calendarSystem.value === 'ethiopic') {
+    const selected = getEthiopicDateParts(selectedDate.value);
+    const candidate = getEthiopicDateParts(day);
+    return candidate.year !== selected.year || candidate.month !== selected.month;
+  }
+  return day.getFullYear() !== selectedDate.value.getFullYear()
+    || day.getMonth() !== selectedDate.value.getMonth();
+}
 
 function dateValue(gregorian: string, ethiopic: { year: number; month: number; day: number }): string | null {
   return calendarSystem.value === 'ethiopic' ? ethiopicDateToGregorian(ethiopic) : (gregorian || null);
@@ -538,7 +557,7 @@ onMounted(refresh);
         <div v-for="day in weekdays" :key="day" class="calendar-workspace__weekday">{{ day }}</div>
         <button v-for="day in monthDays" :key="dateKey(day)" type="button"
           class="calendar-workspace__month-day"
-          :class="{ 'is-outside': day.getMonth() !== selectedDate.getMonth(), 'is-today': dateKey(day) === dateKey(new Date()) }"
+          :class="{ 'is-outside': isOutsideMonth(day), 'is-today': dateKey(day) === dateKey(new Date()) }"
           @click="selectMonthDay(day)">
           <span class="calendar-workspace__day-number">{{ formatCalendarDate(day, { day: 'numeric' }) }}</span>
           <span v-for="event in eventsForDate(day).slice(0, 2)" :key="event.id" class="calendar-workspace__month-event">{{ event.title }}</span>
