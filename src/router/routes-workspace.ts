@@ -801,6 +801,12 @@ export const routesWorkspace: RouteRecordRaw[] = [
         component: () => import('@/features/governance/GovernanceFinanceSettlementView.vue'),
         meta: { permission: 'finance.account.view' },
       },
+      {
+        path: 'calendar',
+        name: 'calendar',
+        component: () => import('@/features/calendar/CalendarWorkspaceView.vue'),
+        meta: { permission: 'calendar.view' },
+      },
     ],
   },
 ];
