@@ -32,6 +32,9 @@ class ArnaRepository(context: Context, baseUrl: String, appVersion: String) {
         mfaChallenge: String? = null,
         mfaCode: String? = null
     ): LoginData = execute {
+        // Do not let a previously authenticated account's tenant header
+        // influence a new login or its MFA challenge binding.
+        tenantSelection.clear()
         val response = api.login(
             AndroidLoginRequest(
                 email = identifier.trim(),
@@ -49,7 +52,6 @@ class ArnaRepository(context: Context, baseUrl: String, appVersion: String) {
         if (!data.mfa_required) {
             val token = data.token ?: error("The API did not return an access token.")
             sessions.save(token)
-            tenantSelection.clear()
             val profile = discoverTenants()
             val selected = tenantId
                 ?: profile.default_tenant_id
