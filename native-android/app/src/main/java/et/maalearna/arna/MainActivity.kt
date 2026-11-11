@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -29,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import et.maalearna.arna.network.ArnaRepository
 import et.maalearna.arna.network.DeviceSessionDto
+import et.maalearna.arna.network.TenantDto
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -55,6 +58,9 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
     var challenge by remember { mutableStateOf<String?>(null) }
     var status by remember { mutableStateOf(if (repository.hasSession()) "የተጠበቀ ክፍለ ጊዜ ተገኝቷል" else "ወደ ARNA ይግቡ") }
     var sessions by remember { mutableStateOf<List<DeviceSessionDto>>(emptyList()) }
+    var tenantOptions by remember { mutableStateOf<List<TenantDto>>(emptyList()) }
+    var selectedTenantId by remember { mutableStateOf(repository.selectedTenantId()) }
+    var tenantMenuExpanded by remember { mutableStateOf(false) }
     var busy by remember { mutableStateOf(false) }
 
     Column(
@@ -66,18 +72,18 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
         Text("One Intelligence. Infinite Possibilities.")
         OutlinedTextField(identifier, { identifier = it }, label = { Text("Email / Phone / Username") }, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(password, { password = it }, label = { Text("Password") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(tenantId, { tenantId = it.filter(Char::isDigit) }, label = { Text("Tenant ID") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(tenantId, { tenantId = it.filter(Char::isDigit) }, label = { Text("Initial organization ID (only if required)") }, modifier = Modifier.fillMaxWidth())
         if (challenge != null) {
             OutlinedTextField(mfaCode, { mfaCode = it }, label = { Text("MFA code") }, modifier = Modifier.fillMaxWidth())
         }
         Button(
-            enabled = !busy && identifier.isNotBlank() && password.isNotBlank() && tenantId.isNotBlank(),
+            enabled = !busy && identifier.isNotBlank() && password.isNotBlank(),
             onClick = {
                 busy = true
                 scope.launch {
                     try {
                         val result = repository.login(
-                            identifier, password, tenantId.toLong(),
+                            identifier, password, tenantId.toLongOrNull(),
                             challenge, if (challenge != null) mfaCode else null
                         )
                         if (result.mfa_required) {
@@ -86,6 +92,9 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
                         } else {
                             challenge = null
                             mfaCode = ""
+                            val profile = repository.discoverTenants()
+                            tenantOptions = profile.tenants
+                            selectedTenantId = repository.selectedTenantId()
                             status = "በተሳካ ሁኔታ ገብተዋል"
                             sessions = repository.listSessions()
                         }
@@ -98,6 +107,49 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
             }
         ) { Text(if (busy) "..." else if (challenge != null) "Verify MFA" else "Sign in") }
         Text(status, style = MaterialTheme.typography.bodyMedium)
+        if (repository.hasSession()) {
+            val selectedTenant = tenantOptions.firstOrNull { it.id == selectedTenantId }
+            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Text("Organization / Tenant", style = MaterialTheme.typography.titleMedium)
+                Button(
+                    enabled = !busy && tenantOptions.isNotEmpty(),
+                    onClick = { tenantMenuExpanded = true },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(selectedTenant?.name ?: "Select an organization")
+                }
+                DropdownMenu(
+                    expanded = tenantMenuExpanded,
+                    onDismissRequest = { tenantMenuExpanded = false }
+                ) {
+                    tenantOptions.forEach { tenant ->
+                        DropdownMenuItem(
+                            text = { Text(tenant.name + " (" + tenant.slug + ")") },
+                            onClick = {
+                                tenantMenuExpanded = false
+                                busy = true
+                                scope.launch {
+                                    try {
+                                        repository.selectTenant(tenant.id)
+                                        selectedTenantId = tenant.id
+                                        status = "የድርጅት ምርጫው ተረጋግጧል"
+                                    } catch (error: Exception) {
+                                        status = error.toArnaUserMessage()
+                                    } finally {
+                                        busy = false
+                                    }
+                                }
+                            }
+                        )
+                    }
+                }
+                Text(
+                    selectedTenant?.let { it.name + " · " + it.slug }
+                        ?: "Choose an organization to establish a verified tenant context.",
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+        }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Button(enabled = !busy && repository.hasSession(), onClick = {
                 busy = true
@@ -131,6 +183,8 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
                     try {
                         repository.logout()
                         sessions = emptyList()
+                        tenantOptions = emptyList()
+                        selectedTenantId = null
                         challenge = null
                         mfaCode = ""
                         status = "ከዚህ መሣሪያ በተሳካ ሁኔታ ወጥተዋል"
