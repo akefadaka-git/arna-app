@@ -646,7 +646,11 @@ onMounted(refresh);
 </template>
 
 <style scoped>
-.calendar-workspace { display: grid; gap: 1.25rem; width: 100%; color: var(--color-text-primary, #202938); }
+.calendar-workspace { display: grid; gap: 1.25rem; width: 100%; min-width: 0; max-width: 100%; color: var(--color-text-primary, #202938); }
+.calendar-workspace, .calendar-workspace * { box-sizing: border-box; }
+.calendar-workspace__composer, .calendar-workspace__time-grid, .calendar-workspace__date-field, .calendar-workspace__ethiopic-date, .calendar-workspace__ethiopic-date > label { min-width: 0; }
+.calendar-workspace__ethiopic-date { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, .8fr); }
+.calendar-workspace input, .calendar-workspace select, .calendar-workspace textarea { min-width: 0; }
 .calendar-workspace__header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
 .calendar-workspace__eyebrow { margin: 0 0 .35rem; color: var(--color-text-muted, #667085); font-size: .75rem; letter-spacing: .12em; }
 .calendar-workspace h1 { margin: 0; font-size: clamp(1.5rem, 3vw, 2rem); }
