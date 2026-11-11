@@ -16,7 +16,7 @@ import retrofit2.http.Path
 data class AndroidLoginRequest(
     val email: String,
     val password: String,
-    val tenant_id: Long,
+    val tenant_id: Long?,
     val client_type: String = "android",
     val device_installation_id: String,
     val device_label: String,
@@ -38,6 +38,23 @@ data class ApiEnvelope<T>(val success: Boolean, val data: T? = null)
 data class ApiErrorEnvelope(val error: ApiErrorDto? = null)
 data class ApiErrorDto(val code: String? = null, val message: String? = null)
 data class LogoutData(val logged_out: Boolean? = null)
+data class TenantDto(val id: Long, val slug: String, val name: String)
+data class UserProfileData(
+    val id: Long,
+    val name: String?,
+    val email: String?,
+    val locale: String?,
+    val default_tenant_id: Long?,
+    val tenants: List<TenantDto> = emptyList()
+)
+data class TenantContextData(
+    val tenant_id: Long?,
+    val tenant_slug: String?,
+    val tenant_name: String?,
+    val is_active: Boolean,
+    val is_member: Boolean,
+    val resolution_source: String?
+)
 
 data class DeviceSessionDto(
     val session_id: String,
@@ -119,6 +136,12 @@ interface ArnaApi {
     @POST("login")
     suspend fun login(@Body body: AndroidLoginRequest): ApiEnvelope<LoginData>
 
+    @GET("profile")
+    suspend fun profile(): ApiEnvelope<UserProfileData>
+
+    @GET("tenant-context")
+    suspend fun tenantContext(): ApiEnvelope<TenantContextData>
+
     @GET("auth/sessions")
     suspend fun sessions(): ApiEnvelope<SessionListData>
 
@@ -134,13 +157,17 @@ interface ArnaApi {
 
 class ArnaApiFactory(
     private val baseUrl: String,
-    private val tokenProvider: () -> String?
+    private val tokenProvider: () -> String?,
+    private val tenantProvider: () -> Long?
 ) {
     fun create(): ArnaApi {
         val auth = Interceptor { chain ->
             val request: Request.Builder = chain.request().newBuilder()
             tokenProvider()?.takeIf(String::isNotBlank)?.let {
                 request.header("Authorization", "Bearer $it")
+            }
+            tenantProvider()?.let {
+                request.header("X-Tenant-ID", it.toString())
             }
             chain.proceed(request.build())
         }
