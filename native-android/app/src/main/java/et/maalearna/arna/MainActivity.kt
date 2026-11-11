@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
@@ -32,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import et.maalearna.arna.network.ArnaRepository
 import et.maalearna.arna.network.DeviceSessionDto
+import et.maalearna.arna.network.LauncherApplicationDto
 import et.maalearna.arna.network.TenantDto
 import kotlinx.coroutines.launch
 
@@ -62,6 +64,8 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
     var tenantOptions by remember { mutableStateOf<List<TenantDto>>(emptyList()) }
     var selectedTenantId by remember { mutableStateOf(repository.selectedTenantId()) }
     var tenantMenuExpanded by remember { mutableStateOf(false) }
+    var workspaceApps by remember { mutableStateOf<List<LauncherApplicationDto>>(emptyList()) }
+    var locale by remember { mutableStateOf("am") }
     var busy by remember { mutableStateOf(false) }
 
     LaunchedEffect(repository) {
@@ -69,12 +73,14 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
             try {
                 val profile = repository.discoverTenants()
                 tenantOptions = profile.tenants
+                locale = profile.locale ?: "am"
                 val candidate = repository.selectedTenantId()
                     ?: profile.default_tenant_id
                     ?: profile.tenants.singleOrNull()?.id
                 if (candidate != null && profile.tenants.any { it.id == candidate }) {
                     repository.selectTenant(candidate)
                     selectedTenantId = candidate
+                    workspaceApps = repository.launcherApps()
                 }
                 sessions = repository.listSessions()
             } catch (error: Exception) {
@@ -114,7 +120,9 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
                             mfaCode = ""
                             val profile = repository.discoverTenants()
                             tenantOptions = profile.tenants
+                            locale = profile.locale ?: "am"
                             selectedTenantId = repository.selectedTenantId()
+                            workspaceApps = if (selectedTenantId != null) repository.launcherApps() else emptyList()
                             status = "በተሳካ ሁኔታ ገብተዋል"
                             sessions = repository.listSessions()
                         }
@@ -152,6 +160,7 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
                                     try {
                                         repository.selectTenant(tenant.id)
                                         selectedTenantId = tenant.id
+                                        workspaceApps = repository.launcherApps()
                                         status = "የድርጅት ምርጫው ተረጋግጧል"
                                     } catch (error: Exception) {
                                         status = error.toArnaUserMessage()
@@ -217,8 +226,14 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
             },
             modifier = Modifier.fillMaxWidth()
         ) { Text("Sign out this device") }
-        Text("Device sessions", style = MaterialTheme.typography.titleMedium)
         LazyColumn(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            if (selectedTenantId != null) {
+                item { Text("ARNA Workspace", style = MaterialTheme.typography.titleLarge) }
+                items(workspaceApps, key = { it.slug }) { application ->
+                    LauncherApplicationCard(application, locale)
+                }
+            }
+            item { Text("Device sessions", style = MaterialTheme.typography.titleMedium) }
             items(sessions, key = { it.session_id }) { item ->
                 SessionRow(item) {
                     scope.launch {
@@ -272,4 +287,29 @@ private fun Throwable.toArnaUserMessage(): String = when (this) {
     is et.maalearna.arna.network.ArnaNetworkException ->
         "የኢንተርኔት ግንኙነት ችግር አለ፤ ግንኙነቱን ያረጋግጡ"
     else -> "ተግባሩን ማጠናቀቅ አልተቻለም"
+}
+
+
+@Composable
+private fun LauncherApplicationCard(application: LauncherApplicationDto, locale: String) {
+    val amharic = locale.lowercase().startsWith("am")
+    val name = if (amharic) application.name_am else application.name_en
+    val description = if (amharic) application.description_am else application.description_en
+    Card(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.fillMaxWidth().padding(14.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text(application.icon_key ?: "▦", style = MaterialTheme.typography.titleLarge)
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(name?.takeIf { it.isNotBlank() } ?: application.slug, style = MaterialTheme.typography.titleMedium)
+                    Text(application.category ?: application.slug, style = MaterialTheme.typography.labelSmall)
+                }
+            }
+            description?.takeIf { it.isNotBlank() }?.let {
+                Text(it, style = MaterialTheme.typography.bodyMedium)
+            }
+            application.domain?.takeIf { it.isNotBlank() }?.let {
+                Text(it, style = MaterialTheme.typography.bodySmall)
+            }
+        }
+    }
 }
