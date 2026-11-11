@@ -63,7 +63,7 @@ class ArnaApiException(
 class ArnaNetworkException(cause: Throwable) :
     Exception("ARNA network request failed.", cause)
 
-private fun HttpException.toArnaApiException(): ArnaApiException {
+internal fun HttpException.toArnaApiException(): ArnaApiException {
     val payload = try {
         response()?.errorBody()?.string()?.let {
             Gson().fromJson(it, ApiErrorEnvelope::class.java)
