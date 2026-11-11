@@ -101,7 +101,7 @@ export function ethiopicDateToGregorian(value: EthiopicDateParts): string | null
   }
 
   const start = Date.UTC(value.year + 7, 8, 1, 12);
-  for (let offset = 0; offset < 370; offset += 1) {
+  for (let offset = 0; offset < 380; offset += 1) {
     const candidate = new Date(start + offset * 86_400_000);
     const parts = formatter.formatToParts(candidate);
     if (numericPart(parts, 'year') !== value.year
