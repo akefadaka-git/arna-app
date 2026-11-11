@@ -90,7 +90,7 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
                             sessions = repository.listSessions()
                         }
                     } catch (error: Exception) {
-                        status = "መግባት አልተሳካም፤ የግንኙነት ወይም የመረጃ ስህተት"
+                        status = error.toArnaUserMessage()
                     } finally {
                         busy = false
                     }
@@ -107,7 +107,7 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
                         status = "የዚህ መሣሪያ ክፍለ ጊዜ ታድሷል"
                         sessions = repository.listSessions()
                     } catch (error: Exception) {
-                        status = "ክፍለ ጊዜውን ማደስ አልተቻለም"
+                        status = error.toArnaUserMessage()
                     } finally { busy = false }
                 }
             }) { Text("Refresh") }
@@ -118,11 +118,31 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
                         sessions = repository.listSessions()
                         status = "የመሣሪያ ክፍለ ጊዜዎች"
                     } catch (error: Exception) {
-                        status = "ክፍለ ጊዜዎችን ማምጣት አልተቻለም"
+                        status = error.toArnaUserMessage()
                     } finally { busy = false }
                 }
             }) { Text("Devices") }
         }
+        Button(
+            enabled = !busy && repository.hasSession(),
+            onClick = {
+                busy = true
+                scope.launch {
+                    try {
+                        repository.logout()
+                        sessions = emptyList()
+                        challenge = null
+                        mfaCode = ""
+                        status = "ከዚህ መሣሪያ በተሳካ ሁኔታ ወጥተዋል"
+                    } catch (error: Exception) {
+                        status = error.toArnaUserMessage()
+                    } finally {
+                        busy = false
+                    }
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) { Text("Sign out this device") }
         Text("Device sessions", style = MaterialTheme.typography.titleMedium)
         LazyColumn(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             items(sessions, key = { it.session_id }) { item ->
@@ -139,7 +159,7 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
                                 status = "የመሣሪያ ክፍለ ጊዜ ተሰርዟል"
                             }
                         } catch (error: Exception) {
-                            status = "ክፍለ ጊዜውን መሰረዝ አልተቻለም"
+                            status = error.toArnaUserMessage()
                         }
                     }
                 }
@@ -161,4 +181,21 @@ private fun SessionRow(session: DeviceSessionDto, onRevoke: () -> Unit) {
         Text(session.expires_at ?: "Expiry unavailable", style = MaterialTheme.typography.bodySmall)
         Button(enabled = session.revoked_at == null, onClick = onRevoke) { Text("Revoke session") }
     }
+}
+
+
+private fun Throwable.toArnaUserMessage(): String = when (this) {
+    is et.maalearna.arna.network.ArnaApiException -> when (httpStatus) {
+        401 -> "የመግቢያ መረጃው ወይም ክፍለ ጊዜው ትክክል አይደለም"
+        403 -> "ይህን ተግባር ለማከናወን ፈቃድ የለዎትም"
+        404 -> "የተጠየቀው መረጃ አልተገኘም"
+        409 -> "ጥያቄው ከአሁኑ ክፍለ ጊዜ ሁኔታ ጋር አይጣጣምም"
+        422 -> "ያስገቡትን መረጃ ያረጋግጡ"
+        429 -> "ብዙ ጥያቄዎች ተልከዋል፤ ቆይተው ይሞክሩ"
+        in 500..599 -> "ARNA ለጊዜው አይገኝም፤ ቆይተው ይሞክሩ"
+        else -> "ጥያቄውን ማጠናቀቅ አልተቻለም"
+    }
+    is et.maalearna.arna.network.ArnaNetworkException ->
+        "የኢንተርኔት ግንኙነት ችግር አለ፤ ግንኙነቱን ያረጋግጡ"
+    else -> "ተግባሩን ማጠናቀቅ አልተቻለም"
 }
