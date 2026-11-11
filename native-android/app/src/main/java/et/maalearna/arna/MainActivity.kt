@@ -22,6 +22,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,6 +63,25 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
     var selectedTenantId by remember { mutableStateOf(repository.selectedTenantId()) }
     var tenantMenuExpanded by remember { mutableStateOf(false) }
     var busy by remember { mutableStateOf(false) }
+
+    LaunchedEffect(repository) {
+        if (repository.hasSession()) {
+            try {
+                val profile = repository.discoverTenants()
+                tenantOptions = profile.tenants
+                val candidate = repository.selectedTenantId()
+                    ?: profile.default_tenant_id
+                    ?: profile.tenants.singleOrNull()?.id
+                if (candidate != null && profile.tenants.any { it.id == candidate }) {
+                    repository.selectTenant(candidate)
+                    selectedTenantId = candidate
+                }
+                sessions = repository.listSessions()
+            } catch (error: Exception) {
+                status = error.toArnaUserMessage()
+            }
+        }
+    }
 
     Column(
         modifier = Modifier.fillMaxSize().padding(20.dp),
