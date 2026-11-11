@@ -214,6 +214,7 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
                         sessions = emptyList()
                         tenantOptions = emptyList()
                         selectedTenantId = null
+                        workspaceApps = emptyList()
                         challenge = null
                         mfaCode = ""
                         status = "ከዚህ መሣሪያ በተሳካ ሁኔታ ወጥተዋል"
@@ -229,6 +230,15 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
         LazyColumn(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             if (selectedTenantId != null) {
                 item { Text("ARNA Workspace", style = MaterialTheme.typography.titleLarge) }
+                if (workspaceApps.isEmpty()) {
+                    item {
+                        Text(
+                            if (locale.lowercase().startsWith("am")) "ለዚህ መለያ የተፈቀዱ መተግበሪያዎች አሁን አልተገኙም"
+                            else "No applications are currently available for this account.",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+                }
                 items(workspaceApps, key = { it.slug }) { application ->
                     LauncherApplicationCard(application, locale)
                 }
@@ -242,6 +252,9 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
                             if (item.is_current) {
                                 repository.clearSession()
                                 sessions = emptyList()
+                                tenantOptions = emptyList()
+                                selectedTenantId = null
+                                workspaceApps = emptyList()
                                 status = "ከዚህ መሣሪያ ወጥተዋል"
                             } else {
                                 sessions = repository.listSessions()
