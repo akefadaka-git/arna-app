@@ -82,7 +82,7 @@ const monthDays = computed(() => {
     const gregorianFirst = ethiopicDateToGregorian({ year: selected.year, month: selected.month, day: 1 });
     if (!gregorianFirst) return [];
     const [year, month, day] = gregorianFirst.split('-').map(Number);
-    first = new Date(year, month - 1, day);
+    first = new Date(year, month - 1, day, 12);
   } else {
     first = new Date(selectedDate.value.getFullYear(), selectedDate.value.getMonth(), 1);
   }
