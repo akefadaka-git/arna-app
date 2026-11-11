@@ -23,15 +23,16 @@ const description = ref('');
 const allDay = ref(false);
 const recurrenceFrequency = ref<'none' | 'daily' | 'weekly' | 'monthly' | 'yearly'>('none');
 const recurrenceInterval = ref(1);
+const hasRecurrenceUntil = ref(false);
 const recurrenceUntilGregorian = ref('');
 const recurrenceUntilEthiopic = ref({ ...todayEthiopic });
 const occurrenceItems = ref<readonly CalendarOccurrenceRecord[]>([]);
 const movingOccurrence = ref<CalendarOccurrenceRecord | null>(null);
 const moveStartEthiopicDate = ref({ ...todayEthiopic });
 const moveEndEthiopicDate = ref({ ...todayEthiopic });
+const todayEthiopic = getEthiopicDateParts(new Date());
 const startGregorianDate = ref(dateKey(new Date()));
 const endGregorianDate = ref(dateKey(new Date()));
-const todayEthiopic = getEthiopicDateParts(new Date());
 const startEthiopicDate = ref({ ...todayEthiopic });
 const endEthiopicDate = ref({ ...todayEthiopic });
 const startTime = ref('09:00');
@@ -56,7 +57,11 @@ const canCreate = computed(() => {
   const end = dateValue(endGregorianDate.value, endEthiopicDate.value);
   return selectedCalendar.value !== '' && title.value.trim() !== '' && !!start && !!end
     && end >= start && (allDay.value || (startTime.value !== '' && endTime.value !== ''))
-    && (recurrenceFrequency.value === 'none' || allDay.value);
+    && (recurrenceFrequency.value === 'none' || (allDay.value && Number.isInteger(recurrenceInterval.value)
+      && recurrenceInterval.value >= 1 && recurrenceInterval.value <= 365
+      && (!hasRecurrenceUntil.value || (calendarSystem.value === 'ethiopic'
+        ? !!dateValue('', recurrenceUntilEthiopic.value) && dateValue('', recurrenceUntilEthiopic.value)! >= start
+        : !!recurrenceUntilGregorian.value && recurrenceUntilGregorian.value >= start))));
 });
 const periodLabel = computed(() => formatCalendarDate(selectedDate.value, { dateStyle: 'full' }));
 const selectedEvent = computed(() => events.value.find((event) => event.id === selectedEventId.value) ?? null);
@@ -201,9 +206,9 @@ async function saveEvent(): Promise<void> {
       frequency: recurrenceFrequency.value,
       interval: recurrenceInterval.value,
       calendar_system: calendarSystem.value === 'ethiopic' ? 'ethiopian' as const : 'gregorian' as const,
-      ...(calendarSystem.value === 'ethiopic'
-        ? (recurrenceUntilGregorian.value ? {} : { until_ec: recurrenceUntilEthiopic.value })
-        : (recurrenceUntilGregorian.value ? { until: recurrenceUntilGregorian.value } : {})),
+      ...(hasRecurrenceUntil.value
+        ? (calendarSystem.value === 'ethiopic' ? { until_ec: recurrenceUntilEthiopic.value } : { until: recurrenceUntilGregorian.value })
+        : {}),
     };
     if (allDay.value) {
       await createCalendarEvent({
@@ -242,6 +247,7 @@ async function saveEvent(): Promise<void> {
     allDay.value = false;
     recurrenceFrequency.value = 'none';
     recurrenceInterval.value = 1;
+    hasRecurrenceUntil.value = false;
     recurrenceUntilGregorian.value = '';
     showComposer.value = false;
     success.value = 'ቀጠሮው ተመዝግቧል።';
@@ -387,7 +393,8 @@ function beginOccurrenceMove(item: CalendarOccurrenceRecord): void {
 async function saveOccurrenceMove(): Promise<void> {
   const event = selectedEvent.value;
   const item = movingOccurrence.value;
-  if (!event || !item?.starts_on_ec || !dateValue('', moveStartEthiopicDate.value) || !dateValue('', moveEndEthiopicDate.value)) return;
+  if (!event || !item?.starts_on_ec || !ethiopicDateToGregorian(moveStartEthiopicDate.value) || !ethiopicDateToGregorian(moveEndEthiopicDate.value)
+    || ethiopicDateToGregorian(moveEndEthiopicDate.value)! < ethiopicDateToGregorian(moveStartEthiopicDate.value)!) return;
   savingLifecycle.value = true;
   error.value = '';
   try {
@@ -494,7 +501,8 @@ onMounted(refresh);
       </label>
       <div v-if="allDay && recurrenceFrequency !== 'none'" class="calendar-workspace__recurrence">
         <label>የድግግሞሽ ልዩነት<input v-model.number="recurrenceInterval" type="number" min="1" max="365" required /></label>
-        <template v-if="calendarSystem === 'ethiopic'">
+        <label class="calendar-workspace__all-day"><input v-model="hasRecurrenceUntil" type="checkbox" /> የመጨረሻ ቀን ይግለጹ</label>
+        <template v-if="hasRecurrenceUntil && calendarSystem === 'ethiopic'">
           <div class="calendar-workspace__ethiopic-date">
             <label>መጨረሻ ዓመት<input v-model.number="recurrenceUntilEthiopic.year" type="number" min="1" /></label>
             <label>መጨረሻ ወር<select v-model.number="recurrenceUntilEthiopic.month"><option v-for="(month, index) in ethiopicMonths" :key="month" :value="index + 1">{{ month }}</option></select></label>
@@ -502,7 +510,7 @@ onMounted(refresh);
           </div>
           <p class="calendar-workspace__hint">የኢትዮጵያ ወርሃዊና ዓመታዊ ድግግሞሽ 13 ወራትንና ጳጉሜን ይከተላል።</p>
         </template>
-        <label v-else>የመጨረሻ ቀን<input v-model="recurrenceUntilGregorian" type="date" /></label>
+        <label v-else-if="hasRecurrenceUntil">የመጨረሻ ቀን<input v-model="recurrenceUntilGregorian" type="date" required /></label>
       </div>
       <p class="calendar-workspace__hint">የቀን ግቤት በተመረጠው አቆጣጠር ይታያል፤ ሰዓቱ በአሁኑ መሣሪያ የጊዜ ዞን ይቀመጣል። የኢትዮጵያ ተደጋጋሚ ሕግ ለሙሉ ቀን ቀጠሮዎች ይተገበራል።</p>
       <div class="calendar-workspace__actions">
