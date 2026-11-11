@@ -4,7 +4,7 @@ import test from 'node:test';
 
 const [route, navigation, api, view, dates] = await Promise.all([
   readFile(new URL('../src/router/routes-workspace.ts', import.meta.url), 'utf8'),
-  readFile(new URL('../src/router/pages/shell-labels.ts', import.meta.url), 'utf8'),
+  readFile(new URL('../src/router/shell-labels.ts', import.meta.url), 'utf8'),
   readFile(new URL('../src/features/calendar/api.ts', import.meta.url), 'utf8'),
   readFile(new URL('../src/features/calendar/CalendarWorkspaceView.vue', import.meta.url), 'utf8'),
   readFile(new URL('../src/core/dates/calendar.ts', import.meta.url), 'utf8'),
