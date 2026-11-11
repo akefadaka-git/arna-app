@@ -127,7 +127,7 @@ export function formatCalendarDateOnly(
 ): string {
   initialize();
   if (!value) return '—';
-  const match = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(value);
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
   if (!match) return '—';
   const year = Number(match[1]);
   const month = Number(match[2]);
