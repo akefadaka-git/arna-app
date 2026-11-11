@@ -572,7 +572,7 @@ onMounted(refresh);
           <span>{{ occurrenceDate(item) }}</span>
           <div>
             <button class="calendar-workspace__secondary" type="button" :disabled="savingLifecycle" @click="cancelOccurrence(item)">ይህን ቀጠሮ ሰርዝ</button>
-            <button v-if="item.all_day && item.starts_on_ec" class="calendar-workspace__secondary" type="button" :disabled="savingLifecycle" @click="beginOccurrenceMove(item)">ቀኑን ቀይር</button>
+            <button v-if="calendarSystem === 'ethiopic' && item.all_day && item.starts_on_ec" class="calendar-workspace__secondary" type="button" :disabled="savingLifecycle" @click="beginOccurrenceMove(item)">ቀኑን ቀይር</button>
           </div>
         </article>
         <form v-if="movingOccurrence" class="calendar-workspace__occurrence-move" @submit.prevent="saveOccurrenceMove">
