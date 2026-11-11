@@ -11,7 +11,7 @@ This App increment consumes the Calendar API contract in [arna-api PR #109](http
 - All-day E.C. events submit `starts_on_ec` and `ends_on_ec` objects with integer `year`, `month`, and `day` fields. The API validates and converts these using its canonical Ethiopian calendar implementation.
 - All-day G.C. events submit `starts_on` and `ends_on` date-only strings.
 - Timed events remain explicit ISO-8601 instants with offsets plus an IANA timezone. The App uses the selected E.C./G.C. preference for date entry; the API returns authoritative `starts_at_ec` / `ends_at_ec` representations for E.C. display.
-- Event list and occurrence-range requests send either Gregorian `from`/`to` values or E.C. `from_ec`/`to_ec` objects, never both.
+- Event list and occurrence-range requests send either Gregorian `from`/`to` values or E.C. `from_ec`/`to_ec` objects, never both. The API interprets E.C. event-list filters as inclusive Addis Ababa civil-day boundaries and converts those boundaries to UTC before querying timed instants.
 - E.C. date display prefers API-provided `formatted_am` / `formatted_en` values. Timed E.C. display uses the API-provided `ethiopian_time` value, retaining `local_time` and timezone metadata in the typed contract.
 - Gregorian canonical storage, absolute instants, timezone retention, tenant context and server authorization remain API-owned.
 
