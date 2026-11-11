@@ -39,6 +39,19 @@ data class ApiErrorEnvelope(val error: ApiErrorDto? = null)
 data class ApiErrorDto(val code: String? = null, val message: String? = null)
 data class LogoutData(val logged_out: Boolean? = null)
 data class TenantDto(val id: Long, val slug: String, val name: String)
+data class LauncherApplicationDto(
+    val slug: String,
+    val name_am: String?,
+    val name_en: String?,
+    val description_am: String?,
+    val description_en: String?,
+    val domain: String?,
+    val is_active: Boolean,
+    val is_frontend_ready: Boolean,
+    val icon_key: String?,
+    val category: String?,
+    val display_order: Int?
+)
 data class UserProfileData(
     val id: Long,
     val name: String?,
@@ -135,6 +148,9 @@ private class SafeGetRetryInterceptor(private val retries: Int = 2) : Intercepto
 interface ArnaApi {
     @POST("login")
     suspend fun login(@Body body: AndroidLoginRequest): ApiEnvelope<LoginData>
+
+    @GET("launcher")
+    suspend fun launcher(): ApiEnvelope<List<LauncherApplicationDto>>
 
     @GET("profile")
     suspend fun profile(): ApiEnvelope<UserProfileData>
