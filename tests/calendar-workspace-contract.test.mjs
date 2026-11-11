@@ -75,4 +75,5 @@ test('E.C. recurrence exceptions use the authenticated Calendar API', () => {
   assert.match(view, /override_starts_on_ec/);
   assert.match(view, /override_ends_on_ec/);
   assert.match(view, /hasRecurrenceUntil/);
+  assert.match(view, /watch\(allDay/);
 });
