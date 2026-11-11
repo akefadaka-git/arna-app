@@ -58,6 +58,20 @@ jobs:
         run: npm run test:calendar-workspace-contract
       - name: Install Chromium for public browser contracts
         run: npx playwright install --with-deps chromium
+      - name: Verify Calendar workspace E.C. behavior in Chromium
+        shell: bash
+        run: |
+          VITE_API_BASE_URL=http://127.0.0.1:4174 npx vite --mode workspace --host 127.0.0.1 --port 4174 --strictPort > "$RUNNER_TEMP/calendar-workspace-vite.log" 2>&1 &
+          VITE_PID=$!
+          trap 'kill "$VITE_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4174/tests/fixtures/calendar-workspace-browser.html >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4174/tests/fixtures/calendar-workspace-browser.html >/dev/null
+          CALENDAR_APP_URL=http://127.0.0.1:4174/ npm run test:calendar-browser
       - name: Verify public browser and WCAG 2.2 accessibility contracts
         shell: bash
         run: |
