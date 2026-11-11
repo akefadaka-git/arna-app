@@ -54,6 +54,8 @@ jobs:
         run: npm run test:wallet-open-form-contract
       - name: Verify workspace dashboard route integration
         run: npm run test:workspace-dashboard-route-contract
+      - name: Verify Calendar workspace route and E.C. API contracts
+        run: npm run test:calendar-workspace-contract
       - name: Install Chromium for public browser contracts
         run: npx playwright install --with-deps chromium
       - name: Verify public browser and WCAG 2.2 accessibility contracts
