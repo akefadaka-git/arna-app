@@ -110,9 +110,9 @@ test.describe('ARNA Calendar E.C. browser verification', () => {
     await expect(page.getByText(/03:00/)).toBeVisible();
 
     const initialFilter = captured.eventFilters[0];
-    expect(initialFilter).toHaveProperty('from_ec[year]');
-    expect(initialFilter).toHaveProperty('from_ec[month]');
-    expect(initialFilter).toHaveProperty('from_ec[day]');
+    expect(initialFilter['from_ec[year]']).toBeDefined();
+    expect(initialFilter['from_ec[month]']).toBeDefined();
+    expect(initialFilter['from_ec[day]']).toBeDefined();
     expect(initialFilter).not.toHaveProperty('from');
     expect(initialFilter).not.toHaveProperty('to');
 
