@@ -90,8 +90,25 @@ export function listCalendars(): Promise<CalendarPage<CalendarRecord>> {
   return api.get<CalendarPage<CalendarRecord>>('/api/calendar/calendars');
 }
 
+function calendarFilterParams(filters: CalendarEventFilters): Record<string, string | number | boolean | undefined> {
+  const params: Record<string, string | number | boolean | undefined> = {};
+  if (filters.from) params.from = filters.from;
+  if (filters.to) params.to = filters.to;
+  if (filters.from_ec) {
+    params['from_ec[year]'] = filters.from_ec.year;
+    params['from_ec[month]'] = filters.from_ec.month;
+    params['from_ec[day]'] = filters.from_ec.day;
+  }
+  if (filters.to_ec) {
+    params['to_ec[year]'] = filters.to_ec.year;
+    params['to_ec[month]'] = filters.to_ec.month;
+    params['to_ec[day]'] = filters.to_ec.day;
+  }
+  return params;
+}
+
 export function listCalendarEvents(filters: CalendarEventFilters): Promise<CalendarPage<CalendarEventRecord>> {
-  return api.get<CalendarPage<CalendarEventRecord>>('/api/calendar/events', { params: filters });
+  return api.get<CalendarPage<CalendarEventRecord>>('/api/calendar/events', { params: calendarFilterParams(filters) });
 }
 
 export type CreateCalendarEventInput = {
@@ -124,7 +141,7 @@ export function listCalendarOccurrences(
   eventId: string,
   filters: CalendarEventFilters,
 ): Promise<readonly CalendarOccurrenceRecord[]> {
-  return api.get<readonly CalendarOccurrenceRecord[]>(`/api/calendar/events/${eventId}/occurrences`, { params: filters });
+  return api.get<readonly CalendarOccurrenceRecord[]>(`/api/calendar/events/${eventId}/occurrences`, { params: calendarFilterParams(filters) });
 }
 
 export function cancelCalendarOccurrence(
