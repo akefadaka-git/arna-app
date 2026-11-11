@@ -131,7 +131,7 @@ test.describe('ARNA Calendar E.C. browser verification', () => {
     await composer.getByLabel('የመጨረሻ ቀን ይግለጹ').check();
     await composer.getByLabel('መጨረሻ ዓመት').fill('2016');
     await composer.getByLabel('መጨረሻ ወር').selectOption('2');
-    await composer.getByLabel('መጨረሻ ቀን').fill('1');
+    await composer.locator('.calendar-workspace__ethiopic-date').last().getByLabel('መጨረሻ ቀን').fill('1');
     await composer.getByRole('button', { name: 'አስቀምጥ' }).click();
 
     await expect.poll(() => captured.create).not.toBeNull();
