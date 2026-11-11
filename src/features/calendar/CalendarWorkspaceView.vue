@@ -2,8 +2,8 @@
 import { computed, onMounted, ref } from 'vue';
 import { ethiopicDateToGregorian, formatCalendarDate, formatCalendarDateOnly, getEthiopicDateParts, useCalendarPreference } from '@/core/dates/calendar';
 import { useAuthStore } from '@/stores/auth';
-import { createCalendarEvent, listCalendarEvents, listCalendars, listCalendarResources, reserveCalendarResource, respondToCalendarEvent, updateCalendarEvent } from './api';
-import type { CalendarEventRecord, CalendarRecord, CalendarResourceRecord } from './api';
+import { cancelCalendarOccurrence, createCalendarEvent, listCalendarEvents, listCalendarOccurrences, listCalendars, listCalendarResources, moveCalendarOccurrence, reserveCalendarResource, respondToCalendarEvent, updateCalendarEvent } from './api';
+import type { CalendarEventFilters, CalendarEventRecord, CalendarOccurrenceRecord, CalendarRecord, CalendarResourceRecord } from './api';
 
 type CalendarView = 'agenda' | 'day' | 'week' | 'month' | 'timeline';
 
@@ -20,6 +20,15 @@ const selectedDate = ref(new Date());
 const viewMode = ref<CalendarView>('agenda');
 const title = ref('');
 const description = ref('');
+const allDay = ref(false);
+const recurrenceFrequency = ref<'none' | 'daily' | 'weekly' | 'monthly' | 'yearly'>('none');
+const recurrenceInterval = ref(1);
+const recurrenceUntilGregorian = ref('');
+const recurrenceUntilEthiopic = ref({ ...todayEthiopic });
+const occurrenceItems = ref<readonly CalendarOccurrenceRecord[]>([]);
+const movingOccurrence = ref<CalendarOccurrenceRecord | null>(null);
+const moveStartEthiopicDate = ref({ ...todayEthiopic });
+const moveEndEthiopicDate = ref({ ...todayEthiopic });
 const startGregorianDate = ref(dateKey(new Date()));
 const endGregorianDate = ref(dateKey(new Date()));
 const todayEthiopic = getEthiopicDateParts(new Date());
@@ -42,11 +51,13 @@ const viewOptions: readonly { value: CalendarView; label: string }[] = [
   { value: 'timeline', label: 'የጊዜ መስመር' },
 ];
 
-const canCreate = computed(() => selectedCalendar.value !== ''
-  && title.value.trim() !== ''
-  && !!dateValue(startGregorianDate.value, startEthiopicDate.value)
-  && !!dateValue(endGregorianDate.value, endEthiopicDate.value)
-  && startTime.value !== '' && endTime.value !== '');
+const canCreate = computed(() => {
+  const start = dateValue(startGregorianDate.value, startEthiopicDate.value);
+  const end = dateValue(endGregorianDate.value, endEthiopicDate.value);
+  return selectedCalendar.value !== '' && title.value.trim() !== '' && !!start && !!end
+    && end >= start && (allDay.value || (startTime.value !== '' && endTime.value !== ''))
+    && (recurrenceFrequency.value === 'none' || allDay.value);
+});
 const periodLabel = computed(() => formatCalendarDate(selectedDate.value, { dateStyle: 'full' }));
 const selectedEvent = computed(() => events.value.find((event) => event.id === selectedEventId.value) ?? null);
 const canUpdateEvents = computed(() => auth.permissions.includes('calendar.update'));
@@ -96,7 +107,7 @@ function eventsForDate(day: Date): readonly CalendarEventRecord[] {
   return events.value.filter((event) => eventDateKey(event) === key);
 }
 
-function range(): { from: string; to: string } {
+function range(): CalendarEventFilters {
   const start = new Date(selectedDate.value);
   start.setHours(0, 0, 0, 0);
   const end = new Date(start);
@@ -120,6 +131,9 @@ function range(): { from: string; to: string } {
   }
 
   end.setHours(23, 59, 59, 0);
+  if (calendarSystem.value === 'ethiopic') {
+    return { from_ec: getEthiopicDateParts(start), to_ec: getEthiopicDateParts(end) };
+  }
   return {
     from: start.toISOString().slice(0, 19).replace('T', ' '),
     to: end.toISOString().slice(0, 19).replace('T', ' '),
@@ -132,7 +146,7 @@ async function refresh(): Promise<void> {
   try {
     const [calendarPage, eventPage, resourcePage] = await Promise.all([
       listCalendars(),
-      (() => { const dates = range(); return listCalendarEvents(dates.from, dates.to); })(),
+      listCalendarEvents(range()),
       listCalendarResources(),
     ]);
     calendars.value = calendarPage.data ?? [];
@@ -181,19 +195,42 @@ async function saveEvent(): Promise<void> {
   try {
     const startDate = dateValue(startGregorianDate.value, startEthiopicDate.value);
     const endDate = dateValue(endGregorianDate.value, endEthiopicDate.value);
-    if (!startDate || !endDate) throw new Error('የኢትዮጵያ ቀን ትክክለኛ አይደለም።');
-    const start = localDateTime(startDate, startTime.value);
-    const end = localDateTime(endDate, endTime.value);
-    if (end <= start) throw new Error('የመጨረሻ ሰዓት ከመጀመሪያ ሰዓት በኋላ መሆን አለበት።');
-    await createCalendarEvent({
-      calendar_id: selectedCalendar.value,
-      title: title.value.trim(),
-      description: description.value.trim() || undefined,
-      all_day: false,
-      starts_at: start.toISOString(),
-      ends_at: end.toISOString(),
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Africa/Addis_Ababa',
-    });
+    if (!startDate || !endDate || endDate < startDate) throw new Error('የመጀመሪያና የመጨረሻ ቀኖች ትክክለኛ አይደሉም።');
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Africa/Addis_Ababa';
+    const recurrence = recurrenceFrequency.value === 'none' ? undefined : {
+      frequency: recurrenceFrequency.value,
+      interval: recurrenceInterval.value,
+      calendar_system: calendarSystem.value === 'ethiopic' ? 'ethiopian' as const : 'gregorian' as const,
+      ...(calendarSystem.value === 'ethiopic'
+        ? (recurrenceUntilGregorian.value ? {} : { until_ec: recurrenceUntilEthiopic.value })
+        : (recurrenceUntilGregorian.value ? { until: recurrenceUntilGregorian.value } : {})),
+    };
+    if (allDay.value) {
+      await createCalendarEvent({
+        calendar_id: selectedCalendar.value,
+        title: title.value.trim(),
+        description: description.value.trim() || undefined,
+        all_day: true,
+        timezone,
+        ...(calendarSystem.value === 'ethiopic'
+          ? { starts_on_ec: startEthiopicDate.value, ends_on_ec: endEthiopicDate.value }
+          : { starts_on: startDate, ends_on: endDate }),
+        ...(recurrence ? { recurrence_rule: recurrence } : {}),
+      });
+    } else {
+      const start = localDateTime(startDate, startTime.value);
+      const end = localDateTime(endDate, endTime.value);
+      if (end <= start) throw new Error('የመጨረሻ ሰዓት ከመጀመሪያ ሰዓት በኋላ መሆን አለበት።');
+      await createCalendarEvent({
+        calendar_id: selectedCalendar.value,
+        title: title.value.trim(),
+        description: description.value.trim() || undefined,
+        all_day: false,
+        starts_at: start.toISOString(),
+        ends_at: end.toISOString(),
+        timezone,
+      });
+    }
     title.value = '';
     description.value = '';
     startGregorianDate.value = dateKey(new Date());
@@ -202,6 +239,10 @@ async function saveEvent(): Promise<void> {
     endEthiopicDate.value = getEthiopicDateParts(new Date());
     startTime.value = '09:00';
     endTime.value = '09:30';
+    allDay.value = false;
+    recurrenceFrequency.value = 'none';
+    recurrenceInterval.value = 1;
+    recurrenceUntilGregorian.value = '';
     showComposer.value = false;
     success.value = 'ቀጠሮው ተመዝግቧል።';
     await refresh();
@@ -270,9 +311,100 @@ async function reserveSelectedResource(): Promise<void> {
   }
 }
 
+function ecDateLabel(value: { formatted_am: string; formatted_en: string } | null | undefined): string {
+  if (!value) return '—';
+  return typeof document !== 'undefined' && document.documentElement.lang.toLowerCase().startsWith('en')
+    ? value.formatted_en : value.formatted_am;
+}
+
 function eventDate(event: CalendarEventRecord): string {
+  if (calendarSystem.value === 'ethiopic') {
+    if (event.all_day) {
+      const start = ecDateLabel(event.starts_on_ec);
+      const end = ecDateLabel(event.ends_on_ec);
+      return end !== '—' && end !== start ? `${start} – ${end}` : start;
+    }
+    if (event.starts_at_ec) {
+      const clock = event.starts_at_ec.ethiopian_time || event.starts_at_ec.local_time;
+      return `${ecDateLabel(event.starts_at_ec)} · ${clock}`;
+    }
+  }
   if (event.all_day) return formatCalendarDateOnly(event.starts_on, { dateStyle: 'full' });
   return formatCalendarDate(event.starts_at, { dateStyle: 'medium', timeStyle: 'short' });
+}
+
+async function openEventDetail(event: CalendarEventRecord): Promise<void> {
+  selectedEventId.value = event.id;
+  occurrenceItems.value = [];
+  movingOccurrence.value = null;
+  if (!event.recurrence_rule) return;
+  try {
+    occurrenceItems.value = await listCalendarOccurrences(event.id, range());
+  } catch (cause) {
+    error.value = cause instanceof Error ? cause.message : 'የተደጋጋሚ ቀጠሮ ዝርዝር ማግኘት አልተቻለም።';
+  }
+}
+
+function occurrenceDate(item: CalendarOccurrenceRecord): string {
+  if (calendarSystem.value === 'ethiopic' && item.starts_on_ec) return ecDateLabel(item.starts_on_ec);
+  if (item.starts_on) return formatCalendarDateOnly(item.starts_on, { dateStyle: 'full' });
+  if (item.starts_at) return formatCalendarDate(item.starts_at, { dateStyle: 'medium', timeStyle: 'short' });
+  return '—';
+}
+
+async function cancelOccurrence(item: CalendarOccurrenceRecord): Promise<void> {
+  const event = selectedEvent.value;
+  if (!event) return;
+  savingLifecycle.value = true;
+  error.value = '';
+  try {
+    if (item.all_day && item.starts_on_ec) {
+      await cancelCalendarOccurrence(event.id, { original_starts_on_ec: {
+        year: item.starts_on_ec.year, month: item.starts_on_ec.month, day: item.starts_on_ec.day,
+      } });
+    } else if (item.starts_on) {
+      await cancelCalendarOccurrence(event.id, { original_starts_at: item.starts_on });
+    } else if (item.starts_at) {
+      await cancelCalendarOccurrence(event.id, { original_starts_at: item.starts_at });
+    }
+    success.value = 'የተመረጠው ተደጋጋሚ ቀጠሮ ተሰርዟል።';
+    await openEventDetail(event);
+    await refresh();
+  } catch (cause) {
+    error.value = cause instanceof Error ? cause.message : 'የተደጋጋሚ ቀጠሮ መሰረዝ አልተቻለም።';
+  } finally {
+    savingLifecycle.value = false;
+  }
+}
+
+function beginOccurrenceMove(item: CalendarOccurrenceRecord): void {
+  if (!item.all_day || !item.starts_on_ec || !item.ends_on_ec) return;
+  movingOccurrence.value = item;
+  moveStartEthiopicDate.value = { year: item.starts_on_ec.year, month: item.starts_on_ec.month, day: item.starts_on_ec.day };
+  moveEndEthiopicDate.value = { year: item.ends_on_ec.year, month: item.ends_on_ec.month, day: item.ends_on_ec.day };
+}
+
+async function saveOccurrenceMove(): Promise<void> {
+  const event = selectedEvent.value;
+  const item = movingOccurrence.value;
+  if (!event || !item?.starts_on_ec || !dateValue('', moveStartEthiopicDate.value) || !dateValue('', moveEndEthiopicDate.value)) return;
+  savingLifecycle.value = true;
+  error.value = '';
+  try {
+    await moveCalendarOccurrence(event.id, {
+      original_starts_on_ec: { year: item.starts_on_ec.year, month: item.starts_on_ec.month, day: item.starts_on_ec.day },
+      override_starts_on_ec: moveStartEthiopicDate.value,
+      override_ends_on_ec: moveEndEthiopicDate.value,
+    });
+    movingOccurrence.value = null;
+    success.value = 'የተደጋጋሚ ቀጠሮው ቀን ተቀይሯል።';
+    await openEventDetail(event);
+    await refresh();
+  } catch (cause) {
+    error.value = cause instanceof Error ? cause.message : 'የተደጋጋሚ ቀጠሮውን ማንቀሳቀስ አልተቻለም።';
+  } finally {
+    savingLifecycle.value = false;
+  }
 }
 
 onMounted(refresh);
@@ -324,6 +456,7 @@ onMounted(refresh);
       <label>መግለጫ
         <textarea v-model="description" rows="3" maxlength="20000" />
       </label>
+      <label class="calendar-workspace__all-day"><input v-model="allDay" type="checkbox" /> ሙሉ ቀን የሚቆይ ቀጠሮ</label>
       <div class="calendar-workspace__time-grid">
         <fieldset class="calendar-workspace__date-field">
           <legend>መጀመሪያ</legend>
@@ -335,7 +468,7 @@ onMounted(refresh);
             </div>
           </template>
           <label v-else>ቀን<input v-model="startGregorianDate" type="date" required /></label>
-          <label>ሰዓት<input v-model="startTime" type="time" required /></label>
+          <label v-if="!allDay">ሰዓት<input v-model="startTime" type="time" required /></label>
         </fieldset>
         <fieldset class="calendar-workspace__date-field">
           <legend>መጨረሻ</legend>
@@ -347,10 +480,31 @@ onMounted(refresh);
             </div>
           </template>
           <label v-else>ቀን<input v-model="endGregorianDate" type="date" required /></label>
-          <label>ሰዓት<input v-model="endTime" type="time" required /></label>
+          <label v-if="!allDay">ሰዓት<input v-model="endTime" type="time" required /></label>
         </fieldset>
       </div>
-      <p class="calendar-workspace__hint">የቀን ግቤት በተመረጠው አቆጣጠር ይታያል፤ ሰዓቱ በአሁኑ መሣሪያ የጊዜ ዞን ይቀመጣል።</p>
+      <label v-if="allDay">ድግግሞሽ
+        <select v-model="recurrenceFrequency">
+          <option value="none">አንድ ጊዜ</option>
+          <option value="daily">በየቀኑ</option>
+          <option value="weekly">በየሳምንቱ</option>
+          <option value="monthly">በየወሩ</option>
+          <option value="yearly">በየዓመቱ</option>
+        </select>
+      </label>
+      <div v-if="allDay && recurrenceFrequency !== 'none'" class="calendar-workspace__recurrence">
+        <label>የድግግሞሽ ልዩነት<input v-model.number="recurrenceInterval" type="number" min="1" max="365" required /></label>
+        <template v-if="calendarSystem === 'ethiopic'">
+          <div class="calendar-workspace__ethiopic-date">
+            <label>መጨረሻ ዓመት<input v-model.number="recurrenceUntilEthiopic.year" type="number" min="1" /></label>
+            <label>መጨረሻ ወር<select v-model.number="recurrenceUntilEthiopic.month"><option v-for="(month, index) in ethiopicMonths" :key="month" :value="index + 1">{{ month }}</option></select></label>
+            <label>መጨረሻ ቀን<input v-model.number="recurrenceUntilEthiopic.day" type="number" min="1" max="30" /></label>
+          </div>
+          <p class="calendar-workspace__hint">የኢትዮጵያ ወርሃዊና ዓመታዊ ድግግሞሽ 13 ወራትንና ጳጉሜን ይከተላል።</p>
+        </template>
+        <label v-else>የመጨረሻ ቀን<input v-model="recurrenceUntilGregorian" type="date" /></label>
+      </div>
+      <p class="calendar-workspace__hint">የቀን ግቤት በተመረጠው አቆጣጠር ይታያል፤ ሰዓቱ በአሁኑ መሣሪያ የጊዜ ዞን ይቀመጣል። የኢትዮጵያ ተደጋጋሚ ሕግ ለሙሉ ቀን ቀጠሮዎች ይተገበራል።</p>
       <div class="calendar-workspace__actions">
         <button class="calendar-workspace__secondary" type="button" @click="showComposer = false">ሰርዝ</button>
         <button class="calendar-workspace__primary" type="submit" :disabled="!canCreate || saving">{{ saving ? 'በማስቀመጥ ላይ…' : 'አስቀምጥ' }}</button>
@@ -385,7 +539,7 @@ onMounted(refresh);
           <h2>{{ event.title }}</h2>
           <p v-if="event.description">{{ event.description }}</p>
           <span class="calendar-workspace__status">{{ event.status === 'scheduled' ? 'የታቀደ' : event.status === 'completed' ? 'የተጠናቀቀ' : 'የተሰረዘ' }}</span>
-          <button class="calendar-workspace__detail-link" type="button" @click="selectedEventId = event.id">ዝርዝር እይታ</button>
+          <button class="calendar-workspace__detail-link" type="button" @click="openEventDetail(event)">ዝርዝር እይታ</button>
         </div>
       </article>
       <div v-if="!loading && events.length === 0" class="calendar-workspace__empty">
@@ -404,6 +558,33 @@ onMounted(refresh);
       <p>{{ eventDate(selectedEvent) }}</p>
       <p v-if="selectedEvent.description">{{ selectedEvent.description }}</p>
       <p class="calendar-workspace__hint">ተሳታፊዎች: {{ selectedEvent.attendees?.length ?? 0 }} · ሁኔታ: {{ selectedEvent.status }}</p>
+      <section v-if="selectedEvent.recurrence_rule" class="calendar-workspace__occurrences" aria-label="ተደጋጋሚ ቀጠሮዎች">
+        <h3>በቅርቡ የሚመጡ ተደጋጋሚ ቀጠሮዎች</h3>
+        <article v-for="item in occurrenceItems" :key="item.occurrence" class="calendar-workspace__occurrence">
+          <span>{{ occurrenceDate(item) }}</span>
+          <div>
+            <button class="calendar-workspace__secondary" type="button" :disabled="savingLifecycle" @click="cancelOccurrence(item)">ይህን ቀጠሮ ሰርዝ</button>
+            <button v-if="item.all_day && item.starts_on_ec" class="calendar-workspace__secondary" type="button" :disabled="savingLifecycle" @click="beginOccurrenceMove(item)">ቀኑን ቀይር</button>
+          </div>
+        </article>
+        <form v-if="movingOccurrence" class="calendar-workspace__occurrence-move" @submit.prevent="saveOccurrenceMove">
+          <h4>የተመረጠውን ቀጠሮ ቀን ይቀይሩ</h4>
+          <div class="calendar-workspace__ethiopic-date">
+            <label>አዲስ ዓመት<input v-model.number="moveStartEthiopicDate.year" type="number" min="1" required /></label>
+            <label>አዲስ ወር<select v-model.number="moveStartEthiopicDate.month"><option v-for="(month, index) in ethiopicMonths" :key="month" :value="index + 1">{{ month }}</option></select></label>
+            <label>አዲስ ቀን<input v-model.number="moveStartEthiopicDate.day" type="number" min="1" max="30" required /></label>
+          </div>
+          <div class="calendar-workspace__ethiopic-date">
+            <label>መጨረሻ ዓመት<input v-model.number="moveEndEthiopicDate.year" type="number" min="1" required /></label>
+            <label>መጨረሻ ወር<select v-model.number="moveEndEthiopicDate.month"><option v-for="(month, index) in ethiopicMonths" :key="month" :value="index + 1">{{ month }}</option></select></label>
+            <label>መጨረሻ ቀን<input v-model.number="moveEndEthiopicDate.day" type="number" min="1" max="30" required /></label>
+          </div>
+          <div class="calendar-workspace__actions">
+            <button class="calendar-workspace__secondary" type="button" @click="movingOccurrence = null">ሰርዝ</button>
+            <button class="calendar-workspace__primary" type="submit" :disabled="savingLifecycle">ቀኑን አዘምን</button>
+          </div>
+        </form>
+      </section>
       <div v-if="canRespond(selectedEvent)" class="calendar-workspace__detail-actions">
         <span>የእርስዎ ምላሽ: {{ myInvitationResponse(selectedEvent) }}</span>
         <button class="calendar-workspace__secondary" type="button" :disabled="savingLifecycle" @click="respond(selectedEvent, 'accepted')">ተቀበል</button>
@@ -447,6 +628,12 @@ onMounted(refresh);
 .calendar-workspace__date-field { min-width: 0; display: grid; gap: .65rem; padding: .8rem; border: 1px solid var(--color-border-default, #d0d5dd); border-radius: .6rem; }
 .calendar-workspace__date-field legend { padding: 0 .3rem; font-weight: 700; }
 .calendar-workspace__ethiopic-date { display: grid; grid-template-columns: 1fr 1.4fr .8fr; gap: .4rem; }
+.calendar-workspace__all-day { display: flex !important; align-items: center; gap: .6rem !important; }
+.calendar-workspace__all-day input { width: 1.1rem; min-height: 1.1rem; }
+.calendar-workspace__recurrence, .calendar-workspace__occurrences, .calendar-workspace__occurrence-move { display: grid; gap: .7rem; padding: .9rem; border: 1px solid var(--color-border-default, #d0d5dd); border-radius: .65rem; }
+.calendar-workspace__occurrences h3, .calendar-workspace__occurrence-move h4 { margin: 0; font-size: 1rem; }
+.calendar-workspace__occurrence { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .6rem; }
+.calendar-workspace__occurrence > div { display: flex; gap: .4rem; flex-wrap: wrap; }
 
 .calendar-workspace__hint { margin: 0; color: var(--color-text-muted, #667085); font-size: .85rem; }
 .calendar-workspace__actions { display: flex; justify-content: flex-end; gap: .65rem; }
