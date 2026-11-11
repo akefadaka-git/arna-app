@@ -53,30 +53,7 @@ jobs:
           disable-animations: true
           emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -no-snapshot -wipe-data
           script: |
-            set -euo pipefail
-            adb wait-for-device
-            echo "Waiting for Android framework package manager to become available..."
-            ready=0
-            for attempt in $(seq 1 120); do
-              booted="$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r' || true)"
-              package_service="$(adb shell service check package 2>/dev/null || true)"
-              if [ "$booted" = "1" ] && echo "$package_service" | grep -q "found"; then
-                ready=1
-                break
-              fi
-              sleep 2
-            done
-            if [ "$ready" -ne 1 ]; then
-              echo "::error::Android emulator did not expose the package manager after 240 seconds."
-              adb shell getprop sys.boot_completed || true
-              adb shell service list | grep -i package || true
-              adb logcat -d -t 500 || true
-              exit 1
-            fi
-            adb shell settings put global window_animation_scale 0
-            adb shell settings put global transition_animation_scale 0
-            adb shell settings put global animator_duration_scale 0
-            gradle --no-daemon -p native-android connectedDebugAndroidTest
+            ready=0; for attempt in $(seq 1 120); do booted="$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r' || true)"; package_service="$(adb shell service check package 2>/dev/null || true)"; if [ "$booted" = "1" ] && echo "$package_service" | grep -q "found"; then ready=1; break; fi; sleep 2; done; if [ "$ready" -ne 1 ]; then echo "::error::Android emulator package manager did not become ready within 240 seconds."; adb shell service list | grep -i package || true; adb logcat -d -t 500 || true; exit 1; fi; adb shell settings put global window_animation_scale 0; adb shell settings put global transition_animation_scale 0; adb shell settings put global animator_duration_scale 0; gradle --no-daemon -p native-android connectedDebugAndroidTest
 
       - name: Upload build reports
         if: always()
