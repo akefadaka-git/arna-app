@@ -85,6 +85,12 @@ class ArnaRepository(context: Context, baseUrl: String, appVersion: String) {
 
     fun selectedTenantId(): Long? = tenantSelection.read()
 
+    suspend fun launcherApps(): List<LauncherApplicationDto> = execute {
+        val response = api.launcher()
+        if (!response.success) error("The workspace catalog request was rejected.")
+        response.data ?: emptyList()
+    }
+
     suspend fun listSessions(): List<DeviceSessionDto> = execute {
         val response = api.sessions()
         if (!response.success) error("The session list request was rejected.")
