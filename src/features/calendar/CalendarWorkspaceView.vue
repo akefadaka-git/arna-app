@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { ethiopicDateToGregorian, formatCalendarDate, formatCalendarDateOnly, getEthiopicDateParts, useCalendarPreference } from '@/core/dates/calendar';
 import { useAuthStore } from '@/stores/auth';
 import { cancelCalendarOccurrence, createCalendarEvent, listCalendarEvents, listCalendarOccurrences, listCalendars, listCalendarResources, moveCalendarOccurrence, reserveCalendarResource, respondToCalendarEvent, updateCalendarEvent } from './api';
@@ -51,6 +51,14 @@ const viewOptions: readonly { value: CalendarView; label: string }[] = [
   { value: 'month', label: 'ወር' },
   { value: 'timeline', label: 'የጊዜ መስመር' },
 ];
+
+watch(allDay, (enabled) => {
+  if (!enabled) {
+    recurrenceFrequency.value = 'none';
+    hasRecurrenceUntil.value = false;
+    movingOccurrence.value = null;
+  }
+});
 
 const canCreate = computed(() => {
   const start = dateValue(startGregorianDate.value, startEthiopicDate.value);
