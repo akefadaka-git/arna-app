@@ -285,7 +285,7 @@ const TILES: readonly TileDefinition[] = [
     key: 'finance',
     to: '/finance',
     icon: 'chart-no-axes-combined',
-    permissions: ['finance.entity.view', 'finance.report.view'],
+    permissions: ['finance.entity.view'],
   },
   {
     key: 'files',
