@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
-import { RouterLink } from 'vue-router';
+import { computed, onMounted, ref, watch } from 'vue';
+import { RouterLink, useRoute } from 'vue-router';
 import { masesBrandLabels } from '@/router/shell-labels';
 import { api } from '@/core/api/client';
 
@@ -24,6 +24,72 @@ const submissionReference = ref('');
 
 const endpointAvailable = computed(() => Boolean(import.meta.env.VITE_API_BASE_URL));
 
+const route = useRoute();
+const locale = computed(() => route.query.locale === 'en' ? 'en' : 'am');
+const copy = computed(() => locale.value === 'am' ? {
+  invalidEmail: copy.value.invalidEmail,
+  verificationSent: copy.value.verificationSent,
+  sendCodeFailed: copy.value.sendCodeFailed,
+  codeInvalid: copy.value.codeInvalid,
+  emailVerified: copy.value.emailVerified,
+  emailVerifyFailed: copy.value.emailVerifyFailed,
+  apiUnavailable: copy.value.apiUnavailable,
+  verifyEmailFirst: copy.value.verifyEmailFirst,
+  consentRequired: copy.value.consentRequired,
+  submitted: copy.value.submitted,
+  unknownError: copy.value.unknownError,
+  back: 'ወደ ዋና ገጽ ተመለስ', eyebrow: 'COMMUNITY CONTRIBUTIONS · የሕዝብ ተሳትፎ',
+  title: 'ይዘት ያቅርቡ',
+  lead: 'ዜና፣ ጽሑፍ፣ ማስታወቂያ ወይም ይፋዊ መረጃ ለARNA ያቅርቡ። ማንኛውም ሰው ማቅረብ ይችላል፤ ለሕዝብ የሚታይ የሚሆነው ግን በተፈቀደ አስተዳዳሪ ከተገመገመና ከጸደቀ በኋላ ብቻ ነው።',
+  processLabel: 'የማተሚያ ሂደት', processTitle: 'የማተሚያ ሂደት',
+  processBody: 'ማቅረብ → በግል የግምገማ ወረፋ → የአስተዳዳሪ ውሳኔ → ከጸደቀ በኋላ ማተም።',
+  processFoot: 'ማቅረብ ማለት ማተም አይደለም። ጸሐፊው ራሱን ማጽደቅ ወይም ማተም አይችልም။',
+  kind: 'የይዘት ዓይነት', article: 'ጽሑፍ / Blog article', news: 'ዜና / News',
+  announcement: 'ማስታወቂያ / Announcement', pressRelease: 'የፕሬስ መግለጫ / Press release',
+  titleLabel: 'ርዕስ', titlePlaceholder: 'የይዘቱን ርዕስ ያስገቡ',
+  bodyLabel: 'ይዘት', bodyPlaceholder: 'የሚያቀርቡትን መረጃ በግልጽ ይጻፉ።',
+  authorName: 'የጸሐፊ ስም', email: 'ኢሜይል', sending: 'በመላክ ላይ…',
+  resend: 'ኮዱን እንደገና ላክ', sendCode: 'የማረጋገጫ ኮድ ላክ',
+  codeLabel: 'ወደ ኢሜይልዎ የተላከው 6 አሃዝ ኮድ', verifyEmail: 'ኢሜይልን አረጋግጥ',
+  emailVerifiedStatus: 'ኢሜይል ተረጋግጧል።',
+  consent: 'የግላዊነት መመሪያውን አንብቤ ተቀብያለሁ፤ ይዘቱ ለግምገማ እንደሚቀርብ ተረድቻለሁ።',
+  apiNotice: 'የARNA API ግንኙነት ሲኖር ማስገባት ይቻላል። የቀረበው ይዘት በአስተዳዳሪ እስኪጸድቅ ድረስ በግል ይቆያል።',
+  reference: 'የማጣቀሻ ቁጥር', submit: 'ለግምገማ ያቅርቡ',
+  footer: 'ይዘት የሚታተመው ከአስተዳዳሪ ፈቃድ በኋላ ብቻ ነው።'
+} : {
+  invalidEmail: 'Enter a valid email address.',
+  verificationSent: 'A verification code has been sent to your email.',
+  sendCodeFailed: 'The verification code could not be sent.',
+  codeInvalid: 'Enter the six-digit code sent to your email.',
+  emailVerified: 'Your email is verified. You can now submit content.',
+  emailVerifyFailed: 'Email verification failed.',
+  apiUnavailable: 'The ARNA API connection is not configured. Please try again later.',
+  verifyEmailFirst: 'Verify your email before submitting content.',
+  consentRequired: 'You must read and accept the privacy notice.',
+  submitted: 'Your content has been received. An ARNA administrator will review it before it is shared publicly.',
+  unknownError: 'An unexpected error occurred.',
+  back: 'Back to homepage', eyebrow: 'COMMUNITY CONTRIBUTIONS',
+  title: 'Submit content',
+  lead: 'Send ARNA news, an article, an announcement or other official information. Anyone may submit content; publication is possible only after review and approval by an authorized administrator.',
+  processLabel: 'Publishing process', processTitle: 'How publication works',
+  processBody: 'Submit → Private review queue → Administrator decision → Publish only after approval.',
+  processFoot: 'Submitting content does not publish it. Authors cannot approve or publish their own submissions.',
+  kind: 'Content type', article: 'Blog article', news: 'News',
+  announcement: 'Announcement', pressRelease: 'Press release',
+  titleLabel: 'Title', titlePlaceholder: 'Enter a title for your content',
+  bodyLabel: 'Content', bodyPlaceholder: 'Describe the information you are submitting.',
+  authorName: 'Author name', email: 'Email address', sending: 'Sending…',
+  resend: 'Resend code', sendCode: 'Send verification code',
+  codeLabel: 'Six-digit code sent to your email', verifyEmail: 'Verify email',
+  emailVerifiedStatus: 'Email verified.',
+  consent: 'I have read and accept the privacy notice, and understand that my content will be reviewed.',
+  apiNotice: 'Submissions are available when the ARNA API is configured. Submitted content remains private until an administrator approves it.',
+  reference: 'Reference', submit: 'Submit for review',
+  footer: 'Content is published only after administrator approval.'
+});
+onMounted(() => { document.documentElement.lang = locale.value; });
+watch(locale, (value) => { document.documentElement.lang = value; });
+
 watch(authorEmail, () => {
   verificationChallengeId.value = '';
   verificationToken.value = '';
@@ -34,7 +100,7 @@ watch(authorEmail, () => {
 async function requestEmailVerification(): Promise<void> {
   errorMessage.value = '';
   if (!endpointAvailable.value || !authorEmail.value.trim()) {
-    errorMessage.value = 'እባክዎ ትክክለኛ ኢሜይል ያስገቡ።';
+    errorMessage.value = copy.value.invalidEmail;
     return;
   }
   submitting.value = true;
@@ -46,9 +112,9 @@ async function requestEmailVerification(): Promise<void> {
     );
     verificationChallengeId.value = result.challenge_id;
     verificationCodeSent.value = true;
-    successMessage.value = 'የማረጋገጫ ኮድ ወደ ኢሜይልዎ ተልኳል።';
+    successMessage.value = copy.value.verificationSent;
   } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : 'ኮዱን መላክ አልተቻለም።';
+    errorMessage.value = error instanceof Error ? error.message : copy.value.sendCodeFailed;
   } finally {
     submitting.value = false;
   }
@@ -57,7 +123,7 @@ async function requestEmailVerification(): Promise<void> {
 async function verifyEmail(): Promise<void> {
   errorMessage.value = '';
   if (!verificationChallengeId.value || !/^\\d{6}$/.test(verificationCode.value)) {
-    errorMessage.value = 'በኢሜይልዎ የተላከውን 6 አሃዝ ኮድ ያስገቡ።';
+    errorMessage.value = copy.value.codeInvalid;
     return;
   }
   submitting.value = true;
@@ -71,9 +137,9 @@ async function verifyEmail(): Promise<void> {
       },
     );
     verificationToken.value = result.verification_token;
-    successMessage.value = 'ኢሜይልዎ ተረጋግጧል። አሁን ይዘቱን ማቅረብ ይችላሉ።';
+    successMessage.value = copy.value.emailVerified;
   } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : 'የኢሜይል ማረጋገጫ አልተሳካም።';
+    errorMessage.value = error instanceof Error ? error.message : copy.value.emailVerifyFailed;
   } finally {
     submitting.value = false;
   }
@@ -86,17 +152,17 @@ async function submitContent(): Promise<void> {
   submissionReference.value = '';
 
   if (!endpointAvailable.value) {
-    errorMessage.value = 'የARNA API ግንኙነት አልተዋቀረም። እባክዎ በኋላ ይሞክሩ።';
+    errorMessage.value = copy.value.apiUnavailable;
     return;
   }
 
   if (!emailVerified.value) {
-    errorMessage.value = 'ይዘት ከማቅረብዎ በፊት ኢሜይልዎን ያረጋግጡ።';
+    errorMessage.value = copy.value.verifyEmailFirst;
     return;
   }
 
   if (!consent.value) {
-    errorMessage.value = 'የግላዊነት መመሪያውን ማንበብና መቀበል ያስፈልጋል።';
+    errorMessage.value = copy.value.consentRequired;
     return;
   }
 
@@ -117,7 +183,7 @@ async function submitContent(): Promise<void> {
       },
     );
     submissionReference.value = typeof result.reference === 'string' ? result.reference : '';
-    successMessage.value = 'ይዘትዎ ተቀብሏል። ከሕዝብ ጋር ከመጋራቱ በፊት በARNA አስተዳዳሪ ይገመገማል።';
+    successMessage.value = copy.value.submitted;
     title.value = '';
     body.value = '';
     authorName.value = '';
@@ -128,7 +194,7 @@ async function submitContent(): Promise<void> {
     verificationCodeSent.value = false;
     consent.value = false;
   } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : 'ያልታወቀ ስህተት ተፈጥሯል።';
+    errorMessage.value = error instanceof Error ? error.message : copy.value.unknownError;
   } finally {
     submitting.value = false;
   }
