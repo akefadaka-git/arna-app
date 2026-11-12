@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import PageHeader from '@/components/patterns/PageHeader';
+import FinanceJournalDraftPanel from './FinanceJournalDraftPanel.vue';
 import {
   generateFinanceAiProposal,
   getFinanceEvidence,
@@ -231,6 +232,14 @@ onMounted(loadEntities);
         </div>
         <p v-if="periods.length === 0" class="finance-workspace__notice">{{ props.labels.noRows }}</p>
       </section>
+
+      <FinanceJournalDraftPanel
+        v-if="selectedEntityId !== null"
+        :legal-entity-id="selectedEntityId"
+        :accounts="accounts"
+        :journals="journals"
+        @changed="loadEvidence"
+      />
 
       <section class="finance-workspace__panel" aria-labelledby="finance-journals-title">
         <h2 id="finance-journals-title">{{ props.labels.journalsTitle }}</h2>
