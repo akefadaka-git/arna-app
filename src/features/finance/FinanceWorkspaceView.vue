@@ -5,9 +5,17 @@ import {
   generateFinanceAiProposal,
   getFinanceEvidence,
   listFinanceAiProposals,
+  listFinanceAccounts,
+  listFinanceInbox,
+  listFinanceJournals,
+  listFinancePeriods,
   listFinanceEntities,
   reviewFinanceAiProposal,
   type FinanceAiProposal,
+  type FinanceAccount,
+  type FinanceAccountingPeriod,
+  type FinanceInboxEvent,
+  type FinanceJournal,
   type FinanceEntity,
   type FinanceEvidenceSnapshot,
 } from './api';
@@ -32,6 +40,11 @@ const selectedEntityId = ref<number | null>(null);
 const asOfEc = ref(getEthiopianToday());
 const evidence = ref<FinanceEvidenceSnapshot | null>(null);
 const proposals = ref<FinanceAiProposal[]>([]);
+const accounts = ref<FinanceAccount[]>([]);
+const journals = ref<FinanceJournal[]>([]);
+const periods = ref<FinanceAccountingPeriod[]>([]);
+const inboxEvents = ref<FinanceInboxEvent[]>([]);
+const sectionErrors = ref<string[]>([]);
 const question = ref('');
 const reviewReason = ref('');
 const loadingEntities = ref(false);
@@ -60,12 +73,26 @@ async function loadEvidence(): Promise<void> {
   loadingEvidence.value = true;
   errorMessage.value = '';
   try {
-    const [snapshot, items] = await Promise.all([
-      getFinanceEvidence(selectedEntityId.value, asOfEc.value),
-      listFinanceAiProposals(selectedEntityId.value),
-    ]);
+    const snapshot = await getFinanceEvidence(selectedEntityId.value, asOfEc.value);
     evidence.value = snapshot;
-    proposals.value = items;
+    const [proposalResult, accountResult, journalResult, periodResult, inboxResult] = await Promise.allSettled([
+      listFinanceAiProposals(selectedEntityId.value),
+      listFinanceAccounts(selectedEntityId.value),
+      listFinanceJournals(selectedEntityId.value),
+      listFinancePeriods(selectedEntityId.value),
+      listFinanceInbox(),
+    ]);
+    sectionErrors.value = [];
+    if (proposalResult.status === 'fulfilled') proposals.value = proposalResult.value;
+    else { proposals.value = []; sectionErrors.value.push('AI proposals'); }
+    if (accountResult.status === 'fulfilled') accounts.value = accountResult.value;
+    else { accounts.value = []; sectionErrors.value.push('Accounts'); }
+    if (journalResult.status === 'fulfilled') journals.value = journalResult.value;
+    else { journals.value = []; sectionErrors.value.push('Journals'); }
+    if (periodResult.status === 'fulfilled') periods.value = periodResult.value;
+    else { periods.value = []; sectionErrors.value.push('Periods'); }
+    if (inboxResult.status === 'fulfilled') inboxEvents.value = inboxResult.value;
+    else { inboxEvents.value = []; sectionErrors.value.push('Inbox'); }
   } catch {
     errorMessage.value = props.labels.evidenceError;
   } finally {
@@ -142,6 +169,7 @@ onMounted(loadEntities);
     <p v-if="loadingEntities" role="status">{{ props.labels.loading }}</p>
     <p v-else-if="entities.length === 0" class="finance-workspace__notice">{{ props.labels.noEntities }}</p>
     <p v-if="errorMessage" class="finance-workspace__error" role="alert">{{ errorMessage }}</p>
+    <p v-if="sectionErrors.length" class="finance-workspace__notice">Some Finance sections are hidden because the current account lacks their permissions: {{ sectionErrors.join(', ') }}.</p>
 
     <template v-if="evidence">
       <section class="finance-workspace__panel" aria-labelledby="finance-trial-balance-title">
@@ -182,6 +210,47 @@ onMounted(loadEntities);
           <strong>{{ props.labels.limitationsTitle }}</strong>
           <ul><li v-for="item in evidence.limitations" :key="item">{{ item }}</li></ul>
         </div>
+      </section>
+
+      <section class="finance-workspace__panel" aria-labelledby="finance-accounts-title">
+        <h2 id="finance-accounts-title">{{ props.labels.accountsTitle }}</h2>
+        <div class="finance-workspace__table-wrap">
+          <table><thead><tr><th scope="col">Code</th><th scope="col">{{ props.labels.accountColumn }}</th><th scope="col">Type</th><th scope="col">Status</th></tr></thead>
+            <tbody><tr v-for="account in accounts" :key="account.id"><td>{{ account.code }}</td><th scope="row">{{ account.name_en }}</th><td>{{ account.account_type }}</td><td>{{ account.status }}</td></tr></tbody>
+          </table>
+        </div>
+        <p v-if="accounts.length === 0" class="finance-workspace__notice">{{ props.labels.noRows }}</p>
+      </section>
+
+      <section class="finance-workspace__panel" aria-labelledby="finance-periods-title">
+        <h2 id="finance-periods-title">{{ props.labels.periodsTitle }}</h2>
+        <div class="finance-workspace__table-wrap">
+          <table><thead><tr><th scope="col">Code</th><th scope="col">Start (G.C.)</th><th scope="col">End (G.C.)</th><th scope="col">Status</th></tr></thead>
+            <tbody><tr v-for="period in periods" :key="period.id"><th scope="row">{{ period.code }}</th><td>{{ period.starts_on }}</td><td>{{ period.ends_on }}</td><td>{{ period.status }}</td></tr></tbody>
+          </table>
+        </div>
+        <p v-if="periods.length === 0" class="finance-workspace__notice">{{ props.labels.noRows }}</p>
+      </section>
+
+      <section class="finance-workspace__panel" aria-labelledby="finance-journals-title">
+        <h2 id="finance-journals-title">{{ props.labels.journalsTitle }}</h2>
+        <div class="finance-workspace__table-wrap">
+          <table><thead><tr><th scope="col">Journal</th><th scope="col">Effective date</th><th scope="col">Currency</th><th scope="col">Status</th></tr></thead>
+            <tbody><tr v-for="journal in journals" :key="journal.id"><th scope="row">{{ journal.journal_number }}</th><td>{{ journal.effective_date }}</td><td>{{ journal.currency }}</td><td>{{ journal.status }}</td></tr></tbody>
+          </table>
+        </div>
+        <p v-if="journals.length === 0" class="finance-workspace__notice">{{ props.labels.noRows }}</p>
+      </section>
+
+      <section class="finance-workspace__panel" aria-labelledby="finance-inbox-title">
+        <h2 id="finance-inbox-title">{{ props.labels.inboxTitle }}</h2>
+        <p class="finance-workspace__notice">Unmapped source events are retained in quarantine; no journal is posted automatically.</p>
+        <div class="finance-workspace__table-wrap">
+          <table><thead><tr><th scope="col">Source</th><th scope="col">Event</th><th scope="col">Version</th><th scope="col">Status</th><th scope="col">Received</th></tr></thead>
+            <tbody><tr v-for="event in inboxEvents" :key="event.id"><th scope="row">{{ event.source_type }}</th><td>{{ event.event_type }} · {{ event.source_event_id }}</td><td>{{ event.source_version }}</td><td>{{ event.status }}</td><td>{{ event.received_at }}</td></tr></tbody>
+          </table>
+        </div>
+        <p v-if="inboxEvents.length === 0" class="finance-workspace__notice">{{ props.labels.noRows }}</p>
       </section>
 
       <section class="finance-workspace__panel" aria-labelledby="finance-ai-title">
