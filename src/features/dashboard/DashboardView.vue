@@ -243,7 +243,8 @@ interface TileDefinition {
     | 'shareholders'
     | 'shareClasses'
     | 'wallets'
-    | 'files';
+    | 'files'
+    | 'finance';
   readonly to: string;
   readonly icon: IconName;
   readonly permissions: readonly string[];
@@ -279,6 +280,12 @@ const TILES: readonly TileDefinition[] = [
     to: '/wallets',
     icon: 'wallet',
     permissions: ['wallet.view'],
+  },
+  {
+    key: 'finance',
+    to: '/finance',
+    icon: 'chart-no-axes-combined',
+    permissions: ['finance.entity.view', 'finance.report.view'],
   },
   {
     key: 'files',
