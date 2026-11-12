@@ -117,7 +117,8 @@ test.describe('ARNA public site browser contract', () => {
     await expect(page.locator('#services-title')).toContainText('What we build is');
     await expect(page.locator('#businesses-title')).toContainText('Connecting opportunities through');
     await expect(page.locator('#contact-title')).toContainText('Get in touch with ARNA.');
-    await expect(page.getByRole('link', { name: 'Submit content' })).toBeVisible();
+    await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Submit content' })).toBeVisible();
+    await expect(page.getByRole('contentinfo').getByRole('link', { name: 'Submit content' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'አማርኛ' })).toBeVisible();
 
     await page.getByRole('link', { name: 'አማርኛ' }).click();
