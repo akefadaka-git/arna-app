@@ -45,7 +45,11 @@ const validLines = computed(() => lines.value.length >= 2 && lines.value.every((
   const credit = units(line.credit) > 0n;
   return line.accountId !== null && amountsValid && debit !== credit;
 }));
-function formatAmount(value: bigint): string {\n  const whole = value / 10000n;\n  const fraction = (value % 10000n).toString().padStart(4, '0');\n  return `${whole}.${fraction}`;\n}\nconst canCreate = computed(() =>
+function formatAmount(value: bigint): string {
+  const whole = value / 10000n;
+  const fraction = (value % 10000n).toString().padStart(4, '0');
+  return `${whole}.${fraction}`;
+}\nconst canCreate = computed(() =>
   journalNumber.value.trim().length > 0
   && /^\d{4}-\d{2}-\d{2}$/.test(effectiveDateEc.value)
   && description.value.trim().length > 0
