@@ -9,6 +9,11 @@ export interface FinanceWorkspaceLabels {
   readonly evidenceError: string;
   readonly noEntities: string;
   readonly trialBalanceTitle: string;
+  readonly accountsTitle: string;
+  readonly periodsTitle: string;
+  readonly journalsTitle: string;
+  readonly inboxTitle: string;
+  readonly noRows: string;
   readonly accountColumn: string;
   readonly debitColumn: string;
   readonly creditColumn: string;
@@ -42,6 +47,11 @@ export const financeWorkspaceLabels: FinanceWorkspaceLabels = {
   evidenceError: 'የሂሳብ ማስረጃ ማምጣት አልተቻለም።',
   noEntities: 'ለዚህ ተቋም የተመዘገበ ሕጋዊ አካል የለም።',
   trialBalanceTitle: 'የሙከራ ሚዛን',
+  accountsTitle: 'የሂሳብ መዝገብ አካውንቶች',
+  periodsTitle: 'የሂሳብ ወቅቶች',
+  journalsTitle: 'የጆርናል መዝገቦች',
+  inboxTitle: 'የምንጭ ክስተቶች ማስተናገጃ',
+  noRows: 'ምንም መዝገብ አልተገኘም።',
   accountColumn: 'ሂሳብ',
   debitColumn: 'ዴቢት',
   creditColumn: 'ክሬዲት',
