@@ -124,6 +124,16 @@ test.describe('ARNA public site browser contract', () => {
     await expect(page.getByRole('contentinfo').getByRole('link', { name: 'Submit content' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'አማርኛ' })).toBeVisible();
 
+    await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Submit content' }).click();
+    await expect(page).toHaveURL(/\\/contribute\\?locale=en/);
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(page.getByRole('heading', { name: 'Submit content' })).toBeVisible();
+    await expect(page.getByLabel('Content type')).toBeVisible();
+    await expect(page.getByLabel('Email address')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Submit for review' })).toBeVisible();
+    await page.getByRole('link', { name: 'Back to homepage' }).click();
+    await expect(page).toHaveURL(/locale=en/);
+
     await page.getByRole('link', { name: 'አማርኛ' }).click();
     await expect(page).toHaveURL(/locale=am/);
     await expect(page.locator('html')).toHaveAttribute('lang', 'am');
