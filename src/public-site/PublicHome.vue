@@ -270,7 +270,7 @@ const publicationChannels = [
           <a href="#updates">{{ copy.navUpdates }}</a>
           <a href="#gallery">{{ copy.navMedia }}</a>
           <a href="#advertise">{{ copy.navAds }}</a>
-          <RouterLink to="/contribute">{{ copy.footerContribute }}</RouterLink>
+          <RouterLink :to="{ path: '/contribute', query: { locale } }">{{ copy.footerContribute }}</RouterLink>
         </nav>
 
         <RouterLink class="header-action" :to="{ path: '/', query: { locale: locale === 'am' ? 'en' : 'am' } }">{{ locale === 'am' ? 'English' : 'አማርኛ' }}</RouterLink>
@@ -599,9 +599,9 @@ const publicationChannels = [
             </div>
             <div>
               <h3>{{ copy.footerOfficial }}</h3>
-              <RouterLink to="/verify">{{ copy.footerVerification }}</RouterLink>
-              <RouterLink to="/legal">{{ copy.footerLegal }}</RouterLink>
-              <RouterLink to="/contribute">{{ copy.footerContribute }}</RouterLink>
+              <RouterLink :to="{ path: '/verify', query: { locale } }">{{ copy.footerVerification }}</RouterLink>
+              <RouterLink :to="{ path: '/legal', query: { locale } }">{{ copy.footerLegal }}</RouterLink>
+              <RouterLink :to="{ path: '/contribute', query: { locale } }">{{ copy.footerContribute }}</RouterLink>
               <a href="#updates">{{ copy.footerNews }}</a>
               <a href="#advertise">{{ copy.footerAds }}</a>
               <a href="#publications">{{ copy.footerPublications }}</a>
