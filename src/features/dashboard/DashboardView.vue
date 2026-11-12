@@ -284,7 +284,7 @@ const TILES: readonly TileDefinition[] = [
   {
     key: 'finance',
     to: '/finance',
-    icon: 'chart-no-axes-combined',
+    icon: 'bar-chart',
     permissions: ['finance.entity.view'],
   },
   {
