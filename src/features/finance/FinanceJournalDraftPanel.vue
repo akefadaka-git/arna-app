@@ -40,11 +40,12 @@ function units(value: string): bigint {
 const debitTotal = computed(() => lines.value.reduce((sum, line) => sum + units(line.debit), 0n));
 const creditTotal = computed(() => lines.value.reduce((sum, line) => sum + units(line.credit), 0n));
 const validLines = computed(() => lines.value.length >= 2 && lines.value.every((line) => {
-  const debit = amountPattern.test(line.debit) && units(line.debit) > 0n;
-  const credit = amountPattern.test(line.credit) && units(line.credit) > 0n;
-  return line.accountId !== null && debit !== credit;
+  const amountsValid = amountPattern.test(line.debit) && amountPattern.test(line.credit);
+  const debit = units(line.debit) > 0n;
+  const credit = units(line.credit) > 0n;
+  return line.accountId !== null && amountsValid && debit !== credit;
 }));
-const canCreate = computed(() =>
+function formatAmount(value: bigint): string {\n  const whole = value / 10000n;\n  const fraction = (value % 10000n).toString().padStart(4, '0');\n  return `${whole}.${fraction}`;\n}\nconst canCreate = computed(() =>
   journalNumber.value.trim().length > 0
   && /^\d{4}-\d{2}-\d{2}$/.test(effectiveDateEc.value)
   && description.value.trim().length > 0
@@ -132,7 +133,7 @@ async function postDraft(journal: FinanceJournal): Promise<void> {
       <button type="button" class="secondary" :disabled="lines.length <= 2" @click="removeLine(index)">አስወግድ</button>
     </div>
     <button type="button" class="secondary" :disabled="lines.length >= 200" @click="addLine">መስመር ጨምር</button>
-    <p aria-live="polite">ዴቢት: {{ debitTotal.toString() }} የአራት ዲጂት ክፍል · ክሬዲት: {{ creditTotal.toString() }} የአራት ዲጂት ክፍል</p>
+    <p aria-live="polite">ዴቢት: {{ formatAmount(debitTotal) }} ETB · ክሬዲት: {{ formatAmount(creditTotal) }} ETB</p>
     <p v-if="error" role="alert" class="error">{{ error }}</p>
     <p v-if="notice" role="status">{{ notice }}</p>
     <button type="button" :disabled="!canCreate" @click="createDraft">{{ saving ? 'በመፍጠር ላይ…' : 'ረቂቅ ፍጠር' }}</button>
