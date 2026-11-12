@@ -1,14 +1,20 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 import ErrorShell from '@/components/patterns/ErrorShell';
 import PublicSiteLayout from '@/layouts/PublicSiteLayout.vue';
 import PageTitle from '@/layouts/AppShell/PageTitle';
-import { publicVerificationLabels as labels } from '@/router/public-verification-labels';
+import { publicVerificationLabels, publicVerificationEnglishLabels } from '@/router/public-verification-labels';
 import type { PublicVerificationResult } from '@/router/public-verification-labels';
 import { PublicVerificationValidationError, verifyPublicDocument } from '@/router/public-verification-api';
 
 const appName: string = import.meta.env.VITE_APP_NAME;
+const route = useRoute();
+const locale = computed(() => route.query.locale === 'en' ? 'en' : 'am');
+const labels = computed(() => locale.value === 'en' ? publicVerificationEnglishLabels : publicVerificationLabels);
+onMounted(() => { document.documentElement.lang = locale.value; });
+watch(locale, (value) => { document.documentElement.lang = value; });
 const reference = ref('');
 const result = ref<PublicVerificationResult | null>(null);
 const loading = ref(false);
@@ -17,24 +23,24 @@ const checked = ref(false);
 
 const resultTitle = computed(() => {
   if (!checked.value) return '';
-  if (loading.value) return labels.submitting;
-  if (result.value === null) return labels.unavailableTitle;
+  if (loading.value) return labels.value.submitting;
+  if (result.value === null) return labels.value.unavailableTitle;
 
   switch (result.value.status) {
-    case 'verified': return labels.verifiedTitle;
-    case 'invalid': return labels.invalidTitle;
-    case 'revoked': return labels.revokedTitle;
+    case 'verified': return labels.value.verifiedTitle;
+    case 'invalid': return labels.value.invalidTitle;
+    case 'revoked': return labels.value.revokedTitle;
   }
 });
 
 const resultMessage = computed(() => {
   if (!checked.value || loading.value) return '';
-  if (result.value === null) return labels.unavailableMessage;
+  if (result.value === null) return labels.value.unavailableMessage;
 
   switch (result.value.status) {
-    case 'verified': return labels.verifiedMessage;
-    case 'invalid': return labels.invalidMessage;
-    case 'revoked': return labels.revokedMessage;
+    case 'verified': return labels.value.verifiedMessage;
+    case 'invalid': return labels.value.invalidMessage;
+    case 'revoked': return labels.value.revokedMessage;
   }
 });
 
@@ -45,12 +51,12 @@ async function submitVerification(): Promise<void> {
   validationMessage.value = '';
 
   if (!normalized) {
-    validationMessage.value = labels.required;
+    validationMessage.value = labels.value.required;
     return;
   }
 
   if (normalized.length > 64) {
-    validationMessage.value = labels.tooLong;
+    validationMessage.value = labels.value.tooLong;
     return;
   }
 
@@ -63,7 +69,7 @@ async function submitVerification(): Promise<void> {
     result.value = await verifyPublicDocument(normalized);
   } catch (error: unknown) {
     if (error instanceof PublicVerificationValidationError) {
-      validationMessage.value = labels.serverValidation;
+      validationMessage.value = labels.value.serverValidation;
       checked.value = false;
       result.value = null;
     } else {
@@ -81,7 +87,7 @@ async function submitVerification(): Promise<void> {
     <PageTitle :title="labels.pageTitle" :suffix="appName" />
 
     <ErrorShell>
-      <section class="verification" aria-labelledby="verification-title">
+      <section class="verification" :lang="locale" aria-labelledby="verification-title">
         <header class="verification__header">
           <p class="verification__eyebrow">ARNA · PUBLIC SERVICE</p>
           <h1 id="verification-title" class="verification__title">{{ labels.pageTitle }}</h1>
@@ -105,7 +111,7 @@ async function submitVerification(): Promise<void> {
             :aria-invalid="validationMessage ? 'true' : 'false'"
             aria-describedby="reference-help reference-error"
           />
-          <p id="reference-help" class="verification__hint">የአክሲዮን ምስክር ወረቀቱን ማጣቀሻ ቁጥር ብቻ ያስገቡ።</p>
+          <p id="reference-help" class="verification__hint">{{ labels.referenceHelp }}</p>
           <p
             v-if="validationMessage"
             id="reference-error"
@@ -115,7 +121,7 @@ async function submitVerification(): Promise<void> {
             {{ validationMessage }}
           </p>
           <button class="verification__submit" type="submit" :disabled="loading">
-            {{ loading ? labels.submitting : labels.submit }}
+            {{ loading ? labels.value.submitting : labels.submit }}
           </button>
         </form>
 
@@ -135,20 +141,17 @@ async function submitVerification(): Promise<void> {
               <dd>{{ result.reference }}</dd>
             </div>
             <div v-if="result.documentType">
-              <dt>የማስረጃ ዓይነት</dt>
+              <dt>{{ labels.documentTypeLabel }}</dt>
               <dd>{{ result.documentType }}</dd>
             </div>
             <div v-if="result.issuedAt">
-              <dt>የተሰጠበት ቀን</dt>
+              <dt>{{ labels.issuedAtLabel }}</dt>
               <dd>{{ result.issuedAt }}</dd>
             </div>
           </dl>
         </section>
 
-        <p class="verification__disclaimer">
-          ይህ አገልግሎት የARNA የአክሲዮን ምስክር ወረቀቶችን ብቻ ያረጋግጣል። ሌሎች ሕጋዊ ሰነዶችን አያረጋግጥም።
-          አገልግሎቱ ካልተገኘ የምስክር ወረቀቱ ትክክል ወይም ሐሰተኛ ነው ብለን አንደምድምም።
-        </p>
+        <p class="verification__disclaimer">{{ labels.disclaimer }}</p>
       </section>
     </ErrorShell>
   </PublicSiteLayout>
