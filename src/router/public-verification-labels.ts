@@ -25,6 +25,10 @@ export const publicVerificationLabels = {
   help: 'እርዳታ',
   corporate: 'የድርጅቱ ድረ ገጽ',
   referenceResult: 'የማጣቀሻ ቁጥር',
+  referenceHelp: 'የአክሲዮን ምስክር ወረቀቱን ማጣቀሻ ቁጥር ብቻ ያስገቡ።',
+  documentTypeLabel: 'የማስረጃ ዓይነት',
+  issuedAtLabel: 'የተሰጠበት ቀን',
+  disclaimer: 'ይህ አገልግሎት የARNA የአክሲዮን ምስክር ወረቀቶችን ብቻ ያረጋግጣል። ሌሎች ሕጋዊ ሰነዶችን አያረጋግጥም። አገልግሎቱ ካልተገኘ የምስክር ወረቀቱ ትክክል ወይም ሐሰተኛ ነው ብለን አንደምድምም።',
 } as const;
 
 export const publicVerificationEnglishLabels = {
