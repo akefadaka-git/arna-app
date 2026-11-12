@@ -204,7 +204,7 @@ async function submitContent(): Promise<void> {
 <template>
   <div class="contribute-page" :lang="locale">
     <header class="contribute-header">
-      <RouterLink class="contribute-brand" to="/">
+      <RouterLink class="contribute-brand" :to="{ path: '/', query: { locale } }">
         <img src="/logo.png" alt="" width="42" height="42" />
         <span><strong>{{ masesBrandLabels.corporateName }}</strong><small>{{ masesBrandLabels.productName }} · PUBLIC</small></span>
       </RouterLink>
