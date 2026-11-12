@@ -53,7 +53,7 @@ const copy = computed(() => locale.value === 'am' ? {
   opportunitiesEmpty: 'There are no published opportunities at this time. New listings appear after review.', contactTitle: 'Get in touch with ARNA.',
   inquiryGeneral: 'General', inquiryInvestor: 'Shareholder / Investor', inquiryPartnership: 'Partnership', inquiryMedia: 'Media', inquiryCareer: 'Career', inquiryAdvertising: 'Advertising', inquiryMarketplace: 'Marketplace',
   verificationTitle: 'Verify the authenticity of a share certificate.', verificationIntro: 'Use the ARNA share-certificate reference number to check the document status.',
-  footerTagline: 'Shared progress built on trust.', footerAbout: 'Explore', footerOfficial: 'Official links', footerDisclosure: 'Approved information only. Transparency, always.', footerContribute: 'Submit content', footerVerification: 'Document verification', footerLegal: 'Legal information', footerNews: 'News & announcements', footerAds: 'Advertise with ARNA', footerPublications: 'Publications', footerOpportunities: 'Careers & marketplace', footerContact: 'Contact us', backToTop: 'Back to top ↑'
+  footerTagline: 'Shared progress built on trust.', footerAbout: 'Explore', footerOfficial: 'Official links', footerDisclosure: 'Approved information only. Transparency, always.', footerContribute: 'Submit content', footerVerification: 'Document verification', footerLegal: 'Legal information (Amharic only)', footerNews: 'News & announcements', footerAds: 'Advertise with ARNA', footerPublications: 'Publications', footerOpportunities: 'Careers & marketplace', footerContact: 'Contact us', backToTop: 'Back to top ↑'
 });
 
 const year = formatCalendarDate(new Date(), { year: 'numeric' });
