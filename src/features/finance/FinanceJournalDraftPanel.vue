@@ -49,7 +49,8 @@ function formatAmount(value: bigint): string {
   const whole = value / 10000n;
   const fraction = (value % 10000n).toString().padStart(4, '0');
   return `${whole}.${fraction}`;
-}\nconst canCreate = computed(() =>
+}
+const canCreate = computed(() =>
   journalNumber.value.trim().length > 0
   && /^\d{4}-\d{2}-\d{2}$/.test(effectiveDateEc.value)
   && description.value.trim().length > 0
