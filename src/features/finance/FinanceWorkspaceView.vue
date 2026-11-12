@@ -15,9 +15,21 @@ import type { FinanceWorkspaceLabels } from './labels';
 
 const props = defineProps<{ labels: FinanceWorkspaceLabels }>();
 
+function getEthiopianToday(): string {
+  const parts = new Intl.DateTimeFormat('en-US-u-ca-ethiopic-nu-latn', {
+    timeZone: 'Africa/Addis_Ababa',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(new Date());
+  const part = (type: Intl.DateTimeFormatPartTypes): string =>
+    parts.find((item) => item.type === type)?.value ?? '';
+  return `${part('year')}-${part('month')}-${part('day')}`;
+}
+
 const entities = ref<FinanceEntity[]>([]);
 const selectedEntityId = ref<number | null>(null);
-const asOf = ref(new Date().toISOString().slice(0, 10));
+const asOfEc = ref(getEthiopianToday());
 const evidence = ref<FinanceEvidenceSnapshot | null>(null);
 const proposals = ref<FinanceAiProposal[]>([]);
 const question = ref('');
@@ -49,7 +61,7 @@ async function loadEvidence(): Promise<void> {
   errorMessage.value = '';
   try {
     const [snapshot, items] = await Promise.all([
-      getFinanceEvidence(selectedEntityId.value, asOf.value),
+      getFinanceEvidence(selectedEntityId.value, asOfEc.value),
       listFinanceAiProposals(selectedEntityId.value),
     ]);
     evidence.value = snapshot;
@@ -70,7 +82,7 @@ async function generateProposal(): Promise<void> {
     await generateFinanceAiProposal({
       legal_entity_id: selectedEntityId.value,
       task_type: 'variance_review',
-      as_of: asOf.value,
+      as_of_ec: asOfEc.value,
       question: question.value.trim(),
     });
     question.value = '';
@@ -120,7 +132,7 @@ onMounted(loadEntities);
       </label>
       <label class="finance-workspace__field">
         <span>{{ props.labels.asOfLabel }}</span>
-        <input v-model="asOf" type="date" />
+        <input v-model="asOfEc" type="text" inputmode="numeric" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY-MM-DD" />
       </label>
       <button type="button" class="finance-workspace__button" :disabled="loadingEvidence || selectedEntityId === null" @click="loadEvidence">
         {{ loadingEvidence ? props.labels.loading : props.labels.loadEvidence }}
@@ -139,6 +151,7 @@ onMounted(loadEntities);
             {{ evidence.report.summary.is_balanced ? props.labels.balanced : props.labels.unbalanced }}
           </span>
         </div>
+        <p class="finance-workspace__digest">E.C. {{ evidence.as_of_ec }} · G.C. {{ evidence.as_of }}</p>
         <div class="finance-workspace__totals">
           <div><span>{{ props.labels.debitColumn }}</span><strong>{{ evidence.report.summary.total_debits }} {{ evidence.report.currency }}</strong></div>
           <div><span>{{ props.labels.creditColumn }}</span><strong>{{ evidence.report.summary.total_credits }} {{ evidence.report.currency }}</strong></div>
