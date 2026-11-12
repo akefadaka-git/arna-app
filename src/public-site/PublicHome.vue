@@ -12,6 +12,50 @@ import { fetchCorporateHome, fetchCorporateEntries, fetchCorporatePages, submitC
 const route = useRoute();
 const locale = ref<'am' | 'en'>(route.query.locale === 'en' ? 'en' : 'am');
 
+const copy = computed(() => locale.value === 'am' ? {
+  skip: 'ወደ ዋናው ይዘት ይሂዱ', announcement: 'የARNA ይፋዊ ድረ ገጽ። የተጸደቀ መረጃ ብቻ እዚህ ይታያል።',
+  navAbout: 'ስለ ARNA', navValues: 'እሴቶቻችን', navServices: 'አገልግሎቶች', navBusiness: 'የንግድ አቅጣጫዎች', navUpdates: 'ዜናና ጦማር', navMedia: 'ሚዲያ', navAds: 'ማስታወቂያ', verify: 'ሰነድ ያረጋግጡ',
+  heroTitle1: 'የጋራ እድገት።', heroTitle2: 'በታማኝነት የተመራ።', heroLead: 'ወደ ARNA እንኳን በደህና መጡ። ግልጽነትን፣ ተጠያቂነትን እና ዘላቂ እድገትን በማዕከል የሚያደርግ የጋራ ጉዞ እየገነባን ነው።',
+  aboutButton: 'ARNAን ይወቁ', verifyCertificate: 'የአክሲዮን ምስክር ወረቀት ያረጋግጡ', trustline: 'መተማመን የሚገነባው በግልጽነት ነው።',
+  aboutEyebrow: 'ስለ እኛ', aboutTitle1: 'ሥራን የሚያቀላጥፍ፣', aboutTitle2: 'እምነትን የሚያጠናክር', aboutAccent: 'ሥርዓት።',
+  aboutP1: 'ARNA የድርጅት አሠራርን ከተጠያቂነትና ከግልጽ አስተዳደር ጋር ለማገናኘት የሚያተኩር የዲጂታል ሥርዓት ነው።',
+  aboutP2: 'ይህ ይፋዊ ድረ ገጽ ስለ ድርጅቱ፣ አገልግሎቶቹ እና የተጸደቁ ማስታወቂያዎች መረጃን በአንድ ቦታ ለማቅረብ ይዘጋጃል።',
+  valuesEyebrow: 'የምንመራባቸው እሴቶች', valuesTitle: 'መሠረታችን', valuesAccent: 'ግልጽ ነው።', valuesIntro: 'የምንገነባው ሥርዓት በሰዎች እምነት ላይ መመሥረት አለበት።',
+  servicesEyebrow: 'አገልግሎቶችና መፍትሄዎች', servicesTitle: 'የምንገነባው', servicesAccent: 'ለወደፊት ነው።', servicesIntro: 'ዝርዝር የአገልግሎት መረጃዎች በይፋ ከጸደቁ በኋላ በዚህ ይታያሉ።',
+  preparing: 'በመዘጋጀት ላይ', servicesNote: 'እነዚህ የአገልግሎት ምድቦች የድረ ገጹን መዋቅር ለማሳየት ቀርበዋል፤ የተወሰኑ ምርቶች፣ ዋጋዎች ወይም የግዢ ተግባራት እስኪጸድቁ ድረስ አይታዩም።',
+  businessTitle: 'እድሎችን የሚያገናኙ', businessAccent: 'የሥራ አቅጣጫዎች።', businessIntro: 'የተረጋገጡ የንግድ ክፍሎችና ኩባንያዎች መገለጫዎች በአስተዳዳሪ ከጸደቁ በኋላ እዚህ ይታያሉ።',
+  businessStatus: 'ዝርዝር መረጃ በማረጋገጥ ላይ', businessDisclaimer: 'ማስታወሻ፦ ከላይ ያሉት ምድቦች የድረ ገጹን መዋቅር ያሳያሉ፤ የተረጋገጡ የሕጋዊ ኩባንያ ስሞች፣ ባለቤትነት ወይም የንግድ ጥያቄዎች አይደሉም።',
+  updatesTitle: 'የቅርብ መረጃዎች።', updatesAccent: 'ከታመነ ምንጭ።', updatesIntro: 'የድርጅቱ ዜናዎች፣ ማስታወቂያዎች እና ይፋዊ ማሻሻያዎች በአስተዳዳሪ ከተጸደቁ በኋላ እዚህ ይታያሉ።',
+  approvedContent: 'የጸደቀ ይዘት ሲኖር ይታያል', mediaTitle: 'የARNA ሚዲያ', mediaAccent: 'ማዕከል።', mediaIntro: 'ፎቶዎችና ህትመቶች ከማረጋገጫና ከአስተዳዳሪ ፈቃድ በኋላ ብቻ ይታያሉ።',
+  mediaEmpty: 'በአሁኑ ጊዜ የታተመ ሚዲያ የለም።', publicationsTitle: 'ህትመቶችና', publicationsAccent: 'ይፋዊ ማስታወቂያዎች።', publicationsEmpty: 'በአሁኑ ጊዜ የታተሙ ህትመቶች የሉም።',
+  opportunitiesTitle: 'የሚቀጥለውን እድል', opportunitiesAccent: 'ከዚህ ይጀምሩ።', opportunitiesIntro: 'የተጸደቁ የሥራ እድሎች፣ የንግድ ማስታወቂያዎችና የገበያ ዝርዝሮች እዚህ ይታያሉ።',
+  opportunitiesEmpty: 'በአሁኑ ጊዜ የታተመ እድል የለም። አዲስ ዝርዝሮች ከግምገማ በኋላ ይታያሉ።', contactTitle: 'ከእኛ ጋር ይገናኙ።',
+  inquiryGeneral: 'አጠቃላይ', inquiryInvestor: 'ባለአክሲዮን / ኢንቨስተር', inquiryPartnership: 'አጋርነት', inquiryMedia: 'ሚዲያ', inquiryCareer: 'ሥራ', inquiryAdvertising: 'ማስታወቂያ', inquiryMarketplace: 'ገበያ',
+  verificationTitle: 'የአክሲዮን ምስክር ወረቀት እውነተኛነት ያረጋግጡ።', verificationIntro: 'የARNA የአክሲዮን ምስክር ወረቀት ማጣቀሻ ቁጥርን በመጠቀም የሰነዱን ሁኔታ ይፈትሹ።',
+  footerTagline: 'በመተማመን የሚገነባ የጋራ እድገት።', footerAbout: 'ይወቁን', footerOfficial: 'ይፋዊ አገናኞች', footerDisclosure: 'የተጸደቀ መረጃ ብቻ። ግልጽነት ሁልጊዜ።', backToTop: 'ወደ ላይ ↑'
+} : {
+  skip: 'Skip to main content', announcement: 'ARNA official corporate website. Only approved information is published here.',
+  navAbout: 'About ARNA', navValues: 'Our values', navServices: 'Services', navBusiness: 'Business areas', navUpdates: 'News & insights', navMedia: 'Media', navAds: 'Advertising', verify: 'Verify a document',
+  heroTitle1: 'Shared progress.', heroTitle2: 'Led by trust.', heroLead: 'Welcome to ARNA. We are building a shared journey centered on transparency, accountability and sustainable progress.',
+  aboutButton: 'Discover ARNA', verifyCertificate: 'Verify a share certificate', trustline: 'Trust is built through transparency.',
+  aboutEyebrow: 'About us', aboutTitle1: 'A system that', aboutTitle2: 'simplifies work and strengthens', aboutAccent: 'trust.',
+  aboutP1: 'ARNA is a digital operating system focused on connecting enterprise operations with accountability and transparent governance.',
+  aboutP2: 'This official website brings together approved information about the organization, its services and public announcements.',
+  valuesEyebrow: 'Our guiding principles', valuesTitle: 'Our foundation is', valuesAccent: 'clear.', valuesIntro: 'The system we build must be grounded in the trust of the people it serves.',
+  servicesEyebrow: 'Services & solutions', servicesTitle: 'What we build is', servicesAccent: 'for the future.', servicesIntro: 'Detailed service information will appear here after formal approval.',
+  preparing: 'In preparation', servicesNote: 'These service categories illustrate the website structure. Specific products, prices and purchasing functions will appear only after approval.',
+  businessTitle: 'Connecting opportunities through', businessAccent: 'business areas.', businessIntro: 'Verified business-unit and company profiles will appear here after administrative approval.',
+  businessStatus: 'Details under verification', businessDisclaimer: 'Note: The categories above illustrate the website structure. They are not verified legal company names, ownership statements or commercial claims.',
+  updatesTitle: 'The latest updates.', updatesAccent: 'From trusted sources.', updatesIntro: 'Corporate news, announcements and official updates appear here after administrative approval.',
+  approvedContent: 'Shown when approved content is available', mediaTitle: 'The ARNA media', mediaAccent: 'center.', mediaIntro: 'Photos and publications appear only after verification and administrative approval.',
+  mediaEmpty: 'There is no published media at this time.', publicationsTitle: 'Publications &', publicationsAccent: 'official notices.', publicationsEmpty: 'There are no published notices or publications at this time.',
+  opportunitiesTitle: 'Your next opportunity', opportunitiesAccent: 'starts here.', opportunitiesIntro: 'Approved career opportunities, business advertisements and marketplace listings appear here.',
+  opportunitiesEmpty: 'There are no published opportunities at this time. New listings appear after review.', contactTitle: 'Get in touch with ARNA.',
+  inquiryGeneral: 'General', inquiryInvestor: 'Shareholder / Investor', inquiryPartnership: 'Partnership', inquiryMedia: 'Media', inquiryCareer: 'Career', inquiryAdvertising: 'Advertising', inquiryMarketplace: 'Marketplace',
+  verificationTitle: 'Verify the authenticity of a share certificate.', verificationIntro: 'Use the ARNA share-certificate reference number to check the document status.',
+  footerTagline: 'Shared progress built on trust.', footerAbout: 'Explore', footerOfficial: 'Official links', footerDisclosure: 'Approved information only. Transparency, always.', backToTop: 'Back to top ↑'
+});
+
 const year = formatCalendarDate(new Date(), { year: 'numeric' });
 
 interface PublishedContent {
