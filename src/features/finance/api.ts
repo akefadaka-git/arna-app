@@ -22,6 +22,7 @@ export interface FinanceTrialBalanceAccount {
 export interface FinanceEvidenceSnapshot {
   readonly scope: { readonly tenant_id: number; readonly legal_entity_id: number; readonly entity_code: string };
   readonly as_of: string;
+  readonly as_of_ec: string;
   readonly report: {
     readonly currency: string;
     readonly accounts: readonly FinanceTrialBalanceAccount[];
@@ -64,9 +65,9 @@ export async function listFinanceEntities(): Promise<FinanceEntity[]> {
   return result.data.data;
 }
 
-export async function getFinanceEvidence(legalEntityId: number, asOf: string): Promise<FinanceEvidenceSnapshot> {
+export async function getFinanceEvidence(legalEntityId: number, asOfEc: string): Promise<FinanceEvidenceSnapshot> {
   const result = await api.get<ApiEnvelope<FinanceEvidenceSnapshot>>('/api/finance/intelligence/evidence', {
-    params: { legal_entity_id: legalEntityId, as_of: asOf },
+    params: { legal_entity_id: legalEntityId, as_of_ec: asOfEc },
   });
   return result.data;
 }
@@ -81,7 +82,7 @@ export async function listFinanceAiProposals(legalEntityId: number): Promise<Fin
 export async function generateFinanceAiProposal(input: {
   legal_entity_id: number;
   task_type: 'variance_review' | 'cash_flow_review' | 'ledger_anomaly_review' | 'period_close_review';
-  as_of: string;
+  as_of_ec: string;
   question: string;
 }): Promise<FinanceAiProposal> {
   const result = await api.post<ApiEnvelope<FinanceAiProposal>>('/api/finance/intelligence/proposals', input);
