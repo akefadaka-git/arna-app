@@ -170,7 +170,7 @@ async function sendOpportunity(): Promise<void> {
   submitting.value = true;
   opportunityStatus.value = '';
   try {
-    const result = await submitCorporateOpportunity(opportunity.value.type, { ...opportunity.value, locale: 'am' });
+    const result = await submitCorporateOpportunity(opportunity.value.type, { ...opportunity.value, locale: locale.value });
     opportunityStatus.value = locale.value === 'am' ? `ማቅረቢያዎ ተቀብሏል። የማጣቀሻ ቁጥር: ${result.reference}` : `Your submission was received. Reference: ${result.reference}`;
     opportunity.value = { type: 'career', name: '', email: '', title: '', description: '', organization: '' };
   } catch {
@@ -189,53 +189,53 @@ const principles = [
     number: '01',
     titleAm: 'መተማመን',
     titleEn: 'Trust',
-    description: 'በግልጽ ሂደቶች፣ በተጠያቂነት እና በታማኝ አሠራር ላይ የተመሠረተ ግንኙነት።',
+    description: 'በግልጽ ሂደቶች፣ በተጠያቂነት እና በታማኝ አሠራር ላይ የተመሠረተ ግንኙነት።', descriptionEn: 'Relationships grounded in clear processes, accountability and trustworthy practice.',
   },
   {
     number: '02',
     titleAm: 'ግልጽነት',
     titleEn: 'Transparency',
-    description: 'ውሳኔዎችና መረጃዎች በቀላሉ እንዲገኙና እንዲረዱ ማድረግ።',
+    description: 'ውሳኔዎችና መረጃዎች በቀላሉ እንዲገኙና እንዲረዱ ማድረግ።', descriptionEn: 'Making decisions and information easy to access and understand.',
   },
   {
     number: '03',
     titleAm: 'ተጠያቂነት',
     titleEn: 'Accountability',
-    description: 'ኃላፊነት ያለውን አመራር፣ ቁጥጥር እና ጥንቃቄ የተሞላበት አስተዳደር መደገፍ።',
+    description: 'ኃላፊነት ያለውን አመራር፣ ቁጥጥር እና ጥንቃቄ የተሞላበት አስተዳደር መደገፍ።', descriptionEn: 'Supporting responsible leadership, oversight and careful governance.',
   },
 ];
 
 const offerings = [
   {
     number: '01',
-    label: 'የድርጅት ሥርዓቶች',
+    label: 'የድርጅት ሥርዓቶች', labelEn: 'Enterprise systems',
     title: 'Enterprise systems',
-    description: 'ለድርጅታዊ ሥራዎች፣ ለአስተዳደር እና ለተቀናጀ አሠራር የተዘጋጁ ዲጂታል መሠረቶች።',
+    description: 'ለድርጅታዊ ሥራዎች፣ ለአስተዳደር እና ለተቀናጀ አሠራር የተዘጋጁ ዲጂታል መሠረቶች።', descriptionEn: 'Digital foundations for enterprise operations, administration and integrated workflows.',
   },
   {
     number: '02',
-    label: 'የአባላት እና የባለአክሲዮኖች አገልግሎቶች',
+    label: 'የአባላት እና የባለአክሲዮኖች አገልግሎቶች', labelEn: 'Member and shareholder services',
     title: 'Member services',
-    description: 'የባለድርሻ ግንኙነቶችንና ተዛማጅ አገልግሎቶችን በተጠበቀ መንገድ ለማቀናጀት የሚያግዙ መፍትሄዎች።',
+    description: 'የባለድርሻ ግንኙነቶችንና ተዛማጅ አገልግሎቶችን በተጠበቀ መንገድ ለማቀናጀት የሚያግዙ መፍትሄዎች።', descriptionEn: 'Secure solutions for coordinating stakeholder relationships and related services.',
   },
   {
     number: '03',
-    label: 'ዲጂታል ንግድ',
+    label: 'ዲጂታል ንግድ', labelEn: 'Digital commerce',
     title: 'Digital commerce',
-    description: 'በደህንነትና በግልጽ መረጃ ላይ የተመሠረቱ የዲጂታል ንግድ አገልግሎቶች።',
+    description: 'በደህንነትና በግልጽ መረጃ ላይ የተመሠረቱ የዲጂታል ንግድ አገልግሎቶች።', descriptionEn: 'Digital commerce services grounded in security and clear information.',
   },
 ];
 
 const businessAreas = [
-  { number: '01', title: 'Enterprise & operations', titleAm: 'ድርጅታዊ አሠራር', description: 'የድርጅት አስተዳደርን፣ የሥራ ሂደቶችንና የተቀናጀ አገልግሎትን የሚደግፉ መፍትሄዎች።' },
-  { number: '02', title: 'People & partnerships', titleAm: 'ሰዎችና አጋርነት', description: 'ከአባላት፣ ከባለድርሻ አካላትና ከንግድ አጋሮች ጋር ግልጽ ግንኙነት ለመገንባት የሚያግዙ አቅጣጫዎች።' },
-  { number: '03', title: 'Commerce & innovation', titleAm: 'ንግድና ፈጠራ', description: 'የንግድ እድሎችን፣ የዲጂታል አገልግሎቶችንና ፈጠራን የሚያበረታቱ የወደፊት አቅጣጫዎች።' },
+  { number: '01', title: 'Enterprise & operations', titleAm: 'ድርጅታዊ አሠራር', description: 'የድርጅት አስተዳደርን፣ የሥራ ሂደቶችንና የተቀናጀ አገልግሎትን የሚደግፉ መፍትሄዎች።', descriptionEn: 'Solutions supporting enterprise governance, workflows and integrated services.' },
+  { number: '02', title: 'People & partnerships', titleAm: 'ሰዎችና አጋርነት', description: 'ከአባላት፣ ከባለድርሻ አካላትና ከንግድ አጋሮች ጋር ግልጽ ግንኙነት ለመገንባት የሚያግዙ አቅጣጫዎች።', descriptionEn: 'Clear partnerships with members, stakeholders and business partners.' },
+  { number: '03', title: 'Commerce & innovation', titleAm: 'ንግድና ፈጠራ', description: 'የንግድ እድሎችን፣ የዲጂታል አገልግሎቶችንና ፈጠራን የሚያበረታቱ የወደፊት አቅጣጫዎች።', descriptionEn: 'Future directions that enable business opportunities, digital services and innovation.' },
 ];
 
 const publicationChannels = [
-  { number: '01', title: 'News', titleAm: 'ዜና', description: 'የድርጅትና የሥራ እንቅስቃሴ ዜናዎች።', label: 'NEWS' },
-  { number: '02', title: 'Insights & blog', titleAm: 'ጦማርና ሀሳቦች', description: 'ጠቃሚ ጽሑፎች፣ ትንታኔዎችና የእውቀት ልውውጥ።', label: 'INSIGHTS' },
-  { number: '03', title: 'Official notices', titleAm: 'ይፋዊ ማስታወቂያዎች', description: 'በአስተዳዳሪ የተገመገሙ ይፋዊ ማሳወቂያዎችና መግለጫዎች።', label: 'ANNOUNCEMENTS' },
+  { number: '01', title: 'News', titleAm: 'ዜና', description: 'የድርጅትና የሥራ እንቅስቃሴ ዜናዎች።', descriptionEn: 'Company and operational news.', label: 'NEWS' },
+  { number: '02', title: 'Insights & blog', titleAm: 'ጦማርና ሀሳቦች', description: 'ጠቃሚ ጽሑፎች፣ ትንታኔዎችና የእውቀት ልውውጥ።', descriptionEn: 'Useful articles, analysis and knowledge exchange.', label: 'INSIGHTS' },
+  { number: '03', title: 'Official notices', titleAm: 'ይፋዊ ማስታወቂያዎች', description: 'በአስተዳዳሪ የተገመገሙ ይፋዊ ማሳወቂያዎችና መግለጫዎች።', descriptionEn: 'Official notices and statements reviewed by administrators.', label: 'ANNOUNCEMENTS' },
 ];
 </script>
 
