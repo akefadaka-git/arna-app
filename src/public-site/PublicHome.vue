@@ -13,7 +13,7 @@ const route = useRoute();
 const locale = ref<'am' | 'en'>(route.query.locale === 'en' ? 'en' : 'am');
 
 const copy = computed(() => locale.value === 'am' ? {
-  skip: 'ወደ ዋናው ይዘት ይሂዱ', announcement: 'የARNA ይፋዊ ድረ ገጽ። የተጸደቀ መረጃ ብቻ እዚህ ይታያል።',
+  skip: 'ወደ ዋናው ይዘት ይሂዱ', navLabel: 'ዋና አሰሳ', heroArtLabel: 'ARNA የጋራ እድገት ምልክት', announcement: 'የARNA ይፋዊ ድረ ገጽ። የተጸደቀ መረጃ ብቻ እዚህ ይታያል።',
   navAbout: 'ስለ ARNA', navValues: 'እሴቶቻችን', navServices: 'አገልግሎቶች', navBusiness: 'የንግድ አቅጣጫዎች', navUpdates: 'ዜናና ጦማር', navMedia: 'ሚዲያ', navAds: 'ማስታወቂያ', verify: 'ሰነድ ያረጋግጡ',
   heroTitle1: 'የጋራ እድገት።', heroTitle2: 'በታማኝነት የተመራ።', heroLead: 'ወደ ARNA እንኳን በደህና መጡ። ግልጽነትን፣ ተጠያቂነትን እና ዘላቂ እድገትን በማዕከል የሚያደርግ የጋራ ጉዞ እየገነባን ነው።',
   aboutButton: 'ARNAን ይወቁ', verifyCertificate: 'የአክሲዮን ምስክር ወረቀት ያረጋግጡ', trustline: 'መተማመን የሚገነባው በግልጽነት ነው።',
@@ -34,7 +34,7 @@ const copy = computed(() => locale.value === 'am' ? {
   verificationTitle: 'የአክሲዮን ምስክር ወረቀት እውነተኛነት ያረጋግጡ።', verificationIntro: 'የARNA የአክሲዮን ምስክር ወረቀት ማጣቀሻ ቁጥርን በመጠቀም የሰነዱን ሁኔታ ይፈትሹ።',
   footerTagline: 'በመተማመን የሚገነባ የጋራ እድገት።', footerAbout: 'ይወቁን', footerOfficial: 'ይፋዊ አገናኞች', footerDisclosure: 'የተጸደቀ መረጃ ብቻ። ግልጽነት ሁልጊዜ።', footerContribute: 'ይዘት ያቅርቡ', footerVerification: 'ሰነድ ማረጋገጫ', footerLegal: 'ሕጋዊ መረጃ', footerNews: 'ዜናዎችና ማስታወቂያዎች', footerAds: 'ማስታወቂያ ያስተዋውቁ', footerPublications: 'ህትመቶች', footerOpportunities: 'የሥራና የገበያ እድሎች', footerContact: 'ያግኙን', backToTop: 'ወደ ላይ ↑'
 } : {
-  skip: 'Skip to main content', announcement: 'ARNA official corporate website. Only approved information is published here.',
+  skip: 'Skip to main content', navLabel: 'Main navigation', heroArtLabel: 'ARNA shared progress emblem', announcement: 'ARNA official corporate website. Only approved information is published here.',
   navAbout: 'About ARNA', navValues: 'Our values', navServices: 'Services', navBusiness: 'Business areas', navUpdates: 'News & insights', navMedia: 'Media', navAds: 'Advertising', verify: 'Verify a document',
   heroTitle1: 'Shared progress.', heroTitle2: 'Led by trust.', heroLead: 'Welcome to ARNA. We are building a shared journey centered on transparency, accountability and sustainable progress.',
   aboutButton: 'Discover ARNA', verifyCertificate: 'Verify a share certificate', trustline: 'Trust is built through transparency.',
@@ -261,7 +261,7 @@ const publicationChannels = [
           </span>
         </RouterLink>
 
-        <nav class="main-nav" aria-label="ዋና አሰሳ">
+        <nav class="main-nav" :aria-label="copy.navLabel">
           <a href="#about">{{ copy.navAbout }}</a>
           <RouterLink v-for="page in navigationPages" :key="page.public_id" :to="`/${locale}/${page.slug}`">{{ page.title }}</RouterLink>
           <a href="#principles">{{ copy.navValues }}</a>
@@ -320,7 +320,7 @@ const publicationChannels = [
             </div>
           </div>
 
-          <div class="hero-art" aria-label="ARNA የጋራ እድገት ምልክት" role="img">
+          <div class="hero-art" :aria-label="copy.heroArtLabel" role="img">
             <div class="hero-art__orbit hero-art__orbit--outer"></div>
             <div class="hero-art__orbit hero-art__orbit--middle"></div>
             <div class="hero-art__orbit hero-art__orbit--inner"></div>
