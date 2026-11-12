@@ -134,6 +134,14 @@ test.describe('ARNA public site browser contract', () => {
     await page.getByRole('link', { name: 'Back to homepage' }).click();
     await expect(page).toHaveURL(/locale=en/);
 
+    await page.goto(new URL('/verify?locale=en', baseUrl).toString());
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(page.getByRole('heading', { name: 'Share certificate verification' })).toBeVisible();
+    await expect(page.getByLabel('Reference number')).toBeVisible();
+    await expect(page.getByText(/This service verifies ARNA share certificates only/)).toBeVisible();
+
+    await page.goto(new URL('/?locale=en', baseUrl).toString());
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await page.getByRole('link', { name: 'አማርኛ' }).click();
     await expect(page).toHaveURL(/locale=am/);
     await expect(page.locator('html')).toHaveAttribute('lang', 'am');
