@@ -121,7 +121,7 @@ async function submitVerification(): Promise<void> {
             {{ validationMessage }}
           </p>
           <button class="verification__submit" type="submit" :disabled="loading">
-            {{ loading ? labels.value.submitting : labels.submit }}
+            {{ loading ? labels.submitting : labels.submit }}
           </button>
         </form>
 
