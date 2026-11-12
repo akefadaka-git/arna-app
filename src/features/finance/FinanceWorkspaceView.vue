@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import PageHeader from '@/components/patterns/PageHeader.vue';
+import PageHeader from '@/components/patterns/PageHeader';
 import {
   generateFinanceAiProposal,
   getFinanceEvidence,
