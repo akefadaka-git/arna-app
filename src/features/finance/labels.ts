@@ -35,7 +35,7 @@ export const financeWorkspaceLabels: FinanceWorkspaceLabels = {
   pageTitle: 'ፋይናንስ',
   pageDescription: 'የሂሳብ መዝገቦችን፣ የሙከራ ሚዛንን እና በማስረጃ የተደገፉ የፋይናንስ ግንዛቤዎችን ይመልከቱ።',
   entityLabel: 'ሕጋዊ አካል',
-  asOfLabel: 'እስከ ቀን (Gregorian)',
+  asOfLabel: 'እስከ ቀን (ዓ.ም.)',
   loadEvidence: 'ሪፖርት አምጣ',
   loading: 'በመጫን ላይ…',
   entitiesError: 'የሕጋዊ አካላት ዝርዝር ማምጣት አልተቻለም።',
