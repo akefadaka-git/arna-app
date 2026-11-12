@@ -20,6 +20,7 @@ test.describe('ARNA public site browser contract', () => {
   test('renders the Amharic homepage at desktop and mobile widths without horizontal page overflow', async ({ page }) => {
     for (const viewport of [
       { width: 1280, height: 900 },
+      { width: 768, height: 1024 },
       { width: 390, height: 844 },
       { width: 320, height: 740 },
     ]) {
@@ -117,6 +118,8 @@ test.describe('ARNA public site browser contract', () => {
     await expect(page.locator('#services-title')).toContainText('What we build is');
     await expect(page.locator('#businesses-title')).toContainText('Connecting opportunities through');
     await expect(page.locator('#contact-title')).toContainText('Get in touch with ARNA.');
+    await expect(page).toHaveTitle('ARNA | Official Website');
+    await expectNoSeriousAccessibilityViolations(page, 'English homepage');
     await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Submit content' })).toBeVisible();
     await expect(page.getByRole('contentinfo').getByRole('link', { name: 'Submit content' })).toBeVisible();
     await expect(page.getByRole('link', { name: 'አማርኛ' })).toBeVisible();
