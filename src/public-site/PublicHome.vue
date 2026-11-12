@@ -32,7 +32,7 @@ const copy = computed(() => locale.value === 'am' ? {
   opportunitiesEmpty: 'በአሁኑ ጊዜ የታተመ እድል የለም። አዲስ ዝርዝሮች ከግምገማ በኋላ ይታያሉ።', contactTitle: 'ከእኛ ጋር ይገናኙ።',
   inquiryGeneral: 'አጠቃላይ', inquiryInvestor: 'ባለአክሲዮን / ኢንቨስተር', inquiryPartnership: 'አጋርነት', inquiryMedia: 'ሚዲያ', inquiryCareer: 'ሥራ', inquiryAdvertising: 'ማስታወቂያ', inquiryMarketplace: 'ገበያ',
   verificationTitle: 'የአክሲዮን ምስክር ወረቀት እውነተኛነት ያረጋግጡ።', verificationIntro: 'የARNA የአክሲዮን ምስክር ወረቀት ማጣቀሻ ቁጥርን በመጠቀም የሰነዱን ሁኔታ ይፈትሹ።',
-  footerTagline: 'በመተማመን የሚገነባ የጋራ እድገት።', footerAbout: 'ይወቁን', footerOfficial: 'ይፋዊ አገናኞች', footerDisclosure: 'የተጸደቀ መረጃ ብቻ። ግልጽነት ሁልጊዜ።', backToTop: 'ወደ ላይ ↑'
+  footerTagline: 'በመተማመን የሚገነባ የጋራ እድገት።', footerAbout: 'ይወቁን', footerOfficial: 'ይፋዊ አገናኞች', footerDisclosure: 'የተጸደቀ መረጃ ብቻ። ግልጽነት ሁልጊዜ።', footerContribute: 'ይዘት ያቅርቡ', footerVerification: 'ሰነድ ማረጋገጫ', footerLegal: 'ሕጋዊ መረጃ', footerNews: 'ዜናዎችና ማስታወቂያዎች', footerAds: 'ማስታወቂያ ያስተዋውቁ', footerPublications: 'ህትመቶች', footerOpportunities: 'የሥራና የገበያ እድሎች', footerContact: 'ያግኙን', backToTop: 'ወደ ላይ ↑'
 } : {
   skip: 'Skip to main content', announcement: 'ARNA official corporate website. Only approved information is published here.',
   navAbout: 'About ARNA', navValues: 'Our values', navServices: 'Services', navBusiness: 'Business areas', navUpdates: 'News & insights', navMedia: 'Media', navAds: 'Advertising', verify: 'Verify a document',
@@ -53,7 +53,7 @@ const copy = computed(() => locale.value === 'am' ? {
   opportunitiesEmpty: 'There are no published opportunities at this time. New listings appear after review.', contactTitle: 'Get in touch with ARNA.',
   inquiryGeneral: 'General', inquiryInvestor: 'Shareholder / Investor', inquiryPartnership: 'Partnership', inquiryMedia: 'Media', inquiryCareer: 'Career', inquiryAdvertising: 'Advertising', inquiryMarketplace: 'Marketplace',
   verificationTitle: 'Verify the authenticity of a share certificate.', verificationIntro: 'Use the ARNA share-certificate reference number to check the document status.',
-  footerTagline: 'Shared progress built on trust.', footerAbout: 'Explore', footerOfficial: 'Official links', footerDisclosure: 'Approved information only. Transparency, always.', backToTop: 'Back to top ↑'
+  footerTagline: 'Shared progress built on trust.', footerAbout: 'Explore', footerOfficial: 'Official links', footerDisclosure: 'Approved information only. Transparency, always.', footerContribute: 'Submit content', footerVerification: 'Document verification', footerLegal: 'Legal information', footerNews: 'News & announcements', footerAds: 'Advertise with ARNA', footerPublications: 'Publications', footerOpportunities: 'Careers & marketplace', footerContact: 'Contact us', backToTop: 'Back to top ↑'
 });
 
 const year = formatCalendarDate(new Date(), { year: 'numeric' });
@@ -270,7 +270,7 @@ const publicationChannels = [
           <a href="#updates">{{ copy.navUpdates }}</a>
           <a href="#gallery">{{ copy.navMedia }}</a>
           <a href="#advertise">{{ copy.navAds }}</a>
-          <RouterLink to="/contribute">ይዘት ያቅርቡ</RouterLink>
+          <RouterLink to="/contribute">{{ copy.footerContribute }}</RouterLink>
         </nav>
 
         <RouterLink class="header-action" :to="{ path: '/', query: { locale: locale === 'am' ? 'en' : 'am' } }">{{ locale === 'am' ? 'English' : 'አማርኛ' }}</RouterLink>
@@ -572,7 +572,7 @@ const publicationChannels = [
             <p :lang="locale">{{ copy.verificationIntro }}</p>
           </div>
           <RouterLink class="button button--gold" to="/verify">
-            <span>ሰነድ ያረጋግጡ</span>
+            <span>{{ copy.verify }}</span>
             <svg aria-hidden="true" viewBox="0 0 20 20" fill="none"><path d="M4 10h11m-4-4 4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </RouterLink>
         </div>
@@ -592,21 +592,21 @@ const publicationChannels = [
           <div class="site-footer__links">
             <div>
               <h3>{{ copy.footerAbout }}</h3>
-              <a href="#about">ስለ ARNA</a>
-              <a href="#principles">እሴቶቻችን</a>
-              <a href="#services">አገልግሎቶች</a>
-              <a href="#businesses">የንግድ አቅጣጫዎች</a>
+              <a href="#about">{{ copy.navAbout }}</a>
+              <a href="#principles">{{ copy.navValues }}</a>
+              <a href="#services">{{ copy.navServices }}</a>
+              <a href="#businesses">{{ copy.navBusiness }}</a>
             </div>
             <div>
               <h3>{{ copy.footerOfficial }}</h3>
-              <RouterLink to="/verify">ሰነድ ማረጋገጫ</RouterLink>
-              <RouterLink to="/legal">ሕጋዊ መረጃ</RouterLink>
-              <RouterLink to="/contribute">ይዘት ያቅርቡ</RouterLink>
-              <a href="#updates">ዜናዎችና ማስታወቂያዎች</a>
-              <a href="#advertise">ማስታወቂያ ያስተዋውቁ</a>
-              <a href="#publications">ህትመቶች</a>
-              <a href="#opportunities">የሥራና የገበያ እድሎች</a>
-              <a href="#contact">ያግኙን</a>
+              <RouterLink to="/verify">{{ copy.footerVerification }}</RouterLink>
+              <RouterLink to="/legal">{{ copy.footerLegal }}</RouterLink>
+              <RouterLink to="/contribute">{{ copy.footerContribute }}</RouterLink>
+              <a href="#updates">{{ copy.footerNews }}</a>
+              <a href="#advertise">{{ copy.footerAds }}</a>
+              <a href="#publications">{{ copy.footerPublications }}</a>
+              <a href="#opportunities">{{ copy.footerOpportunities }}</a>
+              <a href="#contact">{{ copy.footerContact }}</a>
             </div>
           </div>
         </div>
