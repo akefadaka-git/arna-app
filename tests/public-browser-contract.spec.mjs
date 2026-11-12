@@ -125,7 +125,7 @@ test.describe('ARNA public site browser contract', () => {
     await expect(page.getByRole('link', { name: 'አማርኛ' })).toBeVisible();
 
     await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Submit content' }).click();
-    await expect(page).toHaveURL(/\\/contribute\\?locale=en/);
+    await expect(page).toHaveURL(/\/contribute\?locale=en/);
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await expect(page.getByRole('heading', { name: 'Submit content' })).toBeVisible();
     await expect(page.getByLabel('Content type')).toBeVisible();
