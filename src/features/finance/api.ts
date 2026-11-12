@@ -166,3 +166,31 @@ export async function reviewFinanceAiProposal(id: number, action: 'approve' | 'r
   );
   return result.data;
 }
+
+
+export interface FinanceJournalLineInput {
+  readonly account_id: number;
+  readonly debit_amount: string;
+  readonly credit_amount: string;
+  readonly description?: string;
+}
+
+export async function createFinanceJournalDraft(input: {
+  legal_entity_id: number;
+  journal_number: string;
+  effective_date_ec: string;
+  currency: 'ETB';
+  description: string;
+  idempotency_key: string;
+  lines: readonly FinanceJournalLineInput[];
+}): Promise<FinanceJournal> {
+  const result = await api.post<ApiEnvelope<FinanceJournal>>('/api/finance/journals', input);
+  return result.data.data;
+}
+
+export async function postFinanceJournal(journalId: number): Promise<FinanceJournal> {
+  const result = await api.post<ApiEnvelope<FinanceJournal>>(
+    `/api/finance/journals/${journalId}/post`,
+  );
+  return result.data.data;
+}
