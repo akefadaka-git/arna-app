@@ -184,13 +184,9 @@ export async function createFinanceJournalDraft(input: {
   idempotency_key: string;
   lines: readonly FinanceJournalLineInput[];
 }): Promise<FinanceJournal> {
-  const result = await api.post<ApiEnvelope<FinanceJournal>>('/api/finance/journals', input);
-  return result.data.data;
+  return api.post<FinanceJournal>('/api/finance/journals', input);
 }
 
 export async function postFinanceJournal(journalId: number): Promise<FinanceJournal> {
-  const result = await api.post<ApiEnvelope<FinanceJournal>>(
-    `/api/finance/journals/${journalId}/post`,
-  );
-  return result.data.data;
+  return api.post<FinanceJournal>(`/api/finance/journals/${journalId}/post`);
 }
