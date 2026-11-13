@@ -340,7 +340,7 @@ const publicationChannels = [
           <div class="principle-grid">
             <article v-for="principle in principles" :key="principle.number" class="principle-card">
               <div class="principle-card__top"><span>{{ principle.number }}</span><span class="principle-card__symbol" aria-hidden="true">↗</span></div>
-              <h3 lang="am">{{ principle.titleAm }}</h3>
+              <h3 :lang="locale">{{ textFor(principle.titleAm, principle.titleEn) }}</h3>
               <p class="principle-card__english">{{ principle.titleEn }}</p>
               <p class="principle-card__description" :lang="locale">{{ textFor(principle.description, principle.descriptionEn) }}</p>
               <span class="principle-card__rule" aria-hidden="true"></span>
@@ -367,10 +367,10 @@ const publicationChannels = [
           <div v-else class="service-grid">
             <article v-for="offering in offerings" :key="offering.number" class="service-card">
               <div class="service-card__top"><span>{{ offering.number }}</span><span aria-hidden="true">↗</span></div>
-              <p class="service-card__label" lang="am">{{ offering.label }}</p>
+              <p class="service-card__label" :lang="locale">{{ textFor(offering.label, offering.labelEn) }}</p>
               <h3>{{ offering.title }}</h3>
-              <p class="service-card__description" lang="am">{{ offering.description }}</p>
-              <div class="service-card__status"><span></span> በመዘጋጀት ላይ</div>
+              <p class="service-card__description" :lang="locale">{{ textFor(offering.description, offering.descriptionEn) }}</p>
+              <div class="service-card__status"><span></span> {{ textFor('በመዘጋጀት ላይ', 'In preparation') }}</div>
             </article>
           </div>
           <p class="services-section__note" :lang="locale"><span aria-hidden="true">ⓘ</span> {{ textFor('እነዚህ የአገልግሎት ምድቦች የድረ ገጹን መዋቅር ለማሳየት ቀርበዋል፤ የተወሰኑ ምርቶች፣ ዋጋዎች ወይም የግዢ ተግባራት እስኪጸድቁ ድረስ አይታዩም።', 'These service categories illustrate the site structure. Specific products, prices or purchase actions will appear only after approval.') }}</p>
@@ -385,7 +385,7 @@ const publicationChannels = [
               <p class="eyebrow eyebrow--dark">OUR BUSINESS LANDSCAPE</p>
               <h2 id="businesses-title" :lang="locale"><template v-if="locale === 'am'">እድሎችን የሚያገናኙ <span>የሥራ አቅጣጫዎች።</span></template><template v-else>Business areas that <span>connect opportunity.</span></template></h2>
             </div>
-            <p lang="am">የተረጋገጡ የንግድ ክፍሎችና ኩባንያዎች መገለጫዎች በአስተዳዳሪ ከጸደቁ በኋላ እዚህ ይታያሉ።</p>
+            <p :lang="locale">{{ textFor('የተረጋገጡ የንግድ ክፍሎችና ኩባንያዎች መገለጫዎች በአስተዳዳሪ ከጸደቁ በኋላ እዚህ ይታያሉ።', 'Verified business units and company profiles appear here after administrator approval.') }}</p>
           </div>
           <div v-if="corporateBusinesses.length" class="business-grid">
             <article v-for="business in corporateBusinesses" :key="business.public_id" class="business-card">
@@ -398,10 +398,10 @@ const publicationChannels = [
               <p :lang="locale">{{ textFor(area.titleAm, area.title) }}</p>
               <h3>{{ area.title }}</h3>
               <p class="business-card__description" :lang="locale">{{ textFor(area.description, area.descriptionEn) }}</p>
-              <span class="business-card__status">ዝርዝር መረጃ በማረጋገጥ ላይ</span>
+              <span class="business-card__status">{{ textFor('ዝርዝር መረጃ በማረጋገጥ ላይ', 'Details under verification') }}</span>
             </article>
           </div>
-          <p class="businesses-disclaimer" lang="am">ማስታወሻ፦ ከላይ ያሉት ምድቦች የድረ ገጹን መዋቅር ያሳያሉ፤ የተረጋገጡ የሕጋዊ ኩባንያ ስሞች፣ ባለቤትነት ወይም የንግድ ጥያቄዎች አይደሉም።</p>
+          <p class="businesses-disclaimer" :lang="locale">{{ textFor('ማስታወሻ፦ ከላይ ያሉት ምድቦች የድረ ገጹን መዋቅር ያሳያሉ፤ የተረጋገጡ የሕጋዊ ኩባንያ ስሞች፣ ባለቤትነት ወይም የንግድ ጥያቄዎች አይደሉም።', 'Note: These categories describe the site structure; they are not claims about verified legal company names, ownership or commercial activity.') }}</p>
         </div>
       </section>
 
@@ -430,7 +430,7 @@ const publicationChannels = [
           <div v-else class="publication-grid">
             <article v-for="channel in publicationChannels" :key="channel.number" class="publication-card">
               <div class="publication-card__top"><span>{{ channel.number }}</span><span>{{ channel.label }}</span></div>
-              <h3 lang="am">{{ channel.titleAm }}</h3>
+              <h3 :lang="locale">{{ textFor(channel.titleAm, channel.title) }}</h3>
               <p class="publication-card__english">{{ channel.title }}</p>
               <p class="publication-card__description" :lang="locale">{{ textFor(channel.description, channel.descriptionEn) }}</p>
               <span class="publication-card__status"><span></span> {{ textFor('የጸደቀ ይዘት ሲኖር ይታያል', 'Shown when approved content is available') }}</span>
@@ -459,13 +459,13 @@ const publicationChannels = [
 
       <section id="gallery" class="section-pad" aria-labelledby="gallery-title">
         <div class="site-container">
-          <div class="section-heading"><div><p class="eyebrow eyebrow--dark">MEDIA · GALLERY</p><h2 id="gallery-title" :lang="locale"><template v-if="locale === 'am'">የARNA ሚዲያ <span>ማዕከል።</span></template><template v-else>ARNA media <span>centre.</span></template></h2></div><p lang="am">ፎቶዎችና ህትመቶች ከማረጋገጫና ከአስተዳዳሪ ፈቃድ በኋላ ብቻ ይታያሉ።</p></div>
+          <div class="section-heading"><div><p class="eyebrow eyebrow--dark">MEDIA · GALLERY</p><h2 id="gallery-title" :lang="locale"><template v-if="locale === 'am'">የARNA ሚዲያ <span>ማዕከል።</span></template><template v-else>ARNA media <span>centre.</span></template></h2></div><p :lang="locale">{{ textFor('ፎቶዎችና ህትመቶች ከማረጋገጫና ከአስተዳዳሪ ፈቃድ በኋላ ብቻ ይታያሉ።', 'Photos and publications are displayed only after verification and administrator approval.') }}</p></div>
           <div class="publication-grid">
             <article v-for="item in corporateMedia" :key="item.public_id" class="publication-card">
               <img v-if="item.asset_url" :src="item.asset_url" :alt="item.title" loading="lazy" />
               <h3>{{ item.title }}</h3><p>{{ item.summary || item.body }}</p>
             </article>
-            <p v-if="!corporateMedia.length" lang="am">በአሁኑ ጊዜ የታተመ ሚዲያ የለም።</p>
+            <p v-if="!corporateMedia.length" :lang="locale">{{ textFor('በአሁኑ ጊዜ የታተመ ሚዲያ የለም።', 'There is no published media at this time.') }}</p>
           </div>
         </div>
       </section>
@@ -478,7 +478,7 @@ const publicationChannels = [
               <div class="publication-card__top"><span>{{ item.type.toUpperCase() }}</span><span>{{ publishedDate(item.published_at) }}</span></div>
               <h3>{{ item.title }}</h3><p class="publication-card__description">{{ item.summary || item.body }}</p>
             </article>
-            <p v-if="!corporateAnnouncements.length && !corporatePublications.length" lang="am">በአሁኑ ጊዜ የታተሙ ህትመቶች የሉም።</p>
+            <p v-if="!corporateAnnouncements.length && !corporatePublications.length" :lang="locale">{{ textFor('በአሁኑ ጊዜ የታተሙ ህትመቶች የሉም።', 'There are no published notices at this time.') }}</p>
           </div>
         </div>
       </section>
@@ -487,13 +487,13 @@ const publicationChannels = [
         <div class="site-container">
           <div class="section-heading">
             <div><p class="eyebrow eyebrow--dark">CAREERS · OPPORTUNITIES · MARKETPLACE</p><h2 id="opportunities-title" :lang="locale"><template v-if="locale === 'am'">የሚቀጥለውን እድል <span>ከዚህ ይጀምሩ።</span></template><template v-else>Start your next <span>opportunity here.</span></template></h2></div>
-            <p lang="am">የተጸደቁ የሥራ እድሎች፣ የንግድ ማስታወቂያዎችና የገበያ ዝርዝሮች እዚህ ይታያሉ።</p>
+            <p :lang="locale">{{ textFor('የተጸደቁ የሥራ እድሎች፣ የንግድ ማስታወቂያዎችና የገበያ ዝርዝሮች እዚህ ይታያሉ።', 'Approved careers, commercial announcements and marketplace listings appear here.') }}</p>
           </div>
           <div class="business-grid">
             <article v-for="item in [...corporateCareers, ...corporateMarket]" :key="item.public_id" class="business-card">
               <span class="business-card__number">{{ item.type.toUpperCase() }}</span><h3>{{ item.title }}</h3><p class="business-card__description">{{ item.summary || item.body }}</p>
             </article>
-            <p v-if="!corporateCareers.length && !corporateMarket.length" lang="am">በአሁኑ ጊዜ የታተመ እድል የለም። አዲስ ዝርዝሮች ከግምገማ በኋላ ይታያሉ።</p>
+            <p v-if="!corporateCareers.length && !corporateMarket.length" :lang="locale">{{ textFor('በአሁኑ ጊዜ የታተመ እድል የለም። አዲስ ዝርዝሮች ከግምገማ በኋላ ይታያሉ።', 'There are no published opportunities at this time. New listings appear after review.') }}</p>
           </div>
           <form class="public-opportunity-form" @submit.prevent="sendOpportunity">
             <h3>{{ locale === 'am' ? 'የሥራ፣ የማስታወቂያ ወይም የገበያ ማቅረቢያ' : 'Submit a career, advertising or marketplace listing' }}</h3>
@@ -535,7 +535,7 @@ const publicationChannels = [
           <div class="verification-banner__copy">
             <p class="eyebrow">PUBLIC VERIFICATION</p>
             <h2 id="verification-title" :lang="locale">{{ textFor('የአክሲዮን ምስክር ወረቀት እውነተኛነት ያረጋግጡ።', 'Verify the authenticity of a share certificate.') }}</h2>
-            <p lang="am">የARNA የአክሲዮን ምስክር ወረቀት ማጣቀሻ ቁጥርን በመጠቀም የሰነዱን ሁኔታ ይፈትሹ።</p>
+            <p :lang="locale">{{ textFor('የARNA የአክሲዮን ምስክር ወረቀት ማጣቀሻ ቁጥርን በመጠቀም የሰነዱን ሁኔታ ይፈትሹ።', 'Use the ARNA share-certificate reference number to check the document status.') }}</p>
           </div>
           <RouterLink class="button button--gold" to="/verify">
             <span>{{ textFor('ሰነድ ያረጋግጡ', 'Verify a document') }}</span>
@@ -553,7 +553,7 @@ const publicationChannels = [
               <img class="public-home__emblem" src="/logo.png" alt="" width="43" height="43" />
               <span class="brand__wordmark"><strong>ARNA</strong><small>{{ masesBrandLabels.corporateName }}</small></span>
             </RouterLink>
-            <p lang="am">በመተማመን የሚገነባ የጋራ እድገት።</p>
+            <p :lang="locale">{{ textFor('በመተማመን የሚገነባ የጋራ እድገት።', 'Shared progress, built on trust.') }}</p>
           </div>
           <div class="site-footer__links">
             <div>
@@ -578,7 +578,7 @@ const publicationChannels = [
         </div>
         <div class="site-footer__bottom">
           <span>© {{ year }} ARNA · Maale Arna</span>
-          <span lang="am">የተጸደቀ መረጃ ብቻ። ግልጽነት ሁልጊዜ።</span>
+          <span :lang="locale">{{ textFor('የተጸደቀ መረጃ ብቻ። ግልጽነት ሁልጊዜ።', 'Approved information only. Transparency always.') }}</span>
           <a href="#main-content">ወደ ላይ ↑</a>
         </div>
       </div>
