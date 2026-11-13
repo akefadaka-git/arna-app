@@ -43,6 +43,10 @@ test.describe('ARNA public site browser contract', () => {
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await expect(page.locator('#hero-title')).toContainText('Shared progress.');
     await expect(page.locator('#about-title')).toContainText('A system that streamlines work');
+    await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'About ARNA' })).toBeVisible();
+    await expect(page.locator('#gallery-title')).toContainText('ARNA media');
+    await expect(page.locator('#opportunities-title')).toContainText('Start your next');
     await expect(page.getByRole('link', { name: 'አማርኛ' })).toBeVisible();
   });
 
