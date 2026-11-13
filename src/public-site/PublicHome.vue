@@ -273,7 +273,7 @@ const publicationChannels = [
         <div class="hero__glow hero__glow--two" aria-hidden="true"></div>
         <div class="site-container hero__grid">
           <div class="hero__copy">
-            <p class="eyebrow"><span></span> ማአሌ አርና <span class="eyebrow__divider">/</span> TRUST · PURPOSE · PROGRESS</p>
+            <p class="eyebrow"><span></span> {{ textFor('ማአሌ አርና', 'MAALE ARNA') }} <span class="eyebrow__divider">/</span> TRUST · PURPOSE · PROGRESS</p>
             <h1 id="hero-title" :lang="locale"><template v-if="locale === 'am'">የጋራ እድገት።<br/><span>በታማኝነት የተመራ።</span></template><template v-else>Shared progress.<br/><span>Led by trust.</span></template></h1>
             <p class="hero__lead" :lang="locale">{{ textFor('ወደ ARNA እንኳን በደህና መጡ። ግልጽነትን፣ ተጠያቂነትን እና ዘላቂ እድገትን በማዕከል የሚያደርግ የጋራ ጉዞ እየገነባን ነው።', 'Welcome to ARNA. We are building a shared journey centered on transparency, accountability and lasting progress.') }}</p>
             <div class="hero__actions">
