@@ -172,20 +172,26 @@ const offerings = [
   {
     number: '01',
     label: 'የድርጅት ሥርዓቶች',
+    labelEn: 'Enterprise systems',
     title: 'Enterprise systems',
     description: 'ለድርጅታዊ ሥራዎች፣ ለአስተዳደር እና ለተቀናጀ አሠራር የተዘጋጁ ዲጂታል መሠረቶች።',
+    descriptionEn: 'Digital foundations for enterprise operations, administration and integrated workflows.',
   },
   {
     number: '02',
     label: 'የአባላት እና የባለአክሲዮኖች አገልግሎቶች',
+    labelEn: 'Member and shareholder services',
     title: 'Member services',
     description: 'የባለድርሻ ግንኙነቶችንና ተዛማጅ አገልግሎቶችን በተጠበቀ መንገድ ለማቀናጀት የሚያግዙ መፍትሄዎች።',
+    descriptionEn: 'Secure services that help coordinate stakeholder relationships and related operations.',
   },
   {
     number: '03',
     label: 'ዲጂታል ንግድ',
+    labelEn: 'Digital commerce',
     title: 'Digital commerce',
     description: 'በደህንነትና በግልጽ መረጃ ላይ የተመሠረቱ የዲጂታል ንግድ አገልግሎቶች።',
+    descriptionEn: 'Digital commerce services grounded in security and transparent information.',
   },
 ];
 
