@@ -41,6 +41,10 @@ const opportunity = ref({ type: 'career' as 'career' | 'opportunity' | 'advertis
 const opportunityStatus = ref('');
 const submitting = ref(false);
 
+function textFor(amharic: string, english: string): string {
+  return locale.value === 'am' ? amharic : english;
+}
+
 function sectionText(section: CorporateSiteSection, field: string): string {
   const localeContent = section.content[locale.value];
   if (typeof localeContent !== 'object' || localeContent === null) return '';
@@ -126,7 +130,7 @@ async function sendOpportunity(): Promise<void> {
   submitting.value = true;
   opportunityStatus.value = '';
   try {
-    const result = await submitCorporateOpportunity(opportunity.value.type, { ...opportunity.value, locale: 'am' });
+    const result = await submitCorporateOpportunity(opportunity.value.type, { ...opportunity.value, locale: locale.value });
     opportunityStatus.value = locale.value === 'am' ? `ማቅረቢያዎ ተቀብሏል። የማጣቀሻ ቁጥር: ${result.reference}` : `Your submission was received. Reference: ${result.reference}`;
     opportunity.value = { type: 'career', name: '', email: '', title: '', description: '', organization: '' };
   } catch {
@@ -197,12 +201,12 @@ const publicationChannels = [
 
 <template>
   <div class="arna-site" data-testid="public-home">
-    <a class="skip-link" href="#main-content">ወደ ዋናው ይዘት ይሂዱ</a>
+    <a class="skip-link" href="#main-content">{{ textFor('ወደ ዋናው ይዘት ይሂዱ', 'Skip to main content') }}</a>
 
     <div class="announcement-bar">
       <div class="site-container announcement-bar__inner">
         <span class="announcement-bar__pulse" aria-hidden="true"></span>
-        <p lang="am">የARNA ይፋዊ ድረ ገጽ። የተጸደቀ መረጃ ብቻ እዚህ ይታያል።</p>
+        <p :lang="locale">{{ textFor('የARNA ይፋዊ ድረ ገጽ። የተጸደቀ መረጃ ብቻ እዚህ ይታያል።', 'ARNA official website. Only approved information is published here.') }}</p>
         <span class="announcement-bar__english">OFFICIAL CORPORATE WEBSITE</span>
       </div>
     </div>
@@ -217,7 +221,7 @@ const publicationChannels = [
           </span>
         </RouterLink>
 
-        <nav class="main-nav" aria-label="ዋና አሰሳ">
+        <nav class="main-nav" :aria-label="textFor('ዋና አሰሳ', 'Main navigation')">
           <a href="#about">ስለ ARNA</a>
           <RouterLink v-for="page in navigationPages" :key="page.public_id" :to="`/${locale}/${page.slug}`">{{ page.title }}</RouterLink>
           <a href="#principles">እሴቶቻችን</a>
@@ -258,11 +262,8 @@ const publicationChannels = [
         <div class="site-container hero__grid">
           <div class="hero__copy">
             <p class="eyebrow"><span></span> ማአሌ አርና <span class="eyebrow__divider">/</span> TRUST · PURPOSE · PROGRESS</p>
-            <h1 id="hero-title" lang="am">የጋራ እድገት።<br/><span>በታማኝነት የተመራ።</span></h1>
-            <p class="hero__lead" lang="am">
-              ወደ ARNA እንኳን በደህና መጡ። ግልጽነትን፣ ተጠያቂነትን እና ዘላቂ እድገትን
-              በማዕከል የሚያደርግ የጋራ ጉዞ እየገነባን ነው።
-            </p>
+            <h1 id="hero-title" :lang="locale"><template v-if="locale === 'am'">የጋራ እድገት።<br/><span>በታማኝነት የተመራ።</span></template><template v-else>Shared progress.<br/><span>Led by trust.</span></template></h1>
+            <p class="hero__lead" :lang="locale">{{ textFor('ወደ ARNA እንኳን በደህና መጡ። ግልጽነትን፣ ተጠያቂነትን እና ዘላቂ እድገትን በማዕከል የሚያደርግ የጋራ ጉዞ እየገነባን ነው።', 'Welcome to ARNA. We are building a shared journey centered on transparency, accountability and lasting progress.') }}</p>
             <div class="hero__actions">
               <a class="button button--primary" href="#about">
                 <span>ARNAን ይወቁ</span>
@@ -312,7 +313,7 @@ const publicationChannels = [
           </div>
           <div class="intro-section__content">
             <p class="eyebrow eyebrow--dark">ስለ እኛ</p>
-            <h2 id="about-title" lang="am">ሥራን የሚያቀላጥፍ፣<br/>እምነትን የሚያጠናክር <span>ሥርዓት።</span></h2>
+            <h2 id="about-title" :lang="locale"><template v-if="locale === 'am'">ሥራን የሚያቀላጥፍ፣<br/>እምነትን የሚያጠናክር <span>ሥርዓት።</span></template><template v-else>A system that streamlines work<br/>and strengthens <span>trust.</span></template></h2>
             <div class="intro-section__columns">
               <p lang="am">ARNA የድርጅት አሠራርን ከተጠያቂነትና ከግልጽ አስተዳደር ጋር ለማገናኘት የሚያተኩር የዲጂታል ሥርዓት ነው።</p>
               <p lang="am">ይህ ይፋዊ ድረ ገጽ ስለ ድርጅቱ፣ አገልግሎቶቹ እና የተጸደቁ ማስታወቂያዎች መረጃን በአንድ ቦታ ለማቅረብ ይዘጋጃል።</p>
@@ -326,7 +327,7 @@ const publicationChannels = [
           <div class="section-heading">
             <div>
               <p class="eyebrow eyebrow--dark">የምንመራባቸው እሴቶች</p>
-              <h2 id="principles-title" lang="am">መሠረታችን <span>ግልጽ ነው።</span></h2>
+              <h2 id="principles-title" :lang="locale"><template v-if="locale === 'am'">መሠረታችን <span>ግልጽ ነው።</span></template><template v-else>Our foundation is <span>clear.</span></template></h2>
             </div>
             <p lang="am">የምንገነባው ሥርዓት በሰዎች እምነት ላይ መመሥረት አለበት።</p>
           </div>
@@ -347,7 +348,7 @@ const publicationChannels = [
           <div class="section-heading section-heading--light">
             <div>
               <p class="eyebrow">አገልግሎቶችና መፍትሄዎች</p>
-              <h2 id="services-title" lang="am">የምንገነባው <span>ለወደፊት ነው።</span></h2>
+              <h2 id="services-title" :lang="locale"><template v-if="locale === 'am'">የምንገነባው <span>ለወደፊት ነው።</span></template><template v-else>Building for <span>the future.</span></template></h2>
             </div>
             <p lang="am">ዝርዝር የአገልግሎት መረጃዎች በይፋ ከጸደቁ በኋላ በዚህ ይታያሉ።</p>
           </div>
@@ -376,7 +377,7 @@ const publicationChannels = [
           <div class="section-heading">
             <div>
               <p class="eyebrow eyebrow--dark">OUR BUSINESS LANDSCAPE</p>
-              <h2 id="businesses-title" lang="am">እድሎችን የሚያገናኙ <span>የሥራ አቅጣጫዎች።</span></h2>
+              <h2 id="businesses-title" :lang="locale"><template v-if="locale === 'am'">እድሎችን የሚያገናኙ <span>የሥራ አቅጣጫዎች።</span></template><template v-else>Business areas that <span>connect opportunity.</span></template></h2>
             </div>
             <p lang="am">የተረጋገጡ የንግድ ክፍሎችና ኩባንያዎች መገለጫዎች በአስተዳዳሪ ከጸደቁ በኋላ እዚህ ይታያሉ።</p>
           </div>
@@ -402,7 +403,7 @@ const publicationChannels = [
         <div class="site-container updates-section__grid">
           <div class="updates-section__intro">
             <p class="eyebrow eyebrow--dark">NEWS · ANNOUNCEMENTS</p>
-            <h2 id="updates-title" lang="am">የቅርብ መረጃዎች።<br/><span>ከታመነ ምንጭ።</span></h2>
+            <h2 id="updates-title" :lang="locale"><template v-if="locale === 'am'">የቅርብ መረጃዎች።<br/><span>ከታመነ ምንጭ።</span></template><template v-else>Latest updates.<br/><span>From trusted sources.</span></template></h2>
             <p lang="am">የድርጅቱ ዜናዎች፣ ማስታወቂያዎች እና ይፋዊ ማሻሻያዎች በአስተዳዳሪ ከተጸደቁ በኋላ እዚህ ይታያሉ።</p>
           </div>
           <div v-if="corporateNews.length" class="publication-grid">
