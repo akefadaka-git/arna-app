@@ -519,7 +519,7 @@ const publicationChannels = [
         <div class="site-container">
           <div class="section-heading"><div><p class="eyebrow eyebrow--dark">CONTACT · INQUIRIES</p><h2 id="contact-title">{{ locale === 'am' ? 'ከእኛ ጋር ይገናኙ።' : 'Get in touch with ARNA.' }}</h2></div></div>
           <form class="public-opportunity-form" @submit.prevent="sendInquiry">
-            <label>{{ locale === 'am' ? 'ምድብ' : 'Inquiry type' }} <select v-model="inquiry.inquiry_type"><option value="general">አጠቃላይ</option><option value="investor">ባለአክሲዮን / ኢንቨስተር</option><option value="partnership">አጋርነት</option><option value="media">ሚዲያ</option><option value="career">ሥራ</option><option value="advertising">ማስታወቂያ</option><option value="marketplace">ገበያ</option></select></label>
+            <label>{{ locale === 'am' ? 'ምድብ' : 'Inquiry type' }} <select v-model="inquiry.inquiry_type"><option value="general">{{ textFor('አጠቃላይ', 'General') }}</option><option value="investor">{{ textFor('ባለአክሲዮን / ኢንቨስተር', 'Shareholder / investor') }}</option><option value="partnership">{{ textFor('አጋርነት', 'Partnership') }}</option><option value="media">{{ textFor('ሚዲያ', 'Media') }}</option><option value="career">{{ textFor('ሥራ', 'Career') }}</option><option value="advertising">{{ textFor('ማስታወቂያ', 'Advertising') }}</option><option value="marketplace">{{ textFor('ገበያ', 'Marketplace') }}</option></select></label>
             <label>{{ locale === 'am' ? 'ስም' : 'Name' }} <input v-model="inquiry.name" required maxlength="160" /></label>
             <label>{{ locale === 'am' ? 'ኢሜይል' : 'Email' }} <input v-model="inquiry.email" required type="email" maxlength="190" /></label>
             <label>{{ locale === 'am' ? 'ስልክ' : 'Phone' }} <input v-model="inquiry.phone" maxlength="50" /></label>
@@ -563,29 +563,29 @@ const publicationChannels = [
           </div>
           <div class="site-footer__links">
             <div>
-              <h3 lang="am">ይወቁን</h3>
-              <a href="#about">ስለ ARNA</a>
-              <a href="#principles">እሴቶቻችን</a>
-              <a href="#services">አገልግሎቶች</a>
-              <a href="#businesses">የንግድ አቅጣጫዎች</a>
+              <h3 :lang="locale">{{ textFor('ይወቁን', 'Explore') }}</h3>
+              <a href="#about">{{ textFor('ስለ ARNA', 'About ARNA') }}</a>
+              <a href="#principles">{{ textFor('እሴቶቻችን', 'Our values') }}</a>
+              <a href="#services">{{ textFor('አገልግሎቶች', 'Services') }}</a>
+              <a href="#businesses">{{ textFor('የንግድ አቅጣጫዎች', 'Business areas') }}</a>
             </div>
             <div>
-              <h3 lang="am">ይፋዊ አገናኞች</h3>
-              <RouterLink to="/verify">ሰነድ ማረጋገጫ</RouterLink>
-              <RouterLink to="/legal">ሕጋዊ መረጃ</RouterLink>
-              <RouterLink to="/contribute">ይዘት ያቅርቡ</RouterLink>
-              <a href="#updates">ዜናዎችና ማስታወቂያዎች</a>
-              <a href="#advertise">ማስታወቂያ ያስተዋውቁ</a>
-              <a href="#publications">ህትመቶች</a>
-              <a href="#opportunities">የሥራና የገበያ እድሎች</a>
-              <a href="#contact">ያግኙን</a>
+              <h3 :lang="locale">{{ textFor('ይፋዊ አገናኞች', 'Official links') }}</h3>
+              <RouterLink to="/verify">{{ textFor('ሰነድ ማረጋገጫ', 'Document verification') }}</RouterLink>
+              <RouterLink to="/legal">{{ textFor('ሕጋዊ መረጃ', 'Legal information') }}</RouterLink>
+              <RouterLink to="/contribute">{{ textFor('ይዘት ያቅርቡ', 'Submit content') }}</RouterLink>
+              <a href="#updates">{{ textFor('ዜናዎችና ማስታወቂያዎች', 'News & announcements') }}</a>
+              <a href="#advertise">{{ textFor('ማስታወቂያ ያስተዋውቁ', 'Advertise with us') }}</a>
+              <a href="#publications">{{ textFor('ህትመቶች', 'Publications') }}</a>
+              <a href="#opportunities">{{ textFor('የሥራና የገበያ እድሎች', 'Careers & marketplace') }}</a>
+              <a href="#contact">{{ textFor('ያግኙን', 'Contact us') }}</a>
             </div>
           </div>
         </div>
         <div class="site-footer__bottom">
           <span>© {{ year }} ARNA · Maale Arna</span>
           <span :lang="locale">{{ textFor('የተጸደቀ መረጃ ብቻ። ግልጽነት ሁልጊዜ።', 'Approved information only. Transparency always.') }}</span>
-          <a href="#main-content">ወደ ላይ ↑</a>
+          <a href="#main-content">{{ textFor('ወደ ላይ ↑', 'Back to top ↑') }}</a>
         </div>
       </div>
     </footer>
