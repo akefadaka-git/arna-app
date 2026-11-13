@@ -38,6 +38,14 @@ test.describe('ARNA public site browser contract', () => {
     }
   });
 
+  test('switches the public homepage to English and updates the document language', async ({ page }) => {
+    await page.goto(new URL('/?locale=en', baseUrl).toString());
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(page.locator('#hero-title')).toContainText('Shared progress.');
+    await expect(page.locator('#about-title')).toContainText('A system that streamlines work');
+    await expect(page.getByRole('link', { name: 'አማርኛ' })).toBeVisible();
+  });
+
   test('gives the public brand a visible accessible name and keeps navigation within public routes', async ({ page }) => {
     await page.goto(baseUrl);
     const header = page.locator('.site-header');
