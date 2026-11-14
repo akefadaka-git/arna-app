@@ -75,7 +75,7 @@
  The admin build consumes the same shell chrome as the workspace and
  portal builds. AppShell renders the header, sidebar, drawer, footer,
  notification bell, tenant switcher, brand mark, and user menu using
- the shared masesShellLabels object and the shared masesBrandLabels
+ the shared masesShellLabels object and the shared aranaBrandLabels
  and aranaFooterLabels objects from @/router/shell-labels.
 
  The admin build declares no chrome labels of its own. Its only
@@ -230,7 +230,7 @@
     does not exist. The workspace user menu carries only logout today.
     Adding one is a future CR, not a defect.
 
- 3. The admin build reuses masesShellLabels, masesBrandLabels, and
+ 3. The admin build reuses masesShellLabels, aranaBrandLabels, and
     aranaFooterLabels unchanged from shell-labels.ts. If a future CR
     diverges admin chrome from workspace chrome, the divergence is a
     new export in shell-labels.ts, not a per-build override here.
