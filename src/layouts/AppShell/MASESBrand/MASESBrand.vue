@@ -592,7 +592,7 @@ import { masesBrandLabels } from '@/router/shell-labels';
   border-radius: 50%;
   background-color: var(--mases-color-surface-raised);
   box-shadow: var(--mases-shadow-elevation-1);
-  object-fit: cover;
+  object-fit: contain;
 }
 
 /* ============================================================================
