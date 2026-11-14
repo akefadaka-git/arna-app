@@ -49,6 +49,15 @@ async function installCmsFixtures(page) {
   await page.route('**/api/public/site/pages*', async (route) => {
     await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: [] }) });
   });
+  await page.route('**/api/public/site/content/**', async (route) => {
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: { items: [] } }) });
+  });
+  await page.route('**/api/public/site/inquiries', async (route) => {
+    await route.fulfill({ status: 202, contentType: 'application/json', body: JSON.stringify({ success: true, data: { reference: 'INQ-TEST-001', status: 'received' } }) });
+  });
+  await page.route('**/api/public/site/submissions/**', async (route) => {
+    await route.fulfill({ status: 202, contentType: 'application/json', body: JSON.stringify({ success: true, data: { reference: 'SUB-TEST-001', status: 'received' } }) });
+  });
 }
 
 async function expectNoSeriousAccessibilityViolations(page, routeLabel) {
@@ -164,6 +173,26 @@ test.describe('ARNA public site browser contract', () => {
     await expect(page.locator('html')).toHaveAttribute('lang', 'am');
     await expect(page.locator('#hero-title')).toContainText('የጋራ እድገት።');
     await expect(page.getByRole('navigation', { name: 'ዋና አሰሳ' })).toBeVisible();
+  });
+
+  test('loads independent published feeds and submits consented public forms', async ({ page }) => {
+    await page.goto(baseUrl);
+    const contact = page.locator('form.public-form').last();
+    await contact.getByLabel('Full name').fill('Test Visitor');
+    await contact.getByLabel('Email').fill('visitor@example.test');
+    await contact.getByLabel('Subject').fill('General question');
+    await contact.getByLabel('Message').fill('Please contact me.');
+    await contact.getByLabel(/I consent/).check();
+    await contact.getByRole('button', { name: 'Send inquiry' }).click();
+    await expect(contact.getByRole('status')).toContainText('INQ-TEST-001');
+
+    const opportunity = page.locator('form.public-form').first();
+    await opportunity.getByLabel('Full name').fill('Test Applicant');
+    await opportunity.getByLabel('Email').fill('applicant@example.test');
+    await opportunity.getByLabel('Title').fill('Community liaison');
+    await opportunity.getByLabel('Description').fill('Application details.');
+    await opportunity.getByRole('button', { name: 'Submit' }).click();
+    await expect(opportunity.getByRole('status')).toContainText('SUB-TEST-001');
   });
 
   test('has no serious or critical axe accessibility violations on the homepage', async ({ page }) => {
