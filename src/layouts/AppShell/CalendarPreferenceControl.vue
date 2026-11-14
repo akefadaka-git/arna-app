@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { setCalendarSystem, useCalendarPreference } from '@/core/dates/calendar';
+import { useLocaleStore } from '@/stores/locale';
 
 const { calendarSystem } = useCalendarPreference();
-const isEnglish = computed(() => document.documentElement.lang.toLowerCase().startsWith('en'));
+const localeStore = useLocaleStore();
+const isEnglish = computed(() => localeStore.locale === 'en');
 const label = computed(() => isEnglish.value ? 'Calendar' : 'የቀን አቆጣጠር');
 const ecLabel = computed(() => isEnglish.value ? 'E.C. · Ethiopian' : 'ዓ.ም · ኢትዮጵያዊ');
 const gcLabel = computed(() => isEnglish.value ? 'G.C. · Gregorian' : 'ዓ.ል · ግሪጎሪያን');
