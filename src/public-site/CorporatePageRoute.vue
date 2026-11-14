@@ -95,6 +95,7 @@ onMounted(() => void loadPage());
         <p class="eyebrow">{{ page.page_key }}</p>
         <h1>{{ page.title }}</h1>
         <p v-if="page.summary">{{ page.summary }}</p>
+        <p v-if="page.body" class="corporate-page-route__body">{{ page.body }}</p>
         <section v-for="(section, index) in page.sections" :key="section.id ?? index">
           <h2 v-if="sectionText(section, 'title')">{{ sectionText(section, 'title') }}</h2>
           <p v-if="sectionText(section, 'body')">{{ sectionText(section, 'body') }}</p>
