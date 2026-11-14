@@ -95,6 +95,15 @@ async function createPage(): Promise<void> {
   error.value = '';
   notice.value = '';
   try {
+    const sections = parseJsonArray(sectionsJson.value, 'Page sections');
+    if (pageKey.value.trim() === 'home' && !sections.some((section) =>
+      ['community_responsibility', 'community-responsibility', 'responsibility'].includes(String(section.type ?? '').toLowerCase()) &&
+      section.content && typeof section.content === 'object' &&
+      !Array.isArray(section.content) &&
+      (section.content as Record<string, unknown>).am && (section.content as Record<string, unknown>).en
+    )) {
+      throw new Error('The permanent Community Responsibility section must be present in both languages on the homepage.');
+    }
     const draft = {
       page_key: pageKey.value.trim(),
       slug_am: slugAm.value.trim(),
@@ -103,7 +112,7 @@ async function createPage(): Promise<void> {
         am: { title: titleAm.value.trim(), summary: summaryAm.value.trim(), body: bodyAm.value.trim() },
         en: { title: titleEn.value.trim(), summary: summaryEn.value.trim(), body: bodyEn.value.trim() },
       },
-      sections: parseJsonArray(sectionsJson.value, 'Page sections'),
+      sections,
       seo: {
         am: parseJsonObject(pageSeoAmJson.value, 'Amharic page SEO') as Record<string, string>,
         en: parseJsonObject(pageSeoEnJson.value, 'English page SEO') as Record<string, string>,
