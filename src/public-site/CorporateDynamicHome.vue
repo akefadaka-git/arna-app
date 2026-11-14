@@ -27,22 +27,23 @@ const pages = ref<CorporateSitePage[]>([]);
 const loading = ref(true);
 const error = ref(false);
 const entryCollections = ref<Record<string, CorporatePublicEntry[]>>({});
+const feedFailures = ref<Record<string, boolean>>({});
 const inquiryDraft = ref({ inquiry_type: 'general' as const, name: '', email: '', phone: '', subject: '', message: '', consent: false, website: '' });
 const inquiryStatus = ref('');
 const opportunityDraft = ref({ type: 'career' as 'career' | 'opportunity' | 'advertisement' | 'marketplace', name: '', email: '', title: '', description: '', organization: '' });
 const opportunityStatus = ref('');
 const submitting = ref(false);
 const feedGroups = computed(() => [
-  { type: 'news', title: locale.value === 'am' ? 'ዜና' : 'News', entries: entryCollections.value.news ?? [] },
-  { type: 'announcement', title: locale.value === 'am' ? 'ማስታወቂያዎች' : 'Announcements', entries: entryCollections.value.announcement ?? [] },
-  { type: 'publication', title: locale.value === 'am' ? 'ህትመቶች' : 'Publications', entries: entryCollections.value.publication ?? [] },
-  { type: 'media', title: locale.value === 'am' ? 'ሚዲያ' : 'Media', entries: entryCollections.value.media ?? [] },
-  { type: 'business', title: locale.value === 'am' ? 'የንግድ ክፍሎች' : 'Business areas', entries: entryCollections.value.business ?? [] },
-  { type: 'service', title: locale.value === 'am' ? 'አገልግሎቶች' : 'Services', entries: entryCollections.value.service ?? [] },
-  { type: 'career', title: locale.value === 'am' ? 'የሥራ እድሎች' : 'Careers', entries: entryCollections.value.career ?? [] },
-  { type: 'opportunity', title: locale.value === 'am' ? 'እድሎች' : 'Opportunities', entries: entryCollections.value.opportunity ?? [] },
-  { type: 'marketplace', title: locale.value === 'am' ? 'ገበያ' : 'Marketplace', entries: entryCollections.value.marketplace ?? [] },
-  { type: 'advertisement', title: locale.value === 'am' ? 'ማስታወቂያ' : 'Advertising', entries: entryCollections.value.advertisement ?? [] },
+  { type: 'news', title: locale.value === 'am' ? 'ዜና' : 'News', entries: entryCollections.value.news ?? [], failed: feedFailures.value.news ?? false },
+  { type: 'announcement', title: locale.value === 'am' ? 'ማስታወቂያዎች' : 'Announcements', entries: entryCollections.value.announcement ?? [], failed: feedFailures.value.announcement ?? false },
+  { type: 'publication', title: locale.value === 'am' ? 'ህትመቶች' : 'Publications', entries: entryCollections.value.publication ?? [], failed: feedFailures.value.publication ?? false },
+  { type: 'media', title: locale.value === 'am' ? 'ሚዲያ' : 'Media', entries: entryCollections.value.media ?? [], failed: feedFailures.value.media ?? false },
+  { type: 'business', title: locale.value === 'am' ? 'የንግድ ክፍሎች' : 'Business areas', entries: entryCollections.value.business ?? [], failed: feedFailures.value.business ?? false },
+  { type: 'service', title: locale.value === 'am' ? 'አገልግሎቶች' : 'Services', entries: entryCollections.value.service ?? [], failed: feedFailures.value.service ?? false },
+  { type: 'career', title: locale.value === 'am' ? 'የሥራ እድሎች' : 'Careers', entries: entryCollections.value.career ?? [], failed: feedFailures.value.career ?? false },
+  { type: 'opportunity', title: locale.value === 'am' ? 'እድሎች' : 'Opportunities', entries: entryCollections.value.opportunity ?? [], failed: feedFailures.value.opportunity ?? false },
+  { type: 'marketplace', title: locale.value === 'am' ? 'ገበያ' : 'Marketplace', entries: entryCollections.value.marketplace ?? [], failed: feedFailures.value.marketplace ?? false },
+  { type: 'advertisement', title: locale.value === 'am' ? 'ማስታወቂያ' : 'Advertising', entries: entryCollections.value.advertisement ?? [], failed: feedFailures.value.advertisement ?? false },
 ]);
 const communitySection = (section: CorporateSiteSection) =>
   ['community_responsibility', 'community-responsibility', 'responsibility'].includes(section.type.toLowerCase());
@@ -78,6 +79,7 @@ async function load(): Promise<void> {
     const types = ['news', 'announcement', 'publication', 'media', 'business', 'service', 'career', 'opportunity', 'marketplace', 'advertisement'];
     const results = await Promise.allSettled(types.map((type) => fetchCorporateEntries(type, locale.value)));
     entryCollections.value = Object.fromEntries(types.map((type, index) => [type, results[index].status === 'fulfilled' ? results[index].value : []]));
+    feedFailures.value = Object.fromEntries(types.map((type, index) => [type, results[index].status === 'rejected']));
     if (home?.seo?.title) document.title = home.seo.title;
     else document.title = home?.title ? `${home.title} | Maale Arna` : 'Maale Arna | Official Website';
     let description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
@@ -242,6 +244,7 @@ watch(() => route.query.locale, (value) => {
                 <small v-if="entry.published_at">{{ new Date(entry.published_at).toLocaleDateString(locale === 'am' ? 'am-ET' : 'en-ET') }}</small>
               </article>
             </div>
+            <p v-else-if="group.failed" class="section-note" role="status">{{ locale === 'am' ? 'ይዘቱን ለጊዜው ማምጣት አልተቻለም።' : 'This content feed is temporarily unavailable.' }}</p>
             <p v-else class="section-note">{{ locale === 'am' ? 'በአሁኑ ጊዜ የተጸደቀ ይዘት የለም።' : 'No approved content is currently published.' }}</p>
           </div>
         </section>
