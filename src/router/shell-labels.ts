@@ -129,7 +129,7 @@
  * File:      mase_app/src/router/shell-labels.ts  (AMEND)
  * Unit:      CR-BRAND1 — corporate brand identity labels
  * Delivery type:  Amendment — one new exported const
- *                 (`masesBrandLabels`), three header additions
+ *                 (`aranaBrandLabels`), three header additions
  *                 (purpose-sentence, exports list, a new note on the
  *                 corporate name in §"Terms handled deliberately"),
  *                 a new consumer in the §"Consumed by" list,
@@ -155,9 +155,9 @@
  *   derived short form is used (see After).
  *
  * After (v1.9.0):
- *   A new exported const `masesBrandLabels` is added:
+ *   A new exported const `aranaBrandLabels` is added:
  *
- *       masesBrandLabels = {
+ *       aranaBrandLabels = {
  *         corporateName:         'ማሌ ዓርና',
  *         productName:           'ማሴስ',
  *         fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ARNA)',
@@ -218,7 +218,7 @@
  * them here — in the same file that already carries the shell chrome
  * labels and the nav trees — keeps the shell's user-facing text in
  * one place. AranaBrand.vue (the next file in this CR) imports
- * `masesBrandLabels` from here, the same way AppShell, both layouts,
+ * `aranaBrandLabels` from here, the same way AppShell, both layouts,
  * and the launcher route import their respective labels.
  *
  * A separate brand-labels file (e.g. router/brand-labels.ts) was
@@ -849,7 +849,7 @@
  *          items, or existing nav items.
  *
  * 1.9.0  — corporate brand identity (CR-BRAND1). One new exported
- *          const `masesBrandLabels`, carrying the corporate name
+ *          const `aranaBrandLabels`, carrying the corporate name
  *          'ማሌ ዓርና', the product code 'ማሴስ', and the full approved
  *          corporate identity 'ማሌ ዓርና ስማርት ሲስተም (ማሴስ)'. Consumed by
  *          AranaBrand.vue (a companion change in the same CR) via the
@@ -1048,7 +1048,7 @@
  * Seven constants, in six groups:
  *
  *   1. Brand identity — shared by both builds.
- *          masesBrandLabels: { corporateName, productName,
+ *          aranaBrandLabels: { corporateName, productName,
  *                              fullCorporateIdentity }
  *
  *   2. Footer content — shared by both builds.
@@ -1126,7 +1126,7 @@
  * workspace governance-bodies nav item. `landmark` is verified against
  * BaseIcon.vue v2.0.0 in this session.
  *
- * The 1.9.0 revision adds no icon: `masesBrandLabels` carries no icon
+ * The 1.9.0 revision adds no icon: `aranaBrandLabels` carries no icon
  * field. The brand mark is text-only — see the CR-BRAND1 block at the
  * top of this file for why the corporate emblem is not rendered in the
  * header.
@@ -1445,7 +1445,7 @@ import type {
  * the change as a brand decision, not a translation decision, and
  * route it through the brand owner.
  */
-export const masesBrandLabels = {
+export const aranaBrandLabels = {
   corporateName: 'ማሌ ዓርና',
   productName: 'ARNA',
   tagline: 'Lead by example • Build lasting trust',
