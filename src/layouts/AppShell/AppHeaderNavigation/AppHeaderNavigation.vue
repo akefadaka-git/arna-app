@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import type { RouteLocationRaw } from 'vue-router';
 import BaseButton from '@/components/primitives/BaseButton';
@@ -42,9 +42,20 @@ const breadcrumbs = computed(() => route.matched
   .filter((item, index, all) => index === 0 || item.path !== all[index - 1]?.path));
 
 function openSearch(): void {
+  if (dialog.value?.open) return;
   query.value = '';
   dialog.value?.showModal();
 }
+
+function onGlobalKeydown(event: KeyboardEvent): void {
+  if ((event.metaKey || event.ctrlKey) && !event.altKey && event.key.toLowerCase() === 'k') {
+    event.preventDefault();
+    openSearch();
+  }
+}
+
+onMounted(() => window.addEventListener('keydown', onGlobalKeydown));
+onBeforeUnmount(() => window.removeEventListener('keydown', onGlobalKeydown));
 
 function closeSearch(): void {
   dialog.value?.close();
@@ -80,7 +91,7 @@ function navigate(item: SearchNavItem): void {
     >
       <BaseIcon name="search" size="sm" />
       <span class="app-header-navigation__search-label">Search ARNA</span>
-      <kbd>⌘ K</kbd>
+      <kbd>Ctrl / ⌘ K</kbd>
     </BaseButton>
 
     <dialog ref="dialog" class="app-header-navigation__dialog" aria-labelledby="app-header-search-title">
