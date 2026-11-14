@@ -52,7 +52,7 @@ const visibleSections = computed(() => (page.value?.sections ?? []).filter((sect
 const hasCommunitySection = computed(() => visibleSections.value.some(communitySection));
 const approvedProjects = (section: CorporateSiteSection) => {
   const projects = sectionData(section).projects ?? [];
-  return projects.filter((project) => project.approval_status === 'approved' && Boolean(project.evidence_reference?.trim()));
+  return projects.filter((project) => (project as typeof project & { public_approved?: boolean }).public_approved === true);
 };
 const navSections = computed(() => visibleSections.value.filter((section) => {
   const data = section.content[locale.value] as SectionContent | undefined;
@@ -181,11 +181,17 @@ watch(() => route.query.locale, (value) => {
             <div v-if="communitySection(section) && approvedProjects(section).length" class="content-grid">
               <article v-for="project in approvedProjects(section)" :key="project.evidence_reference" class="content-card">
                 <h3>{{ project.title }}</h3><p>{{ project.summary || project.body }}</p>
-                <small>{{ locale === 'am' ? 'የማስረጃ ማጣቀሻ' : 'Evidence reference' }}: {{ project.evidence_reference }}</small>
+                
               </article>
             </div>
             <div v-if="sectionData(section).image_url" class="section-image">
               <img :src="sectionData(section).image_url" :alt="sectionData(section).image_alt || sectionData(section).title || ''" loading="lazy">
+            </div>
+            <div v-if="communitySection(section) && !sectionData(section).items?.length" class="content-grid">
+              <article class="content-card"><h3>{{ locale === 'am' ? 'ትምህርትና ክህሎት ልማት' : 'Education & skills development' }}</h3></article>
+              <article class="content-card"><h3>{{ locale === 'am' ? 'የማኅበረሰብ ጤናና ደህንነት' : 'Community health & well-being' }}</h3></article>
+              <article class="content-card"><h3>{{ locale === 'am' ? 'የአካባቢ ጥበቃ' : 'Environmental care' }}</h3></article>
+              <article class="content-card"><h3>{{ locale === 'am' ? 'አካባቢያዊ ኢኮኖሚያዊ እድልና ዘላቂ ኑሮ' : 'Local economic opportunity & sustainable livelihoods' }}</h3></article>
             </div>
             <div v-if="sectionData(section).items?.length" class="content-grid">
               <article v-for="(item, itemIndex) in sectionData(section).items" :key="itemIndex" class="content-card">
