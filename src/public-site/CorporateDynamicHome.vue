@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { fetchCorporateHome, fetchCorporatePages, type CorporateLocale, type CorporateSitePage, type CorporateSiteSection } from '@/features/public-site/api';
 
 type SectionContent = {
@@ -19,6 +19,7 @@ type SectionContent = {
 };
 
 const route = useRoute();
+const router = useRouter();
 const locale = ref<CorporateLocale>(route.query.locale === 'en' ? 'en' : 'am');
 const page = ref<CorporateSitePage | null>(null);
 const pages = ref<CorporateSitePage[]>([]);
@@ -68,10 +69,9 @@ async function load(): Promise<void> {
     loading.value = false;
   }
 }
-function switchLocale(): void {
+async function switchLocale(): Promise<void> {
   const next = locale.value === 'am' ? 'en' : 'am';
-  locale.value = next;
-  void load();
+  await router.replace({ query: { ...route.query, locale: next } });
 }
 onMounted(() => void load());
 watch(() => route.query.locale, (value) => {
@@ -85,11 +85,11 @@ watch(() => route.query.locale, (value) => {
     <a class="skip-link" href="#main-content">{{ locale === 'am' ? 'ወደ ዋናው ይዘት ይሂዱ' : 'Skip to main content' }}</a>
     <header class="site-header">
       <div class="site-header__inner">
-        <a class="brand" href="/" aria-label="Maale Arna home">
+        <a class="brand" href="/" aria-label="Maale Arna Share Company ARNA home">
           <img src="/logo.png" alt="" width="44" height="44">
           <span><strong>{{ page?.title || 'Maale Arna' }}</strong><small>ARNA</small></span>
         </a>
-        <nav v-if="navSections.length || pages.length" aria-label="Main navigation">
+        <nav v-if="navSections.length || pages.length" :aria-label="locale === 'am' ? 'ዋና አሰሳ' : 'Main navigation'">
           <a v-for="(section, index) in navSections" :key="section.id || index" :href="`#${sectionId(section, index)}`">
             {{ sectionData(section).nav_label || sectionData(section).title }}
           </a>
@@ -108,11 +108,11 @@ watch(() => route.query.locale, (value) => {
           class="content-section" :class="{ 'content-section--hero': ['hero', 'banner'].includes(section.type.toLowerCase()), 'content-section--responsibility': communitySection(section) }">
           <div class="content-section__inner">
             <p v-if="sectionData(section).eyebrow" class="eyebrow">{{ sectionData(section).eyebrow }}</p>
-            <h1 v-if="index === 0 || ['hero', 'banner'].includes(section.type.toLowerCase())" class="section-title">
+            <h1 v-if="index === 0 || ['hero', 'banner'].includes(section.type.toLowerCase())" :id="sectionId(section, index) + '-title'" :lang="locale" class="section-title">
               {{ sectionData(section).title || page.title }}
               <span v-if="sectionData(section).accent">{{ sectionData(section).accent }}</span>
             </h1>
-            <h2 v-else class="section-title">
+            <h2 v-else :id="sectionId(section, index) + '-title'" :lang="locale" class="section-title">
               {{ sectionData(section).title }}
               <span v-if="sectionData(section).accent">{{ sectionData(section).accent }}</span>
             </h2>
