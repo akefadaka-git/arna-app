@@ -20,6 +20,7 @@ test.describe('ARNA public site browser contract', () => {
   test('renders the Amharic homepage at desktop and mobile widths without horizontal page overflow', async ({ page }) => {
     for (const viewport of [
       { width: 1280, height: 900 },
+      { width: 768, height: 1024 },
       { width: 390, height: 844 },
       { width: 320, height: 740 },
     ]) {
@@ -100,6 +101,52 @@ test.describe('ARNA public site browser contract', () => {
     await page.goto(new URL('/route-that-does-not-exist', baseUrl).toString());
     await expect(page).toHaveURL(new URL('/', baseUrl).toString());
     await expect(page.locator('h1[lang="am"]')).toContainText('የጋራ እድገት');
+  });
+
+
+  test('switches the complete public homepage between Amharic and English', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(baseUrl);
+
+    await page.getByRole('link', { name: 'English' }).click();
+    await expect(page).toHaveURL(/locale=en/);
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(page.locator('#hero-title')).toContainText('Shared progress.');
+    await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
+    await expect(page.locator('#about-title')).toContainText('A system that');
+    await expect(page.locator('#principles-title')).toContainText('Our foundation is');
+    await expect(page.locator('#services-title')).toContainText('What we build is');
+    await expect(page.locator('#businesses-title')).toContainText('Connecting opportunities through');
+    await expect(page.locator('#contact-title')).toContainText('Get in touch with ARNA.');
+    await expect(page).toHaveTitle('ARNA | Official Website');
+    await expectNoSeriousAccessibilityViolations(page, 'English homepage');
+    await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Submit content' })).toBeVisible();
+    await expect(page.getByRole('contentinfo').getByRole('link', { name: 'Submit content' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'አማርኛ' })).toBeVisible();
+
+    await page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Submit content' }).click();
+    await expect(page).toHaveURL(/\/contribute\?locale=en/);
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(page.getByRole('heading', { name: 'Submit content' })).toBeVisible();
+    await expect(page.getByLabel('Content type')).toBeVisible();
+    await expect(page.getByLabel('Email address')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Submit for review' })).toBeVisible();
+    await page.getByRole('link', { name: 'Back to homepage' }).click();
+    await expect(page).toHaveURL(/locale=en/);
+
+    await page.goto(new URL('/verify?locale=en', baseUrl).toString());
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(page.getByRole('heading', { name: 'Share certificate verification' })).toBeVisible();
+    await expect(page.getByLabel('Reference number')).toBeVisible();
+    await expect(page.getByText(/This service verifies ARNA share certificates only/)).toBeVisible();
+
+    await page.goto(new URL('/?locale=en', baseUrl).toString());
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await page.getByRole('link', { name: 'አማርኛ' }).click();
+    await expect(page).toHaveURL(/locale=am/);
+    await expect(page.locator('html')).toHaveAttribute('lang', 'am');
+    await expect(page.locator('#hero-title')).toContainText('የጋራ እድገት።');
+    await expect(page.getByRole('navigation', { name: 'ዋና አሰሳ' })).toBeVisible();
   });
 
   test('has no serious or critical axe accessibility violations on the homepage', async ({ page }) => {

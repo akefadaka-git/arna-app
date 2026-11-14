@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
-import { RouterLink } from 'vue-router';
+import { computed, onMounted, ref, watch } from 'vue';
+import { RouterLink, useRoute } from 'vue-router';
 import { masesBrandLabels } from '@/router/shell-labels';
 import { api } from '@/core/api/client';
 
@@ -24,6 +24,72 @@ const submissionReference = ref('');
 
 const endpointAvailable = computed(() => Boolean(import.meta.env.VITE_API_BASE_URL));
 
+const route = useRoute();
+const locale = computed(() => route.query.locale === 'en' ? 'en' : 'am');
+const copy = computed(() => locale.value === 'am' ? {
+  invalidEmail: 'እባክዎ ትክክለኛ ኢሜይል ያስገቡ።',
+  verificationSent: 'የማረጋገጫ ኮድ ወደ ኢሜይልዎ ተልኳል።',
+  sendCodeFailed: 'ኮዱን መላክ አልተቻለም።',
+  codeInvalid: 'በኢሜይልዎ የተላከውን 6 አሃዝ ኮድ ያስገቡ።',
+  emailVerified: 'ኢሜይልዎ ተረጋግጧል። አሁን ይዘቱን ማቅረብ ይችላሉ።',
+  emailVerifyFailed: 'የኢሜይል ማረጋገጫ አልተሳካም።',
+  apiUnavailable: 'የARNA API ግንኙነት አልተዋቀረም። እባክዎ በኋላ ይሞክሩ።',
+  verifyEmailFirst: 'ይዘት ከማቅረብዎ በፊት ኢሜይልዎን ያረጋግጡ።',
+  consentRequired: 'የግላዊነት መመሪያውን ማንበብና መቀበል ያስፈልጋል።',
+  submitted: 'ይዘትዎ ተቀብሏል። ከሕዝብ ጋር ከመጋራቱ በፊት በARNA አስተዳዳሪ ይገመገማል።',
+  unknownError: 'ያልታወቀ ስህተት ተፈጥሯል።',
+  back: 'ወደ ዋና ገጽ ተመለስ', eyebrow: 'COMMUNITY CONTRIBUTIONS · የሕዝብ ተሳትፎ',
+  title: 'ይዘት ያቅርቡ',
+  lead: 'ዜና፣ ጽሑፍ፣ ማስታወቂያ ወይም ይፋዊ መረጃ ለARNA ያቅርቡ። ማንኛውም ሰው ማቅረብ ይችላል፤ ለሕዝብ የሚታይ የሚሆነው ግን በተፈቀደ አስተዳዳሪ ከተገመገመና ከጸደቀ በኋላ ብቻ ነው።',
+  processLabel: 'የማተሚያ ሂደት', processTitle: 'የማተሚያ ሂደት',
+  processBody: 'ማቅረብ → በግል የግምገማ ወረፋ → የአስተዳዳሪ ውሳኔ → ከጸደቀ በኋላ ማተም።',
+  processFoot: 'ማቅረብ ማለት ማተም አይደለም። ጸሐፊው ራሱን ማጽደቅ ወይም ማተም አይችልም။',
+  kind: 'የይዘት ዓይነት', article: 'ጽሑፍ / Blog article', news: 'ዜና / News',
+  announcement: 'ማስታወቂያ / Announcement', pressRelease: 'የፕሬስ መግለጫ / Press release',
+  titleLabel: 'ርዕስ', titlePlaceholder: 'የይዘቱን ርዕስ ያስገቡ',
+  bodyLabel: 'ይዘት', bodyPlaceholder: 'የሚያቀርቡትን መረጃ በግልጽ ይጻፉ።',
+  authorName: 'የጸሐፊ ስም', email: 'ኢሜይል', sending: 'በመላክ ላይ…',
+  resend: 'ኮዱን እንደገና ላክ', sendCode: 'የማረጋገጫ ኮድ ላክ',
+  codeLabel: 'ወደ ኢሜይልዎ የተላከው 6 አሃዝ ኮድ', verifyEmail: 'ኢሜይልን አረጋግጥ',
+  emailVerifiedStatus: 'ኢሜይል ተረጋግጧል።',
+  consent: 'የግላዊነት መመሪያውን አንብቤ ተቀብያለሁ፤ ይዘቱ ለግምገማ እንደሚቀርብ ተረድቻለሁ።',
+  apiNotice: 'የARNA API ግንኙነት ሲኖር ማስገባት ይቻላል። የቀረበው ይዘት በአስተዳዳሪ እስኪጸድቅ ድረስ በግል ይቆያል።',
+  reference: 'የማጣቀሻ ቁጥር', submit: 'ለግምገማ ያቅርቡ',
+  footer: 'ይዘት የሚታተመው ከአስተዳዳሪ ፈቃድ በኋላ ብቻ ነው።'
+} : {
+  invalidEmail: 'Enter a valid email address.',
+  verificationSent: 'A verification code has been sent to your email.',
+  sendCodeFailed: 'The verification code could not be sent.',
+  codeInvalid: 'Enter the six-digit code sent to your email.',
+  emailVerified: 'Your email is verified. You can now submit content.',
+  emailVerifyFailed: 'Email verification failed.',
+  apiUnavailable: 'The ARNA API connection is not configured. Please try again later.',
+  verifyEmailFirst: 'Verify your email before submitting content.',
+  consentRequired: 'You must read and accept the privacy notice.',
+  submitted: 'Your content has been received. An ARNA administrator will review it before it is shared publicly.',
+  unknownError: 'An unexpected error occurred.',
+  back: 'Back to homepage', eyebrow: 'COMMUNITY CONTRIBUTIONS',
+  title: 'Submit content',
+  lead: 'Send ARNA news, an article, an announcement or other official information. Anyone may submit content; publication is possible only after review and approval by an authorized administrator.',
+  processLabel: 'Publishing process', processTitle: 'How publication works',
+  processBody: 'Submit → Private review queue → Administrator decision → Publish only after approval.',
+  processFoot: 'Submitting content does not publish it. Authors cannot approve or publish their own submissions.',
+  kind: 'Content type', article: 'Blog article', news: 'News',
+  announcement: 'Announcement', pressRelease: 'Press release',
+  titleLabel: 'Title', titlePlaceholder: 'Enter a title for your content',
+  bodyLabel: 'Content', bodyPlaceholder: 'Describe the information you are submitting.',
+  authorName: 'Author name', email: 'Email address', sending: 'Sending…',
+  resend: 'Resend code', sendCode: 'Send verification code',
+  codeLabel: 'Six-digit code sent to your email', verifyEmail: 'Verify email',
+  emailVerifiedStatus: 'Email verified.',
+  consent: 'I have read and accept the privacy notice, and understand that my content will be reviewed.',
+  apiNotice: 'Submissions are available when the ARNA API is configured. Submitted content remains private until an administrator approves it.',
+  reference: 'Reference', submit: 'Submit for review',
+  footer: 'Content is published only after administrator approval.'
+});
+onMounted(() => { document.documentElement.lang = locale.value; });
+watch(locale, (value) => { document.documentElement.lang = value; });
+
 watch(authorEmail, () => {
   verificationChallengeId.value = '';
   verificationToken.value = '';
@@ -34,7 +100,7 @@ watch(authorEmail, () => {
 async function requestEmailVerification(): Promise<void> {
   errorMessage.value = '';
   if (!endpointAvailable.value || !authorEmail.value.trim()) {
-    errorMessage.value = 'እባክዎ ትክክለኛ ኢሜይል ያስገቡ።';
+    errorMessage.value = copy.value.invalidEmail;
     return;
   }
   submitting.value = true;
@@ -46,9 +112,9 @@ async function requestEmailVerification(): Promise<void> {
     );
     verificationChallengeId.value = result.challenge_id;
     verificationCodeSent.value = true;
-    successMessage.value = 'የማረጋገጫ ኮድ ወደ ኢሜይልዎ ተልኳል።';
+    successMessage.value = copy.value.verificationSent;
   } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : 'ኮዱን መላክ አልተቻለም።';
+    errorMessage.value = error instanceof Error ? error.message : copy.value.sendCodeFailed;
   } finally {
     submitting.value = false;
   }
@@ -57,7 +123,7 @@ async function requestEmailVerification(): Promise<void> {
 async function verifyEmail(): Promise<void> {
   errorMessage.value = '';
   if (!verificationChallengeId.value || !/^\\d{6}$/.test(verificationCode.value)) {
-    errorMessage.value = 'በኢሜይልዎ የተላከውን 6 አሃዝ ኮድ ያስገቡ።';
+    errorMessage.value = copy.value.codeInvalid;
     return;
   }
   submitting.value = true;
@@ -71,9 +137,9 @@ async function verifyEmail(): Promise<void> {
       },
     );
     verificationToken.value = result.verification_token;
-    successMessage.value = 'ኢሜይልዎ ተረጋግጧል። አሁን ይዘቱን ማቅረብ ይችላሉ።';
+    successMessage.value = copy.value.emailVerified;
   } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : 'የኢሜይል ማረጋገጫ አልተሳካም።';
+    errorMessage.value = error instanceof Error ? error.message : copy.value.emailVerifyFailed;
   } finally {
     submitting.value = false;
   }
@@ -86,17 +152,17 @@ async function submitContent(): Promise<void> {
   submissionReference.value = '';
 
   if (!endpointAvailable.value) {
-    errorMessage.value = 'የARNA API ግንኙነት አልተዋቀረም። እባክዎ በኋላ ይሞክሩ።';
+    errorMessage.value = copy.value.apiUnavailable;
     return;
   }
 
   if (!emailVerified.value) {
-    errorMessage.value = 'ይዘት ከማቅረብዎ በፊት ኢሜይልዎን ያረጋግጡ።';
+    errorMessage.value = copy.value.verifyEmailFirst;
     return;
   }
 
   if (!consent.value) {
-    errorMessage.value = 'የግላዊነት መመሪያውን ማንበብና መቀበል ያስፈልጋል።';
+    errorMessage.value = copy.value.consentRequired;
     return;
   }
 
@@ -117,7 +183,7 @@ async function submitContent(): Promise<void> {
       },
     );
     submissionReference.value = typeof result.reference === 'string' ? result.reference : '';
-    successMessage.value = 'ይዘትዎ ተቀብሏል። ከሕዝብ ጋር ከመጋራቱ በፊት በARNA አስተዳዳሪ ይገመገማል።';
+    successMessage.value = copy.value.submitted;
     title.value = '';
     body.value = '';
     authorName.value = '';
@@ -128,7 +194,7 @@ async function submitContent(): Promise<void> {
     verificationCodeSent.value = false;
     consent.value = false;
   } catch (error) {
-    errorMessage.value = error instanceof Error ? error.message : 'ያልታወቀ ስህተት ተፈጥሯል።';
+    errorMessage.value = error instanceof Error ? error.message : copy.value.unknownError;
   } finally {
     submitting.value = false;
   }
@@ -136,82 +202,82 @@ async function submitContent(): Promise<void> {
 </script>
 
 <template>
-  <div class="contribute-page">
+  <div class="contribute-page" :lang="locale">
     <header class="contribute-header">
-      <RouterLink class="contribute-brand" to="/">
+      <RouterLink class="contribute-brand" :to="{ path: '/', query: { locale } }">
         <img src="/logo.png" alt="" width="42" height="42" />
         <span><strong>{{ masesBrandLabels.corporateName }}</strong><small>{{ masesBrandLabels.productName }} · PUBLIC</small></span>
       </RouterLink>
-      <RouterLink class="contribute-back" to="/">ወደ ዋና ገጽ ተመለስ</RouterLink>
+      <RouterLink class="contribute-back" :to="{ path: '/', query: { locale } }">{{ copy.back }}</RouterLink>
     </header>
 
     <main class="contribute-main">
-      <p class="contribute-eyebrow">COMMUNITY CONTRIBUTIONS · የሕዝብ ተሳትፎ</p>
-      <h1>ይዘት ያቅርቡ</h1>
-      <p class="contribute-lead">ዜና፣ ጽሑፍ፣ ማስታወቂያ ወይም ይፋዊ መረጃ ለARNA ያቅርቡ። ማንኛውም ሰው ማቅረብ ይችላል፤ ለሕዝብ የሚታይ የሚሆነው ግን በተፈቀደ አስተዳዳሪ ከተገመገመና ከጸደቀ በኋላ ብቻ ነው።</p>
+      <p class="contribute-eyebrow">{{ copy.eyebrow }}</p>
+      <h1>{{ copy.title }}</h1>
+      <p class="contribute-lead">{{ copy.lead }}</p>
 
-      <section class="governance-note" aria-label="የማተሚያ ሂደት">
-        <strong>የማተሚያ ሂደት</strong>
-        <p>ማቅረብ → በግል የግምገማ ወረፋ → የአስተዳዳሪ ውሳኔ → ከጸደቀ በኋላ ማተም።</p>
-        <small>ማቅረብ ማለት ማተም አይደለም። ጸሐፊው ራሱን ማጽደቅ ወይም ማተም አይችልም።</small>
+      <section class="governance-note" :aria-label="copy.processLabel">
+        <strong>{{ copy.processTitle }}</strong>
+        <p>{{ copy.processBody }}</p>
+        <small>{{ copy.processFoot }}</small>
       </section>
 
       <form class="contribute-form" @submit.prevent="submitContent">
         <label>
-          የይዘት ዓይነት
+          {{ copy.kind }}
           <select v-model="kind" required>
-            <option value="article">ጽሑፍ / Blog article</option>
-            <option value="news">ዜና / News</option>
-            <option value="announcement">ማስታወቂያ / Announcement</option>
-            <option value="press-release">የፕሬስ መግለጫ / Press release</option>
+            <option value="article">{{ copy.article }}</option>
+            <option value="news">{{ copy.news }}</option>
+            <option value="announcement">{{ copy.announcement }}</option>
+            <option value="press-release">{{ copy.pressRelease }}</option>
           </select>
         </label>
         <label>
-          ርዕስ
-          <input v-model="title" maxlength="180" required autocomplete="off" placeholder="የይዘቱን ርዕስ ያስገቡ" />
+          {{ copy.titleLabel }}
+          <input v-model="title" maxlength="180" required autocomplete="off"  :placeholder="copy.titlePlaceholder" />
         </label>
         <label>
-          ይዘት
-          <textarea v-model="body" rows="9" maxlength="20000" required placeholder="የሚያቀርቡትን መረጃ በግልጽ ይጻፉ።"></textarea>
+          {{ copy.bodyLabel }}
+          <textarea v-model="body" rows="9" maxlength="20000" required  :placeholder="copy.bodyPlaceholder"></textarea>
         </label>
         <div class="contribute-form__row">
           <label>
-            የጸሐፊ ስም
+            {{ copy.authorName }}
             <input v-model="authorName" maxlength="120" required autocomplete="name" />
           </label>
           <label>
-            ኢሜይል
+            {{ copy.email }}
             <input v-model="authorEmail" type="email" maxlength="254" required autocomplete="email" :disabled="emailVerified" />
             <button type="button" class="verification-button" :disabled="submitting || !authorEmail.trim() || emailVerified" @click="requestEmailVerification">
-              {{ submitting ? 'በመላክ ላይ…' : verificationCodeSent ? 'ኮዱን እንደገና ላክ' : 'የማረጋገጫ ኮድ ላክ' }}
+              {{ submitting ? copy.sending : verificationCodeSent ? copy.resend : copy.sendCode }}
             </button>
           </label>
         </div>
         <label v-if="verificationCodeSent && !emailVerified" class="verification-code-field">
-          ወደ ኢሜይልዎ የተላከው 6 አሃዝ ኮድ
+          {{ copy.codeLabel }}
           <input v-model="verificationCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" />
-          <button type="button" class="verification-button" :disabled="submitting || verificationCode.length !== 6" @click="verifyEmail">ኢሜይልን አረጋግጥ</button>
+          <button type="button" class="verification-button" :disabled="submitting || verificationCode.length !== 6" @click="verifyEmail">{{ copy.verifyEmail }}</button>
         </label>
-        <p v-if="emailVerified" class="contribute-status contribute-status--success" role="status">ኢሜይል ተረጋግጧል።</p>
+        <p v-if="emailVerified" class="contribute-status contribute-status--success" role="status">{{ copy.emailVerifiedStatus }}</p>
         <label class="contribute-honeypot" aria-hidden="true">
           Leave this field empty
           <input v-model="website" tabindex="-1" autocomplete="off" />
         </label>
         <label class="contribute-consent">
           <input v-model="consent" type="checkbox" required />
-          <span>የግላዊነት መመሪያውን አንብቤ ተቀብያለሁ፤ ይዘቱ ለግምገማ እንደሚቀርብ ተረድቻለሁ።</span>
+          <span>{{ copy.consent }}</span>
         </label>
 
-        <p v-if="!endpointAvailable" class="contribute-status contribute-status--warning" role="status">የARNA API ግንኙነት ሲኖር ማስገባት ይቻላል። የቀረበው ይዘት በአስተዳዳሪ እስኪጸድቅ ድረስ በግል ይቆያል።</p>
+        <p v-if="!endpointAvailable" class="contribute-status contribute-status--warning" role="status">{{ copy.apiNotice }}</p>
         <p v-if="errorMessage" class="contribute-status contribute-status--error" role="alert">{{ errorMessage }}</p>
-        <p v-if="successMessage" class="contribute-status contribute-status--success" role="status">{{ successMessage }} <span v-if="submissionReference">የማጣቀሻ ቁጥር: {{ submissionReference }}</span></p>
+        <p v-if="successMessage" class="contribute-status contribute-status--success" role="status">{{ successMessage }} <span v-if="submissionReference">{{ copy.reference }}: {{ submissionReference }}</span></p>
 
         <button type="submit" :disabled="submitting || !endpointAvailable || !emailVerified">
-          {{ submitting ? 'በመላክ ላይ…' : 'ለግምገማ ያቅርቡ' }}
+          {{ submitting ? copy.sending : copy.submit }}
         </button>
       </form>
     </main>
-    <footer class="contribute-footer">© {{ new Date().getFullYear() }} {{ masesBrandLabels.corporateName }} · ይዘት የሚታተመው ከአስተዳዳሪ ፈቃድ በኋላ ብቻ ነው።</footer>
+    <footer class="contribute-footer">© {{ new Date().getFullYear() }} {{ masesBrandLabels.corporateName }} · {{ copy.footer }}</footer>
   </div>
 </template>
 
