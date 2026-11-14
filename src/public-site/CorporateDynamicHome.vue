@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
 import { RouterLink, useRoute, useRouter } from 'vue-router';
+import { api } from '@/core/api/client';
 import { fetchCorporateHome, fetchCorporatePages, fetchCorporateEntries, submitCorporateInquiry, submitCorporateOpportunity, type CorporateLocale, type CorporateSitePage, type CorporateSiteSection, type CorporatePublicEntry } from '@/features/public-site/api';
 
 type SectionContent = {
@@ -26,6 +27,9 @@ const page = ref<CorporateSitePage | null>(null);
 const pages = ref<CorporateSitePage[]>([]);
 const loading = ref(true);
 const error = ref(false);
+type PublishedContributorContent = { id: string; type: string; title: string; body: string; published_at: string | null };
+const contributorContent = ref<PublishedContributorContent[]>([]);
+const contributorContentFailed = ref(false);
 const entryCollections = ref<Record<string, CorporatePublicEntry[]>>({});
 const feedFailures = ref<Record<string, boolean>>({});
 const inquiryDraft = ref({ inquiry_type: 'general' as const, name: '', email: '', phone: '', subject: '', message: '', consent: false, website: '' });
@@ -91,6 +95,14 @@ async function load(): Promise<void> {
     const results = await Promise.allSettled(types.map((type) => fetchCorporateEntries(type, locale.value)));
     entryCollections.value = Object.fromEntries(types.map((type, index) => [type, results[index].status === 'fulfilled' ? results[index].value : []]));
     feedFailures.value = Object.fromEntries(types.map((type, index) => [type, results[index].status === 'rejected']));
+    try {
+      const response = await api.get<{ data: PublishedContributorContent[] }>('/api/public/content', { params: { per_page: 3 } });
+      contributorContent.value = response.data;
+      contributorContentFailed.value = false;
+    } catch {
+      contributorContent.value = [];
+      contributorContentFailed.value = true;
+    }
     if (home?.seo?.title) document.title = home.seo.title;
     else document.title = home?.title ? `${home.title} | Maale Arna` : 'Maale Arna | Official Website';
     let description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
@@ -274,6 +286,15 @@ watch(() => route.query.locale, (value) => {
             </div>
             <p v-else-if="group.failed" class="section-note" role="status">{{ locale === 'am' ? 'ይዘቱን ለጊዜው ማምጣት አልተቻለም።' : 'This content feed is temporarily unavailable.' }}</p>
             <p v-else class="section-note">{{ locale === 'am' ? 'በአሁኑ ጊዜ የተጸደቀ ይዘት የለም።' : 'No approved content is currently published.' }}</p>
+          </div>
+        </section>
+        <section v-if="contributorContent.length || contributorContentFailed" class="content-section" aria-labelledby="contributor-content-title">
+          <div class="content-section__inner">
+            <h2 id="contributor-content-title" class="section-title">{{ locale === 'am' ? 'የማኅበረሰብ ይዘት' : 'Community contributions' }}</h2>
+            <div v-if="contributorContent.length" class="content-grid">
+              <article v-for="item in contributorContent" :key="item.id" class="content-card"><h3>{{ item.title }}</h3><p>{{ item.body }}</p></article>
+            </div>
+            <p v-else role="status">{{ locale === 'am' ? 'የማኅበረሰብ ይዘት ለጊዜው አልተገኘም።' : 'Community contributions are temporarily unavailable.' }}</p>
           </div>
         </section>
         <section class="content-section" aria-labelledby="opportunity-form-title">
