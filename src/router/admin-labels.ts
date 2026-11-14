@@ -78,7 +78,7 @@
  *     and composed into `document.title` by each route wrapper. The
  *     brand mark in the header remains `ማሌ ዓርና` on every build.
  *
- *   · Footer content labels. `masesFooterLabels` carries the
+ *   · Footer content labels. `aranaFooterLabels` carries the
  *     copyright template, the legal link, and the support link. Same
  *     strings on every build. The admin build consumes them
  *     unchanged.
@@ -241,7 +241,7 @@
  *    item whose route the guard accepts.
  *
  * 3. The admin build reuses `masesShellLabels`, `masesBrandLabels`,
- *    and `masesFooterLabels` from `shell-labels.ts` unchanged. A
+ *    and `aranaFooterLabels` from `shell-labels.ts` unchanged. A
  *    future CR that changes a shell label affects all three builds;
  *    the admin build does not carry an independent shell-chrome
  *    vocabulary. If the product ever needs the admin chrome to
