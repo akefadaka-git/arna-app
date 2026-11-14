@@ -13,18 +13,18 @@ const route = useRoute();
 const locale = ref<'am' | 'en'>(route.query.locale === 'en' ? 'en' : 'am');
 
 const copy = computed(() => locale.value === 'am' ? {
-  skip: 'ወደ ዋናው ይዘት ይሂዱ', navLabel: 'ዋና አሰሳ', heroArtLabel: 'ARNA የጋራ እድገት ምልክት', announcement: 'የARNA ይፋዊ ድረ ገጽ። የተጸደቀ መረጃ ብቻ እዚህ ይታያል።',
-  navAbout: 'ስለ ARNA', navValues: 'እሴቶቻችን', navServices: 'አገልግሎቶች', navBusiness: 'የንግድ አቅጣጫዎች', navUpdates: 'ዜናና ጦማር', navMedia: 'ሚዲያ', navAds: 'ማስታወቂያ', verify: 'ሰነድ ያረጋግጡ',
-  heroTitle1: 'የጋራ እድገት።', heroTitle2: 'በታማኝነት የተመራ።', heroLead: 'ወደ ARNA እንኳን በደህና መጡ። ግልጽነትን፣ ተጠያቂነትን እና ዘላቂ እድገትን በማዕከል የሚያደርግ የጋራ ጉዞ እየገነባን ነው።',
+  skip: 'ወደ ዋናው ይዘት ይሂዱ', navLabel: 'ዋና አሰሳ', heroArtLabel: 'ARNA የጋራ እድገት ምልክት', announcement: 'የማሌ ዓርና አክሲዮን ማኅበር ይፋዊ ድረ ገጽ። የተጸደቀ መረጃ ብቻ እዚህ ይታያል።',
+  navAbout: 'ስለ ማሌ ዓርና', navValues: 'እሴቶቻችን', navServices: 'አገልግሎቶች', navBusiness: 'የንግድ አቅጣጫዎች', navUpdates: 'ዜናና ጦማር', navMedia: 'ሚዲያ', navAds: 'ማስታወቂያ', verify: 'ሰነድ ያረጋግጡ',
+  heroTitle1: 'የጋራ እድገት።', heroTitle2: 'በታማኝነት የተመራ።', heroLead: 'ወደ ማሌ ዓርና አክሲዮን ማኅበር እንኳን በደህና መጡ። በተለያዩ የንግድ ዘርፎች የሚፈጠሩ ዕድሎችን በኃላፊነት በማሳደግ ለባለአክሲዮኖችና ለማኅበረሰቡ ዘላቂ እሴት ለመፍጠር የተቋቋመ ድርጅት።',
   aboutButton: 'ARNAን ይወቁ', verifyCertificate: 'የአክሲዮን ምስክር ወረቀት ያረጋግጡ', trustline: 'መተማመን የሚገነባው በግልጽነት ነው።',
-  aboutEyebrow: 'ስለ እኛ', aboutTitle1: 'ሥራን የሚያቀላጥፍ፣', aboutTitle2: 'እምነትን የሚያጠናክር', aboutAccent: 'ሥርዓት።',
-  aboutP1: 'ARNA የድርጅት አሠራርን ከተጠያቂነትና ከግልጽ አስተዳደር ጋር ለማገናኘት የሚያተኩር የዲጂታል ሥርዓት ነው።',
-  aboutP2: 'ይህ ይፋዊ ድረ ገጽ ስለ ድርጅቱ፣ አገልግሎቶቹ እና የተጸደቁ ማስታወቂያዎች መረጃን በአንድ ቦታ ለማቅረብ ይዘጋጃል።',
+  aboutEyebrow: 'ስለ እኛ', aboutTitle1: 'የተለያዩ የንግድ ዘርፎችን', aboutTitle2: 'በኃላፊነት የሚያሳድግ', aboutAccent: 'ድርጅት።',
+  aboutP1: 'ማሌ ዓርና አክሲዮን ማኅበር ዋና መሥሪያ ቤቱን በደቡብ ኦሞ ዞን፣ ማሌ ወረዳ፣ ኮይቤ ቀበሌ ያደረገ የአክሲዮን ማኅበር ነው።',
+  aboutP2: 'መመሥረቻ ዓላማዎቹ ግብርና፣ ማዕድን፣ ማኑፋክቸሪንግ፣ ኮንስትራክሽን፣ ንግድ፣ ትራንስፖርት፣ ፋይናንስ፣ ኢንሹራንስ፣ ሪል እስቴትና ማኅበራዊ አገልግሎቶችን ያካትታሉ። የእያንዳንዱ ዘርፍ የአሁኑ የሥራ ሁኔታ በተለይ ይረጋገጣል።',
   valuesEyebrow: 'የምንመራባቸው እሴቶች', valuesTitle: 'መሠረታችን', valuesAccent: 'ግልጽ ነው።', valuesIntro: 'የምንገነባው ሥርዓት በሰዎች እምነት ላይ መመሥረት አለበት።',
-  servicesEyebrow: 'አገልግሎቶችና መፍትሄዎች', servicesTitle: 'የምንገነባው', servicesAccent: 'ለወደፊት ነው።', servicesIntro: 'ዝርዝር የአገልግሎት መረጃዎች በይፋ ከጸደቁ በኋላ በዚህ ይታያሉ።',
-  preparing: 'በመዘጋጀት ላይ', servicesNote: 'እነዚህ የአገልግሎት ምድቦች የድረ ገጹን መዋቅር ለማሳየት ቀርበዋል፤ የተወሰኑ ምርቶች፣ ዋጋዎች ወይም የግዢ ተግባራት እስኪጸድቁ ድረስ አይታዩም።',
-  businessTitle: 'እድሎችን የሚያገናኙ', businessAccent: 'የሥራ አቅጣጫዎች።', businessIntro: 'የተረጋገጡ የንግድ ክፍሎችና ኩባንያዎች መገለጫዎች በአስተዳዳሪ ከጸደቁ በኋላ እዚህ ይታያሉ።',
-  businessStatus: 'ዝርዝር መረጃ በማረጋገጥ ላይ', businessDisclaimer: 'ማስታወሻ፦ ከላይ ያሉት ምድቦች የድረ ገጹን መዋቅር ያሳያሉ፤ የተረጋገጡ የሕጋዊ ኩባንያ ስሞች፣ ባለቤትነት ወይም የንግድ ጥያቄዎች አይደሉም።',
+  servicesEyebrow: 'አገልግሎቶችና መፍትሄዎች', servicesTitle: 'የምንገነባው', servicesAccent: 'ለወደፊት ነው።', servicesIntro: 'በእውነት የሚሰጡ አገልግሎቶች ከተረጋገጡና በአስተዳዳሪ ከጸደቁ በኋላ በዚህ ይታያሉ።',
+  preparing: 'በመዘጋጀት ላይ', servicesNote: 'በመመሥረቻ ሰነድ የተዘረዘሩ የንግድ ዓላማዎች ሁሉ በአሁኑ ጊዜ እየተካሄዱ ናቸው ማለት አይደለም። የአሁኑ አገልግሎቶች በማስረጃ ከተረጋገጡ በኋላ ብቻ ይታያሉ።',
+  businessTitle: 'በመመሥረቻ ሰነድ የተዘረዘሩ', businessAccent: 'የንግድ ዓላማዎች።', businessIntro: 'የማኅበሩ መመሥረቻ ደንብ የሚያስቀምጣቸው የንግድ ዓላማዎች ከታች ቀርበዋል። በእውነት የሚካሄዱ የንግድ ሥራዎች በተለይ ይለያሉ።',
+  businessStatus: 'በመመሥረቻ ደንብ የተፈቀደ ዓላማ · የአሁኑ ሁኔታ በተለይ ይረጋገጣል', businessDisclaimer: 'ማስታወሻ፦ እነዚህ የንግድ ዓላማዎች በመመሥረቻ ደንቡ የተዘረዘሩ ናቸው። ይህ ሁሉም ዘርፎች አሁን በሥራ ላይ ናቸው ወይም ልዩ ፈቃድ አላቸው ማለት አይደለም።',
   updatesTitle: 'የቅርብ መረጃዎች።', updatesAccent: 'ከታመነ ምንጭ።', updatesIntro: 'የድርጅቱ ዜናዎች፣ ማስታወቂያዎች እና ይፋዊ ማሻሻያዎች በአስተዳዳሪ ከተጸደቁ በኋላ እዚህ ይታያሉ።',
   approvedContent: 'የጸደቀ ይዘት ሲኖር ይታያል', mediaTitle: 'የARNA ሚዲያ', mediaAccent: 'ማዕከል።', mediaIntro: 'ፎቶዎችና ህትመቶች ከማረጋገጫና ከአስተዳዳሪ ፈቃድ በኋላ ብቻ ይታያሉ።',
   mediaEmpty: 'በአሁኑ ጊዜ የታተመ ሚዲያ የለም።', publicationsTitle: 'ህትመቶችና', publicationsAccent: 'ይፋዊ ማስታወቂያዎች።', publicationsEmpty: 'በአሁኑ ጊዜ የታተሙ ህትመቶች የሉም።',
@@ -34,18 +34,18 @@ const copy = computed(() => locale.value === 'am' ? {
   verificationTitle: 'የአክሲዮን ምስክር ወረቀት እውነተኛነት ያረጋግጡ።', verificationIntro: 'የARNA የአክሲዮን ምስክር ወረቀት ማጣቀሻ ቁጥርን በመጠቀም የሰነዱን ሁኔታ ይፈትሹ።',
   footerTagline: 'በመተማመን የሚገነባ የጋራ እድገት።', footerAbout: 'ይወቁን', footerOfficial: 'ይፋዊ አገናኞች', footerDisclosure: 'የተጸደቀ መረጃ ብቻ። ግልጽነት ሁልጊዜ።', footerContribute: 'ይዘት ያቅርቡ', footerVerification: 'ሰነድ ማረጋገጫ', footerLegal: 'ሕጋዊ መረጃ', footerNews: 'ዜናዎችና ማስታወቂያዎች', footerAds: 'ማስታወቂያ ያስተዋውቁ', footerPublications: 'ህትመቶች', footerOpportunities: 'የሥራና የገበያ እድሎች', footerContact: 'ያግኙን', backToTop: 'ወደ ላይ ↑'
 } : {
-  skip: 'Skip to main content', navLabel: 'Main navigation', heroArtLabel: 'ARNA shared progress emblem', announcement: 'ARNA official corporate website. Only approved information is published here.',
-  navAbout: 'About ARNA', navValues: 'Our values', navServices: 'Services', navBusiness: 'Business areas', navUpdates: 'News & insights', navMedia: 'Media', navAds: 'Advertising', verify: 'Verify a document',
-  heroTitle1: 'Shared progress.', heroTitle2: 'Led by trust.', heroLead: 'Welcome to ARNA. We are building a shared journey centered on transparency, accountability and sustainable progress.',
+  skip: 'Skip to main content', navLabel: 'Main navigation', heroArtLabel: 'ARNA shared progress emblem', announcement: 'Official website of Maale Arna Share Company. Only approved information is published here.',
+  navAbout: 'About Maale Arna', navValues: 'Our values', navServices: 'Services', navBusiness: 'Business areas', navUpdates: 'News & insights', navMedia: 'Media', navAds: 'Advertising', verify: 'Verify a document',
+  heroTitle1: 'Shared progress.', heroTitle2: 'Led by trust.', heroLead: 'Welcome to Maale Arna Share Company. We pursue opportunities across a diversified range of business sectors with the aim of creating lasting value for shareholders and communities.',
   aboutButton: 'Discover ARNA', verifyCertificate: 'Verify a share certificate', trustline: 'Trust is built through transparency.',
-  aboutEyebrow: 'About us', aboutTitle1: 'A system that', aboutTitle2: 'simplifies work and strengthens', aboutAccent: 'trust.',
-  aboutP1: 'ARNA is a digital operating system focused on connecting enterprise operations with accountability and transparent governance.',
-  aboutP2: 'This official website brings together approved information about the organization, its services and public announcements.',
+  aboutEyebrow: 'About us', aboutTitle1: 'A diversified enterprise', aboutTitle2: 'developing opportunities with', aboutAccent: 'responsibility.',
+  aboutP1: 'Maale Arna Share Company is an Ethiopian share company headquartered in Koybe Kebele, Maale Woreda, South Omo Zone.',
+  aboutP2: 'Its bylaws establish purposes spanning agriculture, mining, manufacturing, construction, trade, transport, finance, insurance, real estate and community, social and personal services. Current operating status is verified separately for each activity.',
   valuesEyebrow: 'Our guiding principles', valuesTitle: 'Our foundation is', valuesAccent: 'clear.', valuesIntro: 'The system we build must be grounded in the trust of the people it serves.',
-  servicesEyebrow: 'Services & solutions', servicesTitle: 'What we build is', servicesAccent: 'for the future.', servicesIntro: 'Detailed service information will appear here after formal approval.',
-  preparing: 'In preparation', servicesNote: 'These service categories illustrate the website structure. Specific products, prices and purchasing functions will appear only after approval.',
-  businessTitle: 'Connecting opportunities through', businessAccent: 'business areas.', businessIntro: 'Verified business-unit and company profiles will appear here after administrative approval.',
-  businessStatus: 'Details under verification', businessDisclaimer: 'Note: The categories above illustrate the website structure. They are not verified legal company names, ownership statements or commercial claims.',
+  servicesEyebrow: 'Services & solutions', servicesTitle: 'What we build is', servicesAccent: 'for the future.', servicesIntro: 'Verified descriptions of services actually being delivered will appear here after administrative review and approval.',
+  preparing: 'In preparation', servicesNote: 'The business purposes listed in the bylaws do not mean every activity is currently operating. Current services are published only after supporting evidence is reviewed.',
+  businessTitle: 'Business purposes stated in', businessAccent: 'the bylaws.', businessIntro: 'The following categories are listed in the company bylaws. Actual operating activities are identified separately and published only after verification.',
+  businessStatus: 'Bylaw-authorized purpose · current operating status to be verified', businessDisclaimer: 'These are business purposes listed in the bylaws. This does not mean every sector is currently active or separately licensed.',
   updatesTitle: 'The latest updates.', updatesAccent: 'From trusted sources.', updatesIntro: 'Corporate news, announcements and official updates appear here after administrative approval.',
   approvedContent: 'Shown when approved content is available', mediaTitle: 'The ARNA media', mediaAccent: 'center.', mediaIntro: 'Photos and publications appear only after verification and administrative approval.',
   mediaEmpty: 'There is no published media at this time.', publicationsTitle: 'Publications &', publicationsAccent: 'official notices.', publicationsEmpty: 'There are no published notices or publications at this time.',
@@ -205,31 +205,17 @@ const principles = [
   },
 ];
 
-const offerings = [
-  {
-    number: '01',
-    label: 'የድርጅት ሥርዓቶች', labelEn: 'Enterprise systems',
-    title: 'Enterprise systems',
-    description: 'ለድርጅታዊ ሥራዎች፣ ለአስተዳደር እና ለተቀናጀ አሠራር የተዘጋጁ ዲጂታል መሠረቶች።', descriptionEn: 'Digital foundations for enterprise operations, administration and integrated workflows.',
-  },
-  {
-    number: '02',
-    label: 'የአባላት እና የባለአክሲዮኖች አገልግሎቶች', labelEn: 'Member and shareholder services',
-    title: 'Member services',
-    description: 'የባለድርሻ ግንኙነቶችንና ተዛማጅ አገልግሎቶችን በተጠበቀ መንገድ ለማቀናጀት የሚያግዙ መፍትሄዎች።', descriptionEn: 'Secure solutions for coordinating stakeholder relationships and related services.',
-  },
-  {
-    number: '03',
-    label: 'ዲጂታል ንግድ', labelEn: 'Digital commerce',
-    title: 'Digital commerce',
-    description: 'በደህንነትና በግልጽ መረጃ ላይ የተመሠረቱ የዲጂታል ንግድ አገልግሎቶች።', descriptionEn: 'Digital commerce services grounded in security and clear information.',
-  },
-];
+const offerings: never[] = [];
 
 const businessAreas = [
-  { number: '01', title: 'Enterprise & operations', titleAm: 'ድርጅታዊ አሠራር', description: 'የድርጅት አስተዳደርን፣ የሥራ ሂደቶችንና የተቀናጀ አገልግሎትን የሚደግፉ መፍትሄዎች።', descriptionEn: 'Solutions supporting enterprise governance, workflows and integrated services.' },
-  { number: '02', title: 'People & partnerships', titleAm: 'ሰዎችና አጋርነት', description: 'ከአባላት፣ ከባለድርሻ አካላትና ከንግድ አጋሮች ጋር ግልጽ ግንኙነት ለመገንባት የሚያግዙ አቅጣጫዎች።', descriptionEn: 'Clear partnerships with members, stakeholders and business partners.' },
-  { number: '03', title: 'Commerce & innovation', titleAm: 'ንግድና ፈጠራ', description: 'የንግድ እድሎችን፣ የዲጂታል አገልግሎቶችንና ፈጠራን የሚያበረታቱ የወደፊት አቅጣጫዎች።', descriptionEn: 'Future directions that enable business opportunities, digital services and innovation.' },
+  { number: '01', title: 'Agriculture', titleAm: 'ግብርና', description: 'Agricultural operations are included in the company\'s stated corporate purposes.', descriptionEn: 'Agricultural operations are included in the company\'s stated corporate purposes.' },
+  { number: '02', title: 'Mining', titleAm: 'ማዕድን', description: 'Mining operations are included in the company\'s stated corporate purposes.', descriptionEn: 'Mining operations are included in the company\'s stated corporate purposes.' },
+  { number: '03', title: 'Manufacturing', titleAm: 'ማኑፋክቸሪንግ', description: 'Manufacturing operations are included in the company\'s stated corporate purposes.', descriptionEn: 'Manufacturing operations are included in the company\'s stated corporate purposes.' },
+  { number: '04', title: 'Construction', titleAm: 'ኮንስትራክሽን', description: 'Construction operations are included in the company\'s stated corporate purposes.', descriptionEn: 'Construction operations are included in the company\'s stated corporate purposes.' },
+  { number: '05', title: 'Wholesale, hospitality, import & export', titleAm: 'ጅምላ ንግድ፣ ሆቴልና ሬስቶራንት፣ አስመጪና ላኪ', description: 'Wholesale trade, hotels and restaurants, import and export are listed in the bylaws.', descriptionEn: 'Wholesale trade, hotels and restaurants, import and export are listed in the bylaws.' },
+  { number: '06', title: 'Transportation', titleAm: 'ትራንስፖርት', description: 'Transportation operations are included in the company\'s stated corporate purposes.', descriptionEn: 'Transportation operations are included in the company\'s stated corporate purposes.' },
+  { number: '07', title: 'Finance, insurance, real estate & trade', titleAm: 'ፋይናንስ፣ ኢንሹራንስ፣ ሪል እስቴትና ንግድ', description: 'Finance, insurance, real estate and trade are included in the bylaws.', descriptionEn: 'Finance, insurance, real estate and trade are included in the bylaws.' },
+  { number: '08', title: 'Community, social & personal services', titleAm: 'ማኅበረሰብ፣ ማኅበራዊና የግል አገልግሎቶች', description: 'Community, social and personal services are included in the company\'s stated corporate purposes.', descriptionEn: 'Community, social and personal services are included in the company\'s stated corporate purposes.' },
 ];
 
 const publicationChannels = [
@@ -349,7 +335,7 @@ const publicationChannels = [
         <div class="site-container intro-section__grid">
           <div class="section-kicker">
             <span class="section-kicker__number">01</span>
-            <span class="section-kicker__label">ABOUT ARNA</span>
+            <span class="section-kicker__label">{{ copy.aboutEyebrow }}</span>
           </div>
           <div class="intro-section__content">
             <p class="eyebrow eyebrow--dark">{{ copy.aboutEyebrow }}</p>
@@ -398,14 +384,9 @@ const publicationChannels = [
               <h3>{{ service.title }}</h3><p class="service-card__description">{{ service.summary || service.body }}</p>
             </article>
           </div>
-          <div v-else class="service-grid">
-            <article v-for="offering in offerings" :key="offering.number" class="service-card">
-              <div class="service-card__top"><span>{{ offering.number }}</span><span aria-hidden="true">↗</span></div>
-              <p class="service-card__label" :lang="locale">{{ locale === 'am' ? offering.label : offering.labelEn }}</p>
-              <h3>{{ offering.title }}</h3>
-              <p class="service-card__description" :lang="locale">{{ locale === 'am' ? offering.description : offering.descriptionEn }}</p>
-              <div class="service-card__status"><span></span> {{ copy.preparing }}</div>
-            </article>
+          <div v-else class="updates-empty">
+            <h3>{{ locale === 'am' ? 'የተረጋገጠ አገልግሎት ገና አልታተመም።' : 'No verified active services have been published yet.' }}</h3>
+            <p>{{ copy.servicesIntro }}</p>
           </div>
           <p class="services-section__note" :lang="locale"><span aria-hidden="true">ⓘ</span> {{ copy.servicesNote }}</p>
         </div>
@@ -416,7 +397,7 @@ const publicationChannels = [
         <div class="site-container">
           <div class="section-heading">
             <div>
-              <p class="eyebrow eyebrow--dark">OUR BUSINESS LANDSCAPE</p>
+              <p class="eyebrow eyebrow--dark">{{ locale === 'am' ? 'የንግድ ዓላማዎች' : 'BYLAWS-BASED BUSINESS PURPOSES' }}</p>
               <h2 id="businesses-title" :lang="locale">{{ copy.businessTitle }} <span>{{ copy.businessAccent }}</span></h2>
             </div>
             <p :lang="locale">{{ copy.businessIntro }}</p>
@@ -429,8 +410,7 @@ const publicationChannels = [
           <div v-else class="business-grid">
             <article v-for="area in businessAreas" :key="area.number" class="business-card">
               <span class="business-card__number">{{ area.number }}</span>
-              <p :lang="locale">{{ locale === 'am' ? area.titleAm : area.title }}</p>
-              <h3>{{ area.title }}</h3>
+              <h3 :lang="locale">{{ locale === 'am' ? area.titleAm : area.title }}</h3>
               <p class="business-card__description" :lang="locale">{{ locale === 'am' ? area.description : area.descriptionEn }}</p>
               <span class="business-card__status">{{ copy.businessStatus }}</span>
             </article>
