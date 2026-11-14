@@ -15,13 +15,13 @@ function collectFiles(directory) {
 }
 
 function resolveLocalAsset(reference) {
-  if (!reference || /^(?:[a-z]+:)?\\/\\//i.test(reference) || /^(?:data:|#)/i.test(reference)) {
+  if (!reference || /^(?:[a-z]+:)?\/\//i.test(reference) || /^(?:data:|#)/i.test(reference)) {
     return null;
   }
 
   const pathname = reference.split(/[?#]/, 1)[0];
   return pathname.startsWith('/')
-    ? join(outputDir, pathname.replace(/^\\/+/, ''))
+    ? join(outputDir, pathname.replace(/^\/+/, ''))
     : resolve(dirname(indexPath), pathname);
 }
 
@@ -33,11 +33,11 @@ test('public build emits a standalone index with existing referenced local asset
   assert.ok(assetFiles.length > 0, 'public build must emit local assets');
 
   const references = [
-    ...html.matchAll(/<script\\b[^>]*\\bsrc=["']([^"']+)["'][^>]*>/gi),
-    ...html.matchAll(/<link\\b(?=[^>]*\\brel=["'][^"']*stylesheet[^"']*["'])[^>]*\\bhref=["']([^"']+)["'][^>]*>/gi),
+    ...html.matchAll(/<script\b[^>]*\bsrc=["']([^"']+)["'][^>]*>/gi),
+    ...html.matchAll(/<link\b(?=[^>]*\brel=["'][^"']*stylesheet[^"']*["'])[^>]*\bhref=["']([^"']+)["'][^>]*>/gi),
   ].map((match) => match[1]);
 
-  assert.ok(references.some((reference) => /\\.js(?:[?#]|$)/i.test(reference)),
+  assert.ok(references.some((reference) => /\.js(?:[?#]|$)/i.test(reference)),
     'public index must reference a JavaScript entry');
 
   for (const reference of references) {
@@ -53,7 +53,7 @@ test('public JavaScript bundle contains the CMS-driven homepage and public route
     .filter((file) => file.endsWith('.js'));
   assert.ok(bundles.length > 0, 'public JavaScript bundles must exist');
 
-  const source = bundles.map((file) => readFileSync(file, 'utf8')).join('\\n');
+  const source = bundles.map((file) => readFileSync(file, 'utf8')).join('\n');
   for (const contract of ['corporate-site/home', 'corporate-site/pages', 'community_responsibility', 'items']) {
     assert.ok(source.includes(contract), `public CMS contract ${contract} must be present in the built bundle`);
   }
