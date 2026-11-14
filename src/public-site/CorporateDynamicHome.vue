@@ -16,7 +16,7 @@ type SectionContent = {
   cta_label?: string;
   cta_url?: string;
   items?: Array<{ title?: string; body?: string; description?: string; image_url?: string; image_alt?: string; label?: string; value?: string; status?: string; url?: string }>;
-  projects?: Array<{ title?: string; summary?: string; body?: string; approval_status?: string; evidence_reference?: string; public_approved?: boolean; partner?: string; budget?: string; outcome?: string }>;
+  projects?: Array<{ public_id?: string; title?: string; summary?: string; body?: string; approval_status?: string; evidence_reference?: string; public_approved?: boolean; partner?: string; budget?: string; outcome?: string }>;
   [key: string]: unknown;
 };
 
@@ -219,9 +219,9 @@ watch(() => route.query.locale, (value) => {
               {{ sectionData(section).intro || sectionData(section).body }}
             </p>
             <p v-if="index === 0 && page.body" class="section-copy">{{ page.body }}</p>
-            <p v-if="sectionData(section).projects?.length && communitySection(section) && approvedProjects(section).length === 0" class="section-note">{{ locale === 'am' ? 'የተጸደቁና በሰነድ የተደገፉ ፕሮጀክቶች ሲኖሩ እዚህ ይታያሉ።' : 'Approved and documented projects will appear here when available.' }}</p>
+            <p v-if="communitySection(section) && approvedProjects(section).length === 0" class="section-note">{{ locale === 'am' ? 'የተጸደቁና በሰነድ የተደገፉ ፕሮጀክቶች ሲኖሩ እዚህ ይታያሉ።' : 'Approved and documented projects will appear here when available.' }}</p>
             <div v-if="communitySection(section) && approvedProjects(section).length" class="content-grid">
-              <article v-for="project in approvedProjects(section)" :key="project.evidence_reference" class="content-card">
+              <article v-for="(project, projectIndex) in approvedProjects(section)" :key="project.public_id || project.title || projectIndex" class="content-card">
                 <h3>{{ project.title }}</h3><p>{{ project.summary || project.body }}</p>
                 
               </article>
@@ -280,7 +280,9 @@ watch(() => route.query.locale, (value) => {
             <h2 :id="`feed-${group.type}`" class="section-title">{{ group.title }}</h2>
             <div v-if="group.entries.length" class="content-grid">
               <article v-for="entry in group.entries" :key="entry.public_id" class="content-card">
+                <img v-if="entry.asset_url && group.type === 'media'" :src="entry.asset_url" :alt="entry.title" loading="lazy">
                 <h3>{{ entry.title }}</h3><p>{{ entry.summary || entry.body }}</p>
+                <RouterLink v-if="entry.slug" :to="`/${locale}/content/${group.type}/${entry.slug}`">{{ locale === 'am' ? 'ሙሉ ይዘት ይመልከቱ' : 'Read full item' }}</RouterLink>
                 <small v-if="entry.published_at">{{ new Date(entry.published_at).toLocaleDateString(locale === 'am' ? 'am-ET' : 'en-ET') }}</small>
               </article>
             </div>
@@ -302,7 +304,7 @@ watch(() => route.query.locale, (value) => {
             <h2 id="opportunity-form-title" class="section-title">{{ locale === 'am' ? 'የሥራና የትብብር እድሎች' : 'Careers & opportunity submissions' }}</h2>
             <form class="public-form" @submit.prevent="submitOpportunity">
               <label>{{ locale === 'am' ? 'የማቅረቢያ አይነት' : 'Submission type' }}
-                <select v-model="opportunityDraft.type"><option value="career">{{ locale === 'am' ? 'ሥራ' : 'Career' }}</option><option value="opportunity">{{ locale === 'am' ? 'እድል' : 'Opportunity' }}</option><option value="advertisement">{{ locale === 'am' ? 'ማስታወቂያ' : 'Advertisement' }}</option><option value="marketplace">Marketplace</option></select>
+                <select v-model="opportunityDraft.type"><option value="career">{{ locale === 'am' ? 'ሥራ' : 'Career' }}</option><option value="opportunity">{{ locale === 'am' ? 'እድል' : 'Opportunity' }}</option><option value="advertisement">{{ locale === 'am' ? 'ማስታወቂያ' : 'Advertisement' }}</option><option value="marketplace">{{ locale === 'am' ? 'ገበያ' : 'Marketplace' }}</option></select>
               </label>
               <label>{{ locale === 'am' ? 'ሙሉ ስም' : 'Full name' }}<input v-model="opportunityDraft.name" required maxlength="160"></label>
               <label>Email<input v-model="opportunityDraft.email" type="email" required maxlength="190"></label>
@@ -319,7 +321,7 @@ watch(() => route.query.locale, (value) => {
             <h2 id="contact-form-title" class="section-title">{{ locale === 'am' ? 'ያግኙን' : 'Contact us' }}</h2>
             <form class="public-form" @submit.prevent="submitInquiry">
               <label>{{ locale === 'am' ? 'የጥያቄ አይነት' : 'Inquiry type' }}
-                <select v-model="inquiryDraft.inquiry_type"><option value="general">{{ locale === 'am' ? 'አጠቃላይ' : 'General' }}</option><option value="investor">{{ locale === 'am' ? 'ባለአክሲዮን / ኢንቨስተር' : 'Shareholder / investor' }}</option><option value="partnership">{{ locale === 'am' ? 'አጋርነት' : 'Partnership' }}</option><option value="media">Media</option></select>
+                <select v-model="inquiryDraft.inquiry_type"><option value="general">{{ locale === 'am' ? 'አጠቃላይ' : 'General' }}</option><option value="investor">{{ locale === 'am' ? 'ባለአክሲዮን / ኢንቨስተር' : 'Shareholder / investor' }}</option><option value="partnership">{{ locale === 'am' ? 'አጋርነት' : 'Partnership' }}</option><option value="media">{{ locale === 'am' ? 'ሚዲያ' : 'Media' }}</option></select>
               </label>
               <label>{{ locale === 'am' ? 'ሙሉ ስም' : 'Full name' }}<input v-model="inquiryDraft.name" required maxlength="160"></label>
               <label>Email<input v-model="inquiryDraft.email" type="email" required maxlength="190"></label>
