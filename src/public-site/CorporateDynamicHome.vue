@@ -169,6 +169,7 @@ watch(() => route.query.locale, (value) => {
 .content-section--hero .content-section__inner{max-width:1100px}
 .content-section--responsibility{background:var(--arna-public-surface-soft)}
 .eyebrow,.card-label{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+.content-section:not(.content-section--hero) .eyebrow,.content-card .card-label,.content-card .card-status,.content-section--responsibility .section-note{color:var(--arna-public-text-secondary)}
 .section-title{font-size:clamp(2rem,5vw,4rem);line-height:1.12;max-width:900px;margin:.5rem 0 1.25rem}
 .section-title span{display:block;color:var(--arna-public-accent)}
 .section-copy{font-size:clamp(1rem,2vw,1.2rem);line-height:1.8;max-width:850px}
