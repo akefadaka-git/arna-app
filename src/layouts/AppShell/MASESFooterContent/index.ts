@@ -40,7 +40,7 @@
  *
  *   · The import path matches the convention used throughout
  *     `layouts/AppShell/`: AppShell, AppHeader, AppFooter,
- *     AppSidebar, UserMenu, MASESBrand, and the rest are all
+ *     AppSidebar, UserMenu, AranaBrand, and the rest are all
  *     imported through their directory's `index.ts`.
  *
  * -----------------------------------------------------------------------------
@@ -67,7 +67,7 @@
  * This matches the pattern the sibling barrels follow. `AppShell`'s
  * barrel re-exports the AppShell component and the types declared in
  * AppShell.vue's `<script lang="ts">` block; it does not re-export
- * the label files, the stores, or the router. `MASESBrand`'s barrel
+ * the label files, the stores, or the router. `AranaBrand`'s barrel
  * re-exports the component and nothing else. Neither is a bulk
  * re-export of unrelated modules.
  * =============================================================================
