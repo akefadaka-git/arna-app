@@ -54,7 +54,7 @@ test('public JavaScript bundle contains the CMS-driven homepage and public route
   assert.ok(bundles.length > 0, 'public JavaScript bundles must exist');
 
   const source = bundles.map((file) => readFileSync(file, 'utf8')).join('\n');
-  for (const contract of ['corporate-site/home', 'corporate-site/pages', 'community_responsibility', 'items']) {
+  for (const contract of ['/api/public/site/home', '/api/public/site/pages', 'community_responsibility', 'items']) {
     assert.ok(source.includes(contract), `public CMS contract ${contract} must be present in the built bundle`);
   }
   for (const route of ['/', '/contribute', '/verify', '/legal', '/legal/:slug']) {
