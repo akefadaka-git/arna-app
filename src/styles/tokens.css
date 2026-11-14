@@ -19,8 +19,8 @@
  *          section below. No existing token renamed, removed, or
  *          reassigned. Additive.
  *
- * 1.2.0  — shell chrome additions: --mases-color-overlay-scrim plus the
- *          three --mases-shell-chrome-padding-inline-* tokens. No
+ * 1.2.0  — shell chrome additions: --arna-color-overlay-scrim plus the
+ *          three --arna-shell-chrome-padding-inline-* tokens. No
  *          existing token renamed, removed, or reassigned. Additive.
  *
  * 1.3.0  — L-0 audit follow-up. Four additive runtime tokens plus one
@@ -40,7 +40,7 @@
  * -----------------------------------------------------------------------------
  * CLASS 1 — RUNTIME TOKENS (4). Consumed or consumable today.
  * -----------------------------------------------------------------------------
- *   · --mases-color-surface-subtle
+ *   · --arna-color-surface-subtle
  *       Tier 2 surface role. Referenced by four feature views:
  *         - GovernanceBodyDetailView.vue (quorum rule <pre>)
  *         - DashboardView.vue (empty-state panel)
@@ -53,25 +53,25 @@
  *       additive: the token resolves to the same family of surfaces
  *       the surrounding components already assume.
  *
- *   · --mases-letter-spacing-caption
+ *   · --arna-letter-spacing-caption
  *       Typography tracking. Referenced by two feature views:
  *         - LoanProductListView.vue (thead th cells, uppercase)
  *         - LoanCollateralForm.vue (fieldset legend, uppercase)
  *       Prior to this revision, those declarations resolved to
  *       undefined and the browser fell back to normal tracking.
- *       The declared value matches --mases-letter-spacing-wide
+ *       The declared value matches --arna-letter-spacing-wide
  *       today, but is declared under its own name so a future CR can
  *       diverge the two without touching consumers.
  *
- *   · --mases-z-arna
+ *   · --arna-z-arna
  *       Z-index scale. Reserved for the ARNA floating assistant family
  *       (Master Spec §35–§38, §61). No consumer yet. Declared now so
  *       that a future ARNA CR does not introduce an off-scale value.
  *
- *   · --mases-z-command-palette
+ *   · --arna-z-command-palette
  *       Z-index scale. Reserved for the command palette (Master Spec
  *       §49, §61). No consumer yet. Same reservation rationale as
- *       --mases-z-arna.
+ *       --arna-z-arna.
  *
  * -----------------------------------------------------------------------------
  * CLASS 2 — SPEC-TARGET DIMENSIONS (1 inert group, 5 declarations).
@@ -82,11 +82,11 @@
  * declares the targets as TOKENS with no consumer, so a future
  * visual-QA-gated CR does not have to invent names. The tokens are:
  *
- *     --mases-shell-header-height-desktop          72px
- *     --mases-shell-header-height-tablet           68px
- *     --mases-shell-header-height-mobile           60px
- *     --mases-shell-sidebar-width-expanded-target  260px
- *     --mases-shell-sidebar-width-collapsed-target 76px
+ *     --arna-shell-header-height-desktop          72px
+ *     --arna-shell-header-height-tablet           68px
+ *     --arna-shell-header-height-mobile           60px
+ *     --arna-shell-sidebar-width-expanded-target  260px
+ *     --arna-shell-sidebar-width-collapsed-target 76px
  *
  * The tokens are inert in this revision. Adoption requires:
  *
@@ -94,11 +94,11 @@
  *      on every authenticated page.
  *   2. A coordinated edit to AppShell.vue, AppHeader.vue,
  *      AppSidebar.vue, AppMobileDrawer.vue, SkipToContent.vue, and
- *      any layout that reads --mases-shell-header-height or
- *      --mases-shell-sidebar-width today.
+ *      any layout that reads --arna-shell-header-height or
+ *      --arna-shell-sidebar-width today.
  *   3. Deprecation of the legacy single-value tokens
- *      (--mases-shell-header-height, --mases-shell-sidebar-width,
- *      --mases-shell-sidebar-width-collapsed) once no consumer reads
+ *      (--arna-shell-header-height, --arna-shell-sidebar-width,
+ *      --arna-shell-sidebar-width-collapsed) once no consumer reads
  *      them.
  *
  * This revision deliberately does NOT change the current header height
@@ -162,88 +162,88 @@
   /* ---------------------------------------------------------------------------
    * Aubergine — brand dark. Hue ~280 degrees. Base: #1F0A2F at step 900.
    * --------------------------------------------------------------------------- */
-  --mases-color-aubergine-50:  #F5F1F8;
-  --mases-color-aubergine-100: #E4DCE9;
-  --mases-color-aubergine-200: #C6B7CE;
-  --mases-color-aubergine-300: #9F8BAC;
-  --mases-color-aubergine-400: #786286;
-  --mases-color-aubergine-500: #574365;
-  --mases-color-aubergine-600: #3F2B4B;
-  --mases-color-aubergine-700: #2C1A38;
-  --mases-color-aubergine-800: #24132E;
-  --mases-color-aubergine-900: #1F0A2F;
-  --mases-color-aubergine-950: #140620;
+  --arna-color-aubergine-50:  #F5F1F8;
+  --arna-color-aubergine-100: #E4DCE9;
+  --arna-color-aubergine-200: #C6B7CE;
+  --arna-color-aubergine-300: #9F8BAC;
+  --arna-color-aubergine-400: #786286;
+  --arna-color-aubergine-500: #574365;
+  --arna-color-aubergine-600: #3F2B4B;
+  --arna-color-aubergine-700: #2C1A38;
+  --arna-color-aubergine-800: #24132E;
+  --arna-color-aubergine-900: #1F0A2F;
+  --arna-color-aubergine-950: #140620;
 
   /* ---------------------------------------------------------------------------
    * Crimson — brand action. Hue ~350 degrees. Base: #9B1B30 at step 600.
    * --------------------------------------------------------------------------- */
-  --mases-color-crimson-50:  #FCEBEF;
-  --mases-color-crimson-100: #F7CCD5;
-  --mases-color-crimson-200: #EC96A6;
-  --mases-color-crimson-300: #DE5E73;
-  --mases-color-crimson-400: #C8384F;
-  --mases-color-crimson-500: #AE2339;
-  --mases-color-crimson-600: #9B1B30;
-  --mases-color-crimson-700: #7A1526;
-  --mases-color-crimson-800: #5C101D;
-  --mases-color-crimson-900: #3E0A14;
+  --arna-color-crimson-50:  #FCEBEF;
+  --arna-color-crimson-100: #F7CCD5;
+  --arna-color-crimson-200: #EC96A6;
+  --arna-color-crimson-300: #DE5E73;
+  --arna-color-crimson-400: #C8384F;
+  --arna-color-crimson-500: #AE2339;
+  --arna-color-crimson-600: #9B1B30;
+  --arna-color-crimson-700: #7A1526;
+  --arna-color-crimson-800: #5C101D;
+  --arna-color-crimson-900: #3E0A14;
 
   /* ---------------------------------------------------------------------------
    * Gold — brand accent. Hue ~42 degrees. Base: #D4A017 at step 500.
    * --------------------------------------------------------------------------- */
-  --mases-color-gold-50:  #FDF6E1;
-  --mases-color-gold-100: #FAE9B3;
-  --mases-color-gold-200: #F2D274;
-  --mases-color-gold-300: #E8BC44;
-  --mases-color-gold-400: #DEAB28;
-  --mases-color-gold-500: #D4A017;
-  --mases-color-gold-600: #B08310;
-  --mases-color-gold-700: #8C660D;
-  --mases-color-gold-800: #694D0A;
-  --mases-color-gold-900: #4A3607;
+  --arna-color-gold-50:  #FDF6E1;
+  --arna-color-gold-100: #FAE9B3;
+  --arna-color-gold-200: #F2D274;
+  --arna-color-gold-300: #E8BC44;
+  --arna-color-gold-400: #DEAB28;
+  --arna-color-gold-500: #D4A017;
+  --arna-color-gold-600: #B08310;
+  --arna-color-gold-700: #8C660D;
+  --arna-color-gold-800: #694D0A;
+  --arna-color-gold-900: #4A3607;
 
   /* ---------------------------------------------------------------------------
    * Warm Neutral — text, borders, muted surfaces. Anchored on Ivory.
    * Base: #FFFDF7 at step 50.
    * --------------------------------------------------------------------------- */
-  --mases-color-neutral-0:   #FFFFFF;
-  --mases-color-neutral-50:  #FFFDF7;
-  --mases-color-neutral-100: #F8F5EC;
-  --mases-color-neutral-200: #EFEADB;
-  --mases-color-neutral-300: #DDD5C0;
-  --mases-color-neutral-400: #BDB29A;
-  --mases-color-neutral-500: #8C8170;
-  --mases-color-neutral-600: #615847;
-  --mases-color-neutral-700: #3F382B;
-  --mases-color-neutral-800: #29231A;
-  --mases-color-neutral-900: #141009;
+  --arna-color-neutral-0:   #FFFFFF;
+  --arna-color-neutral-50:  #FFFDF7;
+  --arna-color-neutral-100: #F8F5EC;
+  --arna-color-neutral-200: #EFEADB;
+  --arna-color-neutral-300: #DDD5C0;
+  --arna-color-neutral-400: #BDB29A;
+  --arna-color-neutral-500: #8C8170;
+  --arna-color-neutral-600: #615847;
+  --arna-color-neutral-700: #3F382B;
+  --arna-color-neutral-800: #29231A;
+  --arna-color-neutral-900: #141009;
 
   /* ---------------------------------------------------------------------------
    * Success — hue ~145 degrees.
    * --------------------------------------------------------------------------- */
-  --mases-color-success-50:  #EDF7F1;
-  --mases-color-success-100: #D3EBDD;
-  --mases-color-success-500: #2F7A4A;
-  --mases-color-success-700: #1F5734;
-  --mases-color-success-900: #123620;
+  --arna-color-success-50:  #EDF7F1;
+  --arna-color-success-100: #D3EBDD;
+  --arna-color-success-500: #2F7A4A;
+  --arna-color-success-700: #1F5734;
+  --arna-color-success-900: #123620;
 
   /* ---------------------------------------------------------------------------
    * Warning — hue ~28 degrees.
    * --------------------------------------------------------------------------- */
-  --mases-color-warning-50:  #FCF3E6;
-  --mases-color-warning-100: #F7E1BE;
-  --mases-color-warning-500: #A05510;
-  --mases-color-warning-700: #7A3F0A;
-  --mases-color-warning-900: #532A05;
+  --arna-color-warning-50:  #FCF3E6;
+  --arna-color-warning-100: #F7E1BE;
+  --arna-color-warning-500: #A05510;
+  --arna-color-warning-700: #7A3F0A;
+  --arna-color-warning-900: #532A05;
 
   /* ---------------------------------------------------------------------------
    * Info — hue ~210 degrees.
    * --------------------------------------------------------------------------- */
-  --mases-color-info-50:  #ECF2F8;
-  --mases-color-info-100: #CFE0F0;
-  --mases-color-info-500: #2A5C8A;
-  --mases-color-info-700: #1D4164;
-  --mases-color-info-900: #112840;
+  --arna-color-info-50:  #ECF2F8;
+  --arna-color-info-100: #CFE0F0;
+  --arna-color-info-500: #2A5C8A;
+  --arna-color-info-700: #1D4164;
+  --arna-color-info-900: #112840;
 
   /* ---------------------------------------------------------------------------
    * Danger — reuses the Crimson family. No separate red scale is defined.
@@ -304,126 +304,126 @@
    * for an empty-state card and an informational block that should read
    * as "slightly off the page" without the full recess of a well.
    * --------------------------------------------------------------------------- */
-  --mases-color-surface-page:             var(--mases-color-neutral-50);
-  --mases-color-surface-raised:           var(--mases-color-neutral-100);
-  --mases-color-surface-subtle:           var(--mases-color-neutral-100); /* 1.3.0 */
-  --mases-color-surface-overlay:          var(--mases-color-neutral-0);
-  --mases-color-surface-sunken:           var(--mases-color-neutral-200);
-  --mases-color-surface-inverse:          var(--mases-color-aubergine-800);
-  --mases-color-surface-inverse-raised:   var(--mases-color-aubergine-700);
-  --mases-color-surface-brand:            var(--mases-color-crimson-600);
-  --mases-color-surface-accent:           var(--mases-color-gold-100);
-  --mases-color-surface-disabled:         var(--mases-color-neutral-200);
-  --mases-color-surface-success:          var(--mases-color-success-50);
-  --mases-color-surface-warning:          var(--mases-color-warning-50);
-  --mases-color-surface-info:             var(--mases-color-info-50);
-  --mases-color-surface-danger:           var(--mases-color-crimson-50);
+  --arna-color-surface-page:             var(--arna-color-neutral-50);
+  --arna-color-surface-raised:           var(--arna-color-neutral-100);
+  --arna-color-surface-subtle:           var(--arna-color-neutral-100); /* 1.3.0 */
+  --arna-color-surface-overlay:          var(--arna-color-neutral-0);
+  --arna-color-surface-sunken:           var(--arna-color-neutral-200);
+  --arna-color-surface-inverse:          var(--arna-color-aubergine-800);
+  --arna-color-surface-inverse-raised:   var(--arna-color-aubergine-700);
+  --arna-color-surface-brand:            var(--arna-color-crimson-600);
+  --arna-color-surface-accent:           var(--arna-color-gold-100);
+  --arna-color-surface-disabled:         var(--arna-color-neutral-200);
+  --arna-color-surface-success:          var(--arna-color-success-50);
+  --arna-color-surface-warning:          var(--arna-color-warning-50);
+  --arna-color-surface-info:             var(--arna-color-info-50);
+  --arna-color-surface-danger:           var(--arna-color-crimson-50);
 
   /* ---------------------------------------------------------------------------
    * Text roles
    * --------------------------------------------------------------------------- */
-  --mases-color-text-primary:             var(--mases-color-neutral-900);
-  --mases-color-text-secondary:           var(--mases-color-neutral-700);
-  --mases-color-text-tertiary:            var(--mases-color-neutral-500);
-  --mases-color-text-muted:               var(--mases-color-neutral-400);
-  --mases-color-text-inverse:             var(--mases-color-neutral-50);
-  --mases-color-text-inverse-secondary:   var(--mases-color-neutral-200);
-  --mases-color-text-brand:               var(--mases-color-crimson-600);
-  --mases-color-text-accent:              var(--mases-color-gold-700);
-  --mases-color-text-success:             var(--mases-color-success-700);
-  --mases-color-text-warning:             var(--mases-color-warning-700);
-  --mases-color-text-info:                var(--mases-color-info-700);
-  --mases-color-text-danger:              var(--mases-color-crimson-700);
-  --mases-color-text-disabled:            var(--mases-color-neutral-400);
+  --arna-color-text-primary:             var(--arna-color-neutral-900);
+  --arna-color-text-secondary:           var(--arna-color-neutral-700);
+  --arna-color-text-tertiary:            var(--arna-color-neutral-500);
+  --arna-color-text-muted:               var(--arna-color-neutral-400);
+  --arna-color-text-inverse:             var(--arna-color-neutral-50);
+  --arna-color-text-inverse-secondary:   var(--arna-color-neutral-200);
+  --arna-color-text-brand:               var(--arna-color-crimson-600);
+  --arna-color-text-accent:              var(--arna-color-gold-700);
+  --arna-color-text-success:             var(--arna-color-success-700);
+  --arna-color-text-warning:             var(--arna-color-warning-700);
+  --arna-color-text-info:                var(--arna-color-info-700);
+  --arna-color-text-danger:              var(--arna-color-crimson-700);
+  --arna-color-text-disabled:            var(--arna-color-neutral-400);
 
   /* ---------------------------------------------------------------------------
    * Border roles
    * --------------------------------------------------------------------------- */
-  --mases-color-border-default:           var(--mases-color-neutral-300);
-  --mases-color-border-strong:            var(--mases-color-neutral-400);
-  --mases-color-border-subtle:            var(--mases-color-neutral-200);
-  --mases-color-border-brand:             var(--mases-color-crimson-600);
-  --mases-color-border-inverse:           var(--mases-color-aubergine-600);
-  --mases-color-border-success:           var(--mases-color-success-500);
-  --mases-color-border-warning:           var(--mases-color-warning-500);
-  --mases-color-border-info:              var(--mases-color-info-500);
-  --mases-color-border-danger:            var(--mases-color-crimson-500);
-  --mases-color-border-focus:             var(--mases-color-aubergine-900);
+  --arna-color-border-default:           var(--arna-color-neutral-300);
+  --arna-color-border-strong:            var(--arna-color-neutral-400);
+  --arna-color-border-subtle:            var(--arna-color-neutral-200);
+  --arna-color-border-brand:             var(--arna-color-crimson-600);
+  --arna-color-border-inverse:           var(--arna-color-aubergine-600);
+  --arna-color-border-success:           var(--arna-color-success-500);
+  --arna-color-border-warning:           var(--arna-color-warning-500);
+  --arna-color-border-info:              var(--arna-color-info-500);
+  --arna-color-border-danger:            var(--arna-color-crimson-500);
+  --arna-color-border-focus:             var(--arna-color-aubergine-900);
 
   /* ---------------------------------------------------------------------------
    * Action roles — buttons and interactive surfaces
    * --------------------------------------------------------------------------- */
-  --mases-color-action-primary:              var(--mases-color-crimson-600);
-  --mases-color-action-primary-hover:        var(--mases-color-crimson-500);
-  --mases-color-action-primary-active:       var(--mases-color-crimson-700);
-  --mases-color-action-primary-disabled:     var(--mases-color-crimson-200);
-  --mases-color-action-secondary:            var(--mases-color-aubergine-900);
-  --mases-color-action-secondary-hover:      var(--mases-color-aubergine-800);
-  --mases-color-action-secondary-active:     var(--mases-color-aubergine-950);
-  --mases-color-action-ghost:                transparent;
-  --mases-color-action-ghost-hover:          var(--mases-color-neutral-200);
-  --mases-color-action-danger:               var(--mases-color-crimson-700);
-  --mases-color-action-danger-hover:         var(--mases-color-crimson-800);
-  --mases-color-action-link:                 var(--mases-color-crimson-600);
-  --mases-color-action-link-hover:           var(--mases-color-crimson-700);
+  --arna-color-action-primary:              var(--arna-color-crimson-600);
+  --arna-color-action-primary-hover:        var(--arna-color-crimson-500);
+  --arna-color-action-primary-active:       var(--arna-color-crimson-700);
+  --arna-color-action-primary-disabled:     var(--arna-color-crimson-200);
+  --arna-color-action-secondary:            var(--arna-color-aubergine-900);
+  --arna-color-action-secondary-hover:      var(--arna-color-aubergine-800);
+  --arna-color-action-secondary-active:     var(--arna-color-aubergine-950);
+  --arna-color-action-ghost:                transparent;
+  --arna-color-action-ghost-hover:          var(--arna-color-neutral-200);
+  --arna-color-action-danger:               var(--arna-color-crimson-700);
+  --arna-color-action-danger-hover:         var(--arna-color-crimson-800);
+  --arna-color-action-link:                 var(--arna-color-crimson-600);
+  --arna-color-action-link-hover:           var(--arna-color-crimson-700);
 
   /* ---------------------------------------------------------------------------
    * Icon roles
    * --------------------------------------------------------------------------- */
-  --mases-color-icon-primary:             var(--mases-color-neutral-700);
-  --mases-color-icon-secondary:           var(--mases-color-neutral-500);
-  --mases-color-icon-inverse:             var(--mases-color-neutral-100);
-  --mases-color-icon-brand:               var(--mases-color-crimson-600);
-  --mases-color-icon-accent:              var(--mases-color-gold-600);
-  --mases-color-icon-success:             var(--mases-color-success-700);
-  --mases-color-icon-warning:             var(--mases-color-warning-700);
-  --mases-color-icon-info:                var(--mases-color-info-700);
-  --mases-color-icon-danger:              var(--mases-color-crimson-700);
+  --arna-color-icon-primary:             var(--arna-color-neutral-700);
+  --arna-color-icon-secondary:           var(--arna-color-neutral-500);
+  --arna-color-icon-inverse:             var(--arna-color-neutral-100);
+  --arna-color-icon-brand:               var(--arna-color-crimson-600);
+  --arna-color-icon-accent:              var(--arna-color-gold-600);
+  --arna-color-icon-success:             var(--arna-color-success-700);
+  --arna-color-icon-warning:             var(--arna-color-warning-700);
+  --arna-color-icon-info:                var(--arna-color-info-700);
+  --arna-color-icon-danger:              var(--arna-color-crimson-700);
 
   /* ---------------------------------------------------------------------------
    * State and interaction roles
    * --------------------------------------------------------------------------- */
-  --mases-color-state-hover:              var(--mases-color-neutral-200);
-  --mases-color-state-selected:           var(--mases-color-crimson-50);
-  --mases-color-state-selected-accent:    var(--mases-color-crimson-600);
-  --mases-color-state-disabled-bg:        var(--mases-color-neutral-200);
-  --mases-color-state-disabled-text:      var(--mases-color-neutral-400);
-  --mases-color-state-focus-ring:         var(--mases-color-aubergine-900);
-  --mases-color-state-focus-ring-inverse: var(--mases-color-gold-400);
+  --arna-color-state-hover:              var(--arna-color-neutral-200);
+  --arna-color-state-selected:           var(--arna-color-crimson-50);
+  --arna-color-state-selected-accent:    var(--arna-color-crimson-600);
+  --arna-color-state-disabled-bg:        var(--arna-color-neutral-200);
+  --arna-color-state-disabled-text:      var(--arna-color-neutral-400);
+  --arna-color-state-focus-ring:         var(--arna-color-aubergine-900);
+  --arna-color-state-focus-ring-inverse: var(--arna-color-gold-400);
 
   /* ---------------------------------------------------------------------------
    * Overlay roles — scrims and dimming layers (1.2.0)
    * --------------------------------------------------------------------------- */
-  --mases-color-overlay-scrim: rgba(31, 10, 47, 0.5);
+  --arna-color-overlay-scrim: rgba(31, 10, 47, 0.5);
 
   /* ===========================================================================
    * SPACING SCALE — 4px base. Every value is a multiple of 4px.
    * ===========================================================================
    */
-  --mases-space-0:  0;
-  --mases-space-1:  4px;
-  --mases-space-2:  8px;
-  --mases-space-3:  12px;
-  --mases-space-4:  16px;
-  --mases-space-5:  20px;
-  --mases-space-6:  24px;
-  --mases-space-8:  32px;
-  --mases-space-10: 40px;
-  --mases-space-12: 48px;
-  --mases-space-16: 64px;
-  --mases-space-20: 80px;
-  --mases-space-24: 96px;
+  --arna-space-0:  0;
+  --arna-space-1:  4px;
+  --arna-space-2:  8px;
+  --arna-space-3:  12px;
+  --arna-space-4:  16px;
+  --arna-space-5:  20px;
+  --arna-space-6:  24px;
+  --arna-space-8:  32px;
+  --arna-space-10: 40px;
+  --arna-space-12: 48px;
+  --arna-space-16: 64px;
+  --arna-space-20: 80px;
+  --arna-space-24: 96px;
 
   /* ===========================================================================
    * RADII SCALE
    * ===========================================================================
    */
-  --mases-radius-none: 0;
-  --mases-radius-sm:   4px;
-  --mases-radius-md:   8px;
-  --mases-radius-lg:   12px;
-  --mases-radius-xl:   16px;
-  --mases-radius-full: 9999px;
+  --arna-radius-none: 0;
+  --arna-radius-sm:   4px;
+  --arna-radius-md:   8px;
+  --arna-radius-lg:   12px;
+  --arna-radius-xl:   16px;
+  --arna-radius-full: 9999px;
 
   /* ===========================================================================
    * ELEVATION (SHADOWS)
@@ -432,19 +432,19 @@
    * No shadow uses black or a generic gray.
    * ===========================================================================
    */
-  --mases-shadow-elevation-1:
+  --arna-shadow-elevation-1:
     0 1px 2px rgba(31, 10, 47, 0.06),
     0 1px 3px rgba(31, 10, 47, 0.10);
 
-  --mases-shadow-elevation-2:
+  --arna-shadow-elevation-2:
     0 2px 4px rgba(31, 10, 47, 0.06),
     0 4px 8px rgba(31, 10, 47, 0.08);
 
-  --mases-shadow-elevation-3:
+  --arna-shadow-elevation-3:
     0 4px 8px rgba(31, 10, 47, 0.08),
     0 8px 16px rgba(31, 10, 47, 0.12);
 
-  --mases-shadow-elevation-4:
+  --arna-shadow-elevation-4:
     0 8px 16px rgba(31, 10, 47, 0.10),
     0 16px 32px rgba(31, 10, 47, 0.14);
 
@@ -452,15 +452,15 @@
    * MOTION
    * ===========================================================================
    */
-  --mases-duration-instant:  0ms;
-  --mases-duration-fast:     150ms;
-  --mases-duration-base:     200ms;
-  --mases-duration-slow:     300ms;
-  --mases-duration-slower:   500ms;
+  --arna-duration-instant:  0ms;
+  --arna-duration-fast:     150ms;
+  --arna-duration-base:     200ms;
+  --arna-duration-slow:     300ms;
+  --arna-duration-slower:   500ms;
 
-  --mases-easing-standard:   cubic-bezier(0.4, 0, 0.2, 1);
-  --mases-easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
-  --mases-easing-accelerate: cubic-bezier(0.4, 0, 1, 1);
+  --arna-easing-standard:   cubic-bezier(0.4, 0, 0.2, 1);
+  --arna-easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  --arna-easing-accelerate: cubic-bezier(0.4, 0, 1, 1);
 
   /* ===========================================================================
    * Z-INDEX SCALE
@@ -469,39 +469,39 @@
    *
    * Conceptual layer map (Master Spec §61):
    *
-   *     background          → --mases-z-base (0)
-   *     content             → --mases-z-base (0)
-   *     sticky header       → --mases-z-raised (10)
-   *     sidebar             → --mases-z-raised (10)
-   *     dropdown            → --mases-z-dropdown (100)
-   *     popover             → --mases-z-popover (600)
-   *     modal               → --mases-z-modal (510)
-   *     command palette     → --mases-z-command-palette (650)  [1.3.0, reserved]
-   *     toast               → --mases-z-toast (800)
-   *     ARNA (floating)     → --mases-z-arna (900)             [1.3.0, reserved]
+   *     background          → --arna-z-base (0)
+   *     content             → --arna-z-base (0)
+   *     sticky header       → --arna-z-raised (10)
+   *     sidebar             → --arna-z-raised (10)
+   *     dropdown            → --arna-z-dropdown (100)
+   *     popover             → --arna-z-popover (600)
+   *     modal               → --arna-z-modal (510)
+   *     command palette     → --arna-z-command-palette (650)  [1.3.0, reserved]
+   *     toast               → --arna-z-toast (800)
+   *     ARNA (floating)     → --arna-z-arna (900)             [1.3.0, reserved]
    *     system overlay      → (no token; not yet specified)
    * ===========================================================================
    */
-  --mases-z-base:             0;
-  --mases-z-raised:           10;
-  --mases-z-dropdown:         100;
-  --mases-z-sticky:           200;
-  --mases-z-overlay-backdrop: 500;
-  --mases-z-modal:            510;
-  --mases-z-drawer:           520;
-  --mases-z-popover:          600;
-  --mases-z-command-palette:  650; /* 1.3.0 — reserved, no consumer yet */
-  --mases-z-tooltip:          700;
-  --mases-z-toast:            800;
-  --mases-z-arna:             900; /* 1.3.0 — reserved, no consumer yet */
+  --arna-z-base:             0;
+  --arna-z-raised:           10;
+  --arna-z-dropdown:         100;
+  --arna-z-sticky:           200;
+  --arna-z-overlay-backdrop: 500;
+  --arna-z-modal:            510;
+  --arna-z-drawer:           520;
+  --arna-z-popover:          600;
+  --arna-z-command-palette:  650; /* 1.3.0 — reserved, no consumer yet */
+  --arna-z-tooltip:          700;
+  --arna-z-toast:            800;
+  --arna-z-arna:             900; /* 1.3.0 — reserved, no consumer yet */
 
   /* ===========================================================================
    * TYPOGRAPHY — FONT FAMILIES
    * ===========================================================================
    */
-  --mases-font-family-am:     "Noto Sans Ethiopic", "Inter", system-ui, sans-serif;
-  --mases-font-family-en:     "Inter", "Noto Sans Ethiopic", system-ui, sans-serif;
-  --mases-font-family-mono:   "JetBrains Mono", ui-monospace, "SFMono-Regular",
+  --arna-font-family-am:     "Noto Sans Ethiopic", "Inter", system-ui, sans-serif;
+  --arna-font-family-en:     "Inter", "Noto Sans Ethiopic", system-ui, sans-serif;
+  --arna-font-family-mono:   "JetBrains Mono", ui-monospace, "SFMono-Regular",
                               "Menlo", "Consolas", monospace;
 
   /* ---------------------------------------------------------------------------
@@ -509,40 +509,40 @@
    * ---------------------------------------------------------------------------
    * Amharic overrides are declared in the html[lang="am"] block below.
    * --------------------------------------------------------------------------- */
-  --mases-font-size-caption:    12px;
-  --mases-font-size-body-sm:    14px;
-  --mases-font-size-body:       16px;
-  --mases-font-size-body-lg:    18px;
-  --mases-font-size-heading-6:  18px;
-  --mases-font-size-heading-5:  20px;
-  --mases-font-size-heading-4:  24px;
-  --mases-font-size-heading-3:  28px;
-  --mases-font-size-heading-2:  36px;
-  --mases-font-size-heading-1:  48px;
-  --mases-font-size-display:    60px;
+  --arna-font-size-caption:    12px;
+  --arna-font-size-body-sm:    14px;
+  --arna-font-size-body:       16px;
+  --arna-font-size-body-lg:    18px;
+  --arna-font-size-heading-6:  18px;
+  --arna-font-size-heading-5:  20px;
+  --arna-font-size-heading-4:  24px;
+  --arna-font-size-heading-3:  28px;
+  --arna-font-size-heading-2:  36px;
+  --arna-font-size-heading-1:  48px;
+  --arna-font-size-display:    60px;
 
   /* ---------------------------------------------------------------------------
    * Line height scale — Latin (English) values
    * --------------------------------------------------------------------------- */
-  --mases-line-height-caption:   16px;
-  --mases-line-height-body-sm:   22px;
-  --mases-line-height-body:      26px;
-  --mases-line-height-body-lg:   30px;
-  --mases-line-height-heading-6: 26px;
-  --mases-line-height-heading-5: 28px;
-  --mases-line-height-heading-4: 32px;
-  --mases-line-height-heading-3: 36px;
-  --mases-line-height-heading-2: 44px;
-  --mases-line-height-heading-1: 56px;
-  --mases-line-height-display:   68px;
+  --arna-line-height-caption:   16px;
+  --arna-line-height-body-sm:   22px;
+  --arna-line-height-body:      26px;
+  --arna-line-height-body-lg:   30px;
+  --arna-line-height-heading-6: 26px;
+  --arna-line-height-heading-5: 28px;
+  --arna-line-height-heading-4: 32px;
+  --arna-line-height-heading-3: 36px;
+  --arna-line-height-heading-2: 44px;
+  --arna-line-height-heading-1: 56px;
+  --arna-line-height-display:   68px;
 
   /* ---------------------------------------------------------------------------
    * Font weight tokens
    * --------------------------------------------------------------------------- */
-  --mases-font-weight-regular:    400;
-  --mases-font-weight-medium:     500;
-  --mases-font-weight-semibold:   600;
-  --mases-font-weight-bold:       700;
+  --arna-font-weight-regular:    400;
+  --arna-font-weight-medium:     500;
+  --arna-font-weight-semibold:   600;
+  --arna-font-weight-bold:       700;
 
   /* ---------------------------------------------------------------------------
    * Letter spacing (tracking)
@@ -558,36 +558,36 @@
    * letter-spacing-wide; callers that want "the caption register" use
    * letter-spacing-caption.
    * --------------------------------------------------------------------------- */
-  --mases-letter-spacing-tight:    -0.01em;
-  --mases-letter-spacing-normal:   0;
-  --mases-letter-spacing-wide:     0.02em;
-  --mases-letter-spacing-caption:  0.02em; /* 1.3.0 */
+  --arna-letter-spacing-tight:    -0.01em;
+  --arna-letter-spacing-normal:   0;
+  --arna-letter-spacing-wide:     0.02em;
+  --arna-letter-spacing-caption:  0.02em; /* 1.3.0 */
 
   /* ===========================================================================
    * ICON SIZES
    * ===========================================================================
    */
-  --mases-icon-xs:   12px;
-  --mases-icon-sm:   16px;
-  --mases-icon-md:   20px;
-  --mases-icon-lg:   24px;
-  --mases-icon-xl:   32px;
-  --mases-icon-2xl:  48px;
-  --mases-icon-3xl:  64px;
+  --arna-icon-xs:   12px;
+  --arna-icon-sm:   16px;
+  --arna-icon-md:   20px;
+  --arna-icon-lg:   24px;
+  --arna-icon-xl:   32px;
+  --arna-icon-2xl:  48px;
+  --arna-icon-3xl:  64px;
 
   /* ===========================================================================
    * LAYOUT — CONTAINER WIDTHS
    * ===========================================================================
    */
-  --mases-container-page:           1280px;
-  --mases-container-page-wide:      1440px;
-  --mases-container-form:            640px;
-  --mases-container-form-two-col:    896px;
-  --mases-container-modal-sm:        448px;
-  --mases-container-modal-md:        640px;
-  --mases-container-modal-lg:        896px;
-  --mases-container-modal-full:      calc(100vw - 64px);
-  --mases-container-drawer:          480px;
+  --arna-container-page:           1280px;
+  --arna-container-page-wide:      1440px;
+  --arna-container-form:            640px;
+  --arna-container-form-two-col:    896px;
+  --arna-container-modal-sm:        448px;
+  --arna-container-modal-md:        640px;
+  --arna-container-modal-lg:        896px;
+  --arna-container-modal-full:      calc(100vw - 64px);
+  --arna-container-drawer:          480px;
 
   /* ===========================================================================
    * LAYOUT — SHELL DIMENSIONS (ACTIVE)
@@ -603,31 +603,31 @@
    * below. Adoption is a separate, approval-gated CR.
    * ===========================================================================
    */
-  --mases-shell-header-height:              64px;
-  --mases-shell-sidebar-width:              256px;
-  --mases-shell-sidebar-width-collapsed:     64px;
-  --mases-shell-content-padding-desktop:    var(--mases-space-8);
-  --mases-shell-content-padding-tablet:     var(--mases-space-6);
-  --mases-shell-content-padding-mobile:     var(--mases-space-4);
+  --arna-shell-header-height:              64px;
+  --arna-shell-sidebar-width:              256px;
+  --arna-shell-sidebar-width-collapsed:     64px;
+  --arna-shell-content-padding-desktop:    var(--arna-space-8);
+  --arna-shell-content-padding-tablet:     var(--arna-space-6);
+  --arna-shell-content-padding-mobile:     var(--arna-space-4);
 
   /* ---------------------------------------------------------------------------
    * Shell chrome inline padding — header, footer, skip-link rhythm (1.2.0)
    * --------------------------------------------------------------------------- */
-  --mases-shell-chrome-padding-inline-desktop: var(--mases-space-6);
-  --mases-shell-chrome-padding-inline-tablet:  var(--mases-space-6);
-  --mases-shell-chrome-padding-inline-mobile:  var(--mases-space-4);
+  --arna-shell-chrome-padding-inline-desktop: var(--arna-space-6);
+  --arna-shell-chrome-padding-inline-tablet:  var(--arna-space-6);
+  --arna-shell-chrome-padding-inline-mobile:  var(--arna-space-4);
 
-  --mases-shell-table-row-height-desktop:   56px;
-  --mases-shell-table-row-height-mobile:    64px;
+  --arna-shell-table-row-height-desktop:   56px;
+  --arna-shell-table-row-height-mobile:    64px;
 
   /* ===========================================================================
    * FOCUS RING
    * ===========================================================================
    */
-  --mases-focus-ring-width:     3px;
-  --mases-focus-ring-offset:    2px;
-  --mases-focus-ring-color:     var(--mases-color-state-focus-ring);
-  --mases-focus-ring-color-inverse: var(--mases-color-state-focus-ring-inverse);
+  --arna-focus-ring-width:     3px;
+  --arna-focus-ring-offset:    2px;
+  --arna-focus-ring-color:     var(--arna-color-state-focus-ring);
+  --arna-focus-ring-color-inverse: var(--arna-color-state-focus-ring-inverse);
 
   /* ===========================================================================
    * AUTH SURFACE — ADDITIONS (1.1.0)
@@ -636,12 +636,12 @@
    * revision note above.
    * ===========================================================================
    */
-  --mases-container-auth-card:      448px;
-  --mases-container-auth-card-wide: 560px;
-  --mases-size-auth-logo-max-width:  180px;
-  --mases-size-auth-logo-max-height: 72px;
-  --mases-color-surface-auth-backdrop: var(--mases-color-surface-page);
-  --mases-color-text-auth-attribution: var(--mases-color-text-tertiary);
+  --arna-container-auth-card:      448px;
+  --arna-container-auth-card-wide: 560px;
+  --arna-size-auth-logo-max-width:  180px;
+  --arna-size-auth-logo-max-height: 72px;
+  --arna-color-surface-auth-backdrop: var(--arna-color-surface-page);
+  --arna-color-text-auth-attribution: var(--arna-color-text-tertiary);
 
   /* ===========================================================================
    * SHELL DIMENSIONS — SPEC TARGET (1.3.0) — INERT / OPT-IN
@@ -655,8 +655,8 @@
    *   2. Editing AppShell.vue / AppHeader.vue / AppSidebar.vue to
    *      consume the new tokens in preference to the legacy single-value
    *      tokens.
-   *   3. Deprecating --mases-shell-header-height (single value) and
-   *      --mases-shell-sidebar-width (256px) / --mases-shell-sidebar-
+   *   3. Deprecating --arna-shell-header-height (single value) and
+   *      --arna-shell-sidebar-width (256px) / --arna-shell-sidebar-
    *      width-collapsed (64px) once no consumer reads them.
    *
    * The tokens are declared now so a future CR does not invent names.
@@ -677,13 +677,13 @@
    */
 
   /* Header heights — spec target (Master Spec §7.1) */
-  --mases-shell-header-height-desktop: 72px;
-  --mases-shell-header-height-tablet:  68px;
-  --mases-shell-header-height-mobile:  60px;
+  --arna-shell-header-height-desktop: 72px;
+  --arna-shell-header-height-tablet:  68px;
+  --arna-shell-header-height-mobile:  60px;
 
   /* Sidebar widths — spec target (Master Spec §18) */
-  --mases-shell-sidebar-width-expanded-target:  260px;
-  --mases-shell-sidebar-width-collapsed-target:  76px;
+  --arna-shell-sidebar-width-expanded-target:  260px;
+  --arna-shell-sidebar-width-collapsed-target:  76px;
 }
 
 /* =============================================================================
@@ -694,29 +694,29 @@
  * =============================================================================
  */
 html[lang="am"] {
-  --mases-font-size-caption:    13px;
-  --mases-font-size-body-sm:    15px;
-  --mases-font-size-body:       17px;
-  --mases-font-size-body-lg:    19px;
-  --mases-font-size-heading-6:  20px;
-  --mases-font-size-heading-5:  22px;
-  --mases-font-size-heading-4:  26px;
-  --mases-font-size-heading-3:  30px;
-  --mases-font-size-heading-2:  38px;
-  --mases-font-size-heading-1:  50px;
-  --mases-font-size-display:    62px;
+  --arna-font-size-caption:    13px;
+  --arna-font-size-body-sm:    15px;
+  --arna-font-size-body:       17px;
+  --arna-font-size-body-lg:    19px;
+  --arna-font-size-heading-6:  20px;
+  --arna-font-size-heading-5:  22px;
+  --arna-font-size-heading-4:  26px;
+  --arna-font-size-heading-3:  30px;
+  --arna-font-size-heading-2:  38px;
+  --arna-font-size-heading-1:  50px;
+  --arna-font-size-display:    62px;
 
-  --mases-line-height-caption:   22px;
-  --mases-line-height-body-sm:   26px;
-  --mases-line-height-body:      30px;
-  --mases-line-height-body-lg:   34px;
-  --mases-line-height-heading-6: 30px;
-  --mases-line-height-heading-5: 32px;
-  --mases-line-height-heading-4: 38px;
-  --mases-line-height-heading-3: 44px;
-  --mases-line-height-heading-2: 52px;
-  --mases-line-height-heading-1: 62px;
-  --mases-line-height-display:   76px;
+  --arna-line-height-caption:   22px;
+  --arna-line-height-body-sm:   26px;
+  --arna-line-height-body:      30px;
+  --arna-line-height-body-lg:   34px;
+  --arna-line-height-heading-6: 30px;
+  --arna-line-height-heading-5: 32px;
+  --arna-line-height-heading-4: 38px;
+  --arna-line-height-heading-3: 44px;
+  --arna-line-height-heading-2: 52px;
+  --arna-line-height-heading-1: 62px;
+  --arna-line-height-display:   76px;
 }
 
 /* =============================================================================
@@ -735,10 +735,10 @@ html[lang="am"] {
  */
 @media (prefers-reduced-motion: reduce) {
   :root {
-    --mases-duration-fast:     1ms;
-    --mases-duration-base:     1ms;
-    --mases-duration-slow:     1ms;
-    --mases-duration-slower:   1ms;
+    --arna-duration-fast:     1ms;
+    --arna-duration-base:     1ms;
+    --arna-duration-slow:     1ms;
+    --arna-duration-slower:   1ms;
   }
 }
 
@@ -748,11 +748,11 @@ html[lang="am"] {
  */
 @media (forced-colors: active) {
   :root {
-    --mases-color-state-focus-ring:     Highlight;
-    --mases-color-action-primary:       ButtonText;
-    --mases-color-action-primary-hover: ButtonText;
-    --mases-color-border-default:       ButtonText;
-    --mases-color-border-strong:        ButtonText;
+    --arna-color-state-focus-ring:     Highlight;
+    --arna-color-action-primary:       ButtonText;
+    --arna-color-action-primary-hover: ButtonText;
+    --arna-color-border-default:       ButtonText;
+    --arna-color-border-strong:        ButtonText;
   }
 }
 

@@ -92,10 +92,10 @@
  max-height, overflow).
 
  The modal's max-width values come from the container tokens:
-   --mases-container-modal-sm   (448px)
-   --mases-container-modal-md   (640px)
-   --mases-container-modal-lg   (896px)
-   --mases-container-modal-full (calc(100vw - 64px))
+   --arna-container-modal-sm   (448px)
+   --arna-container-modal-md   (640px)
+   --arna-container-modal-lg   (896px)
+   --arna-container-modal-full (calc(100vw - 64px))
 
  The backdrop color is a scrim, not a shadow. It uses the aubergine
  base color at low alpha (31, 10, 47 = #1F0A2F) so that the scrim
@@ -192,10 +192,10 @@ interface Props {
   /**
    * Visual size. Defaults to 'md'.
    *
-   *   sm    →  max-width 448px  (--mases-container-modal-sm)
-   *   md    →  max-width 640px  (--mases-container-modal-md)
-   *   lg    →  max-width 896px  (--mases-container-modal-lg)
-   *   full  →  max-width calc(100vw - 64px)  (--mases-container-modal-full)
+   *   sm    →  max-width 448px  (--arna-container-modal-sm)
+   *   md    →  max-width 640px  (--arna-container-modal-md)
+   *   lg    →  max-width 896px  (--arna-container-modal-lg)
+   *   full  →  max-width calc(100vw - 64px)  (--arna-container-modal-full)
    *
    * On mobile (< 640px), every size renders as a nearly-full-width
    * card. See the CSS.
@@ -484,8 +484,8 @@ function onCloseButtonClick(): void {
    * structural viewport-relative bound, not a design value.
    */
   max-width: 100%;
-  max-height: calc(100vh - var(--mases-space-8));
-  max-height: calc(100dvh - var(--mases-space-8));
+  max-height: calc(100vh - var(--arna-space-8));
+  max-height: calc(100dvh - var(--arna-space-8));
   overflow: visible;
   /*
    * Native dialogs center themselves via margin: auto. Retained here
@@ -504,8 +504,8 @@ function onCloseButtonClick(): void {
   opacity: 1;
   transform: translateY(0);
   transition:
-    opacity var(--mases-duration-base) var(--mases-easing-standard),
-    transform var(--mases-duration-base) var(--mases-easing-standard);
+    opacity var(--arna-duration-base) var(--arna-easing-standard),
+    transform var(--arna-duration-base) var(--arna-easing-standard);
 }
 
 @starting-style {
@@ -527,10 +527,10 @@ function onCloseButtonClick(): void {
    * user sees; it manages the internal flex layout.
    */
   max-height: inherit;
-  background-color: var(--mases-color-surface-overlay);
-  border-radius: var(--mases-radius-lg);
-  box-shadow: var(--mases-shadow-elevation-3);
-  color: var(--mases-color-text-primary);
+  background-color: var(--arna-color-surface-overlay);
+  border-radius: var(--arna-radius-lg);
+  box-shadow: var(--arna-shadow-elevation-3);
+  color: var(--arna-color-text-primary);
   overflow: hidden;
 }
 
@@ -546,24 +546,24 @@ function onCloseButtonClick(): void {
 .modal--md .modal__container,
 .modal--lg .modal__container,
 .modal--full .modal__container {
-  width: calc(100vw - var(--mases-space-4));
+  width: calc(100vw - var(--arna-space-4));
 }
 
 @media (min-width: 640px) {
   .modal--sm .modal__container {
-    width: var(--mases-container-modal-sm);
+    width: var(--arna-container-modal-sm);
   }
 
   .modal--md .modal__container {
-    width: var(--mases-container-modal-md);
+    width: var(--arna-container-modal-md);
   }
 
   .modal--lg .modal__container {
-    width: var(--mases-container-modal-lg);
+    width: var(--arna-container-modal-lg);
   }
 
   .modal--full .modal__container {
-    width: var(--mases-container-modal-full);
+    width: var(--arna-container-modal-full);
   }
 
   /*
@@ -571,8 +571,8 @@ function onCloseButtonClick(): void {
    * is repeated for the same reason as the base rule.
    */
   .modal {
-    max-height: calc(100vh - var(--mases-space-16));
-    max-height: calc(100dvh - var(--mases-space-16));
+    max-height: calc(100vh - var(--arna-space-16));
+    max-height: calc(100dvh - var(--arna-space-16));
   }
 }
 
@@ -580,28 +580,28 @@ function onCloseButtonClick(): void {
    Header
    ---------------------------------------------------------------------------
    MOBILE BASE: mobile inline padding. Tablet and desktop widen to
-   --mases-space-6 at the min-width breakpoint above (with the size
+   --arna-space-6 at the min-width breakpoint above (with the size
    rules).
    ============================================================================ */
 .modal__header {
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  gap: var(--mases-space-3);
-  padding-block: var(--mases-space-4);
-  padding-inline: var(--mases-space-4);
-  border-block-end: 1px solid var(--mases-color-border-subtle);
+  gap: var(--arna-space-3);
+  padding-block: var(--arna-space-4);
+  padding-inline: var(--arna-space-4);
+  border-block-end: 1px solid var(--arna-color-border-subtle);
 }
 
 .modal__title {
   flex: 1 1 auto;
   min-width: 0;
   margin: 0;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-heading-5);
-  line-height: var(--mases-line-height-heading-5);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-heading-5);
+  line-height: var(--arna-line-height-heading-5);
+  font-weight: var(--arna-font-weight-semibold);
   /*
    * Truncate the title at one line with an ellipsis. The full title is
    * announced by screen readers via aria-labelledby; a tooltip can be
@@ -615,7 +615,7 @@ function onCloseButtonClick(): void {
 .modal__header-extra {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-shrink: 0;
 }
 
@@ -634,29 +634,29 @@ function onCloseButtonClick(): void {
   appearance: none;
   background-color: transparent;
   border: none;
-  border-radius: var(--mases-radius-sm);
-  color: var(--mases-color-icon-secondary);
+  border-radius: var(--arna-radius-sm);
+  color: var(--arna-color-icon-secondary);
   cursor: pointer;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .modal__close:hover {
-  background-color: var(--mases-color-state-hover);
-  color: var(--mases-color-icon-primary);
+  background-color: var(--arna-color-state-hover);
+  color: var(--arna-color-icon-primary);
 }
 
 .modal__close:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
    Body
    ---------------------------------------------------------------------------
    MOBILE BASE: mobile inline padding. Tablet and desktop widen to
-   --mases-space-6 at the min-width breakpoint above.
+   --arna-space-6 at the min-width breakpoint above.
    ============================================================================ */
 .modal__body {
   flex: 1 1 auto;
@@ -665,26 +665,26 @@ function onCloseButtonClick(): void {
    * header and footer stay fixed because they are flex-shrink: 0.
    */
   overflow-y: auto;
-  padding-block: var(--mases-space-6);
-  padding-inline: var(--mases-space-4);
+  padding-block: var(--arna-space-6);
+  padding-inline: var(--arna-space-4);
 }
 
 /* ============================================================================
    Footer
    ---------------------------------------------------------------------------
    MOBILE BASE: mobile inline padding. Tablet and desktop widen to
-   --mases-space-6 at the min-width breakpoint above.
+   --arna-space-6 at the min-width breakpoint above.
    ============================================================================ */
 .modal__footer {
   flex-shrink: 0;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-wrap: wrap;
-  padding-block: var(--mases-space-4);
-  padding-inline: var(--mases-space-4);
-  border-block-start: 1px solid var(--mases-color-border-subtle);
+  padding-block: var(--arna-space-4);
+  padding-inline: var(--arna-space-4);
+  border-block-start: 1px solid var(--arna-color-border-subtle);
 }
 
 /* ============================================================================
@@ -696,15 +696,15 @@ function onCloseButtonClick(): void {
    ============================================================================ */
 @media (min-width: 640px) {
   .modal__header {
-    padding-inline: var(--mases-space-6);
+    padding-inline: var(--arna-space-6);
   }
 
   .modal__body {
-    padding-inline: var(--mases-space-6);
+    padding-inline: var(--arna-space-6);
   }
 
   .modal__footer {
-    padding-inline: var(--mases-space-6);
+    padding-inline: var(--arna-space-6);
   }
 }
 

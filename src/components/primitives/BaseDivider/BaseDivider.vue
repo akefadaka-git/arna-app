@@ -50,8 +50,8 @@
  -----------------------------------------------------------------------------
  Applies the corresponding margin for the active orientation:
 
-     horizontal + spaced →  margin-block:  var(--mases-space-4)
-     vertical   + spaced →  margin-inline: var(--mases-space-4)
+     horizontal + spaced →  margin-block:  var(--arna-space-4)
+     vertical   + spaced →  margin-inline: var(--arna-space-4)
 
  Default is false (no margin). Consumers add spacing via the parent's
  layout (gap, padding) or via this prop when the divider is directly
@@ -134,8 +134,8 @@ interface Props {
   /**
    * Whether to apply the standard margin for the active orientation.
    *
-   *   horizontal + spaced →  margin-block:  var(--mases-space-4)
-   *   vertical   + spaced →  margin-inline: var(--mases-space-4)
+   *   horizontal + spaced →  margin-block:  var(--arna-space-4)
+   *   vertical   + spaced →  margin-inline: var(--arna-space-4)
    *
    * Defaults to false.
    */
@@ -215,7 +215,7 @@ const verticalAria = computed<Record<string, string | undefined>>(() => {
    ============================================================================ */
 .divider {
   border: 0;
-  background-color: var(--mases-color-border-subtle);
+  background-color: var(--arna-color-border-subtle);
 }
 
 /* ============================================================================
@@ -245,17 +245,17 @@ const verticalAria = computed<Record<string, string | undefined>>(() => {
   align-self: stretch;
   /* A minimum height keeps the vertical divider visible even in
      containers without an explicit cross-axis size. */
-  min-height: var(--mases-space-4);
+  min-height: var(--arna-space-4);
 }
 
 /* ============================================================================
    Spaced
    ============================================================================ */
 .divider--horizontal.divider--spaced {
-  margin-block: var(--mases-space-4);
+  margin-block: var(--arna-space-4);
 }
 
 .divider--vertical.divider--spaced {
-  margin-inline: var(--mases-space-4);
+  margin-inline: var(--arna-space-4);
 }
 </style>

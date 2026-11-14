@@ -121,7 +121,7 @@
    - border: 1px           (structural)
    - appearance: none      (browser reset)
 
- All other values are --mases-* tokens.
+ All other values are --arna-* tokens.
 
  -----------------------------------------------------------------------------
  Test hook
@@ -380,43 +380,43 @@ defineExpose({ focus, blur, el });
 .textarea {
   display: block;
   width: 100%;
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-3);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-3);
   appearance: none;
-  background-color: var(--mases-color-surface-page);
-  border: 1px solid var(--mases-color-border-default);
-  border-radius: var(--mases-radius-md);
-  color: var(--mases-color-text-primary);
+  background-color: var(--arna-color-surface-page);
+  border: 1px solid var(--arna-color-border-default);
+  border-radius: var(--arna-radius-md);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
   transition:
-    border-color var(--mases-duration-fast) var(--mases-easing-standard),
-    background-color var(--mases-duration-fast) var(--mases-easing-standard);
+    border-color var(--arna-duration-fast) var(--arna-easing-standard),
+    background-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 /* Enforce a minimum height of roughly three rows plus padding, so that
    even a textarea rendered with rows="1" remains usable. */
 .textarea {
   min-height: calc(
-    var(--mases-line-height-body) * 3 + var(--mases-space-4)
+    var(--arna-line-height-body) * 3 + var(--arna-space-4)
   );
 }
 
 .textarea:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* Hover border — only when not disabled and not readonly. */
 .textarea:not(.textarea--disabled):not(.textarea--readonly):hover {
-  border-color: var(--mases-color-border-strong);
+  border-color: var(--arna-color-border-strong);
 }
 
 /* Placeholder contrast verified in Design System §2.5.1. */
 .textarea::placeholder {
-  color: var(--mases-color-text-tertiary);
+  color: var(--arna-color-text-tertiary);
   opacity: 1;
 }
 
@@ -424,16 +424,16 @@ defineExpose({ focus, blur, el });
    Invalid state
    ============================================================================ */
 .textarea--invalid {
-  border-color: var(--mases-color-border-danger);
+  border-color: var(--arna-color-border-danger);
 }
 
 /* ============================================================================
    Disabled state
    ============================================================================ */
 .textarea--disabled {
-  background-color: var(--mases-color-state-disabled-bg);
-  border-color: var(--mases-color-border-subtle);
-  color: var(--mases-color-state-disabled-text);
+  background-color: var(--arna-color-state-disabled-bg);
+  border-color: var(--arna-color-border-subtle);
+  color: var(--arna-color-state-disabled-text);
   cursor: not-allowed;
 }
 
@@ -441,7 +441,7 @@ defineExpose({ focus, blur, el });
    Read-only state
    ============================================================================ */
 .textarea--readonly {
-  background-color: var(--mases-color-surface-sunken);
+  background-color: var(--arna-color-surface-sunken);
 }
 
 /* ============================================================================

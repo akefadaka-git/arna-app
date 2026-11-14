@@ -372,7 +372,7 @@ function onSelect(key: string): void {
 .tenant-switcher__trigger-content {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   min-width: 0;
 }
 
@@ -380,7 +380,7 @@ function onSelect(key: string): void {
    Building icon
    ============================================================================ */
 .tenant-switcher__icon {
-  color: var(--mases-color-icon-secondary);
+  color: var(--arna-color-icon-secondary);
 }
 
 /* ============================================================================
@@ -392,7 +392,7 @@ function onSelect(key: string): void {
 
    Truncated with an ellipsis when the header is crowded. Same
    truncation rationale as UserMenu: the header has a fixed height
-   (--mases-shell-header-height, 64px), and wrapping the tenant name
+   (--arna-shell-header-height, 64px), and wrapping the tenant name
    would push it taller. The full name is available in the switcher's
    dropdown menu and via the title attribute.
 
@@ -409,10 +409,10 @@ function onSelect(key: string): void {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
-  color: var(--mases-color-text-primary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
+  color: var(--arna-color-text-primary);
 }
 
 /* Tablet and up: show the name. */
@@ -432,8 +432,8 @@ function onSelect(key: string): void {
    no rule ever set a transform.
    ============================================================================ */
 .tenant-switcher__chevron {
-  color: var(--mases-color-icon-secondary);
-  transition: transform var(--mases-duration-fast) var(--mases-easing-standard);
+  color: var(--arna-color-icon-secondary);
+  transition: transform var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .tenant-switcher[data-menu-open='true'] .tenant-switcher__chevron {

@@ -276,7 +276,7 @@
  Sticky behavior
  -----------------------------------------------------------------------------
  When `sticky=true`, the header sticks to the top of its scroll
- container using position: sticky and --mases-z-sticky (200). A
+ container using position: sticky and --arna-z-sticky (200). A
  background-color is applied when sticky so that scrolled content does
  not show through the header. When not sticky, the background is
  transparent (the page surface shows through).
@@ -296,7 +296,7 @@
 
  The technique is correct inside the shell's content column, where the
  parent's inline padding is at least 4px on each side
- (--mases-shell-content-padding-desktop is 32px; -tablet is 24px;
+ (--arna-shell-content-padding-desktop is 32px; -tablet is 24px;
  -mobile is 16px). It is unsafe inside a nested container whose own
  inline padding is smaller than 4px (a tightly-padded Card, a Modal
  body, a tooltip), because the negative margin would pull the
@@ -848,24 +848,24 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .page-header {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   width: 100%;
   font-family: inherit;
 }
 
 @media (min-width: 640px) {
   .page-header {
-    gap: var(--mases-space-4);
+    gap: var(--arna-space-4);
   }
 }
 
 .page-header--compact {
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
 }
 
 @media (min-width: 640px) {
   .page-header--compact {
-    gap: var(--mases-space-3);
+    gap: var(--arna-space-3);
   }
 }
 
@@ -877,19 +877,19 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
    two are mutually exclusive in effect.
    ============================================================================ */
 .page-header[data-dividers='true']:not(.page-header--sticky) {
-  padding-block-end: var(--mases-space-4);
-  border-block-end: 1px solid var(--mases-color-border-subtle);
+  padding-block-end: var(--arna-space-4);
+  border-block-end: 1px solid var(--arna-color-border-subtle);
 }
 
 .page-header[data-dividers='true']:not(.page-header--sticky).page-header--compact {
-  padding-block-end: var(--mases-space-3);
+  padding-block-end: var(--arna-space-3);
 }
 
 /* ============================================================================
    Sticky
    ---------------------------------------------------------------------------
    The header sticks to the top of its scroll container. Uses the
-   design system's --mases-z-sticky token (200).
+   design system's --arna-z-sticky token (200).
 
    Sticky mode assumes this component is a direct child of the main
    content column. The negative-margin/padding trick below extends the
@@ -903,12 +903,12 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .page-header--sticky {
   position: sticky;
   top: 0;
-  z-index: var(--mases-z-sticky);
-  background-color: var(--mases-color-surface-page);
-  margin-inline: calc(var(--mases-space-1) * -1);
-  padding-inline: var(--mases-space-1);
-  padding-block: var(--mases-space-1);
-  border-block-end: 1px solid var(--mases-color-border-subtle);
+  z-index: var(--arna-z-sticky);
+  background-color: var(--arna-color-surface-page);
+  margin-inline: calc(var(--arna-space-1) * -1);
+  padding-inline: var(--arna-space-1);
+  padding-block: var(--arna-space-1);
+  border-block-end: 1px solid var(--arna-color-border-subtle);
 }
 
 /* ============================================================================
@@ -929,7 +929,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   flex-wrap: wrap;
 }
 
@@ -938,17 +938,17 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-between;
-    gap: var(--mases-space-4);
+    gap: var(--arna-space-4);
   }
 }
 
 .page-header--compact .page-header__top-row {
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
 }
 
 @media (min-width: 640px) {
   .page-header--compact .page-header__top-row {
-    gap: var(--mases-space-3);
+    gap: var(--arna-space-3);
   }
 }
 
@@ -968,7 +968,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .page-header__title-column {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   /*
    * The title column is the primary region; the actions column
    * occupies only as much width as its content needs.
@@ -985,11 +985,11 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
    ============================================================================ */
 .page-header__eyebrow {
   margin: 0;
-  color: var(--mases-color-text-tertiary);
+  color: var(--arna-color-text-tertiary);
   font-family: inherit;
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
+  font-weight: var(--arna-font-weight-medium);
   overflow-wrap: anywhere;
 }
 
@@ -1001,7 +1001,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
   flex-direction: row;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   min-width: 0;
 }
 
@@ -1009,7 +1009,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
   display: inline-flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   min-width: 0;
 }
 
@@ -1019,11 +1019,11 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .page-header__title {
   margin: 0;
   max-width: 40em;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-heading-3);
-  line-height: var(--mases-line-height-heading-3);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-heading-3);
+  line-height: var(--arna-line-height-heading-3);
+  font-weight: var(--arna-font-weight-semibold);
   /*
    * Amharic truncation uses word-boundary wrapping (Design System
    * §3.7 W4). `anywhere` is a stronger fallback for pathological
@@ -1046,11 +1046,11 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .page-header__description {
   margin: 0;
   max-width: 60em;
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: anywhere;
   word-break: normal;
 }
@@ -1066,7 +1066,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .page-header__actions {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-wrap: wrap;
   flex-shrink: 0;
   margin-inline-start: 0;
@@ -1088,11 +1088,11 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   width: 100%;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
 }
 
 /* ============================================================================

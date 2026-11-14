@@ -23,7 +23,7 @@
  * file:
  *
  *   · every component's `font-family: inherit` inherits from the
- *     browser default rather than from --mases-font-family-am;
+ *     browser default rather than from --arna-font-family-am;
  *   · `body` carries the browser's default 8px margin, and the shell's
  *     edges do not reach the viewport edges;
  *   · elements are `content-box` by default, so `padding` on an element
@@ -53,7 +53,7 @@
  * Token discipline
  * -----------------------------------------------------------------------------
  * Every value that has a design-system representation is consumed via a
- * var(--mases-*) reference. The only literals in this file are:
+ * var(--arna-*) reference. The only literals in this file are:
  *
  *   · structural CSS keywords (block, none, inherit, transparent, …);
  *   · `100%` on `max-width` media containment;
@@ -65,7 +65,7 @@
  * -----------------------------------------------------------------------------
  * Amharic-first considerations
  * -----------------------------------------------------------------------------
- * --mases-font-family-am is set as the default on `body`. The stack is:
+ * --arna-font-family-am is set as the default on `body`. The stack is:
  *
  *     "Noto Sans Ethiopic", "Inter", system-ui, sans-serif
  *
@@ -115,7 +115,7 @@
  * -----------------------------------------------------------------------------
  * App.vue imports tokens.css first, then base.css. Vite hoists both
  * imports to the module top and emits the CSS in import order, so every
- * var(--mases-*) reference in base.css resolves against the token
+ * var(--arna-*) reference in base.css resolves against the token
  * declarations. If the order is reversed, base.css becomes a no-op at
  * first paint and the browser paints with defaults before the tokens
  * settle.
@@ -164,12 +164,12 @@ body {
  * ============================================================================= */
 
 body {
-  font-family: var(--mases-font-family-am);
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
-  color: var(--mases-color-text-primary);
-  background-color: var(--mases-color-surface-page);
+  font-family: var(--arna-font-family-am);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
+  color: var(--arna-color-text-primary);
+  background-color: var(--arna-color-surface-page);
 }
 
 /* =============================================================================
@@ -191,7 +191,7 @@ h4,
 h5,
 h6 {
   margin: 0;
-  font-weight: var(--mases-font-weight-semibold);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 /* =============================================================================
@@ -216,12 +216,12 @@ p {
  * ============================================================================= */
 
 a {
-  color: var(--mases-color-action-link);
+  color: var(--arna-color-action-link);
   text-decoration: underline;
 }
 
 a:hover {
-  color: var(--mases-color-action-link-hover);
+  color: var(--arna-color-action-link-hover);
 }
 
 /* =============================================================================
@@ -269,7 +269,7 @@ code,
 pre,
 kbd,
 samp {
-  font-family: var(--mases-font-family-mono);
+  font-family: var(--arna-font-family-mono);
 }
 
 pre {
@@ -306,8 +306,8 @@ canvas {
  * ============================================================================= */
 
 :focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* =============================================================================

@@ -333,18 +333,18 @@ void _displayValue;
 
 .meta-list--2-col {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  column-gap: var(--mases-space-6);
+  column-gap: var(--arna-space-6);
 }
 
 /* ---------------------------------------------------------------------------
    Density — outer row gap.
    --------------------------------------------------------------------------- */
 .meta-list--default {
-  row-gap: var(--mases-space-3);
+  row-gap: var(--arna-space-3);
 }
 
 .meta-list--compact {
-  row-gap: var(--mases-space-2);
+  row-gap: var(--arna-space-2);
 }
 
 /* ============================================================================
@@ -366,11 +366,11 @@ void _displayValue;
 }
 
 .meta-list--default .meta-list__item {
-  column-gap: var(--mases-space-3);
+  column-gap: var(--arna-space-3);
 }
 
 .meta-list--compact .meta-list__item {
-  column-gap: var(--mases-space-2);
+  column-gap: var(--arna-space-2);
 }
 
 /* ============================================================================
@@ -378,11 +378,11 @@ void _displayValue;
    ============================================================================ */
 .meta-list__label {
   margin: 0;
-  color: var(--mases-color-text-tertiary);
+  color: var(--arna-color-text-tertiary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
   /*
    * Amharic truncates at word boundaries via the design system's
    * inherited overflow-wrap rules (Design System §3.7 W4).
@@ -396,11 +396,11 @@ void _displayValue;
 .meta-list__value {
   margin: 0;
   min-width: 0;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: anywhere;
 }
 
@@ -413,10 +413,10 @@ void _displayValue;
 
 .meta-list__placeholder {
   display: block;
-  color: var(--mases-color-text-tertiary);
+  color: var(--arna-color-text-tertiary);
   /* Use a dedicated style so a consumer's CSS does not accidentally
      override the placeholder's muted appearance. */
-  font-weight: var(--mases-font-weight-regular);
+  font-weight: var(--arna-font-weight-regular);
 }
 
 /* ============================================================================

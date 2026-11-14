@@ -17,7 +17,7 @@
 
  1.0.1  — the design token substrate is now imported. The v1.0.0 file did
           not import '@/styles/tokens.css', so every component's
-          var(--mases-*) references resolved to empty values. The
+          var(--arna-*) references resolved to empty values. The
           application rendered with structural CSS but no design system
           (default browser colors, spacing, and typography). The import
           is added to the top of <script setup> and hoisted by Vite so
@@ -61,7 +61,7 @@
    1. Import the global CSS base layer — the reset, then the design
       token substrate (tokens.css) — so every component's scoped styles
       render against a normalised box model and against real
-      var(--mases-*) values.
+      var(--arna-*) values.
 
    2. Keep the <html> element's `lang` and `dir` attributes in sync with
       the locale store.
@@ -81,7 +81,7 @@
    · The reset's two rules apply to every element from the first paint
      of the shell onward.
    · The token custom properties are defined when the first component's
-     scoped styles reference `var(--mases-*)`.
+     scoped styles reference `var(--arna-*)`.
 
  Placing the imports in App.vue's <script setup> means:
 

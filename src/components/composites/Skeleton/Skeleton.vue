@@ -197,7 +197,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
 .skeleton {
   display: inline-block;
   vertical-align: middle;
-  background-color: var(--mases-color-surface-sunken);
+  background-color: var(--arna-color-surface-sunken);
   /*
    * overflow: hidden clips the shimmer gradient to the block's own
    * border radius.
@@ -219,7 +219,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
 .skeleton--text {
   width: 100%;
   height: 1em;
-  border-radius: var(--mases-radius-sm);
+  border-radius: var(--arna-radius-sm);
 }
 
 /* ============================================================================
@@ -232,7 +232,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   width: 2.5rem;
   height: 2.5rem;
   aspect-ratio: 1 / 1;
-  border-radius: var(--mases-radius-full);
+  border-radius: var(--arna-radius-full);
 }
 
 /* ============================================================================
@@ -243,7 +243,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
 .skeleton--rect {
   width: 100%;
   height: 2.5rem;
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
 }
 
 /* ============================================================================
@@ -253,7 +253,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    only the compositor is involved.
    ============================================================================ */
 .skeleton--pulse {
-  animation: mases-skeleton-pulse 1.5s var(--mases-easing-standard) infinite;
+  animation: mases-skeleton-pulse 1.5s var(--arna-easing-standard) infinite;
 }
 
 @keyframes mases-skeleton-pulse {
@@ -279,9 +279,9 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
 .skeleton--shimmer {
   background-image: linear-gradient(
     90deg,
-    var(--mases-color-surface-sunken) 0%,
-    var(--mases-color-surface-page) 50%,
-    var(--mases-color-surface-sunken) 100%
+    var(--arna-color-surface-sunken) 0%,
+    var(--arna-color-surface-page) 50%,
+    var(--arna-color-surface-sunken) 100%
   );
   background-size: 200% 100%;
   background-repeat: no-repeat;
@@ -325,7 +325,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   .skeleton--shimmer {
     animation: none;
     background-image: none;
-    background-color: var(--mases-color-surface-sunken);
+    background-color: var(--arna-color-surface-sunken);
   }
 }
 </style>

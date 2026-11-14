@@ -51,7 +51,7 @@
  fullPage mode — see the response preamble
  -----------------------------------------------------------------------------
  When fullPage=true, the wrapper becomes a fixed full-viewport overlay
- at z-index --mases-z-overlay-backdrop (500), with a page-surface
+ at z-index --arna-z-overlay-backdrop (500), with a page-surface
  background. See the response preamble §"Design note — the fullPage
  mode".
 
@@ -131,9 +131,9 @@ interface Props {
   /**
    * Size of the spinner. Defaults to 'md'.
    *
-   *   sm  →  16px  (--mases-icon-sm)
-   *   md  →  24px  (--mases-icon-lg)
-   *   lg  →  48px  (--mases-icon-2xl)
+   *   sm  →  16px  (--arna-icon-sm)
+   *   md  →  24px  (--arna-icon-lg)
+   *   lg  →  48px  (--arna-icon-2xl)
    *
    * See the response preamble §"Design note — the three sizes".
    */
@@ -238,7 +238,7 @@ const spinnerSize = computed<LoadingStateSize>(() => props.size);
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   /*
    * Default min-height for an inline/region loading state. The
    * catalog does not declare a height; 4rem (64px) is enough to give
@@ -246,8 +246,8 @@ const spinnerSize = computed<LoadingStateSize>(() => props.size);
    * layout on the consumer.
    */
   min-height: 4rem;
-  padding-block: var(--mases-space-4);
-  padding-inline: var(--mases-space-4);
+  padding-block: var(--arna-space-4);
+  padding-inline: var(--arna-space-4);
 }
 
 /* ============================================================================
@@ -256,10 +256,10 @@ const spinnerSize = computed<LoadingStateSize>(() => props.size);
 .loading-state--full-page {
   position: fixed;
   inset: 0;
-  z-index: var(--mases-z-overlay-backdrop);
+  z-index: var(--arna-z-overlay-backdrop);
   min-height: 100vh;
   padding: 0;
-  background-color: var(--mases-color-surface-page);
+  background-color: var(--arna-color-surface-page);
 }
 
 /* ============================================================================
@@ -267,11 +267,11 @@ const spinnerSize = computed<LoadingStateSize>(() => props.size);
    ============================================================================ */
 .loading-state__label {
   margin: 0;
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
   text-align: center;
   /*
    * Cap the width so a long label wraps at a readable length rather
@@ -284,18 +284,18 @@ const spinnerSize = computed<LoadingStateSize>(() => props.size);
 
 /* Size variants — the label follows the spinner's hierarchy. */
 .loading-state--sm .loading-state__label {
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
 }
 
 .loading-state--md .loading-state__label {
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
 }
 
 .loading-state--lg .loading-state__label {
-  font-size: var(--mases-font-size-body-lg);
-  line-height: var(--mases-line-height-body-lg);
+  font-size: var(--arna-font-size-body-lg);
+  line-height: var(--arna-line-height-body-lg);
 }
 
 /* ============================================================================
@@ -303,7 +303,7 @@ const spinnerSize = computed<LoadingStateSize>(() => props.size);
    ============================================================================ */
 @media (max-width: 639px) {
   .loading-state {
-    padding-inline: var(--mases-space-3);
+    padding-inline: var(--arna-space-3);
   }
 }
 </style>

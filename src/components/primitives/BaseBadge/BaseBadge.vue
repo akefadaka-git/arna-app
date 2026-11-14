@@ -176,12 +176,12 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   vertical-align: middle;
   white-space: nowrap;
-  border-radius: var(--mases-radius-full);
+  border-radius: var(--arna-radius-full);
   font-family: inherit;
-  font-weight: var(--mases-font-weight-medium);
+  font-weight: var(--arna-font-weight-medium);
   /* Amharic syllables must never be uppercased.
      Design System §3.5 B6. */
   text-transform: none;
@@ -192,16 +192,16 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    Sizes
    ============================================================================ */
 .badge--sm {
-  padding-block: var(--mases-space-1);
-  padding-inline: var(--mases-space-2);
-  font-size: var(--mases-font-size-caption);
+  padding-block: var(--arna-space-1);
+  padding-inline: var(--arna-space-2);
+  font-size: var(--arna-font-size-caption);
   line-height: 1;
 }
 
 .badge--md {
-  padding-block: var(--mases-space-1);
-  padding-inline: var(--mases-space-3);
-  font-size: var(--mases-font-size-body-sm);
+  padding-block: var(--arna-space-1);
+  padding-inline: var(--arna-space-3);
+  font-size: var(--arna-font-size-body-sm);
   line-height: 1;
 }
 
@@ -209,86 +209,86 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    the pill's internal rhythm does not feel crowded. Applied only when
    dot=true. */
 .badge--with-dot.badge--sm {
-  padding-inline-start: var(--mases-space-2);
-  padding-inline-end: var(--mases-space-3);
+  padding-inline-start: var(--arna-space-2);
+  padding-inline-end: var(--arna-space-3);
 }
 
 .badge--with-dot.badge--md {
-  padding-inline-start: var(--mases-space-3);
-  padding-inline-end: var(--mases-space-4);
+  padding-inline-start: var(--arna-space-3);
+  padding-inline-end: var(--arna-space-4);
 }
 
 /* ============================================================================
    Leading dot
    ---------------------------------------------------------------------------
    The dot's diameter is derived from Tier 2 spacing tokens:
-     sm  →  calc(--mases-space-1 * 1.5)  =  6px
-     md  →  --mases-space-2              =  8px
+     sm  →  calc(--arna-space-1 * 1.5)  =  6px
+     md  →  --arna-space-2              =  8px
    See the response preamble §"Design note" for the derivation rationale.
    ============================================================================ */
 .badge__dot {
   display: inline-block;
   flex-shrink: 0;
-  border-radius: var(--mases-radius-full);
+  border-radius: var(--arna-radius-full);
   background-color: currentColor;
 }
 
 .badge--sm .badge__dot {
-  width: calc(var(--mases-space-1) * 1.5);
-  height: calc(var(--mases-space-1) * 1.5);
+  width: calc(var(--arna-space-1) * 1.5);
+  height: calc(var(--arna-space-1) * 1.5);
 }
 
 .badge--md .badge__dot {
-  width: var(--mases-space-2);
-  height: var(--mases-space-2);
+  width: var(--arna-space-2);
+  height: var(--arna-space-2);
 }
 
 /* ============================================================================
    Variants — Neutral
    ============================================================================ */
 .badge--neutral {
-  background-color: var(--mases-color-surface-raised);
-  color: var(--mases-color-text-secondary);
+  background-color: var(--arna-color-surface-raised);
+  color: var(--arna-color-text-secondary);
 }
 
 /* ============================================================================
    Variants — Success
    ============================================================================ */
 .badge--success {
-  background-color: var(--mases-color-surface-success);
-  color: var(--mases-color-text-success);
+  background-color: var(--arna-color-surface-success);
+  color: var(--arna-color-text-success);
 }
 
 /* ============================================================================
    Variants — Warning
    ============================================================================ */
 .badge--warning {
-  background-color: var(--mases-color-surface-warning);
-  color: var(--mases-color-text-warning);
+  background-color: var(--arna-color-surface-warning);
+  color: var(--arna-color-text-warning);
 }
 
 /* ============================================================================
    Variants — Info
    ============================================================================ */
 .badge--info {
-  background-color: var(--mases-color-surface-info);
-  color: var(--mases-color-text-info);
+  background-color: var(--arna-color-surface-info);
+  color: var(--arna-color-text-info);
 }
 
 /* ============================================================================
    Variants — Danger
    ============================================================================ */
 .badge--danger {
-  background-color: var(--mases-color-surface-danger);
-  color: var(--mases-color-text-danger);
+  background-color: var(--arna-color-surface-danger);
+  color: var(--arna-color-text-danger);
 }
 
 /* ============================================================================
    Variants — Accent (gold)
    ============================================================================ */
 .badge--accent {
-  background-color: var(--mases-color-surface-accent);
-  color: var(--mases-color-text-accent);
+  background-color: var(--arna-color-surface-accent);
+  color: var(--arna-color-text-accent);
 }
 
 /* ============================================================================

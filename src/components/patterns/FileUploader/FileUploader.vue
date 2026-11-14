@@ -787,7 +787,7 @@ onBeforeUnmount(() => {
 .file-uploader {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-4);
+  gap: var(--arna-space-4);
   width: 100%;
 }
 
@@ -800,36 +800,36 @@ onBeforeUnmount(() => {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
 }
 
 .file-uploader__item {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-3);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-md);
-  background-color: var(--mases-color-surface-page);
+  gap: var(--arna-space-2);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-3);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-md);
+  background-color: var(--arna-color-surface-page);
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    border-color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    border-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .file-uploader__item[data-status='success'] {
-  border-color: var(--mases-color-border-success);
-  background-color: var(--mases-color-surface-success);
+  border-color: var(--arna-color-border-success);
+  background-color: var(--arna-color-surface-success);
 }
 
 .file-uploader__item[data-status='error'] {
-  border-color: var(--mases-color-border-danger);
-  background-color: var(--mases-color-surface-danger);
+  border-color: var(--arna-color-border-danger);
+  background-color: var(--arna-color-surface-danger);
 }
 
 .file-uploader__item[data-status='cancelled'] {
-  border-color: var(--mases-color-border-default);
-  background-color: var(--mases-color-surface-sunken);
+  border-color: var(--arna-color-border-default);
+  background-color: var(--arna-color-surface-sunken);
 }
 
 /* ============================================================================
@@ -838,18 +838,18 @@ onBeforeUnmount(() => {
 .file-uploader__row {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   min-width: 0;
 }
 
 .file-uploader__filename {
   flex: 1 1 auto;
   min-width: 0;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
   /*
    * Amharic-safe wrapping. Filenames are the most likely place for a
    * long, unbroken Ethiopic string; overflow-wrap: anywhere ensures
@@ -861,7 +861,7 @@ onBeforeUnmount(() => {
 .file-uploader__actions {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   flex-shrink: 0;
 }
 

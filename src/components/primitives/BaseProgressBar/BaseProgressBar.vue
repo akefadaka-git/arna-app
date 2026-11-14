@@ -23,8 +23,8 @@
  -----------------------------------------------------------------------------
  Sizes
  -----------------------------------------------------------------------------
-   sm  →  4px track height  (--mases-space-1)
-   md  →  8px track height  (--mases-space-2)  — default
+   sm  →  4px track height  (--arna-space-1)
+   md  →  8px track height  (--arna-space-2)  — default
 
  No size selection is required for most consumers; the default 'md'
  reads correctly in cards, forms, and page headers.
@@ -330,16 +330,16 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   position: relative;
   width: 100%;
   overflow: hidden;
-  background-color: var(--mases-color-surface-sunken);
-  border-radius: var(--mases-radius-full);
+  background-color: var(--arna-color-surface-sunken);
+  border-radius: var(--arna-radius-full);
 }
 
 .progress--sm .progress__track {
-  height: var(--mases-space-1);
+  height: var(--arna-space-1);
 }
 
 .progress--md .progress__track {
-  height: var(--mases-space-2);
+  height: var(--arna-space-2);
 }
 
 /* ============================================================================
@@ -354,7 +354,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    * preferences); the transition only smooths the delta between two
    * adjacent prop states.
    */
-  transition: width var(--mases-duration-base) var(--mases-easing-standard);
+  transition: width var(--arna-duration-base) var(--arna-easing-standard);
 }
 
 /* ============================================================================
@@ -363,22 +363,22 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    ============================================================================ */
 .progress--default .progress__fill,
 .progress--default .progress__indeterminate-strip {
-  background-color: var(--mases-color-action-primary);
+  background-color: var(--arna-color-action-primary);
 }
 
 .progress--success .progress__fill,
 .progress--success .progress__indeterminate-strip {
-  background-color: var(--mases-color-success-500);
+  background-color: var(--arna-color-success-500);
 }
 
 .progress--warning .progress__fill,
 .progress--warning .progress__indeterminate-strip {
-  background-color: var(--mases-color-warning-500);
+  background-color: var(--arna-color-warning-500);
 }
 
 .progress--danger .progress__fill,
 .progress--danger .progress__indeterminate-strip {
-  background-color: var(--mases-color-action-danger);
+  background-color: var(--arna-color-action-danger);
 }
 
 /* ============================================================================
@@ -395,9 +395,9 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   left: 0;
   height: 100%;
   width: 30%;
-  border-radius: var(--mases-radius-full);
+  border-radius: var(--arna-radius-full);
   will-change: transform;
-  animation: mases-progress-indeterminate 0.9s var(--mases-easing-standard)
+  animation: mases-progress-indeterminate 0.9s var(--arna-easing-standard)
     infinite;
 }
 
@@ -414,12 +414,12 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    Visible label
    ============================================================================ */
 .progress__label {
-  margin-block-start: var(--mases-space-2);
-  color: var(--mases-color-text-secondary);
+  margin-block-start: var(--arna-space-2);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
 }
 
 /* ============================================================================

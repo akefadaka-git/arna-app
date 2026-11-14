@@ -401,18 +401,18 @@ function onDismiss(): void {
 .maintenance-banner {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   width: 100%;
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-3);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-3);
   /*
    * A single subtle rule separates the banner from the header or
    * content immediately below it.
    */
-  border-block-end: 1px solid var(--mases-color-border-subtle);
+  border-block-end: 1px solid var(--arna-color-border-subtle);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   /*
    * Amharic-safe wrapping on the message and title (inherited).
    */
@@ -423,7 +423,7 @@ function onDismiss(): void {
 /* Tablet and up: the wider chrome rhythm. */
 @media (min-width: 640px) {
   .maintenance-banner {
-    padding-inline: var(--mases-space-4);
+    padding-inline: var(--arna-space-4);
   }
 }
 
@@ -431,18 +431,18 @@ function onDismiss(): void {
    Variant palettes
    ============================================================================ */
 .maintenance-banner[data-variant='info'] {
-  background-color: var(--mases-color-surface-info);
-  color: var(--mases-color-text-info);
+  background-color: var(--arna-color-surface-info);
+  color: var(--arna-color-text-info);
 }
 
 .maintenance-banner[data-variant='warning'] {
-  background-color: var(--mases-color-surface-warning);
-  color: var(--mases-color-text-warning);
+  background-color: var(--arna-color-surface-warning);
+  color: var(--arna-color-text-warning);
 }
 
 .maintenance-banner[data-variant='danger'] {
-  background-color: var(--mases-color-surface-danger);
-  color: var(--mases-color-text-danger);
+  background-color: var(--arna-color-surface-danger);
+  color: var(--arna-color-text-danger);
 }
 
 /* ============================================================================
@@ -484,21 +484,21 @@ function onDismiss(): void {
 .maintenance-banner__content {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   flex: 1 1 auto;
   min-width: 0;
 }
 
 .maintenance-banner__title {
   margin: 0;
-  font-weight: var(--mases-font-weight-semibold);
+  font-weight: var(--arna-font-weight-semibold);
   overflow-wrap: break-word;
   word-break: normal;
 }
 
 .maintenance-banner__message {
   margin: 0;
-  font-weight: var(--mases-font-weight-regular);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: break-word;
   word-break: normal;
 }
@@ -513,7 +513,7 @@ function onDismiss(): void {
 .maintenance-banner__actions {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-shrink: 0;
 }
 

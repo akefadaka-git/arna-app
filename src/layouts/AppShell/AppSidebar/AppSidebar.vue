@@ -653,19 +653,19 @@ function groupToggleAriaDisabled(): 'true' | undefined {
 .app-sidebar {
   display: flex;
   flex-direction: column;
-  width: var(--mases-shell-sidebar-width);
+  width: var(--arna-shell-sidebar-width);
   height: 100%;
-  padding-block: var(--mases-space-4);
-  padding-inline: var(--mases-space-2);
-  background-color: var(--mases-color-surface-raised);
-  color: var(--mases-color-text-primary);
+  padding-block: var(--arna-space-4);
+  padding-inline: var(--arna-space-2);
+  background-color: var(--arna-color-surface-raised);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
   overflow-y: auto;
 }
 
 /* Collapsed (icon-only) mode — narrower width. */
 .app-sidebar[data-collapsed='true'] {
-  width: var(--mases-shell-sidebar-width-collapsed);
+  width: var(--arna-shell-sidebar-width-collapsed);
 }
 
 /* ============================================================================
@@ -674,7 +674,7 @@ function groupToggleAriaDisabled(): 'true' | undefined {
 .app-sidebar__list {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -698,30 +698,30 @@ function groupToggleAriaDisabled(): 'true' | undefined {
    ============================================================================ */
 .app-sidebar__link {
   display: flex;
-  border-inline-start: var(--mases-space-1) solid transparent;
+  border-inline-start: var(--arna-space-1) solid transparent;
   align-items: center;
-  gap: var(--mases-space-3);
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-3);
-  border-radius: var(--mases-radius-md);
-  color: var(--mases-color-text-secondary);
+  gap: var(--arna-space-3);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-3);
+  border-radius: var(--arna-radius-md);
+  color: var(--arna-color-text-secondary);
   text-decoration: none;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .app-sidebar__link:hover {
-  background-color: var(--mases-color-state-hover);
-  color: var(--mases-color-text-primary);
+  background-color: var(--arna-color-state-hover);
+  color: var(--arna-color-text-primary);
 }
 
 .app-sidebar__link:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /*
@@ -732,9 +732,9 @@ function groupToggleAriaDisabled(): 'true' | undefined {
  * navigates within it.
  */
 .app-sidebar__link.router-link-active {
-  border-inline-start-color: var(--mases-color-state-selected-accent);
-  background-color: var(--mases-color-state-selected);
-  color: var(--mases-color-text-brand);
+  border-inline-start-color: var(--arna-color-state-selected-accent);
+  background-color: var(--arna-color-state-selected);
+  color: var(--arna-color-text-brand);
 }
 
 /* ============================================================================
@@ -755,30 +755,30 @@ function groupToggleAriaDisabled(): 'true' | undefined {
 .app-sidebar__group-toggle {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   width: 100%;
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-3);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-3);
   border: 0;
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
   background-color: transparent;
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   cursor: pointer;
   text-align: start;
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-semibold);
-  transition: background-color var(--mases-duration-fast) var(--mases-easing-standard);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-semibold);
+  transition: background-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .app-sidebar__group-toggle:hover {
-  background-color: var(--mases-color-state-hover);
+  background-color: var(--arna-color-state-hover);
 }
 
 .app-sidebar__group-toggle:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
@@ -789,8 +789,8 @@ function groupToggleAriaDisabled(): 'true' | undefined {
    ============================================================================ */
 .app-sidebar__group-chevron {
   margin-inline-start: auto;
-  color: var(--mases-color-icon-secondary);
-  transition: transform var(--mases-duration-fast) var(--mases-easing-standard);
+  color: var(--arna-color-icon-secondary);
+  transition: transform var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 [data-expanded='true'] .app-sidebar__group-chevron {
@@ -803,7 +803,7 @@ function groupToggleAriaDisabled(): 'true' | undefined {
 .app-sidebar__group-list {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -813,14 +813,14 @@ function groupToggleAriaDisabled(): 'true' | undefined {
    * amount of leading whitespace the child needs to visually align
    * under the group's own icon.
    */
-  padding-inline-start: var(--mases-space-5);
+  padding-inline-start: var(--arna-space-5);
 }
 
 /* ============================================================================
    Icon and label
    ============================================================================ */
 .app-sidebar__icon {
-  color: var(--mases-color-icon-secondary);
+  color: var(--arna-color-icon-secondary);
   flex-shrink: 0;
 }
 
@@ -849,7 +849,7 @@ function groupToggleAriaDisabled(): 'true' | undefined {
 .app-sidebar[data-collapsed='true'] .app-sidebar__link,
 .app-sidebar[data-collapsed='true'] .app-sidebar__group-toggle {
   justify-content: center;
-  padding-inline: var(--mases-space-2);
+  padding-inline: var(--arna-space-2);
 }
 
 .app-sidebar[data-collapsed='true'] .app-sidebar__group-chevron {

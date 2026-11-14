@@ -499,12 +499,12 @@ function onToggle(event: Event): void {
 .error-support-panel {
   width: 100%;
   max-width: 40em;
-  margin-block-start: var(--mases-space-4);
-  color: var(--mases-color-text-secondary);
+  margin-block-start: var(--arna-space-4);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
   text-align: start;
 }
 
@@ -513,9 +513,9 @@ function onToggle(event: Event): void {
    ============================================================================ */
 .error-support-panel__summary {
   cursor: pointer;
-  padding-block: var(--mases-space-1);
+  padding-block: var(--arna-space-1);
   color: inherit;
-  font-weight: var(--mases-font-weight-medium);
+  font-weight: var(--arna-font-weight-medium);
   /*
    * The browser's default disclosure triangle is retained (browser
    * native, accessible, no JS). Customising it is deferred to a
@@ -525,9 +525,9 @@ function onToggle(event: Event): void {
 }
 
 .error-support-panel__summary:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
-  border-radius: var(--mases-radius-sm);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
+  border-radius: var(--arna-radius-sm);
 }
 
 /* ============================================================================
@@ -536,13 +536,13 @@ function onToggle(event: Event): void {
 .error-support-panel__body {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
-  margin-block-start: var(--mases-space-2);
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-3);
-  background-color: var(--mases-color-surface-overlay);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-sm);
+  gap: var(--arna-space-3);
+  margin-block-start: var(--arna-space-2);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-3);
+  background-color: var(--arna-color-surface-overlay);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-sm);
 }
 
 /* ============================================================================
@@ -551,7 +551,7 @@ function onToggle(event: Event): void {
 .error-support-panel__fields {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   margin: 0;
   padding: 0;
 }
@@ -567,7 +567,7 @@ function onToggle(event: Event): void {
    * translation) expand the column without wrapping awkwardly.
    */
   grid-template-columns: minmax(7rem, max-content) minmax(0, 1fr);
-  column-gap: var(--mases-space-3);
+  column-gap: var(--arna-space-3);
   align-items: baseline;
   min-width: 0;
 }
@@ -577,11 +577,11 @@ function onToggle(event: Event): void {
    ============================================================================ */
 .error-support-panel__field-label {
   margin: 0;
-  color: var(--mases-color-text-tertiary);
+  color: var(--arna-color-text-tertiary);
   font-family: inherit;
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
+  font-weight: var(--arna-font-weight-medium);
   overflow-wrap: anywhere;
 }
 
@@ -591,17 +591,17 @@ function onToggle(event: Event): void {
 .error-support-panel__field-value {
   margin: 0;
   min-width: 0;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   /*
    * Mono font + tabular numerals are appropriate for identifiers
    * (error codes, UUIDs) and timestamps. Amharic text (in the
    * occurredAt field) falls back to Noto Sans Ethiopic through the
    * design system's font stack.
    */
-  font-family: var(--mases-font-family-mono);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
-  font-weight: var(--mases-font-weight-regular);
+  font-family: var(--arna-font-family-mono);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
+  font-weight: var(--arna-font-weight-regular);
   /*
    * Long values (UUIDs, base64 tokens) wrap at word boundaries via
    * overflow-wrap: anywhere, so the panel never forces horizontal
@@ -616,9 +616,9 @@ function onToggle(event: Event): void {
 .error-support-panel__actions {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   flex-wrap: wrap;
-  padding-block-start: var(--mases-space-1);
+  padding-block-start: var(--arna-space-1);
 }
 
 /* ============================================================================
@@ -628,47 +628,47 @@ function onToggle(event: Event): void {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-3);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-3);
   appearance: none;
-  background-color: var(--mases-color-action-secondary);
-  border: 1px solid var(--mases-color-action-secondary);
-  border-radius: var(--mases-radius-sm);
-  color: var(--mases-color-text-inverse);
+  background-color: var(--arna-color-action-secondary);
+  border: 1px solid var(--arna-color-action-secondary);
+  border-radius: var(--arna-radius-sm);
+  color: var(--arna-color-text-inverse);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
+  font-size: var(--arna-font-size-body-sm);
   line-height: 1;
-  font-weight: var(--mases-font-weight-medium);
+  font-weight: var(--arna-font-weight-medium);
   cursor: pointer;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    border-color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    border-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .error-support-panel__copy:hover {
-  background-color: var(--mases-color-action-secondary-hover);
-  border-color: var(--mases-color-action-secondary-hover);
+  background-color: var(--arna-color-action-secondary-hover);
+  border-color: var(--arna-color-action-secondary-hover);
 }
 
 .error-support-panel__copy:active {
-  background-color: var(--mases-color-action-secondary-active);
-  border-color: var(--mases-color-action-secondary-active);
+  background-color: var(--arna-color-action-secondary-active);
+  border-color: var(--arna-color-action-secondary-active);
 }
 
 .error-support-panel__copy:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
    Copied success message
    ============================================================================ */
 .error-support-panel__copied {
-  color: var(--mases-color-text-success);
+  color: var(--arna-color-text-success);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
 }
 
 /* ============================================================================
@@ -677,33 +677,33 @@ function onToggle(event: Event): void {
 .error-support-panel__fallback {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
-  padding-block-start: var(--mases-space-1);
+  gap: var(--arna-space-2);
+  padding-block-start: var(--arna-space-1);
 }
 
 .error-support-panel__fallback-instruction {
   margin: 0;
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
 }
 
 .error-support-panel__fallback-textarea {
   display: block;
   width: 100%;
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-3);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-3);
   appearance: none;
-  background-color: var(--mases-color-surface-page);
-  border: 1px solid var(--mases-color-border-default);
-  border-radius: var(--mases-radius-sm);
-  color: var(--mases-color-text-primary);
-  font-family: var(--mases-font-family-mono);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
-  font-weight: var(--mases-font-weight-regular);
+  background-color: var(--arna-color-surface-page);
+  border: 1px solid var(--arna-color-border-default);
+  border-radius: var(--arna-radius-sm);
+  color: var(--arna-color-text-primary);
+  font-family: var(--arna-font-family-mono);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
+  font-weight: var(--arna-font-weight-regular);
   resize: vertical;
   /*
    * The textarea is readonly. It remains selectable (the user's
@@ -712,8 +712,8 @@ function onToggle(event: Event): void {
 }
 
 .error-support-panel__fallback-textarea:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
@@ -727,7 +727,7 @@ function onToggle(event: Event): void {
      * very little room to render long values.
      */
     grid-template-columns: minmax(0, 1fr);
-    row-gap: var(--mases-space-1);
+    row-gap: var(--arna-space-1);
   }
 }
 

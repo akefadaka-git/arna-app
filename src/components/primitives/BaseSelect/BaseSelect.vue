@@ -415,38 +415,38 @@ defineExpose({ focus, blur, el });
   position: relative;
   display: block;
   width: 100%;
-  background-color: var(--mases-color-surface-page);
-  border: 1px solid var(--mases-color-border-default);
-  border-radius: var(--mases-radius-md);
-  color: var(--mases-color-text-primary);
+  background-color: var(--arna-color-surface-page);
+  border: 1px solid var(--arna-color-border-default);
+  border-radius: var(--arna-radius-md);
+  color: var(--arna-color-text-primary);
   transition:
-    border-color var(--mases-duration-fast) var(--mases-easing-standard),
-    background-color var(--mases-duration-fast) var(--mases-easing-standard);
+    border-color var(--arna-duration-fast) var(--arna-easing-standard),
+    background-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 /* Focus ring drawn on the wrapper when the inner <select> receives
    :focus-visible. <select> is a non-editable control, so :focus-visible
    matches only keyboard focus. */
 .select-wrapper:has(.select-wrapper__select:focus-visible) {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* Hover border — only when not disabled. */
 .select-wrapper:not(.select-wrapper--disabled):hover {
-  border-color: var(--mases-color-border-strong);
+  border-color: var(--arna-color-border-strong);
 }
 
 /* Invalid state — border is the danger color. */
 .select-wrapper--invalid {
-  border-color: var(--mases-color-border-danger);
+  border-color: var(--arna-color-border-danger);
 }
 
 /* Disabled state. */
 .select-wrapper--disabled {
-  background-color: var(--mases-color-state-disabled-bg);
-  border-color: var(--mases-color-border-subtle);
-  color: var(--mases-color-state-disabled-text);
+  background-color: var(--arna-color-state-disabled-bg);
+  border-color: var(--arna-color-border-subtle);
+  color: var(--arna-color-state-disabled-text);
   cursor: not-allowed;
 }
 
@@ -456,20 +456,20 @@ defineExpose({ focus, blur, el });
 .select-wrapper__select {
   display: block;
   width: 100%;
-  padding-block: var(--mases-space-2);
-  padding-inline-start: var(--mases-space-3);
+  padding-block: var(--arna-space-2);
+  padding-inline-start: var(--arna-space-3);
   /* Reserve room for the chevron: right gutter + chevron width + right
      gutter again = space-3 + icon-md + space-3 = 12 + 20 + 12 = 44px. */
-  padding-inline-end: calc(var(--mases-space-3) * 2 + var(--mases-icon-md));
+  padding-inline-end: calc(var(--arna-space-3) * 2 + var(--arna-icon-md));
   appearance: none;
   background-color: transparent;
   border: none;
   outline: none;
   color: inherit;
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
   cursor: pointer;
 }
 
@@ -488,11 +488,11 @@ defineExpose({ focus, blur, el });
   content: '';
   position: absolute;
   top: 50%;
-  inset-inline-end: var(--mases-space-3);
+  inset-inline-end: var(--arna-space-3);
   transform: translateY(-50%);
-  width: var(--mases-icon-md);
-  height: var(--mases-icon-md);
-  background-color: var(--mases-color-icon-primary);
+  width: var(--arna-icon-md);
+  height: var(--arna-icon-md);
+  background-color: var(--arna-color-icon-primary);
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   -webkit-mask-size: contain;
@@ -511,7 +511,7 @@ defineExpose({ focus, blur, el });
    the disabled state is already communicated by the wrapper's border
    and background. */
 .select-wrapper--disabled::after {
-  background-color: var(--mases-color-icon-secondary);
+  background-color: var(--arna-color-icon-secondary);
 }
 
 /* ============================================================================

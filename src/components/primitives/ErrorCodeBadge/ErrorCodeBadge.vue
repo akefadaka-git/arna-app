@@ -54,7 +54,7 @@
  Mono code and tabular numerals
  -----------------------------------------------------------------------------
  The numeric code renders in the mono font stack
- (--mases-font-family-mono) with font-variant-numeric: tabular-nums.
+ (--arna-font-family-mono) with font-variant-numeric: tabular-nums.
  See the response preamble §"Design note — the monospace code" for the
  rationale (visual signal + numerical alignment).
 
@@ -283,16 +283,16 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
 .error-code-badge {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   vertical-align: middle;
   white-space: nowrap;
-  padding-block: var(--mases-space-1);
-  padding-inline: var(--mases-space-2);
-  border-radius: var(--mases-radius-full);
+  padding-block: var(--arna-space-1);
+  padding-inline: var(--arna-space-2);
+  border-radius: var(--arna-radius-full);
   font-family: inherit;
-  font-size: var(--mases-font-size-caption);
+  font-size: var(--arna-font-size-caption);
   line-height: 1;
-  font-weight: var(--mases-font-weight-medium);
+  font-weight: var(--arna-font-weight-medium);
   /*
    * Amharic syllables must never be uppercased.
    * Design System §3.5 B6.
@@ -305,14 +305,14 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    Code
    ============================================================================ */
 .error-code-badge__code {
-  font-family: var(--mases-font-family-mono);
+  font-family: var(--arna-font-family-mono);
   /*
    * Tabular numerals ensure every digit has the same advance width,
    * so "403", "404", and "500" render at identical widths. See the
    * file header comment §"Mono code and tabular numerals".
    */
   font-variant-numeric: tabular-nums;
-  font-weight: var(--mases-font-weight-semibold);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 /* ============================================================================
@@ -343,23 +343,23 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    Variant — Danger (default)
    ============================================================================ */
 .error-code-badge--danger {
-  background-color: var(--mases-color-surface-danger);
-  color: var(--mases-color-text-danger);
+  background-color: var(--arna-color-surface-danger);
+  color: var(--arna-color-text-danger);
 }
 
 /* ============================================================================
    Variant — Warning
    ============================================================================ */
 .error-code-badge--warning {
-  background-color: var(--mases-color-surface-warning);
-  color: var(--mases-color-text-warning);
+  background-color: var(--arna-color-surface-warning);
+  color: var(--arna-color-text-warning);
 }
 
 /* ============================================================================
    Variant — Neutral
    ============================================================================ */
 .error-code-badge--neutral {
-  background-color: var(--mases-color-surface-raised);
-  color: var(--mases-color-text-secondary);
+  background-color: var(--arna-color-surface-raised);
+  color: var(--arna-color-text-secondary);
 }
 </style>

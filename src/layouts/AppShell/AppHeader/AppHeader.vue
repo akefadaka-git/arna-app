@@ -177,15 +177,15 @@
  -----------------------------------------------------------------------------
  z-index constraint (from Unit 11.1)
  -----------------------------------------------------------------------------
- Uses --mases-z-raised (10). Must be at or below that token so the
- SkipToContent link (--mases-z-sticky, 200) renders above the header
+ Uses --arna-z-raised (10). Must be at or below that token so the
+ SkipToContent link (--arna-z-sticky, 200) renders above the header
  when focused.
 
  The constraint is stated here because the header is the most likely
  surface for a future contributor to raise a z-index — a "the dropdown
  is behind the header" report, for example, that gets fixed by
  bumping this file's value instead of the dropdown's. Raising the
- header above --mases-z-sticky would break the skip link's visibility
+ header above --arna-z-sticky would break the skip link's visibility
  for keyboard users, which is a WCAG 2.4.1 concern. If a specific
  component needs to render above the header, that component's
  z-index token is the correct place to change.
@@ -220,7 +220,7 @@
 
  No hex value appears in this file.
 
- The inline padding consumes --mases-shell-chrome-padding-inline-*,
+ The inline padding consumes --arna-shell-chrome-padding-inline-*,
  the shared chrome rhythm also used by AppFooter and SkipToContent
  (tokens.css v1.2.0 §"Shell chrome inline padding"). Selecting the
  mobile or tablet variant of that token pair is this file's choice;
@@ -318,7 +318,7 @@ interface Props {
    * content. Useful for shells that place the header inside a
    * fixed-height grid layout where only <main> scrolls.
    *
-   * The sticky variant consumes --mases-z-raised (10). See the file
+   * The sticky variant consumes --arna-z-raised (10). See the file
    * header §"z-index constraint" before changing this value's
    * companion token.
    */
@@ -552,11 +552,11 @@ function onToggleClick(): void {
 
    TABLET AND UP: the gap widens and the inline padding increases at
    the min-width breakpoint below, matching the wider spacing rhythm
-   of --mases-shell-chrome-padding-inline-tablet. The three regions
+   of --arna-shell-chrome-padding-inline-tablet. The three regions
    return to one row; the mobile drawer remains the primary mobile
    navigation surface.
 
-   The inline padding consumes --mases-shell-chrome-padding-inline-*,
+   The inline padding consumes --arna-shell-chrome-padding-inline-*,
    the shared chrome rhythm used by AppFooter and SkipToContent. See
    tokens.css v1.2.0 for the value provenance; the header widens by
    one spacing step on desktop relative to its own pre-1.2.0 value as
@@ -566,12 +566,12 @@ function onToggleClick(): void {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   width: 100%;
-  min-height: var(--mases-shell-header-height);
+  min-height: var(--arna-shell-header-height);
   height: auto;
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-shell-chrome-padding-inline-mobile);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-shell-chrome-padding-inline-mobile);
   /*
    * A single subtle rule separates the header from the content below.
    * Matches the rule treatment used by MaintenanceBanner (Unit 11.3).
@@ -579,10 +579,10 @@ function onToggleClick(): void {
    * so a page whose content begins without a border still gets a
    * clean transition under the header.
    */
-  border-block-start: 3px solid var(--mases-color-gold-500);
-  border-block-end: 1px solid var(--mases-color-border-brand);
-  background-color: var(--mases-color-surface-raised);
-  color: var(--mases-color-text-primary);
+  border-block-start: 3px solid var(--arna-color-gold-500);
+  border-block-end: 1px solid var(--arna-color-border-brand);
+  background-color: var(--arna-color-surface-raised);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
 }
 
@@ -599,19 +599,19 @@ function onToggleClick(): void {
 
   .app-header {
     flex-wrap: nowrap;
-    gap: var(--mases-space-4);
-    padding-block: var(--mases-space-3);
-    padding-inline: var(--mases-shell-chrome-padding-inline-tablet);
+    gap: var(--arna-space-4);
+    padding-block: var(--arna-space-3);
+    padding-inline: var(--arna-shell-chrome-padding-inline-tablet);
   }
 }
 
 /* ---------------------------------------------------------------------------
    Sticky variant
    ---------------------------------------------------------------------------
-   Uses --mases-z-raised (10) — see the file header §"z-index
+   Uses --arna-z-raised (10) — see the file header §"z-index
    constraint". The value must remain at or below this token so the
-   SkipToContent link (--mases-z-sticky, 200) renders above the header
-   when focused. Raising it above --mases-z-sticky would put the header
+   SkipToContent link (--arna-z-sticky, 200) renders above the header
+   when focused. Raising it above --arna-z-sticky would put the header
    above the skip link and hide the link from keyboard users, which is
    a WCAG 2.4.1 concern.
 
@@ -625,7 +625,7 @@ function onToggleClick(): void {
 .app-header[data-sticky='true'] {
   position: sticky;
   top: 0;
-  z-index: var(--mases-z-raised);
+  z-index: var(--arna-z-raised);
 }
 
 /* ============================================================================
@@ -665,7 +665,7 @@ function onToggleClick(): void {
 .app-header__brand {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-shrink: 0;
   min-width: 0;
 }
@@ -687,13 +687,13 @@ function onToggleClick(): void {
   order: 4;
   flex: 1 1 100%;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   min-width: 0;
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior-inline: contain;
-  scroll-padding-inline: var(--mases-space-2);
-  scrollbar-color: var(--mases-color-border-strong) transparent;
+  scroll-padding-inline: var(--arna-space-2);
+  scrollbar-color: var(--arna-color-border-strong) transparent;
   scrollbar-width: thin;
 }
 
@@ -712,7 +712,7 @@ function onToggleClick(): void {
   display: flex;
   order: 3;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-shrink: 0;
 }
 
