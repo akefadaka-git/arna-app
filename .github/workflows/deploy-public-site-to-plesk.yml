@@ -109,8 +109,8 @@ jobs:
           if remote_path.startswith("/") or "\\" in remote_path:
               raise SystemExit("PLESK_PUBLIC_DOCROOT must be a relative POSIX path.")
           parts = [part for part in PurePosixPath(remote_path).parts if part not in ("", ".")]
-          if not parts or any(part == ".." for part in parts):
-              raise SystemExit("PLESK_PUBLIC_DOCROOT is empty or contains unsafe path traversal.")
+          if (not parts and remote_path != ".") or any(part == ".." for part in parts):
+              raise SystemExit("PLESK_PUBLIC_DOCROOT must be '.' or a safe relative path.")
 
           root = Path("dist-public").resolve()
           if not root.is_dir() or not (root / "index.html").is_file():
