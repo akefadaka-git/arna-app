@@ -33,6 +33,15 @@
           · Permission filtering, route matching, navigation contracts, and
             collapsed-mode behavior are unchanged.
 
+ 1.2.1  — clarify collapsed group-toggle affordance:
+          · In icon-only mode, group toggles remain focusable and
+            aria-disabled so assistive-technology users can discover
+            that the group cannot expand in this mode.
+          · Suppress the hover surface and pointer cursor for these
+            no-op controls, avoiding a misleading interactive affordance.
+          · Expanded-mode navigation, focus visibility, and group
+            disclosure behavior are unchanged.
+
  1.0.2  — reveal active child route:
           · When the current route matches a child leaf, its parent
             navigation group is expanded automatically. This prevents
@@ -845,6 +854,15 @@ function groupToggleAriaDisabled(): 'true' | undefined {
 
 .app-sidebar[data-collapsed='true'] .app-sidebar__group-chevron {
   display: none;
+}
+
+/* A collapsed group is intentionally non-expandable in this mode. */
+.app-sidebar[data-collapsed='true'] .app-sidebar__group-toggle {
+  cursor: default;
+}
+
+.app-sidebar[data-collapsed='true'] .app-sidebar__group-toggle:hover {
+  background-color: transparent;
 }
 
 /* ============================================================================
