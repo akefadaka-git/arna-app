@@ -16,6 +16,7 @@ export interface CorporateSitePage {
   readonly alternate_slug: string | null;
   readonly title: string;
   readonly summary: string;
+  readonly body: string;
   readonly sections: readonly CorporateSiteSection[];
   readonly seo: {
     readonly title?: string;
