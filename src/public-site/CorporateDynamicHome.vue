@@ -223,6 +223,9 @@ watch(() => route.query.locale, (value) => {
             <div v-if="communitySection(section) && approvedProjects(section).length" class="content-grid">
               <article v-for="(project, projectIndex) in approvedProjects(section)" :key="project.public_id || project.title || projectIndex" class="content-card">
                 <h3>{{ project.title }}</h3><p>{{ project.summary || project.body }}</p>
+                <p v-if="project.partner"><strong>{{ locale === 'am' ? 'አጋር' : 'Partner' }}:</strong> {{ project.partner }}</p>
+                <p v-if="project.budget"><strong>{{ locale === 'am' ? 'በጀት' : 'Budget' }}:</strong> {{ project.budget }}</p>
+                <p v-if="project.outcome"><strong>{{ locale === 'am' ? 'ውጤት' : 'Outcome' }}:</strong> {{ project.outcome }}</p>
                 
               </article>
             </div>
