@@ -25,10 +25,12 @@ jobs:
 
     steps:
       - name: Checkout source
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version-file: .node-version
           cache: npm
@@ -76,11 +78,31 @@ jobs:
           test -n "$PLESK_FTP_USERNAME" || { echo "Missing PLESK_FTP_USERNAME"; exit 1; }
           test -n "$PLESK_FTP_PASSWORD" || { echo "Missing PLESK_FTP_PASSWORD"; exit 1; }
           test -n "$PLESK_PUBLIC_DOCROOT" || { echo "Missing PLESK_PUBLIC_DOCROOT"; exit 1; }
-          [[ "$PLESK_FTP_PORT" =~ ^[0-9]+$ ]] || { echo "Invalid PLESK_FTP_PORT"; exit 1; }
-          [[ "$PLESK_PUBLIC_DOCROOT" != /* ]] || { echo "Document root must be relative to the FTP account home"; exit 1; }
-          [[ "$PLESK_PUBLIC_DOCROOT" != *".."* ]] || { echo "Document root cannot contain parent-directory traversal"; exit 1; }
-          [[ "$PLESK_PUBLIC_DOCROOT" != *\* ]] || { echo "Document root cannot contain backslashes"; exit 1; }
-          echo "Required Plesk deployment inputs are present."
+          python - <<'PY'
+          import os
+          from pathlib import PurePosixPath
+
+          port_text = os.environ["PLESK_FTP_PORT"]
+          if not port_text.isascii() or not port_text.isdecimal():
+              raise SystemExit("PLESK_FTP_PORT must be a decimal TCP port.")
+          port = int(port_text)
+          if not 1 <= port <= 65535:
+              raise SystemExit("PLESK_FTP_PORT must be between 1 and 65535.")
+
+          raw = os.environ["PLESK_PUBLIC_DOCROOT"]
+          if not raw or raw.startswith("/") or "\\\\" in raw:
+              raise SystemExit("PLESK_PUBLIC_DOCROOT must be a non-empty relative POSIX path.")
+          if any(ord(ch) < 32 or ord(ch) == 127 for ch in raw):
+              raise SystemExit("PLESK_PUBLIC_DOCROOT cannot contain control characters.")
+          parts = raw.split("/")
+          if any(part in ("", ".", "..") for part in parts):
+              if raw != ".":
+                  raise SystemExit("PLESK_PUBLIC_DOCROOT cannot contain empty, dot, or parent path segments.")
+          normalized = PurePosixPath(raw)
+          if normalized.is_absolute() or ".." in normalized.parts:
+              raise SystemExit("PLESK_PUBLIC_DOCROOT must remain inside the FTP account home.")
+          print(f"Configuration shape valid; FTPS port {port}; document-root segments {len(normalized.parts)}.")
+          PY
 
       - name: Preflight or deploy public build over verified FTPS
         shell: bash
@@ -106,11 +128,16 @@ jobs:
           remote_path = os.environ["PLESK_PUBLIC_DOCROOT"]
           deploy = os.environ["DEPLOY_TO_PLESK"].lower() == "true"
 
-          if remote_path.startswith("/") or "\\" in remote_path:
-              raise SystemExit("PLESK_PUBLIC_DOCROOT must be a relative POSIX path.")
-          parts = [part for part in PurePosixPath(remote_path).parts if part not in ("", ".")]
-          if (not parts and remote_path != ".") or any(part == ".." for part in parts):
-              raise SystemExit("PLESK_PUBLIC_DOCROOT must be '.' or a safe relative path.")
+          if not remote_path or remote_path.startswith("/") or "\\" in remote_path:
+              raise SystemExit("PLESK_PUBLIC_DOCROOT must be a non-empty relative POSIX path.")
+          if any(ord(ch) < 32 or ord(ch) == 127 for ch in remote_path):
+              raise SystemExit("PLESK_PUBLIC_DOCROOT cannot contain control characters.")
+          raw_parts = remote_path.split("/")
+          if remote_path != "." and any(part in ("", ".", "..") for part in raw_parts):
+              raise SystemExit("PLESK_PUBLIC_DOCROOT cannot contain empty, dot, or parent path segments.")
+          parts = [] if remote_path == "." else raw_parts
+          if not 1 <= port <= 65535:
+              raise SystemExit("PLESK_FTP_PORT must be between 1 and 65535.")
 
           root = Path("dist-public").resolve()
           if not root.is_dir() or not (root / "index.html").is_file():
