@@ -276,7 +276,7 @@ const props = defineProps<Props>();
   .skip-to-content:focus {
     background-color: Highlight;
     color: HighlightText;
-    outline-color: Highlight;
+    outline-color: HighlightText;
   }
 }
 
