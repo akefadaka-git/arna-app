@@ -70,11 +70,11 @@
  *     admin build consumes that object unchanged. Duplicating them
  *     here would produce two sources of truth for the same strings.
  *
- *   · Brand identity labels. `masesBrandLabels` (in `shell-labels.ts`)
+ *   · Brand identity labels. `aranaBrandLabels` (in `shell-labels.ts`)
  *     carries `ማሌ ዓርና` / `ማሴስ` / the full approved identity. The admin
  *     build consumes those unchanged. Note that the admin build's
  *     *application name* — `MASES አስተዳደር` — is NOT
- *     `masesBrandLabels.productName`; it is supplied by `VITE_APP_NAME`
+ *     `aranaBrandLabels.productName`; it is supplied by `VITE_APP_NAME`
  *     and composed into `document.title` by each route wrapper. The
  *     brand mark in the header remains `ማሌ ዓርና` on every build.
  *
@@ -240,7 +240,7 @@
  *    would show an item whose route the guard rejects, or hide an
  *    item whose route the guard accepts.
  *
- * 3. The admin build reuses `masesShellLabels`, `masesBrandLabels`,
+ * 3. The admin build reuses `masesShellLabels`, `aranaBrandLabels`,
  *    and `aranaFooterLabels` from `shell-labels.ts` unchanged. A
  *    future CR that changes a shell label affects all three builds;
  *    the admin build does not carry an independent shell-chrome
