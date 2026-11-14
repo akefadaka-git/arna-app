@@ -435,6 +435,7 @@ const regionCount = computed<number>(() => {
    ============================================================================ */
 .app-footer__slot {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   flex: 0 0 auto;
   width: 100%;
