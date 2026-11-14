@@ -64,8 +64,10 @@ const router = createRouter({
   ],
 });
 
-createApp({
+const app = createApp({
   render: () => h(RouterView),
-})
-  .use(router)
-  .mount('#app');
+});
+app.config.errorHandler = (error, _instance, info) => {
+  console.error('[ARNA_PUBLIC_APP_ERROR]', error instanceof Error ? error.stack : error, info);
+};
+app.use(router).mount('#app');
