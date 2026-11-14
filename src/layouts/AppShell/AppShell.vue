@@ -724,10 +724,10 @@ function onMaintenanceDismiss(): void {
     >
       <slot name="footer">
         <AranaFooterContent />
-        <div class="app-shell__footer-preferences">
-          <ThemePreferenceControl />
-        </div>
       </slot>
+      <div class="app-shell__footer-preferences">
+        <ThemePreferenceControl />
+      </div>
     </AppFooter>
 
     <!-- ============================================================
