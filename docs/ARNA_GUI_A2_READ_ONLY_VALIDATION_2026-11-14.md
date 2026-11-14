@@ -55,7 +55,7 @@ The four entry points are `workspace-entry/`, `portal-entry/`, `admin-entry/` an
 
 PR #18 and #19 overlap in the same five application entry points and `src/styles/themes.css`; PR #19 additionally changes the frontend CI workflow, package scripts and theme contract test. The current main already contains a later theme layer, tests, theme preference implementation and implementation guide through merged work. Reapplying either old branch is not justified.
 
-PR #17 contained only the 155-line A1 draft document. Its source branch is 177 commits behind current main and was closed after the replacement candidate PR #64 was created from current main. The review branch is `docs/arna-gui-a1-a2-reconciled`, latest head `5b86fb28c2c42b8cb9cd343cd30590497543c3a4`.
+PR #17 contained only the 155-line A1 draft document. Its source branch is 177 commits behind current main and was closed after the replacement candidate PR #64 was created from current main. The review branch is `docs/arna-gui-a1-a2-reconciled`, latest head `c4bb4b16dec5474c918130e713cfb4d7ca291cb7`.
 
 **History preservation:** PRs #17, #18 and #19 are closed as superseded; no branches were deleted and no commits were rewritten. The old PRs and branches remain auditable. The replacement A1/A2 review is [PR #64](https://github.com/akefadaka-git/arna-app/pull/64).
 
@@ -115,9 +115,9 @@ This is exact-head CI evidence for PR #63's head. It is not an exact-head workfl
 
 ### 5.2 Reconciled A1/A2 review candidate
 
-The latest fully verified PR #64 head at the time of this validation was `1051cb00299d34d535bf0c893cde8b2864487e4e`. GitHub Actions run **#1437** (run ID `43634796714`) — [Frontend verification](https://github.com/akefadaka-git/arna-app/actions/runs/43634796714) — completed successfully on that exact SHA. The single job passed dependency installation and advisory checks, type-check and all four builds, static-output and public-build smoke checks, brand palette/contrast contract, bilingual theme/component contract, responsive App Shell contract, wallet/dashboard contracts, public browser/WCAG 2.2 axe contracts, and artifact upload. Earlier exact-head runs #1434–#1436 also passed on their respective prior documentation-only heads.
+The latest PR #64 head `c4bb4b16dec5474c918130e713cfb4d7ca291cb7` passed exact-head Frontend verification run **#1439** (run ID `43635160636`): [workflow evidence](https://github.com/akefadaka-git/arna-app/actions/runs/43635160636). The single job passed dependency installation and advisory checks, type-check and all four builds, static-output and public-build smoke checks, brand palette/contrast contract, bilingual theme/component contract, responsive App Shell contract, wallet/dashboard contracts, public browser/WCAG 2.2 axe contracts, and artifact upload. Earlier exact-head runs #1434–#1438 also passed on their respective documentation-only heads.
 
-A subsequent documentation-only A2 evidence correction advanced the review branch to `5b86fb28c2c42b8cb9cd343cd30590497543c3a4`; its exact-head workflow run #1438 is tracked separately. Do not transfer run #1437's result to the newer SHA. These source/CI checks do not constitute a manual WCAG audit or production-host visual audit.
+This exact-head CI verifies source contracts and builds against the current-main code baseline. It does not constitute a manual WCAG audit or production-host visual audit.
 
 ### 5.3 Current main HEAD
 
