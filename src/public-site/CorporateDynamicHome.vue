@@ -153,31 +153,31 @@ watch(() => route.query.locale, (value) => {
 </template>
 
 <style scoped>
-.dynamic-corporate-site{min-height:100vh;background:var(--surface,#f7f7f4);color:var(--text-primary,#18221f)}
-.skip-link{position:absolute;left:-9999px;top:1rem;z-index:10;background:#fff;padding:.75rem}
+.dynamic-corporate-site{min-height:100vh;background:var(--arna-public-page-surface);color:var(--arna-public-text-primary)}
+.skip-link{position:absolute;left:-9999px;top:1rem;z-index:10;background:var(--arna-public-surface);padding:.75rem}
 .skip-link:focus{left:1rem}
-.site-header{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.96);border-bottom:1px solid #dfe5e1;backdrop-filter:blur(12px)}
+.site-header{position:sticky;top:0;z-index:5;background:var(--arna-public-surface-overlay);border-bottom:1px solid var(--arna-public-border-subtle);backdrop-filter:blur(12px)}
 .site-header__inner{max-width:1200px;margin:auto;padding:1rem 1.5rem;display:flex;align-items:center;gap:1.5rem}
 .brand{display:flex;align-items:center;gap:.75rem;color:inherit;text-decoration:none;min-width:180px}
 .brand span{display:grid;gap:.1rem}.brand small{letter-spacing:.18em;font-size:.7rem}
 .site-header nav{display:flex;flex:1;flex-wrap:wrap;gap:.8rem;justify-content:center}
 .site-header nav a,.content-card a{color:inherit;text-decoration:none}.site-header nav a:hover,.content-card a:hover{text-decoration:underline}
 .locale-switch,.section-cta{border:1px solid currentColor;border-radius:999px;padding:.65rem 1rem;background:transparent;color:inherit;text-decoration:none;cursor:pointer}
-.content-section{padding:clamp(3rem,7vw,6rem) 1.5rem;border-bottom:1px solid #e1e6e2}
+.content-section{padding:clamp(3rem,7vw,6rem) 1.5rem;border-bottom:1px solid var(--arna-public-border-subtle)}
 .content-section__inner{max-width:1100px;margin:auto}
-.content-section--hero{background:linear-gradient(135deg,#132b25,#285b48);color:#fff;padding-block:clamp(5rem,12vw,9rem)}
+.content-section--hero{background:linear-gradient(135deg,var(--arna-public-brand-anchor),var(--arna-color-living-green));color:var(--arna-color-white);padding-block:clamp(5rem,12vw,9rem)}
 .content-section--hero .content-section__inner{max-width:1100px}
-.content-section--responsibility{background:#edf3ee}
+.content-section--responsibility{background:var(--arna-public-surface-soft)}
 .eyebrow,.card-label{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
 .section-title{font-size:clamp(2rem,5vw,4rem);line-height:1.12;max-width:900px;margin:.5rem 0 1.25rem}
-.section-title span{display:block;color:#9bc8a9}
+.section-title span{display:block;color:var(--arna-public-accent)}
 .section-copy{font-size:clamp(1rem,2vw,1.2rem);line-height:1.8;max-width:850px}
 .content-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:1rem;margin-top:2rem}
-.content-card{padding:1.5rem;background:rgba(255,255,255,.82);border:1px solid #dce5de;border-radius:1rem;display:flex;flex-direction:column;gap:.65rem}
+.content-card{padding:1.5rem;background:var(--arna-public-surface);border:1px solid var(--arna-public-border-subtle);border-radius:1rem;display:flex;flex-direction:column;gap:.65rem}
 .content-card h3{font-size:1.2rem;margin:0}.content-card p{line-height:1.65;margin:0}.content-card img,.section-image img{width:100%;height:auto;object-fit:cover;border-radius:.7rem}
 .card-value{font-size:2rem}.card-status,.section-note{font-size:.9rem;opacity:.8;line-height:1.6}
 .section-image{max-width:900px;margin-top:2rem}.section-cta{display:inline-block;margin-top:1.5rem}
 .state-panel{max-width:900px;margin:5rem auto;padding:2rem;text-align:center}
-.site-footer{padding:2.5rem 1.5rem;text-align:center;background:#142820;color:#fff}.site-footer p{margin:0 0 .4rem}
+.site-footer{padding:2.5rem 1.5rem;text-align:center;background:var(--arna-public-brand-anchor);color:var(--arna-color-white)}.site-footer p{margin:0 0 .4rem}
 @media(max-width:760px){.site-header__inner{align-items:flex-start;flex-wrap:wrap}.site-header nav{order:3;flex-basis:100%;justify-content:flex-start}.brand{flex:1}.content-section{padding-inline:1rem}}
 </style>
