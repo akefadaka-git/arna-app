@@ -123,9 +123,9 @@ This exact-head run verifies the documentation review branch against its current
 
 ### 5.3 Current main HEAD
 
-A query for workflow runs associated with current main SHA `85751ca489b7e2a250da46f408b040254827a199` returned no PR-triggered workflow runs. The combined commit-status query returned no status records.
+The commit-associated workflow query used during the initial read-only pass returned no PR-triggered workflow runs, and the combined commit-status query returned no status records. A subsequent repository-wide Actions lookup identified **Frontend verification run #1433** (run ID `43630578974`, event `push`) on the exact current main SHA `85751ca489b7e2a250da46f408b040254827a199`; GitHub reports it **completed successfully**.
 
-**UNVERIFIED:** No exact-main-head CI success is claimed in this report. The successful PR #63 head run must not be transferred to the later merge commit as if it were a run on that exact SHA.
+**PASS — exact-main-head CI:** [run #1433](https://github.com/akefadaka-git/arna-app/actions/runs/43630578974) verifies the exact main commit. This closes the earlier exact-main-head CI evidence gap. It does not replace runtime font rendering, exhaustive component/state contrast, manual keyboard/screen-reader review or production-host verification.
 
 ### 5.4 Historical Design System candidate evidence
 
@@ -165,7 +165,7 @@ No evidence in this A2 read-only pass supports a claim that all ARNA UI is 10/10
 | Shared component contracts | **VERIFIED** at source/automated-contract level |
 | Old PR #17/#18/#19 stale/overlap findings | **VERIFIED** |
 | Latest merged PR #63 exact-head CI | **PASS** |
-| Exact current-main-head CI | **UNVERIFIED** |
+| Exact current-main-head CI | **PASS — run #1433** |
 | Full runtime visual matrix | **NOT RUN** |
 | Full manual WCAG 2.2 AA audit | **NOT RUN** |
 | Production deployment parity | **NOT RUN / OUT OF SCOPE** |
