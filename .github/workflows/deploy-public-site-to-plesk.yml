@@ -1,0 +1,172 @@
+name: Deploy ARNA public website to Plesk
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_to_production:
+        description: "Set true to upload the verified public build to Plesk. False runs a connection preflight only."
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: arna-public-site-plesk-production
+  cancel-in-progress: false
+
+jobs:
+  deploy-public-site:
+    name: Build, verify and deploy public website
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: arna-plesk-production
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Build all four applications and type-check
+        run: npm run build
+
+      - name: Verify all static build outputs and deployment policy
+        run: npm run verify:build
+
+      - name: Run public build smoke tests
+        run: npm run test:public-build-smoke
+
+      - name: Install Chromium for public browser acceptance
+        run: npx playwright install --with-deps chromium
+
+      - name: Run public browser and accessibility acceptance
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx vite preview --outDir dist-public --host 127.0.0.1 --port 4173 --strictPort > "$RUNNER_TEMP/arna-preview.log" 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4173/ >/dev/null
+          PUBLIC_SITE_URL=http://127.0.0.1:4173/ npm run test:public-browser
+
+      - name: Validate Plesk deployment configuration
+        shell: bash
+        env:
+          PLESK_FTP_HOST: ${{ secrets.PLESK_FTP_HOST }}
+          PLESK_FTP_USERNAME: ${{ secrets.PLESK_FTP_USERNAME }}
+          PLESK_FTP_PASSWORD: ${{ secrets.PLESK_FTP_PASSWORD }}
+          PLESK_PUBLIC_DOCROOT: ${{ secrets.PLESK_PUBLIC_DOCROOT }}
+          PLESK_FTP_PORT: ${{ vars.PLESK_FTP_PORT || '21' }}
+        run: |
+          set -euo pipefail
+          test -n "$PLESK_FTP_HOST" || { echo "Missing PLESK_FTP_HOST"; exit 1; }
+          test -n "$PLESK_FTP_USERNAME" || { echo "Missing PLESK_FTP_USERNAME"; exit 1; }
+          test -n "$PLESK_FTP_PASSWORD" || { echo "Missing PLESK_FTP_PASSWORD"; exit 1; }
+          test -n "$PLESK_PUBLIC_DOCROOT" || { echo "Missing PLESK_PUBLIC_DOCROOT"; exit 1; }
+          [[ "$PLESK_FTP_PORT" =~ ^[0-9]+$ ]] || { echo "Invalid PLESK_FTP_PORT"; exit 1; }
+          [[ "$PLESK_PUBLIC_DOCROOT" != /* ]] || { echo "Document root must be relative to the FTP account home"; exit 1; }
+          [[ "$PLESK_PUBLIC_DOCROOT" != *".."* ]] || { echo "Document root cannot contain parent-directory traversal"; exit 1; }
+          [[ "$PLESK_PUBLIC_DOCROOT" != *\* ]] || { echo "Document root cannot contain backslashes"; exit 1; }
+          echo "Required Plesk deployment inputs are present."
+
+      - name: Preflight or deploy public build over verified FTPS
+        shell: bash
+        env:
+          PLESK_FTP_HOST: ${{ secrets.PLESK_FTP_HOST }}
+          PLESK_FTP_USERNAME: ${{ secrets.PLESK_FTP_USERNAME }}
+          PLESK_FTP_PASSWORD: ${{ secrets.PLESK_FTP_PASSWORD }}
+          PLESK_PUBLIC_DOCROOT: ${{ secrets.PLESK_PUBLIC_DOCROOT }}
+          PLESK_FTP_PORT: ${{ vars.PLESK_FTP_PORT || '21' }}
+          DEPLOY_TO_PLESK: ${{ inputs.deploy_to_production }}
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          python - <<'PY'
+          import os
+          import ssl
+          from ftplib import FTP_TLS, error_perm
+          from pathlib import Path, PurePosixPath
+
+          host = os.environ["PLESK_FTP_HOST"]
+          username = os.environ["PLESK_FTP_USERNAME"]
+          password = os.environ["PLESK_FTP_PASSWORD"]
+          port = int(os.environ["PLESK_FTP_PORT"])
+          remote_path = os.environ["PLESK_PUBLIC_DOCROOT"]
+          deploy = os.environ["DEPLOY_TO_PLESK"].lower() == "true"
+
+          if remote_path.startswith("/") or "\\" in remote_path:
+              raise SystemExit("PLESK_PUBLIC_DOCROOT must be a relative POSIX path.")
+          parts = [part for part in PurePosixPath(remote_path).parts if part not in ("", ".")]
+          if not parts or any(part == ".." for part in parts):
+              raise SystemExit("PLESK_PUBLIC_DOCROOT is empty or contains unsafe path traversal.")
+
+          root = Path("dist-public").resolve()
+          if not root.is_dir() or not (root / "index.html").is_file():
+              raise SystemExit("dist-public or its index.html is missing.")
+
+          files = []
+          for path in root.rglob("*"):
+              if path.is_symlink():
+                  raise SystemExit(f"Symlink is not permitted in build output: {path}")
+              if path.is_file():
+                  files.append(path)
+          if not files:
+              raise SystemExit("Public build contains no files.")
+
+          # Upload assets before index.html so the new site entry point is exposed last.
+          files.sort(key=lambda p: (
+              p.relative_to(root).as_posix() == "index.html",
+              p.relative_to(root).as_posix()
+          ))
+
+          ftp = FTP_TLS(context=ssl.create_default_context())
+          try:
+              ftp.connect(host, port, timeout=30)
+              ftp.login(username, password)
+              ftp.prot_p()
+              for part in parts:
+                  ftp.cwd(part)
+              remote_root = ftp.pwd()
+
+              print(f"FTPS connection and destination verified: {remote_root}")
+              print(f"Commit: {os.environ['GITHUB_SHA']}")
+              print(f"Files in public build: {len(files)}")
+
+              if not deploy:
+                  print("PREFLIGHT ONLY: no remote files were changed.")
+                  for path in files:
+                      print(f"Would upload: {path.relative_to(root).as_posix()}")
+              else:
+                  for path in files:
+                      relative = path.relative_to(root)
+                      ftp.cwd(remote_root)
+                      for directory in relative.parent.parts:
+                          if directory == ".":
+                              continue
+                          try:
+                              ftp.cwd(directory)
+                          except error_perm:
+                              ftp.mkd(directory)
+                              ftp.cwd(directory)
+                      with path.open("rb") as source:
+                          ftp.storbinary(f"STOR {relative.name}", source)
+                      print(f"Uploaded: {relative.as_posix()}")
+                  print("UPLOAD COMPLETE. No remote files were deleted.")
+          finally:
+              try:
+                  ftp.quit()
+              except Exception:
+                  ftp.close()
+          PY
