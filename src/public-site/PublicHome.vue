@@ -24,6 +24,12 @@ const copy = computed(() => locale.value === 'am' ? {
   missionTitle: 'ተልዕኮ', missionBody: 'በየጊዜው እያደጉ የሚመጡ የቴክኖሎጂ ውጤቶችን በመጠቀም፣ የማኅበረሰቡን ፍላጎት ለማሟላት በገበያ ጥናትና አዋጭነት በተረጋገጡ የንግድ ዘርፎች በመሳተፍ አክሲዮን ማኅበሩን በሁሉም ዘርፍ ተመራጭ ለማድረግ መሥራት።',
   strategyTitle: 'ስትራቴጂያችን', strategyBody: 'የ2036 ራዕያችንን ለማሳካት ዘመኑ ያመጣቸውን ቴክኖሎጂዎች እንጠቀማለን፣ ጠንካራ የኢኮኖሚ ስልቶችን እናዘጋጃለን፣ ለዘላቂነት ትኩረት እንሰጣለን፣ በፈጠራ ክህሎታችን እንመራለን፣ በአዳዲስ ቴክኖሎጂዎችና ሂደቶች ላይ ኢንቨስት በማድረግ የአሠራር ቅልጥፍናን፣ ተደራሽነትንና የደንበኛ እርካታን እናሳድጋለን።',
   valuesEyebrow: 'የምንመራባቸው እሴቶች', valuesTitle: 'መሠረታችን', valuesAccent: 'ግልጽ ነው።', valuesIntro: 'የምንገነባው ሥርዓት በሰዎች እምነት ላይ መመሥረት አለበት።',
+  responsibilityEyebrow: 'ማኅበረሰብና ኃላፊነት', responsibilityTitle: 'ከማኅበረሰቡ ጋር', responsibilityAccent: 'አብሮ ማደግ።',
+  responsibilityIntro: 'የድርጅታችን ዕድገት ከማኅበረሰቡ ደኅንነትና ዕድገት ጋር የተያያዘ እንዲሆን እንፈልጋለን። የአካባቢውን ቅድሚያ ፍላጎቶች በመረዳት፣ ከአቅማችንና ከተፈቀዱ ዕቅዶች ጋር በማጣጣም በተግባራዊ አጋርነት ለዘላቂ ልማት ለማበርከት እንሠራለን።',
+  responsibilityEducation: 'ትምህርትና ክህሎት', responsibilityEducationText: 'የትምህርት ዕድሎችን፣ የክህሎት ልማትንና የዕውቀት ልውውጥን የሚደግፉ አጋርነቶችን መፈለግ።',
+  responsibilityHealth: 'ጤናና ደኅንነት', responsibilityHealthText: 'ለማኅበረሰቡ ጤና፣ ደኅንነትና አካባቢ ጥበቃ የሚያበረክቱ ተግባራትን መደገፍ።',
+  responsibilityLivelihoods: 'ኢኮኖሚያዊ ዕድሎች', responsibilityLivelihoodsText: 'በአካባቢው ሥራ ፈጠራን፣ ምርታማነትንና ዘላቂ የኑሮ ዘዴዎችን የሚያበረታቱ አዋጭ ዕድሎችን መለየት።',
+  responsibilityNote: 'እነዚህ የድርጅቱ የኃላፊነት ቅድሚያዎች ናቸው፤ የተፈጸሙ ፕሮጀክቶች ወይም ቀጣይ የገንዘብ ቃል ኪዳኖች እንዳሉ አያመለክቱም። የተፈጸሙ ተግባራት በማስረጃ ከተረጋገጡ በኋላ ብቻ ይገለጻሉ።',
   servicesEyebrow: 'አገልግሎቶችና መፍትሄዎች', servicesTitle: 'የእኛ አገልግሎቶች', servicesAccent: 'በማስረጃ ይረጋገጣሉ።', servicesIntro: 'በእውነት የሚሰጡ አገልግሎቶች ከተረጋገጡና በአስተዳዳሪ ከጸደቁ በኋላ በዚህ ይታያሉ።',
   preparing: 'በመዘጋጀት ላይ', servicesNote: 'በመመሥረቻ ሰነድ የተዘረዘሩ የንግድ ዓላማዎች ሁሉ በአሁኑ ጊዜ እየተካሄዱ ናቸው ማለት አይደለም። የአሁኑ አገልግሎቶች በማስረጃ ከተረጋገጡ በኋላ ብቻ ይታያሉ።',
   businessTitle: 'በመመሥረቻ ሰነድ የተዘረዘሩ', businessAccent: 'የንግድ ዓላማዎች።', businessIntro: 'የማኅበሩ መመሥረቻ ደንብ የሚያስቀምጣቸው የንግድ ዓላማዎች ከታች ቀርበዋል። በእውነት የሚካሄዱ የንግድ ሥራዎች በተለይ ይለያሉ።',
@@ -48,6 +54,12 @@ const copy = computed(() => locale.value === 'am' ? {
   missionTitle: 'Our mission', missionBody: 'To understand and apply evolving technologies, meet community needs through market research and participation in commercially viable business sectors, and work to make the Share Company a preferred choice across its fields of activity.',
   strategyTitle: 'Our strategy', strategyBody: 'We pursue our 2036 vision through technology adoption, sound economic strategies, sustained commitment to sustainability, innovation, and continued investment in technologies and processes that improve operational efficiency, accessibility and customer satisfaction.',
   valuesEyebrow: 'Our guiding principles', valuesTitle: 'Our foundation is', valuesAccent: 'clear.', valuesIntro: 'The system we build must be grounded in the trust of the people it serves.',
+  responsibilityEyebrow: 'Community & responsibility', responsibilityTitle: 'Growing together', responsibilityAccent: 'with our community.',
+  responsibilityIntro: 'We want the Company’s growth to be connected to the well-being and progress of the communities around us. We aim to understand local priorities and, within our capacity and approved plans, contribute to sustainable development through practical partnerships.',
+  responsibilityEducation: 'Education & skills', responsibilityEducationText: 'Explore partnerships that support learning opportunities, skills development and the exchange of knowledge.',
+  responsibilityHealth: 'Health & well-being', responsibilityHealthText: 'Support initiatives that contribute to community health, well-being and environmental care.',
+  responsibilityLivelihoods: 'Economic opportunity', responsibilityLivelihoodsText: 'Identify viable opportunities that encourage local enterprise, productivity and sustainable livelihoods.',
+  responsibilityNote: 'These are corporate responsibility priorities, not claims that projects have already been delivered or that recurring funding has been committed. Specific activities will be reported only after they are evidenced and approved for publication.',
   servicesEyebrow: 'Services & solutions', servicesTitle: 'Our services are', servicesAccent: 'verified before publication.', servicesIntro: 'Verified descriptions of services actually being delivered will appear here after administrative review and approval.',
   preparing: 'In preparation', servicesNote: 'The business purposes listed in the bylaws do not mean every activity is currently operating. Current services are published only after supporting evidence is reviewed.',
   businessTitle: 'Business purposes stated in', businessAccent: 'the bylaws.', businessIntro: 'The following categories are listed in the company bylaws. Actual operating activities are identified separately and published only after verification.',
@@ -370,6 +382,24 @@ const publicationChannels = [
               <span class="principle-card__rule" aria-hidden="true"></span>
             </article>
           </div>
+        </div>
+      </section>
+
+      <section id="community-responsibility" class="section-pad community-responsibility" aria-labelledby="responsibility-title">
+        <div class="site-container">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow eyebrow--dark" :lang="locale">{{ copy.responsibilityEyebrow }}</p>
+              <h2 id="responsibility-title" :lang="locale">{{ copy.responsibilityTitle }} <span>{{ copy.responsibilityAccent }}</span></h2>
+            </div>
+            <p :lang="locale">{{ copy.responsibilityIntro }}</p>
+          </div>
+          <div class="responsibility-grid">
+            <article><h3 :lang="locale">{{ copy.responsibilityEducation }}</h3><p :lang="locale">{{ copy.responsibilityEducationText }}</p></article>
+            <article><h3 :lang="locale">{{ copy.responsibilityHealth }}</h3><p :lang="locale">{{ copy.responsibilityHealthText }}</p></article>
+            <article><h3 :lang="locale">{{ copy.responsibilityLivelihoods }}</h3><p :lang="locale">{{ copy.responsibilityLivelihoodsText }}</p></article>
+          </div>
+          <p class="responsibility-note" :lang="locale">{{ copy.responsibilityNote }}</p>
         </div>
       </section>
 
@@ -720,6 +750,13 @@ const publicationChannels = [
 .intro-section__columns { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-block-start: 1.5rem; padding-block-start: 1.4rem; border-top: 1px solid var(--arna-line); }
 .intro-section__columns p { margin: 0; color: var(--arna-public-text-secondary); font-size: .94rem; line-height: 2; }
 .principles-section { background: var(--arna-public-surface-soft); }
+.community-responsibility { background: var(--arna-public-surface); }
+.responsibility-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1rem; }
+.responsibility-grid article { padding: 1.5rem; border: 1px solid var(--arna-line); background: var(--arna-public-surface-soft); }
+.responsibility-grid h3 { margin: 0 0 .75rem; color: var(--arna-navy); font-size: 1.08rem; }
+.responsibility-grid p, .responsibility-note { margin: 0; color: var(--arna-public-text-secondary); font-size: .92rem; line-height: 1.9; }
+.responsibility-note { margin-block-start: 1.5rem; padding-inline-start: 1rem; border-inline-start: 3px solid var(--arna-public-accent); }
+@media (max-width: 760px) { .responsibility-grid { grid-template-columns: 1fr; } }
 .section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 2rem; margin-block-end: 2.5rem; }
 .section-heading .eyebrow { margin-block-end: .7rem; }
 .section-heading > p { max-width: 360px; margin: 0 0 .45rem; color: var(--arna-public-text-secondary); font-size: .9rem; line-height: 1.9; }
