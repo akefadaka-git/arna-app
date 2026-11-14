@@ -124,7 +124,7 @@
  *
  *     {
  *       id: 'go-to-workspace',
- *       label: 'ወደ ማሴስ ወርክስፔስ',
+ *       label: 'ወደ ARNA ወርክስፔስ',
  *       icon: 'layout-grid',
  *       permission: 'app.app.access',
  *     }
@@ -152,7 +152,7 @@
  * future role with workspace access)".
  *
  * Reusing an existing confirmed slug satisfies the G1 Q6 condition:
- * "Include `ወደ ማሴስ ወርክስፔስ` only if the existing permission/launch
+ * "Include `ወደ ARNA ወርክስፔስ` only if the existing permission/launch
  * mechanism is verified. Do not invent `app.app.access`." The
  * mechanism is verified; the slug is reused verbatim.
  *
@@ -195,7 +195,7 @@
  * keeps the workspace and admin sidebars consistent in a way that
  * matters when both are open in different tabs.
  *
- * "ወደ ማሴስ ወርክስፔስ" — "To MASES Workspace". Identical to the portal's
+ * "ወደ ARNA ወርክስፔስ" — "To MASES Workspace". Identical to the portal's
  * `go-to-workspace` label. The label names the destination, which is
  * the workspace on both builds; using the same string means a user
  * who has seen the item on the portal recognizes it on the admin.
@@ -216,7 +216,7 @@
  *     reviewer's decision on the workspace label applies here without
  *     a separate review.
  *
- *   · 'ወደ ማሴስ ወርክስፔስ' — the portal's `go-to-workspace` label.
+ *   · 'ወደ ARNA ወርክስፔስ' — the portal's `go-to-workspace` label.
  *     Already on the review list under `shell-labels.ts`'s
  *     "portal back-to-workspace" block. Same reasoning: one review
  *     covers both.
@@ -337,7 +337,7 @@ export const adminNavItems: ReadonlyArray<NavItem> = [
 export const adminUserMenuItems: ReadonlyArray<UserMenuItem> = [
   {
     id: 'go-to-workspace',
-    label: 'ወደ ማሴስ ወርክስፔስ',
+    label: 'ወደ ARNA ወርክስፔስ',
     icon: 'layout-grid',
     permission: 'app.app.access',
   },
