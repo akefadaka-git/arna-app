@@ -113,13 +113,21 @@ The returned job evidence reports success for:
 
 This is exact-head CI evidence for PR #63's head. It is not an exact-head workflow result for the merge commit `85751ca489b7e2a250da46f408b040254827a199`.
 
-### 5.2 Current main HEAD
+### 5.2 Reconciled A1/A2 review candidate
+
+PR #64 head: `5027909d8067a109bfa21ef4f641e200376ed648`.
+
+GitHub Actions run **43634496361** — [Frontend verification](https://github.com/akefadaka-git/arna-app/actions/runs/43634496361) — completed with conclusion **success** on that exact PR head. The single job completed successfully, including dependency installation and advisory checks, type-check and all four builds, static-output and public-build smoke checks, brand palette/contrast contract, bilingual theme/component contract, responsive App Shell contract, wallet/dashboard contracts, public browser/WCAG 2.2 axe contracts, and artifact upload.
+
+This exact-head run verifies the documentation review branch against its current-main code baseline. It does not constitute a manual WCAG audit or a production-host visual audit.
+
+### 5.3 Current main HEAD
 
 A query for workflow runs associated with current main SHA `85751ca489b7e2a250da46f408b040254827a199` returned no PR-triggered workflow runs. The combined commit-status query returned no status records.
 
 **UNVERIFIED:** No exact-main-head CI success is claimed in this report. The successful PR #63 head run must not be transferred to the later merge commit as if it were a run on that exact SHA.
 
-### 5.3 Historical Design System candidate evidence
+### 5.4 Historical Design System candidate evidence
 
 PR #19 reports successful run **41206074547** on its exact verified head `9aa562bd87b96af21ede8d649a8bcdea81927f7f`. This historical run is valid for that SHA only. It does not validate current main or any later candidate head.
 
