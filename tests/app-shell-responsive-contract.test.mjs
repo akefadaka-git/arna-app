@@ -35,7 +35,7 @@ test('brand lockup uses the circular corporate emblem, bilingual identity and ta
   assert.match(brand, /src="\/logo\.png"/);
   assert.match(brand, /width="56"[\s\S]*height="56"/);
   assert.match(brand, /border-radius:\s*50%/);
-  assert.match(brand, /masesBrandLabels\.tagline/);
+  assert.match(brand, /aranaBrandLabels\.tagline/);
   assert.match(labels, /tagline:\s*'Lead by example • Build lasting trust'/);
 });
 
@@ -52,7 +52,7 @@ test('brand lockup uses the approved emblem, product name, and descriptive tagli
   assert.match(brand, /src="\/logo\.png"/);
   assert.match(brand, /border-radius:\s*50%/);
   assert.match(brand, /width:\s*56px/);
-  assert.match(brand, /masesBrandLabels\.productName/);
+  assert.match(brand, /aranaBrandLabels\.productName/);
   assert.match(brand, /Maale Arna Smart System/);
 });
 
@@ -99,7 +99,7 @@ test('E.C. is the default calendar and G.C. is a mutually exclusive preference',
 
 test('date-bearing views use the shared calendar formatter instead of dual calendar labels', () => {
   const center = readFileSync('src/features/notifications/NotificationsCenter.vue', 'utf8');
-  const footer = readFileSync('src/layouts/AppShell/MASESFooterContent/MASESFooterContent.vue', 'utf8');
+  const footer = readFileSync('src/layouts/AppShell/AranaFooterContent/AranaFooterContent.vue', 'utf8');
   assert.match(center, /formatCalendarDate\(value/);
   assert.match(footer, /formatCalendarDate\(new Date\(\)/);
 });
