@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
-import { masesBrandLabels } from '@/router/shell-labels';
+import { aranaBrandLabels } from '@/router/shell-labels';
 import ThemePreferenceControl from '@/layouts/ThemePreferenceControl.vue';
 
 const appName: string = import.meta.env.VITE_APP_NAME || 'ARNA';
@@ -11,7 +11,7 @@ const appName: string = import.meta.env.VITE_APP_NAME || 'ARNA';
     <a class="public-site-layout__skip-link" href="#public-site-main">ወደ ዋናው ይዘት ዝለል</a>
     <header class="public-site-layout__header">
       <nav class="public-site-layout__nav" aria-label="ዋና አሰሳ">
-        <RouterLink class="public-site-layout__brand" to="/" :aria-label="masesBrandLabels.fullCorporateIdentity"><img class="public-site-layout__emblem" src="/logo.png" alt="" width="40" height="40" /><span>{{ masesBrandLabels.fullCorporateIdentity }}</span></RouterLink>
+        <RouterLink class="public-site-layout__brand" to="/" :aria-label="aranaBrandLabels.fullCorporateIdentity"><img class="public-site-layout__emblem" src="/logo.png" alt="" width="40" height="40" /><span>{{ aranaBrandLabels.fullCorporateIdentity }}</span></RouterLink>
         <div class="public-site-layout__links">
           <RouterLink to="/verify">ሰነድ ማረጋገጫ</RouterLink>
           <RouterLink to="/legal">ሕጋዊ መረጃ</RouterLink>
