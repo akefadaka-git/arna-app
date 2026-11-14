@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { fetchCorporateHome, fetchCorporatePages, type CorporateLocale, type CorporateSitePage, type CorporateSiteSection } from '@/features/public-site/api';
+import { fetchCorporateHome, fetchCorporatePages, fetchCorporateEntries, submitCorporateInquiry, submitCorporateOpportunity, type CorporateLocale, type CorporateSitePage, type CorporateSiteSection, type CorporatePublicEntry } from '@/features/public-site/api';
 
 type SectionContent = {
   eyebrow?: string;
@@ -15,6 +15,7 @@ type SectionContent = {
   cta_label?: string;
   cta_url?: string;
   items?: Array<{ title?: string; body?: string; description?: string; image_url?: string; image_alt?: string; label?: string; value?: string; status?: string; url?: string }>;
+  projects?: Array<{ title?: string; summary?: string; body?: string; approval_status?: string; evidence_reference?: string; partner?: string; budget?: string; outcome?: string }>;
   [key: string]: unknown;
 };
 
@@ -25,6 +26,24 @@ const page = ref<CorporateSitePage | null>(null);
 const pages = ref<CorporateSitePage[]>([]);
 const loading = ref(true);
 const error = ref(false);
+const entryCollections = ref<Record<string, CorporatePublicEntry[]>>({});
+const inquiryDraft = ref({ inquiry_type: 'general' as const, name: '', email: '', phone: '', subject: '', message: '', consent: false, website: '' });
+const inquiryStatus = ref('');
+const opportunityDraft = ref({ type: 'career' as 'career' | 'opportunity' | 'advertisement' | 'marketplace', name: '', email: '', title: '', description: '', organization: '' });
+const opportunityStatus = ref('');
+const submitting = ref(false);
+const feedGroups = computed(() => [
+  { type: 'news', title: locale.value === 'am' ? 'ዜና' : 'News', entries: entryCollections.value.news ?? [] },
+  { type: 'announcement', title: locale.value === 'am' ? 'ማስታወቂያዎች' : 'Announcements', entries: entryCollections.value.announcement ?? [] },
+  { type: 'publication', title: locale.value === 'am' ? 'ህትመቶች' : 'Publications', entries: entryCollections.value.publication ?? [] },
+  { type: 'media', title: locale.value === 'am' ? 'ሚዲያ' : 'Media', entries: entryCollections.value.media ?? [] },
+  { type: 'business', title: locale.value === 'am' ? 'የንግድ ክፍሎች' : 'Business areas', entries: entryCollections.value.business ?? [] },
+  { type: 'service', title: locale.value === 'am' ? 'አገልግሎቶች' : 'Services', entries: entryCollections.value.service ?? [] },
+  { type: 'career', title: locale.value === 'am' ? 'የሥራ እድሎች' : 'Careers', entries: entryCollections.value.career ?? [] },
+  { type: 'opportunity', title: locale.value === 'am' ? 'እድሎች' : 'Opportunities', entries: entryCollections.value.opportunity ?? [] },
+  { type: 'marketplace', title: locale.value === 'am' ? 'ገበያ' : 'Marketplace', entries: entryCollections.value.marketplace ?? [] },
+  { type: 'advertisement', title: locale.value === 'am' ? 'ማስታወቂያ' : 'Advertising', entries: entryCollections.value.advertisement ?? [] },
+]);
 const communitySection = (section: CorporateSiteSection) =>
   ['community_responsibility', 'community-responsibility', 'responsibility'].includes(section.type.toLowerCase());
 const visibleSections = computed(() => (page.value?.sections ?? []).filter((section) =>
@@ -51,6 +70,9 @@ async function load(): Promise<void> {
     ]);
     page.value = home;
     pages.value = publishedPages.filter((item) => item.page_key !== 'home');
+    const types = ['news', 'announcement', 'publication', 'media', 'business', 'service', 'career', 'opportunity', 'marketplace', 'advertisement'];
+    const results = await Promise.allSettled(types.map((type) => fetchCorporateEntries(type, locale.value)));
+    entryCollections.value = Object.fromEntries(types.map((type, index) => [type, results[index].status === 'fulfilled' ? results[index].value : []]));
     if (home?.seo?.title) document.title = home.seo.title;
     else document.title = home?.title ? `${home.title} | Maale Arna` : 'Maale Arna | Official Website';
     let description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
@@ -68,6 +90,29 @@ async function load(): Promise<void> {
   } finally {
     loading.value = false;
   }
+}
+async function submitInquiry(): Promise<void> {
+  submitting.value = true;
+  inquiryStatus.value = '';
+  try {
+    const result = await submitCorporateInquiry(inquiryDraft.value);
+    inquiryStatus.value = locale.value === 'am' ? `ጥያቄዎ ተቀብሏል። ማጣቀሻ: ${result.reference}` : `Your inquiry was received. Reference: ${result.reference}`;
+    inquiryDraft.value = { inquiry_type: 'general', name: '', email: '', phone: '', subject: '', message: '', consent: false, website: '' };
+  } catch {
+    inquiryStatus.value = locale.value === 'am' ? 'ጥያቄው አልተላከም። እባክዎ ያረጋግጡና ይድገሙ።' : 'The inquiry could not be sent. Please check the form and try again.';
+  } finally { submitting.value = false; }
+}
+async function submitOpportunity(): Promise<void> {
+  submitting.value = true;
+  opportunityStatus.value = '';
+  try {
+    const { type, ...draft } = opportunityDraft.value;
+    const result = await submitCorporateOpportunity(type, { ...draft, locale: locale.value });
+    opportunityStatus.value = locale.value === 'am' ? `ማቅረቢያዎ ተቀብሏል። ማጣቀሻ: ${result.reference}` : `Your submission was received. Reference: ${result.reference}`;
+    opportunityDraft.value = { type: 'career', name: '', email: '', title: '', description: '', organization: '' };
+  } catch {
+    opportunityStatus.value = locale.value === 'am' ? 'ማቅረቢያው አልተላከም። እባክዎ ያረጋግጡና ይድገሙ።' : 'The submission could not be sent. Please check the form and try again.';
+  } finally { submitting.value = false; }
 }
 async function switchLocale(): Promise<void> {
   const next = locale.value === 'am' ? 'en' : 'am';
@@ -102,8 +147,8 @@ watch(() => route.query.locale, (value) => {
     <main id="main-content">
       <div v-if="loading" class="state-panel" role="status">{{ locale === 'am' ? 'ይዘት በመጫን ላይ…' : 'Loading published content…' }}</div>
       <div v-else-if="error" class="state-panel" role="alert">{{ locale === 'am' ? 'ይዘቱን ማምጣት አልተቻለም። እባክዎ ቆይተው ይሞክሩ።' : 'Published content could not be loaded. Please try again later.' }}</div>
-      <div v-else-if="!page" class="state-panel">{{ locale === 'am' ? 'የተጸደቀ የድረ ገጽ ይዘት በመዘጋጀት ላይ ነው።' : 'Approved website content is being prepared.' }}</div>
       <template v-else>
+        <template v-if="page">
         <section v-for="(section, index) in visibleSections" :id="sectionId(section, index)" :key="section.id || index"
           class="content-section" :class="{ 'content-section--hero': ['hero', 'banner'].includes(section.type.toLowerCase()), 'content-section--responsibility': communitySection(section) }">
           <div class="content-section__inner">
@@ -142,6 +187,71 @@ watch(() => route.query.locale, (value) => {
           </div>
         </section>
         <p v-if="!visibleSections.length" class="state-panel">{{ locale === 'am' ? 'የታተሙ የይዘት ክፍሎች የሉም።' : 'No published page sections are available.' }}</p>
+        </template>
+        <section v-else class="content-section content-section--responsibility" aria-labelledby="responsibility-fallback-title">
+          <div class="content-section__inner">
+            <p class="eyebrow">{{ locale === 'am' ? 'የድርጅቱ ቋሚ ቁርጠኝነት' : 'PERMANENT CORPORATE COMMITMENT' }}</p>
+            <h1 id="responsibility-fallback-title" class="section-title">{{ locale === 'am' ? 'ማኅበረሰባዊ ኃላፊነት' : 'Community Responsibility' }}</h1>
+            <p class="section-copy">{{ locale === 'am' ? 'በትምህርት፣ በጤና፣ በአካባቢ ጥበቃ እና በአካባቢያዊ ኢኮኖሚያዊ እድሎች ላይ የሚያተኩሩ የድርጅቱ ቅድሚያ አቅጣጫዎች። የተወሰኑ ፕሮጀክቶች በይፋ የሚታዩት ሲጸድቁና ሲመዘገቡ ብቻ ነው።' : 'Corporate priorities include education, community health, environmental care and local economic opportunity. Specific projects are published only after approval and documentation.' }}</p>
+            <div class="content-grid">
+              <article class="content-card"><h3>{{ locale === 'am' ? 'ትምህርትና ክህሎት ልማት' : 'Education & skills development' }}</h3></article>
+              <article class="content-card"><h3>{{ locale === 'am' ? 'የማኅበረሰብ ጤናና ደህንነት' : 'Community health & well-being' }}</h3></article>
+              <article class="content-card"><h3>{{ locale === 'am' ? 'የአካባቢ ጥበቃ' : 'Environmental care' }}</h3></article>
+              <article class="content-card"><h3>{{ locale === 'am' ? 'አካባቢያዊ ኢኮኖሚያዊ እድልና ዘላቂ ኑሮ' : 'Local economic opportunity & sustainable livelihoods' }}</h3></article>
+            </div>
+          </div>
+        </section>
+        <section v-for="group in feedGroups" :key="group.type" class="content-section" :aria-labelledby="`feed-${group.type}`">
+          <div class="content-section__inner">
+            <h2 :id="`feed-${group.type}`" class="section-title">{{ group.title }}</h2>
+            <div v-if="group.entries.length" class="content-grid">
+              <article v-for="entry in group.entries" :key="entry.public_id" class="content-card">
+                <h3>{{ entry.title }}</h3><p>{{ entry.summary || entry.body }}</p>
+                <small v-if="entry.published_at">{{ new Date(entry.published_at).toLocaleDateString(locale === 'am' ? 'am-ET' : 'en-ET') }}</small>
+              </article>
+            </div>
+            <p v-else class="section-note">{{ locale === 'am' ? 'በአሁኑ ጊዜ የተጸደቀ ይዘት የለም።' : 'No approved content is currently published.' }}</p>
+          </div>
+        </section>
+        <section class="content-section" aria-labelledby="opportunity-form-title">
+          <div class="content-section__inner">
+            <h2 id="opportunity-form-title" class="section-title">{{ locale === 'am' ? 'የሥራና የትብብር እድሎች' : 'Careers & opportunity submissions' }}</h2>
+            <form class="public-form" @submit.prevent="submitOpportunity">
+              <label>{{ locale === 'am' ? 'የማቅረቢያ አይነት' : 'Submission type' }}
+                <select v-model="opportunityDraft.type"><option value="career">{{ locale === 'am' ? 'ሥራ' : 'Career' }}</option><option value="opportunity">{{ locale === 'am' ? 'እድል' : 'Opportunity' }}</option><option value="advertisement">{{ locale === 'am' ? 'ማስታወቂያ' : 'Advertisement' }}</option><option value="marketplace">Marketplace</option></select>
+              </label>
+              <label>{{ locale === 'am' ? 'ሙሉ ስም' : 'Full name' }}<input v-model="opportunityDraft.name" required maxlength="160"></label>
+              <label>Email<input v-model="opportunityDraft.email" type="email" required maxlength="190"></label>
+              <label>{{ locale === 'am' ? 'ድርጅት' : 'Organization' }}<input v-model="opportunityDraft.organization" maxlength="180"></label>
+              <label>{{ locale === 'am' ? 'ርዕስ' : 'Title' }}<input v-model="opportunityDraft.title" required maxlength="180"></label>
+              <label>{{ locale === 'am' ? 'መግለጫ' : 'Description' }}<textarea v-model="opportunityDraft.description" required maxlength="12000" rows="4"></textarea></label>
+              <button type="submit" :disabled="submitting">{{ locale === 'am' ? 'ላክ' : 'Submit' }}</button>
+              <p v-if="opportunityStatus" role="status">{{ opportunityStatus }}</p>
+            </form>
+          </div>
+        </section>
+        <section class="content-section" aria-labelledby="contact-form-title">
+          <div class="content-section__inner">
+            <h2 id="contact-form-title" class="section-title">{{ locale === 'am' ? 'ያግኙን' : 'Contact us' }}</h2>
+            <form class="public-form" @submit.prevent="submitInquiry">
+              <label>{{ locale === 'am' ? 'የጥያቄ አይነት' : 'Inquiry type' }}
+                <select v-model="inquiryDraft.inquiry_type"><option value="general">{{ locale === 'am' ? 'አጠቃላይ' : 'General' }}</option><option value="investor">{{ locale === 'am' ? 'ባለአክሲዮን / ኢንቨስተር' : 'Shareholder / investor' }}</option><option value="partnership">{{ locale === 'am' ? 'አጋርነት' : 'Partnership' }}</option><option value="media">Media</option></select>
+              </label>
+              <label>{{ locale === 'am' ? 'ሙሉ ስም' : 'Full name' }}<input v-model="inquiryDraft.name" required maxlength="160"></label>
+              <label>Email<input v-model="inquiryDraft.email" type="email" required maxlength="190"></label>
+              <label>{{ locale === 'am' ? 'ስልክ' : 'Phone' }}<input v-model="inquiryDraft.phone" maxlength="50"></label>
+              <label>{{ locale === 'am' ? 'ርዕስ' : 'Subject' }}<input v-model="inquiryDraft.subject" required maxlength="200"></label>
+              <label>{{ locale === 'am' ? 'መልዕክት' : 'Message' }}<textarea v-model="inquiryDraft.message" required maxlength="10000" rows="5"></textarea></label>
+              <label class="consent"><input v-model="inquiryDraft.consent" type="checkbox" required> {{ locale === 'am' ? 'መረጃዬ ለዚህ ጥያቄ እንዲጠቀም እስማማለሁ።' : 'I consent to the use of my information to respond to this inquiry.' }}</label>
+              <label class="honeypot" aria-hidden="true">Website<input v-model="inquiryDraft.website" tabindex="-1" autocomplete="off"></label>
+              <button type="submit" :disabled="submitting">{{ locale === 'am' ? 'መልዕክት ላክ' : 'Send inquiry' }}</button>
+              <p v-if="inquiryStatus" role="status">{{ inquiryStatus }}</p>
+            </form>
+          </div>
+        </section>
+        <section class="content-section">
+          <div class="content-section__inner"><h2 class="section-title">{{ locale === 'am' ? 'የአክሲዮን ሰነድ ማረጋገጫ' : 'Share certificate verification' }}</h2><p class="section-copy">{{ locale === 'am' ? 'የአክሲዮን ሰነድዎን በይፋዊ የማረጋገጫ ገጽ ያረጋግጡ።' : 'Verify a share certificate through the official verification page.' }}</p><RouterLink to="/verify">{{ locale === 'am' ? 'ሰነድ ያረጋግጡ' : 'Verify document' }}</RouterLink></div>
+        </section>
       </template>
     </main>
 
@@ -179,6 +289,7 @@ watch(() => route.query.locale, (value) => {
 .card-value{font-size:2rem}.card-status,.section-note{font-size:.9rem;line-height:1.6}
 .section-image{max-width:900px;margin-top:2rem}.section-cta{display:inline-block;margin-top:1.5rem}
 .state-panel{max-width:900px;margin:5rem auto;padding:2rem;text-align:center}
+.public-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;max-width:850px}.public-form label{display:grid;gap:.4rem;font-weight:600}.public-form input,.public-form select,.public-form textarea{width:100%;min-width:0;padding:.8rem;border:1px solid var(--arna-public-border-subtle);border-radius:.5rem;background:var(--arna-public-surface);color:inherit;font:inherit}.public-form button{justify-self:start;border:0;border-radius:999px;padding:.8rem 1.4rem;background:var(--arna-public-action);color:white;font:inherit;cursor:pointer}.public-form button:disabled{opacity:.55;cursor:wait}.public-form .consent,.public-form p{grid-column:1/-1}.public-form .consent{display:flex;align-items:center}.public-form .consent input{width:auto}.honeypot{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 .site-footer{padding:2.5rem 1.5rem;text-align:center;background:var(--arna-public-brand-anchor);color:var(--arna-color-white)}.site-footer p{margin:0 0 .4rem}
-@media(max-width:760px){.site-header__inner{align-items:flex-start;flex-wrap:wrap}.site-header nav{order:3;flex-basis:100%;justify-content:flex-start}.brand{flex:1}.content-section{padding-inline:1rem}}
+@media(max-width:760px){.public-form{grid-template-columns:1fr}.site-header__inner{align-items:flex-start;flex-wrap:wrap}.site-header nav{order:3;flex-basis:100%;justify-content:flex-start}.brand{flex:1}.content-section{padding-inline:1rem}}
 </style>
