@@ -66,7 +66,7 @@
    the touchpoints.
 
  Dependency note:
-   · No new import. The component continues to import masesBrandLabels
+   · No new import. The component continues to import aranaBrandLabels
      from @/router/shell-labels (v1.10.0).
    · No new token. The <img> sizing uses component-local dimensions
      documented in §"Token discipline". The surrounding text styles
@@ -131,7 +131,7 @@
  The full approved corporate identity is
  `ማሌ ዓርና ስማርት ሲስተም (ማሴስ)` ("Maale Arna Smart System (MASES)"). It
  is exported from @/router/shell-labels as
- `masesBrandLabels.fullCorporateIdentity` for surfaces with more room
+ `aranaBrandLabels.fullCorporateIdentity` for surfaces with more room
  (page titles, document.title, About panels). The header's brand
  region renders the short form.
 
@@ -453,7 +453,7 @@
 -->
 
 <script setup lang="ts">
-import { masesBrandLabels } from '@/router/shell-labels';
+import { aranaBrandLabels } from '@/router/shell-labels';
 </script>
 
 <template>
@@ -510,15 +510,15 @@ import { masesBrandLabels } from '@/router/shell-labels';
       <span
         class="arana-brand__corporate"
         data-testid="arana-brand-corporate"
-      >{{ masesBrandLabels.corporateName }}</span>
+      >{{ aranaBrandLabels.corporateName }}</span>
       <span
         class="arana-brand__product"
         data-testid="arana-brand-product"
-      >{{ masesBrandLabels.productName }}</span>
+      >{{ aranaBrandLabels.productName }}</span>
       <span
         class="arana-brand__tagline"
         data-testid="arana-brand-tagline"
-      >{{ masesBrandLabels.tagline }}</span>
+      >{{ aranaBrandLabels.tagline }}</span>
     </span>
   </span>
 </template>
