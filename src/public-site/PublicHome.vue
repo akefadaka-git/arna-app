@@ -20,6 +20,9 @@ const copy = computed(() => locale.value === 'am' ? {
   aboutEyebrow: 'ስለ እኛ', aboutTitle1: 'የተለያዩ የንግድ ዘርፎችን', aboutTitle2: 'በኃላፊነት የሚያሳድግ', aboutAccent: 'ድርጅት።',
   aboutP1: 'ማሌ ዓርና አክሲዮን ማኅበር ዋና መሥሪያ ቤቱን በደቡብ ኦሞ ዞን፣ ማሌ ወረዳ፣ ኮይቤ ቀበሌ ያደረገ የአክሲዮን ማኅበር ነው።',
   aboutP2: 'መመሥረቻ ዓላማዎቹ ግብርና፣ ማዕድን፣ ማኑፋክቸሪንግ፣ ኮንስትራክሽን፣ ንግድ፣ ትራንስፖርት፣ ፋይናንስ፣ ኢንሹራንስ፣ ሪል እስቴትና ማኅበራዊ አገልግሎቶችን ያካትታሉ። የእያንዳንዱ ዘርፍ የአሁኑ የሥራ ሁኔታ በተለይ ይረጋገጣል።',
+  visionTitle: 'ራዕይ', visionBody: 'በ2036 ዓ.ም በቴክኖሎጂ አጠቃቀም፣ በኢኮኖሚ አቅም እና በተደራሽነት በኢትዮጵያ ካሉ 10 ከፍተኛ ተወዳዳሪ ድርጅቶች መካከል መግባት።',
+  missionTitle: 'ተልዕኮ', missionBody: 'በየጊዜው እያደጉ የሚመጡ የቴክኖሎጂ ውጤቶችን በመጠቀም፣ የማኅበረሰቡን ፍላጎት ለማሟላት በገበያ ጥናትና አዋጭነት በተረጋገጡ የንግድ ዘርፎች በመሳተፍ አክሲዮን ማኅበሩን በሁሉም ዘርፍ ተመራጭ ለማድረግ መሥራት።',
+  strategyTitle: 'ስትራቴጂያችን', strategyBody: 'የ2036 ራዕያችንን ለማሳካት ዘመኑ ያመጣቸውን ቴክኖሎጂዎች እንጠቀማለን፣ ጠንካራ የኢኮኖሚ ስልቶችን እናዘጋጃለን፣ ለዘላቂነት ትኩረት እንሰጣለን፣ በፈጠራ ክህሎታችን እንመራለን፣ በአዳዲስ ቴክኖሎጂዎችና ሂደቶች ላይ ኢንቨስት በማድረግ የአሠራር ቅልጥፍናን፣ ተደራሽነትንና የደንበኛ እርካታን እናሳድጋለን።',
   valuesEyebrow: 'የምንመራባቸው እሴቶች', valuesTitle: 'መሠረታችን', valuesAccent: 'ግልጽ ነው።', valuesIntro: 'የምንገነባው ሥርዓት በሰዎች እምነት ላይ መመሥረት አለበት።',
   servicesEyebrow: 'አገልግሎቶችና መፍትሄዎች', servicesTitle: 'የእኛ አገልግሎቶች', servicesAccent: 'በማስረጃ ይረጋገጣሉ።', servicesIntro: 'በእውነት የሚሰጡ አገልግሎቶች ከተረጋገጡና በአስተዳዳሪ ከጸደቁ በኋላ በዚህ ይታያሉ።',
   preparing: 'በመዘጋጀት ላይ', servicesNote: 'በመመሥረቻ ሰነድ የተዘረዘሩ የንግድ ዓላማዎች ሁሉ በአሁኑ ጊዜ እየተካሄዱ ናቸው ማለት አይደለም። የአሁኑ አገልግሎቶች በማስረጃ ከተረጋገጡ በኋላ ብቻ ይታያሉ።',
@@ -41,6 +44,9 @@ const copy = computed(() => locale.value === 'am' ? {
   aboutEyebrow: 'About us', aboutTitle1: 'A diversified enterprise', aboutTitle2: 'developing opportunities with', aboutAccent: 'responsibility.',
   aboutP1: 'Maale Arna Share Company is an Ethiopian share company headquartered in Koybe Kebele, Maale Woreda, South Omo Zone.',
   aboutP2: 'Its bylaws establish purposes spanning agriculture, mining, manufacturing, construction, trade, transport, finance, insurance, real estate and community, social and personal services. Current operating status is verified separately for each activity.',
+  visionTitle: 'Our vision', visionBody: 'By 2036 E.C., to rank among Ethiopia’s ten leading competitive enterprises in technology adoption, economic capacity and accessibility.',
+  missionTitle: 'Our mission', missionBody: 'To understand and apply evolving technologies, meet community needs through market research and participation in commercially viable business sectors, and work to make the Share Company a preferred choice across its fields of activity.',
+  strategyTitle: 'Our strategy', strategyBody: 'We pursue our 2036 vision through technology adoption, sound economic strategies, sustained commitment to sustainability, innovation, and continued investment in technologies and processes that improve operational efficiency, accessibility and customer satisfaction.',
   valuesEyebrow: 'Our guiding principles', valuesTitle: 'Our foundation is', valuesAccent: 'clear.', valuesIntro: 'The system we build must be grounded in the trust of the people it serves.',
   servicesEyebrow: 'Services & solutions', servicesTitle: 'Our services are', servicesAccent: 'verified before publication.', servicesIntro: 'Verified descriptions of services actually being delivered will appear here after administrative review and approval.',
   preparing: 'In preparation', servicesNote: 'The business purposes listed in the bylaws do not mean every activity is currently operating. Current services are published only after supporting evidence is reviewed.',
@@ -185,24 +191,10 @@ function publishedDate(value: string | null): string {
 
 
 const principles = [
-  {
-    number: '01',
-    titleAm: 'መተማመን',
-    titleEn: 'Trust',
-    description: 'በግልጽ ሂደቶች፣ በተጠያቂነት እና በታማኝ አሠራር ላይ የተመሠረተ ግንኙነት።', descriptionEn: 'Relationships grounded in clear processes, accountability and trustworthy practice.',
-  },
-  {
-    number: '02',
-    titleAm: 'ግልጽነት',
-    titleEn: 'Transparency',
-    description: 'ውሳኔዎችና መረጃዎች በቀላሉ እንዲገኙና እንዲረዱ ማድረግ።', descriptionEn: 'Making decisions and information easy to access and understand.',
-  },
-  {
-    number: '03',
-    titleAm: 'ተጠያቂነት',
-    titleEn: 'Accountability',
-    description: 'ኃላፊነት ያለውን አመራር፣ ቁጥጥር እና ጥንቃቄ የተሞላበት አስተዳደር መደገፍ።', descriptionEn: 'Supporting responsible leadership, oversight and careful governance.',
-  },
+  { number: '01', titleAm: 'ሐቀኝነት', titleEn: 'Integrity', description: 'በሁሉም ግንኙነቶቻችን ከፍተኛ የሥነ ምግባር መሥፈርትን በማክበር በሐቀኝነት እንሠራለን።', descriptionEn: 'We uphold high ethical standards and act honestly in all our relationships.' },
+  { number: '02', titleAm: 'ልህቀት', titleEn: 'Excellence', description: 'በምርቶቻችን ጥራትና በአሠራራችን ቅልጥፍና የላቀ ደረጃ ለማስመዝገብ እንጥራለን።', descriptionEn: 'We continually pursue high standards in product quality and operational effectiveness.' },
+  { number: '03', titleAm: 'ፈጠራ', titleEn: 'Innovation', description: 'ለውጥን በመቀበል የማኅበረሰቡን ችግሮች የሚፈቱ አዳዲስ መንገዶችን እንፈልጋለን።', descriptionEn: 'We embrace change and seek new ways to solve community needs and challenges.' },
+  { number: '04', titleAm: 'ዘላቂነት', titleEn: 'Sustainability', description: 'አካባቢን የሚጠብቁና ለማኅበረሰቡ ደህንነት የሚያበረክቱ ዘላቂ የንግድ ሥራዎችን እንደግፋለን።', descriptionEn: 'We support sustainable business practices that protect the environment and contribute to community well-being.' },
 ];
 
 const businessAreas = [
@@ -343,6 +335,20 @@ const publicationChannels = [
               <p :lang="locale">{{ copy.aboutP2 }}</p>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section id="vision-mission" class="section-pad" aria-labelledby="vision-title">
+        <div class="site-container">
+          <div class="section-heading">
+            <div><p class="eyebrow eyebrow--dark">{{ locale === 'am' ? 'የድርጅታችን አቅጣጫ' : 'OUR CORPORATE DIRECTION' }}</p><h2 id="vision-title" :lang="locale">{{ locale === 'am' ? 'ራዕይና' : 'Vision &' }} <span>{{ locale === 'am' ? 'ተልዕኮ' : 'mission' }}</span></h2></div>
+            <p :lang="locale">{{ locale === 'am' ? 'የረጅም ጊዜ ግባችንን እና የምንሠራበትን መንገድ የሚመሩ መርሆዎች።' : 'The long-term ambition and purpose that guide our work.' }}</p>
+          </div>
+          <div class="intro-section__columns">
+            <article><h3 :lang="locale">{{ copy.visionTitle }}</h3><p :lang="locale">{{ copy.visionBody }}</p></article>
+            <article><h3 :lang="locale">{{ copy.missionTitle }}</h3><p :lang="locale">{{ copy.missionBody }}</p></article>
+          </div>
+          <article class="strategy-summary"><h3 :lang="locale">{{ copy.strategyTitle }}</h3><p :lang="locale">{{ copy.strategyBody }}</p></article>
         </div>
       </section>
 
