@@ -6,7 +6,7 @@
  * File:      mase_app/src/router/shell-labels.ts  (AMEND)
  * Unit:      CR-FOOTER1 — footer content labels
  * Delivery type:  Amendment — one new exported const
- *                 (`masesFooterLabels`), a new consumer in the
+ *                 (`aranaFooterLabels`), a new consumer in the
  *                 §"Consumed by" list, a new export group, a new
  *                 paragraph in §"Terms handled deliberately" on the
  *                 copyright string and its computed year, revision
@@ -21,9 +21,9 @@
  *   number in the bottom-right corner.
  *
  * After (v1.10.0):
- *   A new exported const `masesFooterLabels` is added:
+ *   A new exported const `aranaFooterLabels` is added:
  *
- *       masesFooterLabels = {
+ *       aranaFooterLabels = {
  *         copyrightTemplate:
  *           '© 2016 - {year} ማሌ ዓርና አክሲዮን ማኅበር፥ መብቱ የተጠበቀ ነው።',
  *         legalLinkLabel:   'ሕጋዊ መረጃ',
@@ -160,7 +160,7 @@
  *       masesBrandLabels = {
  *         corporateName:         'ማሌ ዓርና',
  *         productName:           'ማሴስ',
- *         fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ማሴስ)',
+ *         fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ARNA)',
  *       } as const;
  *
  *   The header renders the two-line short form:
@@ -831,7 +831,7 @@
  * Revision history
  * -----------------------------------------------------------------------------
  * 1.10.0 — footer content labels (CR-FOOTER1). One new exported const
- *          `masesFooterLabels`, carrying the copyright template
+ *          `aranaFooterLabels`, carrying the copyright template
  *          ('© 2016 - {year} ማሌ ዓርና አክሲዮን ማኅበር፥ መብቱ የተጠበቀ ነው።'),
  *          the legal link label ('ሕጋዊ መረጃ'), and the support link
  *          label ('ድጋፍ'). Consumed by MASESFooterContent.vue (a
@@ -1052,7 +1052,7 @@
  *                              fullCorporateIdentity }
  *
  *   2. Footer content — shared by both builds.
- *          masesFooterLabels: { copyrightTemplate, legalLinkLabel,
+ *          aranaFooterLabels: { copyrightTemplate, legalLinkLabel,
  *                               supportLinkLabel }
  *
  *   3. Shell chrome labels — shared by both builds.
@@ -1131,7 +1131,7 @@
  * top of this file for why the corporate emblem is not rendered in the
  * header.
  *
- * The 1.10.0 revision adds no icon either. `masesFooterLabels` carries
+ * The 1.10.0 revision adds no icon either. `aranaFooterLabels` carries
  * no icon field — the footer's legal and support links are text
  * labels. Social link labels, which would require icon support, are
  * deferred; see the CR-FOOTER1 block for why the BaseIcon registry
@@ -1447,7 +1447,7 @@ import type {
  */
 export const masesBrandLabels = {
   corporateName: 'ማሌ ዓርና',
-  productName: 'ማሴስ',
+  productName: 'ARNA',
   tagline: 'Lead by example • Build lasting trust',
   fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ማሴስ)',
 } as const;
@@ -1480,7 +1480,7 @@ export const masesBrandLabels = {
  * text-only social links wait for the official URLs and the Amharic
  * label forms.
  */
-export const masesFooterLabels = {
+export const aranaFooterLabels = {
   /**
    * The copyright line. `{year}` is replaced by the current Ethiopian
    * calendar year at render time.
