@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 
 const tokens = readFileSync('src/styles/tokens.css', 'utf8');
-const publicHome = readFileSync('src/public-site/PublicHome.vue', 'utf8');
+const publicHome = readFileSync('src/public-site/CorporateDynamicHome.vue', 'utf8');
 const publicLayout = readFileSync('src/layouts/PublicSiteLayout.vue', 'utf8');
 
 const approvedPalette = {
@@ -71,11 +71,11 @@ test('public home consumes shared semantic roles instead of its previous local p
 
 test('public branding uses approved emblem and shared semantic roles', () => {
   assert.match(publicHome, /src="\/logo\.png"/);
-  assert.match(publicHome, /masesBrandLabels\.corporateName/);
-  assert.match(publicHome, /<strong>ARNA<\/strong>/);
+  assert.match(publicHome, /page\?\.title \|\| 'Maale Arna'/);
+  assert.match(publicHome, /<small>ARNA<\/small>/);
   assert.doesNotMatch(publicHome, /masesBrandLabels\.productName/);
   assert.match(publicLayout, /masesBrandLabels\.fullCorporateIdentity/);
-  assert.match(publicHome, /class="public-home__emblem"/);
+  assert.match(publicHome, /class="brand"/);
   assert.match(publicLayout, /--arna-public-page-surface/);
   assert.match(publicLayout, /--arna-public-text-primary/);
   assert.match(publicLayout, /--arna-public-border-subtle/);

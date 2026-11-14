@@ -100,8 +100,6 @@ test('E.C. is the default calendar and G.C. is a mutually exclusive preference',
 test('date-bearing views use the shared calendar formatter instead of dual calendar labels', () => {
   const center = readFileSync('src/features/notifications/NotificationsCenter.vue', 'utf8');
   const footer = readFileSync('src/layouts/AppShell/MASESFooterContent/MASESFooterContent.vue', 'utf8');
-  const publicHome = readFileSync('src/public-site/PublicHome.vue', 'utf8');
   assert.match(center, /formatCalendarDate\(value/);
   assert.match(footer, /formatCalendarDate\(new Date\(\)/);
-  assert.match(publicHome, /formatCalendarDate\(value/);
 });

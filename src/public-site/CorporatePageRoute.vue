@@ -81,7 +81,7 @@ onMounted(() => void loadPage());
         </RouterLink>
         <nav class="main-nav" :aria-label="locale === 'am' ? 'ዋና አሰሳ' : 'Main navigation'">
           <RouterLink to="/">{{ locale === 'am' ? 'መነሻ' : 'Home' }}</RouterLink>
-          <RouterLink :to="`/${locale === 'am' ? 'en' : 'am'}/${String(route.params.slug)}`">{{ locale === 'am' ? 'English' : 'አማርኛ' }}</RouterLink>
+          <RouterLink :to="`/${locale === 'am' ? 'en' : 'am'}/${page?.alternate_slug || String(route.params.slug)}`">{{ locale === 'am' ? 'English' : 'አማርኛ' }}</RouterLink>
         </nav>
       </div>
     </header>
@@ -95,6 +95,7 @@ onMounted(() => void loadPage());
         <p class="eyebrow">{{ page.page_key }}</p>
         <h1>{{ page.title }}</h1>
         <p v-if="page.summary">{{ page.summary }}</p>
+        <p v-if="page.body" class="corporate-page-route__body">{{ page.body }}</p>
         <section v-for="(section, index) in page.sections" :key="section.id ?? index">
           <h2 v-if="sectionText(section, 'title')">{{ sectionText(section, 'title') }}</h2>
           <p v-if="sectionText(section, 'body')">{{ sectionText(section, 'body') }}</p>
