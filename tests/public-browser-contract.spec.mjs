@@ -77,6 +77,10 @@ async function expectNoSeriousAccessibilityViolations(page, routeLabel) {
 }
 
 test.beforeEach(async ({ page }) => {
+  page.on('pageerror', (error) => console.log('[PUBLIC_PAGE_ERROR]', error.stack || error.message));
+  page.on('console', (message) => {
+    if (message.type() === 'error') console.log('[PUBLIC_CONSOLE_ERROR]', message.text());
+  });
   await installCmsFixtures(page);
 });
 
