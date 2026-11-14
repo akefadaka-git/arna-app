@@ -49,6 +49,11 @@ const communitySection = (section: CorporateSiteSection) =>
 const visibleSections = computed(() => (page.value?.sections ?? []).filter((section) =>
   communitySection(section) || section.content.visible !== false
 ));
+const hasCommunitySection = computed(() => visibleSections.value.some(communitySection));
+const approvedProjects = (section: CorporateSiteSection) => {
+  const projects = sectionData(section).projects ?? [];
+  return projects.filter((project) => project.approval_status === 'approved' && Boolean(project.evidence_reference?.trim()));
+};
 const navSections = computed(() => visibleSections.value.filter((section) => {
   const data = section.content[locale.value] as SectionContent | undefined;
   return Boolean(data?.title && section.id);
@@ -164,6 +169,14 @@ watch(() => route.query.locale, (value) => {
             <p v-if="sectionData(section).intro || sectionData(section).body" class="section-copy">
               {{ sectionData(section).intro || sectionData(section).body }}
             </p>
+            <p v-if="index === 0 && page.body" class="section-copy">{{ page.body }}</p>
+            <p v-if="sectionData(section).projects?.length && communitySection(section) && approvedProjects(section).length === 0" class="section-note">{{ locale === 'am' ? 'የተጸደቁና በሰነድ የተደገፉ ፕሮጀክቶች ሲኖሩ እዚህ ይታያሉ።' : 'Approved and documented projects will appear here when available.' }}</p>
+            <div v-if="communitySection(section) && approvedProjects(section).length" class="content-grid">
+              <article v-for="project in approvedProjects(section)" :key="project.evidence_reference" class="content-card">
+                <h3>{{ project.title }}</h3><p>{{ project.summary || project.body }}</p>
+                <small>{{ locale === 'am' ? 'የማስረጃ ማጣቀሻ' : 'Evidence reference' }}: {{ project.evidence_reference }}</small>
+              </article>
+            </div>
             <div v-if="sectionData(section).image_url" class="section-image">
               <img :src="sectionData(section).image_url" :alt="sectionData(section).image_alt || sectionData(section).title || ''" loading="lazy">
             </div>
@@ -187,6 +200,12 @@ watch(() => route.query.locale, (value) => {
           </div>
         </section>
         <p v-if="!visibleSections.length" class="state-panel">{{ locale === 'am' ? 'የታተሙ የይዘት ክፍሎች የሉም።' : 'No published page sections are available.' }}</p>
+        <section v-if="page && !hasCommunitySection" class="content-section content-section--responsibility" aria-labelledby="responsibility-fallback-title">
+          <div class="content-section__inner"><h2 id="responsibility-fallback-title" class="section-title">{{ locale === 'am' ? 'ማኅበረሰባዊ ኃላፊነት' : 'Community Responsibility' }}</h2>
+            <p class="section-copy">{{ locale === 'am' ? 'የድርጅቱ ቅድሚያ አቅጣጫዎች ትምህርት፣ ጤና፣ አካባቢ ጥበቃ እና አካባቢያዊ ኢኮኖሚያዊ እድሎች ናቸው። ፕሮጀክቶች የሚታዩት ሲጸድቁና በሰነድ ሲደገፉ ብቻ ነው።' : 'Corporate priorities are education, health, environmental care and local economic opportunity. Projects are published only after approval and documentation.' }}</p>
+            <div class="content-grid"><article class="content-card"><h3>{{ locale === 'am' ? 'ትምህርትና ክህሎት ልማት' : 'Education & skills development' }}</h3></article><article class="content-card"><h3>{{ locale === 'am' ? 'የማኅበረሰብ ጤናና ደህንነት' : 'Community health & well-being' }}</h3></article><article class="content-card"><h3>{{ locale === 'am' ? 'የአካባቢ ጥበቃ' : 'Environmental care' }}</h3></article><article class="content-card"><h3>{{ locale === 'am' ? 'አካባቢያዊ ኢኮኖሚያዊ እድልና ዘላቂ ኑሮ' : 'Local economic opportunity & sustainable livelihoods' }}</h3></article></div>
+          </div>
+        </section>
         </template>
         <section v-else class="content-section content-section--responsibility" aria-labelledby="responsibility-fallback-title">
           <div class="content-section__inner">
