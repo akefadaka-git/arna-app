@@ -50,7 +50,7 @@ async function installCmsFixtures(page) {
     await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: [] }) });
   });
   await page.route('**/api/public/content*', async (route) => {
-    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: [] }) });
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: [{ id: 'community-1', type: 'article', title: 'Community note', body: 'Published community contribution', published_at: null }] }) });
   });
   await page.route('**/api/public/site/content/**', async (route) => {
     await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: { items: [] } }) });
@@ -77,10 +77,6 @@ async function expectNoSeriousAccessibilityViolations(page, routeLabel) {
 }
 
 test.beforeEach(async ({ page }) => {
-  page.on('pageerror', (error) => console.log('[PUBLIC_PAGE_ERROR]', error.stack || error.message));
-  page.on('console', (message) => {
-    if (message.type() === 'error') console.log('[PUBLIC_CONSOLE_ERROR]', message.text(), JSON.stringify(message.location()));
-  });
   await installCmsFixtures(page);
 });
 
@@ -186,6 +182,8 @@ test.describe('ARNA public site browser contract', () => {
     await page.goto(baseUrl);
     await page.getByRole('button', { name: 'English' }).click();
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(page.getByRole('heading', { name: 'Community contributions' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Community note' })).toBeVisible();
     const contact = page.locator('form.public-form').last();
     await contact.getByLabel('Full name').fill('Test Visitor');
     await contact.getByLabel('Email').fill('visitor@example.test');
