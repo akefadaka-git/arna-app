@@ -165,7 +165,7 @@ watch(() => route.query.locale, (value) => {
 .locale-switch,.section-cta{border:1px solid currentColor;border-radius:999px;padding:.65rem 1rem;background:transparent;color:inherit;text-decoration:none;cursor:pointer}
 .content-section{padding:clamp(3rem,7vw,6rem) 1.5rem;border-bottom:1px solid var(--arna-public-border-subtle)}
 .content-section__inner{max-width:1100px;margin:auto}
-.content-section--hero{background:linear-gradient(135deg,var(--arna-public-brand-anchor),var(--arna-color-living-green));color:var(--arna-color-white);padding-block:clamp(5rem,12vw,9rem)}
+.content-section--hero{background:linear-gradient(135deg,var(--arna-public-brand-anchor),var(--arna-public-action));color:var(--arna-public-surface);padding-block:clamp(5rem,12vw,9rem)}
 .content-section--hero .content-section__inner{max-width:1100px}
 .content-section--responsibility{background:var(--arna-public-surface-soft)}
 .eyebrow,.card-label{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase}
