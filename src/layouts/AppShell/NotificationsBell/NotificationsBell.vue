@@ -168,8 +168,9 @@ export const BADGE_MAX_DISPLAY = 99;
 </script>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { computed, onBeforeUnmount, watch } from 'vue';
 import { useNotificationsStore } from '@/stores/notifications';
+import { useTenantStore } from '@/stores/tenant';
 import { fetchUnreadCount } from '@/features/notifications/api';
 import BaseButton from '@/components/primitives/BaseButton';
 import BaseIcon from '@/components/primitives/BaseIcon';
@@ -210,20 +211,43 @@ const emit = defineEmits<{
 }>();
 
 // -----------------------------------------------------------------------------
-// Store read
+// Store read and tenant-scoped unread-count refresh
 // -----------------------------------------------------------------------------
 const notifications = useNotificationsStore();
+const tenantStore = useTenantStore();
 
 const unreadCount = computed<number>(() => notifications.unreadCount);
 const hasUnread = computed<boolean>(() => notifications.hasUnread);
 
-onMounted(async () => {
-  if (props.disabled) return;
-  try {
-    notifications.setUnreadCount(await fetchUnreadCount());
-  } catch (error) {
-    notifications.failFetch(error);
-  }
+/*
+ * The bell remains mounted while the user switches tenants. The
+ * bootstrap invalidates tenant-scoped notification state, so refresh
+ * the unread count whenever the effective tenant changes. A request
+ * sequence prevents a slower response for the previous tenant from
+ * overwriting the current tenant's count.
+ */
+let unreadCountRequest = 0;
+
+watch(
+  () => [tenantStore.effectiveTenantId, props.disabled] as const,
+  async ([, disabled]) => {
+    const request = ++unreadCountRequest;
+    if (disabled) return;
+
+    try {
+      const count = await fetchUnreadCount();
+      if (request !== unreadCountRequest) return;
+      notifications.setUnreadCount(count);
+    } catch (error) {
+      if (request === unreadCountRequest) notifications.failFetch(error);
+    }
+  },
+  { immediate: true },
+);
+
+onBeforeUnmount(() => {
+  // Ignore any in-flight response after the shell removes this bell.
+  unreadCountRequest += 1;
 });
 
 // -----------------------------------------------------------------------------
