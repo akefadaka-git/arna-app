@@ -38,7 +38,8 @@ export interface CorporateEntryRecord {
   readonly translations: Partial<Record<CorporateLocale, { title?: string; body?: string }>>;
   readonly created_at: string;
   readonly moderation_note: string | null;
-  readonly payload?: { readonly scan_status?: string };
+  readonly payload?: Record<string, unknown> & { readonly scan_status?: string };
+  readonly seo?: Record<string, Record<string, string>>;
 }
 
 export interface CorporateInquiryRecord {
@@ -72,10 +73,19 @@ export function reviewCorporatePage(page: CorporatePageRecord, decision: 'approv
     ...(scheduledAt ? { scheduled_at: scheduledAt } : {}),
   });
 }
-export async function createCorporateEntry(draft: { entry_type: string; slug_am?: string; slug_en?: string; translations: Record<string, { title: string; body?: string }>; seo?: Record<string, Record<string, string>> }): Promise<CorporateEntryRecord> {
+export interface CorporateEntryDraft {
+  readonly entry_type?: string;
+  readonly slug_am?: string;
+  readonly slug_en?: string;
+  readonly translations: Record<string, { title: string; body?: string }>;
+  readonly payload?: Record<string, unknown>;
+  readonly seo?: Record<string, Record<string, string>>;
+}
+
+export async function createCorporateEntry(draft: CorporateEntryDraft & { entry_type: string }): Promise<CorporateEntryRecord> {
   return api.post(`${base}/entries`, draft);
 }
-export function updateCorporateEntry(entry: CorporateEntryRecord, draft: { slug_am?: string; slug_en?: string; translations: Record<string, { title: string; body?: string }>; seo?: Record<string, Record<string, string>> }): Promise<CorporateEntryRecord> {
+export function updateCorporateEntry(entry: CorporateEntryRecord, draft: CorporateEntryDraft): Promise<CorporateEntryRecord> {
   return api.put(`${base}/entries/${entry.id}`, { ...draft, expected_version: entry.version });
 }
 export async function listCorporateEntries(): Promise<CorporateEntryRecord[]> {
