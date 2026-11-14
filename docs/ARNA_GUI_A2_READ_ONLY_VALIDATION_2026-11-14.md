@@ -45,7 +45,7 @@ The four entry points are `workspace-entry/`, `portal-entry/`, `admin-entry/` an
 
 | PR | Branch / source head | State | Comparison with current main | A2 disposition |
 |---|---|---|---|---|
-| #17 | `docs/arna-gui-a1-design-spec` / `8597351ab2d36ca685939be7ba7221762b206e50` | Closed, superseded 2026-11-14 | Diverged; 1 commit ahead, 177 behind; merge base `28c1c8c0787a666cad12d66c650bfa71475a87ad` | Replace with reconciled A1 on a fresh main-based branch |
+| #17 | `docs/arna-gui-a1-design-spec` / `8597351ab2d36ca685939be7ba7221762b206e50` | Closed, superseded 2026-11-14 | Diverged; 1 commit ahead, 177 behind; merge base `28c1c8c0787a666cad12d66c650bfa71475a87ad` | Superseded by reconciled A1 review PR #64; no merge |
 | #18 | `feat/arna-design-system-v2` / `dcf219b027b39406c503b97970a6030bd2ee557b` | Closed, superseded 2026-11-14 | Diverged; 6 commits ahead, 177 behind; same old merge base | Superseded; do not merge |
 | #19 | `feat/arna-design-system-v2-complete` / verified head `9aa562bd87b96af21ede8d649a8bcdea81927f7f` | Closed, superseded 2026-11-14 | Diverged; 14 commits ahead, 177 behind; same old merge base | Superseded; do not merge |
 | #28 | Design System guide and cross-app contracts | Closed, merged 2026-11-02 | Its deliverables are present on current main | Preserve as implementation history |
@@ -55,7 +55,7 @@ The four entry points are `workspace-entry/`, `portal-entry/`, `admin-entry/` an
 
 PR #18 and #19 overlap in the same five application entry points and `src/styles/themes.css`; PR #19 additionally changes the frontend CI workflow, package scripts and theme contract test. The current main already contains a later theme layer, tests, theme preference implementation and implementation guide through merged work. Reapplying either old branch is not justified.
 
-PR #17 contained only the 155-line A1 draft document. Its source branch is 177 commits behind current main and was closed after the replacement candidate PR #64 was created from current main. The new review branch is `docs/arna-gui-a1-a2-reconciled`, head `e6a5a01a1458ea4bfefb13246012aec3a312df02`.
+PR #17 contained only the 155-line A1 draft document. Its source branch is 177 commits behind current main and was closed after the replacement candidate PR #64 was created from current main. The review branch is `docs/arna-gui-a1-a2-reconciled`, latest head `1051cb00299d34d535bf0c893cde8b2864487e4e`.
 
 **History preservation:** PRs #17, #18 and #19 are closed as superseded; no branches were deleted and no commits were rewritten. The old PRs and branches remain auditable. The replacement A1/A2 review is [PR #64](https://github.com/akefadaka-git/arna-app/pull/64).
 
@@ -115,9 +115,9 @@ This is exact-head CI evidence for PR #63's head. It is not an exact-head workfl
 
 ### 5.2 Reconciled A1/A2 review candidate
 
-PR #64 head: `5027909d8067a109bfa21ef4f641e200376ed648`.
+PR #64 latest head: `1051cb00299d34d535bf0c893cde8b2864487e4e`.
 
-GitHub Actions run **43634496361** — [Frontend verification](https://github.com/akefadaka-git/arna-app/actions/runs/43634496361) — completed with conclusion **success** on that exact PR head. The single job completed successfully, including dependency installation and advisory checks, type-check and all four builds, static-output and public-build smoke checks, brand palette/contrast contract, bilingual theme/component contract, responsive App Shell contract, wallet/dashboard contracts, public browser/WCAG 2.2 axe contracts, and artifact upload.
+GitHub Actions run **#1437** (run ID `43634796714`) — [Frontend verification](https://github.com/akefadaka-git/arna-app/actions/runs/43634796714) — completed with conclusion **success** on that exact latest PR head. The single job passed dependency installation and advisory checks, type-check and all four builds, static-output and public-build smoke checks, brand palette/contrast contract, bilingual theme/component contract, responsive App Shell contract, wallet/dashboard contracts, public browser/WCAG 2.2 axe contracts, and artifact upload. Earlier exact-head runs #1434–#1436 also passed on their respective prior documentation-only heads.
 
 This exact-head run verifies the documentation review branch against its current-main code baseline. It does not constitute a manual WCAG audit or a production-host visual audit.
 
@@ -150,7 +150,7 @@ No evidence in this A2 read-only pass supports a claim that all ARNA UI is 10/10
 
 1. Do not recreate or reapply Design System 2.0. Its shared theme, typography, theme preference, component contracts and cross-app imports are already on main.
 2. Do not merge PR #18 or #19. Their branches are stale and their overlapping work is superseded by merged PRs #20, #28 and #29.
-3. Replace PR #17 with a fresh, main-based A1 review candidate that consolidates the approved brand/strategy and actual implementation findings.
+3. Review the replacement A1/A2 candidate in PR #64; PR #17 remains closed as superseded with its branch and history preserved.
 4. After Owner approval of A1 and acceptance of this A2 baseline, define the next bounded implementation phase against the exact then-current main SHA. Follow the approved master strategy and do not skip its phase gates.
 5. Keep any A3 implementation on a dedicated feature branch. A4 must verify the exact resulting head. A5 deployment remains separate.
 
