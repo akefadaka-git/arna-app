@@ -96,8 +96,8 @@ async function load(): Promise<void> {
     entryCollections.value = Object.fromEntries(types.map((type, index) => [type, results[index].status === 'fulfilled' ? results[index].value : []]));
     feedFailures.value = Object.fromEntries(types.map((type, index) => [type, results[index].status === 'rejected']));
     try {
-      const response = await api.get<{ data: PublishedContributorContent[] }>('/api/public/content', { params: { per_page: 3 } });
-      contributorContent.value = response.data;
+      const response = await api.get<PublishedContributorContent[]>('/api/public/content', { params: { per_page: 3 } });
+      contributorContent.value = response;
       contributorContentFailed.value = false;
     } catch {
       contributorContent.value = [];
