@@ -177,7 +177,7 @@ interface Props {
    * region does not render when this prop is omitted.
    *
    * MASES does not supply this prop today: the copyright line is
-   * rendered by MASESFooterContent inside the middle (default) slot
+   * rendered by AranaFooterContent inside the middle (default) slot
    * instead. The prop remains available to other consumers of
    * AppShell that want the simpler prop-based pattern.
    */
@@ -213,7 +213,7 @@ const props = withDefaults(defineProps<Props>(), {
  * middle content.
  *
  * MASES supplies this slot through AppShell's `#footer` forwarding
- * slot, whose default fallback content is MASESFooterContent.
+ * slot, whose default fallback content is AranaFooterContent.
  */
 defineSlots<{
   default?(): unknown;
