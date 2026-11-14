@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — MaintenanceBanner
+ ARNA UI — MaintenanceBanner
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/MaintenanceBanner/MaintenanceBanner.vue
+ File:      arna-app/src/layouts/AppShell/MaintenanceBanner/MaintenanceBanner.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.1.0
  Status:    ENHANCEMENT — forced-colors accessibility
@@ -23,6 +23,9 @@
 
  -----------------------------------------------------------------------------
  1.1.0  — improve notice readability in forced-colors mode:
+ 1.2.0  — allow action controls to wrap below long translated notices
+          on narrow screens instead of forcing the message into an
+          unusably narrow flex column.
           · Add a high-contrast system-color treatment for all three
             variants instead of relying on theme-specific backgrounds.
           · Keep the live-region role and variant metadata unchanged;
@@ -176,11 +179,11 @@ export type MaintenanceBannerVariant = 'info' | 'warning' | 'danger';
  * Module-level Set for deduplicated development warnings.
  * See design-system rule 8.
  */
-const __masesMaintenanceBannerWarned = new Set<string>();
+const __arnaMaintenanceBannerWarned = new Set<string>();
 
-function __masesMaintenanceBannerWarnOnce(key: string, message: string): void {
-  if (__masesMaintenanceBannerWarned.has(key)) return;
-  __masesMaintenanceBannerWarned.add(key);
+function __arnaMaintenanceBannerWarnOnce(key: string, message: string): void {
+  if (__arnaMaintenanceBannerWarned.has(key)) return;
+  __arnaMaintenanceBannerWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -279,7 +282,7 @@ const hasDismiss = computed<boolean>(() => {
 // Development guard — dismissible without dismissLabel
 // -----------------------------------------------------------------------------
 if (import.meta.env.DEV && props.dismissible && !hasDismiss.value) {
-  __masesMaintenanceBannerWarnOnce(
+  __arnaMaintenanceBannerWarnOnce(
     'dismissible-without-label',
     '[MaintenanceBanner] `dismissible` is true but `dismissLabel` is ' +
       'missing or empty. The dismiss button will not be rendered. ' +
@@ -401,6 +404,7 @@ function onDismiss(): void {
 .maintenance-banner {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: var(--arna-space-3);
   width: 100%;
   padding-block: var(--arna-space-2);
@@ -485,7 +489,7 @@ function onDismiss(): void {
   display: flex;
   flex-direction: column;
   gap: var(--arna-space-1);
-  flex: 1 1 auto;
+  flex: 1 1 12rem;
   min-width: 0;
 }
 
@@ -514,7 +518,8 @@ function onDismiss(): void {
   display: flex;
   align-items: center;
   gap: var(--arna-space-2);
-  flex-shrink: 0;
+  flex: 0 0 auto;
+  margin-inline-start: auto;
 }
 
 /* ============================================================================
