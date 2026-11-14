@@ -81,7 +81,7 @@ onMounted(() => void loadPage());
         </RouterLink>
         <nav class="main-nav" :aria-label="locale === 'am' ? 'ዋና አሰሳ' : 'Main navigation'">
           <RouterLink to="/">{{ locale === 'am' ? 'መነሻ' : 'Home' }}</RouterLink>
-          <RouterLink :to="`/${locale === 'am' ? 'en' : 'am'}/${String(route.params.slug)}`">{{ locale === 'am' ? 'English' : 'አማርኛ' }}</RouterLink>
+          <RouterLink :to="`/${locale === 'am' ? 'en' : 'am'}/${page?.alternate_slug || String(route.params.slug)}`">{{ locale === 'am' ? 'English' : 'አማርኛ' }}</RouterLink>
         </nav>
       </div>
     </header>
