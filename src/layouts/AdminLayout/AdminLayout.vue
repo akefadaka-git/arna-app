@@ -76,7 +76,7 @@
  portal builds. AppShell renders the header, sidebar, drawer, footer,
  notification bell, tenant switcher, brand mark, and user menu using
  the shared masesShellLabels object and the shared masesBrandLabels
- and masesFooterLabels objects from @/router/shell-labels.
+ and aranaFooterLabels objects from @/router/shell-labels.
 
  The admin build declares no chrome labels of its own. Its only
  distinct label-bearing surface is the sidebar navigation tree, which
@@ -231,7 +231,7 @@
     Adding one is a future CR, not a defect.
 
  3. The admin build reuses masesShellLabels, masesBrandLabels, and
-    masesFooterLabels unchanged from shell-labels.ts. If a future CR
+    aranaFooterLabels unchanged from shell-labels.ts. If a future CR
     diverges admin chrome from workspace chrome, the divergence is a
     new export in shell-labels.ts, not a per-build override here.
 =============================================================================
