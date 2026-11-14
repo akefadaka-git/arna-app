@@ -16,7 +16,7 @@ The current repository already contains substantial Design System 2.0 and applic
 
 The original PR #17 A1 document and PR #18/#19 implementation candidates all branch from the historical merge base `28c1c8c0787a666cad12d66c650bfa71475a87ad`. The current main head is 177 commits ahead of that merge base. The three old PR branches are therefore stale relative to the current source of truth.
 
-**A2 recommendation:** prepare one replacement A1 document from current main; retain the merged implementation; close the stale PRs as superseded after the replacement review PR is available; preserve the old branches and commit history. Do not merge any stale candidate.
+**A2 disposition:** replacement review PR #64 was created from current main. PRs #17, #18 and #19 were then closed as superseded on 2026-11-14. Their branches and commit history were retained. No stale candidate was merged.
 
 ## 2. Exact baseline and source inventory
 
@@ -45,9 +45,9 @@ The four entry points are `workspace-entry/`, `portal-entry/`, `admin-entry/` an
 
 | PR | Branch / source head | State | Comparison with current main | A2 disposition |
 |---|---|---|---|---|
-| #17 | `docs/arna-gui-a1-design-spec` / `8597351ab2d36ca685939be7ba7221762b206e50` | Open, draft | Diverged; 1 commit ahead, 177 behind; merge base `28c1c8c0787a666cad12d66c650bfa71475a87ad` | Replace with reconciled A1 on a fresh main-based branch |
-| #18 | `feat/arna-design-system-v2` / `dcf219b027b39406c503b97970a6030bd2ee557b` | Open, draft | Diverged; 6 commits ahead, 177 behind; same old merge base | Superseded; do not merge |
-| #19 | `feat/arna-design-system-v2-complete` / verified head `9aa562bd87b96af21ede8d649a8bcdea81927f7f` | Open, ready for review | Diverged; 14 commits ahead, 177 behind; same old merge base | Superseded; do not merge |
+| #17 | `docs/arna-gui-a1-design-spec` / `8597351ab2d36ca685939be7ba7221762b206e50` | Closed, superseded 2026-11-14 | Diverged; 1 commit ahead, 177 behind; merge base `28c1c8c0787a666cad12d66c650bfa71475a87ad` | Replace with reconciled A1 on a fresh main-based branch |
+| #18 | `feat/arna-design-system-v2` / `dcf219b027b39406c503b97970a6030bd2ee557b` | Closed, superseded 2026-11-14 | Diverged; 6 commits ahead, 177 behind; same old merge base | Superseded; do not merge |
+| #19 | `feat/arna-design-system-v2-complete` / verified head `9aa562bd87b96af21ede8d649a8bcdea81927f7f` | Closed, superseded 2026-11-14 | Diverged; 14 commits ahead, 177 behind; same old merge base | Superseded; do not merge |
 | #28 | Design System guide and cross-app contracts | Closed, merged 2026-11-02 | Its deliverables are present on current main | Preserve as implementation history |
 | #29 | Persistent theme preferences and authentication accessibility | Closed, merged 2026-11-02 | Its theme preference module/control and guide updates are present on current main | Preserve as implementation history |
 | #20 | Responsive ARNA App Shell enhancement | Closed, merged 2026-10-31 | Its shell, entry-point, feature-consumer and responsive-contract changes are present on current main | Preserve as implementation history |
@@ -55,9 +55,9 @@ The four entry points are `workspace-entry/`, `portal-entry/`, `admin-entry/` an
 
 PR #18 and #19 overlap in the same five application entry points and `src/styles/themes.css`; PR #19 additionally changes the frontend CI workflow, package scripts and theme contract test. The current main already contains a later theme layer, tests, theme preference implementation and implementation guide through merged work. Reapplying either old branch is not justified.
 
-PR #17 contains only the 155-line A1 draft document. Its source branch is 177 commits behind current main and should not be used as the base for a current review candidate.
+PR #17 contained only the 155-line A1 draft document. Its source branch is 177 commits behind current main and was closed after the replacement candidate PR #64 was created from current main. The new review branch is `docs/arna-gui-a1-a2-reconciled`, head `e6a5a01a1458ea4bfefb13246012aec3a312df02`.
 
-**History preservation:** This report recommends closing stale PRs as superseded, not deleting branches or rewriting commits. The old PRs and branches remain auditable.
+**History preservation:** PRs #17, #18 and #19 are closed as superseded; no branches were deleted and no commits were rewritten. The old PRs and branches remain auditable. The replacement A1/A2 review is [PR #64](https://github.com/akefadaka-git/arna-app/pull/64).
 
 ## 4. Design-system implementation validation
 
@@ -164,4 +164,4 @@ No evidence in this A2 read-only pass supports a claim that all ARNA UI is 10/10
 
 **A2 result: READ-ONLY RECONCILIATION COMPLETE WITH LIMITATIONS.** The repository baseline is sufficiently identified to prepare a bounded next-phase proposal, but exact-main CI, font rendering, full contrast coverage and manual accessibility evidence remain explicit acceptance gaps.
 
-No application source, API, database, repository settings, production data or deployment target was modified during the read-only inspection. This companion report is documentation of findings and does not authorize implementation, merge or deployment.
+No application source, API, database, repository settings, production data or deployment target was modified during the read-only inspection. The only subsequent repository actions were documentation-only publication of the A1/A2 review candidate and closure of the three superseded PR records; their branches and commits were retained. This companion report does not authorize implementation, merge or deployment.
