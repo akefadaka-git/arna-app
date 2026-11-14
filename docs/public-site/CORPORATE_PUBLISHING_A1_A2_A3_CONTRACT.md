@@ -15,6 +15,8 @@
 - Public routes for bilingual corporate pages and localized editorial details.
 - Homepage locale selection, published CMS navigation, CMS-managed homepage sections, localized content feeds, contact and opportunity submission forms.
 - Corporate CMS administration route for page creation/editing, independent review, publish/unpublish/schedule; bilingual editorial authoring/editing and moderation; quarantined media upload and scan; and contact inquiry triage.
+- Expanded CMS authoring so authorized editors can revise the complete ordered page-section JSON, localized page SEO metadata, editorial-entry payloads and localized entry SEO metadata without silently dropping unedited structured fields. Page and entry edits remain version-checked drafts and return to independent review before publication.
+- Bylaws-based corporate content source map at `docs/public-site/MAALE_ARNA_BYLAWS_CONTENT_MAP.md`; formal vision/mission are not attributed to the bylaws where no separately labelled statements were found. Proposed editorial wording remains subject to Owner approval.
 - Public display feeds for businesses/subsidiaries, services, news, announcements, publications, media/gallery, careers/opportunities and marketplace entries. Only server-published records are displayed.
 - Explicit consent before contact inquiry submission, a honeypot field, API throttling and opaque inquiry reference.
 - Page/editorial metadata application for title, description, canonical URL, robots and Open Graph title where provided.
