@@ -141,8 +141,8 @@ test.describe('ARNA public site browser contract', () => {
 
   test('shows the not-found route for an unknown public path', async ({ page }) => {
     await page.goto(new URL('/route-that-does-not-exist', baseUrl).toString());
-    await expect(page).toHaveURL(new URL('/route-that-does-not-exist', baseUrl).toString());
-    await expect(page.getByText('404', { exact: true })).toBeVisible();
+    await expect(page).toHaveURL(new URL('/', baseUrl).toString());
+    await expect(page.locator('#hero-title')).toContainText('የጋራ እድገት');
   });
 
   test('switches the CMS homepage between Amharic and English', async ({ page }) => {

@@ -85,7 +85,7 @@ watch(() => route.query.locale, (value) => {
     <a class="skip-link" href="#main-content">{{ locale === 'am' ? 'ወደ ዋናው ይዘት ይሂዱ' : 'Skip to main content' }}</a>
     <header class="site-header">
       <div class="site-header__inner">
-        <a class="brand" href="/" aria-label="Maale Arna Share Company ARNA home">
+        <a class="brand" href="/">
           <img src="/logo.png" alt="" width="44" height="44">
           <span><strong>{{ page?.title || 'Maale Arna' }}</strong><small>ARNA</small></span>
         </a>
@@ -168,7 +168,7 @@ watch(() => route.query.locale, (value) => {
 .content-section--hero{background:linear-gradient(135deg,var(--arna-public-brand-anchor),var(--arna-color-living-green));color:var(--arna-color-white);padding-block:clamp(5rem,12vw,9rem)}
 .content-section--hero .content-section__inner{max-width:1100px}
 .content-section--responsibility{background:var(--arna-public-surface-soft)}
-.eyebrow,.card-label{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+.eyebrow,.card-label{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase}
 .content-section:not(.content-section--hero) .eyebrow,.content-card .card-label,.content-card .card-status,.content-section--responsibility .section-note{color:var(--arna-public-text-secondary)}
 .section-title{font-size:clamp(2rem,5vw,4rem);line-height:1.12;max-width:900px;margin:.5rem 0 1.25rem}
 .section-title span{display:block;color:var(--arna-public-accent)}
@@ -176,7 +176,7 @@ watch(() => route.query.locale, (value) => {
 .content-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:1rem;margin-top:2rem}
 .content-card{padding:1.5rem;background:var(--arna-public-surface);border:1px solid var(--arna-public-border-subtle);border-radius:1rem;display:flex;flex-direction:column;gap:.65rem}
 .content-card h3{font-size:1.2rem;margin:0}.content-card p{line-height:1.65;margin:0}.content-card img,.section-image img{width:100%;height:auto;object-fit:cover;border-radius:.7rem}
-.card-value{font-size:2rem}.card-status,.section-note{font-size:.9rem;opacity:.8;line-height:1.6}
+.card-value{font-size:2rem}.card-status,.section-note{font-size:.9rem;line-height:1.6}
 .section-image{max-width:900px;margin-top:2rem}.section-cta{display:inline-block;margin-top:1.5rem}
 .state-panel{max-width:900px;margin:5rem auto;padding:2rem;text-align:center}
 .site-footer{padding:2.5rem 1.5rem;text-align:center;background:var(--arna-public-brand-anchor);color:var(--arna-color-white)}.site-footer p{margin:0 0 .4rem}
