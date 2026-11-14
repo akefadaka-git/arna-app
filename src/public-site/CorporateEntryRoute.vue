@@ -2,7 +2,7 @@
 import { onMounted, ref, watch } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import { fetchCorporateEntry, type CorporateLocale, type CorporatePublicEntry } from '@/features/public-site/api';
-import { masesBrandLabels } from '@/router/shell-labels';
+import { aranaBrandLabels } from '@/router/shell-labels';
 
 const route = useRoute();
 const entry = ref<CorporatePublicEntry | null>(null);
@@ -44,7 +44,7 @@ onMounted(() => void load());
   <div class="arna-site corporate-entry-route">
     <a class="skip-link" href="#entry-content">{{ locale === 'am' ? 'ወደ ዋናው ይዘት ይሂዱ' : 'Skip to main content' }}</a>
     <header class="site-header"><div class="site-container site-header__inner">
-      <RouterLink class="brand" to="/"><img class="public-home__emblem" src="/logo.png" alt="" width="43" height="43" /><span class="brand__wordmark"><strong>{{ masesBrandLabels.corporateName }}</strong><small>{{ masesBrandLabels.productName }}</small></span></RouterLink>
+      <RouterLink class="brand" to="/"><img class="public-home__emblem" src="/logo.png" alt="" width="43" height="43" /><span class="brand__wordmark"><strong>{{ aranaBrandLabels.corporateName }}</strong><small>{{ aranaBrandLabels.productName }}</small></span></RouterLink>
       <nav class="main-nav" :aria-label="locale === 'am' ? 'ዋና አሰሳ' : 'Main navigation'">
         <RouterLink to="/">{{ locale === 'am' ? 'መነሻ' : 'Home' }}</RouterLink>
         <RouterLink :to="`/${locale === 'am' ? 'en' : 'am'}/content/${String(route.params.type)}/${entry?.alternate_slug ?? String(route.params.slug)}`">{{ locale === 'am' ? 'English' : 'አማርኛ' }}</RouterLink>
