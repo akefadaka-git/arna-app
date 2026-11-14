@@ -43,7 +43,7 @@
  What this component does NOT do
  -----------------------------------------------------------------------------
    - It does NOT render the corporate brand mark. The header's
-     MASESBrand component carries the brand; the footer's copyright
+     AranaBrand component carries the brand; the footer's copyright
      line names the entity in text. Repeating the two-line wordmark
      here would be visual noise for an authenticated application
      whose header already establishes identity. A future CR may
