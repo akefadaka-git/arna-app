@@ -43,29 +43,29 @@
             runtime behavior is unchanged.
 
  1.0.3  — brand slot fallback (CR-BRAND1):
-          · The `#brand` forwarding slot now renders <MASESBrand /> as
+          · The `#brand` forwarding slot now renders <AranaBrand /> as
             its fallback content when no consumer supplies the slot.
             Previously the region rendered empty for both current
             consumers (AuthenticatedLayout.vue v1.0.3, PortalLayout.vue
             v1.1.0), producing a header with no visible brand.
           · The `<slot name="brand" />` in the AppHeader forwarding
-            block becomes `<slot name="brand"><MASESBrand /></slot>`.
+            block becomes `<slot name="brand"><AranaBrand /></slot>`.
             Vue's standard slot-fallback semantics apply: if a
             consumer of AppShell supplies `#brand` content, that
-            content wins and MASESBrand is not rendered. This is the
+            content wins and AranaBrand is not rendered. This is the
             intended extension point for future white-label or
             embedded shells — the default brand is a convenience, not
             a lock-in.
           · A new import:
-              import MASESBrand from '@/layouts/AppShell/MASESBrand';
-            The barrel (MASESBrand/index.ts, v1.0.0) is the companion
+              import AranaBrand from '@/layouts/AppShell/AranaBrand';
+            The barrel (AranaBrand/index.ts, v1.0.0) is the companion
             file in this CR.
           · The `defineSlots` comment for `brand` is updated to
             document the fallback. The slot's type signature
             (`brand?(): unknown`) is unchanged — slot fallback does
             not affect the declared type; the same contract holds.
           · The companion change in @/router/shell-labels (v1.9.0)
-            adds `masesBrandLabels`, which MASESBrand.vue imports as
+            adds `masesBrandLabels`, which AranaBrand.vue imports as
             its only dependency. That file is also part of CR-BRAND1.
           · No change to any other slot, prop, emit, or DOM region.
             The `nav`, `actions`, `header-actions`, `footer`, and
@@ -140,7 +140,7 @@
    │ SkipToContent (off-screen; first focusable)     │
    │ MaintenanceBanner (optional, per shell state)   │
    │ AppHeader (sticky, full width)                  │
-   │   ├── #brand     → MASESBrand (default)         │
+   │   ├── #brand     → AranaBrand (default)         │
    │   ├── #nav       → consumer-supplied            │
    │   └── #actions   → NotificationsBell,           │
    │                    TenantSwitcher, UserMenu     │
@@ -175,12 +175,12 @@
  -----------------------------------------------------------------------------
  Brand slot — default content (CR-BRAND1)
  -----------------------------------------------------------------------------
- The `#brand` forwarding slot renders <MASESBrand /> as its fallback
+ The `#brand` forwarding slot renders <AranaBrand /> as its fallback
  content when the consumer of AppShell supplies nothing:
 
      <template #brand>
        <slot name="brand">
-         <MASESBrand />
+         <AranaBrand />
        </slot>
      </template>
 
@@ -203,7 +203,7 @@
 
  The brand strings live in @/router/shell-labels (v1.9.0) as
  `masesBrandLabels`. The component is
- layouts/AppShell/MASESBrand/MASESBrand.vue. See that file and the
+ layouts/AppShell/AranaBrand/AranaBrand.vue. See that file and the
  CR-BRAND1 block in shell-labels.ts for the derivation of the
  header's short form (ማሌ ዓርና + ማሴስ) and for why the corporate
  emblem is not rendered in the header.
@@ -267,7 +267,7 @@
    SkipToContent       (11.1)  — first focusable element
    MaintenanceBanner   (11.3)  — conditional, per `maintenance` prop
    AppHeader           (11.10) — with slots populated below
-   MASESBrand      (CR-BRAND1) — default content of the #brand slot
+   AranaBrand      (CR-BRAND1) — default content of the #brand slot
    UserMenu            (11.11) — in the header's actions region
    NotificationsBell   (11.12) — in the header's actions region;
                                  disabled per §20.2
@@ -293,7 +293,7 @@
  -----------------------------------------------------------------------------
  Every user-facing string is consumer-supplied via `labels`, or via the
  composed units' own labels (all forwarded from `labels` here, except
- MASESBrand and MASESFooterContent, which read their own strings from
+ AranaBrand and MASESFooterContent, which read their own strings from
  @/router/shell-labels). The only string literal in this file is the
  default `skipToContentTargetId` (`'mases-main-content'`), which is a
  DOM id — not user-facing text.
@@ -340,7 +340,7 @@
    - The composed units carry their own semantics (AppHeader has
      role="banner"; AppFooter has role="contentinfo"; AppMobileDrawer
      is a native <dialog>).
-   - MASESBrand contributes text inside the banner landmark as its
+   - AranaBrand contributes text inside the banner landmark as its
      first content — screen readers reach it first when navigating by
      landmark. Its own accessibility notes live in that file.
    - MASESFooterContent contributes text and links inside the
@@ -414,7 +414,7 @@ import SkipToContent from '@/layouts/AppShell/SkipToContent';
 import MaintenanceBanner from '@/layouts/AppShell/MaintenanceBanner';
 import AppHeader from '@/layouts/AppShell/AppHeader';
 import AppHeaderNavigation from '@/layouts/AppShell/AppHeaderNavigation/AppHeaderNavigation.vue';
-import MASESBrand from '@/layouts/AppShell/MASESBrand';
+import AranaBrand from '@/layouts/AppShell/AranaBrand';
 import UserMenu from '@/layouts/AppShell/UserMenu';
 import NotificationsBell from '@/layouts/AppShell/NotificationsBell';
 import NotificationsCenter from '@/features/notifications/NotificationsCenter.vue';
@@ -516,7 +516,7 @@ const emit = defineEmits<{
 
 defineSlots<{
   /**
-   * The AppHeader brand region. Defaults to <MASESBrand /> when the
+   * The AppHeader brand region. Defaults to <AranaBrand /> when the
    * consumer supplies no content; supply content to override the
    * default (white-label builds, embedded surfaces, test harnesses).
    * See the file header §"Brand slot — default content (CR-BRAND1)".
@@ -624,7 +624,7 @@ function onMaintenanceDismiss(): void {
     >
       <template #brand>
         <slot name="brand">
-          <MASESBrand />
+          <AranaBrand />
         </slot>
       </template>
 
