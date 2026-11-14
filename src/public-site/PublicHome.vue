@@ -21,7 +21,7 @@ const copy = computed(() => locale.value === 'am' ? {
   aboutP1: 'ማሌ ዓርና አክሲዮን ማኅበር ዋና መሥሪያ ቤቱን በደቡብ ኦሞ ዞን፣ ማሌ ወረዳ፣ ኮይቤ ቀበሌ ያደረገ የአክሲዮን ማኅበር ነው።',
   aboutP2: 'መመሥረቻ ዓላማዎቹ ግብርና፣ ማዕድን፣ ማኑፋክቸሪንግ፣ ኮንስትራክሽን፣ ንግድ፣ ትራንስፖርት፣ ፋይናንስ፣ ኢንሹራንስ፣ ሪል እስቴትና ማኅበራዊ አገልግሎቶችን ያካትታሉ። የእያንዳንዱ ዘርፍ የአሁኑ የሥራ ሁኔታ በተለይ ይረጋገጣል።',
   valuesEyebrow: 'የምንመራባቸው እሴቶች', valuesTitle: 'መሠረታችን', valuesAccent: 'ግልጽ ነው።', valuesIntro: 'የምንገነባው ሥርዓት በሰዎች እምነት ላይ መመሥረት አለበት።',
-  servicesEyebrow: 'አገልግሎቶችና መፍትሄዎች', servicesTitle: 'የምንገነባው', servicesAccent: 'ለወደፊት ነው።', servicesIntro: 'በእውነት የሚሰጡ አገልግሎቶች ከተረጋገጡና በአስተዳዳሪ ከጸደቁ በኋላ በዚህ ይታያሉ።',
+  servicesEyebrow: 'አገልግሎቶችና መፍትሄዎች', servicesTitle: 'የእኛ አገልግሎቶች', servicesAccent: 'በማስረጃ ይረጋገጣሉ።', servicesIntro: 'በእውነት የሚሰጡ አገልግሎቶች ከተረጋገጡና በአስተዳዳሪ ከጸደቁ በኋላ በዚህ ይታያሉ።',
   preparing: 'በመዘጋጀት ላይ', servicesNote: 'በመመሥረቻ ሰነድ የተዘረዘሩ የንግድ ዓላማዎች ሁሉ በአሁኑ ጊዜ እየተካሄዱ ናቸው ማለት አይደለም። የአሁኑ አገልግሎቶች በማስረጃ ከተረጋገጡ በኋላ ብቻ ይታያሉ።',
   businessTitle: 'በመመሥረቻ ሰነድ የተዘረዘሩ', businessAccent: 'የንግድ ዓላማዎች።', businessIntro: 'የማኅበሩ መመሥረቻ ደንብ የሚያስቀምጣቸው የንግድ ዓላማዎች ከታች ቀርበዋል። በእውነት የሚካሄዱ የንግድ ሥራዎች በተለይ ይለያሉ።',
   businessStatus: 'በመመሥረቻ ደንብ የተፈቀደ ዓላማ · የአሁኑ ሁኔታ በተለይ ይረጋገጣል', businessDisclaimer: 'ማስታወሻ፦ እነዚህ የንግድ ዓላማዎች በመመሥረቻ ደንቡ የተዘረዘሩ ናቸው። ይህ ሁሉም ዘርፎች አሁን በሥራ ላይ ናቸው ወይም ልዩ ፈቃድ አላቸው ማለት አይደለም።',
@@ -29,7 +29,7 @@ const copy = computed(() => locale.value === 'am' ? {
   approvedContent: 'የጸደቀ ይዘት ሲኖር ይታያል', mediaTitle: 'የARNA ሚዲያ', mediaAccent: 'ማዕከል።', mediaIntro: 'ፎቶዎችና ህትመቶች ከማረጋገጫና ከአስተዳዳሪ ፈቃድ በኋላ ብቻ ይታያሉ።',
   mediaEmpty: 'በአሁኑ ጊዜ የታተመ ሚዲያ የለም።', publicationsTitle: 'ህትመቶችና', publicationsAccent: 'ይፋዊ ማስታወቂያዎች።', publicationsEmpty: 'በአሁኑ ጊዜ የታተሙ ህትመቶች የሉም።',
   opportunitiesTitle: 'የሚቀጥለውን እድል', opportunitiesAccent: 'ከዚህ ይጀምሩ።', opportunitiesIntro: 'የተጸደቁ የሥራ እድሎች፣ የንግድ ማስታወቂያዎችና የገበያ ዝርዝሮች እዚህ ይታያሉ።',
-  opportunitiesEmpty: 'በአሁኑ ጊዜ የታተመ እድል የለም። አዲስ ዝርዝሮች ከግምገማ በኋላ ይታያሉ።', contactTitle: 'ከእኛ ጋር ይገናኙ።',
+  opportunitiesEmpty: 'በአሁኑ ጊዜ የታተመ እድል የለም። አዲስ ዝርዝሮች ከግምገማ በኋላ ይታያሉ።', contactTitle: 'ከማሌ ዓርና ጋር ይገናኙ።',
   inquiryGeneral: 'አጠቃላይ', inquiryInvestor: 'ባለአክሲዮን / ኢንቨስተር', inquiryPartnership: 'አጋርነት', inquiryMedia: 'ሚዲያ', inquiryCareer: 'ሥራ', inquiryAdvertising: 'ማስታወቂያ', inquiryMarketplace: 'ገበያ',
   verificationTitle: 'የአክሲዮን ምስክር ወረቀት እውነተኛነት ያረጋግጡ።', verificationIntro: 'የARNA የአክሲዮን ምስክር ወረቀት ማጣቀሻ ቁጥርን በመጠቀም የሰነዱን ሁኔታ ይፈትሹ።',
   footerTagline: 'በመተማመን የሚገነባ የጋራ እድገት።', footerAbout: 'ይወቁን', footerOfficial: 'ይፋዊ አገናኞች', footerDisclosure: 'የተጸደቀ መረጃ ብቻ። ግልጽነት ሁልጊዜ።', footerContribute: 'ይዘት ያቅርቡ', footerVerification: 'ሰነድ ማረጋገጫ', footerLegal: 'ሕጋዊ መረጃ', footerNews: 'ዜናዎችና ማስታወቂያዎች', footerAds: 'ማስታወቂያ ያስተዋውቁ', footerPublications: 'ህትመቶች', footerOpportunities: 'የሥራና የገበያ እድሎች', footerContact: 'ያግኙን', backToTop: 'ወደ ላይ ↑'
@@ -42,7 +42,7 @@ const copy = computed(() => locale.value === 'am' ? {
   aboutP1: 'Maale Arna Share Company is an Ethiopian share company headquartered in Koybe Kebele, Maale Woreda, South Omo Zone.',
   aboutP2: 'Its bylaws establish purposes spanning agriculture, mining, manufacturing, construction, trade, transport, finance, insurance, real estate and community, social and personal services. Current operating status is verified separately for each activity.',
   valuesEyebrow: 'Our guiding principles', valuesTitle: 'Our foundation is', valuesAccent: 'clear.', valuesIntro: 'The system we build must be grounded in the trust of the people it serves.',
-  servicesEyebrow: 'Services & solutions', servicesTitle: 'What we build is', servicesAccent: 'for the future.', servicesIntro: 'Verified descriptions of services actually being delivered will appear here after administrative review and approval.',
+  servicesEyebrow: 'Services & solutions', servicesTitle: 'Our services are', servicesAccent: 'verified before publication.', servicesIntro: 'Verified descriptions of services actually being delivered will appear here after administrative review and approval.',
   preparing: 'In preparation', servicesNote: 'The business purposes listed in the bylaws do not mean every activity is currently operating. Current services are published only after supporting evidence is reviewed.',
   businessTitle: 'Business purposes stated in', businessAccent: 'the bylaws.', businessIntro: 'The following categories are listed in the company bylaws. Actual operating activities are identified separately and published only after verification.',
   businessStatus: 'Bylaw-authorized purpose · current operating status to be verified', businessDisclaimer: 'These are business purposes listed in the bylaws. This does not mean every sector is currently active or separately licensed.',
@@ -50,7 +50,7 @@ const copy = computed(() => locale.value === 'am' ? {
   approvedContent: 'Shown when approved content is available', mediaTitle: 'The ARNA media', mediaAccent: 'center.', mediaIntro: 'Photos and publications appear only after verification and administrative approval.',
   mediaEmpty: 'There is no published media at this time.', publicationsTitle: 'Publications &', publicationsAccent: 'official notices.', publicationsEmpty: 'There are no published notices or publications at this time.',
   opportunitiesTitle: 'Your next opportunity', opportunitiesAccent: 'starts here.', opportunitiesIntro: 'Approved career opportunities, business advertisements and marketplace listings appear here.',
-  opportunitiesEmpty: 'There are no published opportunities at this time. New listings appear after review.', contactTitle: 'Get in touch with ARNA.',
+  opportunitiesEmpty: 'There are no published opportunities at this time. New listings appear after review.', contactTitle: 'Get in touch with Maale Arna.',
   inquiryGeneral: 'General', inquiryInvestor: 'Shareholder / Investor', inquiryPartnership: 'Partnership', inquiryMedia: 'Media', inquiryCareer: 'Career', inquiryAdvertising: 'Advertising', inquiryMarketplace: 'Marketplace',
   verificationTitle: 'Verify the authenticity of a share certificate.', verificationIntro: 'Use the ARNA share-certificate reference number to check the document status.',
   footerTagline: 'Shared progress built on trust.', footerAbout: 'Explore', footerOfficial: 'Official links', footerDisclosure: 'Approved information only. Transparency, always.', footerContribute: 'Submit content', footerVerification: 'Document verification', footerLegal: 'Legal information (Amharic only)', footerNews: 'News & announcements', footerAds: 'Advertise with ARNA', footerPublications: 'Publications', footerOpportunities: 'Careers & marketplace', footerContact: 'Contact us', backToTop: 'Back to top ↑'
@@ -420,7 +420,7 @@ const publicationChannels = [
       <section id="updates" class="updates-section section-pad" aria-labelledby="updates-title">
         <div class="site-container updates-section__grid">
           <div class="updates-section__intro">
-            <p class="eyebrow eyebrow--dark">NEWS · ANNOUNCEMENTS</p>
+            <p class="eyebrow eyebrow--dark">{{ locale === 'am' ? 'ዜናና ማስታወቂያዎች' : 'NEWS · ANNOUNCEMENTS' }}</p>
             <h2 id="updates-title" :lang="locale">{{ copy.updatesTitle }}<br/><span>{{ copy.updatesAccent }}</span></h2>
             <p :lang="locale">{{ copy.updatesIntro }}</p>
           </div>
@@ -456,12 +456,12 @@ const publicationChannels = [
         <div class="site-container advertising-section__inner">
           <div class="advertising-section__mark" aria-hidden="true">AD</div>
           <div class="advertising-section__copy">
-            <p class="eyebrow">COMMERCIAL & PARTNERSHIPS</p>
+            <p class="eyebrow">{{ locale === 'am' ? 'ንግድና አጋርነት' : 'COMMERCIAL & PARTNERSHIPS' }}</p>
             <h2 id="advertising-title">{{ locale === 'am' ? 'የንግድ እድልዎን ከትክክለኛው ታዳሚ ጋር ያገናኙ።' : 'Reach the right audience with your business.' }}</h2>
             <p>{{ locale === 'am' ? 'የማስታወቂያ ጥያቄዎች ለግምገማ ማቅረብ ይችላሉ። ማንኛውም ማስታወቂያ በግልጽ የስፖንሰር መለያ እና በአስተዳዳሪ ፈቃድ ብቻ ይታተማል።' : 'Advertising submissions are reviewed before publication. Approved ads are clearly labelled as sponsored.' }}</p>
           </div>
           <div class="advertising-section__aside">
-            <span>ADVERTISING PLATFORM</span>
+            <span>{{ locale === 'am' ? 'የማስታወቂያ አገልግሎት' : 'ADVERTISING PLATFORM' }}</span>
             <strong>{{ locale === 'am' ? 'ማቅረቢያ ክፍት · ከፈቃድ በኋላ ህትመት' : 'SUBMISSIONS OPEN · PUBLISHING BY APPROVAL' }}</strong>
           </div>
         </div>
@@ -471,7 +471,7 @@ const publicationChannels = [
 
       <section id="gallery" class="section-pad" aria-labelledby="gallery-title">
         <div class="site-container">
-          <div class="section-heading"><div><p class="eyebrow eyebrow--dark">MEDIA · GALLERY</p><h2 id="gallery-title" :lang="locale">{{ copy.mediaTitle }} <span>{{ copy.mediaAccent }}</span></h2></div><p :lang="locale">{{ copy.mediaIntro }}</p></div>
+          <div class="section-heading"><div><p class="eyebrow eyebrow--dark">{{ locale === 'am' ? 'ሚዲያና ማዕከለ-ስዕላት' : 'MEDIA · GALLERY' }}</p><h2 id="gallery-title" :lang="locale">{{ copy.mediaTitle }} <span>{{ copy.mediaAccent }}</span></h2></div><p :lang="locale">{{ copy.mediaIntro }}</p></div>
           <div class="publication-grid">
             <article v-for="item in corporateMedia" :key="item.public_id" class="publication-card">
               <img v-if="item.asset_url" :src="item.asset_url" :alt="item.title" loading="lazy" />
@@ -484,7 +484,7 @@ const publicationChannels = [
 
       <section id="publications" class="section-pad" aria-labelledby="publications-title">
         <div class="site-container">
-          <div class="section-heading"><div><p class="eyebrow eyebrow--dark">PUBLICATIONS · OFFICIAL NOTICES</p><h2 id="publications-title" :lang="locale">{{ copy.publicationsTitle }} <span>{{ copy.publicationsAccent }}</span></h2></div></div>
+          <div class="section-heading"><div><p class="eyebrow eyebrow--dark">{{ locale === 'am' ? 'ህትመቶችና ይፋዊ ማስታወቂያዎች' : 'PUBLICATIONS · OFFICIAL NOTICES' }}</p><h2 id="publications-title" :lang="locale">{{ copy.publicationsTitle }} <span>{{ copy.publicationsAccent }}</span></h2></div></div>
           <div class="publication-grid">
             <article v-for="item in [...corporateAnnouncements, ...corporatePublications]" :key="item.public_id" class="publication-card">
               <div class="publication-card__top"><span>{{ item.type.toUpperCase() }}</span><span>{{ publishedDate(item.published_at) }}</span></div>
@@ -498,7 +498,7 @@ const publicationChannels = [
       <section id="opportunities" class="section-pad" aria-labelledby="opportunities-title">
         <div class="site-container">
           <div class="section-heading">
-            <div><p class="eyebrow eyebrow--dark">CAREERS · OPPORTUNITIES · MARKETPLACE</p><h2 id="opportunities-title" :lang="locale">{{ copy.opportunitiesTitle }} <span>{{ copy.opportunitiesAccent }}</span></h2></div>
+            <div><p class="eyebrow eyebrow--dark">{{ locale === 'am' ? 'ሥራና የንግድ ዕድሎች' : 'CAREERS · OPPORTUNITIES · MARKETPLACE' }}</p><h2 id="opportunities-title" :lang="locale">{{ copy.opportunitiesTitle }} <span>{{ copy.opportunitiesAccent }}</span></h2></div>
             <p :lang="locale">{{ copy.opportunitiesIntro }}</p>
           </div>
           <div class="business-grid">
