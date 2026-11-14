@@ -177,6 +177,8 @@ test.describe('ARNA public site browser contract', () => {
 
   test('loads independent published feeds and submits consented public forms', async ({ page }) => {
     await page.goto(baseUrl);
+    await page.getByRole('button', { name: 'English' }).click();
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     const contact = page.locator('form.public-form').last();
     await contact.getByLabel('Full name').fill('Test Visitor');
     await contact.getByLabel('Email').fill('visitor@example.test');
