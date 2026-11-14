@@ -176,7 +176,7 @@ export type { NavItem, AppSidebarLabels };
 </script>
 
 <script setup lang="ts">
-import { onBeforeUnmount, ref, watch } from 'vue';
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import AppSidebar from '@/layouts/AppShell/AppSidebar';
 import BaseButton from '@/components/primitives/BaseButton';
@@ -254,20 +254,29 @@ const dialogRef = ref<HTMLDialogElement | null>(null);
  * focuses the first focusable element (the close button). No JS focus
  * management is required here.
  */
+function syncDialogState(isOpen: boolean): void {
+  const dialog = dialogRef.value;
+  if (dialog === null) return;
+
+  if (isOpen && !dialog.open) {
+    dialog.showModal();
+  } else if (!isOpen && dialog.open) {
+    dialog.close();
+  }
+}
+
 watch(
   () => props.open,
-  (isOpen) => {
-    const dialog = dialogRef.value;
-    if (dialog === null) return;
-
-    if (isOpen && !dialog.open) {
-      dialog.showModal();
-    } else if (!isOpen && dialog.open) {
-      dialog.close();
-    }
-  },
+  syncDialogState,
   { flush: 'post' },
 );
+
+/*
+ * The prop may already be true on the component's first render. A
+ * non-immediate watcher only observes later changes, so synchronize
+ * once the Teleport target and dialog element have mounted as well.
+ */
+onMounted(() => syncDialogState(props.open));
 
 // -----------------------------------------------------------------------------
 // Unified close request
