@@ -217,7 +217,7 @@
  * requires that all such strings come from a label file. Placing
  * them here — in the same file that already carries the shell chrome
  * labels and the nav trees — keeps the shell's user-facing text in
- * one place. MASESBrand.vue (the next file in this CR) imports
+ * one place. AranaBrand.vue (the next file in this CR) imports
  * `masesBrandLabels` from here, the same way AppShell, both layouts,
  * and the launcher route import their respective labels.
  *
@@ -852,7 +852,7 @@
  *          const `masesBrandLabels`, carrying the corporate name
  *          'ማሌ ዓርና', the product code 'ማሴስ', and the full approved
  *          corporate identity 'ማሌ ዓርና ስማርት ሲስተም (ማሴስ)'. Consumed by
- *          MASESBrand.vue (a companion change in the same CR) via the
+ *          AranaBrand.vue (a companion change in the same CR) via the
  *          AppShell `#brand` slot. See the CR-BRAND1 block at the top
  *          of this file for the rationale and for why
  *          ማሌ ዓርና + ማሴስ is the header's short form.
@@ -1038,7 +1038,7 @@
  * Consumed by:
  *   layouts/AuthenticatedLayout/AuthenticatedLayout.vue   (workspace)
  *   features/portal/PortalLayout.vue                      (portal)
- *   layouts/AppShell/MASESBrand/MASESBrand.vue            (brand labels)
+ *   layouts/AppShell/AranaBrand/AranaBrand.vue            (brand labels)
  *   layouts/AppShell/MASESFooterContent/MASESFooterContent.vue
  *                                                         (footer labels)
  *
@@ -1420,7 +1420,7 @@ import type {
  * usual sense — there is no English counterpart that would be shown
  * in an English locale. But they ARE user-facing strings, so per the
  * project's "no hardcoded user-facing string" policy they live here
- * rather than inside MASESBrand.vue.
+ * rather than inside AranaBrand.vue.
  *
  * The full approved corporate identity, confirmed by the brand owner
  * for CR-BRAND1, is:
