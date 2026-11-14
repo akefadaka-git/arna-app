@@ -103,3 +103,12 @@ test('date-bearing views use the shared calendar formatter instead of dual calen
   assert.match(center, /formatCalendarDate\(value/);
   assert.match(footer, /formatCalendarDate\(new Date\(\)/);
 });
+
+test('ARNA footer exposes its namespaced hooks and a tokenized keyboard focus indicator', () => {
+  const footer = readFileSync('src/layouts/AppShell/AranaFooterContent/AranaFooterContent.vue', 'utf8');
+  assert.match(footer, /class="arana-footer-content"/);
+  assert.match(footer, /data-testid="arana-footer-content-root"/);
+  assert.doesNotMatch(footer, /mases-footer-content/);
+  assert.match(footer, /\.arana-footer-content__link:focus-visible\s*\{[^}]*outline:\s*var\(--arna-focus-ring-width\) solid var\(--arna-focus-ring-color\)/s);
+  assert.match(footer, /outline-offset:\s*var\(--arna-focus-ring-offset\)/);
+});
