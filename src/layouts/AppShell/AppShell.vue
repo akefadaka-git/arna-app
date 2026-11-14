@@ -65,7 +65,7 @@
             (`brand?(): unknown`) is unchanged — slot fallback does
             not affect the declared type; the same contract holds.
           · The companion change in @/router/shell-labels (v1.9.0)
-            adds `masesBrandLabels`, which AranaBrand.vue imports as
+            adds `aranaBrandLabels`, which AranaBrand.vue imports as
             its only dependency. That file is also part of CR-BRAND1.
           · No change to any other slot, prop, emit, or DOM region.
             The `nav`, `actions`, `header-actions`, `footer`, and
@@ -202,7 +202,7 @@
       default. Neither file is modified by CR-BRAND1.
 
  The brand strings live in @/router/shell-labels (v1.9.0) as
- `masesBrandLabels`. The component is
+ `aranaBrandLabels`. The component is
  layouts/AppShell/AranaBrand/AranaBrand.vue. See that file and the
  CR-BRAND1 block in shell-labels.ts for the derivation of the
  header's short form (ማሌ ዓርና + ማሴስ) and for why the corporate
