@@ -323,7 +323,7 @@ function onTertiaryClick(): void {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   flex-wrap: wrap;
   width: 100%;
 }
@@ -339,7 +339,7 @@ function onTertiaryClick(): void {
   .error-actions {
     flex-direction: column;
     align-items: stretch;
-    gap: var(--mases-space-2);
+    gap: var(--arna-space-2);
   }
 
   /*

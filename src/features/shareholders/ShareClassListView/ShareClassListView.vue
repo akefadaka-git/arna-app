@@ -538,7 +538,7 @@ function activeVariantFor(row: ShareClass): 'success' | 'neutral' {
 .share-class-list-view {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -549,9 +549,9 @@ function activeVariantFor(row: ShareClass): 'success' | 'neutral' {
    rather than a display string.
    ============================================================================ */
 .share-class-list-view__code {
-  font-family: var(--mases-font-family-mono);
-  font-size: var(--mases-font-size-body-sm);
-  color: var(--mases-color-text-primary);
+  font-family: var(--arna-font-family-mono);
+  font-size: var(--arna-font-size-body-sm);
+  color: var(--arna-color-text-primary);
 }
 
 /* ============================================================================
@@ -564,7 +564,7 @@ function activeVariantFor(row: ShareClass): 'success' | 'neutral' {
   display: inline-flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
 }
 
 /* ============================================================================

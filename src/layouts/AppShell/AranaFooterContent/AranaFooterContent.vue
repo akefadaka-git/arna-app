@@ -146,13 +146,13 @@
  -----------------------------------------------------------------------------
  Every visual value is a Tier 2 token from tokens.css (v1.2.0):
 
-     Color ........ --mases-color-text-tertiary
-                     --mases-color-action-link
-                     --mases-color-action-link-hover
-     Spacing ...... --mases-space-2
-                     --mases-space-4
-     Type ......... --mases-font-size-caption
-                     --mases-line-height-caption
+     Color ........ --arna-color-text-tertiary
+                     --arna-color-action-link
+                     --arna-color-action-link-hover
+     Spacing ...... --arna-space-2
+                     --arna-space-4
+     Type ......... --arna-font-size-caption
+                     --arna-line-height-caption
 
  No hex value appears in this file. No new token is declared.
 
@@ -309,7 +309,7 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   width: 100%;
   min-width: 0;
 }
@@ -319,7 +319,7 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: var(--mases-space-4);
+    gap: var(--arna-space-4);
   }
 }
 
@@ -337,9 +337,9 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
    ============================================================================ */
 .mases-footer-content__copyright {
   min-width: 0;
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   overflow-wrap: break-word;
 }
 
@@ -359,7 +359,7 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
   display: flex;
   flex-wrap: wrap;
   flex-shrink: 0;
-  gap: var(--mases-space-2) var(--mases-space-4);
+  gap: var(--arna-space-2) var(--arna-space-4);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -377,15 +377,15 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
    users get the same affordance.
    ============================================================================ */
 .mases-footer-content__link {
-  color: var(--mases-color-action-link);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  color: var(--arna-color-action-link);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   text-decoration: none;
 }
 
 .mases-footer-content__link:hover,
 .mases-footer-content__link:focus-visible {
-  color: var(--mases-color-action-link-hover);
+  color: var(--arna-color-action-link-hover);
   text-decoration: underline;
 }
 

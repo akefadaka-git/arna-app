@@ -26,7 +26,7 @@
  Visual identity
  -----------------------------------------------------------------------------
  The secondary variant renders with the aubergine brand surface
- (--mases-color-action-secondary), distinct from the crimson primary
+ (--arna-color-action-secondary), distinct from the crimson primary
  surface. It is the standard "companion action" button in MASES forms
  and dialogs — visually present but subordinated to the primary action.
 

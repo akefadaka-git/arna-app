@@ -294,7 +294,7 @@
      .app-header__brand {
        display: flex;
        align-items: center;
-       gap: var(--mases-space-2);
+       gap: var(--arna-space-2);
        flex-shrink: 0;      ← reserves intrinsic width
        min-width: 0;
      }
@@ -324,14 +324,14 @@
  The text column's visual values are Tier 2 tokens from tokens.css
  (v1.2.0):
 
-     Color ........ --mases-color-text-brand
-                     --mases-color-text-secondary
-     Spacing ...... --mases-space-1
-                     --mases-space-3
-     Type ......... --mases-font-size-body
-                     --mases-font-size-caption
-                     --mases-font-weight-semibold
-                     --mases-font-weight-medium
+     Color ........ --arna-color-text-brand
+                     --arna-color-text-secondary
+     Spacing ...... --arna-space-1
+                     --arna-space-3
+     Type ......... --arna-font-size-body
+                     --arna-font-size-caption
+                     --arna-font-weight-semibold
+                     --arna-font-weight-medium
 
  No hex value appears in this file. No new token is declared.
 
@@ -528,13 +528,13 @@ import { aranaBrandLabels } from '@/router/shell-labels';
    Root — emblem + text column
    ---------------------------------------------------------------------------
    A horizontal flex row. The gap between the emblem and the text column
-   is --mases-space-3 (12px). At mobile the emblem is display: none, so
+   is --arna-space-3 (12px). At mobile the emblem is display: none, so
    the gap has no effect and the layout is identical to v1.0.0.
    ============================================================================ */
 .arana-brand {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   min-width: 0;
   max-width: 100%;
 }
@@ -588,10 +588,10 @@ import { aranaBrandLabels } from '@/router/shell-labels';
   display: block;
   width: 56px;
   height: 56px;
-  border: 1px solid var(--mases-color-border-subtle);
+  border: 1px solid var(--arna-color-border-subtle);
   border-radius: 50%;
-  background-color: var(--mases-color-surface-raised);
-  box-shadow: var(--mases-shadow-elevation-1);
+  background-color: var(--arna-color-surface-raised);
+  box-shadow: var(--arna-shadow-elevation-1);
   object-fit: contain;
 }
 
@@ -606,7 +606,7 @@ import { aranaBrandLabels } from '@/router/shell-labels';
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   min-width: 0;
   line-height: 1.2;
 }
@@ -618,9 +618,9 @@ import { aranaBrandLabels } from '@/router/shell-labels';
    identity anchor.
    ============================================================================ */
 .arana-brand__corporate {
-  color: var(--mases-color-text-brand);
-  font-size: var(--mases-font-size-body);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-brand);
+  font-size: var(--arna-font-size-body);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 /* ============================================================================
@@ -630,16 +630,16 @@ import { aranaBrandLabels } from '@/router/shell-labels';
    weight — clearly subordinate to the corporate name.
    ============================================================================ */
 .arana-brand__product {
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-caption);
-  font-weight: var(--mases-font-weight-medium);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-caption);
+  font-weight: var(--arna-font-weight-medium);
 }
 
 .arana-brand__tagline {
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
   line-height: 1.15;
-  font-weight: var(--mases-font-weight-regular);
+  font-weight: var(--arna-font-weight-regular);
   max-width: 20rem;
 }
 

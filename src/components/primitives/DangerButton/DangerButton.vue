@@ -26,7 +26,7 @@
  Visual identity
  -----------------------------------------------------------------------------
  The danger variant renders with the darkest crimson surface
- (--mases-color-action-danger, resolving to crimson-700). It is visually
+ (--arna-color-action-danger, resolving to crimson-700). It is visually
  distinct from the primary button's crimson-600 surface, so a
  confirmation dialog with "Save" (primary) and "Delete" (danger) does
  not present two identical-looking buttons.
