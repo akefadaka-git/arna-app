@@ -112,3 +112,12 @@ test('ARNA footer exposes its namespaced hooks and a tokenized keyboard focus in
   assert.match(footer, /\.arana-footer-content__link:focus-visible\s*\{[^}]*outline:\s*var\(--arna-focus-ring-width\) solid var\(--arna-focus-ring-color\)/s);
   assert.match(footer, /outline-offset:\s*var\(--arna-focus-ring-offset\)/);
 });
+
+test('maintenance banner wraps actions without crushing long translated messages', () => {
+  const banner = readFileSync('src/layouts/AppShell/MaintenanceBanner/MaintenanceBanner.vue', 'utf8');
+  assert.match(banner, /\.maintenance-banner\s*\{[^}]*flex-wrap:\s*wrap/s);
+  assert.match(banner, /\.maintenance-banner__content\s*\{[^}]*flex:\s*1 1 12rem/s);
+  assert.match(banner, /\.maintenance-banner__actions\s*\{[^}]*flex:\s*0 0 auto/s);
+  assert.match(banner, /\.maintenance-banner__actions\s*\{[^}]*margin-inline-start:\s*auto/s);
+  assert.doesNotMatch(banner, /__masesMaintenanceBanner/);
+});
