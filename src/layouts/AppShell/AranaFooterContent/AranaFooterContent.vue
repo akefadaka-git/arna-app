@@ -383,7 +383,7 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
   text-decoration: none;
 }
 
- .arana-footer-content__link:hover,
+.arana-footer-content__link:hover,
 .arana-footer-content__link:focus-visible {
   color: var(--arna-color-action-link-hover);
   text-decoration: underline;
