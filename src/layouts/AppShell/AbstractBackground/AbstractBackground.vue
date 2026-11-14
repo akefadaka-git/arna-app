@@ -320,7 +320,7 @@
  nothing to disable under `prefers-reduced-motion: reduce`. The
  media query block at the end of the file is a defensive no-op
  placeholder, matching the convention used by AppHeader.vue,
- AppFooter.vue, AppShell.vue, and MASESBrand.vue.
+ AppFooter.vue, AppShell.vue, and AranaBrand.vue.
 
  Forced-colors: the component sets `display: none` under
  `@media (forced-colors: active)`. In Windows High Contrast Mode
@@ -551,7 +551,7 @@
    The component defines no animation. There is nothing to disable
    under prefers-reduced-motion: reduce. This block is a defensive
    no-op placeholder, matching the convention used by AppHeader.vue,
-   AppFooter.vue, AppShell.vue, and MASESBrand.vue, so a future
+   AppFooter.vue, AppShell.vue, and AranaBrand.vue, so a future
    revision that adds a transition has a documented place to gate it
    on the user's motion preference.
    ============================================================================ */
