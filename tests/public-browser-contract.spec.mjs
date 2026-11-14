@@ -78,8 +78,13 @@ async function expectNoSeriousAccessibilityViolations(page, routeLabel) {
 
 test.beforeEach(async ({ page }) => {
   page.on('pageerror', (error) => console.log('[PUBLIC_PAGE_ERROR]', error.stack || error.message));
-  page.on('console', (message) => {
-    if (message.type() === 'error') console.log('[PUBLIC_CONSOLE_ERROR]', message.text());
+  page.on('console', async (message) => {
+    if (message.type() === 'error') {
+      const details = await Promise.all(message.args().map((arg) => arg.evaluate((value) => ({
+        name: value?.name, message: value?.message, stack: value?.stack,
+      })).catch(() => null)));
+      console.log('[PUBLIC_CONSOLE_ERROR]', message.text(), JSON.stringify(message.location()), JSON.stringify(details));
+    }
   });
   await installCmsFixtures(page);
 });
