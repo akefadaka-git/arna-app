@@ -90,7 +90,7 @@ jobs:
               raise SystemExit("PLESK_FTP_PORT must be between 1 and 65535.")
 
           raw = os.environ["PLESK_PUBLIC_DOCROOT"]
-          if not raw or raw.startswith("/") or "\\\\" in raw:
+          if not raw or raw.startswith("/") or "\\" in raw:
               raise SystemExit("PLESK_PUBLIC_DOCROOT must be a non-empty relative POSIX path.")
           if any(ord(ch) < 32 or ord(ch) == 127 for ch in raw):
               raise SystemExit("PLESK_PUBLIC_DOCROOT cannot contain control characters.")
