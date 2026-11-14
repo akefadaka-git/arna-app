@@ -205,17 +205,15 @@ const principles = [
   },
 ];
 
-const offerings: never[] = [];
-
 const businessAreas = [
-  { number: '01', title: 'Agriculture', titleAm: 'ግብርና', description: 'Agricultural operations are included in the company\'s stated corporate purposes.', descriptionEn: 'Agricultural operations are included in the company\'s stated corporate purposes.' },
-  { number: '02', title: 'Mining', titleAm: 'ማዕድን', description: 'Mining operations are included in the company\'s stated corporate purposes.', descriptionEn: 'Mining operations are included in the company\'s stated corporate purposes.' },
-  { number: '03', title: 'Manufacturing', titleAm: 'ማኑፋክቸሪንግ', description: 'Manufacturing operations are included in the company\'s stated corporate purposes.', descriptionEn: 'Manufacturing operations are included in the company\'s stated corporate purposes.' },
-  { number: '04', title: 'Construction', titleAm: 'ኮንስትራክሽን', description: 'Construction operations are included in the company\'s stated corporate purposes.', descriptionEn: 'Construction operations are included in the company\'s stated corporate purposes.' },
-  { number: '05', title: 'Wholesale, hospitality, import & export', titleAm: 'ጅምላ ንግድ፣ ሆቴልና ሬስቶራንት፣ አስመጪና ላኪ', description: 'Wholesale trade, hotels and restaurants, import and export are listed in the bylaws.', descriptionEn: 'Wholesale trade, hotels and restaurants, import and export are listed in the bylaws.' },
-  { number: '06', title: 'Transportation', titleAm: 'ትራንስፖርት', description: 'Transportation operations are included in the company\'s stated corporate purposes.', descriptionEn: 'Transportation operations are included in the company\'s stated corporate purposes.' },
-  { number: '07', title: 'Finance, insurance, real estate & trade', titleAm: 'ፋይናንስ፣ ኢንሹራንስ፣ ሪል እስቴትና ንግድ', description: 'Finance, insurance, real estate and trade are included in the bylaws.', descriptionEn: 'Finance, insurance, real estate and trade are included in the bylaws.' },
-  { number: '08', title: 'Community, social & personal services', titleAm: 'ማኅበረሰብ፣ ማኅበራዊና የግል አገልግሎቶች', description: 'Community, social and personal services are included in the company\'s stated corporate purposes.', descriptionEn: 'Community, social and personal services are included in the company\'s stated corporate purposes.' },
+  { number: '01', title: 'Agriculture', titleAm: 'ግብርና', description: 'የግብርና ሥራዎች በማኅበሩ የተመሠረተ የንግድ ዓላማ ውስጥ ተካትተዋል.', descriptionEn: 'Agricultural operations are included in the company\'s stated corporate purposes.' },
+  { number: '02', title: 'Mining', titleAm: 'ማዕድን', description: 'የማዕድን ሥራዎች በማኅበሩ የተመሠረተ የንግድ ዓላማ ውስጥ ተካትተዋል.', descriptionEn: 'Mining operations are included in the company\'s stated corporate purposes.' },
+  { number: '03', title: 'Manufacturing', titleAm: 'ማኑፋክቸሪንግ', description: 'የማኑፋክቸሪንግ ሥራዎች በማኅበሩ የተመሠረተ የንግድ ዓላማ ውስጥ ተካትተዋል.', descriptionEn: 'Manufacturing operations are included in the company\'s stated corporate purposes.' },
+  { number: '04', title: 'Construction', titleAm: 'ኮንስትራክሽን', description: 'የኮንስትራክሽን ሥራዎች በማኅበሩ የተመሠረተ የንግድ ዓላማ ውስጥ ተካትተዋል.', descriptionEn: 'Construction operations are included in the company\'s stated corporate purposes.' },
+  { number: '05', title: 'Wholesale, hospitality, import & export', titleAm: 'ጅምላ ንግድ፣ ሆቴልና ሬስቶራንት፣ አስመጪና ላኪ', description: 'ጅምላ ንግድ፣ ሆቴልና ሬስቶራንት፣ አስመጪና ላኪ ሥራዎች በመመሥረቻ ደንቡ ተዘርዝረዋል.', descriptionEn: 'Wholesale trade, hotels and restaurants, import and export are listed in the bylaws.' },
+  { number: '06', title: 'Transportation', titleAm: 'ትራንስፖርት', description: 'የትራንስፖርት ሥራዎች በማኅበሩ የተመሠረተ የንግድ ዓላማ ውስጥ ተካትተዋል.', descriptionEn: 'Transportation operations are included in the company\'s stated corporate purposes.' },
+  { number: '07', title: 'Finance, insurance, real estate & trade', titleAm: 'ፋይናንስ፣ ኢንሹራንስ፣ ሪል እስቴትና ንግድ', description: 'ፋይናንስ፣ ኢንሹራንስ፣ ሪል እስቴትና ንግድ በመመሥረቻ ደንቡ ተካትተዋል.', descriptionEn: 'Finance, insurance, real estate and trade are included in the bylaws.' },
+  { number: '08', title: 'Community, social & personal services', titleAm: 'ማኅበረሰብ፣ ማኅበራዊና የግል አገልግሎቶች', description: 'የማኅበረሰብ፣ ማኅበራዊና የግል አገልግሎቶች በማኅበሩ የተመሠረተ ዓላማ ውስጥ ተካትተዋል.', descriptionEn: 'Community, social and personal services are included in the company\'s stated corporate purposes.' },
 ];
 
 const publicationChannels = [
@@ -233,7 +231,7 @@ const publicationChannels = [
       <div class="site-container announcement-bar__inner">
         <span class="announcement-bar__pulse" aria-hidden="true"></span>
         <p :lang="locale">{{ copy.announcement }}</p>
-        <span class="announcement-bar__english">OFFICIAL CORPORATE WEBSITE</span>
+        <span class="announcement-bar__english">{{ locale === 'am' ? 'ይፋዊ የድርጅት ድረ ገጽ' : 'OFFICIAL CORPORATE WEBSITE' }}</span>
       </div>
     </div>
 
@@ -242,8 +240,8 @@ const publicationChannels = [
         <RouterLink class="brand" to="/">
           <img class="public-home__emblem" src="/logo.png" alt="" width="43" height="43" />
           <span class="brand__wordmark">
-            <strong>ARNA</strong>
-            <small>{{ masesBrandLabels.corporateName }}</small>
+            <strong>{{ masesBrandLabels.corporateName }}</strong>
+            <small>ARNA</small>
           </span>
         </RouterLink>
 
@@ -287,7 +285,7 @@ const publicationChannels = [
         <div class="hero__glow hero__glow--two" aria-hidden="true"></div>
         <div class="site-container hero__grid">
           <div class="hero__copy">
-            <p class="eyebrow"><span></span> ማአሌ አርና <span class="eyebrow__divider">/</span> TRUST · PURPOSE · PROGRESS</p>
+            <p class="eyebrow"><span></span> {{ locale === 'am' ? 'ማሌ ዓርና' : 'MAALE ARNA' }} <span class="eyebrow__divider">/</span> {{ locale === 'am' ? 'እምነት · ዓላማ · እድገት' : 'TRUST · PURPOSE · PROGRESS' }}</p>
             <h1 id="hero-title" :lang="locale">{{ copy.heroTitle1 }}<br/><span>{{ copy.heroTitle2 }}</span></h1>
             <p class="hero__lead" :lang="locale">{{ copy.heroLead }}</p>
             <div class="hero__actions">
