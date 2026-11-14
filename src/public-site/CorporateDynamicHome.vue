@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { RouterLink, useRoute, useRouter } from 'vue-router';
 import { fetchCorporateHome, fetchCorporatePages, fetchCorporateEntries, submitCorporateInquiry, submitCorporateOpportunity, type CorporateLocale, type CorporateSitePage, type CorporateSiteSection, type CorporatePublicEntry } from '@/features/public-site/api';
 
 type SectionContent = {
@@ -15,7 +15,7 @@ type SectionContent = {
   cta_label?: string;
   cta_url?: string;
   items?: Array<{ title?: string; body?: string; description?: string; image_url?: string; image_alt?: string; label?: string; value?: string; status?: string; url?: string }>;
-  projects?: Array<{ title?: string; summary?: string; body?: string; approval_status?: string; evidence_reference?: string; partner?: string; budget?: string; outcome?: string }>;
+  projects?: Array<{ title?: string; summary?: string; body?: string; approval_status?: string; evidence_reference?: string; public_approved?: boolean; partner?: string; budget?: string; outcome?: string }>;
   [key: string]: unknown;
 };
 
@@ -65,6 +65,17 @@ const isExternal = (url: string) => /^https:\/\//i.test(url);
 const sectionId = (section: CorporateSiteSection, index: number) =>
   section.id || `section-${index + 1}`;
 
+function upsertMeta(key: string, content: string, attribute: 'name' | 'property' = 'name'): void {
+  const selector = `meta[${attribute}="${key}"]`;
+  let element = document.querySelector<HTMLMetaElement>(selector);
+  if (!element) {
+    element = document.createElement('meta');
+    element.setAttribute(attribute, key);
+    document.head.append(element);
+  }
+  element.content = content;
+}
+
 async function load(): Promise<void> {
   loading.value = true;
   error.value = false;
@@ -89,8 +100,25 @@ async function load(): Promise<void> {
       document.head.append(description);
     }
     description.content = home?.seo?.description || home?.summary || '';
-    const robots = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
-    if (robots && home?.seo?.robots) robots.content = home.seo.robots;
+    if (home?.seo?.robots) upsertMeta('robots', home.seo.robots);
+    if (home?.seo?.title) {
+      upsertMeta('og:title', home.seo.title, 'property');
+      upsertMeta('twitter:title', home.seo.title);
+    }
+    if (home?.seo?.description || home?.summary) {
+      const summary = home?.seo?.description || home?.summary || '';
+      upsertMeta('og:description', summary, 'property');
+      upsertMeta('twitter:description', summary);
+    }
+    if (home?.seo?.og_image) {
+      upsertMeta('og:image', home.seo.og_image, 'property');
+      upsertMeta('twitter:card', 'summary_large_image');
+    }
+    if (home?.seo?.canonical_url) {
+      let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+      if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.append(canonical); }
+      canonical.href = home.seo.canonical_url;
+    }
   } catch {
     error.value = true;
     page.value = null;
