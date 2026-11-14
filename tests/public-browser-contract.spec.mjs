@@ -113,11 +113,11 @@ test.describe('ARNA public site browser contract', () => {
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await expect(page.locator('#hero-title')).toContainText('Shared progress.');
     await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
-    await expect(page.locator('#about-title')).toContainText('A system that');
+    await expect(page.locator('#about-title')).toContainText('A diversified enterprise');
     await expect(page.locator('#principles-title')).toContainText('Our foundation is');
-    await expect(page.locator('#services-title')).toContainText('What we build is');
-    await expect(page.locator('#businesses-title')).toContainText('Connecting opportunities through');
-    await expect(page.locator('#contact-title')).toContainText('Get in touch with ARNA.');
+    await expect(page.locator('#services-title')).toContainText('Our services are');
+    await expect(page.locator('#businesses-title')).toContainText('Business purposes stated in');
+    await expect(page.locator('#contact-title')).toContainText('Get in touch with Maale Arna.');
     await expect(page).toHaveTitle('ARNA | Official Website');
     await expectNoSeriousAccessibilityViolations(page, 'English homepage');
     await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link', { name: 'Submit content' })).toBeVisible();
