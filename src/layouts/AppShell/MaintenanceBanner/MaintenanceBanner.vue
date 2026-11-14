@@ -5,8 +5,8 @@
 
  File:      arna-app/src/layouts/AppShell/MaintenanceBanner/MaintenanceBanner.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.1.0
- Status:    ENHANCEMENT — forced-colors accessibility
+ Version:   1.2.0
+ Status:    ENHANCEMENT — responsive action wrapping and ARNA naming
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §6.x (Layout)
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §15.1, §22 STAGE 11
@@ -23,13 +23,15 @@
 
  -----------------------------------------------------------------------------
  1.1.0  — improve notice readability in forced-colors mode:
- 1.2.0  — allow action controls to wrap below long translated notices
-          on narrow screens instead of forcing the message into an
-          unusably narrow flex column.
           · Add a high-contrast system-color treatment for all three
             variants instead of relying on theme-specific backgrounds.
           · Keep the live-region role and variant metadata unchanged;
             announcement urgency remains intact.
+
+ 1.2.0  — allow action controls to wrap below long translated notices
+          on narrow screens instead of forcing the message into an
+          unusably narrow flex column; rename active internal warning
+          identifiers to the ARNA namespace.
 
  -----------------------------------------------------------------------------
  Purpose
