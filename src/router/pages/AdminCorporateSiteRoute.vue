@@ -37,10 +37,9 @@ const summaryAm = ref('');
 const summaryEn = ref('');
 const bodyAm = ref('');
 const bodyEn = ref('');
-const sectionTitleAm = ref('');
-const sectionTitleEn = ref('');
-const sectionBodyAm = ref('');
-const sectionBodyEn = ref('');
+const sectionsJson = ref('[]');
+const pageSeoAmJson = ref('{}');
+const pageSeoEnJson = ref('{}');
 const selectedPage = ref<CorporatePageRecord | null>(null);
 const scheduleAt = ref('');
 const entryType = ref('news');
@@ -50,10 +49,27 @@ const entryTitleAm = ref('');
 const entryTitleEn = ref('');
 const entryBodyAm = ref('');
 const entryBodyEn = ref('');
+const entryPayloadJson = ref('{}');
+const entrySeoAmJson = ref('{}');
+const entrySeoEnJson = ref('{}');
 const selectedEntry = ref<CorporateEntryRecord | null>(null);
 const mediaTitle = ref('');
 const mediaDescription = ref('');
 const mediaFile = ref<File | null>(null);
+
+function parseJsonObject(value: string, label: string): Record<string, unknown> {
+  let parsed: unknown;
+  try { parsed = JSON.parse(value); } catch { throw new Error(`${label} must contain valid JSON.`); }
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error(`${label} must be a JSON object.`);
+  return parsed as Record<string, unknown>;
+}
+
+function parseJsonArray(value: string, label: string): readonly Record<string, unknown>[] {
+  let parsed: unknown;
+  try { parsed = JSON.parse(value); } catch { throw new Error(`${label} must contain valid JSON.`); }
+  if (!Array.isArray(parsed) || parsed.some((item) => !item || typeof item !== 'object' || Array.isArray(item))) throw new Error(`${label} must be a JSON array of section objects.`);
+  return parsed as readonly Record<string, unknown>[];
+}
 
 async function refresh(): Promise<void> {
   loading.value = true;
@@ -87,10 +103,10 @@ async function createPage(): Promise<void> {
         am: { title: titleAm.value.trim(), summary: summaryAm.value.trim(), body: bodyAm.value.trim() },
         en: { title: titleEn.value.trim(), summary: summaryEn.value.trim(), body: bodyEn.value.trim() },
       },
-      sections: sectionTitleAm.value.trim() || sectionTitleEn.value.trim() || sectionBodyAm.value.trim() || sectionBodyEn.value.trim() ? [{ type: 'text', content: { am: { title: sectionTitleAm.value.trim(), body: sectionBodyAm.value.trim() }, en: { title: sectionTitleEn.value.trim(), body: sectionBodyEn.value.trim() } } }, ...(selectedPage.value?.sections?.slice(1) ?? [])] : (selectedPage.value?.sections ?? []),
+      sections: parseJsonArray(sectionsJson.value, 'Page sections'),
       seo: {
-        am: { title: titleAm.value.trim(), description: summaryAm.value.trim() },
-        en: { title: titleEn.value.trim(), description: summaryEn.value.trim() },
+        am: parseJsonObject(pageSeoAmJson.value, 'Amharic page SEO') as Record<string, string>,
+        en: parseJsonObject(pageSeoEnJson.value, 'English page SEO') as Record<string, string>,
       },
     };
     if (selectedPage.value) await updateCorporatePage(selectedPage.value, draft);
@@ -99,7 +115,7 @@ async function createPage(): Promise<void> {
     selectedPage.value = null;
     pageKey.value = ''; slugAm.value = ''; slugEn.value = '';
     titleAm.value = ''; titleEn.value = ''; summaryAm.value = ''; summaryEn.value = '';
-    bodyAm.value = ''; bodyEn.value = ''; sectionTitleAm.value = ''; sectionTitleEn.value = ''; sectionBodyAm.value = ''; sectionBodyEn.value = ''; sectionTitleAm.value = ''; sectionTitleEn.value = ''; sectionBodyAm.value = ''; sectionBodyEn.value = '';
+    bodyAm.value = ''; bodyEn.value = ''; sectionsJson.value = '[]'; pageSeoAmJson.value = '{}'; pageSeoEnJson.value = '{}';
     await refresh();
   } catch {
     error.value = 'Draft could not be saved. Check unique slugs, required fields and your permission.';
@@ -120,11 +136,9 @@ function editPage(page: CorporatePageRecord): void {
   summaryEn.value = page.translations.en?.summary ?? '';
   bodyAm.value = page.translations.am?.body ?? '';
   bodyEn.value = page.translations.en?.body ?? '';
-  const section = page.sections?.[0] as { content?: Record<string, { title?: string; body?: string }> } | undefined;
-  sectionTitleAm.value = section?.content?.am?.title ?? '';
-  sectionTitleEn.value = section?.content?.en?.title ?? '';
-  sectionBodyAm.value = section?.content?.am?.body ?? '';
-  sectionBodyEn.value = section?.content?.en?.body ?? '';
+  sectionsJson.value = JSON.stringify(page.sections ?? [], null, 2);
+  pageSeoAmJson.value = JSON.stringify(page.seo?.am ?? {}, null, 2);
+  pageSeoEnJson.value = JSON.stringify(page.seo?.en ?? {}, null, 2);
 }
 
 function clearPageEditor(): void {
@@ -132,7 +146,7 @@ function clearPageEditor(): void {
   pageKey.value = ''; slugAm.value = ''; slugEn.value = '';
   titleAm.value = ''; titleEn.value = ''; summaryAm.value = ''; summaryEn.value = '';
   bodyAm.value = ''; bodyEn.value = '';
-  sectionTitleAm.value = ''; sectionTitleEn.value = ''; sectionBodyAm.value = ''; sectionBodyEn.value = '';
+  sectionsJson.value = '[]'; pageSeoAmJson.value = '{}'; pageSeoEnJson.value = '{}';
 }
 
 async function pageAction(page: CorporatePageRecord, decision: 'approve' | 'publish' | 'schedule' | 'unpublish'): Promise<void> {
@@ -161,14 +175,18 @@ async function createEntry(): Promise<void> {
         am: { title: entryTitleAm.value.trim(), body: entryBodyAm.value.trim() },
         en: { title: entryTitleEn.value.trim(), body: entryBodyEn.value.trim() },
       },
-      seo: { am: { title: entryTitleAm.value.trim() }, en: { title: entryTitleEn.value.trim() } },
+      payload: parseJsonObject(entryPayloadJson.value, 'Entry content payload'),
+      seo: {
+        am: parseJsonObject(entrySeoAmJson.value, 'Amharic entry SEO') as Record<string, string>,
+        en: parseJsonObject(entrySeoEnJson.value, 'English entry SEO') as Record<string, string>,
+      },
     };
-    if (selectedEntry.value) await updateCorporateEntry(selectedEntry.value, { slug_am: draft.slug_am, slug_en: draft.slug_en, translations: draft.translations, seo: draft.seo });
+    if (selectedEntry.value) await updateCorporateEntry(selectedEntry.value, { slug_am: draft.slug_am, slug_en: draft.slug_en, translations: draft.translations, payload: draft.payload, seo: draft.seo });
     else await createCorporateEntry(draft);
     selectedEntry.value = null;
     notice.value = 'Bilingual editorial draft saved. It requires independent approval.';
     entrySlugAm.value = ''; entrySlugEn.value = ''; entryTitleAm.value = ''; entryTitleEn.value = '';
-    entryBodyAm.value = ''; entryBodyEn.value = '';
+    entryBodyAm.value = ''; entryBodyEn.value = ''; entryPayloadJson.value = '{}'; entrySeoAmJson.value = '{}'; entrySeoEnJson.value = '{}';
     await refresh();
   } catch { error.value = 'Could not create this draft. Check slugs, bilingual titles and your permissions.'; }
   finally { saving.value = false; }
@@ -191,6 +209,9 @@ function editEntry(entry: CorporateEntryRecord): void {
   entryTitleEn.value = entry.translations.en?.title ?? '';
   entryBodyAm.value = entry.translations.am?.body ?? '';
   entryBodyEn.value = entry.translations.en?.body ?? '';
+  entryPayloadJson.value = JSON.stringify(entry.payload ?? {}, null, 2);
+  entrySeoAmJson.value = JSON.stringify(entry.seo?.am ?? {}, null, 2);
+  entrySeoEnJson.value = JSON.stringify(entry.seo?.en ?? {}, null, 2);
 }
 
 async function uploadMedia(): Promise<void> {
@@ -273,11 +294,11 @@ onMounted(() => void refresh());
           <label>English summary <textarea v-model="summaryEn" rows="2" maxlength="500" /></label>
           <label>Amharic body <textarea v-model="bodyAm" rows="4" maxlength="12000" /></label>
           <label>English body <textarea v-model="bodyEn" rows="4" maxlength="12000" /></label>
-          <h3>Homepage / page content section (optional)</h3>
-          <label>Section title — Amharic <input v-model="sectionTitleAm" maxlength="180" /></label>
-          <label>Section title — English <input v-model="sectionTitleEn" maxlength="180" /></label>
-          <label>Section body — Amharic <textarea v-model="sectionBodyAm" rows="3" maxlength="12000" /></label>
-          <label>Section body — English <textarea v-model="sectionBodyEn" rows="3" maxlength="12000" /></label>
+          <h3>Complete page composition and metadata</h3>
+          <p class="corporate-admin__help">Edit every section in order. Preserve valid JSON; the API stores the full structured section array.</p>
+          <label class="corporate-admin__wide">All page sections — JSON <textarea v-model="sectionsJson" rows="12" spellcheck="false" /></label>
+          <label>Amharic SEO metadata — JSON <textarea v-model="pageSeoAmJson" rows="5" spellcheck="false" /></label>
+          <label>English SEO metadata — JSON <textarea v-model="pageSeoEnJson" rows="5" spellcheck="false" /></label>
           <button type="submit" :disabled="saving">{{ selectedPage ? "Update draft" : "Save draft" }}</button>
           <button v-if="selectedPage" type="button" :disabled="saving" @click="clearPageEditor">Cancel edit</button>
         </form>
@@ -311,6 +332,11 @@ onMounted(() => void refresh());
           <label>Amharic slug <input v-model="entrySlugAm" required /></label><label>English slug <input v-model="entrySlugEn" required /></label>
           <label>Amharic title <input v-model="entryTitleAm" required /></label><label>English title <input v-model="entryTitleEn" required /></label>
           <label>Amharic body <textarea v-model="entryBodyAm" rows="3" /></label><label>English body <textarea v-model="entryBodyEn" rows="3" /></label>
+          <h3>Complete content and metadata</h3>
+          <p class="corporate-admin__help">Use the payload for structured content fields such as links, dates, labels, media references and other entry-specific details. Changes remain drafts until independent approval.</p>
+          <label class="corporate-admin__wide">Structured entry payload — JSON <textarea v-model="entryPayloadJson" rows="10" spellcheck="false" /></label>
+          <label>Amharic SEO metadata — JSON <textarea v-model="entrySeoAmJson" rows="5" spellcheck="false" /></label>
+          <label>English SEO metadata — JSON <textarea v-model="entrySeoEnJson" rows="5" spellcheck="false" /></label>
           <button type="submit" :disabled="saving">{{ selectedEntry ? "Update draft" : "Create draft" }}</button>
           <button v-if="selectedEntry" type="button" :disabled="saving" @click="selectedEntry = null">Cancel edit</button>
         </form>
@@ -357,6 +383,9 @@ onMounted(() => void refresh());
 .corporate-admin button:disabled { opacity: .55; cursor: not-allowed; }
 .corporate-admin__form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
 .corporate-admin__form label, .corporate-admin__inquiry label { display: grid; gap: .3rem; font-weight: 600; }
+.corporate-admin__form h3, .corporate-admin__help, .corporate-admin__wide { grid-column: 1 / -1; }
+.corporate-admin__help { margin: -.35rem 0 0; color: var(--text-muted); font-size: .85rem; line-height: 1.6; }
+.corporate-admin textarea[spellcheck="false"] { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .82rem; line-height: 1.55; }
 .corporate-admin input, .corporate-admin textarea, .corporate-admin select { width: 100%; min-width: 0; border: 1px solid var(--border-default); border-radius: .4rem; padding: .55rem; background: var(--surface-base); color: var(--text-primary); }
 .corporate-admin__list { list-style: none; padding: 0; display: grid; gap: .6rem; }
 .corporate-admin__list li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .8rem; border: 1px solid var(--border-subtle); border-radius: .5rem; padding: .8rem; }
