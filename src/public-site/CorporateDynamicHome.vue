@@ -151,7 +151,14 @@ watch(() => route.query.locale, (value) => {
 
     <main id="main-content">
       <div v-if="loading" class="state-panel" role="status">{{ locale === 'am' ? 'ይዘት በመጫን ላይ…' : 'Loading published content…' }}</div>
-      <div v-else-if="error" class="state-panel" role="alert">{{ locale === 'am' ? 'ይዘቱን ማምጣት አልተቻለም። እባክዎ ቆይተው ይሞክሩ።' : 'Published content could not be loaded. Please try again later.' }}</div>
+      <template v-else-if="error">
+        <div class="state-panel" role="alert">{{ locale === 'am' ? 'ይዘቱን ማምጣት አልተቻለም። እባክዎ ቆይተው ይሞክሩ።' : 'Published content could not be loaded. Please try again later.' }}</div>
+        <section class="content-section content-section--responsibility" aria-labelledby="responsibility-error-title">
+          <div class="content-section__inner"><h1 id="responsibility-error-title" class="section-title">{{ locale === 'am' ? 'ማኅበረሰባዊ ኃላፊነት' : 'Community Responsibility' }}</h1>
+            <p class="section-copy">{{ locale === 'am' ? 'የድርጅቱ ቅድሚያ አቅጣጫዎች ትምህርት፣ ጤና፣ አካባቢ ጥበቃ እና አካባቢያዊ ኢኮኖሚያዊ እድሎች ናቸው። የተወሰኑ ፕሮጀክቶች ሲጸድቁና ሲመዘገቡ ብቻ ይታያሉ።' : 'Corporate priorities are education, health, environmental care and local economic opportunity. Specific projects appear only after approval and documentation.' }}</p>
+          </div>
+        </section>
+      </template>
       <template v-else>
         <template v-if="page">
         <section v-for="(section, index) in visibleSections" :id="sectionId(section, index)" :key="section.id || index"
