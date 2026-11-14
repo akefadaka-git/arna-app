@@ -78,33 +78,33 @@
 
  1.0.4  — footer slot fallback (CR-FOOTER1):
           · The `#footer` forwarding slot now renders
-            <MASESFooterContent /> as its fallback content when no
+            <AranaFooterContent /> as its fallback content when no
             consumer supplies the slot. Previously the region rendered
             empty for both current consumers (AuthenticatedLayout.vue
             v1.0.3, PortalLayout.vue v1.1.0), producing a footer with
             only the version string in its end region.
           · The `<slot name="footer" />` in the AppFooter forwarding
             block becomes
-              <slot name="footer"><MASESFooterContent /></slot>.
+              <slot name="footer"><AranaFooterContent /></slot>.
             Vue's standard slot-fallback semantics apply: a consumer
-            that supplies `#footer` content wins; MASESFooterContent
+            that supplies `#footer` content wins; AranaFooterContent
             is not rendered in that case. This preserves the extension
             point for white-label shells and test harnesses.
           · A new import:
-              import MASESFooterContent
-                from '@/layouts/AppShell/MASESFooterContent';
-            The barrel (MASESFooterContent/index.ts, v1.0.0) is the
+              import AranaFooterContent
+                from '@/layouts/AppShell/AranaFooterContent';
+            The barrel (AranaFooterContent/index.ts, v1.0.0) is the
             companion file in this CR.
           · The `defineSlots` comment for `footer` is updated to
             document the fallback. The slot's type signature
             (`footer?(): unknown`) is unchanged.
           · The companion change in @/router/shell-labels (v1.10.0)
-            adds `masesFooterLabels`, which MASESFooterContent.vue
+            adds `aranaFooterLabels`, which AranaFooterContent.vue
             imports. That file is also part of CR-FOOTER1.
           · `footerVersion` and `footerCopyright` props flow to
             AppFooter unchanged. AppFooter's `version` region
             continues to render the version string at the footer's
-            end position. MASESFooterContent renders the copyright
+            end position. AranaFooterContent renders the copyright
             and the link row in the footer's middle region; the
             `footerCopyright` prop is therefore unused by MASES (the
             layouts pass no value for it) but remains available to
@@ -150,7 +150,7 @@
    ├──────────────────────┴──────────────────────────┤
    │ AppFooter (full width)                          │
    │   ├── start      → footerCopyright prop         │
-   │   ├── middle     → MASESFooterContent (default) │
+   │   ├── middle     → AranaFooterContent (default) │
    │   └── end        → footerVersion prop           │
    └────────────────────────────────────────────────┘
 
@@ -211,12 +211,12 @@
  -----------------------------------------------------------------------------
  Footer slot — default content (CR-FOOTER1)
  -----------------------------------------------------------------------------
- The `#footer` forwarding slot renders <MASESFooterContent /> as its
+ The `#footer` forwarding slot renders <AranaFooterContent /> as its
  fallback content when the consumer of AppShell supplies nothing:
 
      <template #footer>
        <slot name="footer">
-         <MASESFooterContent />
+         <AranaFooterContent />
        </slot>
      </template>
 
@@ -236,11 +236,11 @@
 
    · AppFooter's `start` region is driven by its `copyright` prop.
      MASES does not supply that prop — the copyright line is rendered
-     by MASESFooterContent inside the middle region instead. The
+     by AranaFooterContent inside the middle region instead. The
      `copyright` prop remains available to other consumers of
      AppShell.
 
-   · AppFooter's `middle` region receives MASESFooterContent. Inside
+   · AppFooter's `middle` region receives AranaFooterContent. Inside
      that region the content lays out as a mobile stack and a desktop
      row — copyright at the left edge, link row at the right edge.
 
@@ -249,8 +249,8 @@
      renders at the footer's far right, as it did before this CR.
 
  The footer content strings live in @/router/shell-labels (v1.10.0)
- as `masesFooterLabels`. The component is
- layouts/AppShell/MASESFooterContent/MASESFooterContent.vue. See
+ as `aranaFooterLabels`. The component is
+ layouts/AppShell/AranaFooterContent/AranaFooterContent.vue. See
  that file and the CR-FOOTER1 block in shell-labels.ts for the
  derivation of the copyright template, the choice of the Ethiopic
  colon, and the reasons social link labels are deferred.
@@ -275,7 +275,7 @@
    AppSidebar          (11.16) — in the aside column
    CalendarContext     (11.15) — below the sidebar
    AppFooter           (11.2)  — bottom
-   MASESFooterContent
+   AranaFooterContent
                    (CR-FOOTER1)— default content of the #footer slot
    AppMobileDrawer     (11.17) — teleported to <body>; state-owned
 
@@ -293,7 +293,7 @@
  -----------------------------------------------------------------------------
  Every user-facing string is consumer-supplied via `labels`, or via the
  composed units' own labels (all forwarded from `labels` here, except
- AranaBrand and MASESFooterContent, which read their own strings from
+ AranaBrand and AranaFooterContent, which read their own strings from
  @/router/shell-labels). The only string literal in this file is the
  default `skipToContentTargetId` (`'mases-main-content'`), which is a
  DOM id — not user-facing text.
@@ -343,7 +343,7 @@
    - AranaBrand contributes text inside the banner landmark as its
      first content — screen readers reach it first when navigating by
      landmark. Its own accessibility notes live in that file.
-   - MASESFooterContent contributes text and links inside the
+   - AranaFooterContent contributes text and links inside the
      contentinfo landmark. Its own accessibility notes live in that
      file.
    - Reduced motion: the only animated element in this file is the
@@ -424,7 +424,7 @@ import TenantSwitcher from '@/layouts/AppShell/TenantSwitcher';
 import AppSidebar from '@/layouts/AppShell/AppSidebar';
 import CalendarContext from '@/layouts/AppShell/CalendarContext';
 import AppFooter from '@/layouts/AppShell/AppFooter';
-import MASESFooterContent from '@/layouts/AppShell/MASESFooterContent';
+import AranaFooterContent from '@/layouts/AppShell/AranaFooterContent';
 import AppMobileDrawer from '@/layouts/AppShell/AppMobileDrawer';
 
 interface Props {
@@ -454,7 +454,7 @@ interface Props {
   /**
    * Footer copyright text. Passed through to AppFooter. Unused by
    * MASES today — the copyright line is rendered by
-   * MASESFooterContent in the footer's middle region. Available to
+   * AranaFooterContent in the footer's middle region. Available to
    * other consumers of AppShell.
    */
   footerCopyright?: string;
@@ -530,7 +530,7 @@ defineSlots<{
    */
   'header-actions'?(): unknown;
   /**
-   * The AppFooter middle region. Defaults to <MASESFooterContent />
+   * The AppFooter middle region. Defaults to <AranaFooterContent />
    * when the consumer supplies no content; supply content to override
    * the default (white-label builds, embedded surfaces, test
    * harnesses). See the file header §"Footer slot — default content
@@ -723,7 +723,7 @@ function onMaintenanceDismiss(): void {
       :version="footerVersion"
     >
       <slot name="footer">
-        <MASESFooterContent />
+        <AranaFooterContent />
         <div class="app-shell__footer-preferences">
           <ThemePreferenceControl />
         </div>
