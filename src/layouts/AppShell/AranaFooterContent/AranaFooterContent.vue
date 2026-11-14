@@ -159,11 +159,11 @@
  -----------------------------------------------------------------------------
  Test hooks
  -----------------------------------------------------------------------------
- data-testid="mases-footer-content-root"        on the root <div>
- data-testid="mases-footer-content-copyright"   on the copyright <span>
- data-testid="mases-footer-content-links"       on the links <ul>
- data-testid="mases-footer-content-legal-link"  on the legal <a>
- data-testid="mases-footer-content-support-link" on the support <a>
+ data-testid="arana-footer-content-root"        on the root <div>
+ data-testid="arana-footer-content-copyright"   on the copyright <span>
+ data-testid="arana-footer-content-links"       on the links <ul>
+ data-testid="arana-footer-content-legal-link"  on the legal <a>
+ data-testid="arana-footer-content-support-link" on the support <a>
 
  -----------------------------------------------------------------------------
  Accessibility
@@ -241,15 +241,15 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
 
 <template>
   <div
-    class="mases-footer-content"
-    data-testid="mases-footer-content-root"
+    class="arana-footer-content"
+    data-testid="arana-footer-content-root"
   >
     <!-- ================================================================
          Copyright line
          ================================================================ -->
     <span
-      class="mases-footer-content__copyright"
-      data-testid="mases-footer-content-copyright"
+      class="arana-footer-content__copyright"
+      data-testid="arana-footer-content-copyright"
     >{{ copyrightText }}</span>
 
     <!-- ================================================================
@@ -264,22 +264,22 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
          mailto href.
          ================================================================ -->
     <ul
-      class="mases-footer-content__links"
+      class="arana-footer-content__links"
       role="list"
-      data-testid="mases-footer-content-links"
+      data-testid="arana-footer-content-links"
     >
       <li>
         <RouterLink
           :to="{ name: 'legal' }"
-          class="mases-footer-content__link"
-          data-testid="mases-footer-content-legal-link"
+          class="arana-footer-content__link"
+          data-testid="arana-footer-content-legal-link"
         >{{ aranaFooterLabels.legalLinkLabel }}</RouterLink>
       </li>
       <li>
         <a
           :href="`mailto:${SUPPORT_EMAIL}`"
-          class="mases-footer-content__link"
-          data-testid="mases-footer-content-support-link"
+          class="arana-footer-content__link"
+          data-testid="arana-footer-content-support-link"
         >{{ aranaFooterLabels.supportLinkLabel }}</a>
       </li>
     </ul>
@@ -305,7 +305,7 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
    `flex: 0 0 auto` at mobile and `flex: 1 1 auto` at tablet+). The
    explicit width guarantees the same layout behaviour in both cases.
    ============================================================================ */
-.mases-footer-content {
+.arana-footer-content {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -315,7 +315,7 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
 }
 
 @media (min-width: 640px) {
-  .mases-footer-content {
+  .arana-footer-content {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
@@ -335,7 +335,7 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
    corporate name with its trailing Ethiopic full stop) would
    otherwise overflow a narrow container.
    ============================================================================ */
-.mases-footer-content__copyright {
+.arana-footer-content__copyright {
   min-width: 0;
   color: var(--arna-color-text-tertiary);
   font-size: var(--arna-font-size-caption);
@@ -355,7 +355,7 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
    the copyright text is long. The copyright shrinks instead (via its
    own `min-width: 0`), keeping the link text fully readable.
    ============================================================================ */
-.mases-footer-content__links {
+.arana-footer-content__links {
   display: flex;
   flex-wrap: wrap;
   flex-shrink: 0;
@@ -376,17 +376,23 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
    The :focus-visible selector duplicates the hover state so keyboard
    users get the same affordance.
    ============================================================================ */
-.mases-footer-content__link {
+.arana-footer-content__link {
   color: var(--arna-color-action-link);
   font-size: var(--arna-font-size-caption);
   line-height: var(--arna-line-height-caption);
   text-decoration: none;
 }
 
-.mases-footer-content__link:hover,
-.mases-footer-content__link:focus-visible {
+ .arana-footer-content__link:hover,
+.arana-footer-content__link:focus-visible {
   color: var(--arna-color-action-link-hover);
   text-decoration: underline;
+}
+
+.arana-footer-content__link:focus-visible {
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
+  border-radius: var(--arna-radius-xs);
 }
 
 /* ============================================================================
@@ -398,7 +404,7 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
    documented place to gate it on the user's motion preference.
    ============================================================================ */
 @media (prefers-reduced-motion: reduce) {
-  .mases-footer-content {
+  .arana-footer-content {
     /* no-op placeholder — see comment above */
   }
 }
@@ -408,17 +414,17 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
    Preserve clear link affordances when authored palette tokens are suppressed.
    ============================================================================ */
 @media (forced-colors: active) {
-  .mases-footer-content__copyright {
+  .arana-footer-content__copyright {
     color: CanvasText;
   }
 
-  .mases-footer-content__link {
+  .arana-footer-content__link {
     color: LinkText;
     text-decoration: underline;
   }
 
-  .mases-footer-content__link:hover,
-  .mases-footer-content__link:focus-visible {
+  .arana-footer-content__link:hover,
+  .arana-footer-content__link:focus-visible {
     color: ActiveText;
   }
 }
