@@ -2,7 +2,7 @@
 import { onMounted, ref, watch } from 'vue';
 import { useRoute, RouterLink } from 'vue-router';
 import { fetchCorporatePage, type CorporateLocale, type CorporateSitePage, type CorporateSiteSection } from '@/features/public-site/api';
-import { masesBrandLabels } from '@/router/shell-labels';
+import { aranaBrandLabels } from '@/router/shell-labels';
 
 const route = useRoute();
 const page = ref<CorporateSitePage | null>(null);
@@ -77,7 +77,7 @@ onMounted(() => void loadPage());
       <div class="site-container site-header__inner">
         <RouterLink class="brand" to="/">
           <img class="public-home__emblem" src="/logo.png" alt="" width="43" height="43" />
-          <span class="brand__wordmark"><strong>{{ masesBrandLabels.corporateName }}</strong><small>{{ masesBrandLabels.productName }}</small></span>
+          <span class="brand__wordmark"><strong>{{ aranaBrandLabels.corporateName }}</strong><small>{{ aranaBrandLabels.productName }}</small></span>
         </RouterLink>
         <nav class="main-nav" :aria-label="locale === 'am' ? 'ዋና አሰሳ' : 'Main navigation'">
           <RouterLink to="/">{{ locale === 'am' ? 'መነሻ' : 'Home' }}</RouterLink>
