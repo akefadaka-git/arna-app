@@ -98,3 +98,14 @@ The Owner supplied the following additional subjects for potential corporate pag
 7. Leadership names and credentials require current official confirmation and publication approval.
 8. Preserve the distinction between company CSR commitments and individual members' religious or personal conduct.
 9. Keep source references and editorial decisions in the internal record; do not expose shareholder personal data or private schedules.
+
+### Permanent Community Responsibility section — Owner decision (2026-11-14)
+
+The public corporate website must retain **Community Responsibility** as a permanent institutional section. Its continued presence must not depend on whether the Company currently has a project to announce. The section may describe enduring corporate principles and priority areas, including education and skills development, community health and well-being, environmental care, and local economic opportunity.
+
+Specific project records are a separate, evidence-controlled publication layer. Publish a named project, budget or expenditure, funding commitment, partner, activity, beneficiary figure, deliverable or outcome only when:
+1. the relevant information is supported by current, reviewable company documentation;
+2. the appropriate company authority has approved the specific information for public release; and
+3. the published statement accurately identifies its status, period, scope and evidence (for example, planned, approved, funded, in progress or completed).
+
+Do not turn a priority area into a claim of an active program. Do not publish unapproved budgets, partner names or logos, personal/beneficiary information, impact figures or outcome claims. If there are no approved project updates, keep the permanent section visible and show only the approved corporate-level priorities; do not remove or hide the section and do not fabricate activity.
