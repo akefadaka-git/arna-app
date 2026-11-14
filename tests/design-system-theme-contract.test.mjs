@@ -163,7 +163,7 @@ test('active application sources use only the ARNA CSS token namespace', () => {
   const collect = (directory) => readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     const path = `${directory}/${entry.name}`;
     if (entry.isDirectory()) return collect(path);
-    return /\\.(?:vue|css|ts|tsx|js|mjs|html)$/.test(entry.name) ? [path] : [];
+    return /\.(?:vue|css|ts|tsx|js|mjs|html)$/.test(entry.name) ? [path] : [];
   });
   const legacyFiles = roots.flatMap(collect).filter((path) => read(path).includes(legacyPrefix));
   assert.deepEqual(legacyFiles, [], 'active source and test files must not retain legacy CSS token references');
