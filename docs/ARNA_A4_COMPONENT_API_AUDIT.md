@@ -226,3 +226,15 @@ This CI result supersedes the earlier “in progress / not run” note for that 
 | Drawer consumer census / behavioral suite | NOT COMPLETE |
 | Full API contract extraction | PARTIAL |
 | A4 closure | OPEN |
+
+
+## 14. Added A4 high-risk source-contract regression suite
+
+Added `tests/a4-component-risk-contract.test.mjs` and wired it into `package.json` and the frontend CI workflow. The suite checks source contracts for:
+- Combobox keyboard handlers, ARIA roles/relationships, disabled-option handling and typed emits.
+- FileUploader injected upload boundary, cancellation/unmount abort lifecycle, rejection reasons and lifecycle events.
+- PermissionGate use of the authenticated permission set and deny-on-empty behavior.
+- Modal/Drawer optional close-label risk and typed close events.
+- The 19 inspected Modal consumer call sites passing dedicated translated close-label fields.
+
+**Evidence classification:** these are static source-contract regression checks. They guard expected implementation structure and consumer bindings; they are not mounted-component browser interaction tests and do not prove focus behavior, screen-reader announcements, race conditions or backend authorization. Dedicated runtime suites remain required for Combobox, Modal/Drawer and FileUploader. PermissionGate remains a UI-only gate; server/API authorization must independently enforce permissions.
