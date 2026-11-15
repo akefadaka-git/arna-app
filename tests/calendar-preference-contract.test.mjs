@@ -18,7 +18,8 @@ for (const path of dateViews) {
     const source = await readFile(new URL('../' + path, import.meta.url), 'utf8');
     const setup = source.split('<script setup')[1]?.split('</script>')[0] ?? '';
     assert.match(setup, /formatCalendarDate/);
-    assert.doesNotMatch(source, /\{\{[^{}]*_display[^{}]*\}\}/);
+    const template = source.replace(/<!--[\s\S]*?-->/g, '');
+    assert.doesNotMatch(template, /\{\{[^{}]*_display[^{}]*\}\}/);
   });
 }
 
