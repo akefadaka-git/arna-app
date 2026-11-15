@@ -709,3 +709,39 @@ Five additional primitives were reconciled from their exact SFC declarations and
 | Overall A4 API audit | OPEN |
 
 No merge or deployment is included or authorized.
+
+
+## 28. Primitive API reconciliation — batch 3 (24 of 24)
+
+The final four primitives were reconciled from their exact SFC declarations, imported BaseButton types, event payloads and slot forwarding. Source blob hashes are included for traceability.
+
+| Component / source blob | Public props and defaults | Events / model | Slots and exposed API |
+|---|---|---|---|
+| IconButton — `3425b4e6f9dd999a7dba8e7f5512a48f47e82b47` | Required `icon:string`; required accessible name by contract via `ariaLabel` or `ariaLabelledBy` (both optional in TS); `variant='ghost'` (primary/secondary/ghost/danger); `size='md'`; `type='button'`; `disabled=false`; `loading=false`. Imports `ButtonSize`/`ButtonType` from BaseButton. | `click(MouseEvent)` forwards the original event. | No consumer slots; internal BaseIcon is rendered in BaseButton's default slot. No exposed methods found. |
+| LinkButton — `4fdc4cfb56bf44607b49bee7238516d4fbd8982e` | BaseButton `ButtonSize`/`ButtonType`; `size='md'`, `type='button'`, `disabled=false`, `loading=false`, `block=false`, `iconOnly=false`; optional `ariaLabel`, `ariaLabelledBy`. | `click(MouseEvent)`. | Unscoped default, `leading`, `trailing` slots; leading/trailing are conditionally forwarded. No exposed methods found. |
+| PrimaryButton — `48758ab68a54526d07d38772b88ba50ff6077b19` | Same BaseButton adapter contract: `size='md'`, `type='button'`, `disabled=false`, `loading=false`, `block=false`, `iconOnly=false`; optional `ariaLabel`, `ariaLabelledBy`. | `click(MouseEvent)`. | Unscoped default, `leading`, `trailing` slots; leading/trailing conditionally forwarded. No exposed methods found. |
+| SecondaryButton — `3b9f904514f0ed93b4416bac15255b7207c4409f` | Same BaseButton adapter contract: `size='md'`, `type='button'`, `disabled=false`, `loading=false`, `block=false`, `iconOnly=false`; optional `ariaLabel`, `ariaLabelledBy`. | `click(MouseEvent)`. | Unscoped default, `leading`, `trailing` slots; leading/trailing conditionally forwarded. No exposed methods found. |
+
+### Primitive batch 3 findings and compatibility notes
+
+1. **The four button adapters are intentionally thin.** They fix a visual variant (icon button supports primary/secondary/ghost/danger; other adapters fix link/primary/secondary) and delegate the native button, loading, disabled, size, type, icon-only and slot behavior to BaseButton. Consumer code should rely on BaseButton for the underlying interaction semantics rather than duplicating them.
+2. **IconButton's icon name is deliberately typed as string.** The component narrows it to BaseIcon's registry type at the binding point and relies on BaseIcon's runtime registry warning. An unregistered value can therefore result in a missing icon with a development warning; it is not rejected at the public TypeScript boundary.
+3. **Accessible names remain optional in TypeScript.** IconButton warns when neither `ariaLabel` nor `ariaLabelledBy` is supplied. The other button adapters document the same requirement when `iconOnly=true`, but the interfaces do not encode a discriminated union that makes a name mandatory. Consumer compatibility must verify the name for every icon-only usage.
+4. **Button click payloads are DOM events.** All four adapters emit the original `MouseEvent`, not a domain-level action or value. Consumers should use the event only for UI-level handling and keep business operations in their own handlers.
+5. **Slot forwarding is conditional.** LinkButton, PrimaryButton and SecondaryButton forward leading/trailing slots only when supplied, preventing BaseButton from rendering empty adornment wrappers. IconButton has no consumer slot because its icon is its entire default content.
+6. This batch completes the detailed source-declaration transcription of all 24 primitives when combined with the original 10-component pilot and batches 1–2. It does not prove every consumer supplies required names, nor does it complete mounted interaction and full API compatibility evidence.
+
+| Primitive API audit progress | Status |
+|---|---|
+| Primitive source-declaration inventory | 24 / 24 reconciled |
+| Props/defaults/events/slots source summaries | SOURCE REVIEW COMPLETE for inspected declarations |
+| Imported type dependencies | PARTIAL — BaseButton types followed for these adapters; full transitive type closure not complete |
+| Consumer compatibility across all primitives | NOT COMPLETE |
+| Mounted behavior evidence across all primitives | PARTIAL |
+| Overall A4 API audit | OPEN |
+
+### Primitive source reconciliation milestone
+
+**Source-declaration reconciliation: 24/24 primitives — COMPLETE.** This closes only the primitive inventory and source-contract transcription. It does not close full prop/default/event/slot/expose/attribute-fallthrough compatibility, caller label requirements, patterns, full authenticated-shell review, or physical-device acceptance.
+
+No merge or deployment is included or authorized.
