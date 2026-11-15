@@ -40,10 +40,11 @@
  * -----------------------------------------------------------------------------
  * Storage (Architecture Freeze §13.4)
  * -----------------------------------------------------------------------------
- * The active tenant id is persisted under `mases.tenant_id` in
- * localStorage (§13.4, frozen). The storage is abstracted behind
- * TenantIdStorage so tests can isolate state without touching the
- * browser's global localStorage. The production default is localStorage.
+ * The active tenant id is persisted under `arna.tenant_id`; legacy
+ * `mases.tenant_id` is read as a migration fallback. New writes use
+ * the ARNA key and remove the legacy key. Storage is abstracted behind
+ * TenantIdStorage so tests can isolate state without touching the browser's
+ * global localStorage.
  *
  * -----------------------------------------------------------------------------
  * Bootstrap sequence (Stage 12 responsibility, documented here so the
