@@ -1,6 +1,6 @@
 # ARNA Design System 2.0 — Consolidated Acceptance Record
 
-**Record version:** 0.1  
+**Record version:** 0.2  
 **Assessment date:** 15 November 2026  
 **Repository:** `akefadaka-git/arna-app`  
 **Pull request:** #65 — open, unmerged  
@@ -42,25 +42,25 @@ Searches covered:
 
 ### 3.2 Catalogue section references recovered from component source
 
-| Component | Source-declared catalogue authority | Requirement described by component source | Current adoption finding |
+| Component | Source-declared catalogue authority | Requirement described by component source | Implemented consumer |
 |---|---|---|---|
-| LinkButton | §2.6 | Button-semantic inline JavaScript action styled as a text link; not route navigation | No external import detected |
-| IconButton | §2.7 | Square icon-only action composing BaseButton and BaseIcon; requires accessible name | No external import detected |
-| BaseRadio | §2.12 | One native radio within a named group; emits its typed value | No external import detected |
-| BaseDivider | §2.16 | Horizontal/vertical decorative or semantic separator for content regions | No external import detected |
-| ErrorSupportHint | §2.24; also Amendment A1 Revision 2 §A1R4.3 | Localized advisory text for selected error-page archetypes | No external import detected |
+| LinkButton | §2.6 | Button-semantic inline JavaScript action styled as a text link; not route navigation | `MaintenanceBanner.vue` action |
+| IconButton | §2.7 | Square icon-only action composing BaseButton and BaseIcon; requires accessible name | `AppHeader.vue` mobile-menu trigger |
+| BaseRadio | §2.12 | One native radio within a named group; emits its typed value | `ShareholderForm.vue` shareholder-type group |
+| BaseDivider | §2.16 | Horizontal/vertical decorative or semantic separator for content regions | `ShareholderForm.vue` section boundaries |
+| ErrorSupportHint | §2.24; also Amendment A1 Revision 2 §A1R4.3 | Localized advisory text for selected error-page archetypes | `AccessDeniedPage.vue` exact FILE_ACCESS_DENIED warning |
 
-**Reclassification:** these five are not “unneeded components”. Their own frozen source headers identify them as catalogue-mandated primitives. They are **catalogue-required components with no detected external consumer** in the inspected source search. Their implementation and stable exports exist; application adoption remains a separate gap.
+These five components are no longer classified as unconsumed. Their implementations and stable exports existed already; this change adds concrete use at real consumer boundaries.
 
-### 3.3 Orphan-candidate disposition
+### 3.3 Implemented adoption decisions
 
-- **BaseDivider — REQUIRED / ADOPTION GAP.** Its documented use cases are card divisions, form-section breaks and list/action separation. Adopt only where the existing markup has a genuine separator semantic or consistent visual need; do not add redundant decorative rules.
-- **BaseRadio — REQUIRED / ADOPTION GAP.** It is the correct primitive for actual single-choice form groups. No qualifying existing single-choice workflow was established in the inspected consumers. Do not replace unrelated native controls without a verified workflow and group-level keyboard/label contract.
-- **ErrorSupportHint — REQUIRED / ADOPTION GAP.** It belongs to selected centralized error archetypes and requires translated hint content. Current error surfaces were not shown to consume it. Integration requires an archetype-to-localized-hint mapping; do not invent generic hint copy.
-- **IconButton — REQUIRED / ADOPTION GAP.** It is suitable for genuinely icon-only actions with accessible names. Existing NotificationsBell uses a BaseButton composition carrying an unread badge; a blind substitution would risk breaking that composition. No safe, verified replacement target was established.
-- **LinkButton — REQUIRED / ADOPTION GAP.** It is for JavaScript actions styled like inline links, not route navigation. Its own documented examples include forgot-password, disclosure, copy and resend actions. No external consumer was detected; ordinary navigation must continue using BaseLink/RouterLink.
+- **BaseDivider — IMPLEMENTED.** Replaced duplicated ShareholderForm section-border separators with the shared divider primitive. Each of the three divider instances has a distinct test hook. Existing spacing remains controlled by the parent form layout.
+- **BaseRadio — IMPLEMENTED.** Replaced the shareholder-type select with a translated, mutually exclusive native radio group inside a `fieldset`/ `legend`. The radios share the `shareholder-type` name, preserve the string values, remain required, and are disabled when the type is immutable in edit mode or while submitting.
+- **ErrorSupportHint — IMPLEMENTED.** AccessDeniedPage uses the warning variant only when the backend code exactly equals `FILE_ACCESS_DENIED`. Text remains consumer-supplied and localized; the component does not invent copy or infer the condition from the attempted path.
+- **IconButton — IMPLEMENTED.** AppHeader uses IconButton for the icon-only mobile-menu trigger. It retains the existing accessible name, `aria-haspopup="dialog"`, test hook and click behavior. NotificationsBell was not changed because its current badge composition is not compatible with a blind IconButton substitution.
+- **LinkButton — IMPLEMENTED.** MaintenanceBanner uses LinkButton for its inline JavaScript action. Its dismiss action remains a standard BaseButton, and navigation continues to use link semantics.
 
-No artificial integrations were added. These dispositions avoid claiming that an export is equivalent to real adoption.
+No unrelated feature behavior or backend/API contract was changed. The adoption contract test now checks all five consumer integrations.
 
 ## 4. Four-application entry-point and import-graph evidence
 
@@ -130,16 +130,7 @@ Accessibility status: **PARTIAL**.
 
 ## 7. Exact-head workflow evidence
 
-Assessed head: `a7c6dde9407a43afb949a6791c60b03964b03d69`.
-
-| Event | Workflow run | Result |
-|---|---:|---|
-| Push | [#43692791221](https://github.com/akefadaka-git/arna-app/actions/runs/43692791221) | PASS |
-| Pull request | [#43692795094](https://github.com/akefadaka-git/arna-app/actions/runs/43692795094) | PASS |
-
-Both exact-head runs completed successfully. The frontend workflow executes locked install, dependency audit gate, TypeScript check, all four builds, static output verification, public build smoke, palette contract, theme/component contract, responsive shell contract, selected feature contracts, calendar contracts, public browser accessibility/responsive tests and DatePicker browser interactions.
-
-These workflow results establish that the defined automated checks passed on the stated head. They do not establish that unimplemented or unmeasured acceptance criteria passed.
+The earlier acceptance-record head `e4fd16ae6a1b1561d86ac633150032a8da51c214` passed both push and pull-request workflows. The current implementation adds five consumer integrations and a regression contract. Exact-head workflow evidence for the final updated record is pending and will be reported separately; previous workflow results are not carried forward as proof for newer commits.
 
 ## 8. Consolidated gate matrix
 
@@ -149,7 +140,7 @@ These workflow results establish that the defined automated checks passed on the
 | Catalogue-to-inventory reconciliation | **UNRESOLVED** | Only source-declared section references and partial component authority recovered |
 | 24 primitive files/exports | **VERIFIED** | 24 SFCs and 24 folder exports; contract test passed |
 | 26 composites / 15 patterns inventory | **VERIFIED** | Source-tree count only; no full catalogue mapping |
-| Five orphan candidates disposition | **PARTIAL** | Requirements identified from component source; no safe integrations established |
+| Five required primitive integrations | **IMPLEMENTED — CI PENDING** | Five concrete consumer paths and regression assertions added; exact-head workflows pending |
 | Four entry-point theme imports | **VERIFIED** | Exact source and CI contract |
 | Complete four-root transitive import graph | **NOT RUN / MISSING** | AST/module-resolution graph and template/global component edges absent |
 | Palette and semantic token contracts | **VERIFIED** | Exact-head CI contract passed; exhaustive rendered contrast remains unverified |
@@ -171,7 +162,7 @@ Do not merge PR #65 or deploy from this record. The following evidence is requir
 
 1. Restore the exact approved catalogue v1.0.0 and companion design-system specification, including all sections and approval/version metadata.
 2. Produce the complete four-entrypoint AST import graph and per-app reachability matrix.
-3. Reconcile all catalogue-required components and documented workflows, including the five catalogue-required but currently unconsumed primitives.
+3. Reconcile all catalogue-required components and documented workflows, and review the new five consumer integrations against the restored authoritative catalogue.
 4. Produce a component-by-component state matrix across applicable interaction states.
 5. Run browser verification for light/dark and Amharic/English across all four applications, with realistic long-form content and responsive viewports.
 6. Complete manual keyboard, focus, screen-reader and contrast review against WCAG 2.2 AA.
