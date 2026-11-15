@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/BaseRadio/BaseRadio.vue
  Layer:     1 (Primitives)
- Version:   1.0.0
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.12
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -256,6 +256,12 @@ interface Props {
    * exists in the DOM.
    */
   ariaDescribedBy?: string;
+
+  /** Explicit accessible name when no visible slot label is supplied. */
+  ariaLabel?: string;
+
+  /** ID reference(s) naming the radio from external label content. */
+  ariaLabelledBy?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -267,6 +273,8 @@ const props = withDefaults(defineProps<Props>(), {
   invalid: false,
   ariaInvalid: undefined,
   ariaDescribedBy: undefined,
+  ariaLabel: undefined,
+  ariaLabelledBy: undefined,
 });
 
 const emit = defineEmits<{
@@ -378,6 +386,8 @@ defineExpose({ focus, blur, el });
       :required="required"
       :aria-invalid="resolvedAriaInvalid"
       :aria-describedby="ariaDescribedBy"
+      :aria-label="ariaLabel"
+      :aria-labelledby="ariaLabelledBy"
       class="radio__input"
       data-testid="base-radio-control"
       @change="onChange"
