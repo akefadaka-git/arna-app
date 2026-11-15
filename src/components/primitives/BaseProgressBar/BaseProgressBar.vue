@@ -415,11 +415,11 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   width: 30%;
   border-radius: var(--arna-radius-full);
   will-change: transform;
-  animation: mases-progress-indeterminate 0.9s var(--arna-easing-standard)
+  animation: arna-progress-indeterminate 0.9s var(--arna-easing-standard)
     infinite;
 }
 
-@keyframes mases-progress-indeterminate {
+@keyframes arna-progress-indeterminate {
   0% {
     transform: translateX(-100%);
   }
