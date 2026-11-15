@@ -213,3 +213,30 @@ test('shared component styles use semantic color tokens instead of hardcoded col
   assert.deepEqual(violations, [],
     'shared component styles must use semantic tokens; put raw palette values in the token/theme layer');
 });
+
+
+test('catalogue-required orphan primitives are adopted at real consumer boundaries', () => {
+  const shareholderForm = read('src/features/shareholders/ShareholderForm/ShareholderForm.vue');
+  const accessDenied = read('src/components/patterns/AccessDeniedPage/AccessDeniedPage.vue');
+  const appHeader = read('src/layouts/AppShell/AppHeader/AppHeader.vue');
+  const maintenanceBanner = read('src/layouts/AppShell/MaintenanceBanner/MaintenanceBanner.vue');
+
+  assert.ok(shareholderForm.includes("import BaseDivider from '@/components/primitives/BaseDivider'"));
+  assert.ok(shareholderForm.includes("import BaseRadio from '@/components/primitives/BaseRadio'"));
+  assert.ok(shareholderForm.includes('name="shareholder-type"'));
+  assert.ok(shareholderForm.includes('<legend class="shareholder-form__type-legend">'));
+  assert.ok(shareholderForm.includes('shareholder-form-type-divider'));
+  assert.ok(shareholderForm.includes('shareholder-form-name-divider'));
+  assert.ok(shareholderForm.includes('shareholder-form-access-divider'));
+
+  assert.ok(accessDenied.includes("import ErrorSupportHint from '../../primitives/ErrorSupportHint'"));
+  assert.ok(accessDenied.includes('<ErrorSupportHint'));
+  assert.ok(accessDenied.includes("variant=\"warning\""));
+
+  assert.ok(appHeader.includes("import IconButton from '@/components/primitives/IconButton'"));
+  assert.ok(appHeader.includes('<IconButton'));
+  assert.ok(appHeader.includes('icon="menu"'));
+
+  assert.ok(maintenanceBanner.includes("import LinkButton from '@/components/primitives/LinkButton'"));
+  assert.ok(maintenanceBanner.includes('<LinkButton'));
+});
