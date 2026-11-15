@@ -188,8 +188,15 @@ const sampleData = computed(() => [
 .visual-library-showcase__section { display: grid; gap: var(--arna-space-4); min-width: 0; }
 .visual-library-showcase__section > h3 { margin: 0; color: var(--arna-color-text-primary); font-size: var(--arna-font-size-heading-5); overflow-wrap: anywhere; }
 .visual-library-showcase__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: var(--arna-space-5); min-width: 0; align-items: stretch; }
-.visual-library-showcase__grid--3d { padding: .35rem .2rem .8rem; }
-.visual-library-showcase__grid--content { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+.visual-library-showcase__grid--3d {
+  padding: 1rem .2rem 3rem;
+  row-gap: 3rem;
+}
+.visual-library-showcase__grid--content {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  align-items: start;
+  margin-block-end: 1.5rem;
+}
 .visual-library-showcase__note { margin: 0 0 .75rem; color: var(--arna-color-text-secondary); font-size: var(--arna-font-size-caption); }
 .visual-library-showcase__effects { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin: 0; font-size: clamp(1.4rem, 4vw, 2rem); }
 @media (max-width: 639px) {
