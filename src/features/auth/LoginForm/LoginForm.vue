@@ -135,7 +135,7 @@
 
    1. When checked and login succeeds, the identifier (email or
       phone) is written to localStorage under
-      `mases.auth.remembered_identifier`.
+      `arna.auth.remembered_identifier` (with a legacy MASES fallback).
 
    2. On the next visit, the identifier is pre-filled, the checkbox
       is restored to checked, and focus lands on the password
