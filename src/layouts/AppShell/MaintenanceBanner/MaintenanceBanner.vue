@@ -73,7 +73,8 @@
  Composition
  -----------------------------------------------------------------------------
  COMPOSES:
-   BaseButton (Unit 8.2)  — the action link and the dismiss button
+   LinkButton (Unit 8.8) — the inline JavaScript action
+  BaseButton (Unit 8.2)  — the dismiss button
    BaseIcon   (Unit 8.19) — the variant glyph and the close glyph
 
  Does not reimplement either primitive.
@@ -107,7 +108,7 @@
  data-testid="maintenance-banner-title"   on the title <p> (rendered
                                           only when title is supplied)
  data-testid="maintenance-banner-message" on the message <p>
- data-testid="maintenance-banner-action"  on the action BaseButton
+ data-testid="maintenance-banner-action"  on the action LinkButton
                                           (rendered only when
                                           actionLabel is supplied)
  data-testid="maintenance-banner-dismiss" on the dismiss BaseButton
@@ -142,7 +143,7 @@
      text carries the meaning; the icon reinforces.
    - The dismiss button uses BaseButton with an explicit aria-label
      sourced from `dismissLabel`.
-   - The action link uses BaseButton with a visible label
+   - The action link uses LinkButton with a visible label
      (`actionLabel`), which is the accessible name.
    - Reduced motion: this file defines no animation.
 
