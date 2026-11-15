@@ -928,3 +928,66 @@ No merge or deployment is included or authorized.
 
 
 **Exact-head verification:** [Workflow #43708431750](https://github.com/akefadaka-git/arna-app/actions/runs/43708431750) completed successfully at `86921f4fb1b698bb55b056e16c053ef115c2a17e`. All 32 steps passed, including type-check/build of all four applications, A4 source-contract tests, rendered visual review, public browser/axe checks, mounted Combobox/Modal/Drawer, FileUploader and DatePicker suites. The SearchBar consumer-label regression test passed within the A4 source-contract step.
+
+
+
+## 33. Consumer census — PageHeader, FilterBar, Timeline and error presentation
+
+A further targeted consumer census was performed for patterns whose contracts contain conditional accessibility or data-integrity requirements. The GitHub code-search connector indexes the repository default branch rather than this feature branch; therefore search results below are discovery evidence only and are not represented as an exhaustive branch-local census. Component source was separately fetched from `feat/arna-visual-panels-integration` and reviewed.
+
+### 33.1. PageHeader breadcrumb accessible name
+
+- PageHeader's source documents that `breadcrumbs` without a non-empty `breadcrumbsAriaLabel` causes the nested navigation landmark to render with `aria-label=""`.
+- Default-branch code search for `breadcrumbsAriaLabel` returned only the PageHeader implementation and a shell-label module; it did not identify a feature consumer binding this prop.
+- Search for PageHeader usage returned multiple feature and route consumers, but the search index cannot establish their exact feature-branch content.
+- No consumer defect or source change is asserted from this census. Before any caller introduces breadcrumbs, the consumer contract must require both the breadcrumb items and a non-empty localized accessible name. A future hardening change should make this relationship impossible to omit (for example, a required typed breadcrumb configuration object), rather than inventing a fallback language.
+
+**Disposition:** CONDITIONAL RISK DOCUMENTED; feature-branch caller closure PARTIAL.
+
+### 33.2. FilterBar conditional calendar localization
+
+- FilterBar accepts consumer-supplied filter descriptors and a conditionally required `datePickerLabels` object.
+- When a date filter exists without those labels, the component falls back to native `input type="date"` and emits a development warning. This fallback can bypass the platform's intended Ethiopian-calendar/localization policy.
+- Default-branch code-search queries for FilterBar consumers and `datePickerLabels` did not identify an active feature consumer. The source implementation confirms the fallback path.
+- No code change is justified without a real consumer and its label source. Any date-filter consumer must pass the complete translated DatePicker label contract; the native-date fallback is not accepted as the normal ARNA date UX.
+
+**Disposition:** CONDITIONAL LOCALIZATION RISK DOCUMENTED; consumer census PARTIAL.
+
+### 33.3. Timeline chronological and machine-readable timestamp integrity
+
+- Timeline renders an ordered list and does not sort its input. Consumers own chronological ordering and localized display timestamp formatting.
+- `isoTimestamp`, when present, becomes the `datetime` attribute; without it the display timestamp is plain text.
+- Default-branch search for Timeline usage identified only the component source, not a feature consumer. No consumer-side ordering or timezone conversion could therefore be verified in this pass.
+- No code change is asserted. Consumers that adopt Timeline must sort by the authoritative event instant before rendering and ensure the localized display string and ISO instant represent the same event. Do not derive ISO instants from already-localized display text.
+
+**Disposition:** DATA-INTEGRITY CONTRACT DOCUMENTED; consumer verification NOT ESTABLISHED.
+
+### 33.4. ErrorPage / ErrorSupportPanel diagnostic disclosure boundary
+
+- ErrorPage accepts a bounded set of normalized display fields and does not accept or render a raw error object, stack trace, SQL message, filesystem path or credential field.
+- ErrorSupportPanel is composed inside ErrorPage. The disclosure/copy path remains a sensitive boundary: only allowlisted, redacted support fields should reach it; raw backend payloads and tokens must never be passed as support details.
+- Default-branch search identified ErrorSupportPanel as an ErrorPage composition rather than a direct feature-level consumer. The ErrorPage source documentation describes the normalized-field boundary, but this census did not execute a mounted copy/disclosure test or inspect every route-level normalization adapter.
+- No runtime privacy guarantee is claimed from comments alone. A dedicated behavioral test should assert the exact copied payload and verify forbidden diagnostic fields are absent.
+
+**Disposition:** SOURCE BOUNDARY DOCUMENTED; ROUTE ADAPTER AND COPY PAYLOAD VERIFICATION OPEN.
+
+### 33.5. StatusBadge label/variant consumer convention
+
+- StatusBadge keeps the machine status, visible localized label and visual variant as separate inputs; it does not infer a variant from the status token.
+- Search discovery found consumers in portal wallet/loan/shareholder pages, loan detail and share-class views. The returned snippets show explicit `status`, `variant` and `label` bindings in the inspected examples.
+- This confirms the intended three-part mapping in those discovered examples only; it does not prove exhaustive status-enum coverage or that every label is non-empty for every backend value.
+- Status semantics must remain textually available; color/variant alone is not a status announcement.
+
+**Disposition:** EXAMPLE CONSUMER MAPPING OBSERVED; EXHAUSTIVE ENUM AND LOCALE COVERAGE PARTIAL.
+
+| Additional consumer gate | Status |
+|---|---|
+| PageHeader breadcrumb label callers | PARTIAL — no indexed feature caller identified; feature-branch search limitation |
+| FilterBar date-label callers | PARTIAL — no indexed feature caller identified |
+| Timeline ordering / ISO timestamp callers | NOT ESTABLISHED |
+| ErrorPage normalization adapters | PARTIAL — source boundary only |
+| ErrorSupportPanel copied payload privacy | NOT RUN |
+| StatusBadge example bindings | OBSERVED; exhaustive enum/locale coverage NOT VERIFIED |
+| A4 closure | OPEN |
+
+No merge or deployment is included or authorized.
