@@ -485,3 +485,27 @@ Five further composite SFCs were reconciled from their exact source revisions. S
 | Overall A4 API audit | OPEN |
 
 No merge or deployment is included or authorized.
+
+
+### 22.1. FormField help-slot association correction
+
+The source review finding in batch 3 was corrected additively:
+
+- `FormField.vue` now includes the presence of the named `help` slot in the shared `hasHelp` computation.
+- The same computed state now controls both rendering and inclusion of the generated help-region ID in the scoped control's `aria-describedby`.
+- Added a mounted FormField fixture using a real labeled input and named help slot.
+- Added a Playwright assertion that the rendered help region's ID is present in the input's `aria-describedby`, plus an axe-core scan for serious/critical violations.
+
+**Implementation commit:** `0fe0a9995ec6277727eddae509570c00c1b5dc8e`  
+**Fixture commit:** `4f04754f697cadf7fe052011281937a0d54de161`  
+**Browser test commit:** `0af6356d8ef49313425878a8c69bf56e6b2c6828`
+
+| Gate | Status |
+|---|---|
+| FormField help-slot linkage correction | IMPLEMENTED |
+| Mounted assertion and axe scan | IMPLEMENTED — exact-head CI pending |
+| Help text prop linkage | Existing behavior retained |
+| Full FormField consumer compatibility | NOT COMPLETE |
+| A4 closure | OPEN |
+
+The prior source-level defect is not marked verified until the new exact-head CI run passes. No unrelated FormField behavior or API shape was changed.
