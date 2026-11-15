@@ -80,6 +80,12 @@ test('DatePicker follows the shared calendar preference and keeps ISO model cont
   assert.match(source, /function onGridKeydown/);
   assert.match(source, /function focusCursorCell/);
   assert.match(source, /aria-expanded/);
+  assert.match(source, /watch\(calendarSystem/);
+  assert.match(source, /getEthiopicMonthLength/);
+  assert.match(source, /emit\('update:modelValue', cell\.iso\)/);
+  assert.match(source, /function moveMonth\(delta: number\)/);
+  assert.match(source, /:aria-describedby="ariaDescribedBy"/);
+  assert.match(source, /:required="required"/);
 });
 
 test('all date-only Wallet, Loan, Governance and Administration controls use calendar-aware input', async () => {
@@ -114,5 +120,9 @@ test('date-time forms retain local date-time wire shape with a separate time con
   }
   const adapter = await read('src/components/composites/DatePicker/CalendarDateTimeInput.vue');
   assert.match(adapter, /type="time"/);
+  assert.match(adapter, /watch\(/);
+  assert.match(adapter, /props\.modelValue/);
   assert.match(adapter, /\$\{datePart\.value\}T\$\{timePart\.value\}/);
+  assert.match(adapter, /:required="required"/);
+  assert.match(adapter, /:aria-describedby="ariaDescribedBy"/);
 });
