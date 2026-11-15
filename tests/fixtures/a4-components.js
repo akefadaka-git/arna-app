@@ -2,6 +2,7 @@ import { createApp, h, ref } from 'vue';
 import Combobox from '../../src/components/composites/Combobox/Combobox.vue';
 import Modal from '../../src/components/composites/Modal/Modal.vue';
 import Drawer from '../../src/components/composites/Drawer/Drawer.vue';
+import FormField from '../../src/components/composites/FormField/FormField.vue';
 
 createApp({
   setup() {
@@ -18,6 +19,22 @@ createApp({
     ];
 
     return () => h('main', { style: 'padding: 2rem; display: grid; gap: 2rem; max-width: 42rem;' }, [
+      h('section', { 'aria-label': 'FormField test' }, [
+        h(FormField, {
+          label: 'Account reference',
+          htmlFor: 'a4-form-field-input',
+        }, {
+          default: ({ id, 'aria-describedby': describedBy, invalid, required, disabled }) => h('input', {
+            id,
+            'aria-describedby': describedBy,
+            'aria-invalid': invalid ? 'true' : undefined,
+            required,
+            disabled,
+            'data-testid': 'form-field-control',
+          }),
+          help: () => h('span', { 'data-testid': 'form-field-help-slot' }, 'Enter the account reference.'),
+        }),
+      ]),
       h('section', { 'aria-label': 'Combobox test' }, [
         h('h1', 'Combobox browser test'),
         h(Combobox, {
