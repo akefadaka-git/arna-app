@@ -45,3 +45,15 @@ test('shared formatter chooses exactly one calendar system', async () => {
   assert.match(source, /selected === 'ethiopic' \? 'ethiopic' : 'gregory'/);
   assert.match(source, /formatter\.resolvedOptions\(\)\.calendar !== calendar/);
 });
+
+for (const path of [
+  'src/features/governance/GovernanceAttendanceView.vue',
+  'src/features/communications/CommunicationHubView.vue',
+]) {
+  test(path + ' formats displayed timestamps with the selected calendar', async () => {
+    const source = await readFile(new URL('../' + path, import.meta.url), 'utf8');
+    assert.match(source, /import \{ formatCalendarDate \} from ['"]@\/core\/dates\/calendar['"]/);
+    assert.doesNotMatch(source, /toLocaleDateString\s*\(|toLocaleString\s*\(/);
+    assert.match(source, /formatCalendarDate\s*\(/);
+  });
+}
