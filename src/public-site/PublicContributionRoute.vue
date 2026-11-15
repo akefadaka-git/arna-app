@@ -26,6 +26,9 @@ const endpointAvailable = computed(() => Boolean(import.meta.env.VITE_API_BASE_U
 
 const route = useRoute();
 const locale = computed(() => route.query.locale === 'en' ? 'en' : 'am');
+onMounted(() => { document.documentElement.lang = locale.value; });
+watch(locale, (value) => { document.documentElement.lang = value; });
+watch(locale, (value) => { document.title = value === 'am' ? 'ይዘት ያቅርቡ | ARNA' : 'Submit content | ARNA'; }, { immediate: true });
 const copy = computed(() => locale.value === 'am' ? {
   invalidEmail: 'እባክዎ ትክክለኛ ኢሜይል ያስገቡ።',
   verificationSent: 'የማረጋገጫ ኮድ ወደ ኢሜይልዎ ተልኳል።',
