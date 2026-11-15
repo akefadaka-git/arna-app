@@ -132,6 +132,11 @@ test('AppHeaderNavigation search chrome follows the active Amharic or English lo
   const source = read('src/layouts/AppShell/AppHeaderNavigation/AppHeaderNavigation.vue');
   assert.match(source, /useLocaleStore/);
   assert.match(source, /localeStore\.locale === 'en'/);
+  assert.match(source, /function displayLabel\(item: SearchNavItem\): string/);
+  for (const label of ['Dashboard', 'Documents', 'Shareholders', 'Wallets', 'Loans', 'Governance']) {
+    assert.ok(source.includes(`'${label}'`), `missing English destination label: ${label}`);
+  }
+  assert.match(source, /displayLabel\(item\)\.toLocaleLowerCase\(\)\.includes\(term\)/);
   for (const label of [
     'Search ARNA modules and pages',
     'Find an available module or page',
