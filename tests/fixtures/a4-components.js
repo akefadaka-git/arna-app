@@ -156,7 +156,8 @@ const app = createApp({
         h('output', { 'data-testid': 'drawer-close-events' }, String(drawerCloseEvents.value)),
       ]),
     ]);
-  },});
+  },
+});
 app.use(createPinia());
 app.use(router);
 app.mount('#app');
