@@ -46,7 +46,7 @@ Every component must work in light and dark themes, inherit the active document 
 
 - Prefer optimized WebP/AVIF for raster imagery where supported; retain suitable fallbacks.
 - Use lazy loading for below-the-fold images and provide explicit dimensions/aspect ratio to limit layout shift.
-- GIF is supported as an image format, but large animated GIFs should be converted to video for production delivery where appropriate.
+- GIF files can be displayed as images, but the initial ImageFrame does not provide per-GIF pause controls. Do not use animated GIFs for essential information or where users need motion control; prefer a user-controllable video treatment or a static poster. Large GIFs should be converted to video for production delivery where appropriate.
 - 3D models are deferred until a specific use case, approved asset, renderer, device fallback, performance budget and security review are available.
 - Avoid bundling a large general-purpose 3D engine merely to satisfy a catalogue checkbox.
 
