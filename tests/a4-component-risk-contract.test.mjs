@@ -122,7 +122,7 @@ test('all SearchBar consumers provide a translated clear-button accessible name'
   for (const path of labelSources) {
     const source = read(path);
     const match = source.match(/searchClearLabel:\s*'([^']+)'/);
-    assert.ok(match, `${path} must provide a non-empty search clear label`);
-    assert.match(match[1], /[\u1200-\u137F]/, `${path} search clear label must be Amharic`);
+    assert.ok(match, `${path} must provide a search clear label`);
+    assert.equal(match[1], 'የፍለጋ ጽሑፉን አጽዳ', `${path} must use the approved Amharic clear label`);
   }
 });
