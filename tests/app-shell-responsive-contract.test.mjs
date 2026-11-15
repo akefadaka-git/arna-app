@@ -23,8 +23,11 @@ test('mobile navigation remains delegated to the existing accessible drawer', ()
   assert.match(shell, /<main[\s\S]*tabindex="-1"/);
 });
 
-test('shell layout retains reduced-motion and forced-colors accommodations', () => {
-  assert.match(shell, /prefers-reduced-motion:\s*reduce/);
+test('shell layout retains forced-colors support and delegates motion to child controls', () => {
+  // AppShell defines no animation or transition; composed controls own
+  // their motion contracts and reduced-motion accommodations.
+  assert.doesNotMatch(shell, /(?:animation|transition)\s*:/);
+  assert.doesNotMatch(shell, /prefers-reduced-motion:\s*reduce/);
   assert.match(shell, /forced-colors:\s*active/);
   assert.match(shell, /outline-color:\s*Highlight/);
 });
