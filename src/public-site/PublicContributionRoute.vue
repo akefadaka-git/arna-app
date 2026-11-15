@@ -290,13 +290,13 @@ async function submitContent(): Promise<void> {
 <style scoped>
  .contribute-skip-link{position:absolute;z-index:1000;inset-block-start:.5rem;inset-inline-start:.5rem;padding:.65rem .9rem;color:var(--arna-navy);background:var(--arna-public-surface-soft);border:2px solid currentColor;transform:translateY(calc(-100% - 1rem))}.contribute-skip-link:focus{transform:translateY(0)}
 .contribute-page{min-height:100vh;color:var(--arna-navy);background:var(--arna-public-page-surface);font-family:inherit}
-.contribute-header{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem max(1.25rem,calc((100vw - 1120px)/2));border-bottom:1px solid var(--arna-line);background:var(--arna-public-surface-soft)}
+ .contribute-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;padding:1rem max(1.25rem,calc((100vw - 1120px)/2));border-bottom:1px solid var(--arna-line);background:var(--arna-public-surface-soft)}
 .contribute-brand{display:flex;align-items:center;gap:.75rem;color:inherit;text-decoration:none}
 .contribute-brand img{object-fit:contain}
 .contribute-brand span{display:grid;gap:.12rem}
 .contribute-brand strong{font-size:1.05rem}
 .contribute-brand small{color:var(--arna-public-text-secondary);font-size:.65rem;letter-spacing:.12em}
-.contribute-back{color:var(--arna-public-accent);font-size:.85rem;font-weight:650;text-decoration:none}
+.contribute-back{color:var(--arna-public-accent);font-size:.85rem;font-weight:650;text-decoration:none;margin-inline-end:auto}
 .contribute-main{width:min(100% - 2rem,760px);margin:0 auto;padding:clamp(2.5rem,7vw,5rem) 0}
 .contribute-eyebrow{color:var(--arna-public-accent);font-size:.72rem;font-weight:800;letter-spacing:.1em}
 .contribute-main h1{margin:.65rem 0;color:var(--arna-navy);font-size:clamp(2rem,5vw,3.2rem)}
