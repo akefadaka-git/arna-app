@@ -5,10 +5,23 @@
 
  File:      mase_app/src/components/primitives/BaseTextarea/BaseTextarea.vue
  Layer:     1 (Primitives)
- Version:   1.0.0
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.9
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
+
+ -----------------------------------------------------------------------------
+ Revision history
+ -----------------------------------------------------------------------------
+ 1.1.0  — Added explicit accessible-name props for standalone use:
+          · Added `ariaLabel` and `ariaLabelledBy` props and forwarded
+            them to the native textarea as `aria-label` and
+            `aria-labelledby`.
+          · Preserved generated ids, FormField label association,
+            aria-describedby, validation, events, resize behavior, and
+            the exposed instance API. Placeholder remains a hint only.
+          · Additive and backward-compatible; existing consumers retain
+            their current behavior.
 
  -----------------------------------------------------------------------------
  Purpose
@@ -153,6 +166,8 @@
    - Native required attribute (which maps to aria-required).
    - aria-invalid is resolved from the invalid / ariaInvalid props.
    - aria-describedby is forwarded verbatim from the consumer.
+   - aria-label and aria-labelledby are forwarded explicitly to the
+     native textarea for standalone use when no visible label is available.
    - The focus ring is drawn on the textarea itself via
      :focus-visible. Browsers treat textareas as editable, so
      :focus-visible matches on both keyboard and mouse focus (per spec
@@ -251,6 +266,15 @@ interface Props {
    * exists in the DOM.
    */
   ariaDescribedBy?: string;
+
+  /**
+   * Explicit accessible name for standalone textareas. Prefer a visible
+   * associated <label> when one is available.
+   */
+  ariaLabel?: string;
+
+  /** ID of an external label element naming the textarea. */
+  ariaLabelledBy?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -269,6 +293,8 @@ const props = withDefaults(defineProps<Props>(), {
   invalid: false,
   ariaInvalid: undefined,
   ariaDescribedBy: undefined,
+  ariaLabel: undefined,
+  ariaLabelledBy: undefined,
 });
 
 const emit = defineEmits<{
@@ -364,6 +390,8 @@ defineExpose({ focus, blur, el });
     :rows="rows"
     :aria-invalid="resolvedAriaInvalid"
     :aria-describedby="ariaDescribedBy"
+    :aria-label="ariaLabel"
+    :aria-labelledby="ariaLabelledBy"
     :class="classes"
     data-testid="base-textarea-root"
     @input="onInput"
