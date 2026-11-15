@@ -288,7 +288,7 @@ export interface AppSidebarLabels {
  * aria-controls value is unique even when the same component renders
  * twice (e.g. AppShell + AppMobileDrawer).
  */
-let __masesSidebarIdCounter = 0;
+let __arnaSidebarIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -488,7 +488,7 @@ watch(
 // -----------------------------------------------------------------------------
 // Stable aria-controls ids
 // -----------------------------------------------------------------------------
-const groupListIdPrefix = `mases-sidebar-groups-${++__masesSidebarIdCounter}`;
+const groupListIdPrefix = `arna-sidebar-groups-${++__arnaSidebarIdCounter}`;
 
 function groupListId(groupId: string): string {
   return `${groupListIdPrefix}-${groupId}`;

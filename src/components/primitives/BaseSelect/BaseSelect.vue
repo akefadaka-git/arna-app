@@ -100,7 +100,7 @@
  Same pattern as BaseInput (Unit 8.9) and BaseTextarea (Unit 8.10). If
  the consumer does not supply an `id`, BaseSelect generates one
  internally. The generator is a module-level counter with a distinct
- prefix ("mases-select-") so that a document containing all three
+ prefix ("arna-select-") so that a document containing all three
  primitives never produces colliding ids.
 
  -----------------------------------------------------------------------------
@@ -179,7 +179,7 @@
  * collision is possible even in a document that uses all three
  * primitives.
  */
-let __masesSelectIdCounter = 0;
+let __arnaSelectIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -295,7 +295,7 @@ const emit = defineEmits<{
 /*
  * Generated id — evaluated once per component instance.
  */
-const generatedId = `mases-select-${++__masesSelectIdCounter}`;
+const generatedId = `arna-select-${++__arnaSelectIdCounter}`;
 
 const inputId = computed<string>(() => props.id ?? generatedId);
 

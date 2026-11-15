@@ -191,7 +191,7 @@ export interface MenuItem {
 /*
  * Module-level counter for auto-generated ids.
  */
-let __masesDropdownMenuIdCounter = 0;
+let __arnaDropdownMenuIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -271,7 +271,7 @@ defineSlots<{
 // -----------------------------------------------------------------------------
 // Generated ids
 // -----------------------------------------------------------------------------
-const baseId = `mases-dropdown-menu-${++__masesDropdownMenuIdCounter}`;
+const baseId = `arna-dropdown-menu-${++__arnaDropdownMenuIdCounter}`;
 const triggerId = `${baseId}-trigger`;
 const menuId = `${baseId}-menu`;
 
@@ -746,11 +746,11 @@ html[dir='rtl'] .dropdown-menu[data-align='end'] {
    * the panel's `top: 100%` anchoring.
    */
   transform-origin: var(--arna-dropdown-origin-x) top;
-  animation: mases-dropdown-in var(--arna-duration-fast)
+  animation: arna-dropdown-in var(--arna-duration-fast)
     var(--arna-easing-decelerate);
 }
 
-@keyframes mases-dropdown-in {
+@keyframes arna-dropdown-in {
   from {
     opacity: 0;
     transform: scale(0.98);

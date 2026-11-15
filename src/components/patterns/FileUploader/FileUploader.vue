@@ -293,7 +293,7 @@ export type FileUploaderRejectReason = 'size' | 'type' | 'count';
  * session. Combined with a Date.now() suffix so that ids are not
  * predictable across component instances.
  */
-let __masesFileUploaderIdCounter = 0;
+let __arnaFileUploaderIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -460,8 +460,8 @@ const dropZoneLabels = computed<FileInputLabels>(() => ({
 // Local id generation
 // -----------------------------------------------------------------------------
 function nextLocalId(): string {
-  __masesFileUploaderIdCounter += 1;
-  return `mases-file-uploader-${__masesFileUploaderIdCounter}-${Date.now()}`;
+  __arnaFileUploaderIdCounter += 1;
+  return `arna-file-uploader-${__arnaFileUploaderIdCounter}-${Date.now()}`;
 }
 
 // -----------------------------------------------------------------------------

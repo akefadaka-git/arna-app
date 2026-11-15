@@ -170,7 +170,7 @@ const COPIED_REVERT_MS = 3000;
 /*
  * Module-level counter for auto-generated ids.
  */
-let __masesErrorSupportPanelIdCounter = 0;
+let __arnaErrorSupportPanelIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -230,7 +230,7 @@ const emit = defineEmits<{
 // -----------------------------------------------------------------------------
 // Generated id
 // -----------------------------------------------------------------------------
-const baseId = `mases-error-support-panel-${++__masesErrorSupportPanelIdCounter}`;
+const baseId = `arna-error-support-panel-${++__arnaErrorSupportPanelIdCounter}`;
 const fallbackInstructionId = `${baseId}-fallback-instruction`;
 
 // -----------------------------------------------------------------------------
