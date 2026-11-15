@@ -230,6 +230,7 @@ import { computed, ref, watch } from 'vue';
 import Modal from '@/components/composites/Modal';
 import Alert from '@/components/composites/Alert';
 import FormField from '@/components/composites/FormField';
+import { CalendarDateInput } from '@/components/composites/DatePicker';
 import BaseInput from '@/components/primitives/BaseInput';
 import BaseSelect from '@/components/primitives/BaseSelect';
 import BaseButton from '@/components/primitives/BaseButton';
@@ -928,10 +929,9 @@ const submitLabel = computed<string>(() =>
           :disabled="isSubmitting"
           :required="isExternal"
         >
-          <BaseInput
+          <CalendarDateInput
             id="loan-collateral-valuation-date"
             v-model="valuationDate"
-            type="date"
             :disabled="isSubmitting"
             data-testid="loan-collateral-form-valuation-date"
           />
