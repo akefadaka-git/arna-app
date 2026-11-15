@@ -32,7 +32,8 @@ async function loadPage(): Promise<void> {
   try {
     page.value = await fetchCorporatePage(locale.value, slug);
     const seo = page.value.seo;
-    if (seo?.title) document.title = seo.title;
+    if (seo?.title) document.title = `${seo.title} | ARNA`;
+    else document.title = `${page.value.title} | ARNA`;
     document.documentElement.lang = locale.value;
     if (seo?.robots) {
       let robots = document.querySelector<HTMLMetaElement>('meta[name=\"robots\"]');
@@ -85,7 +86,7 @@ onMounted(() => void loadPage());
         </nav>
       </div>
     </header>
-    <main id="page-content" class="site-container" aria-live="polite">
+    <main id="page-content" class="site-container" aria-live="polite" tabindex="-1">
       <p v-if="loading">{{ locale === 'am' ? 'በመጫን ላይ…' : 'Loading…' }}</p>
       <section v-else-if="failed || !page" role="status">
         <h1>{{ locale === 'am' ? 'ይህ ገጽ አልተገኘም' : 'Page not found' }}</h1>
