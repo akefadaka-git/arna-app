@@ -66,11 +66,13 @@ const app = createApp({
         h('button', {
           type: 'button',
           'data-testid': 'set-locale-en',
+          style: 'min-height: 44px;',
           onClick: () => localeStore.setLocale('en'),
         }, 'Set English'),
         h('button', {
           type: 'button',
           'data-testid': 'set-locale-am',
+          style: 'min-height: 44px;',
           onClick: () => localeStore.setLocale('am'),
         }, 'Set Amharic'),
       ]),
