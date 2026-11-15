@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/LinkButton/LinkButton.vue
  Layer:     1 (Primitives)
- Version:   1.0.0
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.6
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -180,15 +180,19 @@ interface Props {
    * Renders the button with equal padding for a single icon.
    *
    * The link variant rarely uses iconOnly. When it does, the consumer
-   * MUST supply `ariaLabel` — the requirement is enforced by
-   * BaseButton's development-time warning (see Unit 8.2).
+   * MUST supply `ariaLabel` or `ariaLabelledBy` — the requirement is
+   * enforced by BaseButton's development-time warning (see Unit 8.2).
    */
   iconOnly?: boolean;
 
   /**
-   * Accessible name. Required when iconOnly is true.
+   * Accessible name. Required when iconOnly is true unless
+   * ariaLabelledBy is supplied.
    */
   ariaLabel?: string;
+
+  /** ID of the element that labels the button for assistive technology. */
+  ariaLabelledBy?: string;
 }
 
 withDefaults(defineProps<Props>(), {
@@ -199,6 +203,7 @@ withDefaults(defineProps<Props>(), {
   block: false,
   iconOnly: false,
   ariaLabel: undefined,
+  ariaLabelledBy: undefined,
 });
 
 const emit = defineEmits<{
@@ -220,6 +225,7 @@ function handleClick(event: MouseEvent): void {
     :block="block"
     :icon-only="iconOnly"
     :aria-label="ariaLabel"
+    :aria-labelledby="ariaLabelledBy"
     data-testid="link-button-root"
     @click="handleClick"
   >
