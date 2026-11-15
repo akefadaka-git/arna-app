@@ -190,23 +190,24 @@ test.describe('Mounted ErrorSupportPanel privacy and clipboard behavior', () => 
 test.describe('Mounted DataTable behavior', () => {
   test('emits sort changes, selects current-page rows, and isolates interactive row actions', async ({ page }) => {
     const table = page.getByTestId('data-table-root');
-    await expect(table.getByRole('table')).toBeVisible();
-    await expect(table.getByRole('columnheader', { name: 'Account name' })).toHaveAttribute('aria-sort', 'ascending');
+    const tableRegion = table.getByTestId('data-table-table-region');
+    await expect(tableRegion.getByRole('table')).toBeVisible();
+    await expect(tableRegion.getByRole('columnheader', { name: 'Account name' })).toHaveAttribute('aria-sort', 'ascending');
 
-    await table.getByRole('button', { name: 'Account name' }).click();
+    await tableRegion.getByRole('button', { name: 'Account name' }).click();
     await expect(page.getByTestId('table-sort')).toHaveText('name:desc');
-    await expect(table.getByRole('columnheader', { name: 'Account name' })).toHaveAttribute('aria-sort', 'descending');
+    await expect(tableRegion.getByRole('columnheader', { name: 'Account name' })).toHaveAttribute('aria-sort', 'descending');
 
-    await table.getByRole('checkbox', { name: 'Select Alpha account' }).check();
+    await tableRegion.getByRole('checkbox', { name: 'Select Alpha account' }).check();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1');
-    await table.getByRole('checkbox', { name: 'Select all accounts' }).check();
+    await tableRegion.getByRole('checkbox', { name: 'Select all accounts' }).check();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1,row-2');
-    await table.getByRole('checkbox', { name: 'Select all accounts' }).uncheck();
+    await tableRegion.getByRole('checkbox', { name: 'Select all accounts' }).uncheck();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('');
 
-    await table.getByTestId('table-action-row-1').click();
+    await tableRegion.getByTestId('table-action-row-1').click();
     await expect(page.getByTestId('table-row-clicks')).toHaveText('0');
-    await table.getByRole('row').filter({ hasText: 'Beta account' }).click();
+    await tableRegion.getByRole('row').filter({ hasText: 'Beta account' }).click();
     await expect(page.getByTestId('table-row-clicks')).toHaveText('1');
   });
 
