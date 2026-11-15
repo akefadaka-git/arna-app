@@ -263,3 +263,12 @@ The first mounted Playwright run at `3e32b8868a8943cd781ca7dbac71eed9d8aa1371` f
 2. **Confirmed Drawer defect:** `.drawer` sets author-level `display:flex` on the native dialog. This overrides the browser's default closed-dialog `display:none`, leaving an unopened full-viewport Drawer intercepting pointer events. Added an explicit `.drawer:not([open]) { display:none; }` rule. This is a product-code correction, not merely a test workaround.
 
 The failed run is retained as evidence; it is not overwritten or relabeled. The correction requires a new exact-head CI run. Modal/Drawer keyboard, close-event, focus-restoration and axe results remain unverified until that run passes. A4 remains PARTIAL / OPEN.
+
+
+### 16.1. Drawer fix verification and Combobox navigation assertion correction
+
+The exact-head follow-up run at `44d18f19f4669ad743d2f05cc63ffcd8acfc29ba` exercised the mounted suite: **7 passed, 1 failed**. All six Modal/Drawer tests and the Combobox Escape/Tab and axe test passed. This verifies that the explicit closed-Drawer display rule prevents the closed overlay from intercepting page input and restores the tested native dialog interaction paths.
+
+The remaining Combobox failure was a test-sequence error: focusing the input opens the list and initially highlights the first enabled option (Alpha). The test then sent two ArrowDown keys while expecting Beta; the component correctly skipped the disabled option and advanced to Gamma. The test now sends one ArrowDown to reach Beta, then checks End/Home and Enter. This is a test correction; no Combobox production behavior was changed.
+
+The new test-only correction requires another exact-head CI run. A4 remains PARTIAL / OPEN.
