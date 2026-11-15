@@ -336,6 +336,22 @@ test.describe('Mounted NotificationsCenter lifecycle and safety', () => {
     await expect(row).not.toHaveClass(/is-unread/);
   });
 
+  test('marks every cached notification read after the read-all endpoint confirms success', async ({ page }) => {
+    await page.route('**/api/notifications**', async (route) => {
+      if (route.request().method() === 'GET') {
+        await route.fulfill({ json: envelope([item('all-1'), item('all-2')], 1, 2, 2) });
+      } else {
+        await route.fulfill({ json: { success: true, data: { updated: 2, unread_count: 0 } } });
+      }
+    });
+    await page.goto(baseUrl);
+    await page.getByTestId('set-locale-en').click();
+    await page.getByTestId('open-notifications').click();
+    await expect(page.locator('.notification-center__item.is-unread')).toHaveCount(2);
+    await page.getByRole('button', { name: 'Mark all as read' }).click();
+    await expect(page.locator('.notification-center__item.is-unread')).toHaveCount(0);
+  });
+
   test('loads the next page and returns to the previous page', async ({ page }) => {
     const requests = [];
     await page.route('**/api/notifications**', async (route) => {
