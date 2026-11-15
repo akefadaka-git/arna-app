@@ -12,6 +12,7 @@ const props = withDefaults(defineProps<{
   type?: 'bar' | 'line' | 'donut';
   data: ChartDatum[];
   ariaLabel: string;
+  legendLabel: string;
   valueLabel?: string;
 }>(), {
   type: 'bar',
@@ -64,7 +65,7 @@ const donutSegments = computed(() => {
         <text x="60" y="64" text-anchor="middle" class="chart-panel__total">{{ total }}</text>
       </svg>
     </div>
-    <ul class="chart-panel__legend" aria-label="Chart data">
+    <ul class="chart-panel__legend" :aria-label="legendLabel">
       <li v-for="(item, index) in safeData" :key="item.label + index">
         <span :class="['chart-panel__swatch', `chart-panel__swatch--${index % 5}`]" aria-hidden="true" />
         <span class="chart-panel__legend-label">{{ item.label }}</span>
