@@ -74,8 +74,37 @@ export function getEthiopicDateParts(iso: string): EthiopicDateParts | null {
 }
 
 /**
+ * Cache one Ethiopian year at a time. A year starts in September of
+ * Gregorian year (E.C. year + 7), so a bounded 13-month scan covers it.
+ */
+const yearCache = new Map<number, Map<number, EthiopicCalendarDay[]>>();
+
+function getEthiopicYearMonths(year: number): Map<number, EthiopicCalendarDay[]> {
+  const cached = yearCache.get(year);
+  if (cached) return cached;
+
+  const months = new Map<number, EthiopicCalendarDay[]>();
+  const start = utcTimestamp(year + 7, 9, 1);
+  const end = utcTimestamp(year + 8, 10, 1);
+  for (let timestamp = start; timestamp < end; timestamp += 86_400_000) {
+    const date = new Date(timestamp);
+    const parts = partsFromDate(date);
+    if (parts.year !== year) continue;
+    const days = months.get(parts.month) ?? [];
+    days.push({
+      ...parts,
+      iso: isoDate(date),
+      weekday: date.getUTCDay(),
+    });
+    months.set(parts.month, days);
+  }
+
+  yearCache.set(year, months);
+  return months;
+}
+
+/**
  * Convert an Ethiopian calendar date to its Gregorian ISO wire value.
- * The search is bounded to the Gregorian years surrounding the E.C. year.
  */
 export function ethiopicToIso(parts: EthiopicDateParts): string | null {
   const { year, month, day } = parts;
@@ -85,53 +114,20 @@ export function ethiopicToIso(parts: EthiopicDateParts): string | null {
     !Number.isInteger(day) || day < 1 || day > 30
   ) return null;
 
-  const start = utcTimestamp(year + 6, 1, 1);
-  const end = utcTimestamp(year + 9, 1, 1);
-  for (let timestamp = start; timestamp < end; timestamp += 86_400_000) {
-    const date = new Date(timestamp);
-    const candidate = partsFromDate(date);
-    if (
-      candidate.year === year &&
-      candidate.month === month &&
-      candidate.day === day
-    ) return isoDate(date);
-  }
-  return null;
+  return getEthiopicYearMonths(year).get(month)?.find((item) => item.day === day)?.iso ?? null;
 }
 
 export function getEthiopicMonthLength(year: number, month: number): number {
   if (!Number.isInteger(month) || month < 1 || month > 13) return 0;
-  const first = ethiopicToIso({ year, month, day: 1 });
-  if (!first) return 0;
-  const next = month === 13
-    ? ethiopicToIso({ year: year + 1, month: 1, day: 1 })
-    : ethiopicToIso({ year, month: month + 1, day: 1 });
-  if (!next) return 0;
-  const start = utcDate(first)!;
-  const end = utcDate(next)!;
-  return Math.round((end.getTime() - start.getTime()) / 86_400_000);
+  return getEthiopicYearMonths(year).get(month)?.length ?? 0;
 }
 
 export function getEthiopicMonthDays(
   year: number,
   month: number,
 ): EthiopicCalendarDay[] {
-  const length = getEthiopicMonthLength(year, month);
-  if (length === 0) return [];
-  const days: EthiopicCalendarDay[] = [];
-  for (let day = 1; day <= length; day += 1) {
-    const iso = ethiopicToIso({ year, month, day });
-    if (!iso) return [];
-    const date = utcDate(iso)!;
-    days.push({
-      year,
-      month,
-      day,
-      iso,
-      weekday: date.getUTCDay(),
-    });
-  }
-  return days;
+  if (!Number.isInteger(month) || month < 1 || month > 13) return [];
+  return [...(getEthiopicYearMonths(year).get(month) ?? [])];
 }
 
 export function formatEthiopicDate(
