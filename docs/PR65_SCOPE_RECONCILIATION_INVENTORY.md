@@ -7,16 +7,32 @@ Date: 2026-11-15
 - Declared PR intent: one source file, `src/layouts/AppShell/AppHeader/AppHeader.vue`.
 - Actual PR metadata: 190 commits; 199 changed files; +6356 / −4691.
 - Base SHA: `85751ca489b7e2a250da46f408b040254827a199`; head SHA: `86eea1fc507b49065ec017dfa59f15153f9ddaaa`.
-- The original one-file target is present in the returned changed-file manifest.
+- The first PR commit is `42890d68fa44c7a9e0c0c165eed0f5b05d6a5fa7` (`fix(ui): preserve responsive header navigation content`, 2026-11-14 20:05:39Z), parent `85751ca489b7e2a250da46f408b040254827a199`. Its commit diff confirms exactly one changed file: `src/layouts/AppShell/AppHeader/AppHeader.vue` (+36/−18). This is the original one-file change.
+- The PR then accumulated 189 subsequent commits, ending at `86eea1fc507b49065ec017dfa59f15153f9ddaaa` (`ci(architecture): generate and retain four-app import graph`, 2026-11-15 08:24:27Z). The final PR diff has 199 paths; therefore 198 additional changed paths lie beyond the original one-file commit. Their presence in this PR does not establish Owner authorization.
 - The API was paginated: page 1 = 100; page 2 = 99; total enumerated = 199.
 
 ## Classification rule
-Every path is marked UNKNOWN pending Owner review. The path list and diff statistics establish what changed, not whether each change was authorized, necessary, related, or safe to absorb. No path is approved merely because it is inside PR #65. Preserve all files and commit history until a path-by-path and commit-by-commit provenance review is approved.
+The original header file is verified as the single-file initial change. The remaining 198 paths are classified as SCOPE EXPANSION — AUTHORIZATION UNKNOWN, pending Owner review. The path list and diff statistics establish what changed, not whether each expanded change was authorized, necessary, related, or safe to absorb. No path is approved merely because it is inside PR #65. Preserve all files and commit history until a path-by-path and commit-by-commit provenance review is approved.
+
+## Scope distribution
+| Path group | Changed paths |
+|---|---:|
+| `src/components/**` | 68 |
+| `src/features/**` | 59 |
+| `src/layouts/**` | 28 |
+| `src/router/**` | 16 |
+| `src/public-site/**` | 4 |
+| `src/styles/**` | 4 |
+| `tests/**` | 8 |
+| Root, config, docs, build scripts, entry points, and public assets | 12 |
+| **Total** | **199** |
+
+The 198 expanded paths cover component and feature development, layout and router work, public-site work, styles, tests, environment/build configuration, architecture tooling, and documentation. This is a factual scope summary, not an approval classification.
 
 ## Complete changed-path manifest
 | Path | GitHub status | Diff size | Current classification |
 |---|---|---:|---|
-| `.env.portal` | modified | +1 / −1 | UNKNOWN — Owner review required |
+| `.env.portal` | modified | +1 / −1 | SCOPE EXPANSION — AUTHORIZATION UNKNOWN |
 | `.env.workspace` | modified | +1 / −1 | UNKNOWN — Owner review required |
 | `.github/workflows/frontend-ci.yml` | modified | +30 / −0 | UNKNOWN — Owner review required |
 | `docs/ARNA_DESIGN_SYSTEM_2.0_ACCEPTANCE_RECORD.md` | added | +174 / −0 | UNKNOWN — Owner review required |

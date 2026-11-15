@@ -29,8 +29,9 @@ PR: [#69](https://github.com/akefadaka-git/arna-app/pull/69)
 
 ## PR #65 scope and authority blockers
 - PR #65 description promises one file; GitHub reports 190 commits, 199 changed files, +6,356/−4,691, head `86eea1fc507b49065ec017dfa59f15153f9ddaaa`.
-- All 199 paths were retrieved using two pages of the PR files endpoint. The list spans environment/configuration, CI, docs, package/build scripts, component library, core, features, layouts, routes, styles, and tests.
-- This report does not authorize merging or absorbing any of those changes. Required next action is an Owner-reviewed 199-path manifest and commit/path provenance analysis.
+- The first commit `42890d68fa44c7a9e0c0c165eed0f5b05d6a5fa7` is the exact declared one-file change: `src/layouts/AppShell/AppHeader/AppHeader.vue` (+36/−18), parent `85751ca489b7e2a250da46f408b040254827a199`. The subsequent 189 commits expand the PR to 199 changed paths.
+- The 199-path inventory is committed at `docs/PR65_SCOPE_RECONCILIATION_INVENTORY.md`; 198 paths are explicitly classified as scope expansion with authorization UNKNOWN. The largest groups are 68 component paths, 59 feature paths, 28 layout paths, and 16 router paths; additional scope includes public-site, styles, tests, environment/configuration, CI, build tooling, and docs.
+- This report does not authorize merging or absorbing any expanded changes. Remaining work is an Owner-reviewed disposition for the 198 expanded paths, supported by per-commit provenance; preserve unrelated work.
 - Historical `MASES_PHASE_2_UI_DESIGN_SYSTEM.md` and component catalogue originals remain MISSING. Reconstructed documents are drafts, not normative authority unless explicitly approved by the Owner.
 
 ## Verification plan / remaining A4
