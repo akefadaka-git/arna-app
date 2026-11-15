@@ -33,7 +33,7 @@ test('shared conversion helpers preserve Gregorian ISO wire values', async () =>
   assert.match(source, /export function getEthiopicMonthDays/);
   assert.match(source, /timeZone: 'UTC'/);
   assert.match(source, /setUTCFullYear/);
-  assert.match(source, /return isoDate\(date\)/);
+  assert.match(source, /iso: isoDate\(date\)/);
 });
 
 test('DatePicker follows the shared calendar preference and keeps ISO model contract', async () => {
