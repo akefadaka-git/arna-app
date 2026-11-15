@@ -28,11 +28,14 @@
  The shell's notifications bell. Renders a bell icon, optionally with
  an unread-count badge, in AppHeader's `actions` slot.
 
- By Architecture Freeze §20.2, the bell is rendered DISABLED with a
- tooltip ("Notifications coming soon") until the four notification
- endpoints exist. The shell passes :disabled="true" for now; when the
- endpoints land, the shell removes that prop and the bell becomes
- interactive without any change to this file.
+ The four notification endpoints and persisted schema are now
+ implemented in arna-api (main SHA
+ b924f6555cca8f4c5a732ffb6ba9fb181c9d0733). AppShell composes this
+ bell with :disabled="false" and opens NotificationsCenter on
+ activation. The backend routes require authentication and active
+ tenant membership; the service scopes records to the current user
+ and tenant. Deployment and migration execution remain operational
+ checks and are not inferred from repository source alone.
 
  -----------------------------------------------------------------------------
  Composition
