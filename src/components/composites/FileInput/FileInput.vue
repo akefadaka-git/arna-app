@@ -208,6 +208,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   (event: 'select', files: File[]): void;
   (event: 'reject', reason: FileInputRejectReason): void;
+  (event: 'reject-file', payload: { file: File; reason: FileInputRejectReason }): void;
 }>();
 
 /**
@@ -352,6 +353,7 @@ function processFiles(files: File[]): void {
   for (const file of candidates) {
     if (!matchesAccept(file)) {
       emit('reject', 'wrong-type');
+      emit('reject-file', { file, reason: 'wrong-type' });
       continue;
     }
 
@@ -360,6 +362,7 @@ function processFiles(files: File[]): void {
       file.size > props.maxSizeBytes
     ) {
       emit('reject', 'too-large');
+      emit('reject-file', { file, reason: 'too-large' });
       continue;
     }
 
