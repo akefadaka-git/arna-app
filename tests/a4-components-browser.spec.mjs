@@ -246,7 +246,7 @@ test.describe('Mounted localized shell navigation search', () => {
     await page.keyboard.press('Control+k');
     const amharicDialog = page.getByRole('dialog', { name: 'ARNA ይፈልጉ' });
     await expect(amharicDialog).toBeVisible();
-    await expect(amharicDialog.getByRole('searchbox', { name: 'ሞጁሎችን እና ገጾችን ይፈልጉ' })).toHaveAttribute('placeholder', 'ሞጁሎችን እና ገጾችን ይፈልጉ…');
+    await expect(amharicDialog.getByRole('combobox', { name: 'ሞጁሎችን እና ገጾችን ይፈልጉ' })).toHaveAttribute('placeholder', 'ሞጁሎችን እና ገጾችን ይፈልጉ…');
     await amharicDialog.getByRole('button', { name: 'ፍለጋን ዝጋ' }).click();
     await expect(amharicDialog).toBeHidden();
     await expect(trigger).toBeFocused();
