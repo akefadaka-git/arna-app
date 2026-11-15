@@ -73,10 +73,9 @@
  badge therefore remains circular, and a two-digit or "99+" badge
  becomes a horizontal pill.
 
- The change is forward-looking pre-work: the bell is disabled in the
- current build, so no live badge renders today. When the notifications
- endpoints land and the bell is enabled, the wider minimum inline size
- gives the cap value room without clipping.
+ The bell is enabled in the current AppShell integration. The badge
+ displays the tenant-scoped unread count, capped at 99+ for display;
+ the backend remains authoritative for the full count.
 
  -----------------------------------------------------------------------------
  No hardcoded user-facing string
@@ -183,9 +182,9 @@ interface Props {
   /**
    * Whether the bell is disabled. Defaults to false.
    *
-   * The shell passes true for now (Architecture Freeze §20.2: the
-   * notification endpoints do not yet exist). When the endpoints land,
-   * the shell removes this prop and the bell becomes interactive.
+   * The shell passes false now that arna-api implements the notification
+   * schema and inbox endpoints. The bell is interactive and its consumer
+   * opens the in-shell NotificationsCenter.
    *
    * When disabled, the component:
    *   - marks the button with aria-disabled="true"
@@ -381,8 +380,8 @@ function onClick(): void {
    beyond it if needed. The height stays 16px in every case.
 
    See the file header comment §"Badge sizing — pre-work for the 99+
-   case". The badge is dormant in the current build (the bell is
-   disabled), so this sizing change is forward-looking pre-work.
+   case". The badge is active when the tenant-scoped unread count is
+   nonzero.
    ============================================================================ */
 .notifications-bell__badge {
   position: absolute;
