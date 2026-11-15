@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { RouterLink, useRoute, useRouter } from 'vue-router';
 import { api } from '@/core/api/client';
+import ThemePreferenceControl from '@/layouts/ThemePreferenceControl.vue';
 import { formatCalendarDate } from '@/core/dates/calendar';
 import { fetchCorporateHome, fetchCorporatePages, fetchCorporateEntries, submitCorporateInquiry, submitCorporateOpportunity, type CorporateLocale, type CorporateSitePage, type CorporateSiteSection, type CorporatePublicEntry } from '@/features/public-site/api';
 
@@ -189,6 +190,7 @@ watch(() => route.query.locale, (value) => {
           </a>
           <a v-for="item in pages" :key="item.public_id" :href="`/${locale}/${item.slug}`">{{ item.title }}</a>
         </nav>
+        <ThemePreferenceControl />
         <button type="button" class="locale-switch" @click="switchLocale">{{ locale === 'am' ? 'English' : 'አማርኛ' }}</button>
       </div>
     </header>
