@@ -100,6 +100,10 @@ test('inspected Modal consumers pass dedicated close labels', () => {
 
 
 test('all SearchBar consumers provide a translated clear-button accessible name', () => {
+  const component = read('src/components/composites/SearchBar/SearchBar.vue');
+  assert.match(component, /clearLabel: string;/);
+  assert.doesNotMatch(component, /clearLabel\?: string/);
+
   const consumers = [
     ['src/features/files/FilesListView/FilesListView.vue', 'files-list-view-search'],
     ['src/features/wallet/WalletListView.vue', 'wallet-list-view-search'],
