@@ -1,7 +1,7 @@
 # ARNA UI Component Catalogue — Reconstructed Baseline
 
 > **Document status: DRAFT — RECONSTRUCTED FROM REPOSITORY EVIDENCE; OWNER APPROVAL REQUIRED**  
-> **Baseline identifier:** ARNA-UI-CATALOG-RECON-0.1  
+> **Baseline identifier:** ARNA-UI-CATALOG-RECON-0.2  
 > **Repository inspected:** `akefadaka-git/arna-app`  
 > **Inspection ref:** `feat/arna-visual-panels-integration`  
 > **Inspected commit:** `ea6ebd1b1efba6b10e9f3f26cada73ad62e9d8c3`  
