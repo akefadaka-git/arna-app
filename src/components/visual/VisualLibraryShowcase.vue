@@ -68,12 +68,12 @@ const copy = computed(() => isEnglish.value ? {
   preview: 'የክፍል ቅድመ እይታ',
 });
 
-const sampleData = [
+const sampleData = computed(() => [
   { label: isEnglish.value ? 'Alpha' : 'አልፋ', value: 8 },
   { label: isEnglish.value ? 'Beta' : 'ቤታ', value: 14 },
   { label: isEnglish.value ? 'Gamma' : 'ጋማ', value: 11 },
   { label: isEnglish.value ? 'Delta' : 'ዴልታ', value: 20 },
-];
+]);
 </script>
 
 <template>
