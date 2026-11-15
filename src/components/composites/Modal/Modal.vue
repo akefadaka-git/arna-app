@@ -496,7 +496,7 @@ function onCloseButtonClick(): void {
 
 /* Backdrop scrim. Uses the aubergine base color at low alpha. */
 .modal::backdrop {
-  background-color: rgba(31, 10, 47, 0.5);
+  background-color: var(--arna-color-overlay-scrim);
 }
 
 /* Entry fade — degrades to instant on browsers without @starting-style. */
