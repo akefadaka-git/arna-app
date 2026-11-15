@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/BaseAvatar/BaseAvatar.vue
  Layer:     1 (Primitives)
- Version:   1.0.0
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.18
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -23,8 +23,8 @@
    3. Fallback    — a generic user icon, when neither image nor
                     initials is available.
 
- The accessible name is ALWAYS the value of the required `alt` prop,
- regardless of which branch renders. See the file header comment
+ The accessible name is provided by `alt`, or by `ariaLabelledBy` when supplied,
+ regardless of which branch renders. `ariaLabelledBy` takes precedence. See the file header comment
  §"The `alt` prop is required".
 
  -----------------------------------------------------------------------------
@@ -178,6 +178,12 @@ interface Props {
    */
   alt: string;
 
+  /**
+   * ID reference(s) of element(s) that provide the accessible name.
+   * When supplied, takes precedence over `alt`.
+   */
+  ariaLabelledBy?: string;
+
   /** Size. Defaults to 'md'. */
   size?: AvatarSize;
 
@@ -188,6 +194,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   src: undefined,
   initials: undefined,
+  ariaLabelledBy: undefined,
   size: 'md',
   shape: 'circle',
 });
@@ -265,7 +272,8 @@ function onImageError(): void {
   <img
     v-if="branch === 'image'"
     :src="src"
-    :alt="alt"
+    :alt="ariaLabelledBy ? '' : alt"
+    :aria-labelledby="ariaLabelledBy"
     :class="classes"
     loading="lazy"
     decoding="async"
@@ -285,7 +293,8 @@ function onImageError(): void {
   <span
     v-else-if="branch === 'initials'"
     role="img"
-    :aria-label="alt"
+    :aria-label="ariaLabelledBy ? undefined : alt"
+    :aria-labelledby="ariaLabelledBy"
     :class="classes"
     data-testid="base-avatar-root"
     data-avatar-branch="initials"
