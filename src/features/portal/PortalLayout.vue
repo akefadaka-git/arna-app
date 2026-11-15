@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — portal back-to-workspace
 =============================================================================
  *
- * File:      mase_app/src/features/portal/PortalLayout.vue  (AMEND)
+ * File:      arna-app/src/features/portal/PortalLayout.vue  (AMEND)
  * Unit:      Portal user menu — back-to-workspace wiring + defensive
  *            handler
  * Delivery type:  Amendment — one import swap, one new const, one
@@ -55,7 +55,7 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — PortalLayout
+ ARNA Platform UI — PortalLayout
 =============================================================================
 
  File:      mase_app/src/features/portal/PortalLayout.vue
@@ -68,6 +68,12 @@
  -----------------------------------------------------------------------------
  Revision history
  -----------------------------------------------------------------------------
+ 1.2.0  — align active shell identity with ARNA (local alias only):
+          · Imports the shared masesShellLabels export as
+            arnaShellLabels and binds that local name in AppShell.
+          · The shared export remains unchanged for compatibility.
+          · No runtime behavior, labels, routing, or permissions change.
+
  1.1.0  — back-to-workspace wiring:
           · AppShell's `:user-menu-items` now binds to the new
             `portalUserMenuItems` export (companion change in
@@ -279,7 +285,7 @@ import { logout } from '@/features/auth/service';
 import { provideMyShareholder } from './useMyShareholder';
 
 import {
-  masesShellLabels,
+  masesShellLabels as arnaShellLabels,
   portalUserMenuItems,
   portalNavItems,
 } from '@/router/shell-labels';
@@ -390,7 +396,7 @@ async function onUserMenuSelect(payload: { id: string }): Promise<void> {
   <AppShell
     :nav-items="portalNavItems"
     :user-menu-items="portalUserMenuItems"
-    :labels="masesShellLabels"
+    :labels="arnaShellLabels"
     :footer-version="footerVersion"
     @user-menu-select="onUserMenuSelect"
   >
