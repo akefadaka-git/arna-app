@@ -133,7 +133,7 @@ const app = createApp({
           'onUpdate:sort': (sort) => { tableSort.value = sort; },
           onRowClick: () => { tableRowClicks.value += 1; },
         }, {
-          'row-actions': ({ row }) => h('button', { type: 'button', 'data-testid': `table-action-${row.id}` }, 'Open'),
+          'row-actions': ({ row }) => h('button', { type: 'button', 'aria-label': `Open ${row.name}`, 'data-testid': `table-action-${row.id}` }, 'Open'),
         }),
         h('output', { 'data-testid': 'table-selected-keys' }, tableSelectedKeys.value.join(',')),
         h('output', { 'data-testid': 'table-sort' }, `${tableSort.value.key}:${tableSort.value.dir}`),
