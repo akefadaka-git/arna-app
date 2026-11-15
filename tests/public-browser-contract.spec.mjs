@@ -223,7 +223,14 @@ test.describe('ARNA public site browser contract', () => {
 
     for (const routePath of ['/en/about', '/en/content/news/story', '/contribute']) {
       await page.goto(new URL(routePath, baseUrl).toString());
-      await expect(page.getByTestId('theme-preference-control')).toBeVisible();
+      const themeControl = page.getByTestId('theme-preference-control');
+      await expect(themeControl).toBeVisible();
+      await themeControl.selectOption('dark');
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+      await themeControl.selectOption('light');
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+      await themeControl.selectOption('system');
+      await expect(page.locator('html')).not.toHaveAttribute('data-theme');
       await page.keyboard.press('Tab');
       const skip = page.locator(routePath === '/contribute' ? '.contribute-skip-link' : '.skip-link');
       await expect(skip).toBeFocused();
