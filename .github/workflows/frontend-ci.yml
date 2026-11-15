@@ -158,6 +158,20 @@ jobs:
           done
           curl --fail --silent http://127.0.0.1:4174/tests/fixtures/date-picker.html >/dev/null
           DATE_PICKER_URL=http://127.0.0.1:4174/tests/fixtures/date-picker.html npx playwright test tests/date-picker-browser.spec.mjs
+      - name: Verify mounted Workspace, Portal and Admin shells
+        shell: bash
+        run: |
+          npx vite --mode workspace --host 127.0.0.1 --port 4175 --strictPort > "$RUNNER_TEMP/app-shells-preview.log" 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4175/tests/fixtures/app-shells.html >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4175/tests/fixtures/app-shells.html >/dev/null
+          APP_SHELLS_URL=http://127.0.0.1:4175/tests/fixtures/app-shells.html npm run test:app-shells-browser
       - name: Upload versioned static build outputs
         uses: actions/upload-artifact@v4
         with:
