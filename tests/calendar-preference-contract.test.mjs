@@ -16,7 +16,8 @@ const dateViews = [
 for (const path of dateViews) {
   test(path + ' renders dates using the selected calendar preference', async () => {
     const source = await readFile(new URL('../' + path, import.meta.url), 'utf8');
-    assert.match(source, /formatCalendarDate/);
+    const setup = source.split('<script setup')[1]?.split('</script>')[0] ?? '';
+    assert.match(setup, /formatCalendarDate/);
     assert.doesNotMatch(source, /\{\{[^{}]*_display[^{}]*\}\}/);
   });
 }
