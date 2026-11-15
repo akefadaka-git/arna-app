@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const read = (path) => readFile(new URL(path, import.meta.url), 'utf8');
 
@@ -68,6 +70,32 @@ test('locale storage migrates old preference and writes only the ARNA key', asyn
   assert.match(source, /getItem\(STORAGE_KEY\) \?\? localStorage\.getItem\(LEGACY_STORAGE_KEY\)/);
   assert.match(source, /setItem\(STORAGE_KEY, value\)/);
   assert.match(source, /removeItem\(LEGACY_STORAGE_KEY\)/);
+});
+
+
+async function collectFiles(directory) {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const files = [];
+  for (const entry of entries) {
+    const path = join(directory, entry.name);
+    if (entry.isDirectory()) files.push(...await collectFiles(path));
+    else if (/\\.(vue|ts|tsx|js|mjs|css|html)$/.test(entry.name)) files.push(path);
+  }
+  return files;
+}
+
+test('application source has no active legacy MASES component or DOM namespaces', async () => {
+  const root = fileURLToPath(new URL('../', import.meta.url));
+  const roots = ['src', 'workspace-entry', 'portal-entry', 'admin-entry', 'public-entry'];
+  const files = (await Promise.all(roots.map((name) => collectFiles(join(root, name))))).flat();
+  const findings = [];
+  for (const path of files) {
+    const source = await readFile(path, 'utf8');
+    if (/__mases[A-Za-z0-9_]*|mases-[a-z0-9_-]+/i.test(source)) {
+      findings.push(path.replace(root, '').replaceAll('\\\\', '/'));
+    }
+  }
+  assert.deepEqual(findings, [], 'Legacy MASES identifiers must be removed or explicitly migrated');
 });
 
 test('active Combobox DOM identifiers use the ARNA namespace', async () => {
