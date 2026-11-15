@@ -268,6 +268,9 @@ watch(
   () => props.date,
   (d) => {
     if (d === undefined) {
+      // The prop may have controlled the date for days; refresh the
+      // self-managed value immediately instead of exposing a stale date.
+      now.value = new Date();
       document.addEventListener('visibilitychange', onVisibilityChange);
       scheduleMidnightTick();
     } else {
