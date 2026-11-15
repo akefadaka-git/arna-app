@@ -241,26 +241,31 @@ test.describe('Mounted DataTable behavior', () => {
 test.describe('Mounted localized shell navigation search', () => {
   test('switches Amharic and English search labels and navigates to an available destination', async ({ page }) => {
     const trigger = page.getByTestId('app-header-search-trigger');
-    await expect(trigger).toHaveAttribute('aria-label', 'የARNA ሞጁሎችን እና ገጾችን ይፈልጉ');
+    await expect(trigger).toHaveAttribute('aria-label', 'ARNA ይፈልጉ');
 
     await page.keyboard.press('Control+k');
-    const dialog = page.getByRole('dialog', { name: 'ARNA ይፈልጉ' });
-    await expect(dialog).toBeVisible();
-    await expect(dialog.getByRole('searchbox', { name: 'ሞጁሎችን እና ገጾችን ይፈልጉ' })).toHaveAttribute('placeholder', 'ሞጁሎችን እና ገጾችን ይፈልጉ…');
+    const amharicDialog = page.getByRole('dialog', { name: 'ARNA ይፈልጉ' });
+    await expect(amharicDialog).toBeVisible();
+    await expect(amharicDialog.getByRole('searchbox', { name: 'ሞጁሎችን እና ገጾችን ይፈልጉ' })).toHaveAttribute('placeholder', 'ሞጁሎችን እና ገጾችን ይፈልጉ…');
+    await amharicDialog.getByRole('button', { name: 'ፍለጋን ዝጋ' }).click();
+    await expect(amharicDialog).toBeHidden();
 
     await page.getByTestId('set-locale-en').click();
-    await expect(trigger).toHaveAttribute('aria-label', 'Search ARNA modules and pages');
-    await expect(dialog.getByRole('heading', { name: 'Search ARNA' })).toBeVisible();
-    await expect(dialog.getByRole('searchbox', { name: 'Search modules and pages' })).toHaveAttribute('placeholder', 'Search modules and pages…');
+    await expect(trigger).toHaveAttribute('aria-label', 'Search ARNA');
 
-    const input = dialog.getByRole('searchbox', { name: 'Search modules and pages' });
+    await page.keyboard.press('Control+k');
+    const englishDialog = page.getByRole('dialog', { name: 'Search ARNA' });
+    await expect(englishDialog).toBeVisible();
+    await expect(englishDialog.getByRole('heading', { name: 'Search ARNA' })).toBeVisible();
+    const input = englishDialog.getByRole('searchbox', { name: 'Search modules and pages' });
+    await expect(input).toHaveAttribute('placeholder', 'Search modules and pages…');
     await input.fill('Documents');
-    await expect(dialog.getByRole('button', { name: 'Documents' })).toBeVisible();
-    await dialog.getByRole('button', { name: 'Documents' }).click();
+    await expect(englishDialog.getByRole('button', { name: 'Documents' })).toBeVisible();
+    await englishDialog.getByRole('button', { name: 'Documents' }).click();
     await expect(page.getByTestId('a4-files-route')).toBeVisible();
-    await expect(dialog).toBeHidden();
+    await expect(englishDialog).toBeHidden();
 
     await page.getByTestId('set-locale-am').click();
-    await expect(trigger).toHaveAttribute('aria-label', 'የARNA ሞጁሎችን እና ገጾችን ይፈልጉ');
+    await expect(trigger).toHaveAttribute('aria-label', 'ARNA ይፈልጉ');
   });
 });
