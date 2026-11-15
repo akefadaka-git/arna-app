@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — LauncherTile
+ ARNA Phase 2 UI — LauncherTile
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/LauncherTile/LauncherTile.vue
+ File:      arna_app/src/layouts/AppShell/LauncherTile/LauncherTile.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.2.0
  Status:    ENHANCEMENT — forced-colors accessibility
@@ -615,6 +615,16 @@ function onClick(event: MouseEvent): void {
     background-color: Canvas;
     color: GrayText;
     opacity: 1;
+  }
+
+  .launcher-tile__icon-wrapper {
+    border: 1px solid currentColor;
+    background-color: Canvas;
+    color: LinkText;
+  }
+
+  .launcher-tile[data-available='false'] .launcher-tile__icon-wrapper {
+    color: GrayText;
   }
 
   .launcher-tile[data-available='false'] .launcher-tile__description,
