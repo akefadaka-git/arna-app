@@ -16,7 +16,7 @@ test.describe('Mounted Combobox browser behavior', () => {
     await expect(page.getByRole('listbox')).toBeVisible();
 
     await input.press('ArrowDown');
-    await expect(page.getByRole('option', { name: 'Unavailable' })).toHaveAttribute('data-highlighted', '');
+    await expect(page.getByRole('option', { name: 'Unavailable' })).toHaveAttribute('aria-disabled', 'true');
     await input.press('ArrowDown');
     await expect(page.getByRole('option', { name: 'Beta' })).toHaveAttribute('data-highlighted', 'true');
     await expect(input).toBeFocused();
