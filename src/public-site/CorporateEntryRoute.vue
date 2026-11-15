@@ -22,7 +22,7 @@ async function load(): Promise<void> {
   loading.value = true; failed.value = false;
   try {
     entry.value = await fetchCorporateEntry(type, locale.value, slug);
-    document.title = entry.value.seo?.title ?? entry.value.title;
+    document.title = `${entry.value.seo?.title ?? entry.value.title} | ARNA`;
     document.documentElement.lang = locale.value;
     const description = entry.value.summary || entry.value.body.slice(0, 160);
     let meta = document.querySelector<HTMLMetaElement>('meta[name="description"]');
@@ -51,7 +51,7 @@ onMounted(() => void load());
         <RouterLink :to="`/${locale === 'am' ? 'en' : 'am'}/content/${String(route.params.type)}/${entry?.alternate_slug ?? String(route.params.slug)}`">{{ locale === 'am' ? 'English' : 'አማርኛ' }}</RouterLink>
       </nav>
     </div></header>
-    <main id="entry-content" class="site-container" aria-live="polite">
+    <main id="entry-content" class="site-container" aria-live="polite" tabindex="-1">
       <p v-if="loading">{{ locale === 'am' ? 'በመጫን ላይ…' : 'Loading…' }}</p>
       <section v-else-if="failed || !entry" role="status"><h1>{{ locale === 'am' ? 'ይዘቱ አልተገኘም' : 'Content not found' }}</h1><RouterLink to="/">{{ locale === 'am' ? 'ወደ መነሻ ይመለሱ' : 'Return home' }}</RouterLink></section>
       <article v-else class="corporate-entry">
