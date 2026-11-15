@@ -110,3 +110,14 @@ onMounted(() => void loadPage());
     </main>
   </div>
 </template>
+
+<style scoped>
+.site-container { width: min(100% - 2rem, 900px); margin-inline: auto; }
+.site-header { border-bottom: 1px solid var(--arna-public-border-subtle); }
+.site-header__inner { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.brand { display: inline-flex; align-items: center; gap: .7rem; text-decoration: none; }
+.brand__wordmark { display: grid; gap: .2rem; }
+.brand__wordmark small { color: var(--arna-public-text-secondary); }
+.main-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; }
+@media (max-width: 36rem) { .site-header__inner { padding-block: .75rem; } .main-nav { width: 100%; } }
+</style>
