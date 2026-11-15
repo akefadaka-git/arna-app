@@ -6,7 +6,7 @@ export const electionLabels = {
     authorityPending: 'የሕጋዊ ሥልጣን ማረጋገጫ አልተጠናቀቀም',
     registerPending: 'የመራጮች ዝርዝር አልተቆለፈም',
     electronicVotingDisabled: 'ዲጂታል ድምፅ አሰጣጥ አልተፈቀደም',
-    physicalOnly: 'በአሁኑ ደረጃ የአካል ምርጫ ብቻ',
+    methodActivationGate: 'የአካል፣ ዲጂታል፣ ውክልና እና ድብልቅ የምርጫ ዘዴዎች በዕቅዱ ውስጥ አሉ፤ እያንዳንዱ ግን የሕግ፣ የደህንነት እና የሥራ ማረጋገጫ በር ከተሟላ በኋላ ብቻ ይነቃል.',
     noLegalDefaults: 'ያልጸደቁ የሕግ ውሳኔዎች በሥርዓቱ ነባሪ ደንብ አይሆኑም',
   },
   en: {
@@ -16,7 +16,7 @@ export const electionLabels = {
     authorityPending: 'Legal authority has not been verified',
     registerPending: 'The voter register has not been frozen',
     electronicVotingDisabled: 'Electronic voting is not enabled',
-    physicalOnly: 'Physical voting only in this implementation stage',
+    methodActivationGate: 'Physical, electronic, proxy and hybrid methods are in scope; each remains gated until its legal, security and operational acceptance requirements pass.',
     noLegalDefaults: 'Unapproved legal decisions are never system defaults',
   },
 } as const;

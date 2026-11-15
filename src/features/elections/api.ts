@@ -1,7 +1,7 @@
 import { api } from '@/core/api/client';
 
 export type ElectionStatus = 'planned' | 'nominating' | 'voting' | 'counting' | 'certified' | 'ratified' | 'cancelled';
-export type ElectionVotingMethod = 'physical';
+export type ElectionVotingMethod = 'physical' | 'electronic' | 'proxy' | 'hybrid';
 
 export interface GovernanceElection {
   readonly id: number;

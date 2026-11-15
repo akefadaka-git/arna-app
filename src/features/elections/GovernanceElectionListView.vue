@@ -37,8 +37,10 @@ onMounted(() => { void load(); });
     <ErrorState v-else-if="error" title="ምርጫዎችን ማምጣት አልተቻለም | Unable to load elections" description="እባክዎ እንደገና ይሞክሩ። Please try again." action-label="እንደገና ይሞክሩ | Retry" @action="load" />
     <section v-else aria-live="polite">
       <p class="election-list__notice">
-        ዲጂታል ድምፅ አሰጣጥ አልተፈቀደም። የአካል ምርጫ ብቻ በዚህ ደረጃ ይደገፋል።
-        Electronic voting is disabled. This stage supports physical-election administration only.
+        የአካል፣ ዲጂታል፣ ውክልና እና ድብልቅ የምርጫ ዘዴዎች በAGE ዕቅድ ውስጥ ተካትተዋል።
+        እያንዳንዱ ዘዴ ግን ተገቢው የሕግ፣ የደህንነት እና የሥራ ማረጋገጫ ከተሟላ በኋላ ብቻ ይነቃል።
+        Physical, electronic, proxy and hybrid methods are included in the AGE scope.
+        Each remains disabled until its applicable legal, security and operational acceptance gates pass.
       </p>
       <p v-if="elections.length === 0" class="election-list__empty">
         ገና ምርጫ አልተመዘገበም። No elections have been registered.
