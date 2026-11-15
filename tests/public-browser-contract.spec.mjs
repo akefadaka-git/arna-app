@@ -205,12 +205,19 @@ test.describe('ARNA public site browser contract', () => {
     await expect(opportunity.getByRole('status')).toContainText('SUB-TEST-001');
   });
 
-  test('provides focusable skip targets on corporate pages, content entries and contribution', async ({ page }) => {
+  test('provides locale, theme, keyboard and seven-viewport acceptance for corporate pages, content entries and contribution', async ({ page }) => {
     await page.route('**/api/public/site/pages/en/about', async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: {
         public_id: '00000000-0000-4000-8000-000000000002', page_key: 'about', locale: 'en', slug: 'about', alternate_slug: 'about-am',
         title: 'About the Company', summary: 'Corporate profile', body: 'Company information.', sections: [],
         seo: { title: 'About the Company', description: 'Corporate profile.' }, published_at: null
+      } }) });
+    });
+    await page.route('**/api/public/site/pages/am/about-am', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: {
+        public_id: '00000000-0000-4000-8000-000000000002', page_key: 'about', locale: 'am', slug: 'about-am', alternate_slug: 'about',
+        title: 'ስለ ድርጅቱ', summary: 'የድርጅቱ መግለጫ', body: 'የድርጅቱ መረጃ።', sections: [],
+        seo: { title: 'ስለ ድርጅቱ', description: 'የድርጅቱ መግለጫ።' }, published_at: null
       } }) });
     });
     await page.route('**/api/public/site/content/news/story', async (route) => {
@@ -220,7 +227,19 @@ test.describe('ARNA public site browser contract', () => {
         seo: { title: 'ARNA News Story', description: 'A published update.' }, published_at: null, asset_url: null
       } }) });
     });
+    await page.route('**/api/public/site/content/news/story-am', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: {
+        id: 'news-1', type: 'news', locale: 'am', slug: 'story-am', alternate_slug: 'story',
+        title: 'የARNA ዜና', summary: 'የታተመ ዜና', body: 'የታተመ ዜና ይዘት።',
+        seo: { title: 'የARNA ዜና', description: 'የታተመ ዜና።' }, published_at: null, asset_url: null
+      } }) });
+    });
 
+    const viewports = [
+      { width: 320, height: 740 }, { width: 360, height: 800 }, { width: 390, height: 844 },
+      { width: 768, height: 1024 }, { width: 1024, height: 900 }, { width: 1280, height: 900 },
+      { width: 1440, height: 960 },
+    ];
     for (const routePath of ['/en/about', '/en/content/news/story', '/contribute']) {
       await page.goto(new URL(routePath, baseUrl).toString());
       const themeControl = page.getByTestId('theme-preference-control');
@@ -231,6 +250,18 @@ test.describe('ARNA public site browser contract', () => {
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
       await themeControl.selectOption('system');
       await expect(page.locator('html')).not.toHaveAttribute('data-theme');
+
+      for (const viewport of viewports) {
+        await page.setViewportSize(viewport);
+        const dimensions = await page.evaluate(() => ({
+          viewport: document.documentElement.clientWidth,
+          document: document.documentElement.scrollWidth,
+        }));
+        expect(dimensions.document, routePath + ' overflow at ' + viewport.width + 'px')
+          .toBeLessThanOrEqual(dimensions.viewport + 1);
+      }
+
+      await page.setViewportSize({ width: 390, height: 844 });
       await page.keyboard.press('Tab');
       const skip = page.locator(routePath === '/contribute' ? '.contribute-skip-link' : '.skip-link');
       await expect(skip).toBeFocused();
@@ -240,6 +271,27 @@ test.describe('ARNA public site browser contract', () => {
       await expect(page.locator(targetId)).toHaveAttribute('tabindex', '-1');
       await expect(page.locator(targetId)).toBeFocused();
       await expect(page).toHaveTitle(/ARNA/);
+
+      if (routePath === '/en/about') {
+        await page.getByRole('link', { name: 'አማርኛ' }).click();
+        await expect(page).toHaveURL(/\/am\/about-am$/);
+        await expect(page.locator('html')).toHaveAttribute('lang', 'am');
+        await expect(page.locator('h1')).toContainText('ስለ ድርጅቱ');
+      } else if (routePath === '/en/content/news/story') {
+        await page.getByRole('link', { name: 'አማርኛ' }).click();
+        await expect(page).toHaveURL(/\/am\/content\/news\/story-am$/);
+        await expect(page.locator('html')).toHaveAttribute('lang', 'am');
+        await expect(page.locator('h1')).toContainText('የARNA ዜና');
+      } else {
+        await page.getByRole('link', { name: 'English' }).click();
+        await expect(page).toHaveURL(/\/contribute\?locale=en$/);
+        await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+        await expect(page.locator('h1')).toContainText('Submit content');
+        await page.getByRole('link', { name: 'አማርኛ' }).click();
+        await expect(page).toHaveURL(/\/contribute$/);
+        await expect(page.locator('html')).toHaveAttribute('lang', 'am');
+        await expect(page.locator('h1')).toContainText('ይዘት ያቅርቡ');
+      }
     }
   });
 
