@@ -382,3 +382,35 @@ A repository code-search census was performed for direct generic Drawer usage an
 | A4 closure | OPEN |
 
 Do not treat the absence of indexed consumers as permission to weaken the generic Drawer component's API or remove it. A future consumer must supply a translated close label; consider a conditional prop contract or explicit fail-closed behavior in a separately reviewed compatibility change.
+
+
+## 20. Composite API reconciliation — batch 1 (5 of 26)
+
+This batch follows the source declarations rather than inferring contracts from component names. File hashes identify the exact SFC revisions inspected at this audit pass.
+
+| Component / source blob | Public props and defaults | Events / model | Slots and exposed API |
+|---|---|---|---|
+| Accordion — `15981366747dbd88eb9a12910eed234687c10d2e` | Required `modelValue: string[]`, `items: ReadonlyArray<AccordionItem>`; `multiple=false`. Item shape: `id`, `title`, optional `disabled`. | `update:modelValue(string[])` | Typed scoped default slot `{ item: AccordionItem }`; no `defineExpose` found. |
+| Alert — `83afb076993e9b7b82d3c808012ed72093aa6f36` | Required `variant: AlertVariant`; optional `title`; `dismissible=false`; optional `dismissLabel` / `dismissLabelledBy`; `icon=true`. Variants: success, warning, info, danger, neutral. | `dismiss()` | Optional default message slot and `actions` slot; no `defineExpose` found. |
+| Breadcrumbs — `c9fdc6dea8633e5ffa8019e5f985c6ada3159b57` | Required `items: ReadonlyArray<BreadcrumbItem>`, required translated `ariaLabel`; `maxItems=5`. Item shape: `label`, optional `to`. | No component emits declared. | No slots or exposed methods found. Last item is rendered as current-page text, not a link. |
+| Combobox — `098f685ba1b05d63dd21dbb760eefb43501efb62` | `options: ReadonlyArray<ComboboxOption>` required; optional `modelValue: ComboboxValue`; `multiple=false`; `searchable=true`; optional placeholder; `disabled=false`; `invalid=false`; `maxVisible=50`; optional `chipRemoveLabel`, `ariaLabel`, `ariaLabelledBy`, `ariaDescribedBy`. Option: `value: string | number`, `label`, optional `disabled`, optional `group`. | `update:modelValue(ComboboxValue)`; `search(string)`. Single-select values are scalar or null; multiple values are arrays. | Named `option` and `empty` slots; no `defineExpose` found. |
+| ConfirmDialog — `87e276d181df6b73c1e8513504087e5b12bd108c` | Required `open`, `title`, `message`, `confirmLabel`, `cancelLabel`; `variant='primary'`; `loading=false`; `dismissible=true`. Variant: primary or danger. | `update:open(boolean)`, `confirm()`, `cancel()`. | No consumer slots or exposed methods found; internally composes Modal and button primitives. |
+
+### Batch 1 findings and compatibility notes
+
+1. **Required accessible names are caller-owned.** Breadcrumbs requires its navigation `ariaLabel`. Alert's dismiss button requires either `dismissLabel` or `dismissLabelledBy` when dismissible. ConfirmDialog delegates the close accessible name to its required translated `cancelLabel`.
+2. **Accordion has a typed scoped slot.** Its default slot receives an `item` descriptor; treating it as a plain unscoped default slot would lose a public API contract.
+3. **Combobox is a discriminated behavioral contract, not a discriminated TypeScript union.** `multiple` determines whether the model is scalar/null or an array, but the exported `ComboboxValue` union itself does not statically correlate with `multiple`. Consumers must preserve that invariant.
+4. **No instance methods were exposed** by these five components through `defineExpose` in the inspected SFCs. This does not rule out native DOM attributes or internal refs; those are separate checks.
+5. This batch records source-declared contracts and exact source hashes. It does not yet prove every attribute reaches its intended native element or that every consumer binds required translated labels correctly.
+
+| Composite audit progress | Status |
+|---|---|
+| Composite source files contract-reconciled | 5 / 26 |
+| Composite public prop/event/slot summaries | PARTIAL |
+| Imported and exported type definitions | PARTIAL — batch 1 types followed where relevant |
+| Consumer compatibility for batch 1 | NOT COMPLETE |
+| Behavioral evidence linked per contract | PARTIAL — Combobox behavior covered by mounted suite; other components require their own evidence |
+| Remaining composite entries | 21 |
+| Overall A4 API audit | OPEN |
+
