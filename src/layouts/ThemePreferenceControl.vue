@@ -19,7 +19,6 @@ function onChange(event: Event): void {
     <select
       class="theme-preference-control__select"
       :value="themePreference"
-      aria-label="የማሳያ ገጽታ / Display theme"
       data-testid="theme-preference-control"
       @change="onChange"
     >
