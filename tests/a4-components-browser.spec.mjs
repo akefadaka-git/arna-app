@@ -263,7 +263,9 @@ test.describe('Mounted localized shell navigation search', () => {
     const input = englishDialog.getByRole('combobox', { name: 'Search modules and pages…' });
     await expect(input).toHaveAttribute('placeholder', 'Search modules and pages…');
     await input.fill('Documents');
-    await expect(englishDialog.getByRole('option', { name: 'Documents' })).toBeVisible();
+    const documentsOption = englishDialog.getByRole('option', { name: 'Documents' });
+    await expect(documentsOption).toBeVisible();
+    await expect(documentsOption).toHaveAttribute('tabindex', '-1');
     await input.press('ArrowDown');
     await expect(input).toHaveAttribute('aria-activedescendant', 'app-header-search-option-0');
     await expect(englishDialog.getByRole('option', { name: 'Documents' })).toHaveAttribute('aria-selected', 'true');
