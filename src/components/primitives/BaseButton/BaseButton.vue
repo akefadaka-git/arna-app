@@ -296,6 +296,9 @@ function handleClick(event: MouseEvent): void {
 }
 
 .arna-button--icon-only {
+  min-width: 40px;
+  min-height: 40px;
+  justify-content: center;
   padding-inline: var(--arna-space-3);
 }
 
