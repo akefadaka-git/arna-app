@@ -212,6 +212,7 @@ test.describe('Mounted DataTable behavior', () => {
   });
 
   test('provides accessible mobile-card field labels and excludes low-priority columns', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
     const cards = page.getByTestId('data-table-cards-region');
     await expect(cards.getByTestId('data-table-card')).toHaveCount(2);
     await expect(cards.getByText('Account name').first()).toBeVisible();
