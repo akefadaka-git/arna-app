@@ -2,12 +2,17 @@
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { listNotifications, markAllNotificationsRead, markNotificationRead, type CommunicationNotification } from './api';
+import { formatCalendarDate } from '@/core/dates/calendar';
 
 const router = useRouter();
 const items = ref<readonly CommunicationNotification[]>([]);
 const unreadCount = ref(0);
 const loading = ref(false);
 const error = ref('');
+
+function formatTimestamp(value: string): string {
+  return formatCalendarDate(value, { dateStyle: 'medium', timeStyle: 'short' });
+}
 
 function localized(value: string | { am?: string; en?: string } | null): string {
   if (value === null) return '';
@@ -71,7 +76,7 @@ onMounted(() => { void load(); });
       <p v-else-if="items.length === 0" class="empty">ምንም አዲስ ማሳወቂያ የለም። · Your inbox is clear.</p>
       <article v-for="item in items" :key="item.id" class="notification" :class="{ unread: !item.is_read }">
         <span class="dot" :class="{ visible: !item.is_read }"></span>
-        <div class="notification-copy"><strong>{{ localized(item.title) }}</strong><p>{{ localized(item.body) }}</p><small>{{ item.category }} · {{ new Date(item.created_at).toLocaleString() }}</small></div>
+        <div class="notification-copy"><strong>{{ localized(item.title) }}</strong><p>{{ localized(item.body) }}</p><small>{{ item.category }} · {{ formatTimestamp(item.created_at) }}</small></div>
         <button v-if="!item.is_read" type="button" @click="markRead(item)">Mark read</button>
       </article>
     </section>
