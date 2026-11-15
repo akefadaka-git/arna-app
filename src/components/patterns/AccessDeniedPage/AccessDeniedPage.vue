@@ -327,6 +327,3 @@ onMounted(() => {
     />
   </ErrorPage>
 </template>
-
-<style scoped>
-</style>
