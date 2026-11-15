@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — LauncherGrid
+ ARNA App Shell — LauncherGrid
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/LauncherGrid/LauncherGrid.vue
+ File:      src/layouts/AppShell/LauncherGrid/LauncherGrid.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.1.0
  Status:    ENHANCEMENT — narrow-container resilience
@@ -314,16 +314,4 @@ function onRetry(): void {
   flex: 1 1 auto;
 }
 
-/* ============================================================================
-   Reduced motion
-   ---------------------------------------------------------------------------
-   No animation is defined in this file. The composed state components
-   own their own motion contracts. A defensive no-op block is kept for
-   future revisions.
-   ============================================================================ */
-@media (prefers-reduced-motion: reduce) {
-  .launcher-grid {
-    /* no-op placeholder — see comment above */
-  }
-}
 </style>
