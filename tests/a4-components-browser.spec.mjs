@@ -249,6 +249,7 @@ test.describe('Mounted localized shell navigation search', () => {
     await expect(amharicDialog.getByRole('searchbox', { name: 'ሞጁሎችን እና ገጾችን ይፈልጉ' })).toHaveAttribute('placeholder', 'ሞጁሎችን እና ገጾችን ይፈልጉ…');
     await amharicDialog.getByRole('button', { name: 'ፍለጋን ዝጋ' }).click();
     await expect(amharicDialog).toBeHidden();
+    await expect(trigger).toBeFocused();
 
     await page.getByTestId('set-locale-en').click();
     await expect(trigger).toHaveAttribute('aria-label', 'Search ARNA');
@@ -264,6 +265,7 @@ test.describe('Mounted localized shell navigation search', () => {
     await englishDialog.getByRole('button', { name: 'Documents' }).click();
     await expect(page.getByTestId('a4-files-route')).toBeVisible();
     await expect(englishDialog).toBeHidden();
+    await expect(trigger).toBeFocused();
 
     await page.getByTestId('set-locale-am').click();
     await expect(trigger).toHaveAttribute('aria-label', 'ARNA ይፈልጉ');
