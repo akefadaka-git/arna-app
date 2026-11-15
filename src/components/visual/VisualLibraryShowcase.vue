@@ -187,7 +187,7 @@ const sampleData = computed(() => [
 .visual-library-showcase__hero-copy > p:last-child { max-width: 66ch; margin: .65rem 0 0; color: var(--arna-color-text-secondary); line-height: 1.6; overflow-wrap: anywhere; }
 .visual-library-showcase__section { display: grid; gap: var(--arna-space-6, 1.5rem); min-width: 0; }
 .visual-library-showcase__section > h3 { margin: 0; color: var(--arna-color-text-primary); font-size: var(--arna-font-size-heading-5); overflow-wrap: anywhere; }
-.visual-library-showcase__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: var(--arna-space-5); min-width: 0; align-items: stretch; }
+.visual-library-showcase__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: var(--arna-space-5); padding-block-end: var(--arna-space-4); min-width: 0; align-items: stretch; }
 .visual-library-showcase__grid--3d {
   padding: 1rem .2rem 3rem;
   row-gap: 3rem;
