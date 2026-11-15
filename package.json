@@ -43,7 +43,8 @@
     "test:public-browser": "playwright test tests/public-browser-contract.spec.mjs",
     "test:error-handling-contract": "node --test tests/error-handling-contract.test.mjs",
     "analyze:imports": "node scripts/build-application-import-graph.mjs",
-    "test:visual-library-contract": "node --test tests/visual-library-contract.test.mjs"
+    "test:visual-library-contract": "node --test tests/visual-library-contract.test.mjs",
+    "test:visual-panel-integration-contract": "node --test tests/visual-panel-integration-contract.test.mjs"
   },
   "dependencies": {
     "axios": "1.21.0",
