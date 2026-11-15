@@ -745,3 +745,38 @@ The final four primitives were reconciled from their exact SFC declarations, imp
 **Source-declaration reconciliation: 24/24 primitives — COMPLETE.** This closes only the primitive inventory and source-contract transcription. It does not close full prop/default/event/slot/expose/attribute-fallthrough compatibility, caller label requirements, patterns, full authenticated-shell review, or physical-device acceptance.
 
 No merge or deployment is included or authorized.
+
+
+## 29. Pattern API reconciliation — batch 1 (5 of 15)
+
+The first five patterns were reconciled from their SFC declarations, exported data types, event signatures, slot payloads and rendered behavior. Source blob hashes are included for traceability.
+
+| Component / source blob | Public props and defaults | Events / model | Slots and exposed API |
+|---|---|---|---|
+| AccessDeniedPage — `f211df9855eecd24e89380f0d84b70e606478311` | Optional `code`, `from`, `requestId`, `timestamp`; required `labels:AccessDeniedLabels`. Labels require translated `title`, `message`, `statusLabel`, `launcher`, `fileHint`, and nested `support:ErrorPageSupportLabels`. | `launcher()` when its single fixed action is activated. | No consumer slots or exposed methods found. Internally composes ErrorPage and conditionally adds ErrorSupportHint only for exact `FILE_ACCESS_DENIED` code. |
+| Card — `8bbbe78078949976b2e69b712dc47bb71ff44044` | `variant='default'` (default/raised/outlined); `padding='md'` (none/sm/md/lg); `clickable=false`. | `click(MouseEvent)`; mouse click forwards original event, keyboard Enter/Space synthesizes a MouseEvent. | Unscoped `header`, default, and `footer` slots. No exposed methods found. |
+| ConfirmDeleteDialog — `002c077cc8a122cf66e20ee8556cf8ce30714cb2` | Required controlled `open:boolean`, translated `entityLabel`, `entityName`, and `labels:ConfirmDeleteDialogLabels`; optional `confirmationText`; `loading=false`. Labels require title, message, confirm/cancel labels, confirmation prompt and mismatch message. Recognized interpolation tokens: `{entityLabel}`, `{entityName}`, `{confirmationText}`. | `update:open(boolean)`; `confirm()`. | No consumer slots or exposed methods found. Internally composes Modal, BaseInput, SecondaryButton and DangerButton. |
+| DataTable — `2972450d839da9c6df1481c3bd4d8d3e089eba8f` | Required `columns:ReadonlyArray<DataTableColumn>`, `rows:ReadonlyArray<unknown>`, `rowKey(row):string|number`; `loading=false`; optional `empty`, `error`; `selectable=false`; `selectedKeys=[]`; optional `selectionLabels`, `sortKey`, `sortDir`, `pagination`, `paginationLabels`, `perPageOptions`, `ariaLabel`; `density='default'`; `mobileLayout='cards'`. Column includes key/label and optional width/align/sortable/priority/formatter. | `update:sort({key,dir})`; `update:page(number)`; `update:perPage(number)`; `update:selectedKeys((string|number)[])`; `rowClick(row)`. | `toolbar`; scoped `bulk-actions({selectedKeys,clearSelection})`; scoped `row-actions({row})`; `empty`; dynamic scoped `cell:{key}({row,value})`. No exposed methods found. |
+| DetailCard — `be60d375d1a7ad8b8ebe6aeed8f410f12fc9ff6b` | Required translated `title:string` and `fields:ReadonlyArray<MetaListItem>`; optional `subtitle`; `columns=1`. | No emits declared. | Unscoped `actions` slot in header and `extra` slot below fields. No exposed methods found. Internally composes Card and MetaList. |
+
+### Pattern batch 1 findings and compatibility notes
+
+1. **AccessDeniedPage has a deliberately fixed action surface.** It emits only `launcher()`; consumers cannot inject extra actions through props or slots. The file-access hint is shown only when the backend code exactly equals `FILE_ACCESS_DENIED`. Its mounted hook logs path, code, request ID and timestamp; consumer review must ensure those fields are safe for the application's operational logging policy and are not expanded to include credentials or private payloads.
+2. **Card's clickable mode is an interactive non-button container.** It applies button semantics and keyboard activation only when `clickable=true`; nested native/ARIA interactive descendants and `data-no-card-click` suppress delegated click emission. The keyboard path emits a synthetic MouseEvent. Consumers must avoid nesting interactive controls in a clickable card without understanding the delegation boundary.
+3. **ConfirmDeleteDialog's typed confirmation is opt-in.** Missing, empty or whitespace-only `confirmationText` means immediate confirmation eligibility; when supplied, the typed value must match exactly after trimming and case-sensitively. While loading, confirmation is blocked, Cancel/input are disabled and the Modal becomes non-dismissible. Consumers must not interpret `confirm()` as proof that deletion succeeded; it is an intent event.
+4. **DataTable is a controlled data/selection/sort/pagination pattern.** Parent props own rows, sort state, selected keys and pagination; emitted events request changes. `rowKey` must be stable and unique. Select-all applies only to the current `rows` page while preserving off-page selections. Keys are normalized to strings for selection matching, so numeric `1` and string `"1"` collide.
+5. **DataTable accessibility labels are conditionally required but not type-enforced.** `selectionLabels` is required when `selectable=true`; `paginationLabels` is required when pagination is supplied. Source uses empty-string fallback for a row selection label if the caller omits the required callback, which can create unnamed checkboxes. Consumers must provide both label objects when the associated feature is enabled.
+6. **DataTable slots are extensible and high-risk.** Dynamic `cell:{key}` slots receive raw `row` and `value`; bulk-actions receives selected keys and a clear callback; row-actions receives a row. Consumer-provided cell and action content must preserve table semantics, keyboard access and non-row-click behavior. The default mobile card layout hides low-priority columns; the scroll layout is an alternative.
+7. **DetailCard delegates its data grid to MetaList.** Title/subtitle/actions determine whether the header exists; the fields are rendered by MetaList. The `extra` slot is outside the field list and should be used for supplemental content, not as an unstructured replacement for field rows.
+8. This batch records source contracts only. Dedicated mounted interaction suites, consumer call-site completeness and full keyboard/screen-reader checks remain outstanding for these patterns.
+
+| Pattern API audit progress | Status |
+|---|---|
+| Pattern source files contract-reconciled | 5 / 15 |
+| Pattern props/defaults/events/slots | PARTIAL |
+| Consumer compatibility for batch 1 | NOT COMPLETE |
+| Dedicated mounted tests for batch 1 | PARTIAL — DataTable has existing source/behavior tests; full pattern-level acceptance not complete |
+| Remaining patterns | 10 |
+| Overall A4 API audit | OPEN |
+
+No merge or deployment is included or authorized.
