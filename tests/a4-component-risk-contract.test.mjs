@@ -26,6 +26,8 @@ test('FileUploader preserves the upload boundary and abort lifecycle', () => {
   assert.match(source, /new AbortController\(\)/);
   assert.match(source, /controller\.abort\(\)/);
   assert.match(source, /onBeforeUnmount\(\(\) =>/);
+  assert.match(source, /@reject-file="onInputReject"/);
+  assert.match(source, /items\.value\.find\(\(queued\) => queued\.localId === item\.localId\)/);
   assert.match(source, /abortControllers\.clear\(\)/);
   for (const event of ['uploaded', 'failed', 'removed', 'completed', 'rejected']) {
     assert.match(source, new RegExp(`event: '${event}'`), `missing ${event} event`);
