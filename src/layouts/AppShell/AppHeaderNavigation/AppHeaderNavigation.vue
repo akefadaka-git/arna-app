@@ -167,7 +167,7 @@ function navigate(item: SearchNavItem): void {
     >
       <BaseIcon name="search" size="sm" />
       <span class="app-header-navigation__search-label">{{ labels.triggerText }}</span>
-      <kbd>Ctrl / ⌘ K</kbd>
+      <kbd aria-hidden="true">Ctrl / ⌘ K</kbd>
     </BaseButton>
 
     <dialog ref="dialog" class="app-header-navigation__dialog" aria-labelledby="app-header-search-title">
