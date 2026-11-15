@@ -160,7 +160,7 @@ test.describe('Mounted ErrorSupportPanel privacy and clipboard behavior', () => 
       'Request reference: req-12345',
       'Timestamp: 2026-11-15T12:00:00Z',
       'Local time: 15/11/2019 15:00 E.C.',
-    ].join('\\n'));
+    ].join('\n'));
     expect(copied).not.toMatch(/password|token|stack trace|SQL|filesystem|private form/i);
 
     const results = await new AxeBuilder({ page })
@@ -200,11 +200,17 @@ test.describe('Mounted DataTable behavior', () => {
 
   test('selects individual rows and all rows on the current page', async ({ page }) => {
     const tableRegion = page.getByTestId('data-table-table-region');
-    await tableRegion.getByRole('checkbox', { name: 'Select Alpha account' }).check();
+    const alphaCheckbox = tableRegion.getByTestId('data-table-cell-select')
+      .filter({ has: page.getByRole('checkbox', { name: 'Select Alpha account' }) })
+      .getByTestId('base-checkbox-root');
+    await alphaCheckbox.click();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1');
-    await tableRegion.getByRole('checkbox', { name: 'Select all accounts' }).check();
+
+    const selectAllCheckbox = tableRegion.getByTestId('data-table-header-select-all')
+      .getByTestId('base-checkbox-root');
+    await selectAllCheckbox.click();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1,row-2');
-    await tableRegion.getByRole('checkbox', { name: 'Select all accounts' }).uncheck();
+    await selectAllCheckbox.click();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('');
   });
 
