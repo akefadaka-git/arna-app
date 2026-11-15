@@ -580,7 +580,7 @@ Five further composite SFCs were reconciled from their prop declarations, export
 |---|---|---|---|
 | Modal — `cbcaac334efda7a0f64787ee5b4db1d27ba619e1` | Required `open:boolean`, translated `title:string`; `size='md'` (sm/md/lg/full); `dismissible=true`; `hideFooter=false`; optional `closeLabel` (documented as required when dismissible). | `update:open(boolean)`; `close()`. | Unscoped default, `footer`, `header-extra` slots. No `defineExpose` found. Uses native `dialog`; title is associated through `aria-labelledby`. |
 | Popover — `308ea700452c4bb7332ea39e4b8e89090da11606` | Required controlled `open:boolean`; `placement='bottom-start'` (top-start/top/top-end/bottom-start/bottom/bottom-end/left/right); `trigger='click'` (click/manual); `matchTrigger=false`. | `update:open(boolean)`. | Scoped default trigger slot exposes `triggerId`, `controlsId`, `open`, `toggle()`, `ariaHaspopup='dialog'`, `ariaExpanded`, `ariaControls`; unscoped `content` slot. No exposed methods found. |
-| SearchBar — `49ccec9d58633480a8344471c47566d40ea55307` | Required controlled `modelValue:string`; optional translated `placeholder`; `debounceMs=300`; `loading=false`; `autoFocus=false`; optional `ariaLabel`, `loadingLabel`; required translated `clearLabel` (made TypeScript-required during A4 consumer reconciliation). | `update:modelValue(string)`; debounced or Enter-triggered `search(string)`; `clear()`. | Optional unscoped `leading` slot overrides the default search icon. No exposed methods found. |
+| SearchBar — `079d1df3a4b31f51e7e8d6f929de8ee6ca97eeff` | Required controlled `modelValue:string`; optional translated `placeholder`; `debounceMs=300`; `loading=false`; `autoFocus=false`; optional `ariaLabel`, `loadingLabel`; required translated `clearLabel` (made TypeScript-required during A4 consumer reconciliation). | `update:modelValue(string)`; debounced or Enter-triggered `search(string)`; `clear()`. | Optional unscoped `leading` slot overrides the default search icon. No exposed methods found. |
 | Skeleton — `41012b12c100946f5fce4d3638ea6be8dbd8ffde` | `variant='text'` (text/circle/rect); `animation='pulse'` (pulse/shimmer/none); optional CSS `width`, `height`. Exported `SkeletonVariant` and `SkeletonAnimation` unions. | No emits declared. | No slots or exposed methods found. Root is deliberately `aria-hidden=true`; it is decorative and must not carry essential content or be used as the only loading announcement. |
 | Stepper — `61a475ee8452d912c1ce9fd09b0d0ffe30c4b155` | Required `steps:ReadonlyArray<StepperStep>`, `currentKey:string`, `completedKeys:ReadonlyArray<string>`; `orientation='horizontal'` (horizontal/vertical); optional translated `optionalLabel`. `StepperStep={key,label,optional?}`. Horizontal falls back to vertical below 640px. | `navigate(key:string)` when a step button is activated. | No slots or exposed methods found. Uses ordered-list semantics and `aria-current='step'` for the current step. |
 
@@ -885,7 +885,7 @@ Relevant implementation commits:
 - SearchBar required prop: `29119f0934761f587dd83a3ffcfb9e35f6aa291b`
 - Consumer regression test: `987c585c147276b6a2af739a2f97cf64df19bcb9`
 
-**Disposition:** implementation complete; exact-head CI and type-check still required.
+**Disposition:** VERIFIED — implementation, required TypeScript prop, three consumer bindings, Amharic labels and regression assertion passed exact-head CI.
 
 ### 32.2. FileUploader consumer/service boundary
 
@@ -921,7 +921,10 @@ DownloadButton receives a stable component function, `onDownload`, and all four 
 | DownloadButton consumer labels and function | SOURCE VERIFIED |
 | PermissionGate backend authority boundary | DOCUMENTED / consumer service contracts reviewed |
 | DataTable selected/pagination conditional labels | Not activated in inspected FilesListView usage |
-| Exact-head CI for these changes | PENDING |
+| Exact-head CI for these changes | PASS — workflow #43708431750 |
 | A4 closure | OPEN |
 
 No merge or deployment is included or authorized.
+
+
+**Exact-head verification:** [Workflow #43708431750](https://github.com/akefadaka-git/arna-app/actions/runs/43708431750) completed successfully at `86921f4fb1b698bb55b056e16c053ef115c2a17e`. All 32 steps passed, including type-check/build of all four applications, A4 source-contract tests, rendered visual review, public browser/axe checks, mounted Combobox/Modal/Drawer, FileUploader and DatePicker suites. The SearchBar consumer-label regression test passed within the A4 source-contract step.
