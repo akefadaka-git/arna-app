@@ -3,7 +3,7 @@
   <head>
     <!--
       =====================================================================
-      MASES Phase 2 UI — Admin entry HTML
+      ARNA Phase 2 UI — Admin entry HTML
       =====================================================================
 
       File:    mase_app/admin-entry/index.html
@@ -43,14 +43,14 @@
       ---------------------------------------------------------------------
       The four label deltas — why admin differs
       ---------------------------------------------------------------------
-      1. <title>            "MASES"  →  "MASES አስተዳደር"
-      2. application-name   "MASES"  →  "MASES አስተዳደር"
-      3. og:title           "MASES"  →  "MASES አስተዳደር"
+      1. <title>            "ARNA"  →  "ARNA አስተዳደር"
+      2. application-name   "ARNA"  →  "ARNA አስተዳደር"
+      3. og:title           "ARNA"  →  "ARNA አስተዳደር"
       4. og:description     the workspace's description of the shared-
                             equity management platform, replaced with a
                             description of the administration console.
 
-      The value "MASES አስተዳደር" is the admin build's application name.
+      The value "ARNA አስተዳደር" is the admin build's application name.
       It is the string that VITE_APP_NAME carries for the admin build
       (see the environment configuration delivered at G2.10), and it
       is the string the router composes into document.title on every
@@ -78,7 +78,7 @@
       ---------------------------------------------------------------------
       Pre-JS default only. App.vue mounts and the active route wrapper's
       onMounted hook overwrites document.title on every route change
-      (e.g. "ዳሽቦርድ — MASES አስተዳደር"). The initial value exists so the
+      (e.g. "ዳሽቦርድ — ARNA አስተዳደር"). The initial value exists so the
       browser tab shows something meaningful during the ~100ms before
       Vue mounts, and so a user who opens the page in a new tab and
       navigates away before the JS loads still has a sensible history
@@ -159,7 +159,7 @@
       Additional consistency deltas — noted but NOT applied in 1.0.0
       ---------------------------------------------------------------------
       Five meta tags remain at their workspace values. Each identifies
-      the product as "MASES" rather than "MASES አስተዳደር". A reviewer
+      the product as "ARNA" rather than "ARNA አስተዳደር". A reviewer
       who determines they should be aligned in a follow-up revision
       may approve a change to:
 
@@ -181,9 +181,9 @@
 
     <!--
       Title. Overwritten by the router on mount; see the file header
-      comment §"Why <title>MASES አስተዳደር</title>".
+      comment §"Why <title>ARNA አስተዳደር</title>".
     -->
-    <title>MASES አስተዳደር</title>
+    <title>ARNA አስተዳደር</title>
 
     <!--
       Description. Consumed by search engines and by social-platform
@@ -228,7 +228,7 @@
 
     <!--
       Application name. Used by Android when the site is added to the
-      home screen. For the admin build, this is "MASES አስተዳደር" so
+      home screen. For the admin build, this is "ARNA አስተዳደር" so
       that an installed admin tile is distinguishable from an
       installed workspace tile.
     -->
@@ -255,7 +255,7 @@
       Open Graph. Read by Facebook, LinkedIn, Slack, WhatsApp,
       Telegram, and most other platforms when a URL is shared.
 
-      og:title is changed to "MASES አስተዳደር" and og:description to the
+      og:title is changed to "ARNA አስተዳደር" and og:description to the
       admin-specific description. og:site_name is unchanged in this
       initial delivery; see the file header comment §"Additional
       consistency deltas".
