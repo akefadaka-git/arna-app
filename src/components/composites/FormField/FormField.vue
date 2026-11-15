@@ -552,7 +552,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
       helpText is non-empty. The slot takes precedence over the prop.
     -->
     <div
-      v-if="hasHelp"
+      v-if="hasHelp || $slots.help"
       :id="helpId"
       class="form-field__help"
       data-testid="form-field-help"
