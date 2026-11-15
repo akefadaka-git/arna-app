@@ -182,7 +182,7 @@ test.describe('Mounted ErrorSupportPanel privacy and clipboard behavior', () => 
     await expect(panel).toHaveAttribute('data-copy-state', 'failed');
     const fallback = page.getByTestId('error-support-panel-fallback-textarea');
     await expect(fallback).toHaveAttribute('readonly', '');
-    await expect(fallback).toHaveAttribute('aria-labelledby', /mases-error-support-panel-\d+-fallback-instruction/);
+    await expect(fallback).toHaveAttribute('aria-labelledby', /arna-error-support-panel-\d+-fallback-instruction/);
     await expect(fallback).toHaveValue(/AUTH_PERMISSION_DENIED/);
     await expect(fallback).toHaveValue(/req-12345/);
   });
