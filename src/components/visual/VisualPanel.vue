@@ -86,7 +86,7 @@ withDefaults(defineProps<{
 }
 .visual-panel[data-mode="2d"][data-variant="split"] .visual-panel__surface {
   border-inline-start: 4px solid var(--arna-color-border-brand);
-  background: linear-gradient(115deg, var(--arna-color-surface-brand), var(--arna-color-surface-raised) 62%);
+  background: var(--arna-color-surface-raised);
 }
 .visual-panel[data-mode="3d"][data-variant="tilt"] .visual-panel__surface {
   transform: rotateX(4deg) rotateY(-5deg) translateZ(8px);
