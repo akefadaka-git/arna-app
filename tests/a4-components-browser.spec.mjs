@@ -292,3 +292,147 @@ test.describe('Mounted localized shell navigation search', () => {
     await expect(trigger).toHaveAccessibleName('ARNA ይፈልጉ');
   });
 });
+
+
+test.describe('Mounted NotificationsCenter lifecycle and safety', () => {
+  const item = (id, title = 'Sample notification', is_read = false, action = null) => ({
+    id, title: { am: 'የሙከራ ማሳወቂያ', en: title },
+    body: { am: 'የሙከራ ዝርዝር', en: 'Notification details' },
+    category: 'system', priority: 'normal', is_read,
+    created_at: '2026-11-15T10:00:00Z', action,
+  });
+  const envelope = (items, page = 1, unread_count = items.filter((entry) => !entry.is_read).length, total = items.length) => ({
+    success: true,
+    data: { items, pagination: { page, per_page: 20, total }, unread_count },
+  });
+
+  test('shows a loading status while the inbox request is pending', async ({ page }) => {
+    let release;
+    await page.route('**/api/notifications?**', async (route) => {
+      await new Promise((resolve) => { release = resolve; });
+      await route.fulfill({ json: envelope([item('n-1')], 1, 1, 1) });
+    });
+    await page.goto(baseUrl);
+    await page.getByTestId('open-notifications').click();
+    await expect(page.getByRole('status')).toContainText('Loading');
+    release();
+    await expect(page.getByText('Sample notification')).toBeVisible();
+  });
+
+  test('renders unread state and marks one notification read after server confirmation', async ({ page }) => {
+    await page.route('**/api/notifications**', async (route) => {
+      if (route.request().method() === 'GET') {
+        await route.fulfill({ json: envelope([item('n-1')], 1, 1, 1) });
+      } else {
+        await route.fulfill({ json: { success: true, data: { id: 'n-1', is_read: true, unread_count: 0 } } });
+      }
+    });
+    await page.goto(baseUrl);
+    await page.getByTestId('open-notifications').click();
+    const row = page.locator('.notification-center__item');
+    await expect(row).toHaveClass(/is-unread/);
+    await row.click();
+    await expect(row).not.toHaveClass(/is-unread/);
+    await expect(page.getByText(/0/)).toHaveCount(0);
+  });
+
+  test('loads the next page and returns to the previous page', async ({ page }) => {
+    const requests = [];
+    await page.route('**/api/notifications**', async (route) => {
+      const url = new URL(route.request().url());
+      const requestedPage = Number(url.searchParams.get('page') || '1');
+      requests.push(requestedPage);
+      const entries = requestedPage === 1
+        ? Array.from({ length: 20 }, (_, index) => item('p1-' + index, 'Page one ' + index))
+        : [item('p2-1', 'Page two item')];
+      await route.fulfill({ json: envelope(entries, requestedPage, 1, 21) });
+    });
+    await page.goto(baseUrl);
+    await page.getByTestId('open-notifications').click();
+    await expect(page.getByText('Page one 0')).toBeVisible();
+    await page.getByRole('button', { name: 'Next' }).click();
+    await expect(page.getByText('Page two item')).toBeVisible();
+    await page.getByRole('button', { name: 'Previous' }).click();
+    await expect(page.getByText('Page one 0')).toBeVisible();
+    expect(requests).toEqual([1, 2, 1]);
+  });
+
+  test('refreshes localized notification content when the active locale changes', async ({ page }) => {
+    await page.route('**/api/notifications**', async (route) => {
+      if (route.request().method() === 'GET') {
+        await route.fulfill({ json: envelope([item('locale-1', 'Hello')], 1, 1, 1) });
+      } else {
+        await route.fulfill({ json: { success: true, data: { unread_count: 0 } } });
+      }
+    });
+    await page.goto(baseUrl);
+    await page.getByTestId('open-notifications').click();
+    await expect(page.getByText('የሙከራ ማሳወቂያ')).toBeVisible();
+    await page.getByTestId('set-locale-en').click();
+    await expect(page.getByText('Hello')).toBeVisible();
+  });
+
+  test('shows a recoverable error and retries the failed inbox request', async ({ page }) => {
+    let attempts = 0;
+    await page.route('**/api/notifications**', async (route) => {
+      if (route.request().method() !== 'GET') return route.continue();
+      attempts += 1;
+      if (attempts === 1) {
+        await route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ message: 'unavailable' }) });
+      } else {
+        await route.fulfill({ json: envelope([item('retry-1')], 1, 1, 1) });
+      }
+    });
+    await page.goto(baseUrl);
+    await page.getByTestId('open-notifications').click();
+    await expect(page.getByRole('alert')).toContainText('Could not load notifications');
+    await page.getByRole('button', { name: 'Try again' }).click();
+    await expect(page.getByText('Sample notification')).toBeVisible();
+    expect(attempts).toBe(2);
+  });
+
+  test('does not interpret an untrusted resource_ref as a URL or navigate outside the app', async ({ page }) => {
+    await page.route('**/api/notifications**', async (route) => {
+      if (route.request().method() === 'GET') {
+        await route.fulfill({ json: envelope([item('unsafe-1', 'Unsafe action', false, {
+          route_name: 'external.redirect', resource_ref: 'https://attacker.invalid/collect',
+        })], 1, 1, 1) });
+      } else {
+        await route.fulfill({ json: { success: true, data: { unread_count: 0 } } });
+      }
+    });
+    await page.goto(baseUrl);
+    const initialUrl = page.url();
+    await page.getByTestId('open-notifications').click();
+    await page.getByText('Unsafe action').click();
+    await expect(page).toHaveURL(initialUrl);
+    expect(page.url()).not.toContain('attacker.invalid');
+  });
+});
+
+test.describe('Mounted navigation-search edge interactions', () => {
+  test('shows a localized empty state for an unmatched query and resets the active option', async ({ page }) => {
+    await page.goto(baseUrl);
+    await page.getByTestId('set-locale-en').click();
+    await page.getByTestId('app-header-search-trigger').click();
+    const dialog = page.getByRole('dialog', { name: 'Search ARNA' });
+    const input = dialog.getByRole('combobox', { name: 'Search modules and pages…' });
+    await input.fill('not-a-real-destination');
+    await expect(dialog.getByText('No matching modules or pages')).toBeVisible();
+    await expect(input).not.toHaveAttribute('aria-activedescendant', /.+/);
+  });
+
+  test('mouse hover synchronizes the active descendant and click activates the destination', async ({ page }) => {
+    await page.goto(baseUrl);
+    await page.getByTestId('set-locale-en').click();
+    await page.getByTestId('app-header-search-trigger').click();
+    const dialog = page.getByRole('dialog', { name: 'Search ARNA' });
+    const input = dialog.getByRole('combobox', { name: 'Search modules and pages…' });
+    const option = dialog.getByRole('option', { name: 'Shareholders' });
+    await option.hover();
+    await expect(input).toHaveAttribute('aria-activedescendant', await option.getAttribute('id'));
+    await option.click();
+    await expect(page.getByTestId('a4-shareholders-route')).toBeVisible();
+    await expect(dialog).toBeHidden();
+  });
+});

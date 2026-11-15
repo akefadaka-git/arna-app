@@ -3,6 +3,7 @@ import { createPinia } from 'pinia';
 import { createMemoryHistory, createRouter, RouterView } from 'vue-router';
 import { useLocaleStore } from '../../src/stores/locale';
 import AppHeaderNavigation from '../../src/layouts/AppShell/AppHeaderNavigation/AppHeaderNavigation.vue';
+import NotificationsCenter from '../../src/features/notifications/NotificationsCenter.vue';
 import Combobox from '../../src/components/composites/Combobox/Combobox.vue';
 import Modal from '../../src/components/composites/Modal/Modal.vue';
 import Drawer from '../../src/components/composites/Drawer/Drawer.vue';
@@ -25,6 +26,7 @@ const app = createApp({
     const selected = ref(null);
     const modalOpen = ref(false);
     const drawerOpen = ref(false);
+    const notificationsOpen = ref(false);
     const modalCloseEvents = ref(0);
     const drawerCloseEvents = ref(0);
     const tableSelectedKeys = ref([]);
@@ -71,16 +73,23 @@ const app = createApp({
           type: 'button',
           'data-testid': 'set-locale-en',
           style: 'min-height: 44px;',
-          onClick: () => localeStore.setLocale('en'),
+          onClick: () => { localeStore.setLocale('en'); document.documentElement.lang = 'en'; },
         }, 'Set English'),
         h('button', {
           type: 'button',
           'data-testid': 'set-locale-am',
           style: 'min-height: 44px;',
-          onClick: () => localeStore.setLocale('am'),
+          onClick: () => { localeStore.setLocale('am'); document.documentElement.lang = 'am'; },
         }, 'Set Amharic'),
       ]),
       h(RouterView),
+      h('section', { 'aria-label': 'Notifications center test' }, [
+        h('button', { type: 'button', 'data-testid': 'open-notifications', onClick: () => { notificationsOpen.value = true; } }, 'Open notifications'),
+        h(NotificationsCenter, {
+          open: notificationsOpen.value,
+          onClose: () => { notificationsOpen.value = false; },
+        }),
+      ]),
       h('section', { 'aria-label': 'Error support panel test' }, [
         h(ErrorSupportPanel, {
           code: 'AUTH_PERMISSION_DENIED',

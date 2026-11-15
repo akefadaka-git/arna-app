@@ -42,7 +42,7 @@ Evolve ARNA into a coherent, high-quality, Amharic-first enterprise experience t
 - Visual regression baselines for core components and all four app shells.
 
 ### 3.3 Navigation and information discovery
-- Upgrade the existing `AppHeaderNavigation` Ctrl/⌘+K destination search rather than create a competing second palette. Shell labels and known workspace/portal destination names follow the active Amharic/English locale. The current branch adds an accessible combobox/listbox pattern, ArrowUp/ArrowDown result selection, Enter activation, active-descendant state, hover synchronization, and native-dialog focus restoration. Exact-head browser verification is pending; grouping, recent destinations, and a distinct cross-domain entity-search layer remain future work when APIs are ready.
+- Upgrade the existing `AppHeaderNavigation` Ctrl/⌘+K destination search rather than create a competing second palette. Shell labels and known workspace/portal destination names follow the active Amharic/English locale. The current branch adds an accessible combobox/listbox pattern, ArrowUp/ArrowDown result selection, Enter activation, active-descendant state, hover synchronization, and native-dialog focus restoration. Exact-head browser verification passed at `32238fe5950256020fa429d1c0298c329c10e0ee`, workflow run `43717109962` (success). Grouping, recent destinations, and a distinct cross-domain entity-search layer remain future work when APIs are ready.
 - Add cross-domain entity search only when authoritative API contracts exist; keep it distinct from the existing route-destination index.
 - Contextual quick actions and recently viewed items require an explicit route/action catalogue and persistence contract.
 - Search and command results must be filtered by authoritative permissions; UI filtering is not a security boundary.
@@ -147,10 +147,10 @@ Evolve ARNA into a coherent, high-quality, Amharic-first enterprise experience t
 - Core component inventory: 24 primitives, 26 composites, 15 patterns (65 component directories).
 - Additive visual library: MetricWidget, ChartPanel, ImageFrame, PromoBanner, AbstractBackdrop, TextEffect, MotionReveal, VisualPanel, VisualLibraryShowcase.
 - Four independent application entry points remain in place.
-- A Ctrl/⌘+K navigation destination search already exists in AppHeaderNavigation. Its shell controls and known workspace/portal destination labels have been localized; this branch adds keyboard result navigation and combobox/listbox semantics. Latest exact-head CI is pending. It remains a navigation-only index, not a cross-domain entity search.
+- A Ctrl/⌘+K navigation destination search already exists in AppHeaderNavigation. Its shell controls and known workspace/portal destination labels have been localized; this branch adds keyboard result navigation and combobox/listbox semantics. Latest exact-head CI passed at SHA `32238fe5950256020fa429d1c0298c329c10e0ee`, workflow `43717109962`. It remains a navigation-only index, not a cross-domain entity search.
 - NotificationsCenter, its Pinia store, and API adapter already exist; backend endpoints/schema have been source-reconciled against arna-api main SHA `b924f6555cca8f4c5a732ffb6ba9fb181c9d0733`. Mounted behavior and locale-switch coverage remain required.
 - LanguageSelector exists but is intentionally not mounted pending a locale-persistence API contract.
-- PR #67 has a known failing mounted-browser suite; it is not accepted as complete.
+- PR #69 exact-head workflow #43717109962 passed at `32238fe5950256020fa429d1c0298c329c10e0ee`; the mounted component and navigation tests configured in that workflow passed. This is bounded evidence, not full cross-app A4.
 - Historical catalogue/design-system source documents have not been recovered; reconstructed documents remain drafts pending Owner authority.
 - No full authenticated-shell visual acceptance, formal WCAG certification, physical-device acceptance, or 3D model viewer is claimed.
 
@@ -161,3 +161,31 @@ The new branch starts with:
 2. reliable mounted tests for DataTable selection and diagnostic clipboard output;
 3. a source-backed enhancement roadmap;
 4. exact-head CI, then incremental implementation of the unified shell, component lab, navigation, workflow, dashboard, and productivity workstreams.
+
+
+## 9. Exact-head A3/A4 evidence and scope reconciliation (2026-11-15)
+
+### Verified evidence
+- PR #69: `feat/arna-nextgen-ui-foundation`, base `feat/arna-visual-panels-integration`, draft/open/unmerged.
+- Verified baseline SHA: `32238fe5950256020fa429d1c0298c329c10e0ee`.
+- Exact-head GitHub Actions run: [#43717109962](https://github.com/akefadaka-git/arna-app/actions/runs/43717109962), conclusion `success`.
+- Configured checks passed: type-check/build; Ethiopian calendar conversion/date-entry; Chromium/public-browser and WCAG 2.2 accessibility contracts; visual-library rendering; mounted Combobox/Modal/Drawer; FileUploader lifecycle/accessibility; DatePicker browser interactions; artifact upload.
+- This run is evidence for the configured workflow at the exact SHA only. It is not a full four-app-shell, device, manual assistive-technology, or formal WCAG certification.
+
+### PR #65 scope discrepancy — UNRESOLVED / ISOLATED
+- PR #65 declares one file (`src/layouts/AppShell/AppHeader/AppHeader.vue`) in its description.
+- GitHub PR metadata reports 190 commits, 199 changed files, +6,356 additions, −4,691 deletions, head `86eea1fc507b49065ec017dfa59f15153f9ddaaa`, base `main` at `85751ca489b7e2a250da46f408b040254827a199`.
+- The paginated PR files API returns 199 file entries (100 on page 1, 99 on page 2). The changes span environment files, workflow, design-system docs, package/build scripts, 68 component paths, core, features, layouts, routes, styles, and tests.
+- The discrepancy is not resolved by treating the PR as authorized. Preserve all files and history. Do not merge, cherry-pick, rebase, squash, or silently incorporate this PR as part of PR #69.
+- Required resolution: produce an Owner-reviewed manifest classifying all 199 paths as intended UI baseline, necessary dependency, unrelated work, or unknown; compare each changed path with its parent/base; identify the original one-file change and subsequent commits that expanded scope. Only then propose a separate extraction/reconciliation PR.
+
+### Historical design-system authority — MISSING
+- The historical `MASES_PHASE_2_UI_DESIGN_SYSTEM.md` / `MASES_PHASE_2_UI_COMPONENT_CATALOG.md` authority has not been recovered from a verified original artifact in this repository history.
+- `ARNA_UI_DESIGN_SYSTEM_RECONSTRUCTED.md` and `ARNA_UI_COMPONENT_CATALOG_RECONSTRUCTED.md` remain reconstructed working drafts, not historical originals and not automatically Owner-approved normative authority.
+- A2 remains PARTIAL / NOT VERIFIED-CLOSED until either the authoritative originals are recovered and provenance-checked or the Owner explicitly approves the reconstructed versions as replacement authority.
+
+### Gate status
+- A3 implementation: PARTIAL — this branch contains the bounded UI foundation and navigation improvements; broader workstreams remain.
+- A4 verification: PASS for the exact-head configured workflow; PARTIAL for product-wide acceptance.
+- A2 reconciliation: PARTIAL — PR #65 scope and historical authority blockers remain.
+- A5 deployment: NOT STARTED — separate approval required.

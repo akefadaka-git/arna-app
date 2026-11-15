@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { useLocaleStore } from '@/stores/locale';
 import { useNotificationsStore } from '@/stores/notifications';
 import { formatCalendarDate } from '@/core/dates/calendar';
 import {
@@ -11,10 +12,11 @@ import {
 const props = defineProps<{ open: boolean }>();
 const emit = defineEmits<{ (event: 'close'): void }>();
 const store = useNotificationsStore();
+const localeStore = useLocaleStore();
 const busyId = ref<string | null>(null);
 const mutationBusy = ref(false);
 const page = ref(1);
-const locale = computed(() => document.documentElement.lang.toLowerCase().startsWith('en') ? 'en' : 'am');
+const locale = computed(() => localeStore.locale);
 const labels = computed(() => locale.value === 'am'
   ? { title: 'ማሳወቂያዎች', close: 'ዝጋ', markAll: 'ሁሉንም እንደተነበቡ ምልክት አድርግ', empty: 'አዲስ ማሳወቂያ የለም', loading: 'በመጫን ላይ…', retry: 'እንደገና ሞክር', unread: 'ያልተነበበ', previous: 'ቀዳሚ', next: 'ቀጣይ', error: 'ማሳወቂያዎችን ማምጣት አልተቻለም' }
   : { title: 'Notifications', close: 'Close', markAll: 'Mark all as read', empty: 'You are all caught up', loading: 'Loading…', retry: 'Try again', unread: 'Unread', previous: 'Previous', next: 'Next', error: 'Could not load notifications' });
@@ -69,6 +71,14 @@ function onKeydown(event: KeyboardEvent): void {
 
 watch(() => props.open, (opened) => {
   if (opened && (store.isStale || !store.hasFetched)) void load(1);
+});
+
+// API titles and bodies are localized by the adapter at fetch time. Refresh
+// the currently visible page after an in-session locale change so cached
+// notification text follows the selected language without inventing a
+// locale-persistence endpoint or changing the backend contract.
+watch(() => localeStore.locale, (next, previous) => {
+  if (props.open && next !== previous) void load(page.value);
 });
 onMounted(() => window.addEventListener('keydown', onKeydown));
 onUnmounted(() => window.removeEventListener('keydown', onKeydown));
