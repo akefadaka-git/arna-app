@@ -346,9 +346,8 @@
    - AranaFooterContent contributes text and links inside the
      contentinfo landmark. Its own accessibility notes live in that
      file.
-   - Reduced motion: the only animated element in this file is the
-     AppShell itself, which has no animation. A defensive no-op block
-     is kept for future revisions.
+   - Reduced motion: this component defines no animation. Composed
+     child controls own their respective motion contracts.
 =============================================================================
 -->
 
@@ -917,18 +916,6 @@ function onMaintenanceDismiss(): void {
   width: 100%;
   max-width: var(--arna-container-page-wide);
   margin-inline: auto;
-}
-
-/* ============================================================================
-   Reduced motion
-   ---------------------------------------------------------------------------
-   No animation is defined in this file. A defensive no-op block is
-   kept for future revisions that might add one.
-   ============================================================================ */
-@media (prefers-reduced-motion: reduce) {
-  .app-shell {
-    /* no-op placeholder — see comment above */
-  }
 }
 
 /* ============================================================================
