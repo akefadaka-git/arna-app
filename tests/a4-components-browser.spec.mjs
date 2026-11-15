@@ -263,7 +263,18 @@ test.describe('Mounted localized shell navigation search', () => {
     await expect(englishDialog.getByRole('heading', { name: 'Search ARNA' })).toBeVisible();
     const input = englishDialog.getByRole('combobox', { name: 'Search modules and pages…' });
     await expect(input).toHaveAttribute('placeholder', 'Search modules and pages…');
+
+    await input.press('ArrowDown');
+    await expect(input).toHaveAttribute('aria-activedescendant', 'app-header-search-option-0');
+    await input.press('ArrowDown');
+    await expect(input).toHaveAttribute('aria-activedescendant', 'app-header-search-option-1');
+    await input.press('ArrowDown');
+    await expect(input).toHaveAttribute('aria-activedescendant', 'app-header-search-option-0');
+    await input.press('ArrowUp');
+    await expect(input).toHaveAttribute('aria-activedescendant', 'app-header-search-option-1');
+
     await input.fill('Documents');
+    await expect(input).not.toHaveAttribute('aria-activedescendant', /.+/);
     const documentsOption = englishDialog.getByRole('option', { name: 'Documents' });
     await expect(documentsOption).toBeVisible();
     await expect(documentsOption).toHaveAttribute('tabindex', '-1');
@@ -276,6 +287,6 @@ test.describe('Mounted localized shell navigation search', () => {
     await expect(trigger).toBeFocused();
 
     await page.getByTestId('set-locale-am').click();
-    await expect(trigger).toHaveAttribute('aria-label', 'ARNA ይፈልጉ');
+    await expect(trigger).toHaveAccessibleName('ARNA ይፈልጉ Ctrl / ⌘ K');
   });
 });
