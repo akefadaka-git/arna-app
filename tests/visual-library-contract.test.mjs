@@ -41,5 +41,5 @@ test('decorative and motion components honor accessibility preferences', () => {
   const text = read('src/components/visual/TextEffect.vue');
   assert.match(backdrop, /aria-hidden="true"/);
   assert.match(reveal, /prefers-reduced-motion:\s*reduce/);
-  assert.match(text, /prefers-reduced-motion:s*reduce/);
+  assert.match(text, /prefers-reduced-motion:\s*reduce/);
 });
