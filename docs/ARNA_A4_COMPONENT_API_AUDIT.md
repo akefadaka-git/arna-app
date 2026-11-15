@@ -164,3 +164,34 @@ These are source-level risk boundaries to carry into the full test plan; they ar
 7. Run CI against the resulting immutable head.
 
 **Disposition remains PARTIAL / A4 OPEN.** A source-surface review is not equivalent to a complete public API audit, accessibility certification, security approval or Owner acceptance.
+
+
+## 11. Focused contract extraction and test coverage review
+
+A focused type-level pass extracted the following high-risk event contracts directly from the SFC setup scripts:
+
+- **DatePicker:** `update:modelValue` with `string | null` (ISO date value).
+- **Combobox:** `update:modelValue` with `ComboboxValue`; `search` with a query string.
+- **DataTable:** `update:sort`, `update:page`, `update:perPage`, `update:selectedKeys`, and `rowClick`, with typed payloads.
+- **FileUploader:** `uploaded`, `failed`, `removed`, `completed`, and `rejected`, with per-file or queue-level payloads.
+- **Modal / Drawer:** `update:open` and `close`.
+
+### Explicit accessibility contract risk
+
+Both Modal and Drawer document `closeLabel` as required when `dismissible=true`. Their source comments also state that a missing value produces a development warning but leaves the close button with an empty `aria-label` in production. This is a real contract weakness: development-only warning behavior does not prevent an unnamed interactive control in production.
+
+**Disposition:** record as a potential accessibility defect requiring correction or an enforced fail-safe. Do not silently invent a language-specific fallback. Confirm all consumers provide translated labels, then add a runtime-safe behavior and browser test before closure.
+
+### Existing automated test evidence located
+
+The branch contains dedicated browser tests for:
+- DatePicker keyboard navigation, Enter selection, focus restoration, E.C. month/year boundary, G.C. display and axe checks;
+- Public site skip navigation, keyboard focus, bilingual rendering and axe checks;
+- Visual library and visual panel structural/accessibility contracts;
+- Responsive App Shell layout and workspace dashboard route integration.
+
+The current test tree does not show dedicated browser suites for Modal/Drawer close-label behavior, Combobox keyboard interaction, PermissionGate authorization behavior, or FileUploader rejection/cancellation lifecycle. This is a test-coverage gap to resolve, not proof that the components are broken.
+
+### Verification limitations
+
+The test suite's existence is not a test result. Exact-head CI remains the authority for automated execution. Manual assistive-technology and physical-device acceptance remain separate evidence requirements.
