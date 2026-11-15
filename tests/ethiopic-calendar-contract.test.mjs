@@ -84,7 +84,7 @@ test('DatePicker follows the shared calendar preference and keeps ISO model cont
   assert.match(source, /getEthiopicMonthLength/);
   assert.match(source, /emit\('update:modelValue', cell\.iso\)/);
   assert.match(source, /function moveMonth\(delta: number\)/);
-  assert.match(source, /:aria-describedby="ariaDescribedBy"/);
+  assert.match(source, /:aria-describedby="props\\.ariaDescribedBy"/);
   assert.match(source, /:required="required"/);
 });
 
