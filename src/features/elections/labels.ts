@@ -6,7 +6,7 @@ export const electionLabels = {
     authorityPending: 'የሕጋዊ ሥልጣን ማረጋገጫ አልተጠናቀቀም',
     registerPending: 'የመራጮች ዝርዝር አልተቆለፈም',
     electronicVotingDisabled: 'ዲጂታል ድምፅ አሰጣጥ አልተፈቀደም',
-    physicalOnly: 'በአሁኑ ደረጃ የአካል ምርጫ ብቻ',
+    methodActivationGate: 'የአካል፣ ዲጂታል፣ ውክልና እና ድብልቅ የምርጫ ዘዴዎች በዕቅዱ ውስጥ አሉ፤ እያንዳንዱ ግን የሕግ፣ የደህንነት እና የሥራ ማረጋገጫ በር ከተሟላ በኋላ ብቻ ይነቃል.',
     noLegalDefaults: 'ያልጸደቁ የሕግ ውሳኔዎች በሥርዓቱ ነባሪ ደንብ አይሆኑም',
   },
   en: {
