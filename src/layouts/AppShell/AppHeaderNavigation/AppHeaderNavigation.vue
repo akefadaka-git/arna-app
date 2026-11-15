@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import type { RouteLocationRaw } from 'vue-router';
 import BaseButton from '@/components/primitives/BaseButton';
@@ -133,12 +133,6 @@ function onGlobalKeydown(event: KeyboardEvent): void {
 
 onMounted(() => window.addEventListener('keydown', onGlobalKeydown));
 onBeforeUnmount(() => window.removeEventListener('keydown', onGlobalKeydown));
-
-function restoreSearchFocus(): void {
-  nextTick(() => {
-    document.querySelector<HTMLButtonElement>('[data-testid="app-header-search-trigger"]')?.focus();
-  });
-}
 
 function restoreSearchFocus(): void {
   navigationRoot.value?.querySelector<HTMLButtonElement>('[data-testid="app-header-search-trigger"]')?.focus();
