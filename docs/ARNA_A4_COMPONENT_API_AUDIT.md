@@ -1033,3 +1033,31 @@ Added to the existing A4 mounted fixture and Playwright suite:
 
 
 - Follow-up test hardening: the mobile-card browser case explicitly sets a 390×844 viewport before asserting card visibility, rather than relying on Playwright's default desktop viewport. Commit: fab2c1dafc7c0509213f5547c3903cb099c14246.
+
+
+## 35. Next-generation UI foundation — mounted interaction regression closure
+
+**Verification ref:** `e5506e31e955478e5fc3f5219325b81d51a0e5c2`  
+**Workflow:** [#43712748716 — Frontend verification](https://github.com/akefadaka-git/arna-app/actions/runs/43712748716)  
+**Result:** PASS — all 32 workflow steps succeeded.
+
+The mounted A4 browser suite was rerun after the latest corrections:
+
+- 15/15 mounted component browser tests passed.
+- FormField help-slot association and axe scan passed.
+- Combobox keyboard, selection, ARIA and axe checks passed.
+- Modal and Drawer native-dialog close/focus restoration checks passed.
+- ErrorSupportPanel allowlisted clipboard output and manual fallback checks passed.
+- DataTable sort, selection, select-all, row-action isolation, row-click and mobile-card checks passed.
+- Existing FileUploader and DatePicker mounted suites also passed in the same workflow (separate workflow steps).
+
+### Corrections verified
+
+1. **BaseCheckbox:** the visible label hit-area now has a 24 CSS px minimum width and height at all viewports; mobile retains its 44 px minimum height. This improves compact DataTable checkbox usability and resolves the target-size finding in the mounted fixture.
+2. **Combobox:** option rows now have a 32 px minimum height, increasing pointer/touch target size while retaining the existing ARIA listbox pattern.
+3. **ErrorSupportPanel:** the clipboard test now compares a newline-joined string to the actual clipboard text; production component behavior was unchanged.
+4. **DataTable:** the selection test now activates the visible checkbox label surface rather than attempting to interact with the visually clipped 1 px native input directly. This exercises the intended user interaction surface.
+
+### Scope and limitations
+
+This is verified regression evidence for the mounted fixtures at the stated commit. It does not establish full authenticated-shell acceptance, all-component target-size conformance, manual screen-reader acceptance, physical-device acceptance, or formal WCAG 2.2 AA certification. The 65-component source/API audit remains broader and is not closed by this suite alone.
