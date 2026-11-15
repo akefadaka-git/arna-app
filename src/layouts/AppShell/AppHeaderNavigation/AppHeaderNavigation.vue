@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import type { RouteLocationRaw } from 'vue-router';
 import BaseButton from '@/components/primitives/BaseButton';
@@ -71,6 +71,7 @@ const labels = computed(() => localeStore.locale === 'en'
     });
 const dialog = ref<HTMLDialogElement | null>(null);
 const query = ref('');
+const activeResultIndex = ref(-1);
 
 const searchItems = computed(() => props.items.flatMap((item) =>
   item.to ? [item] : [...(item.visibleChildren ?? item.children ?? [])],
@@ -83,6 +84,30 @@ const results = computed(() => {
   );
 });
 
+watch(results, () => {
+  activeResultIndex.value = -1;
+});
+
+function onSearchKeydown(event: KeyboardEvent): void {
+  if (!results.value.length) return;
+
+  if (event.key === 'ArrowDown') {
+    event.preventDefault();
+    activeResultIndex.value = activeResultIndex.value < results.value.length - 1
+      ? activeResultIndex.value + 1
+      : 0;
+  } else if (event.key === 'ArrowUp') {
+    event.preventDefault();
+    activeResultIndex.value = activeResultIndex.value > 0
+      ? activeResultIndex.value - 1
+      : results.value.length - 1;
+  } else if (event.key === 'Enter' && activeResultIndex.value >= 0) {
+    event.preventDefault();
+    const selected = results.value[activeResultIndex.value];
+    if (selected) navigate(selected);
+  }
+}
+
 const breadcrumbs = computed(() => route.matched
   .filter((record) => typeof record.meta.breadcrumb === 'string' || typeof record.meta.title === 'string')
   .map((record) => ({
@@ -94,6 +119,7 @@ const breadcrumbs = computed(() => route.matched
 function openSearch(): void {
   if (dialog.value?.open) return;
   query.value = '';
+  activeResultIndex.value = -1;
   dialog.value?.showModal();
 }
 
@@ -156,11 +182,31 @@ function navigate(item: SearchNavItem): void {
       </form>
       <label class="app-header-navigation__input-wrap">
         <BaseIcon name="search" size="sm" />
-        <input v-model="query" autofocus type="search" :aria-label="labels.input" aria-controls="app-header-search-results" :placeholder="labels.placeholder" />
+        <input
+          v-model="query"
+          autofocus
+          type="search"
+          role="combobox"
+          aria-autocomplete="list"
+          :aria-label="labels.input"
+          aria-controls="app-header-search-results"
+          :aria-expanded="results.length > 0 ? 'true' : 'false'"
+          :aria-activedescendant="activeResultIndex >= 0 ? `app-header-search-option-${activeResultIndex}` : undefined"
+          :placeholder="labels.placeholder"
+          @keydown="onSearchKeydown"
+        />
       </label>
-      <ul id="app-header-search-results" class="app-header-navigation__results" aria-live="polite" aria-relevant="additions text">
-        <li v-for="item in results" :key="item.id">
-          <button type="button" @click="navigate(item)">
+      <ul id="app-header-search-results" class="app-header-navigation__results" role="listbox" :aria-label="labels.input" aria-live="polite" aria-relevant="additions text">
+        <li v-for="(item, index) in results" :key="item.id" role="presentation">
+          <button
+            :id="`app-header-search-option-${index}`"
+            type="button"
+            role="option"
+            :aria-selected="activeResultIndex === index"
+            :class="{ 'is-active': activeResultIndex === index }"
+            @click="navigate(item)"
+            @mouseenter="activeResultIndex = index"
+          >
             <span>{{ displayLabel(item) }}</span>
             <BaseIcon name="arrow-up-right" size="sm" />
           </button>
@@ -294,8 +340,9 @@ function navigate(item: SearchNavItem): void {
   text-align: start;
   cursor: pointer;
 }
-.app-header-navigation__results button:hover,
-.app-header-navigation__results button:focus-visible {
+ .app-header-navigation__results button:hover,
+.app-header-navigation__results button:focus-visible,
+.app-header-navigation__results button.is-active {
   background: var(--arna-color-state-hover);
 }
 .app-header-navigation__empty {
