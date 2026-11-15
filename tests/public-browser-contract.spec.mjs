@@ -271,8 +271,9 @@ test.describe('ARNA public site browser contract', () => {
       const shell = page.getByTestId('public-site-layout');
       await expect(shell).toHaveAttribute('lang', 'en');
       await expect(shell.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
-      await expect(shell.getByRole('link', { name: 'Document verification' })).toBeVisible();
-      await expect(shell.getByRole('link', { name: 'Legal information' })).toBeVisible();
+      const primaryNavigation = shell.getByRole('navigation', { name: 'Main navigation' });
+      await expect(primaryNavigation.getByRole('link', { name: 'Document verification' })).toBeVisible();
+      await expect(primaryNavigation.getByRole('link', { name: 'Legal information' })).toBeVisible();
       await expect(shell.locator('.public-site-layout__skip-link')).toContainText('Skip to main content');
       await expect(shell.getByTestId('theme-preference-control')).toBeVisible();
       const theme = shell.getByTestId('theme-preference-control');
