@@ -76,7 +76,10 @@ test.describe('ARNA visual library rendered review', () => {
             .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
             .analyze();
           const serious = accessibility.violations.filter((item) => item.impact === 'serious' || item.impact === 'critical');
-          expect(serious.map((item) => item.id + ': ' + item.help + ' (' + item.nodes.length + ' nodes)'),
+          const contrastDetails = serious.flatMap((item) => item.nodes.map((node) =>
+            item.id + ': ' + node.target.join(', ') + ' — ' + (node.failureSummary ?? item.help),
+          ));
+          expect(contrastDetails,
             viewport.name + '/' + locale.code + '/' + theme + ' accessibility review').toEqual([]);
         }
       }
