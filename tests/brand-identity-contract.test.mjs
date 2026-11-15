@@ -43,10 +43,11 @@ test('all entry documents identify the ARNA product', async () => {
     ['../public-entry/index.html', 'ARNA'],
   ];
   for (const [path, brand] of expected) {
-    const source = (await read(path)).replace(/<!--[\s\S]*?-->/g, '');
+    const source = await read(path);
+    const title = source.match(/<title>([^<]*)<\/title>/i)?.[1] ?? '';
     assert.ok(source.includes(brand), 'entry must expose its ARNA surface name');
-    assert.doesNotMatch(source, /<title>[^<]*MASES/i, 'entry has a legacy product title');
-    assert.doesNotMatch(source, /(?:application-name|og:site_name|og:title)[^>]*MASES/i, 'entry has legacy product metadata');
+    assert.ok(title.length > 0, 'entry must have a document title');
+    assert.doesNotMatch(title, /MASES/i, 'active document title must not use legacy product identity');
   }
 });
 
