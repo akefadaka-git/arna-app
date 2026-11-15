@@ -195,3 +195,34 @@ The current test tree does not show dedicated browser suites for Modal/Drawer cl
 ### Verification limitations
 
 The test suite's existence is not a test result. Exact-head CI remains the authority for automated execution. Manual assistive-technology and physical-device acceptance remain separate evidence requirements.
+
+
+## 12. Modal / Drawer consumer-label reconciliation
+
+A branch-ref source check was performed against the consumer files identified by the repository's code-search results. The inspected Modal call sites pass a dedicated label binding rather than relying on the component's empty-string fallback:
+
+- Loan forms: approve, reject, disburse, write-off, repayment, collateral, restructure, application and collateral release.
+- Wallet forms: open, adjust, payment, obligation, allocation and allocation reversal.
+- Shareholder forms: holding entry, certificate issue and certificate cancellation.
+- Files: upload modal.
+
+The corresponding feature label modules define non-optional string fields and provide non-empty Amharic values. The inspected call sites bind those fields to `:close-label` / `:closeLabel` as appropriate. Examples include `መስኮቱን ዝጋ` and the more contextual `የመስቀያ መስኮት ዝጋ`.
+
+**Disposition:** the inspected Modal consumers supply translated accessible names; no hardcoded English fallback is warranted for those consumers. The component-level optional prop remains a weak contract for future consumers and the production empty-name branch remains reachable if a caller omits the prop. Retain as an API hardening issue, not a confirmed defect in the inspected call sites. A runtime fail-safe or stricter conditional type should be designed separately with compatibility tests before changing this frozen component contract.
+
+The Drawer source was reviewed, but a complete branch-wide Drawer consumer census and dedicated dialog interaction suite have not yet been completed. Do not mark Drawer consumer compatibility or Modal/Drawer behavioral accessibility as closed.
+
+## 13. Exact-head CI evidence update
+
+Workflow run [#43700423680](https://github.com/akefadaka-git/arna-app/actions/runs/43700423680) completed successfully for exact head `07c606a3cbc1821e7d00c5d6d2cc77cdb34e8b15`. Its sole job, `type-check-and-build`, completed all 28 steps with conclusion `success`, including dependency advisory checks, four-app import graph generation, all-app type-check/build, responsive/accessibility contract checks, visual-library/panel checks, DatePicker browser interactions, and the 12-state visual screenshot run.
+
+This CI result supersedes the earlier “in progress / not run” note for that exact SHA. It does not cover the missing dedicated Modal/Drawer, Combobox, PermissionGate and FileUploader behavioral suites, full authenticated-shell manual review, or physical-device acceptance.
+
+| Gate | Updated status |
+|---|---|
+| Exact-head CI at `07c606a3cbc1821e7d00c5d6d2cc77cdb34e8b15` | PASS |
+| Inspected Modal consumer close-label bindings | PASS — inspected call sites supply translated label fields |
+| Modal component optional-label API hardening | PARTIAL — design and tests outstanding |
+| Drawer consumer census / behavioral suite | NOT COMPLETE |
+| Full API contract extraction | PARTIAL |
+| A4 closure | OPEN |
