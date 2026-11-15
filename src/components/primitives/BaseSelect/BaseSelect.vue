@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/BaseSelect/BaseSelect.vue
  Layer:     1 (Primitives)
- Version:   1.0.0
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.10
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -156,10 +156,10 @@
    - Native disabled attribute (not aria-disabled).
    - Native required attribute (which maps to aria-required).
    - aria-invalid is resolved from the invalid / ariaInvalid props.
-   - aria-describedby is forwarded verbatim (declared prop) or via
-     $attrs (undeclared variant).
-   - Fallthrough attributes such as aria-label, aria-labelledby, title,
-     and autocomplete are forwarded to the <select> via v-bind="$attrs".
+   - aria-describedby, aria-label, and aria-labelledby are explicit
+     declared props forwarded to the native <select>.
+   - Other fallthrough attributes such as title and autocomplete are
+     forwarded to the <select> via v-bind="$attrs".
    - The focus ring is drawn on the WRAPPER when the inner <select>
      receives :focus-visible. Native <select> elements are non-editable,
      so :focus-visible matches only keyboard focus, not mouse click —
@@ -255,6 +255,12 @@ interface Props {
    * exists in the DOM.
    */
   ariaDescribedBy?: string;
+
+  /** Explicit accessible name for the native select. */
+  ariaLabel?: string;
+
+  /** ID of the element that labels the native select. */
+  ariaLabelledBy?: string;
 }
 
 /*
@@ -275,6 +281,8 @@ const props = withDefaults(defineProps<Props>(), {
   invalid: false,
   ariaInvalid: undefined,
   ariaDescribedBy: undefined,
+  ariaLabel: undefined,
+  ariaLabelledBy: undefined,
 });
 
 const emit = defineEmits<{
@@ -364,6 +372,8 @@ defineExpose({ focus, blur, el });
       :required="required"
       :aria-invalid="resolvedAriaInvalid"
       :aria-describedby="ariaDescribedBy"
+      :aria-label="ariaLabel"
+      :aria-labelledby="ariaLabelledBy"
       class="select-wrapper__select"
       data-testid="base-select-control"
       @change="onChange"
