@@ -143,13 +143,13 @@ export type ComboboxValue = string | number | Array<string | number> | null;
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesComboboxWarned = new Set<string>();
+const __arnaComboboxWarned = new Set<string>();
 
-function __masesComboboxWarnOnce(key: string, message: string): void {
-  if (__masesComboboxWarned.has(key)) {
+function __arnaComboboxWarnOnce(key: string, message: string): void {
+  if (__arnaComboboxWarned.has(key)) {
     return;
   }
-  __masesComboboxWarned.add(key);
+  __arnaComboboxWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -290,7 +290,7 @@ defineSlots<{
 // -----------------------------------------------------------------------------
 // Generated ids
 // -----------------------------------------------------------------------------
-const componentId = `mases-combobox-${++__masesComboboxIdCounter}`;
+const componentId = `arna-combobox-${++__masesComboboxIdCounter}`;
 const listboxId = `${componentId}-listbox`;
 function optionId(index: number): string {
   return `${componentId}-option-${index}`;
@@ -315,14 +315,14 @@ const highlightedIndex = ref(-1);
  * chips are not removable via a button. Warn once.
  */
 if (import.meta.env.DEV && !props.ariaLabel && !props.ariaLabelledBy && !props.placeholder) {
-  __masesComboboxWarnOnce(
+  __arnaComboboxWarnOnce(
     'combobox:missing-accessible-name',
     '[Combobox] No accessible name was supplied. Provide ariaLabel or ariaLabelledBy; placeholder is only a fallback.',
   );
 }
 
 if (import.meta.env.DEV && props.multiple && !props.chipRemoveLabel) {
-  __masesComboboxWarnOnce(
+  __arnaComboboxWarnOnce(
     'combobox:multi-no-chip-remove-label',
     '[Combobox] multiple=true without chipRemoveLabel. Chips will not ' +
       'render a remove button. Supply a translated verb (e.g., "Remove") ' +
