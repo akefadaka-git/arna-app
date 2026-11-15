@@ -31,6 +31,9 @@ async function load(): Promise<void> {
     let ogTitle = document.querySelector<HTMLMetaElement>('meta[property=\"og:title\"]');
     if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.append(ogTitle); }
     ogTitle.content = document.title;
+    let siteName = document.querySelector<HTMLMetaElement>('meta[property="og:site_name"]');
+    if (!siteName) { siteName = document.createElement('meta'); siteName.setAttribute('property', 'og:site_name'); document.head.append(siteName); }
+    siteName.content = 'ARNA';
     let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.append(canonical); }
     canonical.href = entry.value.seo?.canonical_url ?? window.location.href;
