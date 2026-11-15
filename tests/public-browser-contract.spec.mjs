@@ -83,10 +83,13 @@ test.beforeEach(async ({ page }) => {
 test.describe('ARNA public site browser contract', () => {
   test('renders the Amharic CMS homepage at desktop and mobile widths without horizontal page overflow', async ({ page }) => {
     for (const viewport of [
-      { width: 1280, height: 900 },
-      { width: 768, height: 1024 },
-      { width: 390, height: 844 },
       { width: 320, height: 740 },
+      { width: 360, height: 800 },
+      { width: 390, height: 844 },
+      { width: 768, height: 1024 },
+      { width: 1024, height: 900 },
+      { width: 1280, height: 900 },
+      { width: 1440, height: 960 },
     ]) {
       await page.setViewportSize(viewport);
       await page.goto(baseUrl);
@@ -168,7 +171,7 @@ test.describe('ARNA public site browser contract', () => {
     await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
     await expect(page.locator('#about-title')).toContainText('About Maale Arna');
     await expect(page.locator('#community-responsibility-title')).toContainText('Community Responsibility');
-    await expect(page).toHaveTitle('Maale Arna | Official Website');
+    await expect(page).toHaveTitle('ARNA | Official Website');
     await expectNoSeriousAccessibilityViolations(page, 'English CMS homepage');
 
     await page.getByRole('button', { name: 'አማርኛ' }).click();
@@ -200,6 +203,36 @@ test.describe('ARNA public site browser contract', () => {
     await opportunity.getByLabel('Description').fill('Application details.');
     await opportunity.getByRole('button', { name: 'Submit' }).click();
     await expect(opportunity.getByRole('status')).toContainText('SUB-TEST-001');
+  });
+
+  test('provides focusable skip targets on corporate pages, content entries and contribution', async ({ page }) => {
+    await page.route('**/api/public/site/pages/en/about', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: {
+        public_id: '00000000-0000-4000-8000-000000000002', page_key: 'about', locale: 'en', slug: 'about', alternate_slug: 'about-am',
+        title: 'About the Company', summary: 'Corporate profile', body: 'Company information.', sections: [],
+        seo: { title: 'About the Company', description: 'Corporate profile.' }, published_at: null
+      } }) });
+    });
+    await page.route('**/api/public/site/content/news/story', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: {
+        id: 'news-1', type: 'news', locale: 'en', slug: 'story', alternate_slug: 'story-am',
+        title: 'ARNA News Story', summary: 'A published update', body: 'Published update body.',
+        seo: { title: 'ARNA News Story', description: 'A published update.' }, published_at: null, asset_url: null
+      } }) });
+    });
+
+    for (const routePath of ['/en/about', '/en/content/news/story', '/contribute']) {
+      await page.goto(new URL(routePath, baseUrl).toString());
+      await page.keyboard.press('Tab');
+      const skip = page.locator(routePath === '/contribute' ? '.contribute-skip-link' : '.skip-link');
+      await expect(skip).toBeFocused();
+      await page.keyboard.press('Enter');
+      const targetId = routePath === '/en/about' ? '#page-content' : routePath === '/en/content/news/story' ? '#entry-content' : '#contribute-main';
+      await expect(page).toHaveURL(new RegExp(targetId.replace('#', '#')));
+      await expect(page.locator(targetId)).toHaveAttribute('tabindex', '-1');
+      await expect(page.locator(targetId)).toBeFocused();
+      await expect(page).toHaveTitle(/ARNA/);
+    }
   });
 
   test('has no serious or critical axe accessibility violations on the homepage', async ({ page }) => {
