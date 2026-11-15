@@ -372,7 +372,8 @@ test.describe('Mounted NotificationsCenter lifecycle and safety', () => {
     const footerButtons = page.locator('.notification-center__footer button');
     await expect(footerButtons).toHaveCount(2);
     await expect(footerButtons.nth(1)).toBeEnabled();
-    console.log('pagination-stage: next enabled');
+    await expect(footerButtons.nth(1)).toBeInViewport();
+    console.log('pagination-stage: next enabled and in viewport');
     await footerButtons.nth(1).click();
     console.log('pagination-stage: next clicked', JSON.stringify(requestUrls));
     await expect(rows).toHaveCount(1);

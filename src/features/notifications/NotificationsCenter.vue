@@ -163,7 +163,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown));
 .notification-center__text-button:disabled { opacity: 0.45; cursor: not-allowed; }
 .notification-center__close { width: 2rem; height: 2rem; border-radius: 0.4rem; font-size: 1.5rem; }
 .notification-center__close:hover { background: var(--arna-color-surface-hover); }
-.notification-center__list { overflow: auto; margin: 0; padding: 0; list-style: none; }
+.notification-center__list { flex: 1 1 auto; min-height: 0; overflow: auto; margin: 0; padding: 0; list-style: none; }
 .notification-center__list li + li { border-block-start: 1px solid var(--arna-color-border-subtle); }
 .notification-center__item { display: flex; flex-direction: column; gap: 0.35rem; width: 100%; padding: 0.9rem 1rem; color: inherit; text-align: start; background: transparent; border: 0; cursor: pointer; }
 .notification-center__item:hover { background: var(--arna-color-surface-hover); }
