@@ -320,7 +320,7 @@ onMounted(() => void refresh());
               <button type="button" :disabled="saving" @click="editPage(page)">Edit</button>
               <button v-if="page.status === 'draft' && page.translations.am?.title && page.translations.en?.title && page.slug_am && page.slug_en" type="button" :disabled="saving" @click="pageAction(page, 'approve')">Approve</button>
               <button v-if="page.status === 'approved'" type="button" :disabled="saving" @click="pageAction(page, 'publish')">Publish</button>
-              <div v-if="page.status === 'approved'" class="corporate-admin__schedule-field"><label for="corporate-page-schedule-at">Schedule date and time</label><CalendarDateTimeInput id="corporate-page-schedule-at" v-model="scheduleAt" time-label="Time / ሰዓት" /></div>
+              <div v-if="page.status === 'approved'" class="corporate-admin__schedule-field"><label for="corporate-page-schedule-at">Schedule date and time</label><CalendarDateTimeInput id="corporate-page-schedule-at" v-model="scheduleAt" /></div>
               <button v-if="page.status === 'approved'" type="button" :disabled="saving || !scheduleAt" @click="pageAction(page, 'schedule')">Schedule</button>
               <button v-if="page.status === 'published' || page.status === 'scheduled'" type="button" :disabled="saving" @click="pageAction(page, 'unpublish')">Unpublish</button>
             </div>
