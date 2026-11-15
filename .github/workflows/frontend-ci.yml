@@ -128,6 +128,20 @@ jobs:
           done
           curl --fail --silent http://127.0.0.1:4176/tests/fixtures/a4-components.html >/dev/null
           A4_COMPONENTS_URL=http://127.0.0.1:4176/tests/fixtures/a4-components.html npm run test:a4-components-browser
+      - name: Verify mounted FileUploader lifecycle and accessibility
+        shell: bash
+        run: |
+          npx vite --mode workspace --host 127.0.0.1 --port 4177 --strictPort > "$RUNNER_TEMP/a4-file-uploader-preview.log" 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4177/tests/fixtures/a4-file-uploader.html >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4177/tests/fixtures/a4-file-uploader.html >/dev/null
+          A4_FILE_UPLOADER_URL=http://127.0.0.1:4177/tests/fixtures/a4-file-uploader.html npm run test:a4-file-uploader-browser
       - name: Verify shared DatePicker browser interactions
         shell: bash
         run: |
