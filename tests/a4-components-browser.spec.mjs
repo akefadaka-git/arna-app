@@ -155,7 +155,7 @@ test.describe('Mounted ErrorSupportPanel privacy and clipboard behavior', () => 
     await expect(panel).toHaveAttribute('data-copy-state', 'copied');
 
     const copied = await page.evaluate(() => navigator.clipboard.readText());
-    expect(copied).toBe([
+    expect(copied.replace(/\r\n/g, '\n')).toBe([
       'Error code: AUTH_PERMISSION_DENIED',
       'Request reference: req-12345',
       'Timestamp: 2026-11-15T12:00:00Z',
@@ -180,7 +180,7 @@ test.describe('Mounted ErrorSupportPanel privacy and clipboard behavior', () => 
     await expect(panel).toHaveAttribute('data-copy-state', 'failed');
     const fallback = page.getByTestId('error-support-panel-fallback-textarea');
     await expect(fallback).toHaveAttribute('readonly', '');
-    await expect(fallback).toHaveAttribute('aria-labelledby', /mases-error-support-panel-\\d+-fallback-instruction/);
+    await expect(fallback).toHaveAttribute('aria-labelledby', /mases-error-support-panel-\d+-fallback-instruction/);
     await expect(fallback).toHaveValue(/AUTH_PERMISSION_DENIED/);
     await expect(fallback).toHaveValue(/req-12345/);
   });
@@ -188,23 +188,28 @@ test.describe('Mounted ErrorSupportPanel privacy and clipboard behavior', () => 
 
 
 test.describe('Mounted DataTable behavior', () => {
-  test('emits sort changes, selects current-page rows, and isolates interactive row actions', async ({ page }) => {
-    const table = page.getByTestId('data-table-root');
-    const tableRegion = table.getByTestId('data-table-table-region');
+  test('emits the sort key and direction when a sortable header is activated', async ({ page }) => {
+    const tableRegion = page.getByTestId('data-table-table-region');
     await expect(tableRegion.getByRole('table')).toBeVisible();
-    await expect(tableRegion.getByRole('columnheader', { name: 'Account name' })).toHaveAttribute('aria-sort', 'ascending');
-
+    const header = tableRegion.getByRole('columnheader', { name: 'Account name' });
+    await expect(header).toHaveAttribute('aria-sort', 'ascending');
     await tableRegion.getByRole('button', { name: 'Account name' }).click();
     await expect(page.getByTestId('table-sort')).toHaveText('name:desc');
-    await expect(tableRegion.getByRole('columnheader', { name: 'Account name' })).toHaveAttribute('aria-sort', 'descending');
+    await expect(header).toHaveAttribute('aria-sort', 'descending');
+  });
 
+  test('selects individual rows and all rows on the current page', async ({ page }) => {
+    const tableRegion = page.getByTestId('data-table-table-region');
     await tableRegion.getByRole('checkbox', { name: 'Select Alpha account' }).check();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1');
     await tableRegion.getByRole('checkbox', { name: 'Select all accounts' }).check();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1,row-2');
     await tableRegion.getByRole('checkbox', { name: 'Select all accounts' }).uncheck();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('');
+  });
 
+  test('does not treat row action buttons as row clicks', async ({ page }) => {
+    const tableRegion = page.getByTestId('data-table-table-region');
     await tableRegion.getByTestId('table-action-row-1').click();
     await expect(page.getByTestId('table-row-clicks')).toHaveText('0');
     await tableRegion.getByRole('row').filter({ hasText: 'Beta account' }).click();
