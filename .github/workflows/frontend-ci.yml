@@ -64,6 +64,8 @@ jobs:
         run: npm run test:visual-library-contract
       - name: Verify 2D/3D visual panels and workspace integration
         run: npm run test:visual-panel-integration-contract
+      - name: Verify A4 high-risk component API and lifecycle contracts
+        run: npm run test:a4-component-risk-contract
       - name: Verify responsive App Shell layout and accessibility contracts
         run: npm run test:app-shell-responsive-contract
       - name: Verify wallet opening form integration
