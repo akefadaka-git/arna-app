@@ -180,7 +180,7 @@ watch(() => route.query.locale, (value) => {
     <a class="skip-link" href="#main-content">{{ locale === 'am' ? 'ወደ ዋናው ይዘት ይሂዱ' : 'Skip to main content' }}</a>
     <header class="site-header">
       <div class="site-header__inner">
-        <a class="brand" :href="locale === 'en' ? '/?locale=en' : ' / '.trim()">
+        <a class="brand" :href="locale === 'en' ? '/?locale=en' : '/'">
           <img src="/logo.png" alt="" width="44" height="44">
           <span><strong>{{ page?.title || 'Maale Arna' }}</strong><small>ARNA</small></span>
         </a>
