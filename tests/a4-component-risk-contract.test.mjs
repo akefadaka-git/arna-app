@@ -138,12 +138,12 @@ test('AppHeaderNavigation search chrome follows the active Amharic or English lo
   }
   assert.match(source, /displayLabel\(item\)\.toLocaleLowerCase\(\)\.includes\(term\)/);
   for (const label of [
-    'Search ARNA modules and pages',
+    'Search ARNA',
     'Find an available module or page',
     'Close search',
     'Search modules and pages…',
     'No matching modules or pages',
-    'የARNA ሞጁሎችን እና ገጾችን ይፈልጉ',
+    'ARNA ይፈልጉ',
     'የሚገኝ ሞጁል ወይም ገጽ ያግኙ',
     'ፍለጋን ዝጋ',
     'የሚዛመድ ሞጁል ወይም ገጽ አልተገኘም',
