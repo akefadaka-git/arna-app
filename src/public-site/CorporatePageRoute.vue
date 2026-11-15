@@ -48,7 +48,10 @@ async function loadPage(): Promise<void> {
     if (seo?.title) {
       let ogTitle = document.querySelector<HTMLMetaElement>('meta[property=\"og:title\"]');
       if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.append(ogTitle); }
-      ogTitle.content = seo.title;
+      ogTitle.content = `${seo.title} | ARNA`;
+      let siteName = document.querySelector<HTMLMetaElement>('meta[property="og:site_name"]');
+      if (!siteName) { siteName = document.createElement('meta'); siteName.setAttribute('property', 'og:site_name'); document.head.append(siteName); }
+      siteName.content = 'ARNA';
     }
     if (seo?.description) {
       let description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
