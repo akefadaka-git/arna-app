@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import type { RouteLocationRaw } from 'vue-router';
 import BaseButton from '@/components/primitives/BaseButton';
@@ -133,6 +133,12 @@ function onGlobalKeydown(event: KeyboardEvent): void {
 onMounted(() => window.addEventListener('keydown', onGlobalKeydown));
 onBeforeUnmount(() => window.removeEventListener('keydown', onGlobalKeydown));
 
+function restoreSearchFocus(): void {
+  nextTick(() => {
+    document.querySelector<HTMLButtonElement>('[data-testid="app-header-search-trigger"]')?.focus();
+  });
+}
+
 function closeSearch(): void {
   dialog.value?.close();
 }
@@ -170,7 +176,7 @@ function navigate(item: SearchNavItem): void {
       <kbd aria-hidden="true">Ctrl / ⌘ K</kbd>
     </BaseButton>
 
-    <dialog ref="dialog" class="app-header-navigation__dialog" aria-labelledby="app-header-search-title">
+    <dialog ref="dialog" class="app-header-navigation__dialog" aria-labelledby="app-header-search-title" @close="restoreSearchFocus">
       <form method="dialog" class="app-header-navigation__dialog-head">
         <div>
           <h2 id="app-header-search-title">{{ labels.title }}</h2>
