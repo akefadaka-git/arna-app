@@ -235,6 +235,17 @@ interface Props {
   chipRemoveLabel?: string;
 
   /**
+   * Explicit accessible name for the input. Prefer this over the
+   * placeholder fallback so the name remains available after typing.
+   */
+  ariaLabel?: string;
+
+  /**
+   * ID of an external label element naming the input.
+   */
+  ariaLabelledBy?: string;
+
+  /**
    * aria-describedby target id. Forwarded verbatim to the input.
    */
   ariaDescribedBy?: string;
@@ -249,6 +260,8 @@ const props = withDefaults(defineProps<Props>(), {
   invalid: false,
   maxVisible: 50,
   chipRemoveLabel: undefined,
+  ariaLabel: undefined,
+  ariaLabelledBy: undefined,
   ariaDescribedBy: undefined,
 });
 
@@ -301,6 +314,13 @@ const highlightedIndex = ref(-1);
  * Development-time guard: multi-select without chipRemoveLabel means
  * chips are not removable via a button. Warn once.
  */
+if (import.meta.env.DEV && !props.ariaLabel && !props.ariaLabelledBy && !props.placeholder) {
+  __masesComboboxWarnOnce(
+    'combobox:missing-accessible-name',
+    '[Combobox] No accessible name was supplied. Provide ariaLabel or ariaLabelledBy; placeholder is only a fallback.',
+  );
+}
+
 if (import.meta.env.DEV && props.multiple && !props.chipRemoveLabel) {
   __masesComboboxWarnOnce(
     'combobox:multi-no-chip-remove-label',
@@ -780,6 +800,8 @@ void _toggle;
         type="text"
         role="combobox"
         :id="`${componentId}-input`"
+        :aria-label="ariaLabel ?? (ariaLabelledBy ? undefined : placeholder)"
+        :aria-labelledby="ariaLabelledBy"
         :aria-expanded="isOpen ? 'true' : 'false'"
         :aria-controls="listboxId"
         :aria-activedescendant="highlightedOptionId"
