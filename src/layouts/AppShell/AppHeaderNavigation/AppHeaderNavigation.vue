@@ -24,6 +24,7 @@ const localeStore = useLocaleStore();
 
 const ENGLISH_DESTINATION_LABELS: Readonly<Record<string, string>> = {
   dashboard: 'Dashboard',
+  'go-to-workspace': 'Go to workspace',
   launcher: 'Home',
   files: 'Documents',
   shareholders: 'Shareholders',
