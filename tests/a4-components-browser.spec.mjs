@@ -185,3 +185,41 @@ test.describe('Mounted ErrorSupportPanel privacy and clipboard behavior', () => 
     await expect(fallback).toHaveValue(/req-12345/);
   });
 });
+
+
+test.describe('Mounted DataTable behavior', () => {
+  test('emits sort changes, selects current-page rows, and isolates interactive row actions', async ({ page }) => {
+    const table = page.getByTestId('data-table-root');
+    await expect(table.getByRole('table')).toBeVisible();
+    await expect(table.getByRole('columnheader', { name: 'Account name' })).toHaveAttribute('aria-sort', 'ascending');
+
+    await table.getByRole('button', { name: 'Account name' }).click();
+    await expect(page.getByTestId('table-sort')).toHaveText('name:desc');
+    await expect(table.getByRole('columnheader', { name: 'Account name' })).toHaveAttribute('aria-sort', 'descending');
+
+    await table.getByRole('checkbox', { name: 'Select Alpha account' }).check();
+    await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1');
+    await table.getByRole('checkbox', { name: 'Select all accounts' }).check();
+    await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1,row-2');
+    await table.getByRole('checkbox', { name: 'Select all accounts' }).uncheck();
+    await expect(page.getByTestId('table-selected-keys')).toHaveText('');
+
+    await table.getByTestId('table-action-row-1').click();
+    await expect(page.getByTestId('table-row-clicks')).toHaveText('0');
+    await table.getByRole('row').filter({ hasText: 'Beta account' }).click();
+    await expect(page.getByTestId('table-row-clicks')).toHaveText('1');
+  });
+
+  test('provides accessible mobile-card field labels and excludes low-priority columns', async ({ page }) => {
+    const cards = page.getByTestId('data-table-cards-region');
+    await expect(cards.getByTestId('data-table-card')).toHaveCount(2);
+    await expect(cards.getByText('Account name').first()).toBeVisible();
+    await expect(cards.getByText('Status').first()).toBeVisible();
+    await expect(cards.getByText('Alpha account')).toBeVisible();
+
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    expect(results.violations.filter((item) => ['serious', 'critical'].includes(item.impact)).map((item) => item.id)).toEqual([]);
+  });
+});
