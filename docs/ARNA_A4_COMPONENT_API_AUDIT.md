@@ -509,3 +509,53 @@ The source review finding in batch 3 was corrected additively:
 | A4 closure | OPEN |
 
 The prior source-level defect is not marked verified until the new exact-head CI run passes. No unrelated FormField behavior or API shape was changed.
+
+
+## 23. Composite API reconciliation — batch 4 (20 of 26)
+
+Five additional composite SFCs were reconciled against their source declarations, exported type blocks, slot definitions and rendered templates. Source blob hashes identify the exact inspected files.
+
+| Component / source blob | Public props and defaults | Events / model | Slots and exposed API |
+|---|---|---|---|
+| ErrorSupportPanel — `6a678efe191516dd97a29c5a5bc458b8f7c73ee9` | Required `code:string`, required `labels:ErrorSupportPanelLabels`; optional `requestId`, raw ISO `timestamp`, consumer-formatted `occurredAt`. Exported labels require eight translated strings: `toggle`, `errorCode`, `requestId`, `timestamp`, `occurredAt`, `copy`, `copied`, `copyFallbackInstruction`. | `copy()` after user-triggered copy action. | No slots or `defineExpose` found. Native `details/summary` disclosure; copy state is internal and reverts after 3000 ms. |
+| FormSection — `50a020ba7061528054bc0032706046dcc26b495d` | Required translated `title:string`; optional `description`; `spacing='default'` (default/compact). | No emits declared. | Unscoped default slot for fields and unscoped `actions` slot. No exposed methods found. Uses native `fieldset/legend`; description ID is associated with fieldset only when non-empty. |
+| LoadingState — `f1ff98f3d2e331846b527e51c7b308c517615bba` | `size='md'` (sm/md/lg); optional translated `label`; `fullPage=false`. Exported `LoadingStateSize='sm'|'md'|'lg'`. | No emits declared. | No slots or exposed methods found. Composes BaseSpinner status/live region; supplied label becomes its accessible name and is also shown visually without duplicate announcement. |
+| MetaList — `db01857c760cfb9df59e0e40e5c7565c8aa43cc4` | Required `items:ReadonlyArray<MetaListItem>`; `columns=1` (1/2); `density='default'` (default/compact); `nullPlaceholder='—'`. Item: required translated `label`, `value:string|null`, optional `span:1|2`. | No emits declared. | Scoped default slot receives `{item:MetaListItem}` for each value region. No exposed methods found. |
+| Pagination — `a3cbda5418cd4b23caf5e0517ece2853aebec7b1` | Required `page` (1-indexed), `pages`, `perPage`, `totalItems`, translated `ariaLabel`, `perPageLabel`, `previousLabel`, `nextLabel`. Optional `totalLabel(ctx)`; `maxButtons=7`; `showTotal=true`; optional `perPageOptions:number[]`. Exported `TotalLabelContext={from,to,totalItems}`. | `update:page(number)`; `update:perPage(number)`. | No slots or exposed methods found. Component renders nothing when page count is 0 or 1; selector appears only when non-empty per-page options are supplied. |
+
+### Batch 4 findings and compatibility notes
+
+1. **ErrorSupportPanel handles support diagnostics and clipboard operations.** Its `requestId`, timestamp and occurrence-time fields are optional; the component renders the supplied strings verbatim and does not perform calendar formatting. Consumers must ensure diagnostic content does not contain credentials, access tokens, private personal data or unredacted backend payloads. Clipboard success is transient and the component provides a manual-copy fallback on failure.
+2. **ErrorSupportPanel's copy event is a notification, not a data payload.** It emits `copy()` without returning the copied text. Consumers must not expect an event argument.
+3. **FormSection is a semantic grouping primitive.** The required title becomes a native `legend`; optional description is referenced by `aria-describedby` on the fieldset. The actions slot is unscoped and only rendered when supplied.
+4. **LoadingState's accessible name is optional in the source API.** When consumers omit or pass whitespace-only `label`, the BaseSpinner live region has no descriptive label. Whether an unnamed status is acceptable depends on the loading context; consumer review must confirm the state is otherwise programmatically clear.
+5. **MetaList exposes a typed scoped slot.** The consumer receives the entire item descriptor, not only its value. Empty values (`null` or whitespace-only string) use the configurable em-dash placeholder unless the scoped slot replaces the value region. `span` values above the selected column count are clamped by the component.
+6. **Pagination's total text is consumer-formatted.** `totalLabel` receives 1-indexed inclusive `from` and `to` values plus `totalItems`; the component does not localize the sentence itself. When `showTotal=true` but `totalLabel` is absent, total text is omitted and a development warning is emitted. `perPageLabel` is required by the declared interface even when the selector is omitted.
+7. **Pagination models are controlled.** The component emits page/per-page changes; it does not own the parent page state. Consumers must update the corresponding props in response. Values are clamped/validated internally for navigation, but upstream data consistency remains the caller's responsibility.
+8. This is source-contract reconciliation only. No dedicated mounted interaction suite or full consumer compatibility census has yet been completed for these five components. Attribute fallthrough and screen-reader behavior require further evidence.
+
+| Composite audit progress | Status |
+|---|---|
+| Composite source files contract-reconciled | 20 / 26 |
+| Composite public prop/event/slot summaries | PARTIAL |
+| Exported types/defaults reconciled | PARTIAL — types followed where relevant in inspected source |
+| Consumer compatibility for batch 4 | NOT COMPLETE |
+| Dedicated mounted behavior tests for batch 4 | NOT RUN |
+| Remaining composite entries | 6 |
+| Overall A4 API audit | OPEN |
+
+### 23.1. FormField named-help-slot regression — current disposition
+
+The earlier source-level issue remains under active verification. Two exact-head browser runs (#43706131482 and #43706291734) failed the new mounted assertion: the named help content and region rendered, but the consumer input received an empty `aria-describedby` value. The failure was traced to evaluating the component's slot presence from inside the scoped default-slot expression, where the slot lookup did not reliably refer to the FormField instance.
+
+A further correction was committed at `ea692a071fe12546593a6fb8ddae157d59e6eab9`: capture the component's named-slot presence using Vue's `useSlots()` in setup scope, and use that captured state for both help-region rendering and the scoped slot's association value. This is a new candidate correction, not yet verified by a passing exact-head browser run.
+
+| Gate | Status |
+|---|---|
+| Source defect identified | CONFIRMED |
+| Candidate setup-scope correction | IMPLEMENTED — commit `ea692a071fe12546593a6fb8ddae157d59e6eab9` |
+| Mounted named-help-slot assertion | FAIL on prior heads; pending exact-head retest |
+| FormField correction verified | NOT VERIFIED |
+| A4 closure | OPEN |
+
+No merge or deployment is included or authorized.
