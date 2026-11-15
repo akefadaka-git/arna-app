@@ -153,7 +153,7 @@
    · The sticky/relative variant, selected by the `sticky` prop, and
      the z-index token that variant consumes.
    · The optional default mobile-menu toggle, which composes
-     BaseButton and BaseIcon rather than reimplementing either.
+     IconButton rather than reimplementing icon-only button behavior.
    · The scoped CSS that expresses the above.
 
  This file does NOT own:
@@ -194,8 +194,7 @@
  Composition
  -----------------------------------------------------------------------------
  COMPOSES:
-   BaseButton (Unit 8.2)  — the default mobile-menu toggle
-   BaseIcon   (Unit 8.19) — the toggle's hamburger glyph
+   IconButton (Unit 8.7) — the default mobile-menu toggle
 
  Does not reimplement either primitive.
 
@@ -248,12 +247,12 @@
  The toggle region renders when either (a) the consumer supplies a
  #mobile-menu-trigger slot, or (b) the consumer supplies a non-empty
  mobileMenuLabel prop. In case (a) the slot content wins and the
- default BaseButton is not rendered; in case (b) the default renders
+ default IconButton is not rendered; in case (b) the default renders
  with the supplied label as its aria-label.
 
  When the override path is taken, the `data-testid="app-header-
  mobile-toggle"` hook is not present in the DOM, because the hook is
- bound on the default BaseButton. A test that asserts on the toggle's
+ bound on the default IconButton. A test that asserts on the toggle's
  presence should therefore either assert on the outer
  `.app-header__mobile-toggle` wrapper (which is rendered in both
  cases) or supply a mobileMenuLabel and rely on the default branch.
@@ -282,11 +281,10 @@
      would announce both. If a feature page needs a header-like
      region (a card header, a section header), it uses a plain
      <header> without the role, or a <div>.
-   - The default mobile toggle uses BaseButton with an explicit
+   - The default mobile toggle uses IconButton with an explicit
      aria-label from mobileMenuLabel. The hamburger glyph inside it
-     is decorative — BaseIcon defaults to aria-hidden="true" when no
-     ariaLabel is supplied, which is the correct behaviour here
-     because the button element already carries the accessible name.
+     is decorative — IconButton renders its glyph as aria-hidden, while
+     the button carries the explicit accessible name.
    - The mobile toggle is hidden on desktop via CSS (display: none),
      so it does not appear in the tab order on desktop. A screen
      reader running on a desktop viewport does not encounter it.
