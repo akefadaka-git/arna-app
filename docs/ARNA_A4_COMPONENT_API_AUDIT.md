@@ -643,3 +643,36 @@ No merge or deployment is included or authorized.
 
 
 **Verification evidence:** [Workflow #43707444575](https://github.com/akefadaka-git/arna-app/actions/runs/43707444575) completed successfully at the exact tested head `5535e9c1f9922e7517809c72d69b1505c7a3101d`. All 32 workflow steps passed, including the mounted FormField/Combobox/Modal/Drawer browser suite, FileUploader lifecycle suite and shared DatePicker browser suite. This verifies the tested regression and the full workflow at that SHA; subsequent commits still require their own exact-head CI.
+
+
+## 26. Primitive API reconciliation — batch 1 (15 of 24)
+
+The first five primitives outside the original 10-component pilot were reconciled from exact SFC declarations, defaults, event signatures, slots and native markup. Source blob hashes are included for traceability.
+
+| Component / source blob | Public props and defaults | Events / model | Slots and exposed API |
+|---|---|---|---|
+| BaseBadge — `d7204df008a54d6d8fb8702de4b6358881ce8c71` | `variant='neutral'` (neutral/success/warning/info/danger/accent); `size='sm'` (sm/md); `dot=false`. | No emits declared. | Unscoped default slot supplies label content. No exposed methods found. |
+| BaseChip — `a2dee8d2b5de333cb05cfcd53d16d76d62ac75ab` | `variant='default'` (default/accent); `removable=false`; optional `removeAriaLabel` or `removeAriaLabelledBy`; `disabled=false`. Accessible remove name is required when removable, but neither prop is TypeScript-required. | `remove()` with no payload; emitted only when the native remove button is activated and not disabled. | Unscoped default label slot; optional unscoped `remove` slot replaces the default close icon. No exposed methods found. |
+| BaseDivider — `b24adc412b745e1f74048d5180f27daba995e98b` | `orientation='horizontal'` (horizontal/vertical); `decorative=true`; `spaced=false`. | No emits declared. | No slots or exposed methods found. Horizontal uses native `hr`; vertical uses `div` with either separator semantics or `aria-hidden`. |
+| BaseLabel — `a13c5640844b898550aec1ed3a73ebbca7aa4ae5` | Optional `id`, optional `for`; `required=false`, `disabled=false`, `error=false`; optional `requiredLabel`; `showRequiredIndicator=true`. | No emits declared. | Unscoped default label-content slot and optional unscoped `optional` slot. No exposed methods found. |
+| BaseProgressBar — `28876b27e5a6d29ae1c85e4afe3c5f09d15e1efa` | Optional `value` (omitted means indeterminate; supplied value clamped 0–100, NaN→0); `variant='default'` (default/success/warning/danger); `size='md'` (sm/md); optional `ariaLabel`, `ariaLabelledBy`, `label`. | No emits declared. | No slots or exposed methods found. Root receives `role=progressbar` and computed ARIA values; consumer attributes fall through to root. |
+
+### Primitive batch 1 findings and compatibility notes
+
+1. **BaseBadge is passive content.** Its text label remains the accessible content; the optional dot is decorative and hidden from assistive technology. Consumers must not rely on variant color alone to convey a status.
+2. **BaseChip has a conditional accessible-name contract.** When `removable=true`, the close button needs either `removeAriaLabel` or `removeAriaLabelledBy`. Both remain optional in the type; the source warns in development and production can render an unnamed button if neither is supplied. The `remove` slot replaces only the icon, not the button's accessible-name requirement.
+3. **BaseDivider changes native semantics by orientation.** Horizontal uses `hr` (or `role=presentation` when decorative); vertical uses a `div` with `role=separator` and `aria-orientation=vertical`, or is hidden from assistive technology when decorative. Consumers must not assume the same DOM element or role in both modes.
+4. **BaseLabel does not make a custom control required by itself.** The visual asterisk is decorative; semantic required state must be forwarded to the control's native `required` attribute. `requiredLabel` supplies an additional translated screen-reader marker; if omitted, the component warns in development and does not render that marker. The optional marker is entirely consumer-supplied through the `optional` slot.
+5. **BaseProgressBar accessible naming is caller-owned but not type-enforced.** Both `ariaLabel` and `ariaLabelledBy` are optional although a progressbar needs an accessible name. Consumers should supply one, preferably `ariaLabelledBy` when a visible label exists. Determinate mode exposes numeric values and optionally `aria-valuetext`; indeterminate mode correctly omits value attributes. A label in indeterminate mode is ignored.
+6. This batch is source-contract reconciliation, not full caller compatibility or mounted behavior evidence. Required accessible-name usage, attribute fallthrough and visual/reduced-motion behavior still need focused tests and consumer checks.
+
+| Primitive API audit progress | Status |
+|---|---|
+| Primitive source-surface inventory | 15 / 24 reconciled at detailed API level (10 pilot + 5 this batch) |
+| Primitive props/defaults/events/slots | PARTIAL |
+| Consumer compatibility for this batch | NOT COMPLETE |
+| Dedicated mounted tests for this batch | NOT RUN |
+| Remaining primitives for detailed API reconciliation | 9 |
+| Overall A4 API audit | OPEN |
+
+No merge or deployment is included or authorized.
