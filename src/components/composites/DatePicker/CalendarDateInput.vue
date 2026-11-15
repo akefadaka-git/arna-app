@@ -15,7 +15,7 @@ interface Props {
   ariaDescribedBy?: string;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   modelValue: null,
   id: undefined,
   min: undefined,
