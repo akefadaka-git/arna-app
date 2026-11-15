@@ -13,15 +13,15 @@ test('visual library exports the initial reusable component set', () => {
 
 test('charts require accessible naming and provide a textual data legend', () => {
   const chart = read('src/components/visual/ChartPanel.vue');
-  assert.match(chart, /ariaLabel:s*string/);
+  assert.match(chart, /ariaLabel:\s*string/);
   assert.match(chart, /:aria-label="ariaLabel"/);
   assert.match(chart, /class="chart-panel__legend"/);
-  assert.match(chart, /type?: 'bar' \| 'line' \| 'donut'/);
+  assert.match(chart, /type\?: 'bar' \| 'line' \| 'donut'/);
 });
 
 test('media requires alternative text and supports lazy decoding', () => {
   const image = read('src/components/visual/ImageFrame.vue');
-  assert.match(image, /alt:s*string/);
+  assert.match(image, /alt:\s*string/);
   assert.match(image, /:alt="alt"/);
   assert.match(image, /loading="lazy"/);
   assert.match(image, /decoding="async"/);
@@ -40,6 +40,6 @@ test('decorative and motion components honor accessibility preferences', () => {
   const reveal = read('src/components/visual/MotionReveal.vue');
   const text = read('src/components/visual/TextEffect.vue');
   assert.match(backdrop, /aria-hidden="true"/);
-  assert.match(reveal, /prefers-reduced-motion:s*reduce/);
+  assert.match(reveal, /prefers-reduced-motion:\s*reduce/);
   assert.match(text, /prefers-reduced-motion:s*reduce/);
 });
