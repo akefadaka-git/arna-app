@@ -70,6 +70,12 @@ test('locale storage migrates old preference and writes only the ARNA key', asyn
   assert.match(source, /removeItem\(LEGACY_STORAGE_KEY\)/);
 });
 
+test('active Combobox DOM identifiers use the ARNA namespace', async () => {
+  const source = await read('../src/components/composites/Combobox/Combobox.vue');
+  assert.match(source, /arna-combobox-/);
+  assert.doesNotMatch(source, /mases-combobox-|__masesCombobox/);
+});
+
 test('active accessibility utility uses ARNA namespace', async () => {
   const source = await read('../src/styles/base.css');
   assert.match(source, /\.arna-visually-hidden/);
