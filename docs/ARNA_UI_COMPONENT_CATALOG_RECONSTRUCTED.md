@@ -204,3 +204,79 @@ Do not rename or delete a component solely to make this reconstructed catalogue 
 | Effective normative version | **Not assigned** |
 
 **Approval rule:** Do not label this document `v1.0.0 approved`, `frozen`, or historically authoritative until the Owner explicitly approves this reconstructed baseline.
+
+
+---
+
+## 12. Evidence labels and catalogue interpretation
+
+A catalogue entry proves only that a name/directory/export was observed at the stated ref. It does not prove runtime mounting, stable API, accessibility, security, four-app consumption or Owner approval.
+
+Use distinct labels:
+- PRESENT: source exists at pinned SHA.
+- EXPORTED: exposed by a public barrel.
+- CONSUMED: imported or mounted by a named app.
+- TESTED: a named test exercises the contract at an exact SHA.
+- A11Y-REVIEWED: manual review has recorded environment and outcome.
+- APPROVED: Owner/delegated authority accepted the stated use.
+- DEPRECATED: replacement and migration path are documented.
+- UNKNOWN: evidence not inspected or unavailable.
+
+Never collapse these into a generic “available” or “complete” status.
+
+## 13. Recommended component inventory schema
+
+For each entry, record: exact name/layer; source path and SHA; public export/barrel; consuming apps (Workspace, Portal, Admin, Public Site); props/types/defaults; events and slots; controlled-state model; semantic element and accessible name; keyboard model; relevant states; localization ownership; theme/responsive behavior; tests and exact workflow evidence; security/privacy/data-integrity risks; lifecycle status.
+
+This is a proposed schema. The current 65-name inventory is not a prop-level audit.
+
+## 14. Cross-layer dependency rules
+
+- Primitives must not depend on page patterns, application routes or domain services.
+- Composites may coordinate primitives but must not reach into unrelated page stores or route state.
+- Patterns may compose lower layers and consumer-provided domain data, but must not become an alternate authorization layer.
+- Visual-library components remain additive and must not replace semantic controls or impose mandatory dependencies on core workflows.
+- Shared components must not import app-specific navigation, tenant policy, finance rules or shareholder records.
+- Avoid circular dependencies. Keep internal subcomponents private unless a documented consumer use case requires a public API.
+
+## 15. High-risk component review priorities
+
+| Family | Components | Main review concerns |
+|---|---|---|
+| Actions | BaseButton, DangerButton, IconButton, LinkButton, PrimaryButton, SecondaryButton | Native semantics, disabled/loading, duplicate submission, accessible names, focus |
+| Inputs | BaseInput, BaseCheckbox, BaseRadio, BaseSelect, BaseTextarea, Combobox, FormField | Labels/errors, keyboard selection, autocomplete, controlled state |
+| Overlays | ConfirmDialog, Modal, Drawer, DropdownMenu, Popover, BaseTooltip | Focus entry/return, Escape, nested overlays, touch |
+| Navigation | BaseLink, Breadcrumbs, Tabs, Stepper, SearchBar | Link/button semantics, current state, route changes, announcements |
+| Data | DataTable, Pagination, FilterBar, Timeline, MetricWidget, ChartPanel | Sorting/filtering semantics, units/provenance, responsive access, non-color encoding |
+| Files | FileInput, FileUploader, FilePreview, DownloadButton | Type/size validation, untrusted content, progress/cancel/retry, safe preview |
+| Permissions/errors | PermissionGate, AccessDeniedPage, ErrorState, ErrorActions | No client authorization assumptions, no sensitive leakage |
+| Motion/visual | AbstractBackdrop, TextEffect, MotionReveal, VisualPanel, ImageFrame | Reduced motion, contrast, layout stability, alt text, fallback |
+
+## 16. Read-only catalogue reconciliation plan
+
+Before this becomes a complete API reference:
+1. Enumerate exact component directories, source files and public exports at a pinned commit.
+2. Explain differences among directories, Vue files, internal subcomponents and visual exports.
+3. Extract public props, emits, slots and defaults for each exported component.
+4. Identify actual consumers across all four app entry points.
+5. Map tests and exact-head CI coverage.
+6. Flag duplicate APIs, unused components and missing tests without deleting or renaming anything.
+7. Record accessibility/localization gaps as findings, not assumptions.
+8. Produce a machine-readable inventory plus a human-readable report.
+9. Preserve all unrelated files and changes; this pass is read-only.
+
+Exit criteria: every entry has a source path and SHA; public/internal export status is known; counts reconcile; consumers are identified or UNKNOWN; API/test fields are evidenced or explicitly NOT DOCUMENTED/NOT RUN; no component is marked APPROVED merely because it exists or builds.
+
+## 17. Owner review decisions
+
+| ID | Recommendation | Rationale |
+|---|---|---|
+| CAT-01 | Approve the 65-name core inventory provisionally, not as a full API audit | Separates inventory fact from maturity |
+| CAT-02 | Require §13 schema for new shared components | Makes API/accessibility/localization obligations inspectable |
+| CAT-03 | Prioritize high-risk families in §15 | Focuses on overlays, forms, permissions, files and data integrity |
+| CAT-04 | Keep visual/media/motion extension outside the 65-core count | Avoids scope/count ambiguity |
+| CAT-05 | Do not remove, rename or deprecate components through catalogue approval | Inventory review is not implementation authority |
+
+## 18. Revision record
+
+Revision 0.2 — review-enhanced reconstruction, 2026-11-15. Prop-level audit NOT RUN; consumer mapping PARTIAL/NOT VERIFIED; historical source unrecovered; Owner approval PENDING. This enhancement adds a verification framework but does not certify components or authorize code changes.
