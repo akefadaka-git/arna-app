@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 import { computed, onMounted, ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import PageHeader from '@/components/patterns/PageHeader';
@@ -90,8 +91,8 @@ onMounted(async () => {
           <div><dt>የአባልነት ሁኔታ</dt><dd>{{ person.status_label }}</dd></div>
           <div><dt>የሥራ ቦታ / Position</dt><dd>{{ person.position?.display_name || '—' }}</dd></div>
           <div><dt>የሥራ ዘመን / Term</dt><dd>{{ person.term?.display_label || '—' }}</dd></div>
-          <div><dt>የጀመረበት ቀን</dt><dd>{{ person.start_date_display || '—' }}</dd></div>
-          <div><dt>የሚያበቃበት ቀን</dt><dd>{{ person.end_date_display || '—' }}</dd></div>
+          <div><dt>የጀመረበት ቀን</dt><dd>{{ formatCalendarDate(person.start_date) }}</dd></div>
+          <div><dt>የሚያበቃበት ቀን</dt><dd>{{ formatCalendarDate(person.end_date) }}</dd></div>
           <div><dt>በስልጣን መሠረት</dt><dd>{{ person.is_ex_officio ? 'አዎ / Yes' : 'አይ / No' }}</dd></div>
           <div><dt>የተያያዘ የቀጠሮ ርዕስ</dt><dd>{{ person.appointment?.display_label || '—' }}</dd></div>
           <div><dt>የማስታወሻ መረጃ</dt><dd>{{ person.notes_am || person.notes_en || '—' }}</dd></div>
@@ -103,8 +104,8 @@ onMounted(async () => {
         <p>{{ detail.body.display_name }}</p>
         <p v-if="detail.currentTerm">
           {{ detail.currentTerm.display_label }}
-          <span v-if="detail.currentTerm.effective_from_display"> · {{ detail.currentTerm.effective_from_display }}</span>
-          <span v-if="detail.currentTerm.effective_until_display"> – {{ detail.currentTerm.effective_until_display }}</span>
+          <span v-if="detail.currentTerm.effective_from"> · {{ formatCalendarDate(detail.currentTerm.effective_from) }}</span>
+          <span v-if="detail.currentTerm.effective_until"> – {{ formatCalendarDate(detail.currentTerm.effective_until) }}</span>
         </p>
         <RouterLink :to="`/governance/bodies/${detail.body.id}`">
           የአካሉን ዝርዝር ይመልከቱ / View governance body

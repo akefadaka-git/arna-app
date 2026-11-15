@@ -241,6 +241,7 @@ export type { MyLoansPageLabels };
 </script>
 
 <script setup lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 import { computed, ref, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 
@@ -571,7 +572,7 @@ function statusVariant(
             date formatting.
           -->
           <template #cell:applied="{ row }">
-            {{ asLoan(row).application_date_display }}
+            {{ formatCalendarDate(asLoan(row).application_date) }}
           </template>
         </DataTable>
       </Card>

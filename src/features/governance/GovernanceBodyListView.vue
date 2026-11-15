@@ -291,6 +291,7 @@
      blocks is a TS2300 duplicate.
 
    <script setup lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
      The setup block. Every other import, the Props interface, the
      defineProps<Props>() call, the component's state, computed
      properties, watchers, handlers, and helper functions.
@@ -887,7 +888,7 @@ function statusLabel(isActive: boolean): string {
             nullable. An open-start body renders an empty cell.
           -->
           <template #cell:effective_from="{ row }">
-            {{ asBody(row).effective_from_display ?? '' }}
+            {{ asBody(row).effective_from ? formatCalendarDate(asBody(row).effective_from) : '' }}
           </template>
         </DataTable>
 

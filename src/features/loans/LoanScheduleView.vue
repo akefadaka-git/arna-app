@@ -357,6 +357,7 @@ export type { LoanScheduleViewLabels } from './labels';
 </script>
 
 <script setup lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 import { computed, onMounted, ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 
@@ -537,7 +538,7 @@ const hasSummaryData = computed<boolean>(() => {
     s.monthly_installment_amount !== null ||
     s.total_scheduled_interest !== null ||
     s.total_scheduled_repayment !== null ||
-    s.maturity_date_display !== null
+    s.maturity_date !== null
   );
 });
 </script>
@@ -645,11 +646,11 @@ const hasSummaryData = computed<boolean>(() => {
           </div>
 
           <div
-            v-if="schedule.maturity_date_display !== null"
+            v-if="schedule.maturity_date !== null"
             class="loan-schedule-view__summary-row"
           >
             <dt>{{ labels.summaryMaturityDateLabel }}</dt>
-            <dd>{{ schedule.maturity_date_display }}</dd>
+            <dd>{{ formatCalendarDate(schedule.maturity_date) }}</dd>
           </div>
         </dl>
       </Card>
@@ -676,7 +677,7 @@ const hasSummaryData = computed<boolean>(() => {
           </template>
 
           <template #cell:due_date="{ row }">
-            {{ asInstallment(row).due_date_display ?? '' }}
+            {{ asInstallment(row).due_date ? formatCalendarDate(asInstallment(row).due_date) : '' }}
           </template>
 
           <template #cell:expected="{ row }">

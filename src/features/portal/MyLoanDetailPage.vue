@@ -189,6 +189,7 @@ export type { MyLoanDetailPageLabels };
 </script>
 
 <script setup lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -535,43 +536,43 @@ function statusVariant(
           <!-- Applied on — always present. -->
           <div class="my-loan-detail-page__loan-row">
             <dt>{{ labels.applicationDateLabel }}</dt>
-            <dd>{{ loan.application_date_display }}</dd>
+            <dd>{{ formatCalendarDate(loan.application_date) }}</dd>
           </div>
 
           <!-- Decided on — nullable. -->
           <div
-            v-if="loan.decision_date_display !== null"
+            v-if="loan.decision_date !== null"
             class="my-loan-detail-page__loan-row"
           >
             <dt>{{ labels.decisionDateLabel }}</dt>
-            <dd>{{ loan.decision_date_display }}</dd>
+            <dd>{{ formatCalendarDate(loan.decision_date) }}</dd>
           </div>
 
           <!-- Disbursed on — nullable. -->
           <div
-            v-if="loan.disbursement_date_display !== null"
+            v-if="loan.disbursement_date !== null"
             class="my-loan-detail-page__loan-row"
           >
             <dt>{{ labels.disbursementDateLabel }}</dt>
-            <dd>{{ loan.disbursement_date_display }}</dd>
+            <dd>{{ formatCalendarDate(loan.disbursement_date) }}</dd>
           </div>
 
           <!-- Matures on — nullable. -->
           <div
-            v-if="loan.maturity_date_display !== null"
+            v-if="loan.maturity_date !== null"
             class="my-loan-detail-page__loan-row"
           >
             <dt>{{ labels.maturityDateLabel }}</dt>
-            <dd>{{ loan.maturity_date_display }}</dd>
+            <dd>{{ formatCalendarDate(loan.maturity_date) }}</dd>
           </div>
 
           <!-- Closed on — nullable. -->
           <div
-            v-if="loan.closed_at_display !== null"
+            v-if="loan.closed_at !== null"
             class="my-loan-detail-page__loan-row"
           >
             <dt>{{ labels.closedAtLabel }}</dt>
-            <dd>{{ loan.closed_at_display }}</dd>
+            <dd>{{ formatCalendarDate(loan.closed_at) }}</dd>
           </div>
         </dl>
       </Card>
@@ -598,7 +599,7 @@ function statusVariant(
           </template>
 
           <template #cell:due_date="{ row }">
-            {{ asInstallment(row).due_date_display ?? '' }}
+            {{ asInstallment(row).due_date ? formatCalendarDate(asInstallment(row).due_date) : '' }}
           </template>
 
           <template #cell:expected="{ row }">

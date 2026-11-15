@@ -171,6 +171,7 @@ export type { PortalHomePageLabels };
 </script>
 
 <script setup lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
 
@@ -355,12 +356,12 @@ function shareholderStatusVariant(active: boolean): 'success' | 'neutral' {
 
           <div class="portal-home-page__row">
             <dt>{{ labels.identityCreated }}</dt>
-            <dd><time :datetime="shareholder.created_at">{{ shareholder.created_at_display }}</time></dd>
+            <dd><time :datetime="shareholder.created_at">{{ formatCalendarDate(shareholder.created_at) }}</time></dd>
           </div>
 
           <div class="portal-home-page__row">
             <dt>{{ labels.identityUpdated }}</dt>
-            <dd><time :datetime="shareholder.updated_at">{{ shareholder.updated_at_display }}</time></dd>
+            <dd><time :datetime="shareholder.updated_at">{{ formatCalendarDate(shareholder.updated_at) }}</time></dd>
           </div>
         </dl>
       </Card>

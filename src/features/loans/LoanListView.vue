@@ -409,6 +409,7 @@ export type { LoanListViewLabels };
 </script>
 
 <script setup lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 import { computed, onMounted, ref, watch } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 
@@ -883,7 +884,7 @@ function onApplicationSubmitted(): void {
 
           <!-- Applied — the backend-supplied localized display string. -->
           <template #cell:applied="{ row }">
-            {{ asLoan(row).application_date_display }}
+            {{ formatCalendarDate(asLoan(row).application_date) }}
           </template>
 
           <!-- Actions -->

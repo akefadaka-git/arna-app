@@ -15,19 +15,15 @@
  Purpose
  -----------------------------------------------------------------------------
  Renders the current date as a semantic <time> element. Ambient chrome
- for the shell, showing the Gregorian date.
+ for the shell, showing only the user's selected calendar system.
 
  -----------------------------------------------------------------------------
- NO locale read, and NO Ethiopian date (Freeze §10.3)
+ Selected calendar and locale
  -----------------------------------------------------------------------------
- §10.3: "the shell's calendar context displays the Gregorian ISO date…
-        No Ethiopian date is displayed."
- The Gregorian ISO date is language-neutral ("2026-09-13" in every
- locale), so the component does not read the locale store. When the
- calendar endpoints of §10.2 exist, a CR will extend this component to
- read the locale store and render the Ethiopian representation (or
- both, per §10.2's formatted_am / formatted_en). See the response
- preamble §"Notice 1".
+ The visible date uses the shared calendar preference utility. E.C.
+ selection renders only the Ethiopian calendar; G.C. selection renders
+ only the Gregorian calendar. Locale controls the language of the
+ selected calendar, not the number of dates shown.
 
  -----------------------------------------------------------------------------
  Self-ticking vs. externally-driven
@@ -49,10 +45,9 @@
  -----------------------------------------------------------------------------
  Formatter override
  -----------------------------------------------------------------------------
- The default formatter produces "YYYY-MM-DD" in the BROWSER'S LOCAL
- TIMEZONE. A consumer with a different formatting need supplies a
- `formatter` prop. See the response preamble §"Design note — why the
- formatter is a prop".
+ The default formatter follows the selected E.C./G.C. preference and
+ active UI locale. A consumer may still supply a deliberate
+ `formatter` override. The machine-readable `datetime` remains ISO.
 
  -----------------------------------------------------------------------------
  Timezone robustness
@@ -82,9 +77,8 @@
  -----------------------------------------------------------------------------
  No hardcoded user-facing string
  -----------------------------------------------------------------------------
- The displayed text is generated at runtime from a formatter. The
- default formatter produces a language-neutral ISO date, which is not
- a translatable phrase.
+ The displayed text is generated at runtime from the selected calendar
+ and active locale. The alternate calendar is never appended.
 
  -----------------------------------------------------------------------------
  Token discipline
@@ -178,6 +172,8 @@ function msUntilNextLocalMidnight(from: Date): number {
 
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
+import { formatCalendarDate, useCalendarPreference } from '@/core/dates/calendar';
+import { useLocaleStore } from '@/stores/locale';
 
 interface Props {
   /**
@@ -207,6 +203,9 @@ interface Props {
    */
   formatter?: CalendarDateFormatter;
 }
+
+const { calendarSystem } = useCalendarPreference();
+const localeStore = useLocaleStore();
 
 const props = withDefaults(defineProps<Props>(), {
   date: undefined,
@@ -291,13 +290,12 @@ onBeforeUnmount(() => {
 // -----------------------------------------------------------------------------
 const effectiveDate = computed<Date>(() => props.date ?? now.value);
 
-const resolvedFormatter = computed<CalendarDateFormatter>(
-  () => props.formatter ?? formatIsoLocalDate,
-);
-
-const displayText = computed<string>(() =>
-  resolvedFormatter.value(effectiveDate.value),
-);
+const displayText = computed<string>(() => {
+  calendarSystem.value;
+  return props.formatter
+    ? props.formatter(effectiveDate.value)
+    : formatCalendarDate(effectiveDate.value, { dateStyle: 'medium' }, localeStore.locale);
+});
 
 /*
  * The datetime attribute is ALWAYS the ISO local date, regardless of
