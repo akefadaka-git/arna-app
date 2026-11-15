@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
+import ts from 'typescript';
 
 const read = (path) => readFile(new URL('../' + path, import.meta.url), 'utf8');
 
@@ -23,6 +24,36 @@ test('Ethiopian calendar conversion handles year boundary and Pagume', () => {
   assert.deepEqual(ethiopicParts('2025-09-11'), { year: 2018, month: 1, day: 1 });
   assert.deepEqual(ethiopicParts('2026-09-10'), { year: 2018, month: 13, day: 5 });
   assert.deepEqual(ethiopicParts('2026-09-11'), { year: 2019, month: 1, day: 1 });
+});
+
+test('conversion implementation round-trips E.C. dates and handles five/six-day Pagume', async () => {
+  const source = await read('src/core/dates/ethiopic.ts');
+  const javascript = ts.transpileModule(source, {
+    compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
+  }).outputText;
+  const module = await import(`data:text/javascript;base64,${Buffer.from(javascript).toString('base64')}`);
+  assert.deepEqual(module.getEthiopicDateParts('2025-09-11'), {
+    year: 2018, month: 1, day: 1,
+  });
+  assert.deepEqual(module.getEthiopicDateParts('2026-09-10'), {
+    year: 2018, month: 13, day: 5,
+  });
+  assert.equal(module.getEthiopicMonthLength(2018, 13), 5);
+  assert.equal(module.getEthiopicMonthLength(2019, 13), 6);
+  assert.equal(module.ethiopicToIso({ year: 2018, month: 1, day: 1 }), '2025-09-11');
+  assert.equal(module.ethiopicToIso({ year: 2018, month: 13, day: 6 }), null);
+  for (const year of [2018, 2019]) {
+    for (let month = 1; month <= 13; month += 1) {
+      const days = module.getEthiopicMonthDays(year, month);
+      assert.equal(days.length, module.getEthiopicMonthLength(year, month));
+      for (const day of days) {
+        assert.deepEqual(module.getEthiopicDateParts(day.iso), {
+          year, month, day: day.day,
+        });
+        assert.equal(module.ethiopicToIso({ year, month, day: day.day }), day.iso);
+      }
+    }
+  }
 });
 
 test('shared conversion helpers preserve Gregorian ISO wire values', async () => {
