@@ -167,7 +167,8 @@ test.describe('Mounted ErrorSupportPanel privacy and clipboard behavior', () => 
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
-    expect(results.violations.filter((item) => ['serious', 'critical'].includes(item.impact)).map((item) => item.id)).toEqual([]);
+    const serious = results.violations.filter((item) => ['serious', 'critical'].includes(item.impact));
+    expect(serious.map((item) => ({ id: item.id, help: item.help, nodes: item.nodes.map((node) => ({ target: node.target, html: node.html, failureSummary: node.failureSummary })) }))).toEqual([]);
   });
 
   test('shows a labeled manual-copy fallback when clipboard access is unavailable', async ({ page }) => {
