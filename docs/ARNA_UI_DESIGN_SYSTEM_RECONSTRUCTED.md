@@ -365,3 +365,8 @@ Automated scans do not certify accessibility or WCAG conformance. Record tool/br
 ## 28. Revision record
 
 Revision 0.2 — review-enhanced reconstruction, 2026-11-15. Historical source remains unrecovered. Owner approval and normative effective date remain PENDING. This revision strengthens authority, trust, API/state, localization, privacy and verification rules; it does not certify conformance, authorize implementation, merge or deployment.
+
+
+## 29. Owner approval record
+
+**Owner decision: APPROVED — 2026-11-15.** The Owner approves this reconstructed document as the replacement normative ARNA UI Design System authority, with the explicit qualification that it is not the recovered historical original. The authority hierarchy, four-surface trust boundaries, component/state contracts, localization/data-integrity requirements, privacy controls and minimum verification matrix are accepted. This approval does not certify implementation conformance or authorize unrelated code changes, merge or deployment.
