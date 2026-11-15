@@ -486,9 +486,6 @@ const selectedDate = computed<DateParts | null>(() =>
   parseIsoDate(props.modelValue),
 );
 
-const minDate = computed<DateParts | null>(() => parseIsoDate(props.min));
-const maxDate = computed<DateParts | null>(() => parseIsoDate(props.max));
-
 // -----------------------------------------------------------------------------
 // Watches — keep textValue in sync with modelValue
 // -----------------------------------------------------------------------------
