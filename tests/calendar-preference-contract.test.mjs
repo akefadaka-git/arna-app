@@ -24,6 +24,14 @@ for (const path of dateViews) {
   });
 }
 
+for (const path of ['src/public-site/CorporateDynamicHome.vue', 'src/public-site/CorporateEntryRoute.vue']) {
+  test(path + ' uses the shared selected-calendar formatter', async () => {
+    const source = await readFile(new URL('../' + path, import.meta.url), 'utf8');
+    assert.match(source, /formatCalendarDate/);
+    assert.doesNotMatch(source, /toLocaleDateString\\s*\\(/);
+  });
+}
+
 test('shell calendar context follows the selected calendar and active locale', async () => {
   const source = await readFile(new URL('../src/layouts/AppShell/CalendarContext/CalendarContext.vue', import.meta.url), 'utf8');
   assert.match(source, /useCalendarPreference/);
