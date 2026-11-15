@@ -306,8 +306,7 @@
 
 <script setup lang="ts">
 import { computed, useSlots } from 'vue';
-import BaseButton from '@/components/primitives/BaseButton';
-import BaseIcon from '@/components/primitives/BaseIcon';
+import IconButton from '@/components/primitives/IconButton';
 
 interface Props {
   /**
@@ -474,16 +473,15 @@ function onToggleClick(): void {
       class="app-header__mobile-toggle"
     >
       <slot name="mobile-menu-trigger">
-        <BaseButton
+        <IconButton
+          icon="menu"
           variant="ghost"
           size="sm"
           :aria-label="mobileMenuLabel"
           aria-haspopup="dialog"
           data-testid="app-header-mobile-toggle"
           @click="onToggleClick"
-        >
-          <BaseIcon name="menu" size="md" />
-        </BaseButton>
+        />
       </slot>
     </div>
 
