@@ -713,7 +713,7 @@ const submitLabel = computed<string>(() => {
             </FormField>
           </section>
 
-          <BaseDivider data-testid="shareholder-form-section-divider" />
+          <BaseDivider data-testid="shareholder-form-type-divider" />
 
           <!-- ====================================================
                Section: Individual name
@@ -883,7 +883,7 @@ const submitLabel = computed<string>(() => {
             </div>
           </section>
 
-          <BaseDivider data-testid="shareholder-form-section-divider" />
+          <BaseDivider data-testid="shareholder-form-name-divider" />
 
           <!-- ====================================================
                Section: Access
@@ -935,7 +935,7 @@ const submitLabel = computed<string>(() => {
             </div>
           </section>
 
-          <BaseDivider data-testid="shareholder-form-section-divider" />
+          <BaseDivider data-testid="shareholder-form-access-divider" />
 
           <!-- ====================================================
                Actions
