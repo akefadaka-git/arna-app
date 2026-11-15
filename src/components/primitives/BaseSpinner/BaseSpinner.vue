@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/BaseSpinner/BaseSpinner.vue
  Layer:     1 (Primitives)
- Version:   1.0.0
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.15
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -139,11 +139,17 @@ interface Props {
    * See the response preamble §"Design note".
    */
   ariaLabel?: string;
+
+  /**
+   * ID reference for an external accessible name. Takes precedence over ariaLabel.
+   */
+  ariaLabelledBy?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   size: 'md',
   ariaLabel: undefined,
+  ariaLabelledBy: undefined,
 });
 
 const classes = computed<Array<string | Record<string, boolean>>>(() => [
@@ -156,6 +162,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   <span
     role="status"
     aria-live="polite"
+    :aria-labelledby="ariaLabelledBy"
     :class="classes"
     data-testid="base-spinner-root"
   >
@@ -166,7 +173,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
       as part of the status change.
     -->
     <span
-      v-if="ariaLabel !== undefined"
+      v-if="ariaLabel !== undefined && !ariaLabelledBy"
       class="spinner__sr-only"
       data-testid="base-spinner-label"
     >
