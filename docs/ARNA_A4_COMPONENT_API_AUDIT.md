@@ -676,3 +676,36 @@ The first five primitives outside the original 10-component pilot were reconcile
 | Overall A4 API audit | OPEN |
 
 No merge or deployment is included or authorized.
+
+
+## 27. Primitive API reconciliation — batch 2 (20 of 24)
+
+Five additional primitives were reconciled from their exact SFC declarations and templates.
+
+| Component / source blob | Public props and defaults | Events / model | Slots and exposed API |
+|---|---|---|---|
+| BaseSpinner — `883a8b49cddf95b72be1464a33e7f113c63163d1` | `size='md'` (sm/md/lg); optional translated `ariaLabel`; optional `ariaLabelledBy` (takes precedence). | No emits declared. | No slots or exposed methods found. Native status live region (`role=status`, `aria-live=polite`); visual spinner is aria-hidden. |
+| DangerButton — `a51792a41a0a7dde3df616000057e26a4a2e1aca` | Reuses BaseButton `ButtonSize` and `ButtonType`; `size='md'`, `type='button'`, `disabled=false`, `loading=false`, `block=false`, `iconOnly=false`; optional `ariaLabel`, `ariaLabelledBy`. | `click(MouseEvent)` forwards the native click event. | Unscoped default, `leading`, and `trailing` slots. Optional slots are forwarded only when supplied. No exposed methods found. |
+| ErrorCodeBadge — `e8dbf4764d7cabbc20cbd1c53fe65627b7200153` | Required `httpStatus:number`, required translated `label:string`; `variant='danger'` (danger/warning/neutral). Out-of-range status is warned but rendered verbatim; empty label suppresses separator and label region. | No emits declared. | No slots or exposed methods found. |
+| ErrorSupportHint — `68cb599c0244d5fbcb2f42dbff7b6399bf5759e0` | Required translated `text:string`; `variant='info'` (info/warning/neutral). Empty/whitespace-only text produces no output. | No emits declared. | No slots or exposed methods found. |
+| GhostButton — `89fb2cd98f8cc00f82f08b3791187c3eaecb422e` | Same API as DangerButton: BaseButton `ButtonSize`/`ButtonType`; `size='md'`, `type='button'`, `disabled=false`, `loading=false`, `block=false`, `iconOnly=false`; optional `ariaLabel`, `ariaLabelledBy`. | `click(MouseEvent)` forwards the native click event. | Unscoped default, `leading`, and `trailing` slots, conditionally forwarded. No exposed methods found. |
+
+### Primitive batch 2 findings and compatibility notes
+
+1. **BaseSpinner provides a live status region but its descriptive name is optional.** It announces status changes through `role=status` and `aria-live=polite`; a supplied `ariaLabelledBy` takes precedence over `ariaLabel`. Without either, the status remains unnamed/descriptive text is absent. Consumers should supply a translated name for non-obvious loading states.
+2. **DangerButton and GhostButton are thin BaseButton adapters.** They fix only the visual variant and forward the shared size/type/disabled/loading/block/icon-only/name contract. Their `click` event payload is the original `MouseEvent`, not a domain action identifier. Consumer handlers should not assume the event has been transformed.
+3. **Icon-only button naming is documented but not type-enforced.** Both adapters permit `iconOnly=true` while leaving `ariaLabel` and `ariaLabelledBy` optional. Consumers must provide one of them whenever no visible text supplies the button name. This is inherited from BaseButton and should be addressed centrally rather than independently in each adapter.
+4. **ErrorCodeBadge treats HTTP status as an identifier.** It deliberately does not clamp invalid values. Consumers must supply a valid HTTP status and a non-empty translated archetype label; the variant color reinforces but does not replace the code/label meaning.
+5. **ErrorSupportHint is plain advisory prose.** It uses a decorative icon and a paragraph; empty text removes the component entirely. It does not create an alert/live region and should not be used as the sole mechanism for announcing a newly occurring error.
+6. This batch has no dedicated mounted behavior suite. Consumer usage, attribute fallthrough, button keyboard behavior and spinner announcement contexts remain part of the broader A4 compatibility review.
+
+| Primitive API audit progress | Status |
+|---|---|
+| Primitive source-surface inventory | 20 / 24 reconciled at detailed API level |
+| Primitive props/defaults/events/slots | PARTIAL |
+| Consumer compatibility for this batch | NOT COMPLETE |
+| Dedicated mounted tests for this batch | NOT RUN |
+| Remaining primitives for detailed API reconciliation | 4 |
+| Overall A4 API audit | OPEN |
+
+No merge or deployment is included or authorized.
