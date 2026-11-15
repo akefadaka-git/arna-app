@@ -15,6 +15,7 @@ const router = createRouter({
   routes: [
     { path: '/', name: 'a4-home', component: { render: () => h('div', 'A4 home') } },
     { path: '/files', name: 'a4-files', component: { render: () => h('div', { 'data-testid': 'a4-files-route' }, 'Files route') } },
+    { path: '/shareholders', name: 'a4-shareholders', component: { render: () => h('div', { 'data-testid': 'a4-shareholders-route' }, 'Shareholders route') } },
   ],
 });
 
@@ -61,7 +62,10 @@ const app = createApp({
     return () => h('main', { style: 'padding: 2rem; display: grid; gap: 2rem; max-width: 42rem;' }, [
       h('section', { 'aria-label': 'Header navigation search test' }, [
         h(AppHeaderNavigation, {
-          items: [{ id: 'files', label: 'ፋይሎች', to: '/files' }],
+          items: [
+            { id: 'files', label: 'ፋይሎች', to: '/files' },
+            { id: 'shareholders', label: 'ባለአክሲዮኖች', to: '/shareholders' },
+          ],
         }),
         h('button', {
           type: 'button',
