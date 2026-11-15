@@ -77,11 +77,12 @@ onMounted(() => void load());
 .brand { display: inline-flex; align-items: center; gap: .7rem; text-decoration: none; }
 .brand__wordmark { display: grid; gap: .2rem; }
 .brand__wordmark small { color: var(--arna-public-text-secondary); }
-.main-nav { display: flex; gap: 1rem; }
+.main-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; }
 .corporate-entry { max-width: 760px; margin: 3rem auto; line-height: 1.9; }
 .corporate-entry h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.3; }
 .corporate-entry img { max-width: 100%; height: auto; border-radius: .75rem; }
 .corporate-entry__body { white-space: pre-wrap; }
 .skip-link { position: absolute; transform: translateY(-200%); }
 .skip-link:focus { transform: translateY(0); }
+@media (max-width: 36rem) { .site-header__inner { padding-block: .75rem; flex-wrap: wrap; } .main-nav { width: 100%; } }
 </style>
