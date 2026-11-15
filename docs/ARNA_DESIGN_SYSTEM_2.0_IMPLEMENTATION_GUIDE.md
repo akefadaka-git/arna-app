@@ -116,3 +116,57 @@ Automated source contracts and successful builds do not establish:
 - Production deployment parity with the current repository head.
 
 Those checks remain separate A4/A5 acceptance work. The current programme does not authorize deployment, merge or hosting changes as part of this guide.
+
+
+## 10. Component adoption audit — 15 November 2026
+
+This is a source-level adoption snapshot, not a replacement for the approved `MASES_PHASE_2_UI_COMPONENT_CATALOG.md` v1.0.0. That catalogue is referenced by existing component headers but is not present in this repository tree or the accessible Library listing. Exact required-component reconciliation remains **UNRESOLVED** until the authoritative catalogue text is restored and inspected.
+
+The repository contains 24 primitive component directories. GitHub code-search inspection of the PR base source tree (`85751ca489b7e2a250da46f408b040254827a199`) detected external consumer references for 19 primitives. Five are currently orphan candidates (no external import detected by the search query); this is not proof that they are unnecessary or absent from the approved catalogue.
+
+| Primitive | Observed consumer(s) | Finding |
+|---|---|---|
+| BaseAvatar | AppShell UserMenu | Consumed |
+| BaseBadge | StatusBadge pattern | Consumed |
+| BaseButton | Feature forms, AppShell, patterns and composites | Consumed |
+| BaseCheckbox | FilterBar, DataTable, ShareholderForm | Consumed |
+| BaseChip | Combobox | Consumed |
+| BaseDivider | No external import detected | Orphan candidate |
+| BaseIcon | AppShell, dashboard, composites and patterns | Consumed |
+| BaseInput | Auth, Loan, Wallet, Shareholder forms; SearchBar, FilterBar, PageHeader | Consumed |
+| BaseLabel | FormField | Consumed |
+| BaseLink | Authentication flows | Consumed |
+| BaseProgressBar | FileUploader | Consumed |
+| BaseRadio | No external import detected | Orphan candidate |
+| BaseSelect | Loan, Wallet, Shareholder and Files forms/views; FilterBar, Pagination | Consumed |
+| BaseSpinner | SearchBar, LoadingState | Consumed |
+| BaseTextarea | Wallet and Shareholder forms; PageHeader | Consumed |
+| BaseTooltip | NotificationsBell, FormField, Popover | Consumed |
+| DangerButton | ConfirmDialog, ConfirmDeleteDialog | Consumed |
+| ErrorCodeBadge | ErrorHeader, AccessDeniedPage, ErrorPage | Consumed |
+| ErrorSupportHint | No external import detected | Orphan candidate |
+| GhostButton | EmptyState, FormActions, ErrorActions, ErrorPage | Consumed |
+| IconButton | No external import detected | Orphan candidate |
+| LinkButton | No external import detected | Orphan candidate |
+| PrimaryButton | Loan, Wallet, Shareholder, Files, Auth, ErrorPage and shared composites/patterns | Consumed |
+| SecondaryButton | EmptyState, FormActions, ErrorActions, ConfirmDialog, ConfirmDeleteDialog, ErrorPage | Consumed |
+
+### Orphan-candidate review rules
+
+- **BaseDivider:** inspect whether existing cards, form sections and content layouts duplicate separator markup; adopt only where it improves semantic or visual consistency.
+- **BaseRadio:** inspect actual single-choice workflows before replacing native controls; preserve radio-group keyboard, label and validation behavior.
+- **ErrorSupportHint:** inspect error archetype data and translation contracts; render only where reviewed localized hint text is available.
+- **IconButton:** inspect icon-only shell/table/pattern actions; preserve current button events, focus and accessible-name contracts.
+- **LinkButton:** inspect navigation actions that intentionally require button chrome; prefer BaseLink for ordinary navigation and avoid duplicate abstractions.
+
+No orphan candidate was automatically inserted into a feature. Component adoption must follow a real use case and preserve existing props, events, slots, route behavior, keyboard operation, localization and accessibility.
+
+### Evidence boundaries and remaining work
+
+- Primitive inventory: 24 directories; 24 SFCs and 24 folder-level exports present.
+- Palette source audit: two hardcoded overlay scrims in Drawer and Modal were replaced with `var(--arna-color-overlay-scrim)`.
+- Regression contracts now require each primitive SFC and folder-level export, and reject hardcoded hex/RGB/HSL color literals in shared primitive/composite/pattern style blocks.
+- Exact-head push and PR workflows for `9089a8bf9edbb7e23fd55e90e972f283262cdcf3` passed.
+- This source-level import search is not a complete AST graph or runtime usage proof. Generate an AST-level graph from all four application entry points before claiming full integration.
+- Compare all component layers and states against the restored approved catalogue; verify Amharic/English, light/dark, responsive and accessibility behavior in browsers. Source contracts and CI do not substitute for manual WCAG 2.2 AA review.
+- No merge, deployment or release is authorized by this audit.
