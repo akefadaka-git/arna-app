@@ -7,6 +7,22 @@ test.beforeEach(async ({ page }) => {
   await page.goto(baseUrl);
 });
 
+test.describe('Mounted FormField accessibility behavior', () => {
+  test('links a named help slot to the consumer control through aria-describedby', async ({ page }) => {
+    const input = page.getByRole('textbox', { name: 'Account reference' });
+    const help = page.getByTestId('form-field-help-slot');
+    await expect(help).toBeVisible();
+    const helpId = await help.evaluate((node) => node.parentElement?.id);
+    expect(helpId).toBeTruthy();
+    await expect(input).toHaveAttribute('aria-describedby', helpId);
+
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    expect(results.violations.filter((item) => ['serious', 'critical'].includes(item.impact)).map((item) => item.id)).toEqual([]);
+  });
+});
+
 test.describe('Mounted Combobox browser behavior', () => {
   test('keeps input focus, skips disabled options, supports Home/End and selects with Enter', async ({ page }) => {
     const input = page.getByRole('combobox', { name: 'Choose an item' });
