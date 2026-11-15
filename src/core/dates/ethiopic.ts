@@ -28,13 +28,20 @@ const formatter = new Intl.DateTimeFormat('en-u-ca-ethiopic-nu-latn', {
   day: 'numeric',
 });
 
+function utcTimestamp(year: number, month: number, day: number): number {
+  const date = new Date(0);
+  date.setUTCFullYear(year, month - 1, day);
+  date.setUTCHours(0, 0, 0, 0);
+  return date.getTime();
+}
+
 function utcDate(iso: string): Date | null {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
   if (!match) return null;
   const year = Number(match[1]);
   const month = Number(match[2]);
   const day = Number(match[3]);
-  const date = new Date(Date.UTC(year, month - 1, day));
+  const date = new Date(utcTimestamp(year, month, day));
   if (
     !Number.isFinite(date.getTime()) ||
     date.getUTCFullYear() !== year ||
@@ -78,8 +85,8 @@ export function ethiopicToIso(parts: EthiopicDateParts): string | null {
     !Number.isInteger(day) || day < 1 || day > 30
   ) return null;
 
-  const start = Date.UTC(year + 6, 0, 1);
-  const end = Date.UTC(year + 9, 0, 1);
+  const start = utcTimestamp(year + 6, 1, 1);
+  const end = utcTimestamp(year + 9, 1, 1);
   for (let timestamp = start; timestamp < end; timestamp += 86_400_000) {
     const date = new Date(timestamp);
     const candidate = partsFromDate(date);
