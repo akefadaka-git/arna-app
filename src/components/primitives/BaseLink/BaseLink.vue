@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/BaseLink/BaseLink.vue
  Layer:     1 (Primitives)
- Version:   1.0.0
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.17
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -175,6 +175,16 @@ interface Props {
   external?: boolean;
 
   /**
+   * Explicit accessible name for links whose visible content is not descriptive.
+   */
+  ariaLabel?: string;
+
+  /**
+   * ID reference for an external accessible name. Takes precedence over ariaLabel.
+   */
+  ariaLabelledBy?: string;
+
+  /**
    * Visual variant. Defaults to 'default'.
    *
    *   default — branded link color (action-link token).
@@ -189,6 +199,8 @@ const props = withDefaults(defineProps<Props>(), {
   to: undefined,
   href: undefined,
   external: false,
+  ariaLabel: undefined,
+  ariaLabelledBy: undefined,
   variant: 'default',
 });
 
@@ -268,6 +280,8 @@ const resolvedHref = computed<string>(() => props.href ?? '#');
     data-testid="base-link-root"
     data-link-kind="router"
     :data-variant="variant"
+    :aria-label="ariaLabelledBy ? undefined : ariaLabel"
+    :aria-labelledby="ariaLabelledBy"
   >
     <slot />
   </RouterLink>
@@ -286,6 +300,8 @@ const resolvedHref = computed<string>(() => props.href ?? '#');
     data-testid="base-link-root"
     data-link-kind="external"
     :data-variant="variant"
+    :aria-label="ariaLabelledBy ? undefined : ariaLabel"
+    :aria-labelledby="ariaLabelledBy"
   >
     <slot />
   </a>
@@ -303,6 +319,8 @@ const resolvedHref = computed<string>(() => props.href ?? '#');
     data-testid="base-link-root"
     data-link-kind="internal"
     :data-variant="variant"
+    :aria-label="ariaLabelledBy ? undefined : ariaLabel"
+    :aria-labelledby="ariaLabelledBy"
   >
     <slot />
   </a>
