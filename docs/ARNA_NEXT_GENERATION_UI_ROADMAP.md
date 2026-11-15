@@ -62,7 +62,7 @@ Evolve ARNA into a coherent, high-quality, Amharic-first enterprise experience t
 - Ethiopian calendar and Gregorian date conversion tested at month/year boundaries and timezone edges.
 
 ### 3.6 Communication and productivity surfaces
-- The repository already contains a NotificationsCenter, store, API adapter, and shell trigger. Reconcile the actual backend endpoints/schema and test the existing integration before expanding it; do not duplicate the feature or display simulated notifications.
+- The repository already contains a NotificationsCenter, store, API adapter, and shell trigger. The API backend was reconciled read-only at `akefadaka-git/arna-api` main SHA `b924f6555cca8f4c5a732ffb6ba9fb181c9d0733`: all four inbox/unread/read/read-all routes exist; the controller returns the adapter's pagination, localized title/body, priority, read state, timestamp, and action shape; storage is tenant- and recipient-scoped with UUID identifiers. Next: add mounted tests for notification-center loading, error, unread/read, pagination, locale changes, and safe action handling.
 - Activity timeline and audit event presentation.
 - Calendar views (month/week/day/agenda) with E.C./G.C. preference and accessible event details.
 - Document center with metadata, preview, version history, and safe download affordances.
@@ -121,7 +121,7 @@ Evolve ARNA into a coherent, high-quality, Amharic-first enterprise experience t
 
 ### W5 — Productivity and communication
 - Calendar, activity feed, document center, and contextual help.
-- Reconcile the existing NotificationsCenter API adapter and shell integration against the actual backend before expanding notification actions.
+- The existing NotificationsCenter API adapter and shell integration now have a source-level backend match. Add mounted lifecycle, locale-switch, pagination and error-state tests before expanding action handling.
 - The LanguageSelector component exists but its shell composition is deliberately deferred by the current architecture record until a locale-persistence API is available. Resolve that contract before enabling it; do not silently change the existing policy.
 - Identify backend/API contracts before presenting controls as operational.
 
@@ -148,7 +148,7 @@ Evolve ARNA into a coherent, high-quality, Amharic-first enterprise experience t
 - Additive visual library: MetricWidget, ChartPanel, ImageFrame, PromoBanner, AbstractBackdrop, TextEffect, MotionReveal, VisualPanel, VisualLibraryShowcase.
 - Four independent application entry points remain in place.
 - A Ctrl/⌘+K navigation destination search already exists in AppHeaderNavigation. Its shell controls and known workspace/portal destination labels have been localized in the current enhancement branch; it remains a navigation-only index, not a cross-domain entity search.
-- NotificationsCenter, its Pinia store, and API adapter already exist; backend schema/endpoint reconciliation and mounted behavior coverage remain required.
+- NotificationsCenter, its Pinia store, and API adapter already exist; backend endpoints/schema have been source-reconciled against arna-api main SHA `b924f6555cca8f4c5a732ffb6ba9fb181c9d0733`. Mounted behavior and locale-switch coverage remain required.
 - LanguageSelector exists but is intentionally not mounted pending a locale-persistence API contract.
 - PR #67 has a known failing mounted-browser suite; it is not accepted as complete.
 - Historical catalogue/design-system source documents have not been recovered; reconstructed documents remain drafts pending Owner authority.
