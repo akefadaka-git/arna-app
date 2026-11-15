@@ -32,9 +32,11 @@ withDefaults(defineProps<{
 <style scoped>
 .visual-panel {
   min-width: 0;
+  height: 100%;
   perspective: 1000px;
 }
 .visual-panel__surface {
+  box-sizing: border-box;
   position: relative;
   min-width: 0;
   height: 100%;
