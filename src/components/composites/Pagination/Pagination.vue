@@ -157,13 +157,13 @@ export interface TotalLabelContext {
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesPaginationWarned = new Set<string>();
+const __arnaPaginationWarned = new Set<string>();
 
-function __masesPaginationWarnOnce(key: string, message: string): void {
-  if (__masesPaginationWarned.has(key)) {
+function __arnaPaginationWarnOnce(key: string, message: string): void {
+  if (__arnaPaginationWarned.has(key)) {
     return;
   }
-  __masesPaginationWarned.add(key);
+  __arnaPaginationWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -312,7 +312,7 @@ const effectiveMaxButtons = computed<number>(() => {
     !Number.isInteger(raw)
   ) {
     if (import.meta.env.DEV) {
-      __masesPaginationWarnOnce(
+      __arnaPaginationWarnOnce(
         'pagination:max-buttons-not-integer',
         `[Pagination] maxButtons=${String(raw)} is not an integer. ` +
           `Clamping to ${MIN_MAX_BUTTONS}.`,
@@ -323,7 +323,7 @@ const effectiveMaxButtons = computed<number>(() => {
 
   if (raw < MIN_MAX_BUTTONS) {
     if (import.meta.env.DEV) {
-      __masesPaginationWarnOnce(
+      __arnaPaginationWarnOnce(
         'pagination:max-buttons-below-minimum',
         `[Pagination] maxButtons=${raw} is below the minimum of ` +
           `${MIN_MAX_BUTTONS}. Clamping to ${MIN_MAX_BUTTONS}.`,
@@ -339,7 +339,7 @@ const effectiveMaxButtons = computed<number>(() => {
  * Guard: showTotal=true without totalLabel.
  */
 if (import.meta.env.DEV && props.showTotal && !props.totalLabel) {
-  __masesPaginationWarnOnce(
+  __arnaPaginationWarnOnce(
     'pagination:missing-total-label',
     '[Pagination] showTotal=true without totalLabel. The "Showing X–Y ' +
       'of Z" text will not be rendered. Supply a formatter such as ' +
@@ -356,7 +356,7 @@ if (
   props.perPageOptions.length > 0 &&
   props.perPageLabel.trim() === ''
 ) {
-  __masesPaginationWarnOnce(
+  __arnaPaginationWarnOnce(
     'pagination:missing-per-page-label',
     '[Pagination] perPageOptions is non-empty but perPageLabel is ' +
       'empty. The per-page selector will render with no accessible ' +

@@ -156,13 +156,13 @@ export interface StepperStep {
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesStepperWarned = new Set<string>();
+const __arnaStepperWarned = new Set<string>();
 
-function __masesStepperWarnOnce(key: string, message: string): void {
-  if (__masesStepperWarned.has(key)) {
+function __arnaStepperWarnOnce(key: string, message: string): void {
+  if (__arnaStepperWarned.has(key)) {
     return;
   }
-  __masesStepperWarned.add(key);
+  __arnaStepperWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -234,7 +234,7 @@ const emit = defineEmits<{
 if (import.meta.env.DEV) {
   const hasCurrent = props.steps.some((s) => s.key === props.currentKey);
   if (!hasCurrent && props.steps.length > 0) {
-    __masesStepperWarnOnce(
+    __arnaStepperWarnOnce(
       'stepper:current-key-not-found',
       `[Stepper] currentKey="${props.currentKey}" does not match any ` +
         `step. No step will be marked current. Verify the value ` +
@@ -249,7 +249,7 @@ if (import.meta.env.DEV) {
 if (import.meta.env.DEV) {
   const anyOptional = props.steps.some((s) => s.optional === true);
   if (anyOptional && (props.optionalLabel === undefined || props.optionalLabel === '')) {
-    __masesStepperWarnOnce(
+    __arnaStepperWarnOnce(
       'stepper:optional-label-missing',
       '[Stepper] at least one step is marked optional=true but ' +
         'optionalLabel is not supplied. No "(optional)" annotation ' +

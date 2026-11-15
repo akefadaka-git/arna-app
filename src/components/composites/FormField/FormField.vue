@@ -216,13 +216,13 @@
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesFormFieldWarned = new Set<string>();
+const __arnaFormFieldWarned = new Set<string>();
 
-function __masesFormFieldWarnOnce(key: string, message: string): void {
-  if (__masesFormFieldWarned.has(key)) {
+function __arnaFormFieldWarnOnce(key: string, message: string): void {
+  if (__arnaFormFieldWarned.has(key)) {
     return;
   }
-  __masesFormFieldWarned.add(key);
+  __arnaFormFieldWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -342,7 +342,7 @@ defineSlots<{
  * contradictory. The `optional` prop is ignored in this case.
  */
 if (import.meta.env.DEV && props.required && props.optional) {
-  __masesFormFieldWarnOnce(
+  __arnaFormFieldWarnOnce(
     'form-field:required-and-optional',
     `[FormField] "${props.htmlFor}" has both required=true and ` +
       `optional=true. These are contradictory; optional is ignored.`,
@@ -393,7 +393,7 @@ const resolvedInvalid = computed<boolean>(() => {
  * without the syntax conflict.
  */
 if (import.meta.env.DEV && resolvedInvalid.value && !hasError.value) {
-  __masesFormFieldWarnOnce(
+  __arnaFormFieldWarnOnce(
     'form-field:invalid-without-error',
     `[FormField] "${props.htmlFor}" has invalid=true but no error ` +
       `content. The user will see an invalid-styled field with no ` +

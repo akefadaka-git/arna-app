@@ -127,13 +127,13 @@ export type ErrorStateVariant = 'danger' | 'warning';
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesErrorStateWarned = new Set<string>();
+const __arnaErrorStateWarned = new Set<string>();
 
-function __masesErrorStateWarnOnce(key: string, message: string): void {
-  if (__masesErrorStateWarned.has(key)) {
+function __arnaErrorStateWarnOnce(key: string, message: string): void {
+  if (__arnaErrorStateWarned.has(key)) {
     return;
   }
-  __masesErrorStateWarned.add(key);
+  __arnaErrorStateWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -255,7 +255,7 @@ if (
   hasDetailsSlot.value &&
   (props.detailsLabel === undefined || props.detailsLabel.trim() === '')
 ) {
-  __masesErrorStateWarnOnce(
+  __arnaErrorStateWarnOnce(
     'error-state:missing-details-label',
     '[ErrorState] the `details` slot is supplied but `detailsLabel` is ' +
       'empty or missing. The details content will render without the ' +
