@@ -414,3 +414,37 @@ This batch follows the source declarations rather than inferring contracts from 
 | Remaining composite entries | 21 |
 | Overall A4 API audit | OPEN |
 
+
+
+## 21. Composite API reconciliation — batch 2 (10 of 26)
+
+This batch records five further composites from their SFC declarations and template slot contracts. Source blob hashes are included for traceability.
+
+| Component / source blob | Public props and defaults | Events / model | Slots and exposed API |
+|---|---|---|---|
+| DropdownMenu — `910e1e412746b802a3c0bfca617294c32331e14a` | Required `open: boolean`, `items: ReadonlyArray<MenuItem>`; `align='start'`. `MenuItem`: required `key`, translated `label`; optional `icon`, `disabled`, `variant='default'|'danger'`, `group`, `separatorAbove`. | `update:open(boolean)`; `select(key: string)`. | Scoped default trigger slot exposes `triggerId`, `menuId`, `open`, `toggle()`, `ariaHaspopup='menu'`, `ariaExpanded`, `ariaControls`. No `defineExpose` found. |
+| EmptyState — `600e8c9db0ae4614329b7d52d7a4dc89ff8dde43` | Required translated `title`; optional `description`, `icon`, `actionLabel`; `actionVariant='primary'` (primary/secondary/ghost). Empty title/description/action labels suppress their respective regions. | `action()` | Unscoped `illustration` slot replaces icon; unscoped `action` slot replaces default action button. No `defineExpose` found. |
+| ErrorActions — `703ba1468411bcf8920554d638916c78f690933f` | Required nullable `primary`, `secondary`, `tertiary` actions. Each action has translated `label` and opaque `action` identifier; `disabled?` applies to primary action per source contract. | `perform(actionId: string)`. | No slots or exposed methods found. All-null actions render no wrapper. |
+| ErrorHeader — `16bc56e30a8fc4f9c664991adb3913425e209c43` | Required `httpStatus`, translated `codeLabel`, `title`, `message`; `variant='danger'` (danger/warning/neutral). | No emits declared. | Exposes `focusTitle(): void` to focus the page-level H1. No slots found. |
+| ErrorState — `966e7a25f1d7185d6db1f2d3dd051c145c91e21f` | Required translated `title`; optional `description`, `icon`, `actionLabel`, `detailsLabel`; `variant='danger'` (danger/warning). Empty `icon` suppresses icon; omitted icon selects variant default. | `action()`. | Unscoped `details` slot; with non-empty `detailsLabel` it renders inside native `<details>/<summary>`, otherwise content remains visible without disclosure wrapper. No exposed methods found. |
+
+### Batch 2 findings and compatibility notes
+
+1. **DropdownMenu trigger semantics are consumer-composed.** The scoped slot supplies the IDs and ARIA association values; consumers must bind them to the actual trigger element. The menu opens below its trigger and the source explicitly documents that vertical-placement limitation.
+2. **DropdownMenu selection emits an identifier, not the item object.** Consumers must resolve the selected `key` against their own action map. Disabled items are part of the item contract and must not be selectable.
+3. **EmptyState slot precedence is explicit.** `illustration` overrides `icon`; `action` overrides the default `actionLabel` button. Supplying both triggers development warnings. These slots are unscoped.
+4. **ErrorActions action labels are security/accessibility relevant.** Empty translated labels can produce unnamed controls; source warns in development but does not make the type non-empty. Duplicate opaque identifiers make consumer dispatch ambiguous and are also development-warning conditions.
+5. **ErrorHeader has a real instance API.** `focusTitle()` is intentionally exposed for ErrorPage mount-time focus management. It must be included in consumer ref compatibility checks; it is not an ordinary DOM attribute.
+6. **ErrorState details disclosure is conditional.** A details slot without a non-empty translated `detailsLabel` is rendered as always-visible content, not as a disclosure. The development warning explains this behavior. Do not treat the slot alone as proof of a keyboard-operable disclosure.
+7. The source-surface audit has not yet verified every consumer's translated labels, native attribute forwarding, or full keyboard/screen-reader behavior for these five components.
+
+| Composite audit progress | Status |
+|---|---|
+| Composite source files contract-reconciled | 10 / 26 |
+| Composite public prop/event/slot summaries | PARTIAL |
+| Exported data types and defaults | PARTIAL — batch 2 types followed where present |
+| Consumer compatibility for batch 2 | NOT COMPLETE |
+| Mounted behavior evidence for this batch | NOT RUN as a dedicated suite |
+| Remaining composite entries | 16 |
+| Overall A4 API audit | OPEN |
+
