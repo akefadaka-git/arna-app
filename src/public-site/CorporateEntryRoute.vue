@@ -4,6 +4,7 @@ import { RouterLink, useRoute } from 'vue-router';
 import { fetchCorporateEntry, type CorporateLocale, type CorporatePublicEntry } from '@/features/public-site/api';
 import { aranaBrandLabels } from '@/router/shell-labels';
 import { formatCalendarDate } from '@/core/dates/calendar';
+import ThemePreferenceControl from '@/layouts/ThemePreferenceControl.vue';
 
 const route = useRoute();
 const entry = ref<CorporatePublicEntry | null>(null);
@@ -52,6 +53,7 @@ onMounted(() => void load());
       <nav class="main-nav" :aria-label="locale === 'am' ? 'ዋና አሰሳ' : 'Main navigation'">
         <RouterLink to="/">{{ locale === 'am' ? 'መነሻ' : 'Home' }}</RouterLink>
         <RouterLink :to="`/${locale === 'am' ? 'en' : 'am'}/content/${String(route.params.type)}/${entry?.alternate_slug ?? String(route.params.slug)}`">{{ locale === 'am' ? 'English' : 'አማርኛ' }}</RouterLink>
+        <ThemePreferenceControl />
       </nav>
     </div></header>
     <main id="entry-content" class="site-container" aria-live="polite" tabindex="-1">
