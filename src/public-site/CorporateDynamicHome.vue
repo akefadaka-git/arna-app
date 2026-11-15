@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { RouterLink, useRoute, useRouter } from 'vue-router';
 import { api } from '@/core/api/client';
+import { formatCalendarDate } from '@/core/dates/calendar';
 import { fetchCorporateHome, fetchCorporatePages, fetchCorporateEntries, submitCorporateInquiry, submitCorporateOpportunity, type CorporateLocale, type CorporateSitePage, type CorporateSiteSection, type CorporatePublicEntry } from '@/features/public-site/api';
 
 type SectionContent = {
@@ -286,7 +287,7 @@ watch(() => route.query.locale, (value) => {
                 <img v-if="entry.asset_url && group.type === 'media'" :src="entry.asset_url" :alt="entry.title" loading="lazy">
                 <h3>{{ entry.title }}</h3><p>{{ entry.summary || entry.body }}</p>
                 <RouterLink v-if="entry.slug" :to="`/${locale}/content/${group.type}/${entry.slug}`">{{ locale === 'am' ? 'ሙሉ ይዘት ይመልከቱ' : 'Read full item' }}</RouterLink>
-                <small v-if="entry.published_at">{{ new Date(entry.published_at).toLocaleDateString(locale === 'am' ? 'am-ET' : 'en-ET') }}</small>
+                <small v-if="entry.published_at">{{ formatCalendarDate(entry.published_at, { dateStyle: 'medium' }, locale) }}</small>
               </article>
             </div>
             <p v-else-if="group.failed" class="section-note" role="status">{{ locale === 'am' ? 'ይዘቱን ለጊዜው ማምጣት አልተቻለም።' : 'This content feed is temporarily unavailable.' }}</p>
