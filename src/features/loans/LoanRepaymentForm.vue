@@ -176,6 +176,7 @@ import { computed, ref, watch } from 'vue';
 import Modal from '@/components/composites/Modal';
 import Alert from '@/components/composites/Alert';
 import FormField from '@/components/composites/FormField';
+import { CalendarDateInput } from '@/components/composites/DatePicker';
 import BaseInput from '@/components/primitives/BaseInput';
 import BaseButton from '@/components/primitives/BaseButton';
 import PrimaryButton from '@/components/primitives/PrimaryButton';
@@ -770,10 +771,9 @@ const submitLabel = computed<string>(() =>
         :error="receivedAtError"
         :disabled="isSubmitting"
       >
-        <BaseInput
+        <CalendarDateInput
           id="loan-repayment-received-at"
           v-model="receivedAt"
-          type="date"
           :disabled="isSubmitting"
           data-testid="loan-repayment-form-received-at"
         />
