@@ -243,6 +243,7 @@ test.describe('Mounted localized shell navigation search', () => {
     const trigger = page.getByTestId('app-header-search-trigger');
     await expect(trigger).toHaveAttribute('aria-label', 'ARNA ይፈልጉ');
 
+    await trigger.focus();
     await page.keyboard.press('Control+k');
     const amharicDialog = page.getByRole('dialog', { name: 'ARNA ይፈልጉ' });
     await expect(amharicDialog).toBeVisible();
@@ -253,6 +254,7 @@ test.describe('Mounted localized shell navigation search', () => {
 
     await page.getByTestId('set-locale-en').click();
     await expect(trigger).toHaveAttribute('aria-label', 'Search ARNA');
+    await trigger.focus();
 
     await page.keyboard.press('Control+k');
     const englishDialog = page.getByRole('dialog', { name: 'Search ARNA' });
