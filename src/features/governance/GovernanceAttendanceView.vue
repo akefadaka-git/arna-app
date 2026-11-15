@@ -302,9 +302,10 @@ onMounted(() => { void loadMeetings(); });
             <option value="board">የዳይሬክተሮች ቦርድ / Board</option>
           </select>
         </label>
-        <label>Meeting date and start time
+        <div class="date-time-field">
+          <label for="governance-meeting-starts-at">Meeting date and start time</label>
           <CalendarDateTimeInput id="governance-meeting-starts-at" v-model="createForm.starts_at" time-label="Time / ሰዓት" required />
-        </label>
+        </div>
         <label>ርዕስ በአማርኛ
           <input v-model="createForm.title_am" maxlength="190" />
         </label>
@@ -360,9 +361,10 @@ onMounted(() => { void loadMeetings(); });
                 <option value="represented">Represented</option>
               </select>
             </label>
-            <label>Arrival time (required for present / late)
+            <div class="date-time-field">
+              <label for="governance-attendance-arrived-at">Arrival time (required for present / late)</label>
               <CalendarDateTimeInput id="governance-attendance-arrived-at" v-model="attendanceForm.arrived_at" time-label="Time / ሰዓት" />
-            </label>
+            </div>
             <label class="wide">Notes / permission evidence reference (required for excused absence)
               <input v-model="attendanceForm.notes" maxlength="2000" :required="attendanceForm.attendance_status === 'excused'" />
             </label>
@@ -435,7 +437,10 @@ onMounted(() => { void loadMeetings(); });
                 <option value="present">Present</option><option value="late">Late</option><option value="absent">Absent</option><option value="excused">Excused</option><option value="represented">Represented</option>
               </select>
             </label>
-            <label>Correct arrival time <CalendarDateTimeInput id="governance-correction-arrived-at" v-model="correctionForm.proposed_arrived_at" time-label="Time / ሰዓት" /></label>
+            <div class="date-time-field">
+              <label for="governance-correction-arrived-at">Correct arrival time</label>
+              <CalendarDateTimeInput id="governance-correction-arrived-at" v-model="correctionForm.proposed_arrived_at" time-label="Time / ሰዓት" />
+            </div>
             <label>Reason <input v-model="correctionForm.reason" minlength="5" maxlength="2000" required /></label>
             <div class="form-actions"><button type="submit" :disabled="saving">Request correction</button></div>
           </form>
@@ -491,6 +496,7 @@ h3 { margin: 0 0 .8rem; font-size: 1rem; }
 .panel { min-width: 0; padding: 1.1rem; border: 1px solid var(--arna-color-border-subtle); border-radius: var(--arna-radius-lg); background: var(--arna-color-surface); }
 .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem; }
 label { display: flex; flex-direction: column; gap: .35rem; font-size: .9rem; }
+.date-time-field { display: flex; flex-direction: column; gap: .35rem; min-width: 0; font-size: .9rem; }
 input, select { width: 100%; min-height: 2.65rem; padding: .55rem .65rem; border: 1px solid var(--arna-color-border); border-radius: var(--arna-radius-md); background: var(--arna-color-surface-raised); color: var(--arna-color-text); }
 button { min-height: 2.5rem; padding: .5rem .85rem; border: 1px solid transparent; border-radius: var(--arna-radius-md); background: var(--arna-color-action-primary); color: white; cursor: pointer; }
 button:disabled { opacity: .55; cursor: not-allowed; }
