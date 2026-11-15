@@ -41,7 +41,7 @@
  *   · Not a design-token file — every visual value comes from tokens.css.
  *   · Not a component stylesheet — component-scoped rules belong in the
  *     component's <style scoped> block.
- *   · Not a utility framework — the single `.mases-visually-hidden`
+ *   · Not a utility framework — the single `.arna-visually-hidden`
  *     utility is the only exception; it is foundational, not a
  *     general-purpose utility.
  *   · Not an opinionated reset — element semantics are preserved. No
@@ -324,7 +324,7 @@ canvas {
  * components that need the pattern without inlining it.
  * ============================================================================= */
 
-.mases-visually-hidden {
+.arna-visually-hidden {
   position: absolute;
   width: 1px;
   height: 1px;
