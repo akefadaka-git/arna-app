@@ -25,5 +25,5 @@ withDefaults(defineProps<{
 .image-frame { min-width: 0; margin: 0; overflow: hidden; border: 1px solid var(--arna-color-border-subtle); border-radius: var(--arna-radius-md); background: var(--arna-color-surface-raised); }
 .image-frame__media { width: 100%; overflow: hidden; background: var(--arna-color-surface-subtle); }
 .image-frame img { display: block; width: 100%; height: 100%; }
-.image-frame__caption { padding: .65rem .8rem; color: var(--arna-color-text-secondary); font-size: var(--arna-font-size-sm); }
+.image-frame__caption { padding: .65rem .8rem; color: var(--arna-color-text-secondary); font-size: var(--arna-font-size-body-sm); }
 </style>
