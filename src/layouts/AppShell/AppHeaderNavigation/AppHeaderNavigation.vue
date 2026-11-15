@@ -69,6 +69,7 @@ const labels = computed(() => localeStore.locale === 'en'
       empty: 'የሚዛመድ ሞጁል ወይም ገጽ አልተገኘም',
       hint: 'ፍለጋው በመለያዎ ሊደረስባቸው የሚችሉ የአሰሳ መዳረሻዎችን ይመለከታል።',
     });
+const navigationRoot = ref<HTMLElement | null>(null);
 const dialog = ref<HTMLDialogElement | null>(null);
 const query = ref('');
 const activeResultIndex = ref(-1);
@@ -139,6 +140,10 @@ function restoreSearchFocus(): void {
   });
 }
 
+function restoreSearchFocus(): void {
+  navigationRoot.value?.querySelector<HTMLButtonElement>('[data-testid="app-header-search-trigger"]')?.focus();
+}
+
 function closeSearch(): void {
   dialog.value?.close();
 }
@@ -151,7 +156,7 @@ function navigate(item: SearchNavItem): void {
 </script>
 
 <template>
-  <div class="app-header-navigation" data-testid="app-header-navigation">
+  <div ref="navigationRoot" class="app-header-navigation" data-testid="app-header-navigation">
     <nav v-if="breadcrumbs.length" :aria-label="labels.breadcrumb" class="app-header-navigation__breadcrumbs">
       <ol>
         <li v-for="(crumb, index) in breadcrumbs" :key="`${crumb.path}-${index}`">
