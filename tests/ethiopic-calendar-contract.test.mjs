@@ -83,5 +83,5 @@ test('date-time forms retain local date-time wire shape with a separate time con
   }
   const adapter = await read('src/components/composites/DatePicker/CalendarDateTimeInput.vue');
   assert.match(adapter, /type="time"/);
-  assert.match(adapter, /\$\{datePart\}T\$\{timePart\}/);
+  assert.match(adapter, /\$\{datePart\.value\}T\$\{timePart\.value\}/);
 });
