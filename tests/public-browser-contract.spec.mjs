@@ -223,6 +223,7 @@ test.describe('ARNA public site browser contract', () => {
 
     for (const routePath of ['/en/about', '/en/content/news/story', '/contribute']) {
       await page.goto(new URL(routePath, baseUrl).toString());
+      await expect(page.getByTestId('theme-preference-control')).toBeVisible();
       await page.keyboard.press('Tab');
       const skip = page.locator(routePath === '/contribute' ? '.contribute-skip-link' : '.skip-link');
       await expect(skip).toBeFocused();
