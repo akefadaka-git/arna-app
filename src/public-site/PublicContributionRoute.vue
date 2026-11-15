@@ -203,6 +203,7 @@ async function submitContent(): Promise<void> {
 
 <template>
   <div class="contribute-page" :lang="locale">
+    <a class="contribute-skip-link" href="#contribute-main">{{ locale === 'am' ? 'ወደ ዋናው ይዘት ዝለል' : 'Skip to main content' }}</a>
     <header class="contribute-header">
       <RouterLink class="contribute-brand" :to="{ path: '/', query: { locale } }">
         <img src="/logo.png" alt="" width="42" height="42" />
@@ -282,6 +283,7 @@ async function submitContent(): Promise<void> {
 </template>
 
 <style scoped>
+ .contribute-skip-link{position:absolute;z-index:1000;inset-block-start:.5rem;inset-inline-start:.5rem;padding:.65rem .9rem;color:var(--arna-navy);background:var(--arna-public-surface-soft);border:2px solid currentColor;transform:translateY(calc(-100% - 1rem))}.contribute-skip-link:focus{transform:translateY(0)}
 .contribute-page{min-height:100vh;color:var(--arna-navy);background:var(--arna-public-page-surface);font-family:inherit}
 .contribute-header{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem max(1.25rem,calc((100vw - 1120px)/2));border-bottom:1px solid var(--arna-line);background:var(--arna-public-surface-soft)}
 .contribute-brand{display:flex;align-items:center;gap:.75rem;color:inherit;text-decoration:none}
