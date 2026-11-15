@@ -448,3 +448,40 @@ This batch records five further composites from their SFC declarations and templ
 | Remaining composite entries | 16 |
 | Overall A4 API audit | OPEN |
 
+
+
+## 22. Composite API reconciliation — batch 3 (15 of 26)
+
+Five further composite SFCs were reconciled from their exact source revisions. Source blob hashes are recorded below.
+
+| Component / source blob | Public props and defaults | Events / model | Slots and exposed API |
+|---|---|---|---|
+| DatePicker — `e0fa6a8c867ca9cde9e85efc8a15b4f4e4a9574a` | Optional `id`, `modelValue: string | null = null`, optional ISO `min`/`max`, `required=false`, `disabled=false`, `invalid=false`, optional translated `placeholder`, required `labels: DatePickerLabels`, optional `ariaDescribedBy`. Exported labels type requires `weekdaysShort[7]`, `monthsLong[12]`, `previousMonth`, `nextMonth`, `openCalendar`; optional `monthYearFormat`. | `update:modelValue(string | null)`; public model is Gregorian ISO date even when E.C. is displayed/entered. | No consumer slots or `defineExpose` found. Calendar trigger, non-modal dialog and grid are internally rendered. |
+| Drawer — `299371a630af7bc64f74f8d04279935306153b1b` | Required `open:boolean`; `side='right'` (left/right); `size='md'` (sm/md/lg/full); optional translated `title`; `dismissible=true`; optional `closeLabel` (required by documented contract when dismissible). | `update:open(boolean)`; `close()`. | Optional default, `header`, `footer` slots; no `defineExpose` found. Native dialog semantics and caller-owned accessible title/label rules apply. |
+| FileInput — `6148e36fcef6cca5f96c6b907ee73c1125268109` | Optional `accept`, `maxSizeBytes`; `multiple=false`, `disabled=false`, `invalid=false`; optional `labels: FileInputLabels` for default presentation. Exported labels require `chooseFile`, `chooseFiles`, `dropHere`, `dropZone`. Exported rejection reason: `too-large | wrong-type | unknown`. | `select(File[])`; `reject(FileInputRejectReason)`; additive `reject-file({file:File, reason:FileInputRejectReason})`. | Scoped default slot exposes `openFilePicker()`, `isDragOver:boolean`, `inputId:string`; slot replaces drop-zone interior. No `defineExpose` found. |
+| FormActions — `ae059eb1053b6e1ce2139bf071462e7e7b76c327` | Required translated `primaryLabel`; `primaryLoading=false`, `primaryDisabled=false`; optional `secondaryLabel`, `tertiaryLabel`; `layout='end'` (start/end). Empty labels suppress their respective buttons. | `primary()`, `secondary()`, `tertiary()`. | No slots or exposed methods found. |
+| FormField — `2678d01257d52864440a98c78753a3359a3e8599` | Required translated `label`, required `htmlFor`; `required=false`, `optional=false`; optional `helpText`, `error:string|string[]`, `invalid` (undefined derives from error content), `disabled=false`. | No component emits declared. | Scoped default slot exposes `id`, `aria-describedby`, `invalid`, `required`, `disabled`; named `help` and `label-extra` slots; no `defineExpose` found. |
+
+### Batch 3 findings and compatibility notes
+
+1. **DatePicker public contract vs component header discrepancy:** the SFC header says the required labels object contains 19 translated strings, but the exported `DatePickerLabels` interface and actual template usage expose five required fields plus optional `monthYearFormat`. The implementation references only those fields. Treat the source type/template as the current contract; the stale “19” statement requires a separate documentation correction, not invented props.
+2. **DatePicker calendar boundary:** the user-facing calendar may display Ethiopian dates, but `update:modelValue` remains Gregorian ISO. Consumers must not pass E.C. strings into the public model or compare display text as if it were the canonical value. Range events remain deferred and are not part of this API.
+3. **Drawer accessible-name requirement remains a real type/runtime mismatch:** `closeLabel` is optional in TypeScript and defaults to undefined although `dismissible` defaults true. The component renders `aria-label=""` when omitted. The earlier mounted suite verifies close behavior only with a supplied label; it does not close this missing-label API gap.
+4. **FileInput rejection compatibility:** the original `reject(reason)` event remains available; `reject-file({file,reason})` is additive and preserves the rejected File identity for FileUploader integration. The custom default slot replaces the default visual drop zone but still receives the picker callback and drag state. Client-side `accept` / size checks are UX validation, not server-side security controls.
+5. **FormActions action semantics:** labels control whether buttons exist; loading/disabled state is applied only to the primary action. Consumers must bind each emitted event to the correct form operation and not assume a generic action payload.
+6. **FormField help-slot association risk:** `hasHelp` used to construct the computed `aria-describedby` value is based on non-empty `helpText`, while the template also renders the help region when the named `help` slot exists. Therefore a help slot supplied without `helpText` is rendered but its generated help-region ID is omitted from the scoped control's `aria-describedby`. This is a concrete source-level accessibility defect requiring a focused correction and mounted regression test before A4 closure.
+7. **FormField consumer-owned association:** the consumer must bind the scoped `id` and `aria-describedby` to the actual control. The wrapper cannot guarantee association if the consumer ignores the scoped slot payload. Error announcements use a polite live region; help and error IDs are generated from `htmlFor`.
+8. This batch records SFC source declarations, exported label/rejection types, slot payloads and event payloads. It does not complete consumer compatibility, native attribute-forwarding, or full keyboard/screen-reader review for all five components.
+
+| Composite audit progress | Status |
+|---|---|
+| Composite source files contract-reconciled | 15 / 26 |
+| Composite public prop/event/slot summaries | PARTIAL |
+| Exported types and default values | PARTIAL — source-declared types followed for this batch |
+| Consumer compatibility for batch 3 | NOT COMPLETE |
+| Dedicated mounted behavior tests for this batch | NOT RUN |
+| Concrete FormField help-slot ARIA linkage defect | CONFIRMED — correction/test outstanding |
+| Remaining composite entries | 11 |
+| Overall A4 API audit | OPEN |
+
+No merge or deployment is included or authorized.
