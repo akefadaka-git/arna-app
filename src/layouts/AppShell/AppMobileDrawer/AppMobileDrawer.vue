@@ -276,7 +276,11 @@ watch(
  * non-immediate watcher only observes later changes, so synchronize
  * once the Teleport target and dialog element have mounted as well.
  */
-onMounted(() => syncDialogState(props.open));
+onMounted(() => {
+  syncDialogState(props.open);
+  // Apply the initial body lock only after mount; setup can also run during SSR.
+  if (props.open) lockBodyScroll();
+});
 
 // -----------------------------------------------------------------------------
 // Unified close request
@@ -375,7 +379,6 @@ watch(
       unlockBodyScroll();
     }
   },
-  { immediate: true },
 );
 
 onBeforeUnmount(() => {
