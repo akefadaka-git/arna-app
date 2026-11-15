@@ -23,7 +23,7 @@ The observed component system is organized into three layers:
 2. **Composites** — coordinated controls and interaction groups built from primitives.
 3. **Patterns** — reusable task, page, data and workflow compositions.
 
-The repository inventory at the inspected ref contains **24 primitives, 26 composites and 15 patterns (65 core components)**. This count is a directory inventory, not a claim that every component is equally mature, accessible, or used by every application.
+The repository inventory at the inspected ref contains **24 primitives, 26 composites and 15 patterns (65 core components)**. This count is a directory inventory, not a claim that every component is equally mature, accessible, or used by every application. A recursive source-tree check at this ref found 76 Vue single-file components: 24 primitive component files, 28 composite-layer Vue files, 15 pattern files and 9 visual-library files. The composite layer contains 26 component directories; the additional two Vue files are internal DatePicker date/time input subcomponents, not two additional catalogue-level composites.
 
 ## 3. Layer 1 — Primitives (24)
 
@@ -123,6 +123,10 @@ The repository inventory at the inspected ref contains **24 primitives, 26 compo
 - Destructive actions require clear consequences and an intentional confirmation path.
 - Data-heavy patterns must provide understandable loading, empty, error and responsive states.
 - Patterns must preserve semantic page structure, heading hierarchy and navigation landmarks.
+
+### Composite internal implementation files
+
+The `DatePicker` composite also contains `CalendarDateInput.vue` and `CalendarDateTimeInput.vue`. These are internal implementation files counted in the Vue source-tree total, not additional top-level catalogue entries.
 
 ## 6. Icon registry
 
