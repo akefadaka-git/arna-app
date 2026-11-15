@@ -18,6 +18,17 @@
           seven text-family types: text, email, password, tel, url,
           search, number.
  
+ 1.2.0  — Added explicit accessible-name props for standalone use:
+          · Added `ariaLabel` and `ariaLabelledBy` props and bound them
+            directly to the native input as `aria-label` and
+            `aria-labelledby`.
+          · Kept the existing generated id, FormField label association,
+            aria-describedby, validation, emits, slots, and exposed API
+            unchanged. No placeholder-based accessible-name fallback is
+            introduced; placeholders are not a substitute for labels.
+          · Additive and backward-compatible; all existing consumers
+            retain their current behavior.
+
  1.1.0  — InputType extended to the date family:
           · Added 'date', 'datetime-local', 'time', 'month', and 'week'
             to the InputType union. The five types render natively in
@@ -215,6 +226,8 @@
    - Native required attribute (which maps to aria-required).
    - aria-invalid is resolved from the invalid / ariaInvalid props.
    - aria-describedby is forwarded verbatim from the consumer.
+   - aria-label and aria-labelledby are forwarded explicitly to the
+     native input for standalone use when no visible label is available.
    - The focus ring is drawn on the wrapper, not on the input, using
      :has(input:focus-visible) so that mouse clicks do not trigger the
      ring while keyboard focus always does. The input itself has
@@ -335,6 +348,15 @@ interface Props {
    * exists in the DOM.
    */
   ariaDescribedBy?: string;
+
+  /**
+   * Explicit accessible name for standalone inputs. Prefer a visible
+   * associated <label> when one is available.
+   */
+  ariaLabel?: string;
+
+  /** ID of an external label element naming the input. */
+  ariaLabelledBy?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -353,6 +375,8 @@ const props = withDefaults(defineProps<Props>(), {
   invalid: false,
   ariaInvalid: undefined,
   ariaDescribedBy: undefined,
+  ariaLabel: undefined,
+  ariaLabelledBy: undefined,
 });
 
 const emit = defineEmits<{
@@ -471,6 +495,8 @@ defineExpose({ focus, blur, el });
       :pattern="pattern"
       :aria-invalid="resolvedAriaInvalid"
       :aria-describedby="ariaDescribedBy"
+      :aria-label="ariaLabel"
+      :aria-labelledby="ariaLabelledBy"
       class="input-wrapper__input"
       data-testid="base-input-control"
       @input="onInput"
