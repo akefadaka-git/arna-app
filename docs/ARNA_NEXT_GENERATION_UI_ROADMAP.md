@@ -42,7 +42,7 @@ Evolve ARNA into a coherent, high-quality, Amharic-first enterprise experience t
 - Visual regression baselines for core components and all four app shells.
 
 ### 3.3 Navigation and information discovery
-- Upgrade the existing `AppHeaderNavigation` Ctrl/⌘+K destination search rather than create a competing second palette. Its shell labels and known workspace/portal destination names now follow the active Amharic/English locale. Remaining enhancements include stronger arrow-key result navigation, clearer grouping, consistent focus restoration, recent destinations, and a distinct cross-domain entity-search layer when APIs are ready.
+- Upgrade the existing `AppHeaderNavigation` Ctrl/⌘+K destination search rather than create a competing second palette. Shell labels and known workspace/portal destination names follow the active Amharic/English locale. The current branch adds an accessible combobox/listbox pattern, ArrowUp/ArrowDown result selection, Enter activation, active-descendant state, hover synchronization, and native-dialog focus restoration. Exact-head browser verification is pending; grouping, recent destinations, and a distinct cross-domain entity-search layer remain future work when APIs are ready.
 - Add cross-domain entity search only when authoritative API contracts exist; keep it distinct from the existing route-destination index.
 - Contextual quick actions and recently viewed items require an explicit route/action catalogue and persistence contract.
 - Search and command results must be filtered by authoritative permissions; UI filtering is not a security boundary.
@@ -106,7 +106,7 @@ Evolve ARNA into a coherent, high-quality, Amharic-first enterprise experience t
 
 ### W2 — Unified shell and navigation
 - Integrate consistent shell behavior across all four applications.
-- Add command palette, global search entry point, contextual quick actions, and notification affordances.
+- Complete the existing command-palette-style destination search, then add global entity search only when API contracts exist; add contextual quick actions only from a permission-aware action catalogue and reconcile existing notification affordances.
 - Verify permission-aware navigation and route-level focus management.
 
 ### W3 — Enterprise interaction patterns
@@ -147,7 +147,7 @@ Evolve ARNA into a coherent, high-quality, Amharic-first enterprise experience t
 - Core component inventory: 24 primitives, 26 composites, 15 patterns (65 component directories).
 - Additive visual library: MetricWidget, ChartPanel, ImageFrame, PromoBanner, AbstractBackdrop, TextEffect, MotionReveal, VisualPanel, VisualLibraryShowcase.
 - Four independent application entry points remain in place.
-- A Ctrl/⌘+K navigation destination search already exists in AppHeaderNavigation. Its shell controls and known workspace/portal destination labels have been localized in the current enhancement branch; it remains a navigation-only index, not a cross-domain entity search.
+- A Ctrl/⌘+K navigation destination search already exists in AppHeaderNavigation. Its shell controls and known workspace/portal destination labels have been localized; this branch adds keyboard result navigation and combobox/listbox semantics. Latest exact-head CI is pending. It remains a navigation-only index, not a cross-domain entity search.
 - NotificationsCenter, its Pinia store, and API adapter already exist; backend endpoints/schema have been source-reconciled against arna-api main SHA `b924f6555cca8f4c5a732ffb6ba9fb181c9d0733`. Mounted behavior and locale-switch coverage remain required.
 - LanguageSelector exists but is intentionally not mounted pending a locale-persistence API contract.
 - PR #67 has a known failing mounted-browser suite; it is not accepted as complete.
