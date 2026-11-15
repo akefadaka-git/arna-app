@@ -28,7 +28,7 @@ for (const path of ['src/public-site/CorporateDynamicHome.vue', 'src/public-site
   test(path + ' uses the shared selected-calendar formatter', async () => {
     const source = await readFile(new URL('../' + path, import.meta.url), 'utf8');
     assert.match(source, /formatCalendarDate/);
-    assert.doesNotMatch(source, /toLocaleDateString\\s*\\(/);
+    assert.doesNotMatch(source, /toLocaleDateString\s*\(/);
   });
 }
 
