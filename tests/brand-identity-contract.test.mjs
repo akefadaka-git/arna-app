@@ -86,19 +86,19 @@ async function collectFiles(directory) {
 
 test('persisted browser state uses ARNA keys with legacy migration fallbacks', async () => {
   const tenant = await read('../src/stores/tenant.ts');
-  assert.match(tenant, /const KEY = 'arna\\.tenant_id'/);
-  assert.match(tenant, /const LEGACY_KEY = 'mases\\.tenant_id'/);
-  assert.match(tenant, /localStorage\\.getItem\\(KEY\\) \\?\\? localStorage\\.getItem\\(LEGACY_KEY\\)/);
-  assert.match(tenant, /localStorage\\.removeItem\\(LEGACY_KEY\\)/);
+  assert.ok(tenant.includes("const KEY = 'arna.tenant_id'"));
+  assert.ok(tenant.includes("const LEGACY_KEY = 'mases.tenant_id'"));
+  assert.ok(tenant.includes('localStorage.getItem(KEY) ?? localStorage.getItem(LEGACY_KEY)'));
+  assert.ok(tenant.includes('localStorage.removeItem(LEGACY_KEY)'));
 
   const bootstrap = await read('../src/core/bootstrap.ts');
-  assert.match(bootstrap, /const KEY = 'arna\\.auth_token'/);
-  assert.match(bootstrap, /const LEGACY_KEY = 'mases\\.auth_token'/);
-  assert.match(bootstrap, /sessionStorage\\.getItem\\(KEY\\) \\?\\? sessionStorage\\.getItem\\(LEGACY_KEY\\)/);
+  assert.ok(bootstrap.includes("const KEY = 'arna.auth_token'"));
+  assert.ok(bootstrap.includes("const LEGACY_KEY = 'mases.auth_token'"));
+  assert.ok(bootstrap.includes('sessionStorage.getItem(KEY) ?? sessionStorage.getItem(LEGACY_KEY)'));
 
   const login = await read('../src/features/auth/LoginForm/LoginForm.vue');
-  assert.match(login, /const REMEMBERED_IDENTIFIER_KEY = 'arna\\.auth\\.remembered_identifier'/);
-  assert.match(login, /const LEGACY_REMEMBERED_IDENTIFIER_KEY = 'mases\\.auth\\.remembered_identifier'/);
+  assert.ok(login.includes("const REMEMBERED_IDENTIFIER_KEY = 'arna.auth.remembered_identifier'"));
+  assert.ok(login.includes("const LEGACY_REMEMBERED_IDENTIFIER_KEY = 'mases.auth.remembered_identifier'"));
 });
 
 test('application source has no active legacy MASES component or DOM namespaces', async () => {
