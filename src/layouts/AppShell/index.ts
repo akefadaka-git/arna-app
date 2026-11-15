@@ -1,12 +1,15 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — AppShell — Barrel Export
+ * ARNA Platform UI — AppShell — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/layouts/AppShell/index.ts
+ * File:      arna-app/src/layouts/AppShell/index.ts
  * Layer:     4 (Shell — AppShell family)
- * Version:   1.0.0
+ * Version:   1.0.1
  * Status:    FROZEN
+ *
+ * Revision 1.0.1 — active product identity metadata aligned with ARNA;
+ * public exports and module behavior remain unchanged.
  *
  * Re-exports the AppShell capstone SFC and its supporting types.
  * Consumers import the shell as:
