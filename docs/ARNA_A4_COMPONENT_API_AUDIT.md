@@ -816,3 +816,40 @@ Five further patterns were reconciled from their prop/type declarations, event p
 | Overall A4 API audit | OPEN |
 
 No merge or deployment is included or authorized.
+
+
+## 31. Pattern API reconciliation — batch 3 (15 of 15)
+
+The final five patterns were reconciled from their prop/type declarations, event payloads, slot scopes and template behavior. Source blob hashes are included for traceability.
+
+| Component / source blob | Public props and defaults | Events / model | Slots and exposed API |
+|---|---|---|---|
+| FilterBar — `b5ebe535887711f88ac1ba69ba9f174a7e8b9cb8` | Required `filters:ReadonlyArray<FilterDescriptor>`, `activeCount:number`, translated `clearLabel:string`; optional `datePickerLabels:DatePickerLabels`. Filter types select/text/date/boolean/custom; values string/number/boolean/null. | `update:filter({key,value})`; `clear()`. | Scoped default slot receives `{customFilters}`; unscoped `actions` slot. No exposed methods found. |
+| PageHeader — `f65e261ecb453f816c4488efbd4ca0c697f691a3` | Required translated `title`; optional `eyebrow`, `description`, `breadcrumbs`, `breadcrumbsAriaLabel`; `variant='default'` (default/compact); `dividers=false`; `sticky=false`. Breadcrumb aria label is required by contract when breadcrumbs supplied, but optional in TS. | No emits declared. | `default` aliases `actions`; named `actions` takes precedence. Optional `leading`, `title-trailing`, `meta`, `tabs` slots. No exposed methods found. |
+| PermissionGate — `069b757f3af2b1665c69ddcf8cdada88e0205155` | Required `permission:string|string[]`; `mode='any'` (any/all). | No emits declared. | Default slot renders when authorized; optional `fallback` slot renders when denied. No wrapper element or exposed methods. |
+| StatusBadge — `17cc337d2d7fb7ddc26317baa027dfce7397414e` | Required machine `status:string`, translated `label:string`, and `variant:BadgeVariant`; optional `icon:string`; `dot=false`; `size='sm'`. Variant is caller-selected; no automatic status mapping. | No emits declared. | No slots or exposed methods found. Composes BaseBadge and optional BaseIcon. |
+| Timeline — `f3ca84ab81d5e9f93dbe1c332c750393084381c1` | Required `items:ReadonlyArray<TimelineItem>`; `dense=false`. Item: required stable `key`, display `timestamp`, translated `title`; optional `description`, `variant='default'`, `icon`, `isoTimestamp`. | No emits declared. | Scoped default slot receives `{item:TimelineItem}` and replaces each item content while marker column remains pattern-owned. No exposed methods found. |
+
+### Pattern batch 3 findings and compatibility notes
+
+1. **FilterBar is controlled by the consumer.** It emits a filter key/value pair and does not own filter state or calculate `activeCount`. The caller must supply a stable unique key, matching value type and active count. Date filters use DatePicker only when `datePickerLabels` is supplied; otherwise the pattern falls back to native `input type=date` with a development warning. Consumers must provide labels to retain the application's calendar/localization policy.
+2. **PageHeader has two action-slot forms.** The named `actions` slot takes precedence over default-slot content; the default slot is an alias for actions, not page-body content. Breadcrumbs without `breadcrumbsAriaLabel` can render an empty accessible name. Sticky mode assumes direct placement in the shell's main content column and should not be used inside cards/modals or nested scrolling surfaces.
+3. **PermissionGate is presentation logic only.** It reads the client auth store's permission slugs and conditionally renders content. It is not an authorization boundary: every protected API request and server-side operation must independently enforce permissions. Empty/whitespace permission inputs deny access. Mode `all` requires every slug; `any` requires at least one.
+4. **StatusBadge separates machine status from human meaning.** `status` is only a data attribute; `label` is the visible/accessibility content. The consumer explicitly chooses `variant`; no mapping is inferred from status. Empty labels and simultaneous icon+dot produce development warnings. Status must never be conveyed by color alone.
+5. **Timeline does not sort or format timestamps.** The consumer supplies chronological order and localized display timestamp strings. Optional `isoTimestamp` adds a machine-readable `datetime` attribute; without it, the display timestamp is plain text. Consumers must ensure the display value and ISO value refer to the same instant and calendar interpretation.
+6. **Timeline scoped slot replaces content, not structure.** The marker column and list-item wrapper remain pattern-owned; custom content must retain meaningful timestamp/title/status information. Icon strings are narrowed to BaseIcon's registry at the binding point, so consumers should supply registered icon names.
+7. This batch records source contracts but does not complete every consumer's localized labels, DatePicker fallback avoidance, permission enforcement, sticky layout constraints or mounted keyboard/screen-reader behavior.
+
+| Pattern API audit progress | Status |
+|---|---|
+| Pattern source files contract-reconciled | 15 / 15 |
+| Pattern props/defaults/events/slots | SOURCE REVIEW COMPLETE for inspected declarations |
+| Consumer compatibility across all patterns | NOT COMPLETE |
+| Dedicated mounted behavior evidence | PARTIAL |
+| Overall A4 API audit | OPEN |
+
+### Pattern source reconciliation milestone
+
+**Source-declaration reconciliation: 15/15 patterns — COMPLETE.** Together with the 24 primitive and 26 composite inventories, all 65 core component entries now have source-level prop/default/event/slot summaries. This is not yet full contract closure: consumer compatibility, complete imported-type closure, native attribute fallthrough, remaining behavioral/accessibility tests, authenticated-shell review and physical-device acceptance remain open.
+
+No merge or deployment is included or authorized.
