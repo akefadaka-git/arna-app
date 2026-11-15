@@ -1,4 +1,8 @@
 import { createApp, h, ref } from 'vue';
+import { createPinia } from 'pinia';
+import { createMemoryHistory, createRouter, RouterView } from 'vue-router';
+import { useLocaleStore } from '../../src/stores/locale';
+import AppHeaderNavigation from '../../src/layouts/AppShell/AppHeaderNavigation/AppHeaderNavigation.vue';
 import Combobox from '../../src/components/composites/Combobox/Combobox.vue';
 import Modal from '../../src/components/composites/Modal/Modal.vue';
 import Drawer from '../../src/components/composites/Drawer/Drawer.vue';
@@ -6,8 +10,17 @@ import FormField from '../../src/components/composites/FormField/FormField.vue';
 import ErrorSupportPanel from '../../src/components/composites/ErrorSupportPanel/ErrorSupportPanel.vue';
 import DataTable from '../../src/components/patterns/DataTable/DataTable.vue';
 
-createApp({
+const router = createRouter({
+  history: createMemoryHistory(),
+  routes: [
+    { path: '/', name: 'a4-home', component: { render: () => h('div', 'A4 home') } },
+    { path: '/files', name: 'a4-files', component: { render: () => h('div', { 'data-testid': 'a4-files-route' }, 'Files route') } },
+  ],
+});
+
+const app = createApp({
   setup() {
+    const localeStore = useLocaleStore();
     const selected = ref(null);
     const modalOpen = ref(false);
     const drawerOpen = ref(false);
@@ -46,6 +59,22 @@ createApp({
     ];
 
     return () => h('main', { style: 'padding: 2rem; display: grid; gap: 2rem; max-width: 42rem;' }, [
+      h('section', { 'aria-label': 'Header navigation search test' }, [
+        h(AppHeaderNavigation, {
+          items: [{ id: 'files', label: 'ፋይሎች', to: '/files' }],
+        }),
+        h('button', {
+          type: 'button',
+          'data-testid': 'set-locale-en',
+          onClick: () => localeStore.setLocale('en'),
+        }, 'Set English'),
+        h('button', {
+          type: 'button',
+          'data-testid': 'set-locale-am',
+          onClick: () => localeStore.setLocale('am'),
+        }, 'Set Amharic'),
+      ]),
+      h(RouterView),
       h('section', { 'aria-label': 'Error support panel test' }, [
         h(ErrorSupportPanel, {
           code: 'AUTH_PERMISSION_DENIED',
@@ -127,5 +156,7 @@ createApp({
         h('output', { 'data-testid': 'drawer-close-events' }, String(drawerCloseEvents.value)),
       ]),
     ]);
-  },
-}).mount('#app');
+  },});
+app.use(createPinia());
+app.use(router);
+app.mount('#app');
