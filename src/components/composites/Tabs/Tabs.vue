@@ -138,7 +138,7 @@ export type TabsValue = string | number;
 /*
  * Module-level counter for auto-generated ids.
  */
-let __masesTabsIdCounter = 0;
+let __arnaTabsIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -201,7 +201,7 @@ defineSlots<{
 // -----------------------------------------------------------------------------
 // Generated ids
 // -----------------------------------------------------------------------------
-const baseId = `mases-tabs-${++__masesTabsIdCounter}`;
+const baseId = `arna-tabs-${++__arnaTabsIdCounter}`;
 function tabId(index: number): string {
   return `${baseId}-tab-${index}`;
 }

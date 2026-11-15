@@ -124,7 +124,7 @@ export type PopoverPlacement =
 /*
  * Module-level counter for auto-generated ids.
  */
-let __masesPopoverIdCounter = 0;
+let __arnaPopoverIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -208,7 +208,7 @@ defineSlots<{
 // -----------------------------------------------------------------------------
 // Generated ids
 // -----------------------------------------------------------------------------
-const baseId = `mases-popover-${++__masesPopoverIdCounter}`;
+const baseId = `arna-popover-${++__arnaPopoverIdCounter}`;
 const triggerId = `${baseId}-trigger`;
 const controlsId = `${baseId}-panel`;
 
@@ -453,11 +453,11 @@ function onKeydown(event: KeyboardEvent): void {
    * Entry transition — subtle opacity fade.
    * Reduced-motion makes it effectively instant.
    */
-  animation: mases-popover-in var(--arna-duration-fast)
+  animation: arna-popover-in var(--arna-duration-fast)
     var(--arna-easing-decelerate);
 }
 
-@keyframes mases-popover-in {
+@keyframes arna-popover-in {
   from {
     opacity: 0;
     transform: scale(0.98);

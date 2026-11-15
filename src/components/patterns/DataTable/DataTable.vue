@@ -276,13 +276,13 @@ export interface DataTablePaginationLabels {
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesDataTableWarned = new Set<string>();
+const __arnaDataTableWarned = new Set<string>();
 
-function __masesDataTableWarnOnce(key: string, message: string): void {
-  if (__masesDataTableWarned.has(key)) {
+function __arnaDataTableWarnOnce(key: string, message: string): void {
+  if (__arnaDataTableWarned.has(key)) {
     return;
   }
-  __masesDataTableWarned.add(key);
+  __arnaDataTableWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -435,7 +435,7 @@ const slots = useSlots();
 // -----------------------------------------------------------------------------
 
 if (import.meta.env.DEV && props.selectable && !props.selectionLabels) {
-  __masesDataTableWarnOnce(
+  __arnaDataTableWarnOnce(
     'data-table:missing-selection-labels',
     '[DataTable] selectable=true without selectionLabels. The header ' +
       'select-all checkbox and each row checkbox will have no ' +
@@ -445,7 +445,7 @@ if (import.meta.env.DEV && props.selectable && !props.selectionLabels) {
 }
 
 if (import.meta.env.DEV && props.pagination && !props.paginationLabels) {
-  __masesDataTableWarnOnce(
+  __arnaDataTableWarnOnce(
     'data-table:missing-pagination-labels',
     '[DataTable] pagination is supplied without paginationLabels. ' +
       'The Pagination composite requires translated strings for ' +
@@ -458,7 +458,7 @@ if (import.meta.env.DEV && props.columns.length > 0) {
     (c) => c.priority === 'low',
   );
   if (allLowPriority && props.mobileLayout === 'cards') {
-    __masesDataTableWarnOnce(
+    __arnaDataTableWarnOnce(
       'data-table:all-columns-low-priority',
       '[DataTable] every column is marked priority="low". The mobile ' +
         'cards will render with no fields. Mark at least one column ' +

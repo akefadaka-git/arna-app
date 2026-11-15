@@ -134,7 +134,7 @@
  * Distinct prefix from the primitives' counters so no collision is
  * possible in a document that uses both.
  */
-let __masesFormSectionIdCounter = 0;
+let __arnaFormSectionIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -188,7 +188,7 @@ defineSlots<{
 /*
  * Generated id — evaluated once per component instance.
  */
-const descriptionId = `mases-form-section-desc-${++__masesFormSectionIdCounter}`;
+const descriptionId = `arna-form-section-desc-${++__arnaFormSectionIdCounter}`;
 
 /*
  * Whether the description should render.
