@@ -97,3 +97,28 @@ test('inspected Modal consumers pass dedicated close labels', () => {
     assert.match(read(path), /closeLabel|uploadModalCloseLabel/);
   }
 });
+
+
+test('all SearchBar consumers provide a translated clear-button accessible name', () => {
+  const consumers = [
+    ['src/features/files/FilesListView/FilesListView.vue', 'files-list-view-search'],
+    ['src/features/wallet/WalletListView.vue', 'wallet-list-view-search'],
+    ['src/features/shareholders/ShareholderListView/ShareholderListView.vue', 'shareholder-list-view-search'],
+  ];
+  for (const [path, testId] of consumers) {
+    const source = read(path);
+    const search = source.match(new RegExp(`<SearchBar[\\s\\S]*?data-testid="${testId}"[\\s\\S]*?/>?`));
+    assert.ok(search, `${path} must contain its SearchBar instance`);
+    assert.match(search[0], /:clear-label="labels\.searchClearLabel"/, `${path} must bind SearchBar clearLabel`);
+  }
+
+  const labelSources = [
+    'src/features/files/labels.ts',
+    'src/features/wallet/labels.ts',
+    'src/features/shareholders/labels.ts',
+  ];
+  for (const path of labelSources) {
+    const source = read(path);
+    assert.match(source, /searchClearLabel:\s*'[^']+祈[^']*'/, `${path} must provide a non-empty Amharic clear label`);
+  }
+});
