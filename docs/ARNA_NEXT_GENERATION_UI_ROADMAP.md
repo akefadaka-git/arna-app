@@ -42,9 +42,9 @@ Evolve ARNA into a coherent, high-quality, Amharic-first enterprise experience t
 - Visual regression baselines for core components and all four app shells.
 
 ### 3.3 Navigation and information discovery
-- Global command palette with keyboard shortcut, recent destinations, and permitted actions.
-- Unified search surface with filters, recent searches, clear empty/loading/error states, and keyboard navigation.
-- Contextual quick actions and recently viewed items.
+- Upgrade the existing `AppHeaderNavigation` Ctrl/⌘+K destination search rather than create a competing second palette. Its current scope is navigation destinations; its labels and empty state are hard-coded in English and need locale integration, stronger keyboard-result navigation, clearer grouping, and consistent focus restoration.
+- Add cross-domain entity search only when authoritative API contracts exist; keep it distinct from the existing route-destination index.
+- Contextual quick actions and recently viewed items require an explicit route/action catalogue and persistence contract.
 - Search and command results must be filtered by authoritative permissions; UI filtering is not a security boundary.
 
 ### 3.4 Data and dashboard experiences
@@ -62,7 +62,7 @@ Evolve ARNA into a coherent, high-quality, Amharic-first enterprise experience t
 - Ethiopian calendar and Gregorian date conversion tested at month/year boundaries and timezone edges.
 
 ### 3.6 Communication and productivity surfaces
-- Notification center with unread/read, category, priority, and action states (requires backend contract).
+- The repository already contains a NotificationsCenter, store, API adapter, and shell trigger. Reconcile the actual backend endpoints/schema and test the existing integration before expanding it; do not duplicate the feature or display simulated notifications.
 - Activity timeline and audit event presentation.
 - Calendar views (month/week/day/agenda) with E.C./G.C. preference and accessible event details.
 - Document center with metadata, preview, version history, and safe download affordances.
@@ -120,7 +120,9 @@ Evolve ARNA into a coherent, high-quality, Amharic-first enterprise experience t
 - Integrate real data only through approved API contracts and permissions.
 
 ### W5 — Productivity and communication
-- Calendar, notification center, activity feed, document center, and contextual help.
+- Calendar, activity feed, document center, and contextual help.
+- Reconcile the existing NotificationsCenter API adapter and shell integration against the actual backend before expanding notification actions.
+- The LanguageSelector component exists but its shell composition is deliberately deferred by the current architecture record until a locale-persistence API is available. Resolve that contract before enabling it; do not silently change the existing policy.
 - Identify backend/API contracts before presenting controls as operational.
 
 ### W6 — Advanced visual experience
@@ -145,6 +147,9 @@ Evolve ARNA into a coherent, high-quality, Amharic-first enterprise experience t
 - Core component inventory: 24 primitives, 26 composites, 15 patterns (65 component directories).
 - Additive visual library: MetricWidget, ChartPanel, ImageFrame, PromoBanner, AbstractBackdrop, TextEffect, MotionReveal, VisualPanel, VisualLibraryShowcase.
 - Four independent application entry points remain in place.
+- A basic Ctrl/⌘+K navigation destination search already exists in AppHeaderNavigation; it is not yet a fully localized, cross-domain search experience.
+- NotificationsCenter, its Pinia store, and API adapter already exist; backend schema/endpoint reconciliation and mounted behavior coverage remain required.
+- LanguageSelector exists but is intentionally not mounted pending a locale-persistence API contract.
 - PR #67 has a known failing mounted-browser suite; it is not accepted as complete.
 - Historical catalogue/design-system source documents have not been recovered; reconstructed documents remain drafts pending Owner authority.
 - No full authenticated-shell visual acceptance, formal WCAG certification, physical-device acceptance, or 3D model viewer is claimed.
