@@ -208,6 +208,7 @@ function navigate(item: SearchNavItem): void {
             :id="`app-header-search-option-${index}`"
             type="button"
             role="option"
+            tabindex="-1"
             :aria-selected="activeResultIndex === index"
             :class="{ 'is-active': activeResultIndex === index }"
             @click="navigate(item)"
