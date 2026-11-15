@@ -163,6 +163,14 @@ test.describe('ARNA public site browser contract', () => {
   test('switches the CMS homepage between Amharic and English', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(baseUrl);
+    const themeControl = page.getByTestId('theme-preference-control');
+    await expect(themeControl).toBeVisible();
+    await themeControl.selectOption('dark');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+    await themeControl.selectOption('light');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+    await themeControl.selectOption('system');
+    await expect(page.locator('html')).not.toHaveAttribute('data-theme');
 
     await page.getByRole('button', { name: 'English' }).click();
     await expect(page).toHaveURL(/locale=en/);
