@@ -24,14 +24,23 @@ createApp({
           label: 'Account reference',
           htmlFor: 'a4-form-field-input',
         }, {
-          default: ({ id, 'aria-describedby': describedBy, invalid, required, disabled }) => h('input', {
-            id,
-            'aria-describedby': describedBy,
-            'aria-invalid': invalid ? 'true' : undefined,
-            required,
-            disabled,
-            'data-testid': 'form-field-control',
-          }),
+          default: (slotProps) => h('div', [
+            h('input', {
+              id: slotProps.id,
+              'aria-describedby': slotProps['aria-describedby'] ?? slotProps.ariaDescribedBy,
+              'aria-invalid': slotProps.invalid ? 'true' : undefined,
+              required: slotProps.required,
+              disabled: slotProps.disabled,
+              'data-testid': 'form-field-control',
+            }),
+            h('output', {
+              'data-testid': 'form-field-slot-props',
+            }, JSON.stringify({
+              keys: Object.keys(slotProps),
+              hyphen: slotProps['aria-describedby'],
+              camel: slotProps.ariaDescribedBy,
+            })),
+          ]),
           help: () => h('span', { 'data-testid': 'form-field-help-slot' }, 'Enter the account reference.'),
         }),
       ]),
