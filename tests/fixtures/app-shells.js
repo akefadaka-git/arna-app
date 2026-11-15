@@ -18,10 +18,14 @@ const router = createRouter({
     { path: '/workspace', component: AuthenticatedLayout, children: [{ path: '', component: child('Workspace') }] },
     { path: '/portal', component: PortalLayout, children: [{ path: '', component: child('Shareholder Portal') }] },
     { path: '/admin', component: AdminLayout, children: [{ path: '', component: child('Administration') }] },
+    { path: '/legal', name: 'legal', component: child('Legal Center') },
   ],
 });
 
 const app = createApp({ render: () => h(RouterView) });
+app.config.errorHandler = (error) => { window.__ARNA_SHELL_FIXTURE_ERROR__ = error instanceof Error ? error.stack : String(error); };
+window.addEventListener('error', (event) => { window.__ARNA_SHELL_FIXTURE_ERROR__ = event.error?.stack || event.message; });
+window.addEventListener('unhandledrejection', (event) => { window.__ARNA_SHELL_FIXTURE_ERROR__ = String(event.reason); });
 app.use(createPinia());
 app.use(router);
 
