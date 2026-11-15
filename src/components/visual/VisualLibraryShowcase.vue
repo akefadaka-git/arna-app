@@ -134,7 +134,7 @@ const sampleData = computed(() => [
             <ChartPanel
               type="bar"
               :data="sampleData"
-              :aria-label="copy.chart"
+              :ariaLabel="copy.chart"
               :legend-label="copy.chart"
             />
           </VisualPanel>
