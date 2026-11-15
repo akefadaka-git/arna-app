@@ -258,11 +258,14 @@ test.describe('Mounted localized shell navigation search', () => {
     const englishDialog = page.getByRole('dialog', { name: 'Search ARNA' });
     await expect(englishDialog).toBeVisible();
     await expect(englishDialog.getByRole('heading', { name: 'Search ARNA' })).toBeVisible();
-    const input = englishDialog.getByRole('searchbox', { name: 'Search modules and pages' });
+    const input = englishDialog.getByRole('combobox', { name: 'Search modules and pages' });
     await expect(input).toHaveAttribute('placeholder', 'Search modules and pages…');
     await input.fill('Documents');
-    await expect(englishDialog.getByRole('button', { name: 'Documents' })).toBeVisible();
-    await englishDialog.getByRole('button', { name: 'Documents' }).click();
+    await expect(englishDialog.getByRole('option', { name: 'Documents' })).toBeVisible();
+    await input.press('ArrowDown');
+    await expect(input).toHaveAttribute('aria-activedescendant', 'app-header-search-option-0');
+    await expect(englishDialog.getByRole('option', { name: 'Documents' })).toHaveAttribute('aria-selected', 'true');
+    await input.press('Enter');
     await expect(page.getByTestId('a4-files-route')).toBeVisible();
     await expect(englishDialog).toBeHidden();
     await expect(trigger).toBeFocused();
