@@ -67,6 +67,7 @@ createApp({
             required,
             disabled,
             'data-testid': 'form-field-control',
+            style: 'min-height: 44px; width: 100%;',
           }),
           help: () => h('span', { 'data-testid': 'form-field-help-slot' }, 'Enter the account reference.'),
         }),
