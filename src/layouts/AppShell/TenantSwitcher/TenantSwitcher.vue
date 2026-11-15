@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — TenantSwitcher
+ ARNA Phase 2 UI — TenantSwitcher
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/TenantSwitcher/TenantSwitcher.vue
+ File:      arna_app/src/layouts/AppShell/TenantSwitcher/TenantSwitcher.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.1.0
  Status:    ENHANCEMENT — forced-colors accessibility
@@ -29,6 +29,9 @@
           · Dropped the unused `const props = ` binding from the
             `defineProps` call (noUnusedLocals). The call is retained
             as a bare expression.
+  1.2.0  — expose current tenant in the trigger's accessible name and
+          remove an empty reduced-motion placeholder; motion reduction
+          remains owned by shared token durations.
 
  -----------------------------------------------------------------------------
  Purpose
@@ -319,7 +322,7 @@ function onSelect(key: string): void {
           :aria-haspopup="ariaHaspopup"
           :aria-expanded="ariaExpanded"
           :aria-controls="ariaControls"
-          :aria-label="labels.triggerAriaLabel"
+          :aria-label="effectiveTenantName ? `${labels.triggerAriaLabel}: ${effectiveTenantName}` : labels.triggerAriaLabel"
           data-testid="tenant-switcher-trigger"
           @click="toggle"
         >
@@ -456,17 +459,4 @@ function onSelect(key: string): void {
   }
 }
 
-/* ============================================================================
-   Reduced motion
-   ---------------------------------------------------------------------------
-   The chevron's transition duration comes from a token, which the
-   substrate shortens to 1ms under prefers-reduced-motion. This block
-   is a defensive no-op placeholder for any future revision that adds
-   a non-token animation.
-   ============================================================================ */
-@media (prefers-reduced-motion: reduce) {
-  .tenant-switcher {
-    /* no-op placeholder — see comment above */
-  }
-}
 </style>
