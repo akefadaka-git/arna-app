@@ -291,7 +291,6 @@
      blocks is a TS2300 duplicate.
 
    <script setup lang="ts">
-import { formatCalendarDate } from '@/core/dates/calendar';
      The setup block. Every other import, the Props interface, the
      defineProps<Props>() call, the component's state, computed
      properties, watchers, handlers, and helper functions.
@@ -449,6 +448,7 @@ export type { GovernanceBodyListViewLabels } from './labels';
 </script>
 
 <script setup lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 import { computed, onMounted, ref, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 

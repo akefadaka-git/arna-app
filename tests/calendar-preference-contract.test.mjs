@@ -17,20 +17,20 @@ for (const path of dateViews) {
   test(path + ' renders dates using the selected calendar preference', async () => {
     const source = await readFile(new URL('../' + path, import.meta.url), 'utf8');
     assert.match(source, /formatCalendarDate/);
-    assert.doesNotMatch(source, /\\{\\{[^{}]*\\b\\w+_display\\b[^{}]*\\}\\}/);
+    assert.doesNotMatch(source, /\{\{[^{}]*_display[^{}]*\}\}/);
   });
 }
 
 test('shell calendar context follows the selected calendar and active locale', async () => {
   const source = await readFile(new URL('../src/layouts/AppShell/CalendarContext/CalendarContext.vue', import.meta.url), 'utf8');
   assert.match(source, /useCalendarPreference/);
-  assert.match(source, /calendarSystem\\.value/);
+  assert.match(source, /calendarSystem\.value/);
   assert.match(source, /formatCalendarDate/);
-  assert.match(source, /localeStore\\.locale/);
+  assert.match(source, /localeStore\.locale/);
 });
 
 test('shared formatter chooses exactly one calendar system', async () => {
   const source = await readFile(new URL('../src/core/dates/calendar.ts', import.meta.url), 'utf8');
-  assert.match(source, /selected === 'ethiopic' \\? 'ethiopic' : 'gregory'/);
-  assert.match(source, /formatter\\.resolvedOptions\\(\\)\\.calendar !== calendar/);
+  assert.match(source, /selected === 'ethiopic' \? 'ethiopic' : 'gregory'/);
+  assert.match(source, /formatter\.resolvedOptions\(\)\.calendar !== calendar/);
 });
