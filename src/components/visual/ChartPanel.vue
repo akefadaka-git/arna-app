@@ -1,10 +1,12 @@
-<script setup lang="ts">
-import { computed } from 'vue';
-
+<script lang="ts">
 export interface ChartDatum {
   label: string;
   value: number;
 }
+</script>
+
+<script setup lang="ts">
+import { computed } from 'vue';
 
 const props = withDefaults(defineProps<{
   type?: 'bar' | 'line' | 'donut';
@@ -89,7 +91,7 @@ const donutSegments = computed(() => {
 .chart-panel__donut-segment--4, .chart-panel__swatch--4 { stroke: var(--arna-color-text-danger); background: var(--arna-color-text-danger); }
 .chart-panel__total { fill: var(--arna-color-text-primary); font-size: 12px; font-weight: 700; }
 .chart-panel__legend { display: grid; grid-template-columns: minmax(0, 1fr); gap: .45rem; list-style: none; margin: 0; padding: 0; }
-.chart-panel__legend li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: .55rem; font-size: var(--arna-font-size-sm); }
+.chart-panel__legend li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: .55rem; font-size: var(--arna-font-size-body-sm); }
 .chart-panel__legend-label { min-width: 0; overflow-wrap: anywhere; color: var(--arna-color-text-secondary); }
 .chart-panel__swatch { width: .65rem; height: .65rem; border-radius: 50%; }
 @media (min-width: 640px) { .chart-panel__legend { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
