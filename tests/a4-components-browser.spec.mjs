@@ -19,7 +19,8 @@ test.describe('Mounted FormField accessibility behavior', () => {
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
-    expect(results.violations.filter((item) => ['serious', 'critical'].includes(item.impact)).map((item) => item.id)).toEqual([]);
+    const serious = results.violations.filter((item) => ['serious', 'critical'].includes(item.impact));
+    expect(serious.map((item) => item.id), JSON.stringify(serious, null, 2)).toEqual([]);
   });
 });
 
@@ -76,7 +77,7 @@ test.describe('Mounted Combobox browser behavior', () => {
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
     const serious = results.violations.filter((item) => item.impact === 'serious' || item.impact === 'critical');
-    expect(serious.map((item) => item.id + ': ' + item.help)).toEqual([]);
+    expect(serious.map((item) => item.id + ': ' + item.help), JSON.stringify(serious, null, 2)).toEqual([]);
   });
 });
 
