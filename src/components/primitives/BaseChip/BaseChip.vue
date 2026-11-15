@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/BaseChip/BaseChip.vue
  Layer:     1 (Primitives)
- Version:   1.0.0
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.21
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -133,6 +133,13 @@ interface Props {
   removeAriaLabel?: string;
 
   /**
+   * ID of the element that labels the remove button. Mutually exclusive
+   * with `removeAriaLabel`; use this when the visible chip label or
+   * surrounding text provides the translated accessible name.
+   */
+  removeAriaLabelledBy?: string;
+
+  /**
    * Disabled state. Defaults to false.
    *
    * Disables the remove button natively and mutes the chip's visual
@@ -146,6 +153,7 @@ const props = withDefaults(defineProps<Props>(), {
   variant: 'default',
   removable: false,
   removeAriaLabel: undefined,
+  removeAriaLabelledBy: undefined,
   disabled: false,
 });
 
@@ -158,13 +166,12 @@ const emit = defineEmits<{
  * has a remove button with no accessible name. Warn once per module
  * load.
  */
-if (import.meta.env.DEV && props.removable && !props.removeAriaLabel) {
+if (import.meta.env.DEV && props.removable && !props.removeAriaLabel && !props.removeAriaLabelledBy) {
   __masesBaseChipWarnOnce(
     'base-chip:missing-remove-label',
-    '[BaseChip] removable=true without removeAriaLabel. The remove ' +
-      'button will render with an empty aria-label, which is an ' +
-      'accessibility defect. Supply a translated string such as ' +
-      '"Remove <label>" or "Remove filter".',
+    '[BaseChip] removable=true without removeAriaLabel or ' +
+      'removeAriaLabelledBy. The remove button has no accessible name. ' +
+      'Supply a translated label or the ID of a visible label element.',
   );
 }
 
@@ -220,7 +227,8 @@ function onRemoveClick(): void {
       v-if="removable"
       type="button"
       :disabled="disabled"
-      :aria-label="removeAriaLabel ?? ''"
+      :aria-label="removeAriaLabelledBy ? undefined : (removeAriaLabel ?? undefined)"
+      :aria-labelledby="removeAriaLabelledBy"
       class="chip__remove"
       data-testid="base-chip-remove"
       @click="onRemoveClick"
