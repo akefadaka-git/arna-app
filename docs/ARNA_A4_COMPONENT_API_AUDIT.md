@@ -272,3 +272,38 @@ The exact-head follow-up run at `44d18f19f4669ad743d2f05cc63ffcd8acfc29ba` exerc
 The remaining Combobox failure was a test-sequence error: focusing the input opens the list and initially highlights the first enabled option (Alpha). The test then sent two ArrowDown keys while expecting Beta; the component correctly skipped the disabled option and advanced to Gamma. The test now sends one ArrowDown to reach Beta, then checks End/Home and Enter. This is a test correction; no Combobox production behavior was changed.
 
 The new test-only correction requires another exact-head CI run. A4 remains PARTIAL / OPEN.
+
+## 17. Mounted FileUploader lifecycle verification added
+
+Added a dedicated mounted Vue fixture and Playwright suite:
+- `tests/fixtures/a4-file-uploader.html`
+- `tests/fixtures/a4-file-uploader.js`
+- `tests/a4-file-uploader-browser.spec.mjs`
+
+The suite exercises the actual FileUploader and its composed FileInput, BaseButton, BaseIcon and BaseProgressBar components in Chromium. It covers:
+- successful upload, progress clamping, `uploaded` and `completed` event payloads;
+- rejected upload, visible error state, retry and subsequent success;
+- pre-validation rejection for size, MIME/extension and queue-count limits;
+- cancellation through the consumer-provided AbortSignal without a false `failed` event;
+- cancellation of a final in-flight item after another item succeeded;
+- abort of outstanding requests when the component unmounts;
+- axe-core scan for serious/critical violations in the active upload state.
+
+### Product defect found and corrected
+
+The mounted mixed-batch scenario exposed a lifecycle gap: `cancel()` changed the final uploading item to `cancelled` but did not call `maybeEmitCompleted()`. If another file in the same batch had already succeeded, the documented aggregate `completed` event was therefore never emitted.
+
+Corrected `src/components/patterns/FileUploader/FileUploader.vue` so cancellation is treated as a terminal transition and calls `maybeEmitCompleted()` after setting the cancelled state. This preserves the existing rule that an all-cancelled/all-failed batch does not emit `completed` when there are no successful uploads.
+
+**Verification state:** the mounted suite and exact-head CI have been wired into the workflow. Awaiting exact-head workflow completion before marking any runtime test PASS. The test suite does not replace server-side validation, authorization, malware/content inspection, storage isolation, or transport-level cancellation verification. Client-side accept and size checks remain UX controls only.
+
+| Gate | Status |
+|---|---|
+| FileUploader mounted success/progress/retry/rejection/cancel/unmount suite | IMPLEMENTED — exact-head CI pending |
+| Aggregate completion after mixed success/cancellation | PRODUCT FIX IMPLEMENTED — exact-head CI pending |
+| Backend upload authorization and content validation | NOT VERIFIED by this frontend audit |
+| FileUploader runtime accessibility scan | IMPLEMENTED — exact-head CI pending |
+| A4 API audit closure | OPEN |
+| Full authenticated shell / physical-device acceptance | NOT RUN |
+
+No merge or deployment is included or authorized.
