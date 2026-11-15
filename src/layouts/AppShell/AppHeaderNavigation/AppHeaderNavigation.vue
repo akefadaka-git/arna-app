@@ -190,7 +190,7 @@ function navigate(item: SearchNavItem): void {
           aria-autocomplete="list"
           :aria-label="labels.input"
           aria-controls="app-header-search-results"
-          :aria-expanded="results.length > 0 ? 'true' : 'false'"
+          :aria-expanded="dialog?.open ? 'true' : 'false'"
           :aria-activedescendant="activeResultIndex >= 0 ? `app-header-search-option-${activeResultIndex}` : undefined"
           :placeholder="labels.placeholder"
           @keydown="onSearchKeydown"
