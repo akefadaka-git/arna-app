@@ -32,7 +32,6 @@ withDefaults(defineProps<{
 <style scoped>
 .visual-panel {
   min-width: 0;
-  height: 100%;
   perspective: 1000px;
 }
 .visual-panel__surface {
