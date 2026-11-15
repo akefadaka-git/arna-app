@@ -159,7 +159,7 @@ import FormField from '@/components/composites/FormField';
 import LoadingState from '@/components/composites/LoadingState';
 import EmptyState from '@/components/composites/EmptyState';
 import ErrorState from '@/components/composites/ErrorState';
-import BaseSelect from '@/components/primitives/BaseSelect';
+import BaseRadio from '@/components/primitives/BaseRadio';
 import BaseDivider from '@/components/primitives/BaseDivider';
 import BaseInput from '@/components/primitives/BaseInput';
 import BaseCheckbox from '@/components/primitives/BaseCheckbox';
@@ -677,20 +677,26 @@ const submitLabel = computed<string>(() => {
               {{ labels.sectionTypeStatus }}
             </h2>
 
-            <FormField
-              :label="labels.typeLabel"
-              html-for="shareholder-type"
+            <fieldset
+              class="shareholder-form__type-group"
               :disabled="!typeEditable || isSubmitting"
-              required
+              data-testid="shareholder-form-type"
             >
-              <BaseSelect
-                id="shareholder-type"
-                v-model="type"
-                :options="typeOptions"
-                :disabled="!typeEditable || isSubmitting"
-                data-testid="shareholder-form-type"
-              />
-            </FormField>
+              <legend class="shareholder-form__type-legend">
+                {{ labels.typeLabel }}
+              </legend>
+              <div class="shareholder-form__type-options">
+                <BaseRadio
+                  v-for="option in typeOptions"
+                  :key="option.value"
+                  v-model="type"
+                  name="shareholder-type"
+                  :value="option.value"
+                  :disabled="!typeEditable || isSubmitting"
+                  required
+                >{{ option.label }}</BaseRadio>
+              </div>
+            </fieldset>
 
             <FormField
               :label="labels.activeLabel"
@@ -998,13 +1004,30 @@ const submitLabel = computed<string>(() => {
   display: flex;
   flex-direction: column;
   gap: var(--arna-space-4);
-  padding-block-end: var(--arna-space-4);
-  border-block-end: 1px solid var(--arna-color-border-subtle);
 }
 
-.shareholder-form__section:last-of-type {
-  padding-block-end: 0;
-  border-block-end: 0;
+.shareholder-form__type-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--arna-space-3);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.shareholder-form__type-legend {
+  margin-block-end: var(--arna-space-3);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-medium);
+}
+
+.shareholder-form__type-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--arna-space-3) var(--arna-space-5);
 }
 
 .shareholder-form__section-title {
