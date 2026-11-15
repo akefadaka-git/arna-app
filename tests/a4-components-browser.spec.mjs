@@ -69,7 +69,7 @@ test.describe('Mounted Combobox browser behavior', () => {
   test('exposes a labeled combobox/listbox and has no serious axe violations', async ({ page }) => {
     const input = page.getByRole('combobox', { name: 'Choose an item' });
     await input.focus();
-    await expect(input).toHaveAttribute('aria-controls', /mases-combobox-/);
+    await expect(input).toHaveAttribute('aria-controls', /arna-combobox-/);
     await expect(page.getByRole('listbox')).toBeVisible();
     await expect(page.getByRole('option', { name: 'Unavailable' })).toHaveAttribute('aria-disabled', 'true');
 
