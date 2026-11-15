@@ -89,8 +89,8 @@ export interface TenantIdStorage {
 }
 
 /**
- * The production default. Reads and writes `mases.tenant_id` in
- * localStorage, matching §13.4.
+ * The production default. Reads `arna.tenant_id` first, falls back to
+ * `mases.tenant_id`, and writes only the ARNA key.
  *
  * Parses defensively: a corrupted value (non-numeric, negative, zero,
  * or NaN) is treated as absent. The store then falls back to the
