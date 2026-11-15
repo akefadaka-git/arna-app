@@ -304,7 +304,7 @@ onMounted(() => { void loadMeetings(); });
         </label>
         <div class="date-time-field">
           <label for="governance-meeting-starts-at">Meeting date and start time</label>
-          <CalendarDateTimeInput id="governance-meeting-starts-at" v-model="createForm.starts_at" time-label="Time / ሰዓት" required />
+          <CalendarDateTimeInput id="governance-meeting-starts-at" v-model="createForm.starts_at" required />
         </div>
         <label>ርዕስ በአማርኛ
           <input v-model="createForm.title_am" maxlength="190" />
@@ -363,7 +363,7 @@ onMounted(() => { void loadMeetings(); });
             </label>
             <div class="date-time-field">
               <label for="governance-attendance-arrived-at">Arrival time (required for present / late)</label>
-              <CalendarDateTimeInput id="governance-attendance-arrived-at" v-model="attendanceForm.arrived_at" time-label="Time / ሰዓት" />
+              <CalendarDateTimeInput id="governance-attendance-arrived-at" v-model="attendanceForm.arrived_at" />
             </div>
             <label class="wide">Notes / permission evidence reference (required for excused absence)
               <input v-model="attendanceForm.notes" maxlength="2000" :required="attendanceForm.attendance_status === 'excused'" />
@@ -439,7 +439,7 @@ onMounted(() => { void loadMeetings(); });
             </label>
             <div class="date-time-field">
               <label for="governance-correction-arrived-at">Correct arrival time</label>
-              <CalendarDateTimeInput id="governance-correction-arrived-at" v-model="correctionForm.proposed_arrived_at" time-label="Time / ሰዓት" />
+              <CalendarDateTimeInput id="governance-correction-arrived-at" v-model="correctionForm.proposed_arrived_at" />
             </div>
             <label>Reason <input v-model="correctionForm.reason" minlength="5" maxlength="2000" required /></label>
             <div class="form-actions"><button type="submit" :disabled="saving">Request correction</button></div>
