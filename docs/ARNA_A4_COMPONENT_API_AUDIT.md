@@ -1008,3 +1008,25 @@ The prior source-only review identified a need to verify the support-diagnostic 
 - Remaining limitations: the fixture verifies the component's copy boundary, not every route-level normalization adapter or server-side diagnostic generation. No sensitive data is intentionally injected into the fixture.
 
 **Disposition:** MOUNTED TESTS ADDED; EXECUTION NOT YET VERIFIED. A4 remains OPEN. No merge or deployment.
+
+
+## 35. Mounted DataTable interaction and mobile-card coverage — tests added, execution pending
+
+DataTable was selected for the next mounted browser-test increment because its contract combines consumer-owned sorting/pagination, row selection, row-action isolation and a dual table/mobile-card rendering strategy.
+
+Added to the existing A4 mounted fixture and Playwright suite:
+
+- tests/fixtures/a4-components.js now mounts DataTable with two synthetic rows, sortable and non-sortable columns, accessible selection labels, a row-actions slot, and observable outputs for emitted sort, selected-key and row-click state.
+- tests/a4-components-browser.spec.mjs now checks:
+  1. Initial ascending sort semantics and the emitted descending sort transition.
+  2. Single-row selection, select-all on the current page, and clearing the page selection.
+  3. Interactive row-action clicks do not bubble into the row-click event, while a normal row click does.
+  4. Mobile cards render both non-low-priority fields and the fixture runs an axe scan for serious/critical violations.
+- Assertions scope duplicate controls to the semantic table region because the component intentionally renders both table and card representations and CSS determines which is visible at a given breakpoint.
+- This increment changes tests and fixture only; DataTable implementation is unchanged.
+- Fixture commit: d30411b825cc4728e42d825c4eac4c07a32ab1d2.
+- Browser test commit: fef78797ad3bcdf5d3ce6b6ffd3b9dfc50bb659c.
+- Test selector scoping correction: 6e91def058f288e814aaff9d998b888fe3d876c4.
+- Exact-head workflow execution is not yet available. No PASS claim is made for these new browser cases.
+
+**Disposition:** DATA TABLE MOUNTED TESTS ADDED; EXECUTION NOT VERIFIED. This expands behavioral coverage but does not close all DataTable consumer, pagination, keyboard, narrow-viewport or authenticated-shell requirements. A4 remains OPEN.
