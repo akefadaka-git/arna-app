@@ -358,3 +358,27 @@ The FileUploader suite passed all seven mounted tests, covering success/progress
 | Authenticated full-shell review / physical device | NOT RUN |
 
 Exact head: `21d1f45a117184565d7d7cf98ca18d6aac3e2060`.
+
+## 19. Drawer consumer census — preliminary repository-wide reconciliation
+
+A repository code-search census was performed for direct generic Drawer usage and close-label consumers:
+- Search for JSX/Vue template usage \`<Drawer\`: no matches in the indexed repository snapshot.
+- Search for imports from the generic Drawer component path: only the Drawer barrel and its own SFC were returned; no application consumer import was returned.
+- Search for \`closeLabel\`: returned Modal and Drawer component definitions, translated Modal labels, and the 19 previously reconciled Modal call sites; no generic Drawer consumer was returned.
+- The mobile shell uses a separate \`AppMobileDrawer\` component. Its source implements its own native \`<dialog>\`, receives required \`dialogAriaLabel\` and \`closeButtonLabel\` props, composes AppSidebar, and emits controlled \`update:open\` / \`close\`. It does not import or compose the generic Drawer component.
+
+**Important search boundary:** GitHub's code-search endpoint indexes the repository default branch, not this PR feature branch. This census is therefore a useful repository-wide baseline but not proof of all branch-local call sites. The PR diff does not introduce generic Drawer consumers. Branch-local full consumer enumeration remains PARTIAL until a branch-specific tree/content scan is performed.
+
+### Drawer disposition
+
+| Gate | Status |
+|---|---|
+| Default-branch generic Drawer consumer search | PASS — no direct consumer located |
+| Generic Drawer \`closeLabel\` consumer binding | NOT APPLICABLE to located default-branch consumers; no direct consumer located |
+| Separate AppMobileDrawer contract | PASS — required translated dialog/close labels and controlled close events confirmed by source |
+| Feature-branch exhaustive consumer census | PARTIAL — search endpoint indexes default branch only |
+| Mounted Drawer behavior | PASS — covered by the 6 passing Modal/Drawer mounted browser cases in exact-head run #43703344441 |
+| Generic Drawer optional \`closeLabel\` API risk | OPEN — still permits an empty production accessible name for future callers |
+| A4 closure | OPEN |
+
+Do not treat the absence of indexed consumers as permission to weaken the generic Drawer component's API or remove it. A future consumer must supply a translated close label; consider a conditional prop contract or explicit fail-closed behavior in a separately reviewed compatibility change.
