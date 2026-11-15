@@ -6,16 +6,17 @@
  File:      mase_app/src/components/composites/DatePicker/DatePicker.vue
  Layer:     2 (Composites)
  Version:   1.0.0
- Status:    FROZEN
+ Status:    CONTROLLED ENHANCEMENT
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §3.5
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
 
  -----------------------------------------------------------------------------
  Purpose
  -----------------------------------------------------------------------------
- Calendar-aware date selection. The active E.C./G.C. preference controls
+ Calendar-aware date selection. The shared E.C./G.C. preference controls
  the displayed and entered calendar; the public model remains Gregorian
- ISO 8601 (YYYY-MM-DD).
+ ISO 8601 (YYYY-MM-DD). The existing dialog, grid, keyboard and focus
+ accessibility contract remains in force.
 
  -----------------------------------------------------------------------------
  Public contract
@@ -506,9 +507,17 @@ watch(
   },
 );
 
-watch(calendarSystem, (system) => {
+watch(calendarSystem, (system, previousSystem) => {
   const inputHasFocus = typeof document !== 'undefined' && document.activeElement === inputRef.value;
-  if (!inputHasFocus) textValue.value = formatForDisplay(selectedDate.value, system);
+  if (inputHasFocus) {
+    const pending = textValue.value.trim();
+    if (pending !== '') {
+      const parsed = parseUserInput(pending, previousSystem);
+      textValue.value = formatForDisplay(parsed ?? selectedDate.value, system);
+    }
+  } else {
+    textValue.value = formatForDisplay(selectedDate.value, system);
+  }
   if (isOpen.value) void focusCursorCell();
 });
 
