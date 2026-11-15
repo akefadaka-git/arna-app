@@ -164,14 +164,14 @@ function navigate(item: SearchNavItem): void {
       variant="ghost"
       size="sm"
       class="app-header-navigation__search-trigger"
-      aria-labelledby="app-header-search-trigger-label"
+      aria-labelledby="app-header-search-trigger-label app-header-search-shortcut"
       aria-haspopup="dialog"
       data-testid="app-header-search-trigger"
       @click="openSearch"
     >
       <BaseIcon name="search" size="sm" />
       <span id="app-header-search-trigger-label" class="app-header-navigation__search-label">{{ labels.triggerText }}</span>
-      <kbd aria-hidden="true">Ctrl / ⌘ K</kbd>
+      <kbd id="app-header-search-shortcut">Ctrl / ⌘ K</kbd>
     </BaseButton>
 
     <dialog ref="dialog" class="app-header-navigation__dialog" aria-labelledby="app-header-search-title" @close="restoreSearchFocus">
