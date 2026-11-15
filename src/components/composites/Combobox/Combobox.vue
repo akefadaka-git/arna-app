@@ -1042,6 +1042,7 @@ void _toggle;
 .combobox__option {
   display: flex;
   align-items: center;
+  min-height: 32px;
   padding-block: var(--arna-space-2);
   padding-inline: var(--arna-space-3);
   cursor: pointer;
