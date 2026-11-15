@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — CR-L3
 =============================================================================
 
- File:      mase_app/src/features/portal/PortalHomePage.vue  (AMEND)
+ File:      arna-app/src/features/portal/PortalHomePage.vue  (AMEND)
  Unit:      CR-L3 — Portal self-service loans pages (home quick-link)
  Delivery type:  Amendment — one added RouterLink block in the
                  quick-links nav, revision history, version bump.
@@ -48,7 +48,7 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — PortalHomePage
+ ARNA Platform UI — PortalHomePage
 =============================================================================
 
  File:      mase_app/src/features/portal/PortalHomePage.vue
@@ -161,7 +161,6 @@
 -->
 
 <script lang="ts">
-import { formatCalendarDate } from '@/core/dates/calendar';
 /*
  * The page's labels type is imported from ./labels and re-exported here
  * for consumers that import the type from the component module. The
@@ -356,12 +355,12 @@ function shareholderStatusVariant(active: boolean): 'success' | 'neutral' {
 
           <div class="portal-home-page__row">
             <dt>{{ labels.identityCreated }}</dt>
-            <dd>{{ formatCalendarDate(shareholder.created_at) }}</dd>
+            <dd><time :datetime="shareholder.created_at">{{ shareholder.created_at_display }}</time></dd>
           </div>
 
           <div class="portal-home-page__row">
             <dt>{{ labels.identityUpdated }}</dt>
-            <dd>{{ formatCalendarDate(shareholder.updated_at) }}</dd>
+            <dd><time :datetime="shareholder.updated_at">{{ shareholder.updated_at_display }}</time></dd>
           </div>
         </dl>
       </Card>
