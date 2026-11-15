@@ -28,7 +28,7 @@
  *          entry (gated on `app.app.access`, which is a confirmed
  *          permission slug — reused from `portalUserMenuItems`, not
  *          invented) spread together with the shared
- *          `masesUserMenuItems`.
+ *          `arnaUserMenuItems`.
  *
  *          Shell chrome labels are NOT declared here. The admin build
  *          reuses `masesShellLabels` from `shell-labels.ts` verbatim —
@@ -46,7 +46,7 @@
  *
  * This file is a leaf. Its only dependencies are `@/layouts/AppShell`
  * (for the `NavItem` and `UserMenuItem` types) and
- * `@/router/shell-labels` (for the shared `masesUserMenuItems` value).
+ * `@/router/shell-labels` (for the shared `arnaUserMenuItems` value).
  * Neither of those dependencies is created by the admin scaffold;
  * both exist and are frozen.
  *
@@ -117,7 +117,7 @@
  * -----------------------------------------------------------------------------
  * The go-to-workspace item — reuse of the portal pattern
  * -----------------------------------------------------------------------------
- * The admin user menu extends the shared `masesUserMenuItems` with a
+ * The admin user menu extends the shared `arnaUserMenuItems` with a
  * cross-domain navigation link back to the workspace. The link is
  * identical in shape and destination to the portal's
  * `go-to-workspace` item, defined in `shell-labels.ts`:
@@ -183,7 +183,7 @@
  * Both names are verified against `BaseIcon.vue` and both are
  * currently referenced by existing code — `layout-grid` by the
  * portal's `go-to-workspace` and the workspace's `dashboard` nav
- * item, `log-out` by `masesUserMenuItems`. No new icon name is
+ * item, `log-out` by `arnaUserMenuItems`. No new icon name is
  * introduced by this file.
  *
  * -----------------------------------------------------------------------------
@@ -200,7 +200,7 @@
  * the workspace on both builds; using the same string means a user
  * who has seen the item on the portal recognizes it on the admin.
  *
- * The shared "ውጣ" (Log out) — inherited from `masesUserMenuItems`,
+ * The shared "ውጣ" (Log out) — inherited from `arnaUserMenuItems`,
  * not declared here. See `shell-labels.ts` §"Terms handled
  * deliberately" for the singular-imperative rationale.
  *
@@ -256,7 +256,7 @@ import type {
   UserMenuItem,
 } from '@/layouts/AppShell';
 
-import { masesUserMenuItems } from '@/router/shell-labels';
+import { arnaUserMenuItems } from '@/router/shell-labels';
 
 /**
  * The admin build's sidebar navigation tree.
@@ -320,7 +320,7 @@ export const adminNavItems: ReadonlyArray<NavItem> = [
  *
  * The array is composed in the same shape as `portalUserMenuItems`
  * (see `shell-labels.ts`): a cross-surface navigation entry followed
- * by the shared `logout`, spread from `masesUserMenuItems`.
+ * by the shared `logout`, spread from `arnaUserMenuItems`.
  *
  * The `go-to-workspace` entry navigates to the workspace's launcher
  * at a different origin. The `permission` field is filtered by
@@ -328,7 +328,7 @@ export const adminNavItems: ReadonlyArray<NavItem> = [
  * the entry from callers who cannot reach the workspace. The
  * workspace's own route guard is the authoritative check.
  *
- * The `logout` item — spread in from `masesUserMenuItems` — is
+ * The `logout` item — spread in from `arnaUserMenuItems` — is
  * declared once in `shell-labels.ts` and shared by all three builds.
  * `AdminLayout.vue`'s `onUserMenuSelect` handler dispatches on the
  * item's `id`; the ids this menu can carry are `'go-to-workspace'`
@@ -341,5 +341,5 @@ export const adminUserMenuItems: ReadonlyArray<UserMenuItem> = [
     icon: 'layout-grid',
     permission: 'app.app.access',
   },
-  ...masesUserMenuItems,
+  ...arnaUserMenuItems,
 ];
