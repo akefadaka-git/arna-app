@@ -3,6 +3,7 @@ import Combobox from '../../src/components/composites/Combobox/Combobox.vue';
 import Modal from '../../src/components/composites/Modal/Modal.vue';
 import Drawer from '../../src/components/composites/Drawer/Drawer.vue';
 import FormField from '../../src/components/composites/FormField/FormField.vue';
+import ErrorSupportPanel from '../../src/components/composites/ErrorSupportPanel/ErrorSupportPanel.vue';
 
 createApp({
   setup() {
@@ -11,6 +12,16 @@ createApp({
     const drawerOpen = ref(false);
     const modalCloseEvents = ref(0);
     const drawerCloseEvents = ref(0);
+    const supportLabels = {
+      toggle: 'Technical details',
+      errorCode: 'Error code',
+      requestId: 'Request reference',
+      timestamp: 'Timestamp',
+      occurredAt: 'Local time',
+      copy: 'Copy support information',
+      copied: 'Copied',
+      copyFallbackInstruction: 'Select and copy the text below.',
+    };
     const options = [
       { value: 'alpha', label: 'Alpha' },
       { value: 'blocked', label: 'Unavailable', disabled: true },
@@ -19,6 +30,15 @@ createApp({
     ];
 
     return () => h('main', { style: 'padding: 2rem; display: grid; gap: 2rem; max-width: 42rem;' }, [
+      h('section', { 'aria-label': 'Error support panel test' }, [
+        h(ErrorSupportPanel, {
+          code: 'AUTH_PERMISSION_DENIED',
+          requestId: 'req-12345',
+          timestamp: '2026-11-15T12:00:00Z',
+          occurredAt: '15/11/2019 15:00 E.C.',
+          labels: supportLabels,
+        }),
+      ]),
       h('section', { 'aria-label': 'FormField test' }, [
         h(FormField, {
           label: 'Account reference',
