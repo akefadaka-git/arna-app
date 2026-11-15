@@ -93,11 +93,11 @@ test.describe('ARNA visual library rendered review', () => {
             };
           });
           expect(flow.threeDTop, '2D panels must not intrude into the 3D section')
-            .toBeGreaterThanOrEqual(flow.twoDVisualBottom - 1);
+            .toBeGreaterThanOrEqual(flow.twoDVisualBottom + 8);
           expect(flow.contentTop, '3D panels must not intrude into the component preview section')
-            .toBeGreaterThanOrEqual(flow.threeDVisualBottom - 1);
+            .toBeGreaterThanOrEqual(flow.threeDVisualBottom + 8);
           expect(flow.promoTop, 'component preview panels must not intrude into the promotional section')
-            .toBeGreaterThanOrEqual(flow.contentBottom - 1);
+            .toBeGreaterThanOrEqual(flow.contentBottom + 8);
           expect(flow.contentPanelCount).toBe(3);
 
           const accessibility = await new AxeBuilder({ page })
