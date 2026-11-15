@@ -489,7 +489,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
     >
       <slot
         :id="htmlFor"
-        :aria-describedby="ariaDescribedBy"
+        v-bind="{ 'aria-describedby': ariaDescribedBy }"
         :invalid="resolvedInvalid"
         :required="required"
         :disabled="disabled"
