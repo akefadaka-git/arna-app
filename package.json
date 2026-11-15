@@ -1,10 +1,10 @@
 {
-  "name": "mases",
+  "name": "arna-ui",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "//": [
-    "MASES Phase 2 UI — Production Package Manifest",
+    "ARNA Platform UI — production package manifest",
     "ARCHITECTURE: one repository, one package.json, one node_modules tree, shared design system, four independent static builds, no Node.js runtime in production.",
     "ENTRY POINTS: workspace-entry/ -> workspace; portal-entry/ -> shareholder portal; admin-entry/ -> administration; public-entry/ -> public corporate website.",
     "BUILD OUTPUT: dist/; dist-portal/; dist-admin/; dist-public/.",
