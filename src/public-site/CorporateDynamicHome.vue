@@ -105,7 +105,7 @@ async function load(): Promise<void> {
       contributorContentFailed.value = true;
     }
     if (home?.seo?.title) document.title = home.seo.title;
-    else document.title = home?.title ? `${home.title} | Maale Arna` : 'Maale Arna | Official Website';
+    else document.title = home?.title ? `${home.title} | ARNA` : 'ARNA | Official Website';
     let description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
     if (!description) {
       description = document.createElement('meta');
@@ -192,7 +192,7 @@ watch(() => route.query.locale, (value) => {
       </div>
     </header>
 
-    <main id="main-content">
+    <main id="main-content" tabindex="-1">
       <div v-if="loading" class="state-panel" role="status">{{ locale === 'am' ? 'ይዘት በመጫን ላይ…' : 'Loading published content…' }}</div>
       <template v-else-if="error">
         <div class="state-panel" role="alert">{{ locale === 'am' ? 'ይዘቱን ማምጣት አልተቻለም። እባክዎ ቆይተው ይሞክሩ።' : 'Published content could not be loaded. Please try again later.' }}</div>
