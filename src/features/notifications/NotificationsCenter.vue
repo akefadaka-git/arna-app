@@ -129,12 +129,12 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown));
 .notification-center {
   position: fixed;
   z-index: 1200;
-  inset-block-start: calc(var(--arna-shell-header-height) + 0.5rem);
+  inset-block-start: calc(var(--arna-shell-header-height, 4rem) + 0.5rem);
   inset-inline-end: clamp(0.75rem, 2vw, 2rem);
   display: flex;
   flex-direction: column;
   width: min(28rem, calc(100vw - 1.5rem));
-  max-height: min(42rem, calc(100dvh - var(--arna-shell-header-height) - 1.5rem));
+  max-height: min(42rem, calc(100dvh - var(--arna-shell-header-height, 4rem) - 1.5rem));
   overflow: hidden;
   color: var(--arna-color-text-primary);
   background: var(--arna-color-surface-raised);
