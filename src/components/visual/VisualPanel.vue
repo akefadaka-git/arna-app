@@ -31,14 +31,15 @@ withDefaults(defineProps<{
 
 <style scoped>
 .visual-panel {
+  display: flex;
   min-width: 0;
   perspective: 1000px;
 }
 .visual-panel__surface {
   box-sizing: border-box;
   position: relative;
+  flex: 1;
   min-width: 0;
-  height: 100%;
   overflow: hidden;
   padding: var(--arna-space-4, 1rem);
   border: 1px solid var(--arna-color-border-subtle);
