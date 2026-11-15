@@ -163,3 +163,10 @@ A2 is VERIFIED-CLOSED only when every required surface/dimension is evidenced as
 ## 12. Revision and status
 
 Revision 0.2 — review-enhanced A1 scope, 2026-11-15. A1 assessment is PREPARED; complete source-backed four-surface evidence matrix still required for closure. Owner freeze PENDING. A2/A3 NOT AUTHORIZED. A4 NOT STARTED. A5 requires separate approval. This revision clarifies acceptance and evidence; it does not claim A1 has passed or authorize implementation.
+
+
+## 13. Owner A1 scope-freeze record
+
+**Owner decision: APPROVED AND FROZEN — 2026-11-15.** The Owner approves the four-surface parity objective, trust boundaries, measurable acceptance contract, required A1 deliverables, and A2 entry/exit gates in this document. The Public Site remains separate from authenticated application shells. Workspace, Shareholder Portal and Admin Console retain distinct route, permission and context boundaries.
+
+**Status distinction:** A1 scope is Owner-frozen. Technical A1 assessment completeness is still PREPARED / PARTIAL until the source-backed four-surface baseline and behavior evidence matrix is completed. This approval authorizes read-only A2 reconciliation only after its stated entry gates are satisfied. It does not authorize A3 implementation, merge, release or A5 deployment.
