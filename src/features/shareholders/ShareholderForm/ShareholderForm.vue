@@ -160,6 +160,7 @@ import LoadingState from '@/components/composites/LoadingState';
 import EmptyState from '@/components/composites/EmptyState';
 import ErrorState from '@/components/composites/ErrorState';
 import BaseSelect from '@/components/primitives/BaseSelect';
+import BaseDivider from '@/components/primitives/BaseDivider';
 import BaseInput from '@/components/primitives/BaseInput';
 import BaseCheckbox from '@/components/primitives/BaseCheckbox';
 import BaseButton from '@/components/primitives/BaseButton';
@@ -706,6 +707,8 @@ const submitLabel = computed<string>(() => {
             </FormField>
           </section>
 
+          <BaseDivider data-testid="shareholder-form-section-divider" />
+
           <!-- ====================================================
                Section: Individual name
                ==================================================== -->
@@ -874,6 +877,8 @@ const submitLabel = computed<string>(() => {
             </div>
           </section>
 
+          <BaseDivider data-testid="shareholder-form-section-divider" />
+
           <!-- ====================================================
                Section: Access
                ==================================================== -->
@@ -923,6 +928,8 @@ const submitLabel = computed<string>(() => {
               </FormField>
             </div>
           </section>
+
+          <BaseDivider data-testid="shareholder-form-section-divider" />
 
           <!-- ====================================================
                Actions
