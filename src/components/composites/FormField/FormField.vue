@@ -405,6 +405,7 @@ const errorId = computed<string>(() => `${props.htmlFor}-error`);
 const helpId = computed<string>(() => `${props.htmlFor}-help`);
 
 const slots = useSlots();
+const hasHelpSlot = Boolean(slots.help);
 
 const helpTextTrimmed = computed<string>(() =>
   props.helpText?.trim() ?? '',
@@ -417,7 +418,7 @@ const helpTextTrimmed = computed<string>(() =>
  * helpText prop has non-empty content.
  */
 const hasHelp = computed<boolean>(() => {
-  return slots.help !== undefined || helpTextTrimmed.value.length > 0;
+  return hasHelpSlot || helpTextTrimmed.value.length > 0;
 });
 
 /*
@@ -554,7 +555,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
       helpText is non-empty. The slot takes precedence over the prop.
     -->
     <div
-      v-if="hasHelp || $slots.help"
+      v-if="hasHelp"
       :id="helpId"
       class="form-field__help"
       data-testid="form-field-help"
