@@ -42,7 +42,7 @@ Evolve ARNA into a coherent, high-quality, Amharic-first enterprise experience t
 - Visual regression baselines for core components and all four app shells.
 
 ### 3.3 Navigation and information discovery
-- Upgrade the existing `AppHeaderNavigation` Ctrl/⌘+K destination search rather than create a competing second palette. Its current scope is navigation destinations; its labels and empty state are hard-coded in English and need locale integration, stronger keyboard-result navigation, clearer grouping, and consistent focus restoration.
+- Upgrade the existing `AppHeaderNavigation` Ctrl/⌘+K destination search rather than create a competing second palette. Its shell labels and known workspace/portal destination names now follow the active Amharic/English locale. Remaining enhancements include stronger arrow-key result navigation, clearer grouping, consistent focus restoration, recent destinations, and a distinct cross-domain entity-search layer when APIs are ready.
 - Add cross-domain entity search only when authoritative API contracts exist; keep it distinct from the existing route-destination index.
 - Contextual quick actions and recently viewed items require an explicit route/action catalogue and persistence contract.
 - Search and command results must be filtered by authoritative permissions; UI filtering is not a security boundary.
@@ -147,7 +147,7 @@ Evolve ARNA into a coherent, high-quality, Amharic-first enterprise experience t
 - Core component inventory: 24 primitives, 26 composites, 15 patterns (65 component directories).
 - Additive visual library: MetricWidget, ChartPanel, ImageFrame, PromoBanner, AbstractBackdrop, TextEffect, MotionReveal, VisualPanel, VisualLibraryShowcase.
 - Four independent application entry points remain in place.
-- A basic Ctrl/⌘+K navigation destination search already exists in AppHeaderNavigation; it is not yet a fully localized, cross-domain search experience.
+- A Ctrl/⌘+K navigation destination search already exists in AppHeaderNavigation. Its shell controls and known workspace/portal destination labels have been localized in the current enhancement branch; it remains a navigation-only index, not a cross-domain entity search.
 - NotificationsCenter, its Pinia store, and API adapter already exist; backend schema/endpoint reconciliation and mounted behavior coverage remain required.
 - LanguageSelector exists but is intentionally not mounted pending a locale-persistence API contract.
 - PR #67 has a known failing mounted-browser suite; it is not accepted as complete.
