@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import { CalendarDateInput } from '@/components/composites/DatePicker';
 import { api } from '@/core/api/client';
 import {
   approveDividendPayable, approveSettlementAccountMapping, revokeSettlementAccountMapping, createDividendPayable,
@@ -88,14 +89,14 @@ onMounted(()=>{});
     <form class="form-grid" @submit.prevent="submitPayable">
       <label>Shareholder ID<input v-model="payableForm.shareholder_id" type="number" min="1" required></label>
       <label>Distribution reference<input v-model="payableForm.distribution_reference" required maxlength="100"></label>
-      <label>Declared on<input v-model="payableForm.declared_on" type="date" required></label><label>Due on<input v-model="payableForm.due_on" type="date" required></label>
+      <label>Declared on<CalendarDateInput v-model="payableForm.declared_on" id="dividend-payable-declared-on" /></label><label>Due on<CalendarDateInput v-model="payableForm.due_on" id="dividend-payable-due-on" /></label>
       <label>Net payable (ETB)<input v-model="payableForm.net_payable_amount" inputmode="decimal" required></label><button :disabled="busy||!legalEntityId">Register draft payable</button>
     </form>
     <div v-for="p in payables" :key="p.id" class="record-row"><span>#{{p.id}} · Shareholder {{p.shareholder_id}} · {{p.distribution_reference}} · ETB {{p.net_payable_amount}} · {{p.status}}</span><button v-if="p.status==='draft'" :disabled="busy" @click="approvePayable(p.id)">Approve distribution payable</button></div>
   </section>
   <section class="panel">
     <h2>Pending settlement execution</h2><form class="form-grid" @submit.prevent="loadMeeting"><label>Governance meeting ID<input v-model="meetingId" type="number" min="1" required></label><button :disabled="busy">Load meeting settlements</button></form>
-    <div class="form-grid"><label>Effective date<input v-model="execution.effective_date" type="date" required></label><label>Idempotency key<input v-model="execution.idempotency_key" required maxlength="128" placeholder="Unique payment reference"></label><label>Dividend payable ID (offset only)<input v-model="execution.dividend_payable_id" type="number" min="1"></label></div>
+    <div class="form-grid"><label>Effective date<CalendarDateInput v-model="execution.effective_date" id="settlement-effective-date" /></label><label>Idempotency key<input v-model="execution.idempotency_key" required maxlength="128" placeholder="Unique payment reference"></label><label>Dividend payable ID (offset only)<input v-model="execution.dividend_payable_id" type="number" min="1"></label></div>
     <label>Source mapping reason<input v-model="sourceMappingReason" required minlength="5"></label>
     <div v-for="s in settlements" :key="s.id" class="record-row"><span>Settlement #{{s.id}} · Penalty #{{s.penalty_id}} · ETB {{(s.amount_cents/100).toFixed(2)}} · {{s.status}}</span><span v-if="s.status==='pending_finance'||s.status==='pending_legal_finance_review'"><button :disabled="busy||!legalEntityId||!sourceMappingReason" @click="requestSourceMapping(s.id)">Request source mapping</button><button :disabled="busy" @click="cash(s)">Post cash receipt</button><button :disabled="busy||!execution.dividend_payable_id" @click="offset(s)">Offset approved dividend</button></span></div>
     <div v-for="sm in sourceMappings" :key="sm.id" class="record-row"><span>Source mapping #{{sm.id}} · settlement {{sm.source_id}} · {{sm.status}}</span><button :disabled="busy||!sourceMappingReason" @click="approveSourceMapping(sm.id)">Approve source mapping</button></div>
