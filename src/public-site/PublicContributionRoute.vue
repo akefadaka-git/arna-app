@@ -211,7 +211,7 @@ async function submitContent(): Promise<void> {
       <RouterLink class="contribute-back" :to="{ path: '/', query: { locale } }">{{ copy.back }}</RouterLink>
     </header>
 
-    <main class="contribute-main">
+    <main id="contribute-main" class="contribute-main" tabindex="-1">
       <p class="contribute-eyebrow">{{ copy.eyebrow }}</p>
       <h1>{{ copy.title }}</h1>
       <p class="contribute-lead">{{ copy.lead }}</p>
