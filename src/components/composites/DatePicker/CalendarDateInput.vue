@@ -26,7 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<{
-  (event: 'update:modelValue', value: string | null): void;
+  (event: 'update:modelValue', value: string): void;
 }>();
 
 const locale = ref('am-ET');
@@ -85,6 +85,6 @@ onBeforeUnmount(() => languageObserver?.disconnect());
     :placeholder="placeholder"
     :aria-described-by="ariaDescribedBy"
     :labels="labels"
-    @update:model-value="emit('update:modelValue', $event)"
+    @update:model-value="emit('update:modelValue', $event ?? '')"
   />
 </template>
