@@ -543,7 +543,7 @@ function onCloseButtonClick(): void {
  * Uses the aubergine base color at low alpha.
  */
 .drawer::backdrop {
-  background-color: rgba(31, 10, 47, 0.5);
+  background-color: var(--arna-color-overlay-scrim);
 }
 
 /* ============================================================================
