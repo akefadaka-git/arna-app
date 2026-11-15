@@ -199,7 +199,7 @@ onMounted(load);
           <p v-if="selected.review_note" class="public-content-admin__note">{{ selected.review_note }}</p>
           <p v-if="selected.submitted_by === auth.userId" class="public-content-admin__message public-content-admin__message--error">{{ labels.selfReview }}</p>
           <label v-if="selected.status === 'approved' || selected.status === 'scheduled'" class="public-content-admin__reason-label" for="publish-at">{{ labels.scheduleAt }}</label>
-          <CalendarDateTimeInput v-if="selected.status === 'approved' || selected.status === 'scheduled'" id="publish-at" v-model="scheduledAt" time-label="Time / ሰዓት" />
+          <CalendarDateTimeInput v-if="selected.status === 'approved' || selected.status === 'scheduled'" id="publish-at" v-model="scheduledAt" />
           <label class="public-content-admin__reason-label" for="review-reason">{{ labels.reason }}</label>
           <textarea id="review-reason" v-model="reason" rows="3" maxlength="2000" />
           <div class="public-content-admin__actions">
