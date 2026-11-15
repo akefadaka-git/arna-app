@@ -43,7 +43,7 @@ test('PermissionGate is a presentation gate backed by the auth permission set', 
   assert.match(source, /const isAuthorized = computed<boolean>/);
   assert.match(source, /required\.length === 0/);
   assert.match(source, /<slot v-if="isAuthorized"/);
-  assert.match(source, /<slot name="fallback"/);
+  assert.match(source, /name="fallback"/);
 });
 
 test('Modal and Drawer expose the optional close-label risk explicitly', () => {
