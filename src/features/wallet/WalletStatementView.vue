@@ -628,11 +628,10 @@ function entryDirection(row: WalletEntry, cur: string): { debit: string; credit:
             class="wallet-statement-view__filter-field"
           >
             <template #default="{ id, 'aria-describedby': describedBy }">
-              <BaseInput
+              <CalendarDateInput
                 :id="id"
                 v-model="to"
-                type="date"
-                :aria-describedby="describedBy"
+                :aria-described-by="describedBy"
                 data-testid="wallet-statement-view-to"
               />
             </template>
