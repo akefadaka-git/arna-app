@@ -166,6 +166,7 @@ export const FILE_ACCESS_DENIED_CODE = 'FILE_ACCESS_DENIED';
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
 import ErrorPage from '../ErrorPage';
+import ErrorSupportHint from '../../primitives/ErrorSupportHint';
 import type { ErrorPageAction, ErrorPageLabels } from '../ErrorPage';
 
 interface Props {
@@ -318,45 +319,14 @@ onMounted(() => {
       default slot, which was designed for exactly this kind of extra
       content (Unit 10.13).
     -->
-    <p
+    <ErrorSupportHint
       v-if="isFileAccessDenied"
-      class="access-denied__file-hint"
+      :text="labels.fileHint"
+      variant="warning"
       data-testid="access-denied-file-hint"
-    >{{ labels.fileHint }}</p>
+    />
   </ErrorPage>
 </template>
 
 <style scoped>
-/* ============================================================================
-   FILE_ACCESS_DENIED hint
-   ---------------------------------------------------------------------------
-   A soft warning surface with a left accent border. Uses Tier 2 warning
-   tokens to communicate "this is a caveat" rather than a second error.
-   Has no role of its own — the enclosing ErrorPage's role="alert" is
-   the live region for this page.
-   ============================================================================ */
-.access-denied__file-hint {
-  margin: 0;
-  padding-block: var(--arna-space-3);
-  padding-inline: var(--arna-space-4);
-  background-color: var(--arna-color-surface-warning);
-  /*
-   * Left accent bar — 4px, expressed as --arna-space-1 so it is a
-   * token rather than a bare pixel value. The inset inline-start
-   * direction ensures the accent sits on the reading-start edge for
-   * both LTR and any future RTL locale.
-   */
-  border-inline-start: var(--arna-space-1) solid var(--arna-color-border-warning);
-  border-radius: var(--arna-radius-sm);
-  color: var(--arna-color-text-warning);
-  font-family: inherit;
-  font-size: var(--arna-font-size-body-sm);
-  line-height: var(--arna-line-height-body-sm);
-  font-weight: var(--arna-font-weight-regular);
-  /*
-   * Amharic-safe wrapping — the hint text is consumer-translated and
-   * may be long in Ethiopic.
-   */
-  overflow-wrap: anywhere;
-}
 </style>
