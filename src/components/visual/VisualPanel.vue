@@ -108,7 +108,7 @@ withDefaults(defineProps<{
   transform: translateY(-3px) translateZ(18px) rotateX(0) rotateY(0) rotateZ(0);
 }
 @media (max-width: 639px) {
-  .visual-panel[data-mode="3d"] .visual-panel__surface { transform: none; }
+  .visual-panel[data-mode="3d"][data-variant] .visual-panel__surface { transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .visual-panel__surface { transition: none; }
