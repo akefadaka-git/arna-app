@@ -155,7 +155,7 @@ const sampleData = computed(() => [
           :eyebrow="copy.promo"
           :title="copy.promoTitle"
           :description="copy.promoBody"
-          tone="brand"
+          tone="neutral"
         />
         <VisualPanel mode="2d" variant="split" :title="copy.effect">
           <p class="visual-library-showcase__effects">
