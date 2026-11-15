@@ -3,6 +3,7 @@ import { onMounted, ref, watch } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import { fetchCorporateEntry, type CorporateLocale, type CorporatePublicEntry } from '@/features/public-site/api';
 import { aranaBrandLabels } from '@/router/shell-labels';
+import { formatCalendarDate } from '@/core/dates/calendar';
 
 const route = useRoute();
 const entry = ref<CorporatePublicEntry | null>(null);
@@ -57,7 +58,7 @@ onMounted(() => void load());
         <p class="eyebrow">{{ entry.type }}</p><h1>{{ entry.title }}</h1><p v-if="entry.summary">{{ entry.summary }}</p>
         <img v-if="entry.asset_url && entry.type === 'media'" :src="entry.asset_url" :alt="entry.title" loading="lazy" />
         <div class="corporate-entry__body">{{ entry.body }}</div>
-        <time v-if="entry.published_at" :datetime="entry.published_at">{{ new Date(entry.published_at).toLocaleDateString(locale === 'am' ? 'am-ET' : 'en-US') }}</time>
+        <time v-if="entry.published_at" :datetime="entry.published_at">{{ formatCalendarDate(entry.published_at, { dateStyle: 'medium' }, locale) }}</time>
       </article>
     </main>
   </div>
