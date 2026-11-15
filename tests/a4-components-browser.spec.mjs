@@ -253,10 +253,14 @@ test.describe('Mounted localized shell navigation search', () => {
     await expect(dialog.getByRole('heading', { name: 'Search ARNA' })).toBeVisible();
     await expect(dialog.getByRole('searchbox', { name: 'Search modules and pages' })).toHaveAttribute('placeholder', 'Search modules and pages…');
 
-    await page.getByTestId('set-locale-am').click();
-    await expect(trigger).toHaveAttribute('aria-label', 'የARNA ሞጁሎችን እና ገጾችን ይፈልጉ');
-    await dialog.getByRole('button', { name: 'ፋይሎች' }).click();
+    const input = dialog.getByRole('searchbox', { name: 'Search modules and pages' });
+    await input.fill('Documents');
+    await expect(dialog.getByRole('button', { name: 'Documents' })).toBeVisible();
+    await dialog.getByRole('button', { name: 'Documents' }).click();
     await expect(page.getByTestId('a4-files-route')).toBeVisible();
     await expect(dialog).toBeHidden();
+
+    await page.getByTestId('set-locale-am').click();
+    await expect(trigger).toHaveAttribute('aria-label', 'የARNA ሞጁሎችን እና ገጾችን ይፈልጉ');
   });
 });
