@@ -288,3 +288,80 @@ A4 acceptance for the visual library additionally requires a full authenticated 
 | Production conformance claim | **Not made** |
 
 **Approval rule:** This document remains a draft until the Owner explicitly approves it. It must not be described as the historical v1.0.0 design system or as a completed A4 acceptance record.
+
+
+---
+
+## 21. Authority hierarchy and normative language
+
+Until Owner approval, this reconstruction is proposed policy, not binding authority. Apply this precedence:
+1. Owner-approved governance and product/security decisions.
+2. Canonical API/backend authorization, identity, tenant and domain contracts.
+3. Approved domain specifications and migration records.
+4. Current source and executable tests as evidence of implementation, not proof of approval or correctness.
+5. This reconstruction, once explicitly approved.
+6. Unapproved mockups, showcase fixtures and synthetic data as illustrative only.
+
+Conflicts must be recorded with affected behavior and decision owner; do not silently choose an interpretation. UI rules cannot override backend authorization, identity policy, privacy obligations or domain invariants.
+
+Normative terms: MUST/MUST NOT are mandatory after approval; SHOULD/SHOULD NOT are defaults requiring rationale for deviation; MAY is optional. Observed means verified at a pinned source/test ref; Proposed means awaiting approval; UNKNOWN/NOT RUN means evidence is absent. Normative wording in this draft does not itself make it binding.
+
+## 22. Surface trust boundaries
+
+| Surface | Trust and product boundary | Required UI behavior |
+|---|---|---|
+| Workspace | Authenticated, tenant-aware application | Render trusted tenant and permission context; clear stale context safely |
+| Shareholder Portal | Authenticated shareholder audience and distinct information architecture | Apply shareholder-specific least privilege; sharing primitives does not grant Workspace privileges |
+| Admin Console | Privileged administrative surface | Gate actions using trusted permission contracts; client-side hiding is not enforcement |
+| Public Site | Public, unauthenticated surface | Never render private user, tenant, shareholder, notification or admin controls |
+
+Shared visual primitives do not imply shared route trees, data access, state or security policy. Public forms require their own validation, abuse and privacy controls.
+
+## 23. Component API and state contract
+
+For each exported component, document applicable props/types/defaults, events, slots, controlled/uncontrolled state, accessible name and semantics, keyboard model, loading/empty/error/success states, localization ownership, theme/token dependencies, security assumptions, and deprecation/migration policy. Do not introduce duplicate sources of truth for controlled state.
+
+Forms must associate labels, hints and errors programmatically; preserve values on validation failure unless policy requires clearing; distinguish client convenience checks from authoritative server validation; and never expose stack traces or sensitive identifiers. Async actions expose busy state and prevent accidental duplicate submission where appropriate. Retry behavior must respect API idempotency guarantees. Destructive confirmation must identify the target and consequence; risk-specific confirmation rules belong to the owning domain/security policy.
+
+## 24. Localization and data integrity
+
+- Amharic-first means Amharic is designed and tested as a primary language, not merely a fallback.
+- Set document language correctly. Preserve Ethiopic glyphs and combining marks at normal and enlarged text sizes.
+- Use locale-aware formatting and canonical domain contracts. Do not hand-roll Ethiopic calendar conversion in presentation components.
+- E.C.-default behavior applies only where the owning product/domain contract specifies it. Preserve G.C. support and conversion where required.
+- Preserve currency code, precision and units; do not assume all entities or ledgers use one currency.
+- Amharic and Ethiopic scripts are left-to-right; do not infer RTL. Any future RTL locale requires explicit bidirectional layout tests.
+- Long labels, mixed-script names, dates and numerals must remain readable and operable without clipping or ambiguous truncation.
+
+## 25. Privacy, content safety and telemetry
+
+Treat user-generated content, imported files, filenames, rich text and remote data as untrusted. Escape output and use a reviewed sanitizer only where rich HTML is explicitly required. Do not expose session tokens, authentication challenges, private shareholder data or unnecessary personal data in DOM attributes, logs, telemetry or fixtures. Error messages must be actionable without disclosing sensitive account/record existence unless policy permits it. External links and media require privacy, reliability and safe-navigation review. Telemetry, tracking pixels, ad delivery and third-party scripts are not implied by design approval; each needs separate purpose, minimization, retention, access and legal/privacy review.
+
+## 26. Minimum verification matrix
+
+| Dimension | Minimum cases | Evidence |
+|---|---|---|
+| Width | 320, 360, 390, 768, 1024, 1280, 1440 CSS px | Screenshots/assertions and overflow checks |
+| Orientation | Supported mobile/tablet portrait and landscape | Device/browser evidence |
+| Zoom | 200% and narrow reflow/text enlargement | Manual and automated checks |
+| Input | Keyboard, touch, pointer where applicable | Interaction results |
+| Theme | Light, dark, system, forced colors | Per-surface evidence |
+| Motion | Normal and reduced motion | Behavior evidence |
+| Locale | Amharic, English, long/mixed-script fixtures | Per-surface rendering evidence |
+| Assistive technology | Supported screen-reader/browser pairing per release plan | Manual notes, versions and results |
+
+Automated scans do not certify accessibility or WCAG conformance. Record tool/browser/OS, exact SHA, test scope, results and exceptions. Distinguish source presence from runtime mounting, component tests from end-to-end tests, browser emulation from physical-device testing, and automated scans from manual assistive-technology review.
+
+## 27. Owner review decisions
+
+| ID | Proposed decision | Recommendation |
+|---|---|---|
+| DS-01 | Adopt this as replacement authority without claiming historical equivalence | Approve only after reviewing the authority hierarchy and trust boundaries |
+| DS-02 | Preserve distinct trust/navigation models across four surfaces while sharing primitives | Approve |
+| DS-03 | Require the verification matrix in §26 as minimum release evidence | Approve |
+| DS-04 | Require API/state contracts for new or materially changed shared components | Approve prospectively; backfill high-risk components first |
+| DS-05 | Keep telemetry, ad delivery, true 3D/WebGL and locale persistence outside implied approval | Approve; require separate decisions |
+
+## 28. Revision record
+
+Revision 0.2 — review-enhanced reconstruction, 2026-11-15. Historical source remains unrecovered. Owner approval and normative effective date remain PENDING. This revision strengthens authority, trust, API/state, localization, privacy and verification rules; it does not certify conformance, authorize implementation, merge or deployment.
