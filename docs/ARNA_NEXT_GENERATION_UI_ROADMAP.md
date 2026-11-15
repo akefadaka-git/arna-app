@@ -62,7 +62,7 @@ Evolve ARNA into a coherent, high-quality, Amharic-first enterprise experience t
 - Ethiopian calendar and Gregorian date conversion tested at month/year boundaries and timezone edges.
 
 ### 3.6 Communication and productivity surfaces
-- The repository already contains a NotificationsCenter, store, API adapter, and shell trigger. The API backend was reconciled read-only at `akefadaka-git/arna-api` main SHA `b924f6555cca8f4c5a732ffb6ba9fb181c9d0733`: all four inbox/unread/read/read-all routes exist; the controller returns the adapter's pagination, localized title/body, priority, read state, timestamp, and action shape; storage is tenant- and recipient-scoped with UUID identifiers. Next: add mounted tests for notification-center loading, error, unread/read, pagination, locale changes, and safe action handling.
+- The repository already contains a NotificationsCenter, store, API adapter, and shell trigger. The API backend was reconciled read-only at `akefadaka-git/arna-api` main SHA `b924f6555cca8f4c5a732ffb6ba9fb181c9d0733`: all four inbox/unread/read/read-all routes exist; the controller returns the adapter's pagination, localized title/body, priority, read state, timestamp, and action shape; storage is tenant- and recipient-scoped with UUID identifiers. Mounted browser coverage now passes for loading, unread/read, read-all, pagination, locale refresh, recoverable errors/retry, and fail-closed untrusted action metadata. Notification list sizing and a standalone header-height fallback keep pagination controls visible.
 - Activity timeline and audit event presentation.
 - Calendar views (month/week/day/agenda) with E.C./G.C. preference and accessible event details.
 - Document center with metadata, preview, version history, and safe download affordances.
@@ -147,10 +147,10 @@ Evolve ARNA into a coherent, high-quality, Amharic-first enterprise experience t
 - Core component inventory: 24 primitives, 26 composites, 15 patterns (65 component directories).
 - Additive visual library: MetricWidget, ChartPanel, ImageFrame, PromoBanner, AbstractBackdrop, TextEffect, MotionReveal, VisualPanel, VisualLibraryShowcase.
 - Four independent application entry points remain in place.
-- A Ctrl/⌘+K navigation destination search already exists in AppHeaderNavigation. Its shell controls and known workspace/portal destination labels have been localized; this branch adds keyboard result navigation and combobox/listbox semantics. Latest exact-head CI passed at SHA `32238fe5950256020fa429d1c0298c329c10e0ee`, workflow `43717109962`. It remains a navigation-only index, not a cross-domain entity search.
+- A Ctrl/⌘+K navigation destination search already exists in AppHeaderNavigation. Its shell controls and known workspace/portal destination labels have been localized; this branch adds keyboard result navigation and combobox/listbox semantics. Latest exact-head CI passed at SHA `424728e195f5d4a44c29fc74b28bd649afecffe5`, workflow `43719708309`. Mounted browser coverage passed for keyboard result navigation, empty results, hover synchronization, selection, and focus restoration. It remains a navigation-only index, not a cross-domain entity search.
 - NotificationsCenter, its Pinia store, and API adapter already exist; backend endpoints/schema have been source-reconciled against arna-api main SHA `b924f6555cca8f4c5a732ffb6ba9fb181c9d0733`. Mounted behavior and locale-switch coverage remain required.
 - LanguageSelector exists but is intentionally not mounted pending a locale-persistence API contract.
-- PR #69 exact-head workflow #43717109962 passed at `32238fe5950256020fa429d1c0298c329c10e0ee`; the mounted component and navigation tests configured in that workflow passed. This is bounded evidence, not full cross-app A4.
+- PR #69 exact-head workflow #43719708309 passed at `424728e195f5d4a44c29fc74b28bd649afecffe5`. The workflow passed type-check/build, four-app import analysis, design-system/theme and visual contracts, mounted component/navigation/notification tests (25 mounted A4 component tests, 7 FileUploader tests, 6 DatePicker tests), and public-browser/WCAG automated contracts. This is bounded evidence, not full cross-app A4.
 - Historical catalogue/design-system source documents have not been recovered; reconstructed documents remain drafts pending Owner authority.
 - No full authenticated-shell visual acceptance, formal WCAG certification, physical-device acceptance, or 3D model viewer is claimed.
 
@@ -185,7 +185,15 @@ The new branch starts with:
 - A2 remains PARTIAL / NOT VERIFIED-CLOSED until either the authoritative originals are recovered and provenance-checked or the Owner explicitly approves the reconstructed versions as replacement authority.
 
 ### Gate status
-- A3 implementation: PARTIAL — this branch contains the bounded UI foundation and navigation improvements; broader workstreams remain.
-- A4 verification: PASS for the exact-head configured workflow; PARTIAL for product-wide acceptance.
+- A3 implementation: PARTIAL — bounded UI foundation, notification lifecycle, and navigation-search improvements are implemented; broader workstreams remain.
+- A4 verification: PASS for configured exact-head workflow #43719708309 at `424728e195f5d4a44c29fc74b28bd649afecffe5`; PARTIAL for product-wide acceptance.
 - A2 reconciliation: PARTIAL — PR #65 scope and historical authority blockers remain.
 - A5 deployment: NOT STARTED — separate approval required.
+
+
+### Next workstream — PR #70: Unified shell parity (A1)
+- Draft PR: https://github.com/akefadaka-git/arna-app/pull/70
+- Branch: `feat/arna-unified-shell-parity-a1`
+- A1 assessment is source-backed and prepared; Owner freeze remains pending.
+- Scope: parity audit and acceptance contract across Workspace, Shareholder Portal, Admin Console, and Public Site, preserving the separate public-site trust boundary.
+- No source implementation is included; no A2/A3 work until the A1 scope is approved.
