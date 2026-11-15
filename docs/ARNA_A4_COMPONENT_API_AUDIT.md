@@ -99,3 +99,68 @@ The 10 primitive pilot is partial rather than fully closed: four Props type alia
 | A4 API audit closure | OPEN |
 
 **No A4 closure is claimed.** This record is a working audit artifact. The reconstructed catalogue and design-system documents remain subject to Owner approval. No merge or deployment is authorized by this audit.
+
+
+## 8. Expanded source-surface review — all catalogue entries
+
+A second source pass reviewed the public SFC surface for all 65 catalogue entries, including declarations, slot sites, native interactive elements and ARIA/role/tabindex usage. This expands the review coverage beyond the 10-component pilot, but does **not** close the contract audit: several SFCs split exported types and `<script setup>` declarations across separate script blocks, and complete prop/event payload extraction plus behavioral verification remains outstanding.
+
+### Primitive layer — 24 entries
+
+BaseAvatar, BaseBadge, BaseButton, BaseCheckbox, BaseChip, BaseDivider, BaseIcon, BaseInput, BaseLabel, BaseLink, BaseProgressBar, BaseRadio, BaseSelect, BaseSpinner, BaseTextarea, BaseTooltip, DangerButton, ErrorCodeBadge, ErrorSupportHint, GhostButton, IconButton, LinkButton, PrimaryButton, SecondaryButton.
+
+### Composite layer — 26 entries
+
+Accordion, Alert, Breadcrumbs, Combobox, ConfirmDialog, DatePicker, Drawer, DropdownMenu, EmptyState, ErrorActions, ErrorHeader, ErrorState, ErrorSupportPanel, FileInput, FormActions, FormField, FormSection, LoadingState, MetaList, Modal, Pagination, Popover, SearchBar, Skeleton, Stepper, Tabs.
+
+The two additional DatePicker calendar input SFCs are internal implementation files, not extra catalogue-level components.
+
+### Pattern layer — 15 entries
+
+AccessDeniedPage, Card, ConfirmDeleteDialog, DataTable, DetailCard, DownloadButton, ErrorPage, ErrorShell, FilePreview, FileUploader, FilterBar, PageHeader, PermissionGate, StatusBadge, Timeline.
+
+## 9. High-risk contract observations
+
+These are source-level risk boundaries to carry into the full test plan; they are not automatically defects.
+
+| Component | Observed contract / boundary | Required verification |
+|---|---|---|
+| PermissionGate | Client-side conditional rendering based on the auth store and permission slugs | Confirm it is never treated as a security boundary; server/API must independently authorize every protected operation |
+| FileUploader | Consumer-supplied upload function; queued-file lifecycle, cancellation signal, progress and client-side accept checks | Verify server-side MIME/content/size validation, authorization, abort cleanup, retry idempotency and rejection handling |
+| FilePreview | Browser loads a supplied URL; comments expect signed URL or consumer-created blob URL for authenticated resources | Verify URL expiry, origin policy, PDF/image content handling, CSP and no accidental exposure of private resources |
+| DataTable | Consumer supplies rows, stable row key and column definitions; emits selection/sort/row-click contracts | Verify keyboard navigation, table semantics, selection state, sorting payloads, empty/loading/error states and narrow viewport behavior |
+| Modal / Drawer | Open-state model and close events; native dialog semantics are present in template | Verify focus entry/return, Escape handling, inert background, scroll locking and nested-dialog behavior |
+| DatePicker | Separate exported type script and setup script; Ethiopian-calendar helpers and labels are consumer-supplied | Verify E.C./G.C. conversion, min/max, keyboard calendar navigation, locale labels, timezone boundaries and screen-reader announcement |
+| Combobox | Exported option/value types and separate setup script; supports single/multiple selection | Verify ARIA combobox/listbox pattern, arrow keys, Home/End, Enter/Escape, disabled options and multi-select announcements |
+| BaseTooltip | Trigger is consumer-provided through a scoped slot exposing tooltipId | Verify keyboard focus visibility, touch behavior, Escape dismissal and correct `aria-describedby` placement |
+| BaseLink | Internal route vs external URL are separate props; external new-tab links require safe rel tokens | Verify mutually exclusive prop validation, target behavior and no unsafe attribute override |
+| ErrorSupportPanel | Displays support diagnostics and copy affordance | Verify no secrets, tokens, personal data or unredacted backend payloads enter user-visible diagnostics |
+
+## 10. Current audit disposition after expanded pass
+
+| Gate | Status |
+|---|---|
+| 65 catalogue entry source surfaces located and reviewed | PASS — source-surface review only |
+| All props/defaults and imported type aliases enumerated | PARTIAL |
+| All emits and payload types enumerated | PARTIAL |
+| All scoped slot contracts enumerated | PARTIAL |
+| Exposed methods and attribute fallthrough enumerated | PARTIAL |
+| Permission and upload security boundaries documented | PARTIAL — source-level only |
+| Consumer call-site compatibility scan | NOT COMPLETE |
+| Behavioral accessibility and keyboard tests | NOT COMPLETE |
+| Full authenticated dashboard shell visual review | NOT RUN |
+| Physical-device acceptance | NOT RUN |
+| Exact-head CI for latest audit commit | NOT RUN at time of this record |
+| A4 closure | OPEN |
+
+### Required next actions
+
+1. Resolve every `Props` declaration, imported type and default in the 65 entries.
+2. Extract all `defineEmits` names and payload signatures, including v-model update events.
+3. Record every slot and scoped-slot property, and every `defineExpose` method.
+4. Check all attribute fallthrough paths and actual consumer call sites in the four app entry points.
+5. Add or run targeted tests for keyboard, focus, dialogs, date picker, combobox, file upload and authorization boundaries.
+6. Execute the authenticated shell review and physical-device checks as separate evidence items.
+7. Run CI against the resulting immutable head.
+
+**Disposition remains PARTIAL / A4 OPEN.** A source-surface review is not equivalent to a complete public API audit, accessibility certification, security approval or Owner acceptance.
