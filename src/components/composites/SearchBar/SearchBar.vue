@@ -187,11 +187,11 @@ interface Props {
   /**
    * Translated accessible name for the clear (✕) button.
    *
-   * Required when the clear button can appear (i.e., always). A missing
-   * value triggers a deduplicated dev warning; in production, the
-   * button renders with an empty aria-label (visible defect).
+   * Required. The clear button can appear whenever the input has text
+   * and the component is not loading, so every consumer must supply a
+   * translated accessible name.
    */
-  clearLabel?: string;
+  clearLabel: string;
 
   /**
    * Translated accessible name for the loading spinner.
@@ -209,7 +209,6 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false,
   autoFocus: false,
   ariaLabel: undefined,
-  clearLabel: undefined,
   loadingLabel: undefined,
 });
 
