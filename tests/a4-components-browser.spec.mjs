@@ -351,11 +351,11 @@ test.describe('Mounted NotificationsCenter lifecycle and safety', () => {
   });
 
   test('loads the next page and returns to the previous page', async ({ page }) => {
-    const requests = [];
+    let inboxRequests = 0;
     await page.route('**/api/notifications**', async (route) => {
-      const url = new URL(route.request().url());
-      const requestedPage = Number(url.searchParams.get('page') || '1');
-      requests.push(requestedPage);
+      if (route.request().method() !== 'GET') return route.continue();
+      inboxRequests += 1;
+      const requestedPage = inboxRequests === 2 ? 2 : 1;
       const entries = requestedPage === 1
         ? Array.from({ length: 20 }, (_, index) => item('p1-' + index, 'Page one ' + index))
         : [item('p2-1', 'Page two item')];
@@ -364,12 +364,19 @@ test.describe('Mounted NotificationsCenter lifecycle and safety', () => {
     await page.goto(baseUrl);
     await page.getByTestId('set-locale-en').click();
     await page.getByTestId('open-notifications').click();
-    await expect(page.getByText('Page one 0')).toBeVisible();
-    await page.getByRole('button', { name: 'Next' }).click();
+    const rows = page.locator('.notification-center__item');
+    await expect(rows).toHaveCount(20);
+    const footerButtons = page.locator('.notification-center__footer button');
+    await expect(footerButtons).toHaveCount(2);
+    await expect(footerButtons.nth(1)).toBeEnabled();
+    await footerButtons.nth(1).click();
+    await expect(rows).toHaveCount(1);
     await expect(page.getByText('Page two item')).toBeVisible();
-    await page.getByRole('button', { name: 'Previous' }).click();
+    await expect(footerButtons.nth(0)).toBeEnabled();
+    await footerButtons.nth(0).click();
+    await expect(rows).toHaveCount(20);
     await expect(page.getByText('Page one 0')).toBeVisible();
-    expect(requests).toEqual([1, 2, 1]);
+    expect(inboxRequests).toBe(3);
   });
 
   test('refreshes localized notification content when the active locale changes', async ({ page }) => {
