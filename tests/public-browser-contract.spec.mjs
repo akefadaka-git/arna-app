@@ -255,6 +255,7 @@ test.describe('ARNA public site browser contract', () => {
     for (const route of ['/verify', '/legal', '/legal/terms']) {
       await page.goto(new URL(route, baseUrl).toString());
       await expect(page.locator('h1')).toBeVisible();
+      await expect(page.getByTestId('theme-preference-control')).toBeVisible();
       await expectNoSeriousAccessibilityViolations(page, route);
     }
   });
