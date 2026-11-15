@@ -29,7 +29,7 @@ const appName: string = import.meta.env.VITE_APP_NAME || 'ARNA';
     <a class="public-site-layout__skip-link" href="#public-site-main">{{ copy.skip }}</a>
     <header class="public-site-layout__header">
       <nav class="public-site-layout__nav" :aria-label="copy.navigation">
-        <RouterLink class="public-site-layout__brand" to="/" :aria-label="aranaBrandLabels.fullCorporateIdentity"><img class="public-site-layout__emblem" src="/logo.png" alt="" width="40" height="40" /><span>{{ aranaBrandLabels.fullCorporateIdentity }}</span></RouterLink>
+        <RouterLink class="public-site-layout__brand" :to="{ path: '/', query: locale === 'en' ? { locale: 'en' } : {} }" :aria-label="aranaBrandLabels.fullCorporateIdentity"><img class="public-site-layout__emblem" src="/logo.png" alt="" width="40" height="40" /><span>{{ aranaBrandLabels.fullCorporateIdentity }}</span></RouterLink>
         <div class="public-site-layout__links">
           <RouterLink to="/verify" :aria-label="copy.verification">{{ copy.verification }}</RouterLink>
           <RouterLink to="/legal" :aria-label="copy.legal">{{ copy.legal }}</RouterLink>
