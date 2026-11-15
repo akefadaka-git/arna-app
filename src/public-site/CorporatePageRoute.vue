@@ -80,12 +80,12 @@ onMounted(() => void loadPage());
     <a class="skip-link" href="#page-content">{{ locale === 'am' ? 'ወደ ዋናው ይዘት ይሂዱ' : 'Skip to main content' }}</a>
     <header class="site-header">
       <div class="site-container site-header__inner">
-        <RouterLink class="brand" to="/">
+        <RouterLink class="brand" :to="{ path: '/', query: { locale } }">
           <img class="public-home__emblem" src="/logo.png" alt="" width="43" height="43" />
           <span class="brand__wordmark"><strong>{{ aranaBrandLabels.corporateName }}</strong><small>{{ aranaBrandLabels.productName }}</small></span>
         </RouterLink>
         <nav class="main-nav" :aria-label="locale === 'am' ? 'ዋና አሰሳ' : 'Main navigation'">
-          <RouterLink to="/">{{ locale === 'am' ? 'መነሻ' : 'Home' }}</RouterLink>
+          <RouterLink :to="{ path: '/', query: { locale } }">{{ locale === 'am' ? 'መነሻ' : 'Home' }}</RouterLink>
           <RouterLink :to="`/${locale === 'am' ? 'en' : 'am'}/${page?.alternate_slug || String(route.params.slug)}`">{{ locale === 'am' ? 'English' : 'አማርኛ' }}</RouterLink>
           <ThemePreferenceControl />
         </nav>
@@ -95,7 +95,7 @@ onMounted(() => void loadPage());
       <p v-if="loading">{{ locale === 'am' ? 'በመጫን ላይ…' : 'Loading…' }}</p>
       <section v-else-if="failed || !page" role="status">
         <h1>{{ locale === 'am' ? 'ይህ ገጽ አልተገኘም' : 'Page not found' }}</h1>
-        <RouterLink to="/">{{ locale === 'am' ? 'ወደ መነሻ ይመለሱ' : 'Return home' }}</RouterLink>
+        <RouterLink :to="{ path: '/', query: { locale } }">{{ locale === 'am' ? 'ወደ መነሻ ይመለሱ' : 'Return home' }}</RouterLink>
       </section>
       <article v-else>
         <p class="eyebrow">{{ page.page_key }}</p>
