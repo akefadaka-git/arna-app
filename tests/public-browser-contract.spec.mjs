@@ -259,4 +259,52 @@ test.describe('ARNA public site browser contract', () => {
       await expectNoSeriousAccessibilityViolations(page, route);
     }
   });
+
+  test('keeps verification and legal shell locale-aware, keyboard-accessible and responsive', async ({ page }) => {
+    const viewports = [
+      { width: 320, height: 740 }, { width: 360, height: 800 }, { width: 390, height: 844 },
+      { width: 768, height: 1024 }, { width: 1024, height: 900 }, { width: 1280, height: 900 },
+      { width: 1440, height: 960 },
+    ];
+    for (const routePath of ['/verify?locale=en', '/legal?locale=en', '/legal/terms?locale=en']) {
+      await page.goto(new URL(routePath, baseUrl).toString());
+      const shell = page.getByTestId('public-site-layout');
+      await expect(shell).toHaveAttribute('lang', 'en');
+      await expect(shell.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
+      await expect(shell.getByRole('link', { name: 'Document verification' })).toBeVisible();
+      await expect(shell.getByRole('link', { name: 'Legal information' })).toBeVisible();
+      await expect(shell.locator('.public-site-layout__skip-link')).toContainText('Skip to main content');
+      await expect(shell.getByTestId('theme-preference-control')).toBeVisible();
+      const theme = shell.getByTestId('theme-preference-control');
+      await theme.selectOption('dark');
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+      await theme.selectOption('light');
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+      await theme.selectOption('system');
+      await expect(page.locator('html')).not.toHaveAttribute('data-theme');
+      for (const viewport of viewports) {
+        await page.setViewportSize(viewport);
+        const dimensions = await page.evaluate(() => ({
+          viewport: document.documentElement.clientWidth,
+          document: document.documentElement.scrollWidth,
+        }));
+        expect(dimensions.document, routePath + ' overflow at ' + viewport.width + 'px')
+          .toBeLessThanOrEqual(dimensions.viewport + 1);
+      }
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.keyboard.press('Tab');
+      const skip = shell.locator('.public-site-layout__skip-link');
+      await expect(skip).toBeFocused();
+      await page.keyboard.press('Enter');
+      await expect(page).toHaveURL(/#public-site-main$/);
+      await expect(page.locator('#public-site-main')).toBeFocused();
+      await expectNoSeriousAccessibilityViolations(page, routePath);
+    }
+    await page.goto(new URL('/verify', baseUrl).toString());
+    const amharicShell = page.getByTestId('public-site-layout');
+    await expect(amharicShell).toHaveAttribute('lang', 'am');
+    await expect(amharicShell.getByRole('navigation', { name: 'ዋና አሰሳ' })).toBeVisible();
+    await expect(amharicShell.getByRole('link', { name: 'ሰነድ ማረጋገጫ' })).toBeVisible();
+  });
+
 });
