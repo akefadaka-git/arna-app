@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/BaseProgressBar/BaseProgressBar.vue
  Layer:     1 (Primitives)
- Version:   1.0.0
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.22
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -146,6 +146,16 @@ interface Props {
   size?: ProgressBarSize;
 
   /**
+   * Accessible name for the progressbar. Prefer ariaLabelledBy when a visible label exists.
+   */
+  ariaLabel?: string;
+
+  /**
+   * ID reference for the progressbar's accessible name. Takes precedence over ariaLabel.
+   */
+  ariaLabelledBy?: string;
+
+  /**
    * Human-readable description of the current state.
    *
    * When supplied AND determinate, this string becomes the
@@ -166,6 +176,8 @@ const props = withDefaults(defineProps<Props>(), {
   variant: 'default',
   size: 'md',
   label: undefined,
+  ariaLabel: undefined,
+  ariaLabelledBy: undefined,
 });
 
 /*
@@ -218,9 +230,14 @@ const fillStyle = computed<Record<string, string>>(() => ({
  * these attributes.
  */
 const ariaAttributes = computed<Record<string, string | undefined>>(() => {
+  const nameAttributes = {
+    'aria-label': props.ariaLabelledBy ? undefined : props.ariaLabel,
+    'aria-labelledby': props.ariaLabelledBy,
+  };
   if (isIndeterminate.value) {
     return {
       role: 'progressbar',
+      ...nameAttributes,
     };
   }
   return {
@@ -229,6 +246,7 @@ const ariaAttributes = computed<Record<string, string | undefined>>(() => {
     'aria-valuemax': '100',
     'aria-valuenow': String(clampedValue.value),
     'aria-valuetext': props.label,
+    ...nameAttributes,
   };
 });
 
