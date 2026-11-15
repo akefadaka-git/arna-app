@@ -138,7 +138,7 @@ test('repository product metadata consistently identifies ARNA', async () => {
 
   for (const path of ['../.env.workspace', '../.env.portal', '../.env.admin']) {
     const source = await read(path);
-    assert.doesNotMatch(source, /^\\s*VITE_APP_NAME\\s*=.*MASES/im, path);
+    assert.doesNotMatch(source, /^\s*VITE_APP_NAME\s*=.*MASES/im, path);
   }
 
   const vite = await read('../vite.config.ts');
