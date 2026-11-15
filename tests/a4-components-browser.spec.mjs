@@ -247,7 +247,7 @@ test.describe('Mounted localized shell navigation search', () => {
     await page.keyboard.press('Control+k');
     const amharicDialog = page.getByRole('dialog', { name: 'ARNA ይፈልጉ' });
     await expect(amharicDialog).toBeVisible();
-    await expect(amharicDialog.getByRole('combobox', { name: 'ሞጁሎችን እና ገጾችን ይፈልጉ' })).toHaveAttribute('placeholder', 'ሞጁሎችን እና ገጾችን ይፈልጉ…');
+    await expect(amharicDialog.getByRole('combobox', { name: 'ሞጁሎችን እና ገጾችን ይፈልጉ…' })).toHaveAttribute('placeholder', 'ሞጁሎችን እና ገጾችን ይፈልጉ…');
     await amharicDialog.getByRole('button', { name: 'ፍለጋን ዝጋ' }).click();
     await expect(amharicDialog).toBeHidden();
     await expect(trigger).toBeFocused();
@@ -260,7 +260,7 @@ test.describe('Mounted localized shell navigation search', () => {
     const englishDialog = page.getByRole('dialog', { name: 'Search ARNA' });
     await expect(englishDialog).toBeVisible();
     await expect(englishDialog.getByRole('heading', { name: 'Search ARNA' })).toBeVisible();
-    const input = englishDialog.getByRole('combobox', { name: 'Search modules and pages' });
+    const input = englishDialog.getByRole('combobox', { name: 'Search modules and pages…' });
     await expect(input).toHaveAttribute('placeholder', 'Search modules and pages…');
     await input.fill('Documents');
     await expect(englishDialog.getByRole('option', { name: 'Documents' })).toBeVisible();
