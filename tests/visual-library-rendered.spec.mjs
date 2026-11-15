@@ -77,17 +77,23 @@ test.describe('ARNA visual library rendered review', () => {
               const elements = Array.from(document.querySelectorAll(selector));
               return Math.max(0, ...elements.map((element) => element.getBoundingClientRect().bottom));
             };
+            const twoDSection = document.querySelector('[aria-labelledby="visual-2d-heading"]');
+            const threeDSection = document.querySelector('[aria-labelledby="visual-3d-heading"]');
             const contentSection = document.querySelector('[aria-label="Visual component previews"]');
             const promo = document.querySelector('[data-testid="promo-banner"]');
             const contentPanels = document.querySelectorAll('.visual-library-showcase__grid--content .visual-panel');
             return {
-              threeDVisualBottom: rectBottom('.visual-panel[data-mode="3d"] .visual-panel__surface'),
+              twoDVisualBottom: rectBottom('[aria-labelledby="visual-2d-heading"] .visual-panel__surface'),
+              threeDTop: threeDSection?.getBoundingClientRect().top ?? 0,
+              threeDVisualBottom: rectBottom('[aria-labelledby="visual-3d-heading"] .visual-panel__surface'),
               contentTop: contentSection?.getBoundingClientRect().top ?? 0,
               contentBottom: rectBottom('.visual-library-showcase__grid--content .visual-panel__surface'),
               promoTop: promo?.getBoundingClientRect().top ?? 0,
               contentPanelCount: contentPanels.length,
             };
           });
+          expect(flow.threeDTop, '2D panels must not intrude into the 3D section')
+            .toBeGreaterThanOrEqual(flow.twoDVisualBottom - 1);
           expect(flow.contentTop, '3D panels must not intrude into the component preview section')
             .toBeGreaterThanOrEqual(flow.threeDVisualBottom - 1);
           expect(flow.promoTop, 'component preview panels must not intrude into the promotional section')
