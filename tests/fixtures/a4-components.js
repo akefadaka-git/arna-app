@@ -4,6 +4,7 @@ import Modal from '../../src/components/composites/Modal/Modal.vue';
 import Drawer from '../../src/components/composites/Drawer/Drawer.vue';
 import FormField from '../../src/components/composites/FormField/FormField.vue';
 import ErrorSupportPanel from '../../src/components/composites/ErrorSupportPanel/ErrorSupportPanel.vue';
+import DataTable from '../../src/components/patterns/DataTable/DataTable.vue';
 
 createApp({
   setup() {
@@ -12,6 +13,21 @@ createApp({
     const drawerOpen = ref(false);
     const modalCloseEvents = ref(0);
     const drawerCloseEvents = ref(0);
+    const tableSelectedKeys = ref([]);
+    const tableSort = ref({ key: 'name', dir: 'asc' });
+    const tableRowClicks = ref(0);
+    const tableRows = [
+      { id: 'row-1', name: 'Alpha account', status: 'Active' },
+      { id: 'row-2', name: 'Beta account', status: 'Pending' },
+    ];
+    const tableColumns = [
+      { key: 'name', label: 'Account name', sortable: true, priority: 'high' },
+      { key: 'status', label: 'Status', priority: 'medium' },
+    ];
+    const tableSelectionLabels = {
+      selectAll: 'Select all accounts',
+      selectRow: (row) => `Select ${row.name}`,
+    };
     const supportLabels = {
       toggle: 'Technical details',
       errorCode: 'Error code',
@@ -66,6 +82,26 @@ createApp({
         }),
         h('output', { 'data-testid': 'combobox-selected', 'aria-live': 'polite' }, String(selected.value ?? 'none')),
         h('button', { type: 'button', 'data-testid': 'after-combobox' }, 'After combobox'),
+      ]),
+      h('section', { 'aria-label': 'DataTable test' }, [
+        h(DataTable, {
+          columns: tableColumns,
+          rows: tableRows,
+          rowKey: (row) => row.id,
+          selectable: true,
+          selectedKeys: tableSelectedKeys.value,
+          selectionLabels: tableSelectionLabels,
+          sortKey: tableSort.value.key,
+          sortDir: tableSort.value.dir,
+          'onUpdate:selectedKeys': (keys) => { tableSelectedKeys.value = keys; },
+          'onUpdate:sort': (sort) => { tableSort.value = sort; },
+          onRowClick: () => { tableRowClicks.value += 1; },
+        }, {
+          'row-actions': ({ row }) => h('button', { type: 'button', 'data-testid': `table-action-${row.id}` }, 'Open'),
+        }),
+        h('output', { 'data-testid': 'table-selected-keys' }, tableSelectedKeys.value.join(',')),
+        h('output', { 'data-testid': 'table-sort' }, `${tableSort.value.key}:${tableSort.value.dir}`),
+        h('output', { 'data-testid': 'table-row-clicks' }, String(tableRowClicks.value)),
       ]),
       h('section', { 'aria-label': 'Modal test' }, [
         h('button', { type: 'button', 'data-testid': 'open-modal', onClick: () => { modalOpen.value = true; } }, 'Open modal'),
