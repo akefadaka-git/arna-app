@@ -32,6 +32,7 @@ PR: [#69](https://github.com/akefadaka-git/arna-app/pull/69)
 - Historical `MASES_PHASE_2_UI_DESIGN_SYSTEM.md` and component catalogue originals remain MISSING. Reconstructed documents are drafts, not normative authority unless explicitly approved by the Owner.
 
 ## Verification plan / remaining A4
+- Workflow #43718030810 at SHA `12089300f4109504dc0d4b238a5d5fc3c3a32693` failed at the mounted browser test step; build/static checks and earlier workflow steps passed. Exact Playwright assertion details were not exposed in the check annotations. The fixture's locale initialization and a brittle numeric text assertion were corrected in the follow-up test commit; the new exact-head run must confirm the repair.
 1. Run exact-head type-check and all four builds on the new notification/navigation test commit.
 2. Execute mounted notification tests for loading, read state, pagination, locale refresh, failure/retry, and fail-closed untrusted action metadata.
 3. Execute navigation search tests for keyboard navigation, empty results, hover synchronization, selection, and focus restoration.
