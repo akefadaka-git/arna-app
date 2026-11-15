@@ -34,9 +34,9 @@ withDefaults(defineProps<{
 }
 .metric-widget__label,
 .metric-widget__description { margin: 0; color: var(--arna-color-text-secondary); }
-.metric-widget__label { font-size: var(--arna-font-size-sm); }
+.metric-widget__label { font-size: var(--arna-font-size-body-sm); }
 .metric-widget__value { margin: .35rem 0; font-size: clamp(1.35rem, 4vw, 2rem); font-weight: 700; overflow-wrap: anywhere; }
-.metric-widget__footer { display: flex; flex-wrap: wrap; gap: .35rem .65rem; font-size: var(--arna-font-size-xs); }
+.metric-widget__footer { display: flex; flex-wrap: wrap; gap: .35rem .65rem; font-size: var(--arna-font-size-caption); }
 .metric-widget__change { font-weight: 600; }
 .metric-widget__change[data-trend="up"] { color: var(--arna-color-text-success); }
 .metric-widget__change[data-trend="down"] { color: var(--arna-color-text-danger); }
