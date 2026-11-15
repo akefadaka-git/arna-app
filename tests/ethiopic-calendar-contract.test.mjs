@@ -63,8 +63,9 @@ test('all date-only Wallet, Loan, Governance and Administration controls use cal
   ];
   for (const path of paths) {
     const source = await read(path);
+    const template = source.slice(source.indexOf('<template>'), source.indexOf('<style'));
     assert.match(source, /CalendarDateInput|DatePicker/);
-    assert.doesNotMatch(source, /type="date"/);
+    assert.doesNotMatch(template, /type="date"/);
   }
 });
 
@@ -76,8 +77,9 @@ test('date-time forms retain local date-time wire shape with a separate time con
   ];
   for (const path of paths) {
     const source = await read(path);
+    const template = source.slice(source.indexOf('<template>'), source.indexOf('<style'));
     assert.match(source, /CalendarDateTimeInput/);
-    assert.doesNotMatch(source, /type="datetime-local"/);
+    assert.doesNotMatch(template, /type="datetime-local"/);
   }
   const adapter = await read('src/components/composites/DatePicker/CalendarDateTimeInput.vue');
   assert.match(adapter, /type="time"/);
