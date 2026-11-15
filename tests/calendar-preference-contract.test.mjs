@@ -11,6 +11,23 @@ const dateViews = [
   'src/features/loans/LoanScheduleView.vue',
   'src/features/governance/GovernancePersonProfileView.vue',
   'src/features/governance/GovernanceBodyListView.vue',
+  'src/features/governance/GovernanceBodyDetailView.vue',
+  'src/features/shareholders/ShareholderListView/ShareholderListView.vue',
+  'src/features/shareholders/ShareholderDetailView/ShareholderDetailView.vue',
+  'src/features/portal/MyCertificatesPage.vue',
+  'src/features/portal/MyShareholdingsPage.vue',
+  'src/features/portal/MyWalletPage.vue',
+  'src/features/loans/LoanStatementView.vue',
+  'src/features/wallet/WalletListView.vue',
+  'src/features/wallet/WalletDetailView.vue',
+  'src/features/wallet/WalletStatementView.vue',
+  'src/features/wallet/WalletAllocationForm.vue',
+  'src/features/wallet/WalletAllocationReverseDialog.vue',
+  'src/features/files/FilesListView/FilesListView.vue',
+  'src/features/files/FileDetailView/FileDetailView.vue',
+  'src/features/notifications/NotificationsCenter.vue',
+  'src/router/pages/AdminPublicContentRoute.vue',
+  'src/router/pages/AdminAuditSecurityRoute.vue',
 ];
 
 for (const path of dateViews) {
