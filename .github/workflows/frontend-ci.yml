@@ -38,6 +38,18 @@ jobs:
           '
       - name: Block high and critical dependency advisories
         run: npm audit --audit-level=high
+      - name: Generate four-application AST import graph
+        run: npm run analyze:imports
+      - name: Upload import graph audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arna-import-graph-${{ github.sha }}
+          path: |
+            artifacts/arna-application-import-graph.json
+            artifacts/ARNA_APPLICATION_IMPORT_GRAPH.md
+          if-no-files-found: warn
+          retention-days: 14
       - name: Type-check and build all applications
         run: npm run build
       - name: Verify root entry points, local assets, and deployment policy
