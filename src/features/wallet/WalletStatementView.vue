@@ -317,7 +317,6 @@ import { CalendarDateInput } from '@/components/composites/DatePicker';
 import LoadingState from '@/components/composites/LoadingState';
 import EmptyState from '@/components/composites/EmptyState';
 import ErrorState from '@/components/composites/ErrorState';
-import BaseInput from '@/components/primitives/BaseInput';
 import BaseButton from '@/components/primitives/BaseButton';
 import PageTitle from '@/layouts/AppShell/PageTitle';
 
