@@ -48,7 +48,6 @@ function displayLabel(item: SearchNavItem): string {
 const labels = computed(() => localeStore.locale === 'en'
   ? {
       breadcrumb: 'Breadcrumb',
-      trigger: 'Search ARNA',
       triggerText: 'Search ARNA',
       title: 'Search ARNA',
       description: 'Find an available module or page',
@@ -60,7 +59,6 @@ const labels = computed(() => localeStore.locale === 'en'
     }
   : {
       breadcrumb: 'የገጽ አቅጣጫ',
-      trigger: 'ARNA ይፈልጉ',
       triggerText: 'ARNA ይፈልጉ',
       title: 'ARNA ይፈልጉ',
       description: 'የሚገኝ ሞጁል ወይም ገጽ ያግኙ',
@@ -167,13 +165,12 @@ function navigate(item: SearchNavItem): void {
       size="sm"
       class="app-header-navigation__search-trigger"
       aria-haspopup="dialog"
-      :aria-label="labels.trigger"
       data-testid="app-header-search-trigger"
       @click="openSearch"
     >
       <BaseIcon name="search" size="sm" />
       <span class="app-header-navigation__search-label">{{ labels.triggerText }}</span>
-      <kbd aria-hidden="true">Ctrl / ⌘ K</kbd>
+      <kbd>Ctrl / ⌘ K</kbd>
     </BaseButton>
 
     <dialog ref="dialog" class="app-header-navigation__dialog" aria-labelledby="app-header-search-title" @close="restoreSearchFocus">
