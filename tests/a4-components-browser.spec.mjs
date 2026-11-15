@@ -142,3 +142,46 @@ test.describe('Mounted native Modal and Drawer behavior', () => {
     expect(drawerResults.violations.filter((item) => ['serious', 'critical'].includes(item.impact)).map((item) => item.id)).toEqual([]);
   });
 });
+
+
+test.describe('Mounted ErrorSupportPanel privacy and clipboard behavior', () => {
+  test('copies only the allowlisted diagnostic fields and omits absent optional fields', async ({ page, context }) => {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await page.reload();
+    const panel = page.getByTestId('error-support-panel-root');
+    await panel.getByTestId('error-support-panel-summary').click();
+    await expect(panel.locator('[data-field-key="requestId"]')).toBeVisible();
+    await panel.getByTestId('error-support-panel-copy').click();
+    await expect(panel).toHaveAttribute('data-copy-state', 'copied');
+
+    const copied = await page.evaluate(() => navigator.clipboard.readText());
+    expect(copied).toBe([
+      'Error code: AUTH_PERMISSION_DENIED',
+      'Request reference: req-12345',
+      'Timestamp: 2026-11-15T12:00:00Z',
+      'Local time: 15/11/2019 15:00 E.C.',
+    ].join('\\n'));
+    expect(copied).not.toMatch(/password|token|stack trace|SQL|filesystem|private form/i);
+
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    expect(results.violations.filter((item) => ['serious', 'critical'].includes(item.impact)).map((item) => item.id)).toEqual([]);
+  });
+
+  test('shows a labeled manual-copy fallback when clipboard access is unavailable', async ({ page }) => {
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, 'clipboard', { configurable: true, value: undefined });
+    });
+    await page.reload();
+    const panel = page.getByTestId('error-support-panel-root');
+    await panel.getByTestId('error-support-panel-summary').click();
+    await panel.getByTestId('error-support-panel-copy').click();
+    await expect(panel).toHaveAttribute('data-copy-state', 'failed');
+    const fallback = page.getByTestId('error-support-panel-fallback-textarea');
+    await expect(fallback).toHaveAttribute('readonly', '');
+    await expect(fallback).toHaveAttribute('aria-labelledby', /mases-error-support-panel-\\d+-fallback-instruction/);
+    await expect(fallback).toHaveValue(/AUTH_PERMISSION_DENIED/);
+    await expect(fallback).toHaveValue(/req-12345/);
+  });
+});
