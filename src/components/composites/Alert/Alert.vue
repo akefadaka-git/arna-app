@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/composites/Alert/Alert.vue
  Layer:     2 (Composites)
- Version:   1.0.0
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §3.12
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -200,11 +200,13 @@ interface Props {
   /**
    * Translated accessible name for the dismiss button.
    *
-   * Required when dismissible=true. A missing value triggers a
-   * development-time warning; in production, the button renders with
-   * an empty aria-label (visible defect).
+   * Required when dismissible=true unless dismissLabelledBy is supplied.
+   * A missing accessible name triggers a development-time warning.
    */
   dismissLabel?: string;
+
+  /** ID of the element(s) that provide the dismiss button's accessible name. */
+  dismissLabelledBy?: string;
 
   /**
    * Whether the leading icon is rendered. Defaults to true.
@@ -219,6 +221,7 @@ const props = withDefaults(defineProps<Props>(), {
   title: undefined,
   dismissible: false,
   dismissLabel: undefined,
+  dismissLabelledBy: undefined,
   icon: true,
 });
 
@@ -241,12 +244,16 @@ defineSlots<{
 // -----------------------------------------------------------------------------
 // Development-time guard
 // -----------------------------------------------------------------------------
-if (import.meta.env.DEV && props.dismissible && !props.dismissLabel) {
+if (
+  import.meta.env.DEV &&
+  props.dismissible &&
+  !props.dismissLabel &&
+  !props.dismissLabelledBy
+) {
   __masesAlertWarnOnce(
     'alert:missing-dismiss-label',
-    '[Alert] dismissible=true without dismissLabel. The dismiss button ' +
-      'will render with an empty aria-label, which is an accessibility ' +
-      'defect. Supply a translated string such as "Dismiss".',
+    '[Alert] dismissible=true without dismissLabel or dismissLabelledBy. ' +
+      'Supply a translated accessible name for the dismiss button.',
   );
 }
 
@@ -360,7 +367,8 @@ function onDismiss(): void {
       v-if="dismissible"
       type="button"
       class="alert__dismiss"
-      :aria-label="dismissLabel ?? ''"
+      :aria-label="dismissLabelledBy ? undefined : dismissLabel || undefined"
+      :aria-labelledby="dismissLabelledBy"
       data-testid="alert-dismiss"
       @click="onDismiss"
     >
