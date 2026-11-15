@@ -164,7 +164,7 @@ function navigate(item: SearchNavItem): void {
       variant="ghost"
       size="sm"
       class="app-header-navigation__search-trigger"
-      :aria-label="labels.triggerText"
+      :aria-label="`${labels.triggerText} Ctrl / ⌘ K`"
       aria-haspopup="dialog"
       data-testid="app-header-search-trigger"
       @click="openSearch"
