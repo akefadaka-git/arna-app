@@ -1030,3 +1030,6 @@ Added to the existing A4 mounted fixture and Playwright suite:
 - Exact-head workflow execution is not yet available. No PASS claim is made for these new browser cases.
 
 **Disposition:** DATA TABLE MOUNTED TESTS ADDED; EXECUTION NOT VERIFIED. This expands behavioral coverage but does not close all DataTable consumer, pagination, keyboard, narrow-viewport or authenticated-shell requirements. A4 remains OPEN.
+
+
+- Follow-up test hardening: the mobile-card browser case explicitly sets a 390×844 viewport before asserting card visibility, rather than relying on Playwright's default desktop viewport. Commit: fab2c1dafc7c0509213f5547c3903cb099c14246.
