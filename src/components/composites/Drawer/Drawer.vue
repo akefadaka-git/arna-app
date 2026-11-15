@@ -530,6 +530,16 @@ function onCloseButtonClick(): void {
    */
 }
 
+/*
+ * An author-level display:flex on the dialog overrides the browser's
+ * lower-specificity closed-dialog display:none rule. Restore the native
+ * closed state explicitly so an unopened Drawer cannot cover the page
+ * or intercept pointer events.
+ */
+.drawer:not([open]) {
+  display: none;
+}
+
 .drawer--right {
   justify-content: flex-end;
 }
