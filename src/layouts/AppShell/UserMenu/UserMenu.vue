@@ -346,6 +346,14 @@ const auth = useAuthStore();
 const user = computed(() => auth.user);
 const displayName = computed<string>(() => auth.userName ?? '');
 
+// Keep the authenticated identity in the trigger's accessible name, even
+// when the visual name is hidden at the mobile breakpoint.
+const triggerAccessibleLabel = computed(() =>
+  displayName.value
+    ? `${props.labels.triggerAriaLabel}: ${displayName.value}`
+    : props.labels.triggerAriaLabel,
+);
+
 // -----------------------------------------------------------------------------
 // Menu open state (single-instance controlled state)
 // -----------------------------------------------------------------------------
@@ -459,7 +467,7 @@ function onMenuSelect(key: string): void {
           :aria-haspopup="ariaHaspopup"
           :aria-expanded="ariaExpanded"
           :aria-controls="ariaControls"
-          :aria-label="labels.triggerAriaLabel"
+          :aria-label="triggerAccessibleLabel"
           data-testid="user-menu-trigger"
           @click="toggle"
         >
