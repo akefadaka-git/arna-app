@@ -780,3 +780,39 @@ The first five patterns were reconciled from their SFC declarations, exported da
 | Overall A4 API audit | OPEN |
 
 No merge or deployment is included or authorized.
+
+
+## 30. Pattern API reconciliation — batch 2 (10 of 15)
+
+Five further patterns were reconciled from their prop/type declarations, event payloads, slot contracts and lifecycle implementations.
+
+| Component / source blob | Public props and defaults | Events / model | Slots and exposed API |
+|---|---|---|---|
+| DownloadButton — `2552f614f00f043f7dac18e9c7ea9765288da819` | Required `download:DownloadFn` and `labels:DownloadButtonLabels`; `variant='primary'`; `size='md'`; `block=false`; `disabled=false`; `successDuration=2000ms`. Download function returns `Promise<void>`; labels require download/downloading/success/retry. | `started()`; `downloaded()`; `failed({error:unknown})`. | No consumer slots or exposed methods found. |
+| ErrorPage — `8180d16bbb26fa394f5f753475cd3ee706a3147c` | Required `status:number`, translated `statusLabel`, `title`, `message`, and `labels:ErrorPageLabels`; optional `code`, `requestId`, `timestamp`; `actions=[]`. Action shape: `{id,label,variant?,disabled?}`; first three actions map positionally to primary/secondary/tertiary. | `action({id:string})`. | Optional unscoped default slot for contextual extra content between actions and support panel. No exposed methods found. |
+| ErrorShell — `8782a1100f9592870684504d217e4842408229aa` | No public props declared in inspected SFC. | No emits declared. | Required default slot; optional `brand` and `footer` slots. Presence of brand/footer changes layout from centered to column. No exposed methods found. |
+| FilePreview — `52c43b33167a03a46a651564a6d52489dff06edc` | Required `src:string`, `name:string`, `labels:FilePreviewLabels`; optional `mimeType`, `alt` (defaults to name), `loadText:LoadTextFn`; `size='md'` (sm/md/lg). Exported status/kind unions and `deriveMimeFromName` / `kindFromMime` helpers. | `ready()`; `error({error:unknown})`. | Optional `fallback` slot replaces error/unsupported overlay content while wrapper semantics remain owned by pattern. No exposed methods found. |
+| FileUploader — `f69d954f26e0c70029df23e5e89297d549506e99` | Required stable `upload:UploadFn` and `labels:FileUploaderLabels`; optional `accept`, `maxSizeBytes`, `maxFiles`; `multiple=true`; `disabled=false`. Upload function receives `File` and `UploadContext={onProgress,signal}`, resolves `UploadedFile`. | `uploaded({localId,uploaded})`; `failed({localId,error})`; `removed({localId})`; `completed({uploaded})`; `rejected({file,reason:size|type|count})`. | Optional scoped `item({item:FileUploaderQueueItem})` slot replaces each queue row interior; outer list item/status/key remain pattern-owned. No exposed methods found. |
+
+### Pattern batch 2 findings and compatibility notes
+
+1. **DownloadButton delegates the actual download to the consumer.** The pattern owns transient UI state but does not fetch a URL itself. The consumer's `download()` promise must resolve only after the intended download operation completes and reject for network, authorization, expired-URL or browser-save failures. The pattern emits the original rejection as `failed({error})`; consumers must avoid exposing sensitive error internals to end users.
+2. **ErrorPage is a controlled error presentation pattern.** The first three action records map by position, not by their `variant` field; action IDs are returned in the `action({id})` event. Extra slot content is rendered between actions and support diagnostics. Support-panel data is conditional and should contain only approved/redacted diagnostic fields.
+3. **ErrorShell has a required content slot.** The default slot hosts the error page; brand/footer slots are optional. Their presence changes layout behavior. Consumers must not assume a fixed vertically centered layout when adding branding or footer content.
+4. **FilePreview loads browser resources directly from `src`.** The component cannot attach Authorization headers to native `img`/`object` loads. For private resources, consumers must provide a backend-issued signed URL or a locally created blob/object URL. The source explicitly says MIME derivation from extension is a presentation convenience, not a security boundary. Server-side authorization, content validation and URL lifetime remain mandatory.
+5. **FilePreview's text preview is consumer-mediated.** A `text/*` resource is only loaded when a `loadText` function is supplied; otherwise it becomes unsupported. The component does not fetch text by itself. The fallback slot replaces overlay content but not the pattern's error/unsupported wrapper.
+6. **FileUploader is a controlled integration boundary with an internal queue.** The upload function must be a stable reference, honor the supplied AbortSignal and report progress through `onProgress`. Cancellation is terminal; unmount aborts active requests; retries are permitted only for error items. The pattern emits per-file outcomes and aggregate completion only when at least one upload succeeded.
+7. **FileUploader validation is client-side UX validation only.** `accept`, max size and max count checks do not replace server-side authentication, authorization, MIME/content inspection, quota enforcement, malware scanning or idempotency controls. A successful `uploaded` event reports the consumer's resolved payload; it does not independently verify server persistence.
+8. **FileUploader slot responsibility is bounded.** The custom `item` slot replaces row interior, but list wrapper, item key and status attribute remain pattern-owned. Consumer content must preserve retry/cancel/remove actions and accessible status announcements if it replaces the default row.
+9. This batch records source contracts but does not complete every caller's signed-URL handling, upload abort propagation, diagnostics redaction, or keyboard/screen-reader review.
+
+| Pattern API audit progress | Status |
+|---|---|
+| Pattern source files contract-reconciled | 10 / 15 |
+| Pattern props/defaults/events/slots | PARTIAL |
+| Consumer compatibility for batch 2 | NOT COMPLETE |
+| Dedicated mounted behavior evidence | PARTIAL — FileUploader has mounted lifecycle suite; remaining patterns need focused coverage |
+| Remaining patterns | 5 |
+| Overall A4 API audit | OPEN |
+
+No merge or deployment is included or authorized.
