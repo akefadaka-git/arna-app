@@ -15,7 +15,6 @@ test.describe('Mounted Combobox browser behavior', () => {
     await expect(input).toHaveAttribute('aria-expanded', 'true');
     await expect(page.getByRole('listbox')).toBeVisible();
 
-    await input.press('ArrowDown');
     await expect(page.getByRole('option', { name: 'Unavailable' })).toHaveAttribute('aria-disabled', 'true');
     await input.press('ArrowDown');
     const beta = page.getByRole('option', { name: 'Beta' });
