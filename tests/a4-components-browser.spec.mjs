@@ -244,7 +244,7 @@ test.describe('Mounted DataTable behavior', () => {
 test.describe('Mounted localized shell navigation search', () => {
   test('switches Amharic and English search labels and navigates to an available destination', async ({ page }) => {
     const trigger = page.getByTestId('app-header-search-trigger');
-    await expect(trigger).toHaveAccessibleName('ARNA ይፈልጉ');
+    await expect(trigger).toHaveAccessibleName('ARNA ይፈልጉ Ctrl / ⌘ K');
 
     await trigger.focus();
     await page.keyboard.press('Control+k');
@@ -256,7 +256,7 @@ test.describe('Mounted localized shell navigation search', () => {
     await expect(trigger).toBeFocused();
 
     await page.getByTestId('set-locale-en').click();
-    await expect(trigger).toHaveAccessibleName('Search ARNA');
+    await expect(trigger).toHaveAccessibleName('Search ARNA Ctrl / ⌘ K');
     await trigger.focus();
 
     await page.keyboard.press('Control+k');
