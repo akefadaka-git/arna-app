@@ -107,9 +107,7 @@ test('all SearchBar consumers provide a translated clear-button accessible name'
   ];
   for (const [path, testId] of consumers) {
     const source = read(path);
-    const search = source.match(new RegExp(`<SearchBar[\\s\\S]*?data-testid="${testId}"[\\s\\S]*?/>?`));
-    assert.ok(search, `${path} must contain its SearchBar instance`);
-    assert.match(search[0], /:clear-label="labels\.searchClearLabel"/, `${path} must bind SearchBar clearLabel`);
+    assert.match(source, new RegExp(`<SearchBar[\\s\\S]*?:clear-label="labels\\.searchClearLabel"[\\s\\S]*?data-testid="${testId}"`), `${path} must bind SearchBar clearLabel`);
   }
 
   const labelSources = [
