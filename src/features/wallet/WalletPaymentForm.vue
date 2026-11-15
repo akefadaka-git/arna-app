@@ -195,6 +195,7 @@ import { computed, ref, watch } from 'vue';
 import Modal from '@/components/composites/Modal';
 import Alert from '@/components/composites/Alert';
 import FormField from '@/components/composites/FormField';
+import { CalendarDateInput } from '@/components/composites/DatePicker';
 import BaseInput from '@/components/primitives/BaseInput';
 import BaseSelect from '@/components/primitives/BaseSelect';
 import BaseButton from '@/components/primitives/BaseButton';
@@ -551,10 +552,9 @@ const submitLabel = computed<string>(() =>
         :error="occurredAtError"
         :disabled="isSubmitting"
       >
-        <BaseInput
+        <CalendarDateInput
           id="wallet-payment-occurred-at"
           v-model="occurredAt"
-          type="date"
           :disabled="isSubmitting"
           data-testid="wallet-payment-form-occurred-at"
         />
