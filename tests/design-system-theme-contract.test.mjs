@@ -122,7 +122,7 @@ test('theme preference is persisted, system-aware, and safely applied', () => {
   assert.ok(themePreference.includes('window.localStorage.getItem(STORAGE_KEY)'));
   assert.ok(themePreference.includes('window.localStorage.setItem(STORAGE_KEY, preference)'));
   assert.ok(themePreference.includes('catch'));
-  assert.ok(themeControl.includes('aria-label="የማሳያ ገጽታ / Display theme"'));
+  assert.match(themeControl, /<label class="theme-preference-control">[\s\S]*<span class="theme-preference-control__label">ገጽታ \/ Theme<\/span>[\s\S]*<select/);
   assert.ok(themeControl.includes('value="system"'));
   assert.ok(themeControl.includes('value="light"'));
   assert.ok(themeControl.includes('value="dark"'));
