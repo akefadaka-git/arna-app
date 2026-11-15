@@ -19,6 +19,7 @@ import {
 import { listGovernanceBodies } from '@/features/governance/service';
 import type { GovernanceBody } from '@/features/governance/api';
 import { formatCalendarDate } from '@/core/dates/calendar';
+import { CalendarDateTimeInput } from '@/components/composites/DatePicker';
 
 const meetings = ref<readonly GovernanceMeeting[]>([]);
 const governanceBodies = ref<readonly GovernanceBody[]>([]);
@@ -302,7 +303,7 @@ onMounted(() => { void loadMeetings(); });
           </select>
         </label>
         <label>Meeting date and start time
-          <input v-model="createForm.starts_at" type="datetime-local" required />
+          <CalendarDateTimeInput id="governance-meeting-starts-at" v-model="createForm.starts_at" time-label="Time / ሰዓት" required />
         </label>
         <label>ርዕስ በአማርኛ
           <input v-model="createForm.title_am" maxlength="190" />
@@ -360,7 +361,7 @@ onMounted(() => { void loadMeetings(); });
               </select>
             </label>
             <label>Arrival time (required for present / late)
-              <input v-model="attendanceForm.arrived_at" type="datetime-local" />
+              <CalendarDateTimeInput id="governance-attendance-arrived-at" v-model="attendanceForm.arrived_at" time-label="Time / ሰዓት" />
             </label>
             <label class="wide">Notes / permission evidence reference (required for excused absence)
               <input v-model="attendanceForm.notes" maxlength="2000" :required="attendanceForm.attendance_status === 'excused'" />
@@ -434,7 +435,7 @@ onMounted(() => { void loadMeetings(); });
                 <option value="present">Present</option><option value="late">Late</option><option value="absent">Absent</option><option value="excused">Excused</option><option value="represented">Represented</option>
               </select>
             </label>
-            <label>Correct arrival time <input v-model="correctionForm.proposed_arrived_at" type="datetime-local" /></label>
+            <label>Correct arrival time <CalendarDateTimeInput id="governance-correction-arrived-at" v-model="correctionForm.proposed_arrived_at" time-label="Time / ሰዓት" /></label>
             <label>Reason <input v-model="correctionForm.reason" minlength="5" maxlength="2000" required /></label>
             <div class="form-actions"><button type="submit" :disabled="saving">Request correction</button></div>
           </form>
