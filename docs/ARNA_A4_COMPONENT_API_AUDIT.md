@@ -307,3 +307,26 @@ Corrected `src/components/patterns/FileUploader/FileUploader.vue` so cancellatio
 | Full authenticated shell / physical-device acceptance | NOT RUN |
 
 No merge or deployment is included or authorized.
+
+## 18. FileUploader first mounted-run findings and corrections
+
+Exact-head workflow [#43703054325](https://github.com/akefadaka-git/arna-app/actions/runs/43703054325) completed with the new FileUploader suite at **5 passed / 2 failed**. The other workflow stages, including build, static contracts, public browser/axe, 12-state visual review and mounted Combobox/Modal/Drawer tests, passed. The failure log identified two component integration defects:
+
+1. **Progress reactivity:** the initial upload lifecycle retained the raw queue-item object after inserting it into Vue's reactive array. Progress callbacks mutated that raw object, bypassing the reactive proxy; the visible progressbar stayed at its initial value. The initial selection path now retrieves the queued item through the reactive array before calling `startUpload`.
+2. **Rejected-file payload propagation:** FileInput's existing `reject` event carries only a reason, so FileUploader could not relay the rejected File in its documented `rejected` payload. Added an additive `reject-file` event carrying `{ file, reason }`, preserving the existing `reject` event unchanged. FileUploader maps the payload to its existing `size` / `type` rejection contract.
+
+The earlier mixed-batch cancellation completion correction remains in place. These are component fixes, not test-only expectation changes.
+
+### Reverification
+
+- Added static regression assertions for the reactive queue-proxy path and FileInput rejection relay.
+- Re-running the complete frontend workflow at the corrected exact head; the new mounted FileUploader suite must pass before these fixes are marked verified.
+- The original failed run remains recorded as failed evidence and is not relabeled.
+
+| Gate | Status |
+|---|---|
+| FileUploader progress reactivity correction | IMPLEMENTED — exact-head CI pending |
+| Rejected-file payload propagation | IMPLEMENTED — exact-head CI pending |
+| Mixed-batch cancellation completion | IMPLEMENTED — exact-head CI pending |
+| FileUploader mounted browser suite | PARTIAL — 5/7 on initial run; corrected rerun pending |
+| A4 API audit closure | OPEN |
