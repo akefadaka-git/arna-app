@@ -38,8 +38,9 @@ function onChange(event: Event): void {
   font-size: var(--arna-font-size-caption);
   white-space: nowrap;
 }
-.calendar-preference select {
-  min-height: 2.25rem;
+ .calendar-preference select {
+  min-width: 4.5rem;
+  min-height: 2.5rem;
   max-width: 9.5rem;
   padding: 0.35rem 1.6rem 0.35rem 0.55rem;
   color: var(--arna-color-text-primary);
