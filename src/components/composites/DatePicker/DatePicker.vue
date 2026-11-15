@@ -330,6 +330,9 @@ import {
 } from '@/core/dates/ethiopic';
 
 interface Props {
+  /** Optional stable input id supplied by a containing FormField. */
+  id?: string;
+
   /**
    * Bound value. ISO 8601 date string (YYYY-MM-DD) or null.
    */
@@ -381,6 +384,7 @@ const props = withDefaults(defineProps<Props>(), {
   invalid: false,
   placeholder: undefined,
   ariaDescribedBy: undefined,
+  id: undefined,
 });
 
 const emit = defineEmits<{
@@ -929,7 +933,7 @@ function onCellClick(cell: GridCell): void {
       <input
         ref="inputRef"
         type="text"
-        :id="`${componentId}-input`"
+        :id="id ?? `${componentId}-input`"
         :disabled="disabled"
         :readonly="false"
         :placeholder="placeholder"
