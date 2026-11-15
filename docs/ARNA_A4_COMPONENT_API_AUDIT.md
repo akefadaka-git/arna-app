@@ -991,3 +991,20 @@ A further targeted consumer census was performed for patterns whose contracts co
 | A4 closure | OPEN |
 
 No merge or deployment is included or authorized.
+
+
+## 34. ErrorSupportPanel mounted privacy and clipboard verification — test implementation
+
+The prior source-only review identified a need to verify the support-diagnostic disclosure/copy path in a real browser. A mounted Vue fixture and Playwright cases have now been added:
+
+- `tests/fixtures/a4-components.js` mounts ErrorSupportPanel with a representative normalized error code, request reference, ISO timestamp, localized occurrence string and translated Amharic-independent fixture labels.
+- `tests/a4-components-browser.spec.mjs` now includes:
+  1. Clipboard success: grants clipboard permissions, opens the native disclosure, invokes Copy, verifies the copied text contains only the four documented allowlisted fields in order, checks forbidden diagnostic categories (password, token, stack trace, SQL, filesystem and private form data) are absent, and performs an axe scan for serious/critical violations.
+  2. Clipboard unavailable: removes navigator.clipboard before page load, invokes Copy, verifies the failed state, readonly manual-copy textarea, its accessible label relationship, and the expected normalized error/request values.
+- The component implementation was not changed; this is test-only work. The component's source still accepts only code, optional requestId/timestamp/occurredAt and a labels object, and builds the copied text from those fields rather than a raw error object.
+- Test fixture commit: `0d4c3587fdd68be92fe9e55c2967e0a3826e91a0`.
+- Browser test commit: `c265a40222800d0b562f09d23d7f827f925b5e7a`.
+- Exact-head workflow result is pending. The test design is recorded, not yet PASS evidence.
+- Remaining limitations: the fixture verifies the component's copy boundary, not every route-level normalization adapter or server-side diagnostic generation. No sensitive data is intentionally injected into the fixture.
+
+**Disposition:** MOUNTED TESTS ADDED; EXECUTION NOT YET VERIFIED. A4 remains OPEN. No merge or deployment.
