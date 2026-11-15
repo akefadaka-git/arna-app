@@ -72,6 +72,7 @@ function codeSpecifiers(file, source) {
 }
 
 const nodes = new Map();
+const processed = new Set();
 const edges = [];
 const unresolved = [];
 function visitFile(file, entry, stack = new Set()) {
@@ -79,7 +80,8 @@ function visitFile(file, entry, stack = new Set()) {
   if (!nodes.has(key)) nodes.set(key, { path: key, entries: new Set(), imports: [] });
   const node = nodes.get(key);
   node.entries.add(entry);
-  if (stack.has(key) || node.imports.length) return;
+  if (stack.has(key) || processed.has(key)) return;
+  processed.add(key);
   if (!exists(file)) return;
   const nextStack = new Set(stack).add(key);
   let source;
