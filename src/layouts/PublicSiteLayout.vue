@@ -1,20 +1,39 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router';
+import { computed } from 'vue';
+import { RouterLink, useRoute } from 'vue-router';
 import { aranaBrandLabels } from '@/router/shell-labels';
 import ThemePreferenceControl from '@/layouts/ThemePreferenceControl.vue';
 
+const route = useRoute();
+const locale = computed(() => route.query.locale === 'en' ? 'en' : 'am');
+const copy = computed(() => locale.value === 'en' ? {
+  skip: 'Skip to main content',
+  navigation: 'Main navigation',
+  verification: 'Document verification',
+  legal: 'Legal information',
+  footer: 'Footer navigation',
+  switchLocale: 'አማርኛ',
+} : {
+  skip: 'ወደ ዋናው ይዘት ዝለል',
+  navigation: 'ዋና አሰሳ',
+  verification: 'ሰነድ ማረጋገጫ',
+  legal: 'ሕጋዊ መረጃ',
+  footer: 'የግርጌ አሰሳ',
+  switchLocale: 'English',
+});
 const appName: string = import.meta.env.VITE_APP_NAME || 'ARNA';
 </script>
 
 <template>
-  <div class="public-site-layout" data-testid="public-site-layout">
-    <a class="public-site-layout__skip-link" href="#public-site-main">ወደ ዋናው ይዘት ዝለል</a>
+  <div class="public-site-layout" data-testid="public-site-layout" :lang="locale">
+    <a class="public-site-layout__skip-link" href="#public-site-main">{{ copy.skip }}</a>
     <header class="public-site-layout__header">
-      <nav class="public-site-layout__nav" aria-label="ዋና አሰሳ">
+      <nav class="public-site-layout__nav" :aria-label="copy.navigation">
         <RouterLink class="public-site-layout__brand" to="/" :aria-label="aranaBrandLabels.fullCorporateIdentity"><img class="public-site-layout__emblem" src="/logo.png" alt="" width="40" height="40" /><span>{{ aranaBrandLabels.fullCorporateIdentity }}</span></RouterLink>
         <div class="public-site-layout__links">
-          <RouterLink to="/verify">ሰነድ ማረጋገጫ</RouterLink>
-          <RouterLink to="/legal">ሕጋዊ መረጃ</RouterLink>
+          <RouterLink to="/verify" :aria-label="copy.verification">{{ copy.verification }}</RouterLink>
+          <RouterLink to="/legal" :aria-label="copy.legal">{{ copy.legal }}</RouterLink>
+          <RouterLink :to="{ path: route.path, query: { ...route.query, locale: locale === 'am' ? 'en' : undefined } }" :aria-label="copy.switchLocale">{{ copy.switchLocale }}</RouterLink>
           <ThemePreferenceControl />
         </div>
       </nav>
@@ -23,10 +42,10 @@ const appName: string = import.meta.env.VITE_APP_NAME || 'ARNA';
       <slot />
     </main>
     <footer class="public-site-layout__footer">
-      <nav aria-label="የግርጌ አሰሳ">
-        <RouterLink to="/legal">ሕጋዊ መረጃ</RouterLink>
+      <nav :aria-label="copy.footer">
+        <RouterLink to="/legal">{{ copy.legal }}</RouterLink>
         <span aria-hidden="true">·</span>
-        <RouterLink to="/verify">የሰነድ ትክክለኛነት ማረጋገጫ</RouterLink>
+        <RouterLink to="/verify">{{ copy.verification }}</RouterLink>
       </nav>
       <small>© {{ new Date().getFullYear() }} {{ appName }}</small>
     </footer>
@@ -76,7 +95,6 @@ const appName: string = import.meta.env.VITE_APP_NAME || 'ARNA';
   font-weight: var(--arna-font-weight-semibold);
   text-decoration: none;
 }
-
 .public-site-layout__emblem {
   display: block;
   width: 2.5rem;
@@ -96,55 +114,22 @@ const appName: string = import.meta.env.VITE_APP_NAME || 'ARNA';
   border-radius: var(--arna-radius-sm);
   transform: translateY(calc(-100% - 1rem));
 }
-.public-site-layout__skip-link:focus {
-  transform: translateY(0);
-}
-.public-site-layout a {
-  color: var(--arna-public-text-primary);
-  text-underline-offset: 0.2em;
-}
+.public-site-layout__skip-link:focus { transform: translateY(0); }
+.public-site-layout a { color: var(--arna-public-text-primary); text-underline-offset: 0.2em; }
 .public-site-layout a:focus-visible,
-.public-site-layout__content:focus-visible {
-  outline: 3px solid var(--arna-public-action);
-  outline-offset: 3px;
-}
-.public-site-layout__content {
-  flex: 1;
-  min-width: 0;
-}
+.public-site-layout__content:focus-visible { outline: 3px solid var(--arna-public-action); outline-offset: 3px; }
+.public-site-layout__content { flex: 1; min-width: 0; }
 @media (max-width: 36rem) {
-  .public-site-layout__nav {
-    align-items: flex-start;
-    flex-direction: column;
-  }
+  .public-site-layout__nav { align-items: flex-start; flex-direction: column; }
+  .public-site-layout__links { justify-content: flex-start; }
 }
-
 @media (forced-colors: active) {
-  .public-site-layout {
-    background: Canvas;
-    color: CanvasText;
-  }
-
-  .public-site-layout__header,
-  .public-site-layout__footer {
-    border-color: CanvasText;
-  }
-
-  .public-site-layout a {
-    color: LinkText;
-  }
-
-  .public-site-layout a:focus-visible,
-  .public-site-layout__content:focus-visible {
-    outline-color: Highlight;
-  }
-
-  .public-site-layout__skip-link,
-  .public-site-layout__skip-link:focus {
-    color: HighlightText;
-    background: Highlight;
-    border-color: Highlight;
+  .public-site-layout { background: Canvas; color: CanvasText; }
+  .public-site-layout__header, .public-site-layout__footer { border-color: CanvasText; }
+  .public-site-layout a { color: LinkText; }
+  .public-site-layout a:focus-visible, .public-site-layout__content:focus-visible { outline-color: Highlight; }
+  .public-site-layout__skip-link, .public-site-layout__skip-link:focus {
+    color: HighlightText; background: Highlight; border-color: Highlight;
   }
 }
-
 </style>
