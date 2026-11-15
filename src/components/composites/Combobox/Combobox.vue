@@ -158,7 +158,7 @@ function __arnaComboboxWarnOnce(key: string, message: string): void {
  * Module-level counter for auto-generated ids.
  * Distinct prefix from the other components' counters.
  */
-let __masesComboboxIdCounter = 0;
+let __arnaComboboxIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -290,7 +290,7 @@ defineSlots<{
 // -----------------------------------------------------------------------------
 // Generated ids
 // -----------------------------------------------------------------------------
-const componentId = `arna-combobox-${++__masesComboboxIdCounter}`;
+const componentId = `arna-combobox-${++__arnaComboboxIdCounter}`;
 const listboxId = `${componentId}-listbox`;
 function optionId(index: number): string {
   return `${componentId}-option-${index}`;
