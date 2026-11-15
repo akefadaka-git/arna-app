@@ -47,7 +47,7 @@ function displayLabel(item: SearchNavItem): string {
 const labels = computed(() => localeStore.locale === 'en'
   ? {
       breadcrumb: 'Breadcrumb',
-      trigger: 'Search ARNA modules and pages',
+      trigger: 'Search ARNA',
       triggerText: 'Search ARNA',
       title: 'Search ARNA',
       description: 'Find an available module or page',
@@ -59,7 +59,7 @@ const labels = computed(() => localeStore.locale === 'en'
     }
   : {
       breadcrumb: 'የገጽ አቅጣጫ',
-      trigger: 'የARNA ሞጁሎችን እና ገጾችን ይፈልጉ',
+      trigger: 'ARNA ይፈልጉ',
       triggerText: 'ARNA ይፈልጉ',
       title: 'ARNA ይፈልጉ',
       description: 'የሚገኝ ሞጁል ወይም ገጽ ያግኙ',
