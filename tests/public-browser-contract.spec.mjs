@@ -357,8 +357,9 @@ test.describe('ARNA public site browser contract', () => {
     await page.goto(new URL('/verify', baseUrl).toString());
     const amharicShell = page.getByTestId('public-site-layout');
     await expect(amharicShell).toHaveAttribute('lang', 'am');
-    await expect(amharicShell.getByRole('navigation', { name: 'ዋና አሰሳ' })).toBeVisible();
-    await expect(amharicShell.getByRole('link', { name: 'ሰነድ ማረጋገጫ' })).toBeVisible();
+    const amharicNavigation = amharicShell.getByRole('navigation', { name: 'ዋና አሰሳ' });
+    await expect(amharicNavigation).toBeVisible();
+    await expect(amharicNavigation.getByRole('link', { name: 'ሰነድ ማረጋገጫ' })).toBeVisible();
   });
 
 });
