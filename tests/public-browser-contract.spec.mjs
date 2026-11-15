@@ -273,11 +273,13 @@ test.describe('ARNA public site browser contract', () => {
       await expect(page).toHaveTitle(/ARNA/);
 
       if (routePath === '/en/about') {
+        await expect(page.locator('h1')).toContainText('About the Company');
         await page.getByRole('link', { name: 'አማርኛ' }).click();
         await expect(page).toHaveURL(/\/am\/about-am$/);
         await expect(page.locator('html')).toHaveAttribute('lang', 'am');
         await expect(page.locator('h1')).toContainText('ስለ ድርጅቱ');
       } else if (routePath === '/en/content/news/story') {
+        await expect(page.locator('h1')).toContainText('ARNA News Story');
         await page.getByRole('link', { name: 'አማርኛ' }).click();
         await expect(page).toHaveURL(/\/am\/content\/news\/story-am$/);
         await expect(page.locator('html')).toHaveAttribute('lang', 'am');
