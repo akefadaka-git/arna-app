@@ -595,3 +595,37 @@ Five further composite SFCs were reconciled from their prop declarations, export
 | Overall A4 API audit | OPEN |
 
 No merge or deployment is included or authorized.
+
+
+## 25. Composite API reconciliation — batch 6 (26 of 26)
+
+The final composite in the catalogue was reconciled from its SFC prop declarations, exported types, event signature, scoped slot declaration and rendered ARIA/keyboard implementation.
+
+| Component / source blob | Public props and defaults | Events / model | Slots and exposed API |
+|---|---|---|---|
+| Tabs — `68062d91f9e39b05555df8999c0582da2dc215a4` | Required controlled `modelValue:TabsValue` (`string | number`) and `tabs:ReadonlyArray<TabItem>`; `variant='underline'` (underline/pill). `TabItem={value:string|number,label:string,disabled?:boolean,count?:number}`. | `update:modelValue(TabsValue)`; emitted value preserves the selected tab's original string/number type. | Scoped `panel` slot receives `{value,index,tab}`; no other slots or exposed methods found. If no panel slot is supplied, only the tablist renders. |
+
+### Batch 6 findings and compatibility notes
+
+1. **Tabs is a controlled component.** It emits `update:modelValue` and does not own the selected value. Consumers must update the bound model; the component does not silently change the model when the selected tab later becomes disabled.
+2. **Keyboard behavior uses automatic activation.** ArrowLeft/ArrowRight move among enabled tabs with wrapping; Home/End move to the first/last enabled tab. Focus and selection move together. The component uses roving tabindex and native disabled buttons.
+3. **Tab and panel relationships are generated internally.** Each tab has `role=tab`, `aria-selected`, `aria-controls`; the panel has `role=tabpanel`, `aria-labelledby` and `tabindex=0`. Panel content is rendered only when a panel slot is supplied and a valid active tab exists.
+4. **Value comparison normalizes through String().** Active-tab matching and same-value suppression compare `String(value)`, while the emitted value preserves its original type. A string value `"1"` and numeric value `1` therefore collide for active matching; consumers should provide unique values after stringification.
+5. **No enabled tabs is an edge case.** When all tabs are disabled, the computed focusable index is -1 and keyboard navigation has no destination. Consumer data should avoid an all-disabled tablist unless that state is intentional and separately explained.
+6. The source declares a full WAI-ARIA tabs pattern and reduced-motion behavior, but this batch does not add a dedicated mounted keyboard/axe suite. Those behaviors remain subject to A4 runtime verification.
+
+| Composite audit progress | Status |
+|---|---|
+| Composite source files contract-reconciled | 26 / 26 |
+| Composite public prop/event/slot summaries | SOURCE REVIEW COMPLETE |
+| Exported types/defaults reconciled | SOURCE REVIEW COMPLETE for inspected SFC declarations and referenced exported types |
+| Consumer compatibility across all composites | NOT COMPLETE |
+| Full native attribute-forwarding review | NOT COMPLETE |
+| Mounted behavior coverage across all composites | PARTIAL |
+| Overall A4 API audit | OPEN |
+
+### Composite source reconciliation milestone
+
+**Source-declaration reconciliation: 26/26 composites — COMPLETE.** This closes only the composite inventory and source-surface contract transcription. It does not close the full component API audit: all consumer call sites, native attribute fallthrough, imported type dependencies, all primitive/pattern contracts, full interaction coverage, authenticated-shell acceptance and physical-device acceptance remain open.
+
+No merge or deployment is included or authorized.
