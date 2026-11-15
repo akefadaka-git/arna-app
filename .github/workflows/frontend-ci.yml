@@ -90,6 +90,28 @@ jobs:
           done
           curl --fail --silent http://127.0.0.1:4173/ >/dev/null
           PUBLIC_SITE_URL=http://127.0.0.1:4173/ npm run test:public-browser
+      - name: Render visual library across mobile, tablet, desktop, locales and themes
+        shell: bash
+        run: |
+          npx vite --mode workspace --host 127.0.0.1 --port 4175 --strictPort > "$RUNNER_TEMP/visual-review-preview.log" 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4175/tests/fixtures/visual-library.html >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4175/tests/fixtures/visual-library.html >/dev/null
+          VISUAL_LIBRARY_URL=http://127.0.0.1:4175/tests/fixtures/visual-library.html npx playwright test tests/visual-library-rendered.spec.mjs
+      - name: Upload rendered visual review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arna-visual-review-${{ github.sha }}
+          path: artifacts/visual-review/
+          if-no-files-found: warn
+          retention-days: 14
       - name: Verify shared DatePicker browser interactions
         shell: bash
         run: |
