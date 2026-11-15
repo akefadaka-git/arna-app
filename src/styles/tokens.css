@@ -139,9 +139,12 @@
  *   wide     1440px and up
  *
  * -----------------------------------------------------------------------------
- * No dark mode
+ * Theme overlays
  * -----------------------------------------------------------------------------
- * Dark mode is deferred. The :root block is the only theme block.
+ * This file defines the light/default token values. Dark semantic role
+ * overrides, explicit data-theme selection, and operating-system dark
+ * preference are implemented in src/styles/themes.css. Keep this token
+ * substrate as the shared source of primitive and default semantic values.
  *
  * -----------------------------------------------------------------------------
  * No gradients, no glassmorphism (except the launcher exception)
