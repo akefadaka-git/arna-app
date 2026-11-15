@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/BaseButton/BaseButton.vue
  Layer:     1 (Primitives)
- Version:   1.0.0
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.1
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -47,8 +47,8 @@
    - Renders a native <button> element.
    - Uses the native disabled attribute (not aria-disabled).
    - loading sets aria-busy="true" and disables the button.
-   - iconOnly requires an ariaLabel prop; a development-time warning is
-     emitted if it is missing.
+   - iconOnly requires ariaLabel or ariaLabelledBy; a development-time
+     warning is emitted if both are missing.
    - Focus ring appears only on :focus-visible (keyboard focus).
    - Loading spinner respects prefers-reduced-motion (slows, does not
      stop) per Design System §11.5.
@@ -95,6 +95,9 @@ interface Props {
    * assistive technology (the visible label remains the default name).
    */
   ariaLabel?: string;
+
+  /** ID of the element that labels the button for assistive technology. */
+  ariaLabelledBy?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -106,6 +109,7 @@ const props = withDefaults(defineProps<Props>(), {
   block: false,
   iconOnly: false,
   ariaLabel: undefined,
+  ariaLabelledBy: undefined,
 });
 
 const emit = defineEmits<{
@@ -116,14 +120,12 @@ const emit = defineEmits<{
 // imported so future revisions can filter or forward them explicitly.
 void useAttrs();
 
-// Development-time guard: an icon-only button without an aria-label has
-// no accessible name. Warn loudly in dev; in production, we render
-// aria-label="undefined" as an empty string, which browsers treat as
-// "no name".
-if (import.meta.env.DEV && props.iconOnly && !props.ariaLabel) {
+// Development-time guard: an icon-only button must have an explicit
+// accessible name, either directly or through an associated label.
+if (import.meta.env.DEV && props.iconOnly && !props.ariaLabel && !props.ariaLabelledBy) {
   // eslint-disable-next-line no-console
   console.warn(
-    '[BaseButton] iconOnly=true requires the ariaLabel prop. ' +
+    '[BaseButton] iconOnly=true requires ariaLabel or ariaLabelledBy. ' +
       'The rendered button will have no accessible name.',
   );
 }
@@ -141,12 +143,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   },
 ]);
 
-const resolvedAriaLabel = computed<string | undefined>(() => {
-  if (props.ariaLabel !== undefined) {
-    return props.ariaLabel;
-  }
-  return undefined;
-});
+const resolvedAriaLabel = computed<string | undefined>(() => props.ariaLabel);
 
 function handleClick(event: MouseEvent): void {
   if (isDisabled.value) {
@@ -168,6 +165,7 @@ function handleClick(event: MouseEvent): void {
     :disabled="isDisabled"
     :aria-busy="loading ? 'true' : undefined"
     :aria-label="resolvedAriaLabel"
+    :aria-labelledby="ariaLabelledBy"
     data-testid="base-button-root"
     @click="handleClick"
   >
