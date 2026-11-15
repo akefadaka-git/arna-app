@@ -1,5 +1,8 @@
 import AxeBuilder from '@axe-core/playwright';
+import { mkdirSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
+
+mkdirSync('artifacts/visual-review', { recursive: true });
 
 const baseUrl = process.env.VISUAL_LIBRARY_URL ?? 'http://127.0.0.1:4175/tests/fixtures/visual-library.html';
 const viewports = [
@@ -37,13 +40,17 @@ test.describe('ARNA visual library rendered review', () => {
           await expect(page.getByTestId('chart-panel')).toBeVisible();
           await expect(page.getByTestId('promo-banner')).toBeVisible();
 
+          const image = page.locator('img[src="/media/arna-visual-preview.svg"]');
+          await expect(image).toBeVisible();
+          await image.evaluate((element) => (element).decode());
+
           const layout = await page.evaluate(() => ({
             viewportWidth: document.documentElement.clientWidth,
             documentWidth: document.documentElement.scrollWidth,
             bodyWidth: document.body.scrollWidth,
             pageBackground: getComputedStyle(document.body).backgroundColor,
             panelCount: document.querySelectorAll('[data-testid="visual-panel"]').length,
-            imageLoaded: (document.querySelector('img[src="/media/arna-visual-preview.svg"]') as HTMLImageElement | null)?.complete ?? true,
+            imageLoaded: document.querySelector('img[src="/media/arna-visual-preview.svg"]')?.complete ?? true,
           }));
           expect(layout.documentWidth).toBeLessThanOrEqual(layout.viewportWidth + 1);
           expect(layout.bodyWidth).toBeLessThanOrEqual(layout.viewportWidth + 1);
