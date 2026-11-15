@@ -9,6 +9,7 @@ interface Props {
   min?: string;
   max?: string;
   disabled?: boolean;
+  required?: boolean;
   invalid?: boolean;
   placeholder?: string;
   ariaDescribedBy?: string;
@@ -20,6 +21,7 @@ const props = withDefaults(defineProps<Props>(), {
   min: undefined,
   max: undefined,
   disabled: false,
+  required: false,
   invalid: false,
   placeholder: undefined,
   ariaDescribedBy: undefined,
@@ -81,6 +83,7 @@ onBeforeUnmount(() => languageObserver?.disconnect());
     :min="min"
     :max="max"
     :disabled="disabled"
+    :required="required"
     :invalid="invalid"
     :placeholder="placeholder"
     :aria-described-by="ariaDescribedBy"
