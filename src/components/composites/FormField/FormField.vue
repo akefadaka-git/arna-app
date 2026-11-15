@@ -422,20 +422,20 @@ const hasHelp = computed<boolean>(() => {
 });
 
 /*
- * Compute the aria-describedby string.
- *
- * See the file header comment §"Region ordering and aria-describedby".
+ * Compute the aria-describedby string from the exact same region state
+ * used by the template. This keeps rendered help/error IDs and the
+ * consumer-facing scoped-slot association in one reactive contract.
  */
-function getAriaDescribedBy(): string | undefined {
+const ariaDescribedBy = computed<string | undefined>(() => {
   const parts: string[] = [];
   if (hasError.value) {
     parts.push(errorId.value);
   }
-  if (hasHelpSlot.value || helpTextTrimmed.value.length > 0) {
+  if (hasHelp.value) {
     parts.push(helpId.value);
   }
   return parts.length > 0 ? parts.join(' ') : undefined;
-}
+});
 
 const classes = computed<Array<string | Record<string, boolean>>>(() => [
   'form-field',
@@ -489,7 +489,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
     >
       <slot
         :id="htmlFor"
-        :aria-describedby="getAriaDescribedBy()"
+        :aria-describedby="ariaDescribedBy"
         :invalid="resolvedInvalid"
         :required="required"
         :disabled="disabled"
