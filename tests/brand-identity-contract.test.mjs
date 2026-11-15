@@ -108,7 +108,11 @@ test('application source has no active legacy MASES component or DOM namespaces'
   const findings = [];
   for (const path of files) {
     const source = await readFile(path, 'utf8');
-    if (/__mases[A-Za-z0-9_]*|mases-[a-z0-9_-]+/i.test(source)) {
+    const executable = source
+      .replace(/\\/\\*[\\s\\S]*?\\*\\//g, '')
+      .replace(/<!--[\\s\\S]*?-->/g, '')
+      .replace(/^\\s*\\/\\/.*$/gm, '');
+    if (/__mases[A-Za-z0-9_]*|mases-[a-z0-9_-]+/i.test(executable) || /\\bMASES\\b/.test(executable)) {
       findings.push(path.replace(root, '').replaceAll('\\\\', '/'));
     }
   }
@@ -125,4 +129,24 @@ test('active accessibility utility uses ARNA namespace', async () => {
   const source = await read('../src/styles/base.css');
   assert.match(source, /\.arna-visually-hidden/);
   assert.doesNotMatch(source, /\.mases-visually-hidden/);
+});
+
+test('repository product metadata consistently identifies ARNA', async () => {
+  const readme = await read('../README.md');
+  assert.match(readme, /ARNA is the canonical product name/);
+  assert.doesNotMatch(readme, /MASES is the established legacy\\/product name used during the transition/i);
+
+  for (const path of ['../.env.workspace', '../.env.portal', '../.env.admin']) {
+    const source = await read(path);
+    assert.doesNotMatch(source, /^\\s*VITE_APP_NAME\\s*=.*MASES/im, path);
+  }
+
+  const vite = await read('../vite.config.ts');
+  assert.match(vite, /^\\s*\\* ARNA UI — Vite configuration/m);
+
+  const publicShell = await read('../src/layouts/PublicSiteLayout.vue');
+  assert.match(publicShell, /Main navigation/);
+  assert.match(publicShell, /Document verification/);
+  assert.match(publicShell, /Legal information/);
+  assert.match(publicShell, /Skip to main content/);
 });
