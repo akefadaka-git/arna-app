@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/BaseLabel/BaseLabel.vue
  Layer:     1 (Primitives)
- Version:   1.0.1
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.13
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -131,6 +131,12 @@ import { computed } from 'vue';
 
 interface Props {
   /**
+   * Optional DOM id for this label. Allows controls to reference this
+   * label with aria-labelledby when native `for` association is unsuitable.
+   */
+  id?: string;
+
+  /**
    * The `id` of the control this label is associated with.
    *
    * When supplied, the label's native `for` attribute is set, and
@@ -189,6 +195,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  id: undefined,
   for: undefined,
   required: false,
   disabled: false,
@@ -234,6 +241,7 @@ const showSrRequired = computed<boolean>(
 
 <template>
   <label
+    :id="props.id"
     :for="props.for"
     :class="classes"
     data-testid="base-label-root"
