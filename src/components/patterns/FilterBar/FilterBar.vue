@@ -198,7 +198,7 @@ import BaseInput from '../../primitives/BaseInput';
 import BaseSelect from '../../primitives/BaseSelect';
 import BaseCheckbox from '../../primitives/BaseCheckbox';
 import BaseIcon from '../../primitives/BaseIcon';
-import DatePicker from '@/components/composites/DatePicker';
+import DatePicker, { CalendarDateInput } from '@/components/composites/DatePicker';
 import type { DatePickerLabels } from '@/components/composites/DatePicker';
 
 interface Props {
@@ -466,16 +466,11 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
           data-testid="filter-bar-label"
         >{{ filter.label }}</label>
 
-        <input
+        <CalendarDateInput
           :id="filterInputIdFor(filter.key)"
-          type="date"
-          class="filter-bar__date-fallback"
-          :value="valueAsDateString(filter.value) ?? ''"
+          :model-value="valueAsDateString(filter.value)"
           data-testid="filter-bar-date-fallback"
-          @input="onDateChange(
-            filter,
-            ($event.target as HTMLInputElement).value || null,
-          )"
+          @update:model-value="(value: string) => onDateChange(filter, value || null)"
         />
       </template>
 
