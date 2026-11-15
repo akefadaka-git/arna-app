@@ -193,7 +193,7 @@ function __arnaMaintenanceBannerWarnOnce(key: string, message: string): void {
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import BaseButton from '@/components/primitives/BaseButton';
+import LinkButton from '@/components/primitives/LinkButton';
 import BaseIcon from '@/components/primitives/BaseIcon';
 import type { IconName } from '@/components/primitives/BaseIcon';
 
@@ -373,13 +373,12 @@ function onDismiss(): void {
       v-if="hasAction || hasDismiss"
       class="maintenance-banner__actions"
     >
-      <BaseButton
+      <LinkButton
         v-if="hasAction"
-        variant="link"
         size="sm"
         data-testid="maintenance-banner-action"
         @click="onAction"
-      >{{ actionLabel }}</BaseButton>
+      >{{ actionLabel }}</LinkButton>
 
       <BaseButton
         v-if="hasDismiss"
