@@ -16,13 +16,10 @@ const dateViews = [
 for (const path of dateViews) {
   test(path + ' renders dates using the selected calendar preference', async () => {
     const source = await readFile(new URL('../' + path, import.meta.url), 'utf8');
-    const setupStart = source.lastIndexOf('<script setup');
-    const setupEnd = source.indexOf('</script>', setupStart);
-    const templateStart = source.indexOf('<template>', setupEnd);
+    assert.match(source, /import \{ formatCalendarDate \} from ['"]@\/core\/dates\/calendar['"]/);
+    const templateStart = source.indexOf('<template>');
     const styleStart = source.indexOf('<style', templateStart);
-    const setup = source.slice(setupStart, setupEnd);
-    const template = source.slice(templateStart, styleStart);
-    assert.match(setup, /formatCalendarDate/);
+    const template = source.slice(templateStart, styleStart < 0 ? undefined : styleStart);
     assert.doesNotMatch(template, /\{\{[^{}]*_display[^{}]*\}\}/);
   });
 }
