@@ -36,6 +36,7 @@ const appName: string = import.meta.env.VITE_APP_NAME || 'ARNA';
 <style scoped>
 .public-site-layout {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   color: var(--arna-public-text-primary);
