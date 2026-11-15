@@ -253,3 +253,13 @@ Coverage added:
 **Evidence boundary:** this is real Chromium browser execution of the mounted Vue components, but not full authenticated dashboard-shell testing, manual screen-reader testing or physical-device acceptance. FileUploader remains without a mounted lifecycle suite. Drawer consumer census and complete API prop/event/slot/expose/attribute inventory also remain outstanding.
 
 **A4 disposition remains PARTIAL / OPEN pending exact-head CI result and remaining acceptance evidence.**
+
+
+## 16. Mounted browser run findings and corrective action
+
+The first mounted Playwright run at `3e32b8868a8943cd781ca7dbac71eed9d8aa1371` failed (2 passed, 6 failed). The logs identified two separate issues:
+
+1. **Test assertion correction:** Combobox communicates the visually highlighted option through `aria-activedescendant`; the browser test incorrectly assumed a highlighted data attribute was the most reliable assertion. The test now checks the active descendant against the option's actual ID.
+2. **Confirmed Drawer defect:** `.drawer` sets author-level `display:flex` on the native dialog. This overrides the browser's default closed-dialog `display:none`, leaving an unopened full-viewport Drawer intercepting pointer events. Added an explicit `.drawer:not([open]) { display:none; }` rule. This is a product-code correction, not merely a test workaround.
+
+The failed run is retained as evidence; it is not overwritten or relabeled. The correction requires a new exact-head CI run. Modal/Drawer keyboard, close-event, focus-restoration and axe results remain unverified until that run passes. A4 remains PARTIAL / OPEN.
