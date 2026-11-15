@@ -124,13 +124,13 @@
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesDrawerWarned = new Set<string>();
+const __arnaDrawerWarned = new Set<string>();
 
-function __masesDrawerWarnOnce(key: string, message: string): void {
-  if (__masesDrawerWarned.has(key)) {
+function __arnaDrawerWarnOnce(key: string, message: string): void {
+  if (__arnaDrawerWarned.has(key)) {
     return;
   }
-  __masesDrawerWarned.add(key);
+  __arnaDrawerWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -138,7 +138,7 @@ function __masesDrawerWarnOnce(key: string, message: string): void {
 /*
  * Module-level counter for auto-generated title ids.
  */
-let __masesDrawerIdCounter = 0;
+let __arnaDrawerIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -254,7 +254,7 @@ const hasHeaderSlot = computed<boolean>(() => slots.header !== undefined);
 // -----------------------------------------------------------------------------
 // Generated id
 // -----------------------------------------------------------------------------
-const titleId = `mases-drawer-title-${++__masesDrawerIdCounter}`;
+const titleId = `arna-drawer-title-${++__arnaDrawerIdCounter}`;
 
 // -----------------------------------------------------------------------------
 // Refs
@@ -265,7 +265,7 @@ const dialogRef = ref<HTMLDialogElement | null>(null);
 // Development-time guard
 // -----------------------------------------------------------------------------
 if (import.meta.env.DEV && props.dismissible && !props.closeLabel) {
-  __masesDrawerWarnOnce(
+  __arnaDrawerWarnOnce(
     'drawer:missing-close-label',
     '[Drawer] dismissible=true without closeLabel. The close button ' +
       'will render with an empty aria-label, which is an accessibility ' +
@@ -606,11 +606,11 @@ function onCloseButtonClick(): void {
    modern browsers.
    ============================================================================ */
 .drawer--right[open] .drawer__container {
-  animation: mases-drawer-in-right var(--arna-duration-slow)
+  animation: arna-drawer-in-right var(--arna-duration-slow)
     var(--arna-easing-decelerate);
 }
 
-@keyframes mases-drawer-in-right {
+@keyframes arna-drawer-in-right {
   from {
     transform: translateX(100%);
   }
@@ -620,11 +620,11 @@ function onCloseButtonClick(): void {
 }
 
 .drawer--left[open] .drawer__container {
-  animation: mases-drawer-in-left var(--arna-duration-slow)
+  animation: arna-drawer-in-left var(--arna-duration-slow)
     var(--arna-easing-decelerate);
 }
 
-@keyframes mases-drawer-in-left {
+@keyframes arna-drawer-in-left {
   from {
     transform: translateX(-100%);
   }

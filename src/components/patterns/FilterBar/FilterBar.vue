@@ -175,13 +175,13 @@ export interface FilterUpdatePayload {
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesFilterBarWarned = new Set<string>();
+const __arnaFilterBarWarned = new Set<string>();
 
-function __masesFilterBarWarnOnce(key: string, message: string): void {
-  if (__masesFilterBarWarned.has(key)) {
+function __arnaFilterBarWarnOnce(key: string, message: string): void {
+  if (__arnaFilterBarWarned.has(key)) {
     return;
   }
-  __masesFilterBarWarned.add(key);
+  __arnaFilterBarWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -189,7 +189,7 @@ function __masesFilterBarWarnOnce(key: string, message: string): void {
 /*
  * Module-level counter for auto-generated filter input ids.
  */
-let __masesFilterBarIdCounter = 0;
+let __arnaFilterBarIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -260,7 +260,7 @@ const slots = useSlots();
 // -----------------------------------------------------------------------------
 // Generated base id
 // -----------------------------------------------------------------------------
-const baseId = `mases-filter-bar-${++__masesFilterBarIdCounter}`;
+const baseId = `arna-filter-bar-${++__arnaFilterBarIdCounter}`;
 
 function filterInputIdFor(filterKey: string): string {
   return `${baseId}-${filterKey}`;
@@ -293,7 +293,7 @@ const hasActionsSlot = computed<boolean>(() => slots.actions !== undefined);
  * default slot.
  */
 if (import.meta.env.DEV && customFilters.value.length > 0) {
-  __masesFilterBarWarnOnce(
+  __arnaFilterBarWarnOnce(
     'filter-bar:custom-filters-present',
     `[FilterBar] ${customFilters.value.length} filter(s) of type ` +
       `'custom' are declared. FilterBar does not render them; the ` +
@@ -306,7 +306,7 @@ if (import.meta.env.DEV && customFilters.value.length > 0) {
  * Guard: date filter present without datePickerLabels.
  */
 if (import.meta.env.DEV && hasDateFilter.value && !props.datePickerLabels) {
-  __masesFilterBarWarnOnce(
+  __arnaFilterBarWarnOnce(
     'filter-bar:date-labels-missing',
     '[FilterBar] a date filter is declared but `datePickerLabels` is ' +
       'not supplied. The date filter will fall back to the browser\'s ' +
