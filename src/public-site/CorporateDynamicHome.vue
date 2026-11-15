@@ -104,7 +104,7 @@ async function load(): Promise<void> {
       contributorContent.value = [];
       contributorContentFailed.value = true;
     }
-    if (home?.seo?.title) document.title = home.seo.title;
+    if (home?.seo?.title) document.title = `${home.seo.title} | ARNA`;
     else document.title = home?.title ? `${home.title} | ARNA` : 'ARNA | Official Website';
     let description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
     if (!description) {
@@ -115,7 +115,8 @@ async function load(): Promise<void> {
     description.content = home?.seo?.description || home?.summary || '';
     if (home?.seo?.robots) upsertMeta('robots', home.seo.robots);
     if (home?.seo?.title) {
-      upsertMeta('og:title', home.seo.title, 'property');
+      upsertMeta('og:title', `${home.seo.title} | ARNA`, 'property');
+      upsertMeta('og:site_name', 'ARNA', 'property');
       upsertMeta('twitter:title', home.seo.title);
     }
     if (home?.seo?.description || home?.summary) {
