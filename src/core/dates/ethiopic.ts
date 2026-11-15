@@ -29,7 +29,7 @@ const formatter = new Intl.DateTimeFormat('en-u-ca-ethiopic-nu-latn', {
 });
 
 function utcDate(iso: string): Date | null {
-  const match = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(iso);
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
   if (!match) return null;
   const year = Number(match[1]);
   const month = Number(match[2]);
