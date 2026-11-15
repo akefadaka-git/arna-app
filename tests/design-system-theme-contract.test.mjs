@@ -201,10 +201,10 @@ test('shared component styles use semantic color tokens instead of hardcoded col
   const violations = [];
   for (const path of roots.flatMap(collectVueFiles)) {
     const source = read(path);
-    const styles = [...source.matchAll(/<style\\b[^>]*>([\\s\\S]*?)<\\/style>/gi)]
-      .map((match) => match[1].replace(/\\/\\*[\\s\\S]*?\\*\\//g, ''));
+    const styles = [...source.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)]
+      .map((match) => match[1].replace(/\/\*[\s\S]*?\*\//g, ''));
     for (const style of styles) {
-      if (/#(?:[0-9a-f]{3,8})\\b|\\b(?:rgba?|hsla?)\\s*\\(/i.test(style)) {
+      if (/#(?:[0-9a-f]{3,8})\b|\b(?:rgba?|hsla?)\s*\(/i.test(style)) {
         violations.push(path);
         break;
       }
