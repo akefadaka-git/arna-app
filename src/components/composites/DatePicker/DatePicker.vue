@@ -949,7 +949,7 @@ function onCellClick(cell: GridCell): void {
         :readonly="false"
         :placeholder="placeholder"
         :aria-invalid="invalid ? 'true' : undefined"
-        :aria-describedby="ariaDescribedBy"
+        :aria-describedby="props.ariaDescribedBy"
         :value="textValue"
         class="date-picker__input"
         data-testid="date-picker-input"
