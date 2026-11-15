@@ -22,6 +22,28 @@ const route = useRoute();
 const router = useRouter();
 const localeStore = useLocaleStore();
 
+const ENGLISH_DESTINATION_LABELS: Readonly<Record<string, string>> = {
+  dashboard: 'Dashboard',
+  launcher: 'Home',
+  files: 'Documents',
+  shareholders: 'Shareholders',
+  'share-classes': 'Share classes',
+  wallets: 'Wallets',
+  loans: 'Loans',
+  'loan-products': 'Loan products',
+  governance: 'Governance',
+  'portal-home': 'Home',
+  'my-holdings': 'My holdings',
+  'my-certificates': 'My certificates',
+  'my-wallet': 'My wallet',
+  'my-loans': 'My loans',
+};
+
+function displayLabel(item: SearchNavItem): string {
+  if (localeStore.locale !== 'en') return item.label;
+  return ENGLISH_DESTINATION_LABELS[item.id] ?? item.label;
+}
+
 const labels = computed(() => localeStore.locale === 'en'
   ? {
       breadcrumb: 'Breadcrumb',
@@ -57,7 +79,7 @@ const searchItems = computed(() => props.items.flatMap((item) =>
 const results = computed(() => {
   const term = query.value.trim().toLocaleLowerCase();
   return searchItems.value.filter((item) =>
-    item.to && (!term || item.label.toLocaleLowerCase().includes(term)),
+    item.to && (!term || displayLabel(item).toLocaleLowerCase().includes(term)),
   );
 });
 
@@ -139,7 +161,7 @@ function navigate(item: SearchNavItem): void {
       <ul id="app-header-search-results" class="app-header-navigation__results" aria-live="polite" aria-relevant="additions text">
         <li v-for="item in results" :key="item.id">
           <button type="button" @click="navigate(item)">
-            <span>{{ item.label }}</span>
+            <span>{{ displayLabel(item) }}</span>
             <BaseIcon name="arrow-up-right" size="sm" />
           </button>
         </li>
