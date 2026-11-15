@@ -84,6 +84,23 @@ async function collectFiles(directory) {
   return files;
 }
 
+test('persisted browser state uses ARNA keys with legacy migration fallbacks', async () => {
+  const tenant = await read('../src/stores/tenant.ts');
+  assert.match(tenant, /const KEY = 'arna\\.tenant_id'/);
+  assert.match(tenant, /const LEGACY_KEY = 'mases\\.tenant_id'/);
+  assert.match(tenant, /localStorage\\.getItem\\(KEY\\) \\?\\? localStorage\\.getItem\\(LEGACY_KEY\\)/);
+  assert.match(tenant, /localStorage\\.removeItem\\(LEGACY_KEY\\)/);
+
+  const bootstrap = await read('../src/core/bootstrap.ts');
+  assert.match(bootstrap, /const KEY = 'arna\\.auth_token'/);
+  assert.match(bootstrap, /const LEGACY_KEY = 'mases\\.auth_token'/);
+  assert.match(bootstrap, /sessionStorage\\.getItem\\(KEY\\) \\?\\? sessionStorage\\.getItem\\(LEGACY_KEY\\)/);
+
+  const login = await read('../src/features/auth/LoginForm/LoginForm.vue');
+  assert.match(login, /const REMEMBERED_IDENTIFIER_KEY = 'arna\\.auth\\.remembered_identifier'/);
+  assert.match(login, /const LEGACY_REMEMBERED_IDENTIFIER_KEY = 'mases\\.auth\\.remembered_identifier'/);
+});
+
 test('application source has no active legacy MASES component or DOM namespaces', async () => {
   const root = fileURLToPath(new URL('../', import.meta.url));
   const roots = ['src', 'workspace-entry', 'portal-entry', 'admin-entry', 'public-entry'];
