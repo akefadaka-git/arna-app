@@ -29,7 +29,8 @@ test('media requires alternative text and supports lazy decoding', () => {
 
 test('promotional content is identified and uses ordinary link semantics', () => {
   const promo = read('src/components/visual/PromoBanner.vue');
-  assert.match(promo, /aria-label="Promotion"/);
+  assert.match(promo, /eyebrow:\s*string/);
+  assert.match(promo, /:aria-label="title"/);
   assert.match(promo, /<a v-if="href && actionLabel"/);
   assert.doesNotMatch(promo, /target="_blank"/);
 });
