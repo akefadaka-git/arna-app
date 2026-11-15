@@ -14,7 +14,6 @@ test.describe('Mounted FormField accessibility behavior', () => {
     await expect(help).toBeVisible();
     const helpId = await help.evaluate((node) => node.parentElement?.id);
     expect(helpId).toBeTruthy();
-    console.log('FormField scoped slot payload:', await page.getByTestId('form-field-slot-props').textContent());
     await expect(input).toHaveAttribute('aria-describedby', helpId);
 
     const results = await new AxeBuilder({ page })
