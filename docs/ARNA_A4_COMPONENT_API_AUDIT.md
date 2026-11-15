@@ -580,7 +580,7 @@ Five further composite SFCs were reconciled from their prop declarations, export
 |---|---|---|---|
 | Modal — `cbcaac334efda7a0f64787ee5b4db1d27ba619e1` | Required `open:boolean`, translated `title:string`; `size='md'` (sm/md/lg/full); `dismissible=true`; `hideFooter=false`; optional `closeLabel` (documented as required when dismissible). | `update:open(boolean)`; `close()`. | Unscoped default, `footer`, `header-extra` slots. No `defineExpose` found. Uses native `dialog`; title is associated through `aria-labelledby`. |
 | Popover — `308ea700452c4bb7332ea39e4b8e89090da11606` | Required controlled `open:boolean`; `placement='bottom-start'` (top-start/top/top-end/bottom-start/bottom/bottom-end/left/right); `trigger='click'` (click/manual); `matchTrigger=false`. | `update:open(boolean)`. | Scoped default trigger slot exposes `triggerId`, `controlsId`, `open`, `toggle()`, `ariaHaspopup='dialog'`, `ariaExpanded`, `ariaControls`; unscoped `content` slot. No exposed methods found. |
-| SearchBar — `49ccec9d58633480a8344471c47566d40ea55307` | Required controlled `modelValue:string`; optional translated `placeholder`; `debounceMs=300`; `loading=false`; `autoFocus=false`; optional `ariaLabel`, `clearLabel`, `loadingLabel`. Source documents `clearLabel` as required whenever the clear button can appear, although the TypeScript prop remains optional. | `update:modelValue(string)`; debounced or Enter-triggered `search(string)`; `clear()`. | Optional unscoped `leading` slot overrides the default search icon. No exposed methods found. |
+| SearchBar — `49ccec9d58633480a8344471c47566d40ea55307` | Required controlled `modelValue:string`; optional translated `placeholder`; `debounceMs=300`; `loading=false`; `autoFocus=false`; optional `ariaLabel`, `loadingLabel`; required translated `clearLabel` (made TypeScript-required during A4 consumer reconciliation). | `update:modelValue(string)`; debounced or Enter-triggered `search(string)`; `clear()`. | Optional unscoped `leading` slot overrides the default search icon. No exposed methods found. |
 | Skeleton — `41012b12c100946f5fce4d3638ea6be8dbd8ffde` | `variant='text'` (text/circle/rect); `animation='pulse'` (pulse/shimmer/none); optional CSS `width`, `height`. Exported `SkeletonVariant` and `SkeletonAnimation` unions. | No emits declared. | No slots or exposed methods found. Root is deliberately `aria-hidden=true`; it is decorative and must not carry essential content or be used as the only loading announcement. |
 | Stepper — `61a475ee8452d912c1ce9fd09b0d0ffe30c4b155` | Required `steps:ReadonlyArray<StepperStep>`, `currentKey:string`, `completedKeys:ReadonlyArray<string>`; `orientation='horizontal'` (horizontal/vertical); optional translated `optionalLabel`. `StepperStep={key,label,optional?}`. Horizontal falls back to vertical below 640px. | `navigate(key:string)` when a step button is activated. | No slots or exposed methods found. Uses ordered-list semantics and `aria-current='step'` for the current step. |
 
@@ -589,7 +589,7 @@ Five further composite SFCs were reconciled from their prop declarations, export
 1. **Modal's close-label mismatch is still present.** The close button is rendered when `dismissible=true` and receives `aria-label=""` when `closeLabel` is missing. The prop is optional in TypeScript despite the documented requirement. The mounted suite verifies normal operation with a supplied translated label; it does not validate the missing-label path. The same contract issue was previously observed on Drawer.
 2. **Popover positioning is CSS-only.** The source explicitly states there is no automatic viewport flip or clamping. Consumers must choose placements that fit the current viewport and test edge-of-screen layouts. In click mode the consumer wires the scoped `toggle` function; in manual mode it is a no-op and the parent owns open state. Outside-click and Escape close behavior still apply.
 3. **Popover's trigger association is consumer-owned.** The scoped slot supplies IDs and ARIA values, but a consumer that does not bind them to the actual trigger can leave the panel relationship inaccessible. The panel uses non-modal dialog semantics and labels itself by the trigger ID.
-4. **SearchBar clear-label mismatch is still present.** The clear button can appear whenever the model contains text and loading is false, but `clearLabel` is optional in the TypeScript interface and production renders an empty accessible name when it is omitted. This is a concrete API hardening/a11y risk. Consumers must provide translated `clearLabel`.
+4. **SearchBar clear-label mismatch was corrected during A4 consumer reconciliation.** The clear button can appear whenever the model contains text and loading is false. The source contract now makes `clearLabel` required in TypeScript, and the three discovered consumers pass translated values. A source-contract regression test enforces both the required prop and all current call sites.
 5. **SearchBar debounce semantics are controlled by the parent model.** Every `modelValue` change schedules a debounced `search`; Enter cancels the pending timer and emits immediately; clearing cancels the timer, emits an empty model value and `clear()`, then restores input focus. The timer is cleaned up on unmount. Consumer tests should verify no stale search after clear/unmount.
 6. **Skeleton is decorative.** Its root is always hidden from assistive technology. A loading experience must pair it with a meaningful status/label elsewhere; do not use the skeleton alone to communicate that content is loading.
 7. **Stepper emits navigation intent rather than changing state.** It does not mutate `currentKey` or `completedKeys`; the consumer must handle `navigate(key)` and update those controlled props. The current key must match a step key. Optional-step annotations depend on a translated `optionalLabel`.
@@ -851,5 +851,77 @@ The final five patterns were reconciled from their prop/type declarations, event
 ### Pattern source reconciliation milestone
 
 **Source-declaration reconciliation: 15/15 patterns — COMPLETE.** Together with the 24 primitive and 26 composite inventories, all 65 core component entries now have source-level prop/default/event/slot summaries. This is not yet full contract closure: consumer compatibility, complete imported-type closure, native attribute fallthrough, remaining behavioral/accessibility tests, authenticated-shell review and physical-device acceptance remain open.
+
+No merge or deployment is included or authorized.
+
+
+## 32. Consumer compatibility audit — SearchBar, files and permission boundaries
+
+A focused consumer audit was performed after the source-declaration reconciliation. The audit used the feature branch's exact consumer SFCs and service adapters rather than relying only on default-branch code search.
+
+### 32.1. SearchBar accessible-name defect and correction
+
+The SearchBar source explicitly documents `clearLabel` as required whenever its clear button can appear, but originally declared it optional in TypeScript and defaulted it to `undefined`. The production clear button used `:aria-label="clearLabel ?? ''"`, leaving an unnamed icon-only button if a caller omitted the label.
+
+Three current consumers were identified and reconciled:
+
+| Consumer | Search clear label | Status |
+|---|---|---|
+| `src/features/files/FilesListView/FilesListView.vue` | `labels.searchClearLabel` | IMPLEMENTED |
+| `src/features/wallet/WalletListView.vue` | `labels.searchClearLabel` | IMPLEMENTED |
+| `src/features/shareholders/ShareholderListView/ShareholderListView.vue` | `labels.searchClearLabel` | IMPLEMENTED |
+
+Each corresponding Amharic label module now supplies `searchClearLabel: 'የፍለጋ ጽሑፉን አጽዳ'`. The three consumer interfaces/label objects were updated, and the template passes `:clear-label="labels.searchClearLabel"`.
+
+The SearchBar public prop is now `clearLabel:string` (required), and the previous `clearLabel:undefined` default was removed. A source-contract regression test checks the required prop, the three consumer bindings and Amharic label presence.
+
+Relevant implementation commits:
+- Files list view: `3b7430e1b3eb5b6d2a072697f9edc7d47c17519a`
+- Files Amharic labels: `b51e0ac987f1d705e66b5a23ba5787b58c5ff98b`
+- Wallet labels/interface: `13ecebac4c7f3ddddd093e607cdf7051c384f010`
+- Wallet list view: `d1f963a8110af36ea5807557996386eedea9e4cd`
+- Shareholder list view/interface: `87eee09e364b8ec1f37c6d2effe22abac374d268`
+- Shareholder Amharic labels: `926cb5c2722c6a7afc534a0ebd760ea6661a3f0a`
+- SearchBar required prop: `29119f0934761f587dd83a3ffcfb9e35f6aa291b`
+- Consumer regression test: `987c585c147276b6a2af739a2f97cf64df19bcb9`
+
+**Disposition:** implementation complete; exact-head CI and type-check still required.
+
+### 32.2. FileUploader consumer/service boundary
+
+The FilesListView consumer passes the stable `uploadViaApi` adapter and all ten required translated FileUploader labels. The service adapter:
+
+- forwards the pattern's `AbortSignal` to the API client's request options;
+- forwards upload progress only when a meaningful total is available;
+- converts API `FileResource` to the pattern's `UploadedFile` shape;
+- returns the API promise so rejection reaches the pattern's `failed` lifecycle event.
+
+The FileUploader mounted suite already verifies success, progress, retry, size/type/count rejection, cancellation, abort-on-unmount, mixed-batch completion and FileInput rejection identity. Server-side authorization, MIME/content validation, quota enforcement and malware scanning remain backend responsibilities and are not established by this frontend audit.
+
+### 32.3. FilePreview / DownloadButton consumer boundary
+
+FileDetailView fetches previewable content through the authenticated file API, creates a browser blob URL and supplies that URL to FilePreview. It revokes the prior blob URL before reloading and on component unmount. It avoids fetching unsupported MIME types and shows a separate status fallback when no preview blob is available.
+
+DownloadButton receives a stable component function, `onDownload`, and all four translated labels. The download service fetches the authenticated resource, creates a Blob URL, triggers browser save and revokes the URL in a `finally` path.
+
+**Disposition:** source/service integration reviewed; authenticated browser and real-device acceptance remain outstanding.
+
+### 32.4. PermissionGate and DataTable consumer boundaries
+
+- PermissionGate is used around privileged workspace actions (including file upload/delete and wallet/loan actions). The relevant service comments explicitly state that backend authorization remains authoritative; the client gate is advisory presentation logic only. This does not replace server-side policy verification.
+- FilesListView uses DataTable with stable file ID row keys and no row selection or built-in pagination, so its conditional `selectionLabels` and `paginationLabels` contracts are not activated.
+- WalletDetailView and LoanDetailView use DataTable cell slots with row narrowing helpers; row-action and cell slots preserve the table's own wrappers. Further keyboard, mobile-card and full consumer compatibility testing remains necessary.
+
+| Consumer compatibility gate | Status |
+|---|---|
+| SearchBar clear-label call sites | 3 / 3 corrected |
+| SearchBar clear-label TypeScript contract | IMPLEMENTED |
+| FileUploader adapter AbortSignal/progress | SOURCE VERIFIED |
+| FilePreview blob URL lifecycle | SOURCE VERIFIED |
+| DownloadButton consumer labels and function | SOURCE VERIFIED |
+| PermissionGate backend authority boundary | DOCUMENTED / consumer service contracts reviewed |
+| DataTable selected/pagination conditional labels | Not activated in inspected FilesListView usage |
+| Exact-head CI for these changes | PENDING |
+| A4 closure | OPEN |
 
 No merge or deployment is included or authorized.
