@@ -18,6 +18,7 @@ import {
 } from '@/features/governance/attendance-api';
 import { listGovernanceBodies } from '@/features/governance/service';
 import type { GovernanceBody } from '@/features/governance/api';
+import { formatCalendarDate } from '@/core/dates/calendar';
 
 const meetings = ref<readonly GovernanceMeeting[]>([]);
 const governanceBodies = ref<readonly GovernanceBody[]>([]);
@@ -329,13 +330,13 @@ onMounted(() => { void loadMeetings(); });
           @click="selectMeeting(meeting.id)"
         >
           <strong>{{ meeting.title_am || meeting.title_en || meeting.meeting_code }}</strong>
-          <span>{{ meeting.meeting_kind === 'board' ? 'Board' : 'General Assembly' }} · {{ new Date(meeting.starts_at).toLocaleString() }}</span>
+          <span>{{ meeting.meeting_kind === 'board' ? 'Board' : 'General Assembly' }} · {{ formatCalendarDate(meeting.starts_at, { dateStyle: 'medium', timeStyle: 'short' }) }}</span>
         </button>
       </aside>
 
       <section v-if="selected" class="panel meeting-detail">
         <h2>{{ selectedLabel }}</h2>
-        <p class="muted">{{ selected.meeting_code }} · {{ selected.meeting_kind }} · {{ new Date(selected.starts_at).toLocaleString() }}</p>
+        <p class="muted">{{ selected.meeting_code }} · {{ selected.meeting_kind }} · {{ formatCalendarDate(selected.starts_at, { dateStyle: 'medium', timeStyle: 'short' }) }}</p>
 
         <div class="section-block">
           <h3>መገኘት መመዝገብ / Record attendance</h3>
@@ -406,7 +407,7 @@ onMounted(() => { void loadMeetings(); });
           <div v-for="entry in selected.attendance" :key="entry.id" class="record-row">
             <span>{{ entry.subject_type }} #{{ entry.subject_id }}</span>
             <strong>{{ entry.attendance_status }}</strong>
-            <span>{{ entry.arrived_at ? new Date(entry.arrived_at).toLocaleString() : '—' }}</span>
+            <span>{{ entry.arrived_at ? formatCalendarDate(entry.arrived_at, { dateStyle: 'medium', timeStyle: 'short' }) : '—' }}</span>
             <button v-if="entry.attendance_status === 'late'" class="text-button" :disabled="saving" @click="assessPenalty(entry.id, 'late')">Assess ETB 50</button>
             <button v-if="entry.attendance_status === 'absent'" class="text-button" :disabled="saving" @click="assessPenalty(entry.id, 'absence')">Assess ETB 300</button>
           </div>
@@ -418,7 +419,7 @@ onMounted(() => { void loadMeetings(); });
           <div v-for="proxy in selected.proxies" :key="proxy.id" class="record-row">
             <span>{{ proxy.principal_type }} #{{ proxy.principal_id }} → {{ proxy.proxy_user_id ? 'user #' + proxy.proxy_user_id : (proxy.proxy_name_am || proxy.proxy_name_en || 'external proxy') }}</span>
             <strong>{{ proxy.status }}</strong>
-            <span>Deadline {{ new Date(proxy.deadline_at).toLocaleString() }}</span>
+            <span>Deadline {{ formatCalendarDate(proxy.deadline_at, { dateStyle: 'medium', timeStyle: 'short' }) }}</span>
             <button v-if="proxy.status === 'submitted'" class="text-button" :disabled="saving" @click="reviewProxy(proxy.id, 'approved')">Approve</button>
             <button v-if="proxy.status === 'submitted'" class="text-button danger-text" :disabled="saving" @click="reviewProxy(proxy.id, 'rejected')">Reject</button>
           </div>
