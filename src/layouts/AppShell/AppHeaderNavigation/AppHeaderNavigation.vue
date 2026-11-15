@@ -106,9 +106,9 @@ function navigate(item: SearchNavItem): void {
       </form>
       <label class="app-header-navigation__input-wrap">
         <BaseIcon name="search" size="sm" />
-        <input v-model="query" autofocus type="search" placeholder="Search modules and pages…" />
+        <input v-model="query" autofocus type="search" aria-label="Search modules and pages" aria-controls="app-header-search-results" placeholder="Search modules and pages…" />
       </label>
-      <ul class="app-header-navigation__results">
+      <ul id="app-header-search-results" class="app-header-navigation__results" aria-live="polite" aria-relevant="additions text">
         <li v-for="item in results" :key="item.id">
           <button type="button" @click="navigate(item)">
             <span>{{ item.label }}</span>
