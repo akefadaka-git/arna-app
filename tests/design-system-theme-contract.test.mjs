@@ -172,3 +172,44 @@ test('active application sources use only the ARNA CSS token namespace', () => {
   assert.match(tokens, /--arna-color-surface-page:/);
   assert.match(theme, /--arna-color-surface-page:/);
 });
+
+
+test('every primitive component has a stable folder-level export', () => {
+  const primitiveRoot = 'src/components/primitives';
+  const directories = readdirSync(primitiveRoot, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name);
+  assert.ok(directories.length > 0, 'primitive component inventory must not be empty');
+  for (const name of directories) {
+    const files = readdirSync(`${primitiveRoot}/${name}`);
+    assert.ok(files.includes(`${name}.vue`), `${name} must provide its component SFC`);
+    assert.ok(files.includes('index.ts'), `${name} must provide a stable folder-level export`);
+  }
+});
+
+test('shared component styles use semantic color tokens instead of hardcoded color literals', () => {
+  const roots = [
+    'src/components/primitives',
+    'src/components/composites',
+    'src/components/patterns',
+  ];
+  const collectVueFiles = (directory) => readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const path = `${directory}/${entry.name}`;
+    if (entry.isDirectory()) return collectVueFiles(path);
+    return entry.name.endsWith('.vue') ? [path] : [];
+  });
+  const violations = [];
+  for (const path of roots.flatMap(collectVueFiles)) {
+    const source = read(path);
+    const styles = [...source.matchAll(/<style\\b[^>]*>([\\s\\S]*?)<\\/style>/gi)]
+      .map((match) => match[1].replace(/\\/\\*[\\s\\S]*?\\*\\//g, ''));
+    for (const style of styles) {
+      if (/#(?:[0-9a-f]{3,8})\\b|\\b(?:rgba?|hsla?)\\s*\\(/i.test(style)) {
+        violations.push(path);
+        break;
+      }
+    }
+  }
+  assert.deepEqual(violations, [],
+    'shared component styles must use semantic tokens; put raw palette values in the token/theme layer');
+});
