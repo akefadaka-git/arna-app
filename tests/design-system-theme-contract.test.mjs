@@ -88,7 +88,9 @@ test('English and Amharic typography use their approved font stacks and scales',
 test('shared button, form, card, table and dialog contracts retain keyboard and AT semantics', () => {
   assert.ok(button.includes(':disabled="isDisabled"'));
   assert.ok(button.includes('aria-busy'));
-  assert.ok(button.includes('iconOnly=true requires the ariaLabel prop'));
+  assert.ok(button.includes('iconOnly=true requires ariaLabel or ariaLabelledBy'));
+  assert.ok(button.includes(':aria-labelledby="ariaLabelledBy"'));
+  assert.ok(button.includes('!props.ariaLabel && !props.ariaLabelledBy'));
   assert.ok(field.includes('aria-describedby'));
   assert.ok(field.includes('aria-live="polite"'));
   assert.ok(card.includes('role="button"'));
