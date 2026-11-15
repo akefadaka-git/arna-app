@@ -49,16 +49,16 @@ onMounted(() => void load());
   <div class="arna-site corporate-entry-route">
     <a class="skip-link" href="#entry-content">{{ locale === 'am' ? 'ወደ ዋናው ይዘት ይሂዱ' : 'Skip to main content' }}</a>
     <header class="site-header"><div class="site-container site-header__inner">
-      <RouterLink class="brand" to="/"><img class="public-home__emblem" src="/logo.png" alt="" width="43" height="43" /><span class="brand__wordmark"><strong>{{ aranaBrandLabels.corporateName }}</strong><small>{{ aranaBrandLabels.productName }}</small></span></RouterLink>
+      <RouterLink class="brand" :to="{ path: '/', query: { locale } }"><img class="public-home__emblem" src="/logo.png" alt="" width="43" height="43" /><span class="brand__wordmark"><strong>{{ aranaBrandLabels.corporateName }}</strong><small>{{ aranaBrandLabels.productName }}</small></span></RouterLink>
       <nav class="main-nav" :aria-label="locale === 'am' ? 'ዋና አሰሳ' : 'Main navigation'">
-        <RouterLink to="/">{{ locale === 'am' ? 'መነሻ' : 'Home' }}</RouterLink>
+        <RouterLink :to="{ path: '/', query: { locale } }">{{ locale === 'am' ? 'መነሻ' : 'Home' }}</RouterLink>
         <RouterLink :to="`/${locale === 'am' ? 'en' : 'am'}/content/${String(route.params.type)}/${entry?.alternate_slug ?? String(route.params.slug)}`">{{ locale === 'am' ? 'English' : 'አማርኛ' }}</RouterLink>
         <ThemePreferenceControl />
       </nav>
     </div></header>
     <main id="entry-content" class="site-container" aria-live="polite" tabindex="-1">
       <p v-if="loading">{{ locale === 'am' ? 'በመጫን ላይ…' : 'Loading…' }}</p>
-      <section v-else-if="failed || !entry" role="status"><h1>{{ locale === 'am' ? 'ይዘቱ አልተገኘም' : 'Content not found' }}</h1><RouterLink to="/">{{ locale === 'am' ? 'ወደ መነሻ ይመለሱ' : 'Return home' }}</RouterLink></section>
+      <section v-else-if="failed || !entry" role="status"><h1>{{ locale === 'am' ? 'ይዘቱ አልተገኘም' : 'Content not found' }}</h1><RouterLink :to="{ path: '/', query: { locale } }">{{ locale === 'am' ? 'ወደ መነሻ ይመለሱ' : 'Return home' }}</RouterLink></section>
       <article v-else class="corporate-entry">
         <p class="eyebrow">{{ entry.type }}</p><h1>{{ entry.title }}</h1><p v-if="entry.summary">{{ entry.summary }}</p>
         <img v-if="entry.asset_url && entry.type === 'media'" :src="entry.asset_url" :alt="entry.title" loading="lazy" />
