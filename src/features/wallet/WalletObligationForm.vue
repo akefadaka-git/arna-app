@@ -166,6 +166,7 @@ import { computed, ref, watch } from 'vue';
 import Modal from '@/components/composites/Modal';
 import Alert from '@/components/composites/Alert';
 import FormField from '@/components/composites/FormField';
+import { CalendarDateInput } from '@/components/composites/DatePicker';
 import BaseInput from '@/components/primitives/BaseInput';
 import BaseButton from '@/components/primitives/BaseButton';
 import PrimaryButton from '@/components/primitives/PrimaryButton';
@@ -496,10 +497,9 @@ const submitLabel = computed<string>(() =>
         :error="dueDateError"
         :disabled="isSubmitting"
       >
-        <BaseInput
+        <CalendarDateInput
           id="wallet-obligation-due-date"
           v-model="dueDate"
-          type="date"
           :disabled="isSubmitting"
           data-testid="wallet-obligation-form-due-date"
         />
