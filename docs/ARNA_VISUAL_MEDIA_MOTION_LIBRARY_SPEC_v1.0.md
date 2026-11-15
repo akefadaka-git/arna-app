@@ -15,7 +15,7 @@ The library is presentation-only. It does not create advertising campaigns, trac
 | Capability | Library contract | Initial implementation |
 |---|---|---|
 | Cards | Reuse existing Card and DetailCard patterns | Existing; no duplicate card |
-| Icon pack | Single Lucide-backed BaseIcon registry | Existing registry; 56 names documented in BaseIcon source |
+| Icon pack | Single Lucide-backed BaseIcon registry | Existing registry; 298 names registered in the BaseIcon source registry at the inspected baseline |
 | Charts / graphs | Accessible chart container with caller-supplied series | ChartPanel: bar, line and donut |
 | Dashboard widgets | Small composable KPI and chart surfaces | MetricWidget and ChartPanel |
 | Media / images | Responsive image frame, caption and alt text | ImageFrame; GIF is supported as an image source |
