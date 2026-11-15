@@ -18,13 +18,16 @@ test.describe('Mounted Combobox browser behavior', () => {
     await input.press('ArrowDown');
     await expect(page.getByRole('option', { name: 'Unavailable' })).toHaveAttribute('aria-disabled', 'true');
     await input.press('ArrowDown');
-    await expect(page.getByRole('option', { name: 'Beta' })).toHaveAttribute('data-highlighted', 'true');
+    const beta = page.getByRole('option', { name: 'Beta' });
+    await expect(input).toHaveAttribute('aria-activedescendant', await beta.getAttribute('id'));
     await expect(input).toBeFocused();
 
     await input.press('End');
-    await expect(page.getByRole('option', { name: 'Gamma' })).toHaveAttribute('data-highlighted', 'true');
+    const gamma = page.getByRole('option', { name: 'Gamma' });
+    await expect(input).toHaveAttribute('aria-activedescendant', await gamma.getAttribute('id'));
     await input.press('Home');
-    await expect(page.getByRole('option', { name: 'Alpha' })).toHaveAttribute('data-highlighted', 'true');
+    const alpha = page.getByRole('option', { name: 'Alpha' });
+    await expect(input).toHaveAttribute('aria-activedescendant', await alpha.getAttribute('id'));
     await input.press('Enter');
 
     await expect(page.getByTestId('combobox-selected')).toHaveText('alpha');
