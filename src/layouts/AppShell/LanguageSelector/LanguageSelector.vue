@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — LanguageSelector
+ ARNA App Shell — LanguageSelector
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/LanguageSelector/LanguageSelector.vue
+ File:      src/layouts/AppShell/LanguageSelector/LanguageSelector.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.0.1
  Status:    FROZEN
@@ -34,10 +34,10 @@
  dropdown of the two frozen locales. Reads the active locale and the
  available-locales catalogue from @/stores/locale (Unit 11.6).
 
- Does NOT set the locale itself. Emits @select({ code }) so the
- consumer (the shell) can call localeStore.setLocale(code) and,
- once the endpoint exists, also call the localization service which
- POSTs to /api/locale.
+ Does NOT mutate the locale itself. Emits @select({ code }) so the
+ consumer can call localeStore.setLocale(code). The store persists
+ the preference client-side; a future localization service may also
+ synchronize it with the backend when that endpoint is available.
 
  -----------------------------------------------------------------------------
  RENDERING IS DEFERRED (§9.3 / §20.3)
@@ -130,8 +130,8 @@
 /**
  * Consumer-supplied, translated labels for the component itself.
  *
- * The menu-item labels are NOT here — they come from the frozen
- * locale store catalogue. See the file header comment §"The menu items
+ * The menu-item labels are NOT here — they come from the locale
+ * store catalogue. See the file header comment §"The menu items
  * come from the store".
  */
 export interface LanguageSelectorLabels {
