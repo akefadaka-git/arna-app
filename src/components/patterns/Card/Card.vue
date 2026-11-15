@@ -138,13 +138,13 @@ export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesCardWarned = new Set<string>();
+const __arnaCardWarned = new Set<string>();
 
-function ___masesCardWarnOnce(key: string, message: string): void {
-  if (__masesCardWarned.has(key)) {
+function ___arnaCardWarnOnce(key: string, message: string): void {
+  if (__arnaCardWarned.has(key)) {
     return;
   }
-  __masesCardWarned.add(key);
+  __arnaCardWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -303,7 +303,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   },
 ]);
 
-void ___masesCardWarnOnce;
+void ___arnaCardWarnOnce;
 </script>
 
 <template>

@@ -107,13 +107,13 @@
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesStatusBadgeWarned = new Set<string>();
+const __arnaStatusBadgeWarned = new Set<string>();
 
-function __masesStatusBadgeWarnOnce(key: string, message: string): void {
-  if (__masesStatusBadgeWarned.has(key)) {
+function __arnaStatusBadgeWarnOnce(key: string, message: string): void {
+  if (__arnaStatusBadgeWarned.has(key)) {
     return;
   }
-  __masesStatusBadgeWarned.add(key);
+  __arnaStatusBadgeWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -198,7 +198,7 @@ const props = withDefaults(defineProps<Props>(), {
 // -----------------------------------------------------------------------------
 
 if (import.meta.env.DEV && props.label.trim() === '') {
-  __masesStatusBadgeWarnOnce(
+  __arnaStatusBadgeWarnOnce(
     'status-badge:empty-label',
     `[StatusBadge] the label for status "${props.status}" is empty. ` +
       `A status must never be communicated by color alone (Design ` +
@@ -207,7 +207,7 @@ if (import.meta.env.DEV && props.label.trim() === '') {
 }
 
 if (import.meta.env.DEV && props.icon !== undefined && props.dot === true) {
-  __masesStatusBadgeWarnOnce(
+  __arnaStatusBadgeWarnOnce(
     'status-badge:icon-and-dot',
     '[StatusBadge] both `icon` and `dot=true` are supplied. The two ' +
       'leading visuals compete for the same slot and produce a busy ' +

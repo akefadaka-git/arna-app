@@ -85,13 +85,13 @@
  * Module-level Set for deduplicated development warnings.
  * See the file header comment §"The remove button".
  */
-const __masesBaseChipWarned = new Set<string>();
+const __arnaBaseChipWarned = new Set<string>();
 
-function __masesBaseChipWarnOnce(key: string, message: string): void {
-  if (__masesBaseChipWarned.has(key)) {
+function __arnaBaseChipWarnOnce(key: string, message: string): void {
+  if (__arnaBaseChipWarned.has(key)) {
     return;
   }
-  __masesBaseChipWarned.add(key);
+  __arnaBaseChipWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -167,7 +167,7 @@ const emit = defineEmits<{
  * load.
  */
 if (import.meta.env.DEV && props.removable && !props.removeAriaLabel && !props.removeAriaLabelledBy) {
-  __masesBaseChipWarnOnce(
+  __arnaBaseChipWarnOnce(
     'base-chip:missing-remove-label',
     '[BaseChip] removable=true without removeAriaLabel or ' +
       'removeAriaLabelledBy. The remove button has no accessible name. ' +
