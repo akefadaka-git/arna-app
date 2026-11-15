@@ -6,13 +6,13 @@ PR: [#69](https://github.com/akefadaka-git/arna-app/pull/69)
 
 ## Executive status
 - A3 implementation: PARTIAL. The foundation, accessibility corrections, bilingual navigation search, notification lifecycle and pagination layout correction, and visual library integration are present in the stacked PR chain.
-- A4 verification: PASS for configured exact-head workflow #43719708309 at SHA `424728e195f5d4a44c29fc74b28bd649afecffe5`; PARTIAL for end-to-end product acceptance across four application shells and real devices.
+- A4 verification: PASS for configured exact-head workflow #43720162907 at SHA `b1ea31c10e3a57e3de308b8741666718ff399574`; PARTIAL for end-to-end product acceptance across four application shells and real devices.
 - A2 reconciliation: PARTIAL / NOT VERIFIED-CLOSED because PR #65 scope is inconsistent with its declared one-file intent and historical design-system authority remains missing.
 - A5: NOT STARTED. No merge or deployment is authorized by this report.
 
 ## Exact-head CI evidence
-- Workflow run [#43719708309](https://github.com/akefadaka-git/arna-app/actions/runs/43719708309)
-- Exact head: `424728e195f5d4a44c29fc74b28bd649afecffe5`
+- Workflow run [#43720162907](https://github.com/akefadaka-git/arna-app/actions/runs/43720162907)
+- Exact head: `b1ea31c10e3a57e3de308b8741666718ff399574`
 - Conclusion: success.
 - Configured successful checks include type-check/build, calendar/date controls, Chromium/public-browser and WCAG 2.2 automated contracts, visual library rendering, mounted Combobox/Modal/Drawer interactions, FileUploader lifecycle/accessibility, DatePicker browser interactions, and artifact upload.
 - Mounted A4 browser results on this exact head: 25 component/navigation/notification tests passed; 7 FileUploader tests passed; 6 DatePicker tests passed. The public-browser contract suite (10 tests) and visual-library render (1 test) also passed.
@@ -37,7 +37,7 @@ PR: [#69](https://github.com/akefadaka-git/arna-app/pull/69)
 - Exact repository path-history queries for `docs/MASES_PHASE_2_UI_DESIGN_SYSTEM.md` and `docs/MASES_PHASE_2_UI_COMPONENT_CATALOG.md` returned zero commits; the current tree contains only `ARNA_UI_DESIGN_SYSTEM_RECONSTRUCTED.md` and `ARNA_UI_COMPONENT_CATALOG_RECONSTRUCTED.md`. Historical originals remain MISSING. Reconstructed documents are drafts, not normative authority unless explicitly approved by the Owner.
 
 ## Verification plan / remaining A4
-- The initial notification pagination tests exposed two actual layout constraints: the list's default flex min-size and the absence of `--arna-shell-header-height` in the standalone fixture. The component now sets the list to `flex: 1 1 auto; min-height: 0` and supplies a conservative `4rem` fallback for the header-height token used by its max-height and top offset. Exact-head workflow #43719708309 confirms the footer remained visible and pagination next/previous passed.
+- The initial notification pagination tests exposed two actual layout constraints: the list's default flex min-size and the absence of `--arna-shell-header-height` in the standalone fixture. The component now sets the list to `flex: 1 1 auto; min-height: 0` and supplies a conservative `4rem` fallback for the header-height token used by its max-height and top offset. Exact-head workflow #43720162907 confirms the footer remained visible and pagination next/previous passed.
 1. Run exact-head type-check and all four builds on the new notification/navigation test commit.
 2. Execute mounted notification tests for loading, read state, pagination, locale refresh, failure/retry, and fail-closed untrusted action metadata.
 3. Execute navigation search tests for keyboard navigation, empty results, hover synchronization, selection, and focus restoration.
