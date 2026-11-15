@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import CalendarDateInput from './CalendarDateInput.vue';
 
 interface Props {
   modelValue?: string;
   id: string;
-  timeLabel: string;
+  timeLabel?: string;
   disabled?: boolean;
   required?: boolean;
   invalid?: boolean;
@@ -24,6 +24,10 @@ const emit = defineEmits<{
   (event: 'update:modelValue', value: string): void;
 }>();
 
+const locale = ref('am-ET');
+let languageObserver: MutationObserver | null = null;
+const resolvedTimeLabel = computed(() => props.timeLabel ?? (locale.value.startsWith('en') ? 'Time' : 'ሰዓት'));
+
 const datePart = ref('');
 const timePart = ref('');
 
@@ -36,6 +40,15 @@ watch(
   },
   { immediate: true },
 );
+
+onMounted(() => {
+  const resolveLocale = () => typeof document !== 'undefined' && document.documentElement.lang.toLowerCase().startsWith('en') ? 'en-ET' : 'am-ET';
+  locale.value = resolveLocale();
+  languageObserver = new MutationObserver(() => { locale.value = resolveLocale(); });
+  languageObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+});
+
+onBeforeUnmount(() => languageObserver?.disconnect());
 
 function emitCompleteValue(): void {
   emit('update:modelValue', datePart.value && timePart.value
@@ -56,7 +69,7 @@ function emitCompleteValue(): void {
       @update:model-value="datePart = $event; emitCompleteValue()"
     />
     <label class="calendar-datetime-input__time">
-      <span>{{ timeLabel }}</span>
+      <span>{{ resolvedTimeLabel }}</span>
       <input
         :id="`${id}-time`"
         v-model="timePart"
