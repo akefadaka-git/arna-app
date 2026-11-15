@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/BaseIcon/BaseIcon.vue
  Layer:     1 (Primitives)
- Version:   2.0.0
+ Version:   2.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.19
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -25,7 +25,7 @@
      understands (hex / rgb / hsl / hwb / lab / lch / oklab / oklch /
      color() / named colors).
    - Correct accessibility semantics (decorative by default; role="img"
-     + aria-label when `ariaLabel` is supplied).
+     + aria-label or aria-labelledby when an accessible name is supplied).
    - Missing icons render a layout-preserving placeholder rather than
      collapsing the surrounding layout, and warn in development.
 
@@ -97,13 +97,14 @@
  -----------------------------------------------------------------------------
  Accessibility
  -----------------------------------------------------------------------------
- Decorative (ariaLabel omitted) — DEFAULT and CORRECT for the vast
- majority of uses (button icons, form field adornments, list icons,
- table cell icons). aria-hidden="true"; removed from the a11y tree.
+ Decorative (ariaLabel and ariaLabelledBy omitted) — DEFAULT and CORRECT
+ for the vast majority of uses (button icons, form field adornments,
+ list icons, table cell icons). aria-hidden="true"; removed from the a11y tree.
 
- Informative (ariaLabel provided) — role="img" + aria-label. Use only
- when the icon is the SOLE carrier of meaning (status glyph with no
- adjacent text, icon-only toolbar button whose label is on the parent).
+ Informative (ariaLabel or ariaLabelledBy provided) — role="img" with
+ the corresponding accessible-name attribute. Use only when the icon
+ is the SOLE carrier of meaning (status glyph with no adjacent text,
+ icon-only toolbar button whose label is on the parent).
 
  -----------------------------------------------------------------------------
  Test hooks
@@ -576,17 +577,23 @@ interface Props {
   /** Color. See the file header §"Color resolution". */
   color?: IconColor;
   /**
-   * Accessible name. When omitted the icon is decorative
-   * (aria-hidden="true"). When provided the icon is informative
-   * (role="img" + aria-label).
+   * Accessible name. When omitted, unless ariaLabelledBy is supplied,
+   * the icon is decorative (aria-hidden="true").
    */
   ariaLabel?: string;
+
+  /**
+   * ID reference(s) of element(s) that provide the accessible name.
+   * Takes precedence over ariaLabel when both are supplied.
+   */
+  ariaLabelledBy?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   size: 'md',
   color: undefined,
   ariaLabel: undefined,
+  ariaLabelledBy: undefined,
 });
 
 /* ────────────────────────────────────────────────────────────────────────
@@ -759,7 +766,9 @@ const inlineStyle = computed<Record<string, string>>(() => ({
  * Accessibility
  * ──────────────────────────────────────────────────────────────────────── */
 
-const isDecorative = computed<boolean>(() => props.ariaLabel === undefined);
+const isDecorative = computed<boolean>(
+  () => props.ariaLabel === undefined && props.ariaLabelledBy === undefined,
+);
 </script>
 
 <template>
@@ -777,7 +786,8 @@ const isDecorative = computed<boolean>(() => props.ariaLabel === undefined);
     :class="['base-icon', `base-icon--${resolvedSizeKey}`]"
     :aria-hidden="isDecorative ? 'true' : undefined"
     :role="isDecorative ? undefined : 'img'"
-    :aria-label="isDecorative ? undefined : ariaLabel"
+    :aria-label="isDecorative || ariaLabelledBy !== undefined ? undefined : ariaLabel"
+    :aria-labelledby="isDecorative ? undefined : ariaLabelledBy"
     focusable="false"
     data-testid="base-icon-root"
     :data-icon-name="name"
@@ -796,7 +806,8 @@ const isDecorative = computed<boolean>(() => props.ariaLabel === undefined);
     :class="['base-icon', 'base-icon--missing', `base-icon--${resolvedSizeKey}`]"
     :aria-hidden="isDecorative ? 'true' : undefined"
     :role="isDecorative ? undefined : 'img'"
-    :aria-label="isDecorative ? undefined : ariaLabel"
+    :aria-label="isDecorative || ariaLabelledBy !== undefined ? undefined : ariaLabel"
+    :aria-labelledby="isDecorative ? undefined : ariaLabelledBy"
     data-testid="base-icon-root"
     :data-icon-name="name"
     :data-size="resolvedSizeKey"
