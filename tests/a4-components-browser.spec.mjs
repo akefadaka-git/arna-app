@@ -307,16 +307,14 @@ test.describe('Mounted NotificationsCenter lifecycle and safety', () => {
   });
 
   test('shows a loading status while the inbox request is pending', async ({ page }) => {
-    let release;
-    await page.route('**/api/notifications?**', async (route) => {
-      await new Promise((resolve) => { release = resolve; });
+    await page.route('**/api/notifications**', async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 350));
       await route.fulfill({ json: envelope([item('n-1')], 1, 1, 1) });
     });
     await page.goto(baseUrl);
     await page.getByTestId('set-locale-en').click();
     await page.getByTestId('open-notifications').click();
-    await expect(page.getByRole('status')).toContainText('Loading');
-    release();
+    await expect(page.locator('.notification-center__state[role="status"]')).toContainText('Loading');
     await expect(page.getByText('Sample notification')).toBeVisible();
   });
 
