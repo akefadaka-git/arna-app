@@ -620,6 +620,9 @@ function cancel(item: FileUploaderQueueItem): void {
   // The rejection handler will not re-mark the item — we do it here
   // so the state is correct synchronously, before the microtask queue.
   item.status = 'cancelled';
+  // Cancellation is a terminal transition too. If other files in this
+  // batch already succeeded, publish the aggregate completion now.
+  maybeEmitCompleted();
 }
 
 function remove(item: FileUploaderQueueItem): void {
