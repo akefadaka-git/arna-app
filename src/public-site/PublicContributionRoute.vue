@@ -3,6 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import { aranaBrandLabels } from '@/router/shell-labels';
 import { api } from '@/core/api/client';
+import ThemePreferenceControl from '@/layouts/ThemePreferenceControl.vue';
 
 type SubmissionKind = 'news' | 'article' | 'announcement' | 'press-release';
 const title = ref('');
@@ -213,6 +214,7 @@ async function submitContent(): Promise<void> {
         <span><strong>{{ aranaBrandLabels.corporateName }}</strong><small>{{ aranaBrandLabels.productName }} · PUBLIC</small></span>
       </RouterLink>
       <RouterLink class="contribute-back" :to="{ path: '/', query: { locale } }">{{ copy.back }}</RouterLink>
+      <ThemePreferenceControl />
     </header>
 
     <main id="contribute-main" class="contribute-main" tabindex="-1">
