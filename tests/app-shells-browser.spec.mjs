@@ -19,10 +19,19 @@ const viewports = [
 
 for (const surface of surfaces) {
   test(`mounted ${surface.label} shell renders ARNA chrome and remains responsive`, async ({ page }) => {
+    const runtimeErrors = [];
+    page.on('pageerror', (error) => runtimeErrors.push(error.stack || error.message));
+    page.on('console', (message) => { if (message.type() === 'error') runtimeErrors.push(message.text()); });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`${baseUrl}?surface=${surface.key}`);
 
-    await expect(page.getByTestId('app-shell-root')).toBeVisible();
+    const fixtureError = await page.evaluate(() => window.__ARNA_SHELL_FIXTURE_ERROR__ || '');
+    const root = page.getByTestId('app-shell-root');
+    if (await root.count() === 0) {
+      const markup = await page.locator('#app').innerHTML();
+      throw new Error(`Mounted shell missing. Runtime errors: ${runtimeErrors.join(' | ')}. Fixture error: ${fixtureError}. App markup: ${markup.slice(0, 1200)}`);
+    }
+    await expect(root).toBeVisible();
     await expect(page.getByTestId('arana-brand-root')).toBeVisible();
     await expect(page.getByTestId('arana-brand-product')).toContainText('ARNA');
     await expect(page.getByTestId('app-shell-main')).toHaveAttribute('id', 'arna-main-content');
