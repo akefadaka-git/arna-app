@@ -82,7 +82,7 @@ const sampleData = computed(() => [
       <AbstractBackdrop variant="mesh" />
       <div class="visual-library-showcase__hero-copy">
         <p class="visual-library-showcase__eyebrow">{{ copy.eyebrow }}</p>
-        <h2><TextEffect :text="copy.title" effect="gradient" /></h2>
+        <h2>{{ copy.title }}</h2>
         <p>{{ copy.description }}</p>
       </div>
     </header>
@@ -179,7 +179,7 @@ const sampleData = computed(() => [
   padding: clamp(1.1rem, 3vw, 2rem);
   border: 1px solid var(--arna-color-border-subtle);
   border-radius: var(--arna-radius-lg);
-  background: var(--arna-color-surface-brand);
+  background: var(--arna-color-surface-raised);
 }
 .visual-library-showcase__hero-copy { position: relative; z-index: 1; max-width: 62rem; }
 .visual-library-showcase__eyebrow { margin: 0 0 .45rem; color: var(--arna-color-text-secondary); font-size: var(--arna-font-size-caption); font-weight: 700; letter-spacing: .06em; }
