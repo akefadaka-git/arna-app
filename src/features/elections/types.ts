@@ -13,7 +13,7 @@ export type ElectionStatus =
   | 'certified'
   | 'cancelled';
 
-export type ElectionVotingMethod = 'physical';
+export type ElectionVotingMethod = 'physical' | 'electronic' | 'proxy' | 'hybrid';
 
 export interface GovernanceElectionSummary {
   readonly id: number;
