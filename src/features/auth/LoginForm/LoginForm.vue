@@ -513,7 +513,8 @@ const passwordFieldType = computed<'password' | 'text'>(() =>
 // -----------------------------------------------------------------------------
 // Remember-me storage
 // -----------------------------------------------------------------------------
-const REMEMBERED_IDENTIFIER_KEY = 'mases.auth.remembered_identifier';
+const REMEMBERED_IDENTIFIER_KEY = 'arna.auth.remembered_identifier';
+const LEGACY_REMEMBERED_IDENTIFIER_KEY = 'mases.auth.remembered_identifier';
 
 /**
  * Read the remembered identifier. Returns null on storage failure or
@@ -521,7 +522,7 @@ const REMEMBERED_IDENTIFIER_KEY = 'mases.auth.remembered_identifier';
  */
 function loadRememberedIdentifier(): string | null {
   try {
-    const value = window.localStorage.getItem(REMEMBERED_IDENTIFIER_KEY);
+    const value = window.localStorage.getItem(REMEMBERED_IDENTIFIER_KEY) ?? window.localStorage.getItem(LEGACY_REMEMBERED_IDENTIFIER_KEY);
     if (typeof value === 'string' && value.length > 0) {
       return value;
     }
@@ -540,8 +541,10 @@ function persistRememberedIdentifier(value: string): void {
   try {
     if (value !== '') {
       window.localStorage.setItem(REMEMBERED_IDENTIFIER_KEY, value);
+      window.localStorage.removeItem(LEGACY_REMEMBERED_IDENTIFIER_KEY);
     } else {
       window.localStorage.removeItem(REMEMBERED_IDENTIFIER_KEY);
+      window.localStorage.removeItem(LEGACY_REMEMBERED_IDENTIFIER_KEY);
     }
   } catch {
     /* Silently disabled. */

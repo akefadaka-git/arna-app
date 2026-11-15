@@ -147,8 +147,8 @@ export interface LocaleStorage {
 }
 
 /**
- * The production default. Reads and writes `mases.locale` in
- * localStorage.
+ * The production default. Reads `arna.locale` first, falls back to
+ * the legacy `mases.locale` key, and writes only the ARNA key.
  */
 function createLocalStorageLocaleStorage(): LocaleStorage {
   return {

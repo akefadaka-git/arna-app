@@ -97,11 +97,12 @@ export interface TenantIdStorage {
  * user's default tenant, which is the correct recovery behavior.
  */
 function createLocalStorageTenantIdStorage(): TenantIdStorage {
-  const KEY = 'mases.tenant_id';
+  const KEY = 'arna.tenant_id';
+  const LEGACY_KEY = 'mases.tenant_id';
 
   return {
     get(): number | null {
-      const raw = localStorage.getItem(KEY);
+      const raw = localStorage.getItem(KEY) ?? localStorage.getItem(LEGACY_KEY);
       if (raw === null) return null;
       const parsed = Number.parseInt(raw, 10);
       if (!Number.isFinite(parsed) || parsed <= 0) return null;
@@ -109,9 +110,11 @@ function createLocalStorageTenantIdStorage(): TenantIdStorage {
     },
     set(id: number): void {
       localStorage.setItem(KEY, String(id));
+      localStorage.removeItem(LEGACY_KEY);
     },
     clear(): void {
       localStorage.removeItem(KEY);
+      localStorage.removeItem(LEGACY_KEY);
     },
   };
 }
