@@ -238,3 +238,18 @@ Added `tests/a4-component-risk-contract.test.mjs` and wired it into `package.jso
 - The 19 inspected Modal consumer call sites passing dedicated translated close-label fields.
 
 **Evidence classification:** these are static source-contract regression checks. They guard expected implementation structure and consumer bindings; they are not mounted-component browser interaction tests and do not prove focus behavior, screen-reader announcements, race conditions or backend authorization. Dedicated runtime suites remain required for Combobox, Modal/Drawer and FileUploader. PermissionGate remains a UI-only gate; server/API authorization must independently enforce permissions.
+
+
+## 15. Mounted A4 component browser verification added
+
+Added a dedicated Vue-mounted browser fixture at `tests/fixtures/a4-components.html` and `tests/fixtures/a4-components.js`, with Playwright coverage in `tests/a4-components-browser.spec.mjs`. The suite mounts the actual Combobox, Modal and Drawer SFCs rather than testing source text or mocks.
+
+Coverage added:
+- **Combobox:** focus retention, disabled-option exclusion, ArrowDown navigation, Home/End navigation, Enter selection, Escape close without selection, Tab close with natural focus movement, ARIA relationships and axe scan.
+- **Modal:** native dialog opening, modal semantics, translated close-button accessible name, Escape close, close-button close, close event emission, focus restoration and axe scan.
+- **Drawer:** corresponding native dialog, accessible close name, Escape and close-button behavior, close event emission, focus restoration and axe scan.
+- CI runs the mounted suite from a Vite fixture server on port 4176 after installing Chromium.
+
+**Evidence boundary:** this is real Chromium browser execution of the mounted Vue components, but not full authenticated dashboard-shell testing, manual screen-reader testing or physical-device acceptance. FileUploader remains without a mounted lifecycle suite. Drawer consumer census and complete API prop/event/slot/expose/attribute inventory also remain outstanding.
+
+**A4 disposition remains PARTIAL / OPEN pending exact-head CI result and remaining acceptance evidence.**
