@@ -72,6 +72,28 @@ test.describe('ARNA visual library rendered review', () => {
             animations: 'disabled',
           });
 
+          const flow = await page.evaluate(() => {
+            const rectBottom = (selector) => {
+              const elements = Array.from(document.querySelectorAll(selector));
+              return Math.max(0, ...elements.map((element) => element.getBoundingClientRect().bottom));
+            };
+            const contentSection = document.querySelector('[aria-label="Visual component previews"]');
+            const promo = document.querySelector('[data-testid="promo-banner"]');
+            const contentPanels = document.querySelectorAll('.visual-library-showcase__grid--content .visual-panel');
+            return {
+              threeDVisualBottom: rectBottom('.visual-panel[data-mode="3d"] .visual-panel__surface'),
+              contentTop: contentSection?.getBoundingClientRect().top ?? 0,
+              contentBottom: rectBottom('.visual-library-showcase__grid--content .visual-panel__surface'),
+              promoTop: promo?.getBoundingClientRect().top ?? 0,
+              contentPanelCount: contentPanels.length,
+            };
+          });
+          expect(flow.contentTop, '3D panels must not intrude into the component preview section')
+            .toBeGreaterThanOrEqual(flow.threeDVisualBottom - 1);
+          expect(flow.promoTop, 'component preview panels must not intrude into the promotional section')
+            .toBeGreaterThanOrEqual(flow.contentBottom - 1);
+          expect(flow.contentPanelCount).toBe(3);
+
           const accessibility = await new AxeBuilder({ page })
             .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
             .analyze();
