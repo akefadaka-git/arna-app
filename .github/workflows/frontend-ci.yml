@@ -23,6 +23,8 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci
+      - name: Verify canonical ARNA brand identity
+        run: npm run test:brand-identity-contract
       - name: Report dependency vulnerability inventory
         shell: bash
         run: |
