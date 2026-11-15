@@ -299,7 +299,7 @@ let __masesFileUploaderIdCounter = 0;
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref } from 'vue';
 import FileInput from '../../composites/FileInput';
-import type { FileInputLabels } from '../../composites/FileInput';
+import type { FileInputLabels, FileInputRejectReason } from '../../composites/FileInput';
 import BaseButton from '../../primitives/BaseButton';
 import BaseIcon from '../../primitives/BaseIcon';
 import BaseProgressBar from '../../primitives/BaseProgressBar';
@@ -566,6 +566,13 @@ function maybeEmitCompleted(): void {
 // -----------------------------------------------------------------------------
 // File selection
 // -----------------------------------------------------------------------------
+function onInputReject(payload: { file: File; reason: FileInputRejectReason }): void {
+  emit('rejected', {
+    file: payload.file,
+    reason: payload.reason === 'too-large' ? 'size' : 'type',
+  });
+}
+
 function onSelect(files: File[]): void {
   if (props.disabled) return;
 
@@ -598,7 +605,11 @@ function onSelect(files: File[]): void {
     };
 
     items.value.push(item);
-    startUpload(item);
+    // Use the reactive array proxy for lifecycle updates. Mutating the
+    // original raw object would bypass Vue's proxy and leave progress
+    // changes invisible until an unrelated render occurs.
+    const queuedItem = items.value.find((queued) => queued.localId === item.localId);
+    if (queuedItem !== undefined) startUpload(queuedItem);
   }
 }
 
@@ -701,6 +712,7 @@ onBeforeUnmount(() => {
       :disabled="isDisabled"
       :labels="dropZoneLabels"
       @select="onSelect"
+      @reject-file="onInputReject"
     />
 
     <!-- ==============================================================
