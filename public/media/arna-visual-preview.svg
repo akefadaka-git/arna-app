@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">ARNA visual system illustration</title>
+  <desc id="desc">Abstract layered geometric surfaces with a dimensional central form.</desc>
+  <defs>
+    <linearGradient id="base" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#183f62"/>
+      <stop offset="1" stop-color="#397f88"/>
+    </linearGradient>
+    <linearGradient id="top" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d9f0e8"/>
+      <stop offset="1" stop-color="#82c8ba"/>
+    </linearGradient>
+    <linearGradient id="side" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2f8790"/>
+      <stop offset="1" stop-color="#173e60"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="540" rx="28" fill="#eaf2f4"/>
+  <circle cx="770" cy="110" r="160" fill="#c8e5df" opacity=".8"/>
+  <circle cx="150" cy="430" r="190" fill="#d2e3ed" opacity=".9"/>
+  <path d="M190 350 480 185 780 355 480 520Z" fill="url(#base)" opacity=".16"/>
+  <path d="M300 300 500 185 700 300 500 415Z" fill="url(#top)"/>
+  <path d="M300 300v100l200 115V415Z" fill="#367d86"/>
+  <path d="M700 300v100L500 515V415Z" fill="url(#side)"/>
+  <path d="m420 235 80-46 80 46-80 46Z" fill="#fff" opacity=".9"/>
+  <path d="m420 235v78l80 47v-79Z" fill="#b5d9d1"/>
+  <path d="m580 235v78l-80 47v-79Z" fill="#4f9c98"/>
+  <path d="M160 160h150M160 190h95M690 430h120M735 460h75" stroke="#397f88" stroke-width="8" stroke-linecap="round" opacity=".45"/>
+</svg>
