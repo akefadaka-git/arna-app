@@ -280,3 +280,8 @@ Exit criteria: every entry has a source path and SHA; public/internal export sta
 ## 18. Revision record
 
 Revision 0.2 — review-enhanced reconstruction, 2026-11-15. Prop-level audit NOT RUN; consumer mapping PARTIAL/NOT VERIFIED; historical source unrecovered; Owner approval PENDING. This enhancement adds a verification framework but does not certify components or authorize code changes.
+
+
+## 19. Owner approval record
+
+**Owner decision: APPROVED — 2026-11-15.** The Owner approves this reconstructed catalogue as the governing ARNA UI component catalogue and audit framework. The 65-name inventory is accepted provisionally as an inventory, not as a completed prop-level, consumer, accessibility or production-readiness audit. The inventory schema, evidence labels, dependency rules and high-risk review priorities are accepted. This approval does not authorize component removal, renaming, deprecation or unrelated implementation changes.
