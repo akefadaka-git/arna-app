@@ -236,3 +236,27 @@ test.describe('Mounted DataTable behavior', () => {
     expect(results.violations.filter((item) => ['serious', 'critical'].includes(item.impact)).map((item) => item.id)).toEqual([]);
   });
 });
+
+
+test.describe('Mounted localized shell navigation search', () => {
+  test('switches Amharic and English search labels and navigates to an available destination', async ({ page }) => {
+    const trigger = page.getByTestId('app-header-search-trigger');
+    await expect(trigger).toHaveAttribute('aria-label', 'የARNA ሞጁሎችን እና ገጾችን ይፈልጉ');
+
+    await page.keyboard.press('Control+k');
+    const dialog = page.getByRole('dialog', { name: 'ARNA ይፈልጉ' });
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByRole('searchbox', { name: 'ሞጁሎችን እና ገጾችን ይፈልጉ' })).toHaveAttribute('placeholder', 'ሞጁሎችን እና ገጾችን ይፈልጉ…');
+
+    await page.getByTestId('set-locale-en').click();
+    await expect(trigger).toHaveAttribute('aria-label', 'Search ARNA modules and pages');
+    await expect(dialog.getByRole('heading', { name: 'Search ARNA' })).toBeVisible();
+    await expect(dialog.getByRole('searchbox', { name: 'Search modules and pages' })).toHaveAttribute('placeholder', 'Search modules and pages…');
+
+    await page.getByTestId('set-locale-am').click();
+    await expect(trigger).toHaveAttribute('aria-label', 'የARNA ሞጁሎችን እና ገጾችን ይፈልጉ');
+    await dialog.getByRole('button', { name: 'ፋይሎች' }).click();
+    await expect(page.getByTestId('a4-files-route')).toBeVisible();
+    await expect(dialog).toBeHidden();
+  });
+});
