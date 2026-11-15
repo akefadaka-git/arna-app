@@ -55,7 +55,7 @@ test('all entry documents identify the ARNA product', async () => {
 
 test('build environments use ARNA surface names', async () => {
   for (const [path, value] of [
-    assert.doesNotMatch(source, /^\s*VITE_APP_NAME\s*=.*MASES/im, path);
+    ['../.env.workspace', 'VITE_APP_NAME="ARNA Workspace"'],
     ['../.env.portal', 'VITE_APP_NAME="ARNA Shareholder Portal"'],
     ['../.env.admin', 'VITE_APP_NAME=ARNA Administration'],
   ]) {
