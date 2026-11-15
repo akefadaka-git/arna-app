@@ -128,7 +128,7 @@ test('no application view bypasses the shared calendar with native date or datet
     const end = source.indexOf('</template>', start);
     if (start < 0 || end < 0) continue;
     const template = source.slice(start, end);
-    if (/type\\s*=\\s*["'](?:date|datetime-local)["']/i.test(template)) {
+    if (/type\s*=\s*["'](?:date|datetime-local)["']/i.test(template)) {
       nativeDateInputs.push(path.replace(root.pathname, 'src/'));
     }
   }
