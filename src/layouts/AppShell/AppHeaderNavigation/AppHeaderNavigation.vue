@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router';
 import type { RouteLocationRaw } from 'vue-router';
 import BaseButton from '@/components/primitives/BaseButton';
 import BaseIcon from '@/components/primitives/BaseIcon';
+import { useLocaleStore } from '@/stores/locale';
 
 interface SearchNavItem {
   readonly id: string;
@@ -19,6 +20,33 @@ interface Props {
 const props = defineProps<Props>();
 const route = useRoute();
 const router = useRouter();
+const localeStore = useLocaleStore();
+
+const labels = computed(() => localeStore.locale === 'en'
+  ? {
+      breadcrumb: 'Breadcrumb',
+      trigger: 'Search ARNA modules and pages',
+      triggerText: 'Search ARNA',
+      title: 'Search ARNA',
+      description: 'Find an available module or page',
+      close: 'Close search',
+      input: 'Search modules and pages',
+      placeholder: 'Search modules and pages…',
+      empty: 'No matching modules or pages',
+      hint: 'Search covers the navigation destinations currently available to your account.',
+    }
+  : {
+      breadcrumb: 'የገጽ አቅጣጫ',
+      trigger: 'የARNA ሞጁሎችን እና ገጾችን ይፈልጉ',
+      triggerText: 'ARNA ይፈልጉ',
+      title: 'ARNA ይፈልጉ',
+      description: 'የሚገኝ ሞጁል ወይም ገጽ ያግኙ',
+      close: 'ፍለጋን ዝጋ',
+      input: 'ሞጁሎችን እና ገጾችን ይፈልጉ',
+      placeholder: 'ሞጁሎችን እና ገጾችን ይፈልጉ…',
+      empty: 'የሚዛመድ ሞጁል ወይም ገጽ አልተገኘም',
+      hint: 'ፍለጋው በመለያዎ ሊደረስባቸው የሚችሉ የአሰሳ መዳረሻዎችን ይመለከታል።',
+    });
 const dialog = ref<HTMLDialogElement | null>(null);
 const query = ref('');
 
@@ -70,7 +98,7 @@ function navigate(item: SearchNavItem): void {
 
 <template>
   <div class="app-header-navigation" data-testid="app-header-navigation">
-    <nav v-if="breadcrumbs.length" aria-label="Breadcrumb" class="app-header-navigation__breadcrumbs">
+    <nav v-if="breadcrumbs.length" :aria-label="labels.breadcrumb" class="app-header-navigation__breadcrumbs">
       <ol>
         <li v-for="(crumb, index) in breadcrumbs" :key="`${crumb.path}-${index}`">
           <span :aria-current="index === breadcrumbs.length - 1 ? 'page' : undefined">{{ crumb.label }}</span>
@@ -85,28 +113,28 @@ function navigate(item: SearchNavItem): void {
       size="sm"
       class="app-header-navigation__search-trigger"
       aria-haspopup="dialog"
-      aria-label="Search ARNA modules and pages"
+      :aria-label="labels.trigger"
       data-testid="app-header-search-trigger"
       @click="openSearch"
     >
       <BaseIcon name="search" size="sm" />
-      <span class="app-header-navigation__search-label">Search ARNA</span>
+      <span class="app-header-navigation__search-label">{{ labels.triggerText }}</span>
       <kbd>Ctrl / ⌘ K</kbd>
     </BaseButton>
 
     <dialog ref="dialog" class="app-header-navigation__dialog" aria-labelledby="app-header-search-title">
       <form method="dialog" class="app-header-navigation__dialog-head">
         <div>
-          <h2 id="app-header-search-title">Search ARNA</h2>
-          <p>Find an available module or page</p>
+          <h2 id="app-header-search-title">{{ labels.title }}</h2>
+          <p>{{ labels.description }}</p>
         </div>
-        <BaseButton type="button" variant="ghost" size="sm" aria-label="Close search" @click="closeSearch">
+        <BaseButton type="button" variant="ghost" size="sm" :aria-label="labels.close" @click="closeSearch">
           <BaseIcon name="close" size="md" />
         </BaseButton>
       </form>
       <label class="app-header-navigation__input-wrap">
         <BaseIcon name="search" size="sm" />
-        <input v-model="query" autofocus type="search" aria-label="Search modules and pages" aria-controls="app-header-search-results" placeholder="Search modules and pages…" />
+        <input v-model="query" autofocus type="search" :aria-label="labels.input" aria-controls="app-header-search-results" :placeholder="labels.placeholder" />
       </label>
       <ul id="app-header-search-results" class="app-header-navigation__results" aria-live="polite" aria-relevant="additions text">
         <li v-for="item in results" :key="item.id">
@@ -115,9 +143,9 @@ function navigate(item: SearchNavItem): void {
             <BaseIcon name="arrow-up-right" size="sm" />
           </button>
         </li>
-        <li v-if="!results.length" class="app-header-navigation__empty">No matching modules or pages</li>
+        <li v-if="!results.length" class="app-header-navigation__empty">{{ labels.empty }}</li>
       </ul>
-      <p class="app-header-navigation__hint">Search covers the navigation destinations currently available to your account.</p>
+      <p class="app-header-navigation__hint">{{ labels.hint }}</p>
     </dialog>
   </div>
 </template>
