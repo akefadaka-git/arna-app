@@ -330,3 +330,31 @@ The earlier mixed-batch cancellation completion correction remains in place. The
 | Mixed-batch cancellation completion | IMPLEMENTED — exact-head CI pending |
 | FileUploader mounted browser suite | PARTIAL — 5/7 on initial run; corrected rerun pending |
 | A4 API audit closure | OPEN |
+
+### 18.1. Corrected FileUploader exact-head CI result
+
+Workflow [#43703344441](https://github.com/akefadaka-git/arna-app/actions/runs/43703344441) completed **SUCCESS** against exact head `21d1f45a117184565d7d7cf98ca18d6aac3e2060`. All 32 job steps completed successfully, including:
+- four-application import graph and all-app type-check/build;
+- dependency advisory high/critical gate;
+- A4 static source-contract tests;
+- public browser/accessibility checks;
+- 12-state visual review;
+- mounted Combobox, Modal and Drawer suite;
+- mounted FileUploader lifecycle/accessibility suite;
+- shared DatePicker browser suite;
+- versioned static build artifact upload.
+
+The FileUploader suite passed all seven mounted tests, covering success/progress clamp, failed upload/retry, size/type/count rejection, AbortSignal cancellation, mixed success/cancellation aggregate completion, unmount abort and axe scan. This verifies the frontend component behavior under the tested Chromium fixture; it does not verify the remote upload service, server-side file inspection, authorization, persistence, or real network transport.
+
+| Gate | Status |
+|---|---|
+| FileUploader mounted lifecycle tests | PASS — 7/7 |
+| FileUploader progress reactivity | PASS — exercised by mounted progress test |
+| FileInput rejected-file payload relay | PASS — exercised by type rejection test |
+| Mixed-batch completion after cancellation | PASS — exercised by mounted batch test |
+| FileUploader unmount abort | PASS — exercised by mounted lifecycle test |
+| Exact-head CI | PASS — all 32 steps |
+| A4 API audit closure | OPEN |
+| Authenticated full-shell review / physical device | NOT RUN |
+
+Exact head: `21d1f45a117184565d7d7cf98ca18d6aac3e2060`.
