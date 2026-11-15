@@ -41,27 +41,34 @@
  *     call them (see the response preamble).
  *
  * -----------------------------------------------------------------------------
- * The GET /api/notifications/* endpoints are DEPENDENCY MISSING
+ * The notification backend contract is implemented
  * -----------------------------------------------------------------------------
- * Architecture Freeze §20.2 records four endpoints as Phase 2 backend
- * tasks:
+ * The current arna-api main branch implements the four endpoints and
+ * persisted schema. Source verified at API main SHA
+ * b924f6555cca8f4c5a732ffb6ba9fb181c9d0733:
  *
- *   GET  /api/notifications                 — paginated list
- *   GET  /api/notifications/unread-count    — badge count
- *   POST /api/notifications/{id}/read       — mark one read
+ *   GET  /api/notifications                 — paginated inbox
+ *   GET  /api/notifications/unread-count    — authoritative badge count
+ *   POST /api/notifications/{uuid}/read     — mark one read
  *   POST /api/notifications/read-all        — mark all read
  *
- * §20.2 also states plainly that the notification SCHEMA does not
- * currently exist in the database, and that the response shape is "to
- * be defined by backend". The MasesNotification interface below is
- * therefore a PROPOSAL, derived from the shape hints in the master
- * prompt §28 and Catalog §24.18. See the response preamble §"Design
- * note — the notification schema is a proposal".
+ * The platform_notifications migration stores UUID identifiers, tenant
+ * and recipient ownership, localized JSON title/body, category,
+ * priority, action route metadata, deduplication key, read_at and
+ * created_at. Routes are inside auth:sanctum + tenant.membership.
+ * NotificationService scopes inbox/count/read mutations to both the
+ * resolved tenant and authenticated user. CentralNotificationsTest
+ * covers recipient/tenant isolation, cross-user read denial, and the
+ * required-tenant failure.
  *
- * Stage 11 (shell) will render the notifications bell DISABLED with a
- * tooltip ("Notifications coming soon") until the endpoint exists
- * (§20.2). This store is delivered now because path B was chosen
- * (deliver all five stores before shell chrome).
+ * The frontend API client unwraps the canonical { success, data }
+ * envelope. The adapter's ApiNotificationPage and ApiNotification
+ * types correspond to the controller's data.items, pagination,
+ * unread_count and item fields; is_read is derived from read_at.
+ * The interface below is therefore aligned to an implemented backend
+ * contract, not a speculative schema. Deployment/migration execution
+ * remains a separate operational verification and is not inferred from
+ * source presence.
  *
  * -----------------------------------------------------------------------------
  * unreadCount is stored separately from the list — why
@@ -104,16 +111,13 @@ export type NotificationPriority = 'low' | 'normal' | 'high';
 /**
  * A single notification.
  *
- * PROPOSAL — see the file header comment §"The GET /api/notifications/*
- * endpoints are DEPENDENCY MISSING". Every field's source hint is
- * documented so the eventual reconciliation against the real backend
- * shape is mechanical.
+ * Contract: maps the persisted PlatformNotification response
+ * implemented by arna-api. The API adapter localizes title/body and
+ * maps read_at to is_read before storing this presentation model.
  */
 export interface MasesNotification {
   /**
-   * Stable identifier. Typed string (not number) to accommodate both
-   * integer ids ("123") and UUIDs ("notif_abc") while the backend
-   * schema is unfrozen. See the response preamble.
+   * Stable UUID identifier returned by PlatformNotification.
    */
   readonly id: string;
 
