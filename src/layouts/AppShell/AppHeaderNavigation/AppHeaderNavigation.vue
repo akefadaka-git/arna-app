@@ -159,20 +159,22 @@ function navigate(item: SearchNavItem): void {
       </ol>
     </nav>
 
-    <BaseButton
-      type="button"
-      variant="ghost"
-      size="sm"
-      class="app-header-navigation__search-trigger"
-      aria-labelledby="app-header-search-trigger-label app-header-search-shortcut"
-      aria-haspopup="dialog"
-      data-testid="app-header-search-trigger"
-      @click="openSearch"
-    >
-      <BaseIcon name="search" size="sm" />
-      <span id="app-header-search-trigger-label" class="app-header-navigation__search-label">{{ labels.triggerText }}</span>
-      <kbd id="app-header-search-shortcut">Ctrl / ⌘ K</kbd>
-    </BaseButton>
+    <div class="app-header-navigation__search-control">
+      <BaseButton
+        type="button"
+        variant="ghost"
+        size="sm"
+        class="app-header-navigation__search-trigger"
+        aria-labelledby="app-header-search-trigger-label"
+        aria-haspopup="dialog"
+        data-testid="app-header-search-trigger"
+        @click="openSearch"
+      >
+        <BaseIcon name="search" size="sm" />
+        <span id="app-header-search-trigger-label" class="app-header-navigation__search-label">{{ labels.triggerText }}</span>
+      </BaseButton>
+      <kbd class="app-header-navigation__search-shortcut">Ctrl / ⌘ K</kbd>
+    </div>
 
     <dialog ref="dialog" class="app-header-navigation__dialog" aria-labelledby="app-header-search-title" @close="restoreSearchFocus">
       <form method="dialog" class="app-header-navigation__dialog-head">
@@ -259,15 +261,20 @@ function navigate(item: SearchNavItem): void {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.app-header-navigation__search-trigger {
+.app-header-navigation__search-control {
+  display: flex;
+  align-items: center;
+  gap: var(--arna-space-2);
   margin-inline-start: auto;
+  flex-shrink: 0;
+}
+.app-header-navigation__search-trigger {
   flex-shrink: 0;
 }
 .app-header-navigation__search-label {
   display: inline;
 }
-.app-header-navigation__search-trigger kbd {
-  margin-inline-start: var(--arna-space-3);
+.app-header-navigation__search-shortcut {
   padding: 1px var(--arna-space-1);
   border: 1px solid var(--arna-color-border-subtle);
   border-radius: var(--arna-radius-sm);
