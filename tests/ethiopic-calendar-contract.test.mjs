@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readdir, readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import test from 'node:test';
 import ts from 'typescript';
 
@@ -104,6 +105,34 @@ test('all date-only Wallet, Loan, Governance and Administration controls use cal
     assert.match(source, /CalendarDateInput|DatePicker/);
     assert.doesNotMatch(template, /type="date"/);
   }
+});
+
+test('no application view bypasses the shared calendar with native date or datetime-local inputs', async () => {
+  async function collectVueFiles(directory) {
+    const entries = await readdir(directory, { withFileTypes: true });
+    const files = [];
+    for (const entry of entries) {
+      const path = join(directory, entry.name);
+      if (entry.isDirectory()) files.push(...await collectVueFiles(path));
+      else if (entry.isFile() && entry.name.endsWith('.vue')) files.push(path);
+    }
+    return files;
+  }
+
+  const root = new URL('../src/', import.meta.url);
+  const files = await collectVueFiles(root.pathname);
+  const nativeDateInputs = [];
+  for (const path of files) {
+    const source = await readFile(path, 'utf8');
+    const start = source.indexOf('<template>');
+    const end = source.indexOf('</template>', start);
+    if (start < 0 || end < 0) continue;
+    const template = source.slice(start, end);
+    if (/type\\s*=\\s*["'](?:date|datetime-local)["']/i.test(template)) {
+      nativeDateInputs.push(path.replace(root.pathname, 'src/'));
+    }
+  }
+  assert.deepEqual(nativeDateInputs, [], 'Native date inputs bypass the shared calendar: ' + nativeDateInputs.join(', '));
 });
 
 test('date-time forms retain local date-time wire shape with a separate time control', async () => {
