@@ -228,14 +228,14 @@ test.describe('ARNA public site browser contract', () => {
         seo: { title: 'ስለ ድርጅቱ', description: 'የድርጅቱ መግለጫ።' }, published_at: null
       } }) });
     });
-    await page.route('**/api/public/site/content/news/story', async (route) => {
+    await page.route('**/api/public/site/content/news/story*', async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: {
         id: 'news-1', type: 'news', locale: 'en', slug: 'story', alternate_slug: 'story-am',
         title: 'ARNA News Story', summary: 'A published update', body: 'Published update body.',
         seo: { title: 'ARNA News Story', description: 'A published update.' }, published_at: null, asset_url: null
       } }) });
     });
-    await page.route('**/api/public/site/content/news/story-am', async (route) => {
+    await page.route('**/api/public/site/content/news/story-am*', async (route) => {
       await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: {
         id: 'news-1', type: 'news', locale: 'am', slug: 'story-am', alternate_slug: 'story',
         title: 'የARNA ዜና', summary: 'የታተመ ዜና', body: 'የታተመ ዜና ይዘት።',
