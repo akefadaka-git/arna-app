@@ -546,15 +546,26 @@ Five additional composite SFCs were reconciled against their source declarations
 
 ### 23.1. FormField named-help-slot regression — current disposition
 
-The earlier source-level issue remains under active verification. Two exact-head browser runs (#43706131482 and #43706291734) failed the new mounted assertion: the named help content and region rendered, but the consumer input received an empty `aria-describedby` value. The failure was traced to evaluating the component's slot presence from inside the scoped default-slot expression, where the slot lookup did not reliably refer to the FormField instance.
+The mounted browser regression exposed a second, more fundamental issue in the scoped-slot contract. The named help region rendered and had the expected ID, but the input received an empty `aria-describedby` value. A diagnostic run recorded the actual slot payload keys as `["id","ariaDescribedby","invalid","required","disabled"]`. Vue's template compiler normalized the hyphenated slot binding `:aria-describedby` to the JavaScript key `ariaDescribedby`, while the documented public contract and existing SFC consumers destructure the literal key `'aria-describedby'`. Thus the scoped slot's key no longer matched its declared and consumed API.
 
-A further correction was committed at `ea692a071fe12546593a6fb8ddae157d59e6eab9`: capture the component's named-slot presence using Vue's `useSlots()` in setup scope, and use that captured state for both help-region rendering and the scoped slot's association value. This is a new candidate correction, not yet verified by a passing exact-head browser run.
+The correction now uses an object-spread binding on the slot outlet to preserve the literal key:
+`v-bind="{ 'aria-describedby': ariaDescribedBy }"`. This retains the existing documented API and consumer syntax instead of requiring a broad caller migration. The component also derives the association from the same reactive `hasHelp` state used to render the help region.
+
+Relevant commits:
+- Setup-scope capture candidate: `ea692a071fe12546593a6fb8ddae157d59e6eab9`
+- Shared region-state candidate: `ddde639f8e557f10bfc613a885c25e85523634e5`
+- Preserve the literal hyphenated slot key: `0b8b6f9db5ba0d69a33bf6d6a90492dd0d3659fa`
+- Restore the fixture to test the documented hyphenated key: `460fd7c0bfb447a572986b7f78bad10a1d6ab6e0`
+- Remove temporary diagnostic logging: `58eb222ab817cf7415d73d8fcbec47249744c6da`
+
+The latest exact-head browser run must pass before this is marked verified.
 
 | Gate | Status |
 |---|---|
-| Source defect identified | CONFIRMED |
-| Candidate setup-scope correction | IMPLEMENTED — commit `ea692a071fe12546593a6fb8ddae157d59e6eab9` |
-| Mounted named-help-slot assertion | FAIL on prior heads; pending exact-head retest |
+| Root cause isolated | CONFIRMED — Vue slot-prop key normalization mismatch |
+| Preserve documented literal slot key | IMPLEMENTED |
+| Help region and scoped association share state | IMPLEMENTED |
+| Mounted named-help-slot assertion | PENDING exact-head CI |
 | FormField correction verified | NOT VERIFIED |
 | A4 closure | OPEN |
 
