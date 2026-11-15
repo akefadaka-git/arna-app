@@ -58,11 +58,19 @@ test.describe('ARNA visual library rendered review', () => {
           expect(layout.imageLoaded).toBeTruthy();
           expect(layout.pageBackground).not.toBe('rgba(0, 0, 0, 0)');
 
-          const tiltTransform = await page.locator('.visual-panel[data-variant="tilt"] .visual-panel__surface').evaluate(
-            (element) => getComputedStyle(element).transform,
-          );
-          if (viewport.width < 640) expect(tiltTransform).toBe('none');
-          else expect(tiltTransform).not.toBe('none');
+          for (const variant of ['tilt', 'isometric', 'floating', 'stacked']) {
+            const transform = await page.locator('.visual-panel[data-variant="' + variant + '"] .visual-panel__surface').evaluate(
+              (element) => getComputedStyle(element).transform,
+            );
+            if (viewport.width < 640) expect(transform, variant + ' mobile transform').toBe('none');
+            else expect(transform, variant + ' dimensional transform').not.toBe('none');
+          }
+
+          await page.screenshot({
+            path: 'artifacts/visual-review/' + viewport.name + '-' + locale.code + '-' + theme + '.png',
+            fullPage: true,
+            animations: 'disabled',
+          });
 
           const accessibility = await new AxeBuilder({ page })
             .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
@@ -70,12 +78,6 @@ test.describe('ARNA visual library rendered review', () => {
           const serious = accessibility.violations.filter((item) => item.impact === 'serious' || item.impact === 'critical');
           expect(serious.map((item) => item.id + ': ' + item.help + ' (' + item.nodes.length + ' nodes)'),
             viewport.name + '/' + locale.code + '/' + theme + ' accessibility review').toEqual([]);
-
-          await page.screenshot({
-            path: 'artifacts/visual-review/' + viewport.name + '-' + locale.code + '-' + theme + '.png',
-            fullPage: true,
-            animations: 'disabled',
-          });
         }
       }
     }
