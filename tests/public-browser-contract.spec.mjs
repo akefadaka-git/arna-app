@@ -171,7 +171,7 @@ test.describe('ARNA public site browser contract', () => {
     await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
     await expect(page.locator('#about-title')).toContainText('About Maale Arna');
     await expect(page.locator('#community-responsibility-title')).toContainText('Community Responsibility');
-    await expect(page).toHaveTitle('ARNA | Official Website');
+    await expect(page).toHaveTitle('Maale Arna | Official Website | ARNA');
     await expectNoSeriousAccessibilityViolations(page, 'English CMS homepage');
 
     await page.getByRole('button', { name: 'አማርኛ' }).click();
