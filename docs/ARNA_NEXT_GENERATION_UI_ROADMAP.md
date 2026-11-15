@@ -151,7 +151,7 @@ Evolve ARNA into a coherent, high-quality, Amharic-first enterprise experience t
 - NotificationsCenter, its Pinia store, and API adapter already exist; backend endpoints/schema have been source-reconciled against arna-api main SHA `b924f6555cca8f4c5a732ffb6ba9fb181c9d0733`. Mounted behavior and locale-switch coverage remain required.
 - LanguageSelector exists but is intentionally not mounted pending a locale-persistence API contract.
 - PR #69 exact-head workflow #43719708309 passed at `424728e195f5d4a44c29fc74b28bd649afecffe5`. The workflow passed type-check/build, four-app import analysis, design-system/theme and visual contracts, mounted component/navigation/notification tests (25 mounted A4 component tests, 7 FileUploader tests, 6 DatePicker tests), and public-browser/WCAG automated contracts. This is bounded evidence, not full cross-app A4.
-- Historical catalogue/design-system source documents have not been recovered; reconstructed documents remain drafts pending Owner authority.
+- Historical `docs/MASES_PHASE_2_UI_DESIGN_SYSTEM.md` and `docs/MASES_PHASE_2_UI_COMPONENT_CATALOG.md` were checked against repository path history; both exact-path history queries returned zero commits, and the current tree contains only the reconstructed ARNA documents. Reconstructed documents remain drafts pending explicit Owner authority.
 - No full authenticated-shell visual acceptance, formal WCAG certification, physical-device acceptance, or 3D model viewer is claimed.
 
 ## 8. First execution slice
@@ -187,7 +187,7 @@ The new branch starts with:
 ### Gate status
 - A3 implementation: PARTIAL — bounded UI foundation, notification lifecycle, and navigation-search improvements are implemented; broader workstreams remain.
 - A4 verification: PASS for configured exact-head workflow #43719708309 at `424728e195f5d4a44c29fc74b28bd649afecffe5`; PARTIAL for product-wide acceptance.
-- A2 reconciliation: PARTIAL — PR #65 scope and historical authority blockers remain.
+- A2 reconciliation: PARTIAL — PR #65's original one-file commit is now identified, but 198 later paths remain scope-expansion with authorization UNKNOWN; historical design-system authority remains missing.
 - A5 deployment: NOT STARTED — separate approval required.
 
 
