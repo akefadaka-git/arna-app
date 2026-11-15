@@ -313,6 +313,7 @@ import Card from '@/components/patterns/Card';
 import DataTable from '@/components/patterns/DataTable';
 import type { DataTableColumn } from '@/components/patterns/DataTable';
 import FormField from '@/components/composites/FormField';
+import { CalendarDateInput } from '@/components/composites/DatePicker';
 import LoadingState from '@/components/composites/LoadingState';
 import EmptyState from '@/components/composites/EmptyState';
 import ErrorState from '@/components/composites/ErrorState';
@@ -612,11 +613,10 @@ function entryDirection(row: WalletEntry, cur: string): { debit: string; credit:
             class="wallet-statement-view__filter-field"
           >
             <template #default="{ id, 'aria-describedby': describedBy }">
-              <BaseInput
+              <CalendarDateInput
                 :id="id"
                 v-model="from"
-                type="date"
-                :aria-describedby="describedBy"
+                :aria-described-by="describedBy"
                 data-testid="wallet-statement-view-from"
               />
             </template>
