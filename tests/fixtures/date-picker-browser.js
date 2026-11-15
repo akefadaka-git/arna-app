@@ -23,7 +23,7 @@ createApp({
         modelValue: value.value,
         labels,
         required: true,
-        'aria-describedby': 'date-help',
+        ariaDescribedBy: 'date-help',
         'onUpdate:modelValue': (next) => { value.value = next; },
       }),
       h('p', { id: 'date-help' }, 'Select a date. The stored value is Gregorian ISO.'),
