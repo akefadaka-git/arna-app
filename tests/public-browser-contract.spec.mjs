@@ -292,6 +292,7 @@ test.describe('ARNA public site browser contract', () => {
         await expect(page.locator('html')).toHaveAttribute('lang', 'am');
         await expect(page.locator('h1')).toContainText('ይዘት ያቅርቡ');
       }
+      await expectNoSeriousAccessibilityViolations(page, routePath + ' final locale');
     }
   });
 
