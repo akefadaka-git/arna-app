@@ -565,8 +565,8 @@ The latest exact-head browser run must pass before this is marked verified.
 | Root cause isolated | CONFIRMED — Vue slot-prop key normalization mismatch |
 | Preserve documented literal slot key | IMPLEMENTED |
 | Help region and scoped association share state | IMPLEMENTED |
-| Mounted named-help-slot assertion | PENDING exact-head CI |
-| FormField correction verified | NOT VERIFIED |
+| Mounted named-help-slot assertion | PASS — exact-head workflow #43707444575 |
+| FormField correction verified | VERIFIED on tested commit `5535e9c1f9922e7517809c72d69b1505c7a3101d` |
 | A4 closure | OPEN |
 
 No merge or deployment is included or authorized.
@@ -640,3 +640,6 @@ The final composite in the catalogue was reconciled from its SFC prop declaratio
 **Source-declaration reconciliation: 26/26 composites — COMPLETE.** This closes only the composite inventory and source-surface contract transcription. It does not close the full component API audit: all consumer call sites, native attribute fallthrough, imported type dependencies, all primitive/pattern contracts, full interaction coverage, authenticated-shell acceptance and physical-device acceptance remain open.
 
 No merge or deployment is included or authorized.
+
+
+**Verification evidence:** [Workflow #43707444575](https://github.com/akefadaka-git/arna-app/actions/runs/43707444575) completed successfully at the exact tested head `5535e9c1f9922e7517809c72d69b1505c7a3101d`. All 32 workflow steps passed, including the mounted FormField/Combobox/Modal/Drawer browser suite, FileUploader lifecycle suite and shared DatePicker browser suite. This verifies the tested regression and the full workflow at that SHA; subsequent commits still require their own exact-head CI.
