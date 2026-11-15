@@ -348,6 +348,9 @@ interface Props {
    */
   max?: string;
 
+  /** Native required constraint for form submission. */
+  required?: boolean;
+
   /** Disabled state. */
   disabled?: boolean;
 
@@ -381,6 +384,7 @@ const props = withDefaults(defineProps<Props>(), {
   min: undefined,
   max: undefined,
   disabled: false,
+  required: false,
   invalid: false,
   placeholder: undefined,
   ariaDescribedBy: undefined,
@@ -935,6 +939,7 @@ function onCellClick(cell: GridCell): void {
         type="text"
         :id="id ?? `${componentId}-input`"
         :disabled="disabled"
+        :required="required"
         :readonly="false"
         :placeholder="placeholder"
         :aria-invalid="invalid ? 'true' : undefined"
