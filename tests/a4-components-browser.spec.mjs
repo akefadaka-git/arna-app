@@ -28,7 +28,7 @@ test.describe('Mounted BaseCheckbox enhancement behavior', () => {
 
   test('indeterminate activation emits a boolean true value and change event', async ({ page }) => {
     const checkbox = page.getByRole('checkbox', { name: 'የመለያ ምርጫ' });
-    await checkbox.click();
+    await page.getByTestId('base-checkbox-root').first().click();
     await expect(checkbox).toBeChecked();
     await expect(checkbox).toHaveJSProperty('indeterminate', false);
     await expect(page.getByTestId('base-checkbox-value')).toHaveText('true');
@@ -41,7 +41,7 @@ test.describe('Mounted BaseCheckbox enhancement behavior', () => {
     await expect(checkbox).toBeFocused();
     await page.keyboard.press('Space');
     await expect(checkbox).toBeChecked();
-    const outline = await page.getByTestId('base-checkbox-box').evaluate((node) => getComputedStyle(node).outlineStyle);
+    const outline = await checkbox.locator('xpath=..').getByTestId('base-checkbox-box').evaluate((node) => getComputedStyle(node).outlineStyle);
     expect(outline).not.toBe('none');
     await expect(page.getByTestId('base-checkbox-events')).toContainText('"focus":1');
   });
@@ -51,8 +51,8 @@ test.describe('Mounted BaseCheckbox enhancement behavior', () => {
     await expect(checkbox).toHaveAttribute('aria-describedby', 'base-checkbox-help');
     await expect(page.getByRole('checkbox', { name: 'Disabled option' })).toBeDisabled();
     await expect(page.getByRole('checkbox', { name: 'Required option' })).toHaveAttribute('required', '');
-    await expect(page.getByRole('checkbox', { name: 'Valid override option' })).toHaveAttribute('aria-invalid', 'false');
-    await expect(page.getByRole('checkbox', { name: 'Invalid override option' })).toHaveAttribute('aria-invalid', 'true');
+    await expect(page.getByRole('checkbox', { name: 'Valid override option', exact: true })).toHaveAttribute('aria-invalid', 'false');
+    await expect(page.getByRole('checkbox', { name: 'Invalid override option', exact: true })).toHaveAttribute('aria-invalid', 'true');
     await expect(page.getByRole('checkbox', { name: 'Standalone checkbox name' })).toBeVisible();
     await expect(page.getByRole('checkbox', { name: 'Referenced checkbox name' })).toBeVisible();
   });
