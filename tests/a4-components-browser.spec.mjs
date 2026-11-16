@@ -473,12 +473,12 @@ test.describe('Mounted navigation-search edge interactions', () => {
 test.describe('Mounted BaseButton enhancement', () => {
   test('keeps the visible label and button dimensions stable while loading', async ({ page }) => {
     const button = page.getByTestId('enhanced-base-button');
-    await expect(button).toHaveText('የረጅም ስም ያለው የአርና አዝራር');
+    await expect(button).toHaveText('የአርና መድረክ አስተዳደር እና የባለአክሲዮኖች የፋይናንስ አገልግሎት መቆጣጠሪያ አዝራር');
     const before = await button.boundingBox();
     await page.getByTestId('toggle-base-button-loading').click();
     await expect(button).toHaveAttribute('aria-busy', 'true');
     await expect(button).toBeDisabled();
-    await expect(button.getByTestId('base-button-label')).toHaveText('የረጅም ስም ያለው የአርና አዝራር');
+    await expect(button.getByTestId('base-button-label')).toHaveText('የአርና መድረክ አስተዳደር እና የባለአክሲዮኖች የፋይናንስ አገልግሎት መቆጣጠሪያ አዝራር');
     await expect(button.getByTestId('base-button-spinner')).toBeVisible();
     const during = await button.boundingBox();
     expect(during?.width).toBe(before?.width);
@@ -502,11 +502,12 @@ test.describe('Mounted BaseButton enhancement', () => {
     const button = page.getByTestId('enhanced-base-button');
     await expect(button).toHaveCSS('white-space', 'normal');
     await expect(button).toHaveCSS('overflow-wrap', 'anywhere');
-    const dimensions = await page.evaluate(() => ({
-      viewport: document.documentElement.clientWidth,
-      document: document.documentElement.scrollWidth,
-    }));
-    expect(dimensions.document).toBeLessThanOrEqual(dimensions.viewport);
+    const box = await button.boundingBox();
+    const viewportWidth = await page.evaluate(() => document.documentElement.clientWidth);
+    expect(box?.x + (box?.width ?? 0)).toBeLessThanOrEqual(viewportWidth);
+    const label = button.getByTestId('base-button-label');
+    const labelBox = await label.boundingBox();
+    expect(labelBox?.height).toBeGreaterThan(20);
   });
 
   test('does not animate the loading indicator when reduced motion is requested', async ({ page }) => {
