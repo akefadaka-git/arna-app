@@ -20,7 +20,7 @@
           · Dropped the unused `const props = ` binding. The component's
             template accesses every prop by bare name (Vue auto-unwraps
             them), and the `<script setup>` body never reads `props.`.
-            The `withDefaults(defineProps<Props>(), { … })` call is
+            The `const props = withDefaults(defineProps<Props>(), { … })` call is
             retained as a bare expression so the default values still
             apply. No behavior change.
 
@@ -409,7 +409,6 @@ export type {
 import { computed, ref } from 'vue';
 import { useTenantStore } from '@/stores/tenant';
 import { useLocaleStore } from '@/stores/locale';
-import type { AppShellLabels } from '@/layouts/AppShell';
 import { arnaShellEnglishLabels, localizeNavItems, localizeUserMenuItems } from '@/router/shell-english-labels';
 
 import SkipToContent from '@/layouts/AppShell/SkipToContent';
@@ -550,27 +549,27 @@ const tenantStore = useTenantStore();
 const localeStore = useLocaleStore();
 
 const activeLabels = computed<AppShellLabels>(() => {
-  if (localeStore.locale !== 'en') return labels;
+  if (localeStore.locale !== 'en') return props.labels;
   const english = arnaShellEnglishLabels;
   return {
-    ...labels,
+    ...props.labels,
     skipToContent: english.skipToContent,
     mobileMenu: english.mobileMenu,
-    userMenu: { ...labels.userMenu, ...english.userMenu },
-    notificationsBell: { ...labels.notificationsBell, ...english.notificationsBell },
-    tenantSwitcher: { ...labels.tenantSwitcher, ...english.tenantSwitcher },
-    sidebar: { ...labels.sidebar, ...english.sidebar },
-    drawer: { ...labels.drawer, ...english.drawer },
+    userMenu: { ...props.labels.userMenu, ...english.userMenu },
+    notificationsBell: { ...props.labels.notificationsBell, ...english.notificationsBell },
+    tenantSwitcher: { ...props.labels.tenantSwitcher, ...english.tenantSwitcher },
+    sidebar: { ...props.labels.sidebar, ...english.sidebar },
+    drawer: { ...props.labels.drawer, ...english.drawer },
   };
 });
 
 const activeNavItems = computed(() => {
-  if (localeStore.locale !== 'en') return navItems;
-  return localizeNavItems(navItems, navItems.some((item) => item.id === 'portal-home') ? 'portal' : 'workspace');
+  if (localeStore.locale !== 'en') return props.navItems;
+  return localizeNavItems(props.navItems, props.navItems.some((item) => item.id === 'portal-home') ? 'portal' : 'workspace');
 });
 
 const activeUserMenuItems = computed(() =>
-  localeStore.locale === 'en' ? localizeUserMenuItems(userMenuItems) : userMenuItems,
+  localeStore.locale === 'en' ? localizeUserMenuItems(props.userMenuItems) : props.userMenuItems,
 );
 
 function onTenantSelect(payload: { id: number }): void {
