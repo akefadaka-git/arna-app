@@ -5,7 +5,7 @@
  *
  * File:      mase_app/src/components/primitives/BaseInput/index.ts
  * Layer:     1 (Primitives)
- * Version:   1.0.0
+ * Version:    1.2.0
  * Status:    FROZEN
  *
  * Re-exports the BaseInput SFC so consumers can import it via a stable
@@ -30,4 +30,9 @@ export type InputType =
   | 'tel'
   | 'url'
   | 'search'
-  | 'number';
+  | 'number'
+  | 'date'
+  | 'datetime-local'
+  | 'time'
+  | 'month'
+  | 'week';
