@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/BaseInput/BaseInput.vue
  Layer:     1 (Primitives)
- Version:   1.1.0
+ Version:   1.2.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.8
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
