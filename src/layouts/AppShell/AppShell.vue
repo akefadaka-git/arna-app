@@ -476,28 +476,13 @@ interface Props {
 }
 
 /*
- * The `defineProps` call is retained as a bare expression (no `const`
- * binding) because the `<script setup>` body never reads `props.` — the
- * component's template accesses every prop by bare name and Vue
- * unwraps them there. Dropping the binding satisfies `noUnusedLocals`
- * without changing the runtime: `withDefaults` still applies the
- * defaults below.
- *
- * DO NOT re-add `const props = ` unless a function in THIS
- * `<script setup>` block actually reads a prop through `props.`. The
- * v1.0.1 revision removed the binding precisely because no such read
- * existed, and `noUnusedLocals` (tsconfig.json v1.0.1) failed the
- * build on the unused identifier. Re-adding the binding without
- * introducing a `props.` read re-introduces that error.
- *
- * Legitimate reasons to re-add the binding:
- *   · a `watch(() => props.x, …)` — reads a prop to observe it
- *   · a helper that takes `props.y` as an argument
- *   · a computed that forwards `props.z` without using it in the
- *     template
- * If none of those applies, leave the call as a bare expression.
+ * The props binding is intentionally retained because the computed
+ * locale adapters read labels, navigation and user-menu inputs from
+ * the script setup scope. The template continues to use Vue's direct
+ * prop exposure for static props. Keep this binding used so
+ * noUnusedLocals remains satisfied.
  */
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   maintenance: null,
   footerCopyright: undefined,
   footerVersion: undefined,
