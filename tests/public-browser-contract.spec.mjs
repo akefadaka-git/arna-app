@@ -154,10 +154,19 @@ test.describe('ARNA public site browser contract', () => {
     await expect(page.locator('h1')).toBeVisible();
   });
 
-  test('shows the not-found route for an unknown public path', async ({ page }) => {
+  test('renders a dedicated bilingual not-found route and preserves the requested path', async ({ page }) => {
     await page.goto(new URL('/route-that-does-not-exist', baseUrl).toString());
-    await expect(page).toHaveURL(new URL('/', baseUrl).toString());
-    await expect(page.locator('#hero-title')).toContainText('የጋራ እድገት');
+    await expect(page).toHaveURL(new URL('/route-that-does-not-exist', baseUrl).toString());
+    await expect(page.getByTestId('public-not-found')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'ገጹ አልተገኘም' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'ወደ ARNA መነሻ ተመለስ' })).toHaveAttribute('href', '/');
+
+    await page.goto(new URL('/unknown-en?locale=en', baseUrl).toString());
+    await expect(page).toHaveURL(new URL('/unknown-en?locale=en', baseUrl).toString());
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Return to the ARNA homepage' })).toHaveAttribute('href', '/?locale=en');
+    await expectNoSeriousAccessibilityViolations(page, 'Public not-found route');
   });
 
   test('switches the CMS homepage between Amharic and English', async ({ page }) => {
@@ -372,4 +381,70 @@ test.describe('ARNA public site browser contract', () => {
     await expect(amharicNavigation.getByRole('link', { name: 'ሰነድ ማረጋገጫ' })).toBeVisible();
   });
 
+
+  test('renders authoritative verification statuses and fails closed on unsupported status', async ({ page }) => {
+    const reference = 'ARNA-TEST-001';
+    for (const status of ['verified', 'invalid', 'revoked']) {
+      await page.route('**/api/public/document-verifications/verify', async (route) => {
+        const requested = route.request().postDataJSON().reference;
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ success: true, data: { status, reference: requested } }),
+        });
+      });
+      await page.goto(new URL('/verify', baseUrl).toString());
+      await page.getByLabel('የማጣቀሻ ቁጥር').fill(reference);
+      await page.getByRole('button', { name: 'አረጋግጥ' }).click();
+      await expect(page.getByTestId('public-verification-result')).toHaveAttribute('data-status', status);
+      await page.unroute('**/api/public/document-verifications/verify');
+    }
+
+    await page.route('**/api/public/document-verifications/verify', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ success: true, data: { status: 'expired', reference } }),
+      });
+    });
+    await page.goto(new URL('/verify', baseUrl).toString());
+    await page.getByLabel('የማጣቀሻ ቁጥር').fill(reference);
+    await page.getByRole('button', { name: 'አረጋግጥ' }).click();
+    await expect(page.getByTestId('public-verification-result')).toHaveAttribute('data-status', 'unavailable');
+    await expect(page.getByRole('heading', { name: 'ማረጋገጫው ለጊዜው አይገኝም' })).toBeVisible();
+  });
+
+  test('fails closed on reference mismatch and network failure, and distinguishes HTTP 422 validation', async ({ page }) => {
+    const reference = 'ARNA-TEST-002';
+    await page.route('**/api/public/document-verifications/verify', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ success: true, data: { status: 'verified', reference: 'ARNA-OTHER-999' } }),
+      });
+    });
+    await page.goto(new URL('/verify', baseUrl).toString());
+    await page.getByLabel('የማጣቀሻ ቁጥር').fill(reference);
+    await page.getByRole('button', { name: 'አረጋግጥ' }).click();
+    await expect(page.getByTestId('public-verification-result')).toHaveAttribute('data-status', 'unavailable');
+
+    await page.unroute('**/api/public/document-verifications/verify');
+    await page.route('**/api/public/document-verifications/verify', async (route) => route.abort('failed'));
+    await page.getByLabel('የማጣቀሻ ቁጥር').fill(reference);
+    await page.getByRole('button', { name: 'አረጋግጥ' }).click();
+    await expect(page.getByTestId('public-verification-result')).toHaveAttribute('data-status', 'unavailable');
+
+    await page.unroute('**/api/public/document-verifications/verify');
+    await page.route('**/api/public/document-verifications/verify', async (route) => {
+      await route.fulfill({
+        status: 422,
+        contentType: 'application/json',
+        body: JSON.stringify({ success: false, error: { code: 'VALIDATION_ERROR', message: 'Invalid reference.' } }),
+      });
+    });
+    await page.getByLabel('የማጣቀሻ ቁጥር').fill(reference);
+    await page.getByRole('button', { name: 'አረጋግጥ' }).click();
+    await expect(page.getByRole('alert')).toContainText('በአገልጋዩ ማረጋገጫ');
+    await expect(page.getByTestId('public-verification-result')).toHaveCount(0);
+  });
 });
