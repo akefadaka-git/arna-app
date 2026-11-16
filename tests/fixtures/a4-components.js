@@ -12,6 +12,7 @@ import ErrorSupportPanel from '../../src/components/composites/ErrorSupportPanel
 import DataTable from '../../src/components/patterns/DataTable/DataTable.vue';
 import BaseButton from '../../src/components/primitives/BaseButton/BaseButton.vue';
 import BaseInput from '../../src/components/primitives/BaseInput/BaseInput.vue';
+import BaseCheckbox from '../../src/components/primitives/BaseCheckbox/BaseCheckbox.vue';
 
 const router = createRouter({
   history: createMemoryHistory(),
@@ -40,6 +41,9 @@ const app = createApp({
     const baseInputDate = ref('2026-11-16');
     const baseInputRef = ref(null);
     const baseInputEventCounts = ref({ focus: 0, blur: 0, enter: 0 });
+    const baseCheckboxValue = ref(undefined);
+    const baseCheckboxRef = ref(null);
+    const baseCheckboxEvents = ref({ change: 0, focus: 0, blur: 0 });
     const tableRows = [
       { id: 'row-1', name: 'Alpha account', status: 'Active' },
       { id: 'row-2', name: 'Beta account', status: 'Pending' },
@@ -91,6 +95,33 @@ const app = createApp({
         }, 'Set Amharic'),
       ]),
       h(RouterView),
+      h('section', { 'aria-label': 'BaseCheckbox enhancement test', 'data-testid': 'base-checkbox-section', style: 'min-width: 0; width: 100%;' }, [
+        h(BaseCheckbox, {
+          ref: baseCheckboxRef,
+          id: 'base-checkbox-primary',
+          modelValue: baseCheckboxValue.value,
+          ariaDescribedBy: 'base-checkbox-help',
+          onFocus: () => { baseCheckboxEvents.value.focus += 1; },
+          onBlur: () => { baseCheckboxEvents.value.blur += 1; },
+          onChange: () => { baseCheckboxEvents.value.change += 1; },
+          'onUpdate:modelValue': (value) => { baseCheckboxValue.value = value; },
+        }, { default: () => 'የመለያ ምርጫ' }),
+        h('p', { id: 'base-checkbox-help' }, 'Choose this account option.'),
+        h('output', { 'data-testid': 'base-checkbox-value' }, String(baseCheckboxValue.value)),
+        h('output', { 'data-testid': 'base-checkbox-events' }, JSON.stringify(baseCheckboxEvents.value)),
+        h('button', { type: 'button', 'data-testid': 'base-checkbox-set-true', onClick: () => { baseCheckboxValue.value = true; } }, 'Set checkbox true'),
+        h('button', { type: 'button', 'data-testid': 'base-checkbox-set-false', onClick: () => { baseCheckboxValue.value = false; } }, 'Set checkbox false'),
+        h('button', { type: 'button', 'data-testid': 'base-checkbox-set-indeterminate', onClick: () => { baseCheckboxValue.value = undefined; } }, 'Set checkbox indeterminate'),
+        h('button', { type: 'button', 'data-testid': 'base-checkbox-focus', onClick: () => baseCheckboxRef.value?.focus() }, 'Focus BaseCheckbox'),
+        h('button', { type: 'button', 'data-testid': 'base-checkbox-blur', onMousedown: (event) => event.preventDefault(), onClick: () => baseCheckboxRef.value?.blur() }, 'Blur BaseCheckbox'),
+        h(BaseCheckbox, { id: 'base-checkbox-disabled', disabled: true, modelValue: true }, { default: () => 'Disabled option' }),
+        h(BaseCheckbox, { id: 'base-checkbox-required', required: true, modelValue: false }, { default: () => 'Required option' }),
+        h(BaseCheckbox, { id: 'base-checkbox-invalid', invalid: true, ariaInvalid: false, modelValue: false }, { default: () => 'Valid override option' }),
+        h(BaseCheckbox, { id: 'base-checkbox-invalid-true', invalid: false, ariaInvalid: true, modelValue: false }, { default: () => 'Invalid override option' }),
+        h(BaseCheckbox, { id: 'base-checkbox-aria-label', ariaLabel: 'Standalone checkbox name', modelValue: false }),
+        h('span', { id: 'base-checkbox-labelledby-text' }, 'Referenced checkbox name'),
+        h(BaseCheckbox, { id: 'base-checkbox-labelledby', ariaLabelledBy: 'base-checkbox-labelledby-text', modelValue: false }),
+      ]),
       h('section', { 'aria-label': 'BaseInput enhancement test', 'data-testid': 'base-input-section', style: 'min-width: 0; width: 100%;' }, [
         h('label', { for: 'base-input-primary' }, 'BaseInput primary field'),
         h(BaseInput, {
