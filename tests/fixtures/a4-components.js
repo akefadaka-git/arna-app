@@ -113,6 +113,7 @@ const app = createApp({
         h('output', { 'data-testid': 'base-input-value' }, baseInputValue.value),
         h('output', { 'data-testid': 'base-input-events' }, JSON.stringify(baseInputEventCounts.value)),
         h('button', { type: 'button', 'data-testid': 'base-input-focus', onClick: () => baseInputRef.value?.focus() }, 'Focus BaseInput'),
+        h('button', { type: 'button', 'data-testid': 'base-input-blur', onMousedown: (event) => event.preventDefault(), onClick: () => baseInputRef.value?.blur() }, 'Blur BaseInput'),
         h('label', { for: 'base-input-date' }, 'Occurrence date'),
         h(BaseInput, {
           id: 'base-input-date',
