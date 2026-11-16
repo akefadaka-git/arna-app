@@ -151,7 +151,6 @@ function handleClick(event: MouseEvent): void {
     data-testid="base-button-root"
     @click="handleClick"
   >
-    <!-- Icon-only controls retain their explicit accessible name while loading. -->
     <template v-if="iconOnly">
       <span
         v-if="loading"
@@ -175,20 +174,6 @@ function handleClick(event: MouseEvent): void {
           data-testid="base-button-spinner"
         />
         <slot v-else name="leading" />
-      </span>
-
-    <!--
-      Standard mode: optional leading icon, mandatory label, optional
-      trailing icon. Icons are decorative; the label carries the name.
-    -->
-    <template v-else>
-      <span
-        v-if="$slots.leading"
-        class="arna-button__leading"
-        aria-hidden="true"
-        data-testid="base-button-leading"
-      >
-        <slot name="leading" />
       </span>
 
       <span
