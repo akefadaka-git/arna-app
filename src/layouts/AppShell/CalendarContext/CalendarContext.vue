@@ -324,7 +324,7 @@ const datetimeAttribute = computed<string>(() =>
    * A muted, slightly smaller presentation — ambient chrome that
    * accompanies the primary shell content without competing with it.
    */
-  color: var(--arna-color-text-tertiary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
   font-size: var(--arna-font-size-body-sm);
   line-height: var(--arna-line-height-body-sm);
