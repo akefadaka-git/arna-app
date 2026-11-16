@@ -10,6 +10,7 @@ import PublicContributionRoute from '@/public-site/PublicContributionRoute.vue';
 import PublicVerificationRoute from '@/router/pages/PublicVerificationRoute.vue';
 import LegalCenterRoute from '@/router/pages/LegalCenterRoute.vue';
 import LegalDocumentRoute from '@/router/pages/LegalDocumentRoute.vue';
+import PublicNotFoundRoute from '@/public-site/PublicNotFoundRoute.vue';
 
 /**
  * The corporate public site owns a small, independent route table.
@@ -59,7 +60,8 @@ const router = createRouter({
     },
     {
       path: '/:pathMatch(.*)*',
-      redirect: '/',
+      name: 'public-not-found',
+      component: PublicNotFoundRoute,
     },
   ],
 });
