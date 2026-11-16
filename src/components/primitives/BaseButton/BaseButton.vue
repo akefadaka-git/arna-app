@@ -248,7 +248,8 @@ function handleClick(event: MouseEvent): void {
     box-shadow var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
-.arna-button:focus-visible {
+.arna-button:focus-visible,
+.arna-button:focus {
   outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
   outline-offset: var(--arna-focus-ring-offset);
 }
