@@ -591,6 +591,7 @@ defineExpose({ focus, blur, el });
 .input-wrapper__input {
   flex: 1 1 auto;
   min-width: 0;
+  min-height: 24px;
   padding: 0;
   margin: 0;
   appearance: none;
