@@ -5,7 +5,7 @@
  *
  * File:      mase_app/src/components/primitives/BaseSelect/index.ts
  * Layer:     1 (Primitives)
- * Version:   1.0.0
+ * Version:   1.1.0
  * Status:    FROZEN
  *
  * Re-exports the BaseSelect SFC and its SelectOption interface so
