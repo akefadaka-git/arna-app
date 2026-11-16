@@ -468,3 +468,44 @@ test.describe('Mounted navigation-search edge interactions', () => {
     await expect(dialog).toBeHidden();
   });
 });
+
+
+test.describe('Mounted BaseButton enhancement', () => {
+  test('keeps the visible label and button dimensions stable while loading', async ({ page }) => {
+    const button = page.getByTestId('enhanced-base-button');
+    await expect(button).toHaveText('የረጅም ስም ያለው የአርና አዝራር');
+    const before = await button.boundingBox();
+    await page.getByTestId('toggle-base-button-loading').click();
+    await expect(button).toHaveAttribute('aria-busy', 'true');
+    await expect(button).toBeDisabled();
+    await expect(button.getByTestId('base-button-label')).toHaveText('የረጅም ስም ያለው የአርና አዝራር');
+    await expect(button.getByTestId('base-button-spinner')).toBeVisible();
+    const during = await button.boundingBox();
+    expect(during?.width).toBe(before?.width);
+    expect(during?.height).toBe(before?.height);
+    await page.getByTestId('toggle-base-button-loading').click();
+    await expect(button).not.toHaveAttribute('aria-busy', 'true');
+    await expect(button).toBeEnabled();
+  });
+
+  test('provides a 44px mobile icon-only target and preserves its accessible name', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    const button = page.getByTestId('enhanced-base-button-icon-only');
+    await expect(button).toHaveAccessibleName('More actions');
+    const box = await button.boundingBox();
+    expect(box?.width).toBeGreaterThanOrEqual(44);
+    expect(box?.height).toBeGreaterThanOrEqual(44);
+  });
+
+  test('emits click only while enabled and exposes a keyboard focus indicator', async ({ page }) => {
+    const button = page.getByTestId('enhanced-base-button');
+    await button.focus();
+    await expect(button).toBeFocused();
+    await expect(button).toHaveCSS('outline-style', 'solid');
+    await button.click();
+    await expect(page.getByTestId('enhanced-base-button-clicks')).toHaveText('1');
+    await page.getByTestId('toggle-base-button-loading').click();
+    await button.click({ force: true });
+    await expect(page.getByTestId('enhanced-base-button-clicks')).toHaveText('1');
+  });
+});
