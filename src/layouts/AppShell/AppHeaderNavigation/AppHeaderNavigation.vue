@@ -33,6 +33,8 @@ const ENGLISH_DESTINATION_LABELS: Readonly<Record<string, string>> = {
   loans: 'Loans',
   'loan-products': 'Loan products',
   governance: 'Governance',
+  'audit-security-center': 'Audit and security',
+  'public-content-review': 'Public content review',
   'portal-home': 'Home',
   'my-holdings': 'My holdings',
   'my-certificates': 'My certificates',
