@@ -497,6 +497,27 @@ test.describe('Mounted BaseButton enhancement', () => {
     expect(box?.height).toBeGreaterThanOrEqual(44);
   });
 
+  test('wraps long Amharic labels without forcing horizontal overflow', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 800 });
+    const button = page.getByTestId('enhanced-base-button');
+    await expect(button).toHaveCSS('white-space', 'normal');
+    await expect(button).toHaveCSS('overflow-wrap', 'anywhere');
+    const dimensions = await page.evaluate(() => ({
+      viewport: document.documentElement.clientWidth,
+      document: document.documentElement.scrollWidth,
+    }));
+    expect(dimensions.document).toBeLessThanOrEqual(dimensions.viewport);
+  });
+
+  test('does not animate the loading indicator when reduced motion is requested', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.getByTestId('toggle-base-button-loading').click();
+    await expect(page.getByTestId('enhanced-base-button-spinner')).toHaveCount(0);
+    const spinner = page.getByTestId('enhanced-base-button').getByTestId('base-button-spinner');
+    await expect(spinner).toBeVisible();
+    await expect(spinner).toHaveCSS('animation-name', 'none');
+  });
+
   test('emits click only while enabled and exposes a keyboard focus indicator', async ({ page }) => {
     const button = page.getByTestId('enhanced-base-button');
     await button.focus();
