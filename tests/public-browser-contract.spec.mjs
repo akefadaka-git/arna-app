@@ -384,16 +384,6 @@ test.describe('ARNA public site browser contract', () => {
 
   test('renders authoritative public verification statuses and fails closed on unknown responses', async ({ page }) => {
     const reference = 'ARNA-TEST-001';
-    await page.route('**/api/public/document-verifications/verify', async (route) => {
-      const requested = route.request().postDataJSON().reference;
-      const status = new URL(route.request().url()).searchParams.get('fixture') || 'verified';
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ success: true, data: { status, reference: requested, document_type: 'Share certificate', issued_at: '2026-11-01' } }),
-      });
-    });
-
     for (const status of ['verified', 'invalid', 'revoked']) {
       await page.goto(new URL('/verify', baseUrl).toString());
       await page.route('**/api/public/document-verifications/verify', async (route) => {
