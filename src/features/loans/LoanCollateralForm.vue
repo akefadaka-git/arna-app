@@ -782,8 +782,8 @@ const submitLabel = computed<string>(() =>
         :error="typeError"
         :disabled="isSubmitting"
         required
-  v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
->
+        v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
+      >
         <BaseSelect
           v-model="collateralType"
           :options="typeOptions"
