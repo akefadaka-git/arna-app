@@ -262,9 +262,8 @@ export const useLocaleStore = defineStore('locale', () => {
 
   /**
    * Set the active locale. Updates the store and persists to the storage
-   * backend. Does NOT call the backend — POST /api/locale does not exist
-   * (§9.3). The localization service (Stage 12+) will call the endpoint
-   * after this action succeeds.
+   * backend. The AppShell locale preference adapter persists the
+   * account preference before this action is called.
    *
    * The caller must pass a SupportedLocale. Values arriving from
    * untyped sources (route params, storage, API payloads) should be
