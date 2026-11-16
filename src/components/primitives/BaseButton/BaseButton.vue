@@ -173,7 +173,14 @@ function handleClick(event: MouseEvent): void {
       The spinner is additive and remains decorative to assistive technology.
     -->
     <span
+      v-if="!iconOnly"
       :class="['arna-button__spinner', { 'arna-button__spinner--hidden': !loading }]"
+      aria-hidden="true"
+      data-testid="base-button-spinner"
+    />
+    <span
+      v-else-if="loading"
+      class="arna-button__spinner arna-button__spinner--icon-only"
       aria-hidden="true"
       data-testid="base-button-spinner"
     />
@@ -182,7 +189,7 @@ function handleClick(event: MouseEvent): void {
     <slot v-if="iconOnly" />
 
     <!-- The visible label remains mounted during loading. -->
-    <template v-else-if="!iconOnly">
+    <template v-else>
       <span
         v-if="$slots.leading"
         class="arna-button__leading"
@@ -217,6 +224,7 @@ function handleClick(event: MouseEvent): void {
    ============================================================================ */
 .arna-button {
   appearance: none;
+  position: relative;
   border: 1px solid transparent;
   cursor: pointer;
   display: inline-flex;
@@ -455,6 +463,12 @@ function handleClick(event: MouseEvent): void {
 .arna-button__spinner--hidden {
   visibility: hidden;
   animation: none;
+}
+
+.arna-button__spinner--icon-only {
+  position: absolute;
+  inset: 0;
+  margin: auto;
 }
 
 /* Respect reduced-motion: retain a static progress indicator instead of
