@@ -22,8 +22,9 @@ for (const surface of surfaces) {
     const runtimeErrors = [];
     page.on('pageerror', (error) => runtimeErrors.push(error.stack || error.message));
     page.on('console', (message) => { if (message.type() === 'error') runtimeErrors.push(message.text()); });
+    await page.addInitScript(() => { window.localStorage.removeItem('arna.theme'); window.localStorage.removeItem('arna.locale'); });
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto(`${baseUrl}?surface=${surface.key}`);
+    await page.goto(`${baseUrl}?surface=${surface.key}&locale=en`);
 
     const fixtureError = await page.evaluate(() => window.__ARNA_SHELL_FIXTURE_ERROR__ || '');
     const root = page.getByTestId('app-shell-root');
@@ -36,6 +37,91 @@ for (const surface of surfaces) {
     await expect(page.getByTestId('arana-brand-product')).toContainText('ARNA');
     await expect(page.getByTestId('app-shell-main')).toHaveAttribute('id', 'arna-main-content');
     await expect(page.getByTestId('shell-child-page')).toContainText(surface.label);
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(page.getByRole('link', { name: 'Skip to main content' })).toBeAttached();
+    await expect(page.getByRole('navigation', { name: 'Main navigation' }).first()).toBeVisible();
+    const englishNavLabel = { workspace: 'Dashboard', portal: 'My holdings', admin: 'Audit and security' }[surface.key];
+    await page.setViewportSize({ width: 1440, height: 960 });
+    await expect(page.getByRole('link', { name: englishNavLabel }).first()).toBeVisible();
+
+    const themeControl = page.getByTestId('theme-preference-control');
+    await expect(themeControl).toBeVisible();
+    await expect(themeControl.locator('option')).toHaveCount(3);
+    await themeControl.selectOption('dark');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('arna.theme'))).toBe('dark');
+    await page.reload();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+    await expect(page.getByTestId('theme-preference-control')).toHaveValue('dark');
+    await page.getByTestId('theme-preference-control').selectOption('light');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('arna.theme'))).toBe('light');
+    await page.getByTestId('theme-preference-control').selectOption('system');
+    await expect(page.locator('html')).not.toHaveAttribute('data-theme');
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('arna.theme'))).toBe('system');
+
+    await page.goto(baseUrl + '?surface=' + surface.key + '&locale=am');
+    await expect(page.locator('html')).toHaveAttribute('lang', 'am');
+    await expect(page.getByRole('link', { name: 'ወደ ዋና ይዘት ዝለል' })).toBeAttached();
+    await expect(page.getByRole('navigation', { name: 'ዋና ዳሰሳ' }).first()).toBeVisible();
+    const amharicNavLabel = { workspace: 'ዳሽቦርድ', portal: 'አክሲዮኖቼ', admin: 'ኦዲት እና ደህንነት' }[surface.key];
+    await expect(page.getByRole('link', { name: amharicNavLabel }).first()).toBeVisible();
+
+    await page.getByRole('link', { name: 'Open details' }).click();
+    await expect(page).toHaveURL(new RegExp('/' + surface.key + '/details
+    const skip = page.locator('a[href="#arna-main-content"]').first();
+    await expect(skip).toBeAttached();
+    await skip.focus();
+    await expect(skip).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(page.getByTestId('app-shell-main')).toBeFocused();
+
+    for (const viewport of viewports) {
+      await page.setViewportSize(viewport);
+      const dimensions = await page.evaluate(() => ({
+        viewport: document.documentElement.clientWidth,
+        document: document.documentElement.scrollWidth,
+      }));
+      expect(dimensions.document, `${surface.label} horizontal overflow at ${viewport.width}px`).toBeLessThanOrEqual(dimensions.viewport + 1);
+    }
+
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    const serious = results.violations.filter((item) => ['serious', 'critical'].includes(item.impact));
+    expect(serious.map((item) => item.id + ': ' + item.help), JSON.stringify(serious, null, 2)).toEqual([]);
+  });
+}
+));
+    await expect(page.getByTestId('app-shell-main')).toBeFocused();
+    await expect(page.getByTestId('shell-child-page')).toContainText('details');
+    await page.getByRole('link', { name: 'Back to surface' }).click();
+    await expect(page).toHaveURL(new RegExp('/' + surface.key + '
+    const skip = page.locator('a[href="#arna-main-content"]').first();
+    await expect(skip).toBeAttached();
+    await skip.focus();
+    await expect(skip).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(page.getByTestId('app-shell-main')).toBeFocused();
+
+    for (const viewport of viewports) {
+      await page.setViewportSize(viewport);
+      const dimensions = await page.evaluate(() => ({
+        viewport: document.documentElement.clientWidth,
+        document: document.documentElement.scrollWidth,
+      }));
+      expect(dimensions.document, `${surface.label} horizontal overflow at ${viewport.width}px`).toBeLessThanOrEqual(dimensions.viewport + 1);
+    }
+
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    const serious = results.violations.filter((item) => ['serious', 'critical'].includes(item.impact));
+    expect(serious.map((item) => item.id + ': ' + item.help), JSON.stringify(serious, null, 2)).toEqual([]);
+  });
+}
+));
+    await expect(page.getByTestId('app-shell-main')).toBeFocused();
 
     const skip = page.locator('a[href="#arna-main-content"]').first();
     await expect(skip).toBeAttached();
