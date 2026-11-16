@@ -519,6 +519,8 @@ test.describe('Mounted BaseButton enhancement', () => {
   });
 
   test('emits click only while enabled and exposes a keyboard focus indicator', async ({ page }) => {
+    // The real app loads these focus tokens from App.vue; this isolated fixture does not.
+    await page.addStyleTag({ content: ':root { --arna-focus-ring-width: 3px; --arna-focus-ring-offset: 2px; --arna-focus-ring-color: Highlight; }' });
     const button = page.getByTestId('enhanced-base-button');
     await page.getByTestId('base-button-focus-sentinel').focus();
     await page.keyboard.press('Tab');
