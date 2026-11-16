@@ -80,7 +80,7 @@ for (const surface of surfaces) {
         }
         if (background === 'rgba(0, 0, 0, 0)') background = getComputedStyle(document.body).backgroundColor;
         const luminance = (color) => {
-          const channels = color.match(/[\\d.]+/g).slice(0, 3).map(Number).map((value) => {
+          const channels = color.match(/[\d.]+/g).slice(0, 3).map(Number).map((value) => {
             const channel = value / 255;
             return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
           });
