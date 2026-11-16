@@ -567,12 +567,16 @@ function statusLabel(product: LoanProduct): string {
         :label="labels.activeFilterLabel"
         html-for="loan-products-active-filter"
         :disabled="loading"
-      >
+  v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
+>
         <BaseSelect
-          id="loan-products-active-filter"
           v-model="activeFilter"
           :options="filterOptions"
-          :disabled="loading"
+          :id="fieldId"
+          :aria-describedby="describedBy"
+          :invalid="fieldInvalid"
+          :required="fieldRequired"
+          :disabled="fieldDisabled"
           data-testid="loan-product-list-view-filter"
         />
       </FormField>
