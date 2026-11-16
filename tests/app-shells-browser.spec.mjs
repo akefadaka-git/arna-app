@@ -22,9 +22,9 @@ for (const surface of surfaces) {
     const runtimeErrors = [];
     page.on('pageerror', (error) => runtimeErrors.push(error.stack || error.message));
     page.on('console', (message) => { if (message.type() === 'error') runtimeErrors.push(message.text()); });
-    await page.addInitScript(() => window.localStorage.removeItem('arna.theme'));
+    await page.addInitScript(() => { window.localStorage.removeItem('arna.theme'); window.localStorage.removeItem('arna.locale'); });
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto(`${baseUrl}?surface=${surface.key}`);
+    await page.goto(`${baseUrl}?surface=${surface.key}&locale=en`);
 
     const fixtureError = await page.evaluate(() => window.__ARNA_SHELL_FIXTURE_ERROR__ || '');
     const root = page.getByTestId('app-shell-root');
@@ -37,6 +37,9 @@ for (const surface of surfaces) {
     await expect(page.getByTestId('arana-brand-product')).toContainText('ARNA');
     await expect(page.getByTestId('app-shell-main')).toHaveAttribute('id', 'arna-main-content');
     await expect(page.getByTestId('shell-child-page')).toContainText(surface.label);
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+    await expect(page.getByRole('link', { name: 'Skip to main content' })).toBeAttached();
+    await expect(page.getByRole('navigation', { name: 'Main navigation' }).first()).toBeVisible();
 
     const themeControl = page.getByTestId('theme-preference-control');
     await expect(themeControl).toBeVisible();
@@ -53,6 +56,11 @@ for (const surface of surfaces) {
     await page.getByTestId('theme-preference-control').selectOption('system');
     await expect(page.locator('html')).not.toHaveAttribute('data-theme');
     await expect.poll(() => page.evaluate(() => localStorage.getItem('arna.theme'))).toBe('system');
+
+    await page.goto(`${baseUrl}?surface=${surface.key}&locale=am`);
+    await expect(page.locator('html')).toHaveAttribute('lang', 'am');
+    await expect(page.getByRole('link', { name: 'ወደ ዋና ይዘት ዝለል' })).toBeAttached();
+    await expect(page.getByRole('navigation', { name: 'ዋና ዳሰሳ' }).first()).toBeVisible();
 
     const skip = page.locator('a[href="#arna-main-content"]').first();
     await expect(skip).toBeAttached();
