@@ -278,7 +278,7 @@ function navigate(item: SearchNavItem): void {
   padding: 1px var(--arna-space-1);
   border: 1px solid var(--arna-color-border-subtle);
   border-radius: var(--arna-radius-sm);
-  color: var(--arna-color-text-muted);
+  color: var(--arna-color-text-secondary);
   font-size: var(--arna-font-size-caption);
 }
 .app-header-navigation__dialog {
@@ -372,6 +372,11 @@ function navigate(item: SearchNavItem): void {
   }
 }
 @media (forced-colors: active) {
+  .app-header-navigation__search-shortcut {
+    color: CanvasText;
+    border-color: ButtonText;
+  }
+
   .app-header-navigation__dialog {
     border: 1px solid CanvasText;
     background: Canvas;
