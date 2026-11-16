@@ -5,7 +5,7 @@
  *
  * File:      mase_app/src/components/primitives/BaseRadio/index.ts
  * Layer:     1 (Primitives)
- * Version:   1.0.0
+ * Version:   1.2.0
  * Status:    FROZEN
  *
  * Re-exports the BaseRadio SFC so consumers can import it via a stable
