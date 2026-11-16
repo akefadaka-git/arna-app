@@ -217,6 +217,15 @@ watch(
   },
 );
 
+watch(
+  () => route.path,
+  async () => {
+    await nextTick();
+    const primaryContent = document.querySelector<HTMLElement>('main[tabindex="-1"]');
+    primaryContent?.focus({ preventScroll: true });
+  },
+);
+
 onMounted(async () => {
   await nextTick();
   routeAnnouncement.value = document.title;
