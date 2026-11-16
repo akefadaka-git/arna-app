@@ -1294,7 +1294,7 @@
  * other per-component groups:
  *
  *     languageSelector: {
- *       triggerAriaLabel: string;   // "Change language" / "ቋንቋ ቀይር"
+ *       triggerAriaLabel: { am: string; en: string };
  *       optionAm: string;           // "አማርኛ"
  *       optionEn: string;           // "English"
  *     }
