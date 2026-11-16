@@ -41,7 +41,8 @@
     "test:wallet-open-form-contract": "node --test tests/wallet-open-form-contract.test.mjs",
     "test:workspace-dashboard-route-contract": "node --test tests/workspace-dashboard-route-contract.test.mjs",
     "test:public-browser": "playwright test tests/public-browser-contract.spec.mjs",
-    "test:error-handling-contract": "node --test tests/error-handling-contract.test.mjs"
+    "test:error-handling-contract": "node --test tests/error-handling-contract.test.mjs",
+    "test:visual-library-contract": "node --test tests/visual-library-contract.test.mjs"
   },
   "dependencies": {
     "axios": "1.21.0",
