@@ -516,12 +516,16 @@ const submitLabel = computed<string>(() =>
         :error="methodError"
         :disabled="isSubmitting"
         required
-      >
+  v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
+>
         <BaseSelect
-          id="wallet-payment-method"
           v-model="method"
           :options="methodOptions"
-          :disabled="isSubmitting"
+          :id="fieldId"
+          :aria-describedby="describedBy"
+          :invalid="fieldInvalid"
+          :required="fieldRequired"
+          :disabled="fieldDisabled"
           data-testid="wallet-payment-form-method"
         />
       </FormField>
