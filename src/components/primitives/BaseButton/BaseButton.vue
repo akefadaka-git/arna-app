@@ -1,14 +1,13 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — BaseButton
+ ARNA UI — BaseButton
 =============================================================================
 
- File:      mase_app/src/components/primitives/BaseButton/BaseButton.vue
+ File:      src/components/primitives/BaseButton/BaseButton.vue
  Layer:     1 (Primitives)
- Version:   1.1.0
- Status:    FROZEN
- Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.1
-            MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
+ Version:   1.2.0
+ Status:    ENHANCED
+ Authority: ARNA BaseButton Enhancement Specification v1.0.0
 
  -----------------------------------------------------------------------------
  Purpose
@@ -20,38 +19,21 @@
  -----------------------------------------------------------------------------
  Token discipline
  -----------------------------------------------------------------------------
- This component consumes ONLY Tier 2 semantic tokens declared in
- mase_app/src/styles/tokens.css. No hex value, px literal, radius literal,
- duration, easing, or shadow is defined in this file.
-
- The component catalog lists the following as its token dependencies:
-
-   --arna-color-action-primary{,-hover,-active,-disabled}
-   --arna-color-action-secondary{,-hover,-active}
-   --arna-color-action-ghost{,-hover}
-   --arna-color-action-danger{,-hover}
-   --arna-color-action-link{,-hover}
-   --arna-radius-md
-   --arna-space-{2,3,4,6}
-   --arna-duration-fast
-   --arna-easing-standard
-   --arna-font-weight-medium
-
- Additional tokens referenced for accessibility and disabled treatment
- are also Tier 2 (text-inverse, text-primary, text-disabled,
- surface-disabled, border-subtle, state-focus-ring).
+ This component consumes existing frozen ARNA semantic and dimension tokens.
+No design-token definitions are changed by this component revision.
 
  -----------------------------------------------------------------------------
  Accessibility contract (INTERACTIVE)
  -----------------------------------------------------------------------------
    - Renders a native <button> element.
    - Uses the native disabled attribute (not aria-disabled).
-   - loading sets aria-busy="true" and disables the button.
+   - loading sets aria-busy="true", disables the button, and preserves
+     the visible action label while showing a spinner.
    - iconOnly requires ariaLabel or ariaLabelledBy; a development-time
      warning is emitted if both are missing.
    - Focus ring appears only on :focus-visible (keyboard focus).
-   - Loading spinner respects prefers-reduced-motion (slows, does not
-     stop) per Design System §11.5.
+   - Reduced-motion preferences suppress spinner rotation; the static progress
+     indicator remains visible.
 
  -----------------------------------------------------------------------------
  Test hook
@@ -169,21 +151,31 @@ function handleClick(event: MouseEvent): void {
     data-testid="base-button-root"
     @click="handleClick"
   >
-    <!--
-      Loading state: render the spinner INSTEAD of the slot content.
-      The min-height of each size preserves layout stability.
-    -->
-    <span
-      v-if="loading"
-      class="arna-button__spinner"
-      aria-hidden="true"
-      data-testid="base-button-spinner"
-    />
+    <!-- Icon-only controls retain their explicit accessible name while loading. -->
+    <template v-if="iconOnly">
+      <span
+        v-if="loading"
+        class="arna-button__spinner"
+        aria-hidden="true"
+        data-testid="base-button-spinner"
+      />
+      <slot v-else />
+    </template>
 
-    <!--
-      Icon-only mode: the default slot carries the icon. No label wrapper.
-    -->
-    <slot v-else-if="iconOnly" />
+    <template v-else>
+      <span
+        v-if="loading || $slots.leading"
+        class="arna-button__leading"
+        aria-hidden="true"
+        data-testid="base-button-leading"
+      >
+        <span
+          v-if="loading"
+          class="arna-button__spinner"
+          data-testid="base-button-spinner"
+        />
+        <slot v-else name="leading" />
+      </span>
 
     <!--
       Standard mode: optional leading icon, mandatory label, optional
@@ -224,6 +216,7 @@ function handleClick(event: MouseEvent): void {
    ============================================================================ */
 .arna-button {
   appearance: none;
+  box-sizing: border-box;
   border: 1px solid transparent;
   cursor: pointer;
   display: inline-flex;
@@ -233,9 +226,10 @@ function handleClick(event: MouseEvent): void {
   font-family: var(--arna-font-family-am);
   font-weight: var(--arna-font-weight-medium);
   line-height: 1;
+  min-width: 0;
   text-align: center;
   text-decoration: none;
-  white-space: nowrap;
+  white-space: normal;
   user-select: none;
   vertical-align: middle;
   transition:
@@ -256,36 +250,28 @@ function handleClick(event: MouseEvent): void {
 .arna-button--sm {
   font-size: var(--arna-font-size-body-sm);
   line-height: var(--arna-line-height-body-sm);
-  padding-block: var(--arna-space-2);
+  padding-block: var(--arna-space-1);
   padding-inline: var(--arna-space-3);
-  min-height: 32px;
+  min-height: var(--arna-space-8);
   border-radius: var(--arna-radius-sm);
 }
 
 .arna-button--md {
   font-size: var(--arna-font-size-body);
   line-height: var(--arna-line-height-body);
-  padding-block: var(--arna-space-3);
+  padding-block: var(--arna-space-2);
   padding-inline: var(--arna-space-4);
-  min-height: 40px;
+  min-height: var(--arna-space-10);
   border-radius: var(--arna-radius-md);
 }
 
 .arna-button--lg {
   font-size: var(--arna-font-size-body-lg);
   line-height: var(--arna-line-height-body-lg);
-  padding-block: var(--arna-space-3);
+  padding-block: var(--arna-space-2);
   padding-inline: var(--arna-space-6);
-  min-height: 48px;
+  min-height: var(--arna-space-12);
   border-radius: var(--arna-radius-md);
-}
-
-/* Mobile touch-target enforcement (Design System §6.5). */
-@media (max-width: 639px) {
-  .arna-button--sm,
-  .arna-button--md {
-    min-height: 44px;
-  }
 }
 
 /* ============================================================================
@@ -296,8 +282,8 @@ function handleClick(event: MouseEvent): void {
 }
 
 .arna-button--icon-only {
-  min-width: 40px;
-  min-height: 40px;
+  min-width: var(--arna-space-10);
+  min-height: var(--arna-space-10);
   justify-content: center;
   padding-inline: var(--arna-space-3);
 }
@@ -428,6 +414,20 @@ function handleClick(event: MouseEvent): void {
   min-height: auto;
 }
 
+/* Mobile interactive targets: all variants, including link and icon-only. */
+@media (max-width: 639px) {
+  .arna-button--sm,
+  .arna-button--md,
+  .arna-button--link {
+    min-height: calc(var(--arna-space-10) + var(--arna-space-1));
+  }
+
+  .arna-button--icon-only {
+    min-width: calc(var(--arna-space-10) + var(--arna-space-1));
+    min-height: calc(var(--arna-space-10) + var(--arna-space-1));
+  }
+}
+
 /* ============================================================================
    Loading spinner
    (Inline; BaseSpinner is a separate primitive delivered in a later unit.
@@ -438,10 +438,10 @@ function handleClick(event: MouseEvent): void {
   flex-shrink: 0;
   width: 1em;
   height: 1em;
-  border: 2px solid currentColor;
+  border: var(--arna-focus-ring-width) solid currentColor;
   border-top-color: transparent;
   border-radius: var(--arna-radius-full);
-  animation: arna-button-spin 0.8s linear infinite;
+  animation: arna-button-spin var(--arna-duration-slower) linear infinite;
 }
 
 @keyframes arna-button-spin {
@@ -450,11 +450,10 @@ function handleClick(event: MouseEvent): void {
   }
 }
 
-/* Design System §11.5 — the loading spinner is the single permitted
-   exception to reduced-motion; it slows to 2x duration but does not stop. */
+/* Reduced motion keeps the progress cue visible without rotation. */
 @media (prefers-reduced-motion: reduce) {
   .arna-button__spinner {
-    animation-duration: 1.6s;
+    animation: none;
   }
 }
 
@@ -472,5 +471,8 @@ function handleClick(event: MouseEvent): void {
 .arna-button__label {
   display: inline-flex;
   align-items: center;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 </style>
