@@ -7,6 +7,82 @@ test.beforeEach(async ({ page }) => {
   await page.goto(baseUrl);
 });
 
+
+test.describe('Mounted BaseCheckbox enhancement behavior', () => {
+  test('reflects checked, unchecked, and indeterminate model states', async ({ page }) => {
+    const checkbox = page.getByRole('checkbox', { name: 'የመለያ ምርጫ' });
+    await expect(checkbox).toHaveJSProperty('indeterminate', true);
+    await expect(checkbox).not.toBeChecked();
+
+    await page.getByTestId('base-checkbox-set-true').click();
+    await expect(checkbox).toBeChecked();
+    await expect(checkbox).toHaveJSProperty('indeterminate', false);
+
+    await page.getByTestId('base-checkbox-set-false').click();
+    await expect(checkbox).not.toBeChecked();
+    await expect(checkbox).toHaveJSProperty('indeterminate', false);
+
+    await page.getByTestId('base-checkbox-set-indeterminate').click();
+    await expect(checkbox).toHaveJSProperty('indeterminate', true);
+  });
+
+  test('indeterminate activation emits a boolean true value and change event', async ({ page }) => {
+    const checkbox = page.getByRole('checkbox', { name: 'የመለያ ምርጫ' });
+    await checkbox.click();
+    await expect(checkbox).toBeChecked();
+    await expect(checkbox).toHaveJSProperty('indeterminate', false);
+    await expect(page.getByTestId('base-checkbox-value')).toHaveText('true');
+    await expect(page.getByTestId('base-checkbox-events')).toContainText('"change":1');
+  });
+
+  test('supports native Space activation and keyboard-visible focus', async ({ page }) => {
+    const checkbox = page.getByRole('checkbox', { name: 'የመለያ ምርጫ' });
+    await checkbox.focus();
+    await expect(checkbox).toBeFocused();
+    await page.keyboard.press('Space');
+    await expect(checkbox).toBeChecked();
+    const outline = await page.getByTestId('base-checkbox-box').evaluate((node) => getComputedStyle(node).outlineStyle);
+    expect(outline).not.toBe('none');
+    await expect(page.getByTestId('base-checkbox-events')).toContainText('"focus":1');
+  });
+
+  test('preserves accessible names, descriptions, required, disabled, and invalid overrides', async ({ page }) => {
+    const checkbox = page.getByRole('checkbox', { name: 'የመለያ ምርጫ' });
+    await expect(checkbox).toHaveAttribute('aria-describedby', 'base-checkbox-help');
+    await expect(page.getByRole('checkbox', { name: 'Disabled option' })).toBeDisabled();
+    await expect(page.getByRole('checkbox', { name: 'Required option' })).toHaveAttribute('required', '');
+    await expect(page.getByRole('checkbox', { name: 'Valid override option' })).toHaveAttribute('aria-invalid', 'false');
+    await expect(page.getByRole('checkbox', { name: 'Invalid override option' })).toHaveAttribute('aria-invalid', 'true');
+    await expect(page.getByRole('checkbox', { name: 'Standalone checkbox name' })).toBeVisible();
+    await expect(page.getByRole('checkbox', { name: 'Referenced checkbox name' })).toBeVisible();
+  });
+
+  test('exposes focus, blur, and native element methods', async ({ page }) => {
+    const checkbox = page.getByRole('checkbox', { name: 'የመለያ ምርጫ' });
+    await page.getByTestId('base-checkbox-focus').click();
+    await expect(checkbox).toBeFocused();
+    await page.getByTestId('base-checkbox-blur').click();
+    await expect(checkbox).not.toBeFocused();
+    await expect(page.getByTestId('base-checkbox-events')).toContainText('"blur":1');
+  });
+
+  test('keeps a 44px minimum touch target on mobile', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    const root = page.getByTestId('base-checkbox-root').first();
+    const box = await root.boundingBox();
+    expect(box?.height).toBeGreaterThanOrEqual(44);
+  });
+
+  test('has no serious or critical accessibility violations in its mounted fixture', async ({ page }) => {
+    const results = await new AxeBuilder({ page })
+      .include('[data-testid="base-checkbox-section"]')
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    const serious = results.violations.filter((item) => ['serious', 'critical'].includes(item.impact));
+    expect(serious.map((item) => item.id + ': ' + item.help), JSON.stringify(serious, null, 2)).toEqual([]);
+  });
+});
+
 test.describe('Mounted FormField accessibility behavior', () => {
   test('links a named help slot to the consumer control through aria-describedby', async ({ page }) => {
     const input = page.getByRole('textbox', { name: 'Account reference' });
