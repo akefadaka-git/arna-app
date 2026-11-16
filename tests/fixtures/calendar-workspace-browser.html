@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="am">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARNA Calendar browser verification harness</title>
+</head>
+<body>
+  <div id="calendar-test-root"></div>
+  <script type="module">
+    import { createApp } from 'vue';
+    import { createPinia } from 'pinia';
+    import CalendarWorkspaceView from '/src/features/calendar/CalendarWorkspaceView.vue';
+    import { useAuthStore } from '/src/stores/auth.ts';
+
+    const pinia = createPinia();
+    const app = createApp(CalendarWorkspaceView);
+    app.use(pinia);
+    const auth = useAuthStore(pinia);
+    auth.setUser({
+      id: 9001,
+      name: 'Calendar Browser QA',
+      email: 'calendar-browser-qa@example.invalid',
+      locale: 'am',
+      default_tenant_id: 9001,
+      roles: [],
+      permissions: ['calendar.view', 'calendar.create', 'calendar.update', 'calendar.reserve'],
+      tenants: [],
+    });
+    app.mount('#calendar-test-root');
+    window.__calendarBrowserHarness = app;
+  </script>
+</body>
+</html>
