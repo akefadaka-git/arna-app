@@ -10,6 +10,7 @@ import Drawer from '../../src/components/composites/Drawer/Drawer.vue';
 import FormField from '../../src/components/composites/FormField/FormField.vue';
 import ErrorSupportPanel from '../../src/components/composites/ErrorSupportPanel/ErrorSupportPanel.vue';
 import DataTable from '../../src/components/patterns/DataTable/DataTable.vue';
+import BaseButton from '../../src/components/primitives/BaseButton/BaseButton.vue';
 
 const router = createRouter({
   history: createMemoryHistory(),
@@ -27,6 +28,8 @@ const app = createApp({
     const modalOpen = ref(false);
     const drawerOpen = ref(false);
     const notificationsOpen = ref(false);
+    const baseButtonLoading = ref(false);
+    const baseButtonClicks = ref(0);
     const modalCloseEvents = ref(0);
     const drawerCloseEvents = ref(0);
     const tableSelectedKeys = ref([]);
@@ -98,6 +101,45 @@ const app = createApp({
           occurredAt: '15/11/2019 15:00 E.C.',
           labels: supportLabels,
         }),
+      ]),
+      h('section', { 'aria-label': 'BaseButton test' }, [
+        h('h2', 'BaseButton enhancement test'),
+        ...['primary', 'secondary', 'ghost', 'danger', 'link'].flatMap((variant) =>
+          ['sm', 'md', 'lg'].map((size) =>
+            h(BaseButton, {
+              variant,
+              size,
+              'data-testid': `base-button-${variant}-${size}`,
+              onClick: () => { baseButtonClicks.value += 1; },
+            }, { default: () => `${variant} ${size}` }),
+          ),
+        ),
+        h(BaseButton, {
+          variant: 'primary',
+          size: 'md',
+          block: true,
+          'data-testid': 'base-button-amharic-long',
+        }, { default: () => 'አዲስ የባለአክሲዮን መዝገብ ፍጠር እና የማረጋገጫ ሰነድ አውጣ' }),
+        h(BaseButton, {
+          variant: 'primary',
+          size: 'md',
+          loading: baseButtonLoading.value,
+          'data-testid': 'base-button-loading',
+          onClick: () => { baseButtonClicks.value += 1; },
+        }, { default: () => 'Save changes' }),
+        h('button', {
+          type: 'button',
+          'data-testid': 'base-button-toggle-loading',
+          onClick: () => { baseButtonLoading.value = !baseButtonLoading.value; },
+        }, 'Toggle button loading'),
+        h(BaseButton, {
+          variant: 'ghost',
+          size: 'md',
+          iconOnly: true,
+          ariaLabel: 'Close panel',
+          'data-testid': 'base-button-icon-only',
+        }, { default: () => '×' }),
+        h('output', { 'data-testid': 'base-button-clicks' }, String(baseButtonClicks.value)),
       ]),
       h('section', { 'aria-label': 'FormField test' }, [
         h(FormField, {
