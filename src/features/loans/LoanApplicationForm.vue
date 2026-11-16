@@ -757,8 +757,8 @@ const submitLabel = computed<string>(() =>
         :error="borrowerError"
         :disabled="isSubmitting"
         required
-  v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
->
+        v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
+      >
         <BaseSelect
           v-model="borrowerShareholderId"
           :options="borrowerOptions"
@@ -779,8 +779,8 @@ const submitLabel = computed<string>(() =>
         :error="productError"
         :disabled="isSubmitting"
         required
-  v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
->
+        v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
+      >
         <BaseSelect
           v-model="loanProductId"
           :options="productOptions"
