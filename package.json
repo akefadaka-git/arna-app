@@ -45,8 +45,10 @@
     "analyze:imports": "node scripts/build-application-import-graph.mjs",
     "test:visual-library-contract": "node --test tests/visual-library-contract.test.mjs",
     "test:visual-panel-integration-contract": "node --test tests/visual-panel-integration-contract.test.mjs",
-    "test:a4-component-risk-contract": "node --test tests/a4-component-risk-contract.test.mjs",
-    "test:a4-components-browser": "playwright test tests/a4-components-browser.spec.mjs",
+    "test:a4-component-risk-contract": "node --test tests/a4-component-risk-contract.test.mjs tests/base-select-contract.test.mjs",
+    "test:base-select-contract": "node --test tests/base-select-contract.test.mjs",
+    "test:a4-components-browser": "playwright test tests/a4-components-browser.spec.mjs tests/base-select-browser.spec.mjs",
+    "test:base-select-browser": "playwright test tests/base-select-browser.spec.mjs",
     "test:a4-file-uploader-browser": "playwright test tests/a4-file-uploader-browser.spec.mjs",
     "test:brand-identity-contract": "node --test tests/brand-identity-contract.test.mjs",
     "test:app-shells-browser": "playwright test tests/app-shells-browser.spec.mjs"
