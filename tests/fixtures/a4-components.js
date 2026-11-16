@@ -11,6 +11,7 @@ import FormField from '../../src/components/composites/FormField/FormField.vue';
 import ErrorSupportPanel from '../../src/components/composites/ErrorSupportPanel/ErrorSupportPanel.vue';
 import DataTable from '../../src/components/patterns/DataTable/DataTable.vue';
 import BaseButton from '../../src/components/primitives/BaseButton/BaseButton.vue';
+import BaseInput from '../../src/components/primitives/BaseInput/BaseInput.vue';
 
 const router = createRouter({
   history: createMemoryHistory(),
@@ -35,6 +36,10 @@ const app = createApp({
     const tableRowClicks = ref(0);
     const baseButtonLoading = ref(false);
     const baseButtonClicks = ref(0);
+    const baseInputValue = ref('Initial value');
+    const baseInputDate = ref('2026-11-16');
+    const baseInputRef = ref(null);
+    const baseInputEventCounts = ref({ focus: 0, blur: 0, enter: 0 });
     const tableRows = [
       { id: 'row-1', name: 'Alpha account', status: 'Active' },
       { id: 'row-2', name: 'Beta account', status: 'Pending' },
@@ -86,6 +91,40 @@ const app = createApp({
         }, 'Set Amharic'),
       ]),
       h(RouterView),
+      h('section', { 'aria-label': 'BaseInput enhancement test', 'data-testid': 'base-input-section' }, [
+        h('label', { for: 'base-input-primary' }, 'BaseInput primary field'),
+        h(BaseInput, {
+          ref: baseInputRef,
+          id: 'base-input-primary',
+          modelValue: baseInputValue.value,
+          ariaDescribedBy: 'base-input-help',
+          onUpdate:modelValue: (value) => { baseInputValue.value = value; },
+          onFocus: () => { baseInputEventCounts.value.focus += 1; },
+          onBlur: () => { baseInputEventCounts.value.blur += 1; },
+          onEnter: () => { baseInputEventCounts.value.enter += 1; },
+          'data-testid': 'base-input-primary-root',
+        }, {
+          prefix: () => h('span', 'Br'),
+          leading: () => h('span', 'Leading icon'),
+          trailing: () => h('span', 'Trailing icon'),
+          suffix: () => h('span', 'kg'),
+        }),
+        h('p', { id: 'base-input-help' }, 'Enter the account value.'),
+        h('output', { 'data-testid': 'base-input-value' }, baseInputValue.value),
+        h('output', { 'data-testid': 'base-input-events' }, JSON.stringify(baseInputEventCounts.value)),
+        h('button', { type: 'button', 'data-testid': 'base-input-focus', onClick: () => baseInputRef.value?.focus() }, 'Focus BaseInput'),
+        h('label', { for: 'base-input-date' }, 'Occurrence date'),
+        h(BaseInput, {
+          id: 'base-input-date',
+          type: 'date',
+          modelValue: baseInputDate.value,
+          onUpdate:modelValue: (value) => { baseInputDate.value = value; },
+        }),
+        h('label', { for: 'base-input-invalid' }, 'Explicitly valid override'),
+        h(BaseInput, { id: 'base-input-invalid', invalid: true, ariaInvalid: false, required: true }),
+        h('label', { for: 'base-input-disabled' }, 'Disabled field'),
+        h(BaseInput, { id: 'base-input-disabled', disabled: true }),
+      ]),
       h('section', { 'aria-label': 'BaseButton enhancement test' }, [
         h('button', { type: 'button', 'data-testid': 'base-button-focus-sentinel' }, 'Focus sentinel'),
         h(BaseButton, {
