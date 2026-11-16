@@ -91,7 +91,7 @@ const app = createApp({
         }, 'Set Amharic'),
       ]),
       h(RouterView),
-      h('section', { 'aria-label': 'BaseInput enhancement test', 'data-testid': 'base-input-section' }, [
+      h('section', { 'aria-label': 'BaseInput enhancement test', 'data-testid': 'base-input-section', style: 'min-width: 0; width: 100%;' }, [
         h('label', { for: 'base-input-primary' }, 'BaseInput primary field'),
         h(BaseInput, {
           ref: baseInputRef,
