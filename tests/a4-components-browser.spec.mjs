@@ -468,3 +468,79 @@ test.describe('Mounted navigation-search edge interactions', () => {
     await expect(dialog).toBeHidden();
   });
 });
+
+
+test.describe('Mounted BaseButton enhancement behavior', () => {
+  test('renders all five variants and three sizes with stable accessible names', async ({ page }) => {
+    const section = page.getByRole('region', { name: 'BaseButton test' });
+    for (const variant of ['primary', 'secondary', 'ghost', 'danger', 'link']) {
+      for (const size of ['sm', 'md', 'lg']) {
+        const button = section.getByTestId(`base-button-${variant}-${size}`);
+        await expect(button).toBeVisible();
+        await expect(button).toHaveAccessibleName(`${variant} ${size}`);
+        await expect(button).toBeEnabled();
+      }
+    }
+    await expect(section.getByTestId('base-button-icon-only')).toHaveAccessibleName('Close panel');
+  });
+
+  test('preserves the action label during loading and blocks duplicate activation', async ({ page }) => {
+    const section = page.getByRole('region', { name: 'BaseButton test' });
+    const button = section.getByTestId('base-button-loading');
+    await button.click();
+    await expect(page.getByTestId('base-button-clicks')).toHaveText('1');
+
+    await section.getByTestId('base-button-toggle-loading').click();
+    await expect(button).toHaveAttribute('aria-busy', 'true');
+    await expect(button).toBeDisabled();
+    await expect(button).toHaveAccessibleName('Save changes');
+    await expect(button.getByTestId('base-button-label')).toHaveText('Save changes');
+    await expect(button.getByTestId('base-button-spinner')).toBeVisible();
+    await button.click({ force: true });
+    await expect(page.getByTestId('base-button-clicks')).toHaveText('1');
+
+    await section.getByTestId('base-button-toggle-loading').click();
+    await expect(button).not.toHaveAttribute('aria-busy', 'true');
+    await expect(button).toBeEnabled();
+  });
+
+  test('keeps Amharic labels inside the button at narrow mobile widths', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 740 });
+    const button = page.getByTestId('base-button-amharic-long');
+    const label = button.getByTestId('base-button-label');
+    await expect(button).toBeVisible();
+    await expect(label).toHaveCSS('white-space', 'normal');
+    const dimensions = await button.evaluate((node) => ({
+      clientWidth: node.clientWidth,
+      scrollWidth: node.scrollWidth,
+      clientHeight: node.clientHeight,
+      scrollHeight: node.scrollHeight,
+    }));
+    expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth);
+    expect(dimensions.clientHeight).toBeGreaterThanOrEqual(44);
+  });
+
+  test('enforces mobile touch targets for every variant, size and icon-only action', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    const section = page.getByRole('region', { name: 'BaseButton test' });
+    for (const variant of ['primary', 'secondary', 'ghost', 'danger', 'link']) {
+      for (const size of ['sm', 'md', 'lg']) {
+        const button = section.getByTestId(`base-button-${variant}-${size}`);
+        const box = await button.boundingBox();
+        expect(box?.height, `${variant}/${size} mobile target`).toBeGreaterThanOrEqual(44);
+      }
+    }
+    const iconOnly = await section.getByTestId('base-button-icon-only').boundingBox();
+    expect(iconOnly?.width).toBeGreaterThanOrEqual(44);
+    expect(iconOnly?.height).toBeGreaterThanOrEqual(44);
+  });
+
+  test('has no serious or critical axe violations in the BaseButton showcase', async ({ page }) => {
+    const results = await new AxeBuilder({ page })
+      .include('[aria-label="BaseButton test"]')
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    const serious = results.violations.filter((item) => ['serious', 'critical'].includes(item.impact));
+    expect(serious.map((item) => ({ id: item.id, help: item.help })), JSON.stringify(serious, null, 2)).toEqual([]);
+  });
+});
