@@ -549,6 +549,11 @@ test.describe('Mounted BaseInput browser behavior', () => {
     await expect(page.getByTestId('base-input-events')).toContainText('"blur":1');
   });
 
+  test('supports explicit aria-label and aria-labelledby accessible names', async ({ page }) => {
+    await expect(page.getByRole('textbox', { name: 'Standalone accessible name' })).toBeVisible();
+    await expect(page.getByRole('textbox', { name: 'Referenced accessible name' })).toBeVisible();
+  });
+
   test('forwards native date type and preserves ISO date values as strings', async ({ page }) => {
     const input = page.getByLabel('Occurrence date');
     await expect(input).toHaveAttribute('type', 'date');
