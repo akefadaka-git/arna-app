@@ -7,6 +7,89 @@ test.beforeEach(async ({ page }) => {
   await page.goto(baseUrl);
 });
 
+test.describe('Mounted BaseRadio enhancement behavior', () => {
+  test('preserves strict typed value identity and emits the original value type', async ({ page }) => {
+    const numeric = page.getByRole('radio', { name: 'ቁጥር አንድ' });
+    const stringOne = page.getByRole('radio', { name: 'String one' });
+    await expect(numeric).toBeChecked();
+    await expect(stringOne).not.toBeChecked();
+    await page.getByTestId('base-radio-root').nth(1).click();
+    await expect(stringOne).toBeChecked();
+    await expect(numeric).not.toBeChecked();
+    await expect(page.getByTestId('base-radio-value')).toHaveText('1:string');
+    await expect(page.getByTestId('base-radio-last-event')).toHaveText('1:string');
+  });
+
+  test('retains native same-name exclusivity and arrow-key selection', async ({ page }) => {
+    const numeric = page.getByRole('radio', { name: 'ቁጥር አንድ' });
+    const stringOne = page.getByRole('radio', { name: 'String one' });
+    const optionTwo = page.getByRole('radio', { name: 'Option two' });
+    await numeric.focus();
+    await numeric.press('ArrowRight');
+    await expect(stringOne).toBeFocused();
+    await expect(stringOne).toBeChecked();
+    await expect(numeric).not.toBeChecked();
+    await optionTwo.focus();
+    await optionTwo.press('Space');
+    await expect(optionTwo).toBeChecked();
+    await expect(stringOne).not.toBeChecked();
+  });
+
+  test('preserves accessible names, descriptions, required, disabled, and aria-invalid overrides', async ({ page }) => {
+    await expect(page.getByRole('radio', { name: 'ቁጥር አንድ' })).toHaveAttribute('aria-describedby', 'base-radio-help');
+    await expect(page.getByRole('radio', { name: 'Disabled radio' })).toBeDisabled();
+    await expect(page.getByRole('radio', { name: 'Required radio' })).toHaveAttribute('required', '');
+    await expect(page.getByRole('radio', { name: 'Valid override radio' })).toHaveAttribute('aria-invalid', 'false');
+    await expect(page.getByRole('radio', { name: 'Invalid override radio' })).toHaveAttribute('aria-invalid', 'true');
+    await expect(page.getByRole('radio', { name: 'Standalone radio name' })).toBeVisible();
+    await expect(page.getByRole('radio', { name: 'Referenced radio name' })).toBeVisible();
+  });
+
+  test('exposes focus, blur, and native element methods', async ({ page }) => {
+    const radio = page.getByRole('radio', { name: 'ቁጥር አንድ' });
+    await page.getByTestId('base-radio-focus').click();
+    await expect(radio).toBeFocused();
+    await page.getByTestId('base-radio-blur').click();
+    await expect(radio).not.toBeFocused();
+    await expect(page.getByTestId('base-radio-events')).toContainText('"blur":1');
+  });
+
+  test('shows a keyboard-visible focus ring', async ({ page }) => {
+    const radio = page.getByRole('radio', { name: 'ቁጥር አንድ' });
+    await page.getByTestId('base-radio-focus-sentinel').focus();
+    await page.keyboard.press('Tab');
+    await expect(radio).toBeFocused();
+    const outline = await page.getByTestId('base-radio-circle').first().evaluate((node) => getComputedStyle(node).outlineStyle);
+    expect(outline).not.toBe('none');
+  });
+
+  test('provides at least a 44 by 44 pixel mobile target, including a slotless named radio', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    const root = page.getByTestId('base-radio-root').nth(7);
+    const box = await root.boundingBox();
+    expect(box?.width).toBeGreaterThanOrEqual(44);
+    expect(box?.height).toBeGreaterThanOrEqual(44);
+  });
+
+  test('disables circle transitions when reduced motion is requested', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    const duration = await page.getByTestId('base-radio-circle').first().evaluate((node) => getComputedStyle(node).transitionDuration);
+    expect(duration.split(',').every((value) => Number.parseFloat(value) === 0)).toBe(true);
+  });
+
+  test('renders Amharic and English labels and has no serious or critical axe violations', async ({ page }) => {
+    await expect(page.getByRole('radio', { name: 'ቁጥር አንድ' })).toBeVisible();
+    await expect(page.getByRole('radio', { name: 'String one' })).toBeVisible();
+    const results = await new AxeBuilder({ page })
+      .include('[data-testid="base-radio-section"]')
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    const serious = results.violations.filter((item) => ['serious', 'critical'].includes(item.impact));
+    expect(serious.map((item) => item.id + ': ' + item.help), JSON.stringify(serious, null, 2)).toEqual([]);
+  });
+});
+
+
 
 test.describe('Mounted BaseCheckbox enhancement behavior', () => {
   test('reflects checked, unchecked, and indeterminate model states', async ({ page }) => {
