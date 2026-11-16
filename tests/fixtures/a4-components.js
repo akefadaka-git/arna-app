@@ -167,7 +167,7 @@ const app = createApp({
         h('span', { id: 'base-input-labelledby-text' }, 'Referenced accessible name'),
         h(BaseInput, { id: 'base-input-labelledby', ariaLabelledBy: 'base-input-labelledby-text' }),
       ]),
-      h('section', { 'aria-label': 'BaseSelect enhancement test', 'data-testid': 'base-select-section', style: 'min-width: 0; width: 100%;' }, [
+      h('section', { 'aria-label': 'BaseSelect enhancement test', 'data-testid': 'base-select-section', style: 'min-width: 0; width: 100%; --arna-focus-ring-width: 3px; --arna-focus-ring-offset: 2px; --arna-focus-ring-color: #1F0A2F;' }, [
         h('button', { type: 'button', 'data-testid': 'base-select-keyboard-sentinel' }, 'Select focus sentinel'),
         h(FormField, {
           label: 'Account type',
@@ -184,7 +184,7 @@ const app = createApp({
             options: [
               { value: 1, label: 'Numeric account' },
               { value: 'two', label: 'Standard account' },
-              { value: 'blocked', label: 'Unavailable account', disabled: true },
+              { value: 'blocked', label: 'Blocked account', disabled: true },
             ],
             placeholder: 'Choose an account type',
             ariaDescribedBy: describedBy,
