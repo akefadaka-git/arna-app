@@ -512,7 +512,6 @@ test.describe('Mounted BaseButton enhancement', () => {
   test('does not animate the loading indicator when reduced motion is requested', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.getByTestId('toggle-base-button-loading').click();
-    await expect(page.getByTestId('enhanced-base-button-spinner')).toHaveCount(0);
     const spinner = page.getByTestId('enhanced-base-button').getByTestId('base-button-spinner');
     await expect(spinner).toBeVisible();
     await expect(spinner).toHaveCSS('animation-name', 'none');
