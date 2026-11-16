@@ -170,8 +170,8 @@ function handleClick(event: MouseEvent): void {
     @click="handleClick"
   >
     <!--
-      Loading state: render the spinner INSTEAD of the slot content.
-      The min-height of each size preserves layout stability.
+      Loading keeps the visible label in place to prevent layout shifts.
+      The spinner is additive and remains decorative to assistive technology.
     -->
     <span
       v-if="loading"
@@ -180,18 +180,13 @@ function handleClick(event: MouseEvent): void {
       data-testid="base-button-spinner"
     />
 
-    <!--
-      Icon-only mode: the default slot carries the icon. No label wrapper.
-    -->
-    <slot v-else-if="iconOnly" />
+    <!-- Icon-only mode retains its icon except while the spinner is shown. -->
+    <slot v-if="iconOnly && !loading" />
 
-    <!--
-      Standard mode: optional leading icon, mandatory label, optional
-      trailing icon. Icons are decorative; the label carries the name.
-    -->
-    <template v-else>
+    <!-- The visible label remains mounted during loading. -->
+    <template v-else-if="!iconOnly">
       <span
-        v-if="$slots.leading"
+        v-if="$slots.leading && !loading"
         class="arna-button__leading"
         aria-hidden="true"
         data-testid="base-button-leading"
@@ -207,7 +202,7 @@ function handleClick(event: MouseEvent): void {
       </span>
 
       <span
-        v-if="$slots.trailing"
+        v-if="$slots.trailing && !loading"
         class="arna-button__trailing"
         aria-hidden="true"
         data-testid="base-button-trailing"
@@ -232,10 +227,12 @@ function handleClick(event: MouseEvent): void {
   gap: var(--arna-space-2);
   font-family: var(--arna-font-family-am);
   font-weight: var(--arna-font-weight-medium);
-  line-height: 1;
+  line-height: 1.25;
   text-align: center;
   text-decoration: none;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  min-width: 0;
   user-select: none;
   vertical-align: middle;
   transition:
@@ -258,7 +255,7 @@ function handleClick(event: MouseEvent): void {
   line-height: var(--arna-line-height-body-sm);
   padding-block: var(--arna-space-2);
   padding-inline: var(--arna-space-3);
-  min-height: 32px;
+  min-height: var(--arna-space-8);
   border-radius: var(--arna-radius-sm);
 }
 
@@ -267,7 +264,7 @@ function handleClick(event: MouseEvent): void {
   line-height: var(--arna-line-height-body);
   padding-block: var(--arna-space-3);
   padding-inline: var(--arna-space-4);
-  min-height: 40px;
+  min-height: var(--arna-space-10);
   border-radius: var(--arna-radius-md);
 }
 
@@ -276,15 +273,20 @@ function handleClick(event: MouseEvent): void {
   line-height: var(--arna-line-height-body-lg);
   padding-block: var(--arna-space-3);
   padding-inline: var(--arna-space-6);
-  min-height: 48px;
+  min-height: var(--arna-space-12);
   border-radius: var(--arna-radius-md);
 }
 
 /* Mobile touch-target enforcement (Design System §6.5). */
 @media (max-width: 639px) {
   .arna-button--sm,
-  .arna-button--md {
+  .arna-button--md,
+  .arna-button--icon-only {
     min-height: 44px;
+  }
+
+  .arna-button--icon-only {
+    min-width: 44px;
   }
 }
 
@@ -296,8 +298,8 @@ function handleClick(event: MouseEvent): void {
 }
 
 .arna-button--icon-only {
-  min-width: 40px;
-  min-height: 40px;
+  min-width: var(--arna-space-10);
+  min-height: var(--arna-space-10);
   justify-content: center;
   padding-inline: var(--arna-space-3);
 }
@@ -441,7 +443,7 @@ function handleClick(event: MouseEvent): void {
   border: 2px solid currentColor;
   border-top-color: transparent;
   border-radius: var(--arna-radius-full);
-  animation: arna-button-spin 0.8s linear infinite;
+  animation: arna-button-spin var(--arna-duration-slow, 800ms) linear infinite;
 }
 
 @keyframes arna-button-spin {
@@ -450,11 +452,11 @@ function handleClick(event: MouseEvent): void {
   }
 }
 
-/* Design System §11.5 — the loading spinner is the single permitted
-   exception to reduced-motion; it slows to 2x duration but does not stop. */
+/* Respect reduced-motion: retain a static progress indicator instead of
+   forcing continuous motion for users who request less animation. */
 @media (prefers-reduced-motion: reduce) {
   .arna-button__spinner {
-    animation-duration: 1.6s;
+    animation: none;
   }
 }
 
