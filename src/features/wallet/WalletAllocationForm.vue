@@ -544,13 +544,17 @@ const submitLabel = computed<string>(() =>
         :error="paymentError"
         :disabled="isSubmitting"
         required
-      >
+  v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
+>
         <BaseSelect
-          id="wallet-allocation-payment"
           v-model="paymentId"
           :options="paymentOptions"
           :placeholder="labels.paymentPlaceholder"
-          :disabled="isSubmitting"
+          :id="fieldId"
+          :aria-describedby="describedBy"
+          :invalid="fieldInvalid"
+          :required="fieldRequired"
+          :disabled="fieldDisabled"
           data-testid="wallet-allocation-form-payment"
         />
       </FormField>
@@ -562,13 +566,17 @@ const submitLabel = computed<string>(() =>
         :error="obligationError"
         :disabled="isSubmitting"
         required
-      >
+  v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
+>
         <BaseSelect
-          id="wallet-allocation-obligation"
           v-model="obligationId"
           :options="obligationOptions"
           :placeholder="labels.obligationPlaceholder"
-          :disabled="isSubmitting"
+          :id="fieldId"
+          :aria-describedby="describedBy"
+          :invalid="fieldInvalid"
+          :required="fieldRequired"
+          :disabled="fieldDisabled"
           data-testid="wallet-allocation-form-obligation"
         />
       </FormField>
