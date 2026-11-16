@@ -74,11 +74,38 @@ const NOTIFICATION_DETAIL_ROUTES = new Set([
   'portal-my-loan-detail',
 ]);
 
+const NOTIFICATION_LIST_ROUTES = new Set([
+  'admin-home',
+  'admin-public-content',
+  'admin-corporate-site',
+  'admin-audit-security',
+  'portal-home',
+  'portal-my-holdings',
+  'portal-my-certificates',
+  'portal-my-wallet',
+  'portal-my-loans',
+  'dashboard',
+  'launcher',
+  'communications',
+  'announcements',
+  'files',
+  'shareholders',
+  'share-classes',
+  'wallets',
+  'loans',
+  'loan-products',
+  'people',
+  'governance-overview',
+  'governance-attendance',
+  'governance-bodies',
+]);
+
 function resolveNotificationTarget(
   action: MasesNotification['action'],
-): { name: string; params: { id: string } } | null {
-  if (!action || !NOTIFICATION_DETAIL_ROUTES.has(action.route_name)) return null;
-  if (!router.hasRoute(action.route_name)) return null;
+): { name: string; params?: { id: string } } | null {
+  if (!action || !router.hasRoute(action.route_name)) return null;
+  if (NOTIFICATION_LIST_ROUTES.has(action.route_name)) return { name: action.route_name };
+  if (!NOTIFICATION_DETAIL_ROUTES.has(action.route_name)) return null;
 
   const resource = action.resource_ref;
   if (resource === null || typeof resource !== 'object' || Array.isArray(resource)) return null;
