@@ -93,7 +93,7 @@ const app = createApp({
           loading: baseButtonLoading.value,
           onClick: () => { baseButtonClicks.value += 1; },
           'data-testid': 'enhanced-base-button',
-        }, { default: () => 'የረጅም ስም ያለው የአርና አዝራር' }),
+        }, { default: () => 'የአርና መድረክ አስተዳደር እና የባለአክሲዮኖች የፋይናንስ አገልግሎት መቆጣጠሪያ አዝራር' }),
         h('button', {
           type: 'button',
           'data-testid': 'toggle-base-button-loading',
