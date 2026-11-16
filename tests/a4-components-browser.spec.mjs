@@ -544,6 +544,9 @@ test.describe('Mounted BaseInput browser behavior', () => {
     await input.press('Enter');
     await expect(page.getByTestId('base-input-events')).toContainText('"enter":1');
     await expect(page.getByTestId('base-input-events')).toContainText('"focus":1');
+    await page.getByTestId('base-input-blur').click();
+    await expect(input).not.toBeFocused();
+    await expect(page.getByTestId('base-input-events')).toContainText('"blur":1');
   });
 
   test('forwards native date type and preserves ISO date values as strings', async ({ page }) => {
