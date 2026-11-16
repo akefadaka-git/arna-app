@@ -259,7 +259,7 @@ function handleClick(event: MouseEvent): void {
 .arna-button--md {
   font-size: var(--arna-font-size-body);
   line-height: var(--arna-line-height-body);
-  padding-block: var(--arna-space-2);
+  padding-block: var(--arna-space-1);
   padding-inline: var(--arna-space-4);
   min-height: var(--arna-space-10);
   border-radius: var(--arna-radius-md);
@@ -268,7 +268,7 @@ function handleClick(event: MouseEvent): void {
 .arna-button--lg {
   font-size: var(--arna-font-size-body-lg);
   line-height: var(--arna-line-height-body-lg);
-  padding-block: var(--arna-space-2);
+  padding-block: var(--arna-space-1);
   padding-inline: var(--arna-space-6);
   min-height: var(--arna-space-12);
   border-radius: var(--arna-radius-md);
