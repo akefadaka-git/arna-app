@@ -35,23 +35,19 @@
  available-locales catalogue from @/stores/locale (Unit 11.6).
 
  Does NOT mutate the locale itself. Emits @select({ code }) so the
- consumer can call localeStore.setLocale(code). The store persists
- the preference client-side; a future localization service may also
- synchronize it with the backend when that endpoint is available.
+shell can persist the account preference through POST /api/locale,
+then commit the new locale to the store.
 
- -----------------------------------------------------------------------------
- RENDERING IS DEFERRED (§9.3 / §20.3)
- -----------------------------------------------------------------------------
- The freeze's two relevant sections both require that this selector is
- NOT rendered until POST /api/locale exists. The component is delivered
- now, ready for that endpoint, but the shell must not compose it into
- AppHeader yet.
+-----------------------------------------------------------------------------
+SHELL INTEGRATION
+-----------------------------------------------------------------------------
+The authenticated shell renders this control because the matching
+authenticated POST /api/locale endpoint is implemented. The shell
+owns persistence and state commit; this component only emits a
+validated SupportedLocale selection.
 
- Consequence: there is NO disabled prop. See the response preamble
- §"Notice 2".
-
- -----------------------------------------------------------------------------
- The menu items come from the store, not from props
+-----------------------------------------------------------------------------
+The menu items come from the store, not from props
  -----------------------------------------------------------------------------
  LanguageSelector, unlike UserMenu (Unit 11.11), takes no `items` prop.
  The two locale entries are the frozen §9.1 catalogue, exposed by the
