@@ -593,8 +593,8 @@ const canSubmit = computed<boolean>(
         :error="shareClassError"
         :disabled="isSubmitting"
         required
-  v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
->
+        v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
+      >
         <BaseSelect
           v-model="shareClassId"
           :options="classOptions"
@@ -615,8 +615,8 @@ const canSubmit = computed<boolean>(
         :error="entryTypeError"
         :disabled="isSubmitting"
         required
-  v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
->
+        v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
+      >
         <BaseSelect
           v-model="entryType"
           :options="entryTypeOptions"
@@ -637,8 +637,8 @@ const canSubmit = computed<boolean>(
         :helper-text="directionHelper"
         :disabled="isSubmitting"
         required
-  v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
->
+        v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
+      >
         <BaseSelect
           v-model="direction"
           :options="directionOptions"
