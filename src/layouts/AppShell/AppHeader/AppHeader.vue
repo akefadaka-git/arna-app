@@ -64,6 +64,19 @@
           · Existing header dimensions, breakpoints, slots, props,
             events, and z-index behavior are unchanged.
 
+ 1.2.1  — responsive navigation overflow correction:
+          · The mobile navigation's intended full-row flex basis was
+            overridden by a later duplicate `flex` shorthand. The
+            duplicate is removed so the navigation receives its own
+            row below the brand/actions row at widths below 640px.
+          · Long navigation and breadcrumb content is no longer
+            silently clipped. The bounded nav region becomes a
+            horizontally scrollable area with a thin token-colored
+            scrollbar and contained inline overscroll.
+          · Duplicate `align-items` in the actions region is removed.
+          · No prop, slot, event, route, DOM test hook or consumer
+            contract changes.
+
  -----------------------------------------------------------------------------
  Purpose
  -----------------------------------------------------------------------------
@@ -533,12 +546,15 @@ function onToggleClick(): void {
    shell-chrome inline padding. The nav region absorbs free space so
    the actions region is pushed to the trailing edge.
 
+   MOBILE: the brand and actions share the first row; the navigation
+   region occupies a full second row so breadcrumbs do not compete
+   with identity or utility controls for the narrow viewport width.
+
    TABLET AND UP: the gap widens and the inline padding increases at
    the min-width breakpoint below, matching the wider spacing rhythm
-   of --mases-shell-chrome-padding-inline-tablet. The header does not
-   reflow its regions — it stays a single row at every viewport; the
-   mobile drawer, not a wrapped header, is how MASES handles the
-   mobile navigation surface.
+   of --mases-shell-chrome-padding-inline-tablet. The three regions
+   return to one row; the mobile drawer remains the primary mobile
+   navigation surface.
 
    The inline padding consumes --mases-shell-chrome-padding-inline-*,
    the shared chrome rhythm used by AppFooter and SkipToContent. See
@@ -657,25 +673,28 @@ function onToggleClick(): void {
 /* ---------------------------------------------------------------------------
    Nav region
    ---------------------------------------------------------------------------
-   Center-anchored, the only region that absorbs free space.
-   `flex: 1 1 auto` lets it grow to fill the space between the brand
-   and the actions cluster; `min-width: 0` is load-bearing — without
-   it, a long unbreakable child (a wide tenant name, a full breadcrumb
-   trail) forces horizontal overflow of the entire header, which is
-   the classic flexbox min-content trap. `overflow: hidden` clips
-   anything that still exceeds the region's box after shrinking; the
-   alternative (letting it overflow visibly) would paint slot content
-   over the actions cluster.
+   Center-anchored, this is the elastic region between the brand and
+   actions. On mobile it occupies a dedicated second row; at tablet
+   widths it grows into the space between the fixed brand and actions.
+   `min-width: 0` prevents a long unbreakable child from forcing the
+   entire header wider than the viewport. Inline overflow is scrollable
+   rather than clipped, so every breadcrumb/navigation item remains
+   reachable by touch, trackpad, mouse wheel and keyboard focus. The
+   scroll boundary prevents the nav content from painting over actions.
    --------------------------------------------------------------------------- */
- .app-header__nav {
+.app-header__nav {
   display: flex;
   order: 4;
   flex: 1 1 100%;
   align-items: center;
   gap: var(--mases-space-2);
-  flex: 1 1 auto;
   min-width: 0;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  scroll-padding-inline: var(--mases-space-2);
+  scrollbar-color: var(--mases-color-border-strong) transparent;
+  scrollbar-width: thin;
 }
 
 /* ---------------------------------------------------------------------------
@@ -689,13 +708,12 @@ function onToggleClick(): void {
    correct priority order for chrome: identity and actions are fixed,
    navigation is elastic.
    --------------------------------------------------------------------------- */
- .app-header__actions {
+.app-header__actions {
   display: flex;
   order: 3;
   align-items: center;
   gap: var(--mases-space-2);
   flex-shrink: 0;
-  align-items: center;
 }
 
 /* ============================================================================
