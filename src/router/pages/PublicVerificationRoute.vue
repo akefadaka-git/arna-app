@@ -129,6 +129,7 @@ async function submitVerification(): Promise<void> {
           v-if="checked"
           class="verification__result"
           :class="`verification__result--${resultKind}`"
+          :data-status="resultKind"
           aria-live="polite"
           aria-atomic="true"
           data-testid="public-verification-result"
