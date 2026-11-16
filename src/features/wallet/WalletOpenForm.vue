@@ -522,8 +522,8 @@ const submitLabel = computed<string>(() =>
         :error="shareholderError"
         :disabled="isSubmitting"
         required
-  v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
->
+        v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
+      >
         <BaseSelect
           v-model="shareholderId"
           :options="shareholderOptions"
@@ -545,8 +545,8 @@ const submitLabel = computed<string>(() =>
         :error="currencyError"
         :disabled="isSubmitting"
         required
-  v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
->
+        v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
+      >
         <BaseSelect
           v-model="currency"
           :options="currencyOptions"
