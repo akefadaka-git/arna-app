@@ -406,8 +406,11 @@ export type {
 </script>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useTenantStore } from '@/stores/tenant';
+import { useLocaleStore } from '@/stores/locale';
+import type { AppShellLabels } from '@/layouts/AppShell';
+import { arnaShellEnglishLabels, localizeNavItems, localizeUserMenuItems } from '@/router/shell-english-labels';
 
 import SkipToContent from '@/layouts/AppShell/SkipToContent';
 import MaintenanceBanner from '@/layouts/AppShell/MaintenanceBanner';
@@ -544,6 +547,31 @@ defineSlots<{
 // Tenant switching (internal — the shell updates the store directly)
 // -----------------------------------------------------------------------------
 const tenantStore = useTenantStore();
+const localeStore = useLocaleStore();
+
+const activeLabels = computed<AppShellLabels>(() => {
+  if (localeStore.locale !== 'en') return labels;
+  const english = arnaShellEnglishLabels;
+  return {
+    ...labels,
+    skipToContent: english.skipToContent,
+    mobileMenu: english.mobileMenu,
+    userMenu: { ...labels.userMenu, ...english.userMenu },
+    notificationsBell: { ...labels.notificationsBell, ...english.notificationsBell },
+    tenantSwitcher: { ...labels.tenantSwitcher, ...english.tenantSwitcher },
+    sidebar: { ...labels.sidebar, ...english.sidebar },
+    drawer: { ...labels.drawer, ...english.drawer },
+  };
+});
+
+const activeNavItems = computed(() => {
+  if (localeStore.locale !== 'en') return navItems;
+  return localizeNavItems(navItems, navItems.some((item) => item.id === 'portal-home') ? 'portal' : 'workspace');
+});
+
+const activeUserMenuItems = computed(() =>
+  localeStore.locale === 'en' ? localizeUserMenuItems(userMenuItems) : userMenuItems,
+);
 
 function onTenantSelect(payload: { id: number }): void {
   /*
@@ -596,7 +624,7 @@ function onMaintenanceDismiss(): void {
          ============================================================ -->
     <SkipToContent
       :target-id="skipToContentTargetId"
-      :label="labels.skipToContent"
+      :label="activeLabels.skipToContent"
     />
 
     <!-- ============================================================
@@ -618,7 +646,7 @@ function onMaintenanceDismiss(): void {
          Header
          ============================================================ -->
     <AppHeader
-      :mobile-menu-label="labels.mobileMenu"
+      :mobile-menu-label="activeLabels.mobileMenu"
       @open-mobile-menu="openMobileDrawer"
     >
       <template #brand>
@@ -628,7 +656,7 @@ function onMaintenanceDismiss(): void {
       </template>
 
       <template #nav>
-        <AppHeaderNavigation :items="navItems" />
+        <AppHeaderNavigation :items="activeNavItems" />
         <slot name="breadcrumbs" />
       </template>
 
@@ -639,7 +667,7 @@ function onMaintenanceDismiss(): void {
 
         <NotificationsBell
           :disabled="false"
-          :labels="labels.notificationsBell"
+          :labels="activeLabels.notificationsBell"
           @open="onNotificationsOpen"
         />
 
@@ -650,13 +678,13 @@ function onMaintenanceDismiss(): void {
         -->
 
         <TenantSwitcher
-          :labels="labels.tenantSwitcher"
+          :labels="activeLabels.tenantSwitcher"
           @select="onTenantSelect"
         />
 
         <UserMenu
-          :items="userMenuItems"
-          :labels="labels.userMenu"
+          :items="activeUserMenuItems"
+          :labels="activeLabels.userMenu"
           @select="onUserMenuSelect"
         />
       </template>
@@ -678,8 +706,8 @@ function onMaintenanceDismiss(): void {
       >
         <div class="app-shell__aside-nav">
           <AppSidebar
-            :items="navItems"
-            :labels="labels.sidebar"
+            :items="activeNavItems"
+            :labels="activeLabels.sidebar"
           />
         </div>
 
@@ -734,9 +762,9 @@ function onMaintenanceDismiss(): void {
          ============================================================ -->
     <AppMobileDrawer
       v-model:open="isMobileDrawerOpen"
-      :items="navItems"
-      :sidebar-labels="labels.sidebar"
-      :labels="labels.drawer"
+      :items="activeNavItems"
+      :sidebar-labels="activeLabels.sidebar"
+      :labels="activeLabels.drawer"
     />
   </div>
 </template>
