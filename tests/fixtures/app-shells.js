@@ -1,5 +1,6 @@
 import { createApp, h } from 'vue';
 import { createPinia } from 'pinia';
+import { useLocaleStore } from '../../src/stores/locale';
 import { createMemoryHistory, createRouter, RouterView } from 'vue-router';
 import AuthenticatedLayout from '../../src/layouts/AuthenticatedLayout/AuthenticatedLayout.vue';
 import PortalLayout from '../../src/features/portal/PortalLayout.vue';
@@ -26,7 +27,12 @@ const app = createApp({ render: () => h(RouterView) });
 app.config.errorHandler = (error) => { window.__ARNA_SHELL_FIXTURE_ERROR__ = error instanceof Error ? error.stack : String(error); };
 window.addEventListener('error', (event) => { window.__ARNA_SHELL_FIXTURE_ERROR__ = event.error?.stack || event.message; });
 window.addEventListener('unhandledrejection', (event) => { window.__ARNA_SHELL_FIXTURE_ERROR__ = String(event.reason); });
-app.use(createPinia());
+const pinia = createPinia();
+app.use(pinia);
+const localeStore = useLocaleStore(pinia);
+const requestedLocale = new URLSearchParams(window.location.search).get('locale');
+if (requestedLocale === 'am' || requestedLocale === 'en') localeStore.setLocale(requestedLocale);
+document.documentElement.lang = localeStore.locale;
 app.use(router);
 
 const requested = new URLSearchParams(window.location.search).get('surface') || 'workspace';
