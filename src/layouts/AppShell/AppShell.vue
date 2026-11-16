@@ -548,7 +548,7 @@ defineSlots<{
 const tenantStore = useTenantStore();
 const localeStore = useLocaleStore();
 
-const activeLabels = computed<AppShellLabels>(() => {
+const activeLabels = computed(() => {
   if (localeStore.locale !== 'en') return props.labels;
   const english = arnaShellEnglishLabels;
   return {
