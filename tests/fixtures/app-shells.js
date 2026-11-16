@@ -17,7 +17,10 @@ const child = (surface) => ({
 const router = createRouter({
   history: createMemoryHistory(),
   routes: [
-    { path: '/workspace', component: AuthenticatedLayout, children: [{ path: '', component: child('Workspace') }] },
+    { path: '/workspace', component: AuthenticatedLayout, children: [
+      { path: '', component: child('Workspace') },
+      { path: 'files/:id', name: 'file-detail', component: child('File detail') },
+    ] },
     { path: '/portal', component: PortalLayout, children: [{ path: '', component: child('Shareholder Portal') }] },
     { path: '/admin', component: AdminLayout, children: [{ path: '', component: child('Administration') }] },
     { path: '/legal', name: 'legal', component: child('Legal Center') },
