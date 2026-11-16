@@ -593,13 +593,17 @@ const canSubmit = computed<boolean>(
         :error="shareClassError"
         :disabled="isSubmitting"
         required
-      >
+  v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
+>
         <BaseSelect
-          id="holding-share-class"
           v-model="shareClassId"
           :options="classOptions"
-          :disabled="isSubmitting"
           :placeholder="labels.shareClassPlaceholder"
+          :id="fieldId"
+          :aria-describedby="describedBy"
+          :invalid="fieldInvalid"
+          :required="fieldRequired"
+          :disabled="fieldDisabled"
           data-testid="holding-entry-form-share-class"
         />
       </FormField>
@@ -611,12 +615,16 @@ const canSubmit = computed<boolean>(
         :error="entryTypeError"
         :disabled="isSubmitting"
         required
-      >
+  v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
+>
         <BaseSelect
-          id="holding-entry-type"
           v-model="entryType"
           :options="entryTypeOptions"
-          :disabled="isSubmitting"
+          :id="fieldId"
+          :aria-describedby="describedBy"
+          :invalid="fieldInvalid"
+          :required="fieldRequired"
+          :disabled="fieldDisabled"
           data-testid="holding-entry-form-entry-type"
         />
       </FormField>
@@ -629,12 +637,16 @@ const canSubmit = computed<boolean>(
         :helper-text="directionHelper"
         :disabled="isSubmitting"
         required
-      >
+  v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
+>
         <BaseSelect
-          id="holding-direction"
           v-model="direction"
           :options="directionOptions"
-          :disabled="!directionEditable || isSubmitting"
+          :id="fieldId"
+          :aria-describedby="describedBy"
+          :invalid="fieldInvalid"
+          :required="fieldRequired"
+          :disabled="fieldDisabled || !directionEditable"
           data-testid="holding-entry-form-direction"
         />
       </FormField>
