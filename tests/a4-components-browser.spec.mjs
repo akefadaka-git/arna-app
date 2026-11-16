@@ -39,7 +39,7 @@ test.describe('Mounted BaseRadio enhancement behavior', () => {
     await expect(page.getByRole('radio', { name: 'ቁጥር አንድ' })).toHaveAttribute('aria-describedby', 'base-radio-help');
     await expect(page.getByRole('radio', { name: 'Disabled radio' })).toBeDisabled();
     await expect(page.getByRole('radio', { name: 'Required radio' })).toHaveAttribute('required', '');
-    await expect(page.getByRole('radio', { name: 'Valid override radio' })).toHaveAttribute('aria-invalid', 'false');
+    await expect(page.getByRole('radio', { name: 'Valid override radio', exact: true })).toHaveAttribute('aria-invalid', 'false');
     await expect(page.getByRole('radio', { name: 'Invalid override radio' })).toHaveAttribute('aria-invalid', 'true');
     await expect(page.getByRole('radio', { name: 'Standalone radio name' })).toBeVisible();
     await expect(page.getByRole('radio', { name: 'Referenced radio name' })).toBeVisible();
