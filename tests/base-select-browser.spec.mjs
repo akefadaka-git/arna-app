@@ -15,7 +15,7 @@ test.describe('Mounted BaseSelect browser contract', () => {
       'Choose an account type',
       'Numeric account',
       'Standard account',
-      'Unavailable account',
+      'Blocked account',
     ]);
 
     await select.selectOption('two');
@@ -44,7 +44,7 @@ test.describe('Mounted BaseSelect browser contract', () => {
 
   test('propagates disabled state and preserves native disabled options', async ({ page }) => {
     const select = page.getByRole('combobox', { name: 'Account type' });
-    await expect(select.locator('option').filter({ hasText: 'Unavailable account' })).toBeDisabled();
+    await expect(select.locator('option').filter({ hasText: 'Blocked account' })).toBeDisabled();
 
     await page.getByTestId('base-select-disable').click();
     await expect(select).toBeDisabled();
