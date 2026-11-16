@@ -558,6 +558,8 @@ test.describe('Mounted BaseInput browser behavior', () => {
     const input = page.getByLabel('Occurrence date');
     await expect(input).toHaveAttribute('type', 'date');
     await expect(input).toHaveValue('2026-11-16');
+    const box = await input.boundingBox();
+    expect(box?.height).toBeGreaterThanOrEqual(24);
     await input.fill('2026-12-24');
     await expect(input).toHaveValue('2026-12-24');
   });
