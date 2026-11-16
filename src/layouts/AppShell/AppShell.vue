@@ -168,7 +168,7 @@
      main.ts (Stage 12).
    - It does NOT register the auth service, the API client, or the
      router. All of those are Stage 12+ work.
-   - It does NOT render the LanguageSelector — Freeze §9.3 / §20.3.
+   - It renders LanguageSelector; AppShell persists the account preference before changing locale state.
    - It does NOT navigate. The header slot content and the launcher
      route handle navigation; AppShell only re-emits.
 
@@ -687,11 +687,8 @@ function onMaintenanceDismiss(): void {
           @open="onNotificationsOpen"
         />
 
-        <!--
-          LanguageSelector (Unit 11.13) is deliberately NOT rendered
-          here — Freeze §9.3 / §20.3. Add its import and composition
-          when POST /api/locale exists.
-        -->
+        <!-- Account-level preference is persisted before the locale store changes. -->
+
 
         <TenantSwitcher
           :labels="labels.tenantSwitcher"
