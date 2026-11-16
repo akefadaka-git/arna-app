@@ -567,8 +567,8 @@ function statusLabel(product: LoanProduct): string {
         :label="labels.activeFilterLabel"
         html-for="loan-products-active-filter"
         :disabled="loading"
-  v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
->
+        v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
+      >
         <BaseSelect
           v-model="activeFilter"
           :options="filterOptions"
