@@ -1,29 +1,31 @@
 import { createApp, h } from 'vue';
 import { createPinia } from 'pinia';
 import { useLocaleStore } from '../../src/stores/locale';
-import { createMemoryHistory, createRouter, RouterView } from 'vue-router';
+import { createMemoryHistory, createRouter, RouterLink } from 'vue-router';
+import AppRoot from '../../src/App.vue';
 import AuthenticatedLayout from '../../src/layouts/AuthenticatedLayout/AuthenticatedLayout.vue';
 import PortalLayout from '../../src/features/portal/PortalLayout.vue';
 import AdminLayout from '../../src/layouts/AdminLayout/AdminLayout.vue';
 
-const child = (surface) => ({
+const child = (surface, target, detail = false) => ({
   render: () => h('section', { 'data-testid': 'shell-child-page' }, [
     h('h1', { tabindex: '-1' }, `ARNA ${surface} mounted route`),
     h('p', `Mounted child content for the ${surface} surface.`),
+    h(RouterLink, { to: target }, () => detail ? 'Back to surface' : 'Open details'),
   ]),
 });
 
 const router = createRouter({
   history: createMemoryHistory(),
   routes: [
-    { path: '/workspace', component: AuthenticatedLayout, children: [{ path: '', component: child('Workspace') }] },
-    { path: '/portal', component: PortalLayout, children: [{ path: '', component: child('Shareholder Portal') }] },
-    { path: '/admin', component: AdminLayout, children: [{ path: '', component: child('Administration') }] },
+    { path: '/workspace', component: AuthenticatedLayout, children: [{ path: '', component: child('Workspace', '/workspace/details') }, { path: 'details', component: child('Workspace details', '/workspace', true) }] },
+    { path: '/portal', component: PortalLayout, children: [{ path: '', component: child('Shareholder Portal', '/portal/details') }, { path: 'details', component: child('Shareholder Portal details', '/portal', true) }] },
+    { path: '/admin', component: AdminLayout, children: [{ path: '', component: child('Administration', '/admin/details') }, { path: 'details', component: child('Administration details', '/admin', true) }] },
     { path: '/legal', name: 'legal', component: child('Legal Center') },
   ],
 });
 
-const app = createApp({ render: () => h(RouterView) });
+const app = createApp(AppRoot);
 app.config.errorHandler = (error) => { window.__ARNA_SHELL_FIXTURE_ERROR__ = error instanceof Error ? error.stack : String(error); };
 window.addEventListener('error', (event) => { window.__ARNA_SHELL_FIXTURE_ERROR__ = event.error?.stack || event.message; });
 window.addEventListener('unhandledrejection', (event) => { window.__ARNA_SHELL_FIXTURE_ERROR__ = String(event.reason); });
