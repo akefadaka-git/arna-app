@@ -95,7 +95,7 @@ const app = createApp({
         }, 'Set Amharic'),
       ]),
       h(RouterView),
-      h('section', { 'aria-label': 'BaseCheckbox enhancement test', 'data-testid': 'base-checkbox-section', style: 'min-width: 0; width: 100%;' }, [
+      h('section', { 'aria-label': 'BaseCheckbox enhancement test', 'data-testid': 'base-checkbox-section', style: 'min-width: 0; width: 100%; --arna-focus-ring-width: 3px; --arna-focus-ring-offset: 2px; --arna-focus-ring-color: #1F0A2F;' }, [
         h(BaseCheckbox, {
           ref: baseCheckboxRef,
           id: 'base-checkbox-primary',
