@@ -182,7 +182,7 @@ test('language preference is persisted and notification actions navigate to allo
   await page.getByTestId('notifications-bell-trigger').click();
   await expect(page.getByTestId('notification-center')).toBeVisible();
   await page.getByText('Document ready').click();
-  await expect(page).toHaveURL(/\\/workspace\\/files\\/42$/);
+  expect(new URL(page.url()).pathname).toBe('/workspace/files/42');
   await expect(page.getByTestId('shell-child-page')).toContainText('File detail');
   await expect(page.getByTestId('notification-center')).toHaveCount(0);
 });
