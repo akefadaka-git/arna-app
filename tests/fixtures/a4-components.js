@@ -125,6 +125,9 @@ const app = createApp({
         h(BaseInput, { id: 'base-input-invalid', invalid: true, ariaInvalid: false, required: true }),
         h('label', { for: 'base-input-disabled' }, 'Disabled field'),
         h(BaseInput, { id: 'base-input-disabled', disabled: true }),
+        h(BaseInput, { id: 'base-input-aria-label', ariaLabel: 'Standalone accessible name' }),
+        h('span', { id: 'base-input-labelledby-text' }, 'Referenced accessible name'),
+        h(BaseInput, { id: 'base-input-labelledby', ariaLabelledBy: 'base-input-labelledby-text' }),
       ]),
       h('section', { 'aria-label': 'BaseButton enhancement test' }, [
         h('button', { type: 'button', 'data-testid': 'base-button-focus-sentinel' }, 'Focus sentinel'),
