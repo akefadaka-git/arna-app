@@ -1,3 +1,4 @@
+import '../../src/styles/themes.css';
 import { createApp, h, ref } from 'vue';
 import { createPinia } from 'pinia';
 import { createMemoryHistory, createRouter, RouterView } from 'vue-router';
