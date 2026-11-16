@@ -1,4 +1,3 @@
-import type { AppShellLabels } from '@/layouts/AppShell';
 import type { NavItem, UserMenuItem } from '@/layouts/AppShell';
 
 /**
@@ -6,7 +5,7 @@ import type { NavItem, UserMenuItem } from '@/layouts/AppShell';
  * fallback; the active locale is supplied by the existing locale store.
  * This does not introduce a language selector or a locale API dependency.
  */
-export const arnaShellEnglishLabels: AppShellLabels = {
+export const arnaShellEnglishLabels = {
   skipToContent: 'Skip to main content',
   mobileMenu: 'Open navigation menu',
   userMenu: { triggerAriaLabel: 'User menu' },
