@@ -37,7 +37,7 @@ test.describe('Mounted BaseCheckbox enhancement behavior', () => {
 
   test('supports native Space activation and keyboard-visible focus', async ({ page }) => {
     const checkbox = page.getByRole('checkbox', { name: 'የመለያ ምርጫ' });
-    await page.getByTestId('set-locale-am').focus();
+    await page.getByTestId('base-checkbox-keyboard-sentinel').focus();
     await page.keyboard.press('Tab');
     await expect(checkbox).toBeFocused();
     await page.keyboard.press('Space');
