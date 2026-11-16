@@ -533,3 +533,69 @@ test.describe('Mounted BaseButton enhancement', () => {
     await expect(page.getByTestId('enhanced-base-button-clicks')).toHaveText('1');
   });
 });
+
+test.describe('Mounted BaseInput browser behavior', () => {
+  test('preserves controlled string updates, accessible description, and event payload behavior', async ({ page }) => {
+    const input = page.getByRole('textbox', { name: 'BaseInput primary field' });
+    await expect(input).toHaveValue('Initial value');
+    await expect(input).toHaveAttribute('aria-describedby', 'base-input-help');
+    await input.fill('Updated account value');
+    await expect(page.getByTestId('base-input-value')).toHaveText('Updated account value');
+    await input.press('Enter');
+    await expect(page.getByTestId('base-input-events')).toContainText('"enter":1');
+    await expect(page.getByTestId('base-input-events')).toContainText('"focus":1');
+  });
+
+  test('forwards native date type and preserves ISO date values as strings', async ({ page }) => {
+    const input = page.getByLabel('Occurrence date');
+    await expect(input).toHaveAttribute('type', 'date');
+    await expect(input).toHaveValue('2026-11-16');
+    await input.fill('2026-12-24');
+    await expect(input).toHaveValue('2026-12-24');
+  });
+
+  test('resolves explicit aria-invalid override and retains native required/disabled semantics', async ({ page }) => {
+    const invalidOverride = page.getByLabel('Explicitly valid override');
+    await expect(invalidOverride).toHaveAttribute('aria-invalid', 'false');
+    await expect(invalidOverride).toHaveAttribute('required', '');
+    await expect(invalidOverride.locator('xpath=..')).toHaveClass(/input-wrapper--invalid/);
+
+    const disabled = page.getByLabel('Disabled field');
+    await expect(disabled).toBeDisabled();
+  });
+
+  test('keeps adornments in the documented order and hides decorative icons from assistive technology', async ({ page }) => {
+    const root = page.getByTestId('base-input-primary-root');
+    const order = await root.locator(':scope > *').evaluateAll((nodes) =>
+      nodes.map((node) => node.getAttribute('data-testid') || node.tagName.toLowerCase()),
+    );
+    expect(order).toEqual([
+      'base-input-prefix',
+      'base-input-leading',
+      'base-input-control',
+      'base-input-trailing',
+      'base-input-suffix',
+    ]);
+    await expect(root.getByTestId('base-input-leading')).toHaveAttribute('aria-hidden', 'true');
+    await expect(root.getByTestId('base-input-trailing')).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  test('exposes programmatic focus and maintains a 44px mobile touch target', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    const input = page.getByRole('textbox', { name: 'BaseInput primary field' });
+    await page.getByTestId('base-input-focus').click();
+    await expect(input).toBeFocused();
+    const box = await page.getByTestId('base-input-primary-root').boundingBox();
+    expect(box?.height).toBeGreaterThanOrEqual(44);
+  });
+
+  test('has no serious or critical axe violations in its isolated fixture region', async ({ page }) => {
+    const results = await new AxeBuilder({ page })
+      .include('[data-testid="base-input-section"]')
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    const serious = results.violations.filter((item) => ['serious', 'critical'].includes(item.impact));
+    expect(serious.map((item) => ({ id: item.id, help: item.help, nodes: item.nodes.map((node) => node.target) }))).toEqual([]);
+  });
+});
+
