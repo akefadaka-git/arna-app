@@ -279,7 +279,7 @@ function handleClick(event: MouseEvent): void {
 @media (max-width: 639px) {
   .arna-button--sm,
   .arna-button--md,
-  .arna-button--icon-only {
+  .arna-button.arna-button--icon-only {
     min-height: 44px;
   }
 
