@@ -544,8 +544,8 @@ const submitLabel = computed<string>(() =>
         :error="paymentError"
         :disabled="isSubmitting"
         required
-  v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
->
+        v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
+      >
         <BaseSelect
           v-model="paymentId"
           :options="paymentOptions"
@@ -566,8 +566,8 @@ const submitLabel = computed<string>(() =>
         :error="obligationError"
         :disabled="isSubmitting"
         required
-  v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
->
+        v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
+      >
         <BaseSelect
           v-model="obligationId"
           :options="obligationOptions"
