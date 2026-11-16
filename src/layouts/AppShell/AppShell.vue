@@ -550,7 +550,12 @@ const activeLabels = computed(() => {
 
 const activeNavItems = computed(() => {
   if (localeStore.locale !== 'en') return props.navItems;
-  return localizeNavItems(props.navItems, props.navItems.some((item) => item.id === 'portal-home') ? 'portal' : 'workspace');
+  const surface = props.navItems.some((item) => item.id === 'portal-home')
+    ? 'portal'
+    : props.navItems.some((item) => item.id === 'audit-security-center')
+      ? 'admin'
+      : 'workspace';
+  return localizeNavItems(props.navItems, surface);
 });
 
 const activeUserMenuItems = computed(() =>
