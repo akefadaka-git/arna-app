@@ -178,13 +178,13 @@ function handleClick(event: MouseEvent): void {
       data-testid="base-button-spinner"
     />
 
-    <!-- Icon-only mode retains its icon except while the spinner is shown. -->
-    <slot v-if="iconOnly && !loading" />
+    <!-- Preserve the icon slot while loading so intrinsic dimensions stay stable. -->
+    <slot v-if="iconOnly" />
 
     <!-- The visible label remains mounted during loading. -->
     <template v-else-if="!iconOnly">
       <span
-        v-if="$slots.leading && !loading"
+        v-if="$slots.leading"
         class="arna-button__leading"
         aria-hidden="true"
         data-testid="base-button-leading"
@@ -200,7 +200,7 @@ function handleClick(event: MouseEvent): void {
       </span>
 
       <span
-        v-if="$slots.trailing && !loading"
+        v-if="$slots.trailing"
         class="arna-button__trailing"
         aria-hidden="true"
         data-testid="base-button-trailing"
