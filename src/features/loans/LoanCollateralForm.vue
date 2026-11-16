@@ -782,12 +782,16 @@ const submitLabel = computed<string>(() =>
         :error="typeError"
         :disabled="isSubmitting"
         required
-      >
+  v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
+>
         <BaseSelect
-          id="loan-collateral-type"
           v-model="collateralType"
           :options="typeOptions"
-          :disabled="isSubmitting"
+          :id="fieldId"
+          :aria-describedby="describedBy"
+          :invalid="fieldInvalid"
+          :required="fieldRequired"
+          :disabled="fieldDisabled"
           data-testid="loan-collateral-form-type"
         />
       </FormField>
