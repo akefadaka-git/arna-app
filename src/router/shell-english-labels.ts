@@ -34,6 +34,12 @@ const workspaceLabels: Readonly<Record<string, string>> = {
   governance: 'Governance',
 };
 
+const adminLabels: Readonly<Record<string, string>> = {
+  dashboard: 'Dashboard',
+  'audit-security-center': 'Audit and security',
+  'public-content-review': 'Public content review',
+};
+
 const portalLabels: Readonly<Record<string, string>> = {
   'portal-home': 'Home',
   'my-holdings': 'My holdings',
@@ -48,8 +54,8 @@ const userMenuLabels: Readonly<Record<string, string>> = {
 };
 
 /** Return translated copies without mutating the canonical Amharic arrays. */
-export function localizeNavItems(items: ReadonlyArray<NavItem>, surface: 'workspace' | 'portal'): ReadonlyArray<NavItem> {
-  const labels = surface === 'portal' ? portalLabels : workspaceLabels;
+export function localizeNavItems(items: ReadonlyArray<NavItem>, surface: 'workspace' | 'portal' | 'admin'): ReadonlyArray<NavItem> {
+  const labels = surface === 'portal' ? portalLabels : surface === 'admin' ? adminLabels : workspaceLabels;
   return items.map((item) => ({ ...item, label: labels[item.id] ?? item.label }));
 }
 
