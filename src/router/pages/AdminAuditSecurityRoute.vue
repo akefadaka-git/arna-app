@@ -216,29 +216,29 @@ onMounted(load);
 </template>
 
 <style scoped>
-.audit-security-admin { display:flex; flex-direction:column; gap:var(--mases-space-6); width:100%; min-width:0; }
-.audit-security-admin__toolbar,.audit-security-admin__tabs,.audit-security-admin__filters,.audit-security-admin__pagination { display:flex; align-items:center; justify-content:space-between; gap:var(--mases-space-3); flex-wrap:wrap; }
-.audit-security-admin button,.audit-security-admin input,.audit-security-admin select,.audit-security-admin textarea { border:1px solid var(--mases-color-border-default); border-radius:var(--mases-radius-md); padding:var(--mases-space-2) var(--mases-space-3); color:var(--mases-color-text-primary); background:var(--mases-color-surface-raised); }
+.audit-security-admin { display:flex; flex-direction:column; gap:var(--arna-space-6); width:100%; min-width:0; }
+.audit-security-admin__toolbar,.audit-security-admin__tabs,.audit-security-admin__filters,.audit-security-admin__pagination { display:flex; align-items:center; justify-content:space-between; gap:var(--arna-space-3); flex-wrap:wrap; }
+.audit-security-admin button,.audit-security-admin input,.audit-security-admin select,.audit-security-admin textarea { border:1px solid var(--arna-color-border-default); border-radius:var(--arna-radius-md); padding:var(--arna-space-2) var(--arna-space-3); color:var(--arna-color-text-primary); background:var(--arna-color-surface-raised); }
 .audit-security-admin button { cursor:pointer; }
 .audit-security-admin button:disabled { opacity:.55; cursor:wait; }
-.audit-security-admin__tabs button.active,.audit-security-admin__row.active { border-color:var(--mases-color-action-primary); background:var(--mases-color-state-selected); }
-.audit-security-admin__filters { justify-content:flex-start; margin-block:var(--mases-space-4); }
+.audit-security-admin__tabs button.active,.audit-security-admin__row.active { border-color:var(--arna-color-action-primary); background:var(--arna-color-state-selected); }
+.audit-security-admin__filters { justify-content:flex-start; margin-block:var(--arna-space-4); }
 .audit-security-admin__filters input { flex:1 1 260px; min-width:0; }
-.audit-security-admin__layout { display:grid; grid-template-columns:minmax(240px,.8fr) minmax(0,1.5fr); gap:var(--mases-space-4); margin-top:var(--mases-space-3); }
-.audit-security-admin__list { display:flex; flex-direction:column; gap:var(--mases-space-2); min-width:0; }
-.audit-security-admin__row { display:flex; flex-direction:column; align-items:flex-start; gap:var(--mases-space-1); text-align:start; overflow-wrap:anywhere; }
-.audit-security-admin__row span,.audit-security-admin__row small,.audit-security-admin__hint,.audit-security-admin__empty { color:var(--mases-color-text-secondary); font-size:var(--mases-font-size-body-sm); }
-.audit-security-admin__detail { min-width:0; padding:var(--mases-space-4); border:1px solid var(--mases-color-border-default); border-radius:var(--mases-radius-lg); }
+.audit-security-admin__layout { display:grid; grid-template-columns:minmax(240px,.8fr) minmax(0,1.5fr); gap:var(--arna-space-4); margin-top:var(--arna-space-3); }
+.audit-security-admin__list { display:flex; flex-direction:column; gap:var(--arna-space-2); min-width:0; }
+.audit-security-admin__row { display:flex; flex-direction:column; align-items:flex-start; gap:var(--arna-space-1); text-align:start; overflow-wrap:anywhere; }
+.audit-security-admin__row span,.audit-security-admin__row small,.audit-security-admin__hint,.audit-security-admin__empty { color:var(--arna-color-text-secondary); font-size:var(--arna-font-size-body-sm); }
+.audit-security-admin__detail { min-width:0; padding:var(--arna-space-4); border:1px solid var(--arna-color-border-default); border-radius:var(--arna-radius-lg); }
 .audit-security-admin__detail h2 { margin-top:0; overflow-wrap:anywhere; }
-.audit-security-admin__detail dl { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:var(--mases-space-3); }
-.audit-security-admin__detail dt { color:var(--mases-color-text-secondary); font-size:var(--mases-font-size-caption); }
+.audit-security-admin__detail dl { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:var(--arna-space-3); }
+.audit-security-admin__detail dt { color:var(--arna-color-text-secondary); font-size:var(--arna-font-size-caption); }
 .audit-security-admin__detail dd { margin:0; overflow-wrap:anywhere; }
-.audit-security-admin pre { max-width:100%; overflow:auto; white-space:pre-wrap; overflow-wrap:anywhere; padding:var(--mases-space-3); background:var(--mases-color-surface-subtle); border-radius:var(--mases-radius-md); font-size:var(--mases-font-size-body-sm); }
-.audit-security-admin__resolve { display:flex; flex-direction:column; gap:var(--mases-space-2); margin-top:var(--mases-space-4); }
+.audit-security-admin pre { max-width:100%; overflow:auto; white-space:pre-wrap; overflow-wrap:anywhere; padding:var(--arna-space-3); background:var(--arna-color-surface-subtle); border-radius:var(--arna-radius-md); font-size:var(--arna-font-size-body-sm); }
+.audit-security-admin__resolve { display:flex; flex-direction:column; gap:var(--arna-space-2); margin-top:var(--arna-space-4); }
 .audit-security-admin__resolve textarea { width:100%; resize:vertical; }
-.audit-security-admin__message.error { color:var(--mases-color-text-danger); }
-.audit-security-admin__message.success { color:var(--mases-color-text-success); }
-.audit-security-admin__pagination { margin-top:var(--mases-space-4); color:var(--mases-color-text-secondary); font-size:var(--mases-font-size-body-sm); }
+.audit-security-admin__message.error { color:var(--arna-color-text-danger); }
+.audit-security-admin__message.success { color:var(--arna-color-text-success); }
+.audit-security-admin__pagination { margin-top:var(--arna-space-4); color:var(--arna-color-text-secondary); font-size:var(--arna-font-size-body-sm); }
 .audit-security-admin .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 @media(max-width:760px) { .audit-security-admin__layout { grid-template-columns:minmax(0,1fr); } }
 </style>

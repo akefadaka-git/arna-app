@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 import { computed, onMounted, ref } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import PageHeader from '@/components/patterns/PageHeader';
@@ -90,8 +91,8 @@ onMounted(async () => {
           <div><dt>የአባልነት ሁኔታ</dt><dd>{{ person.status_label }}</dd></div>
           <div><dt>የሥራ ቦታ / Position</dt><dd>{{ person.position?.display_name || '—' }}</dd></div>
           <div><dt>የሥራ ዘመን / Term</dt><dd>{{ person.term?.display_label || '—' }}</dd></div>
-          <div><dt>የጀመረበት ቀን</dt><dd>{{ person.start_date_display || '—' }}</dd></div>
-          <div><dt>የሚያበቃበት ቀን</dt><dd>{{ person.end_date_display || '—' }}</dd></div>
+          <div><dt>የጀመረበት ቀን</dt><dd>{{ formatCalendarDate(person.start_date) }}</dd></div>
+          <div><dt>የሚያበቃበት ቀን</dt><dd>{{ formatCalendarDate(person.end_date) }}</dd></div>
           <div><dt>በስልጣን መሠረት</dt><dd>{{ person.is_ex_officio ? 'አዎ / Yes' : 'አይ / No' }}</dd></div>
           <div><dt>የተያያዘ የቀጠሮ ርዕስ</dt><dd>{{ person.appointment?.display_label || '—' }}</dd></div>
           <div><dt>የማስታወሻ መረጃ</dt><dd>{{ person.notes_am || person.notes_en || '—' }}</dd></div>
@@ -103,8 +104,8 @@ onMounted(async () => {
         <p>{{ detail.body.display_name }}</p>
         <p v-if="detail.currentTerm">
           {{ detail.currentTerm.display_label }}
-          <span v-if="detail.currentTerm.effective_from_display"> · {{ detail.currentTerm.effective_from_display }}</span>
-          <span v-if="detail.currentTerm.effective_until_display"> – {{ detail.currentTerm.effective_until_display }}</span>
+          <span v-if="detail.currentTerm.effective_from"> · {{ formatCalendarDate(detail.currentTerm.effective_from) }}</span>
+          <span v-if="detail.currentTerm.effective_until"> – {{ formatCalendarDate(detail.currentTerm.effective_until) }}</span>
         </p>
         <RouterLink :to="`/governance/bodies/${detail.body.id}`">
           የአካሉን ዝርዝር ይመልከቱ / View governance body
@@ -121,15 +122,15 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.people-profile { display: grid; gap: var(--mases-space-4); min-width: 0; }
+.people-profile { display: grid; gap: var(--arna-space-4); min-width: 0; }
 .people-profile__hero { display: flex; align-items: center; gap: 1rem; }
-.people-profile__avatar { display: grid; place-items: center; width: 4rem; height: 4rem; flex: 0 0 4rem; border-radius: 50%; background: var(--mases-color-surface-raised); color: var(--mases-color-text-brand); font-size: 1.5rem; font-weight: 700; }
+.people-profile__avatar { display: grid; place-items: center; width: 4rem; height: 4rem; flex: 0 0 4rem; border-radius: 50%; background: var(--arna-color-surface-raised); color: var(--arna-color-text-brand); font-size: 1.5rem; font-weight: 700; }
 .people-profile h2 { margin-top: 0; }
 .people-profile__hero p { margin: .25rem 0; overflow-wrap: anywhere; }
 .people-profile__facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
 .people-profile__facts div { min-width: 0; }
-.people-profile__facts dt { color: var(--mases-color-text-secondary); font-size: .875rem; }
+.people-profile__facts dt { color: var(--arna-color-text-secondary); font-size: .875rem; }
 .people-profile__facts dd { margin: .25rem 0 0; overflow-wrap: anywhere; }
-.people-profile__notice { color: var(--mases-color-text-secondary); font-size: .875rem; line-height: 1.65; }
+.people-profile__notice { color: var(--arna-color-text-secondary); font-size: .875rem; line-height: 1.65; }
 @media (max-width: 640px) { .people-profile__facts { grid-template-columns: 1fr; } .people-profile__hero { align-items: flex-start; } }
 </style>

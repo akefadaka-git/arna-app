@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import test from 'node:test';
 
 const read = (path) => readFileSync(path, 'utf8');
@@ -25,41 +25,41 @@ test('all four application entry points import the shared theme layer', () => {
 
 test('dark theme maps every shared semantic color family', () => {
   const requiredRoles = [
-    '--mases-color-surface-page', '--mases-color-surface-raised',
-    '--mases-color-surface-subtle', '--mases-color-surface-overlay',
-    '--mases-color-surface-sunken', '--mases-color-surface-inverse',
-    '--mases-color-surface-inverse-raised', '--mases-color-surface-brand',
-    '--mases-color-surface-accent', '--mases-color-surface-disabled',
-    '--mases-color-surface-success', '--mases-color-surface-warning',
-    '--mases-color-surface-info', '--mases-color-surface-danger',
-    '--mases-color-text-primary', '--mases-color-text-secondary',
-    '--mases-color-text-tertiary', '--mases-color-text-muted',
-    '--mases-color-text-inverse', '--mases-color-text-inverse-secondary',
-    '--mases-color-text-brand', '--mases-color-text-accent',
-    '--mases-color-text-success', '--mases-color-text-warning',
-    '--mases-color-text-info', '--mases-color-text-danger',
-    '--mases-color-text-disabled', '--mases-color-border-default',
-    '--mases-color-border-strong', '--mases-color-border-subtle',
-    '--mases-color-border-brand', '--mases-color-border-inverse',
-    '--mases-color-border-success', '--mases-color-border-warning',
-    '--mases-color-border-info', '--mases-color-border-danger',
-    '--mases-color-border-focus', '--mases-color-action-primary',
-    '--mases-color-action-primary-hover', '--mases-color-action-primary-active',
-    '--mases-color-action-primary-disabled', '--mases-color-action-secondary',
-    '--mases-color-action-secondary-hover', '--mases-color-action-secondary-active',
-    '--mases-color-action-ghost', '--mases-color-action-ghost-hover',
-    '--mases-color-action-danger', '--mases-color-action-danger-hover',
-    '--mases-color-action-link', '--mases-color-action-link-hover',
-    '--mases-color-icon-primary', '--mases-color-icon-secondary',
-    '--mases-color-icon-inverse', '--mases-color-icon-brand',
-    '--mases-color-icon-accent', '--mases-color-icon-success',
-    '--mases-color-icon-warning', '--mases-color-icon-info',
-    '--mases-color-icon-danger', '--mases-color-state-hover',
-    '--mases-color-state-selected', '--mases-color-state-selected-accent',
-    '--mases-color-state-disabled-bg', '--mases-color-state-disabled-text',
-    '--mases-color-state-focus-ring', '--mases-color-state-focus-ring-inverse',
-    '--mases-color-overlay-scrim', '--mases-color-surface-auth-backdrop',
-    '--mases-color-text-auth-attribution',
+    '--arna-color-surface-page', '--arna-color-surface-raised',
+    '--arna-color-surface-subtle', '--arna-color-surface-overlay',
+    '--arna-color-surface-sunken', '--arna-color-surface-inverse',
+    '--arna-color-surface-inverse-raised', '--arna-color-surface-brand',
+    '--arna-color-surface-accent', '--arna-color-surface-disabled',
+    '--arna-color-surface-success', '--arna-color-surface-warning',
+    '--arna-color-surface-info', '--arna-color-surface-danger',
+    '--arna-color-text-primary', '--arna-color-text-secondary',
+    '--arna-color-text-tertiary', '--arna-color-text-muted',
+    '--arna-color-text-inverse', '--arna-color-text-inverse-secondary',
+    '--arna-color-text-brand', '--arna-color-text-accent',
+    '--arna-color-text-success', '--arna-color-text-warning',
+    '--arna-color-text-info', '--arna-color-text-danger',
+    '--arna-color-text-disabled', '--arna-color-border-default',
+    '--arna-color-border-strong', '--arna-color-border-subtle',
+    '--arna-color-border-brand', '--arna-color-border-inverse',
+    '--arna-color-border-success', '--arna-color-border-warning',
+    '--arna-color-border-info', '--arna-color-border-danger',
+    '--arna-color-border-focus', '--arna-color-action-primary',
+    '--arna-color-action-primary-hover', '--arna-color-action-primary-active',
+    '--arna-color-action-primary-disabled', '--arna-color-action-secondary',
+    '--arna-color-action-secondary-hover', '--arna-color-action-secondary-active',
+    '--arna-color-action-ghost', '--arna-color-action-ghost-hover',
+    '--arna-color-action-danger', '--arna-color-action-danger-hover',
+    '--arna-color-action-link', '--arna-color-action-link-hover',
+    '--arna-color-icon-primary', '--arna-color-icon-secondary',
+    '--arna-color-icon-inverse', '--arna-color-icon-brand',
+    '--arna-color-icon-accent', '--arna-color-icon-success',
+    '--arna-color-icon-warning', '--arna-color-icon-info',
+    '--arna-color-icon-danger', '--arna-color-state-hover',
+    '--arna-color-state-selected', '--arna-color-state-selected-accent',
+    '--arna-color-state-disabled-bg', '--arna-color-state-disabled-text',
+    '--arna-color-state-focus-ring', '--arna-color-state-focus-ring-inverse',
+    '--arna-color-overlay-scrim', '--arna-color-surface-auth-backdrop',
+    '--arna-color-text-auth-attribution',
   ];
   for (const role of requiredRoles) {
     assert.ok(tokens.includes(role), `frozen token substrate must declare ${role}`);
@@ -76,19 +76,21 @@ test('system preference and explicit light/dark overrides are supported', () => 
 });
 
 test('English and Amharic typography use their approved font stacks and scales', () => {
-  assert.ok(tokens.includes('--mases-font-family-am:     "Noto Sans Ethiopic"'));
-  assert.ok(tokens.includes('--mases-font-family-en:     "Inter"'));
+  assert.ok(tokens.includes('--arna-font-family-am:     "Noto Sans Ethiopic"'));
+  assert.ok(tokens.includes('--arna-font-family-en:     "Inter"'));
   assert.ok(tokens.includes('html[lang="am"]'));
   assert.ok(theme.includes('html[lang="am"] body'));
   assert.ok(theme.includes('html[lang="en"] body'));
-  assert.ok(theme.includes('--mases-font-size-body'));
-  assert.ok(theme.includes('--mases-line-height-body'));
+  assert.ok(theme.includes('--arna-font-size-body'));
+  assert.ok(theme.includes('--arna-line-height-body'));
 });
 
 test('shared button, form, card, table and dialog contracts retain keyboard and AT semantics', () => {
   assert.ok(button.includes(':disabled="isDisabled"'));
   assert.ok(button.includes('aria-busy'));
-  assert.ok(button.includes('iconOnly=true requires the ariaLabel prop'));
+  assert.ok(button.includes('iconOnly=true requires ariaLabel or ariaLabelledBy'));
+  assert.ok(button.includes(':aria-labelledby="ariaLabelledBy"'));
+  assert.ok(button.includes('!props.ariaLabel && !props.ariaLabelledBy'));
   assert.ok(field.includes('aria-describedby'));
   assert.ok(field.includes('aria-live="polite"'));
   assert.ok(card.includes('role="button"'));
@@ -122,7 +124,7 @@ test('theme preference is persisted, system-aware, and safely applied', () => {
   assert.ok(themePreference.includes('window.localStorage.getItem(STORAGE_KEY)'));
   assert.ok(themePreference.includes('window.localStorage.setItem(STORAGE_KEY, preference)'));
   assert.ok(themePreference.includes('catch'));
-  assert.ok(themeControl.includes('aria-label="የማሳያ ገጽታ / Display theme"'));
+  assert.match(themeControl, /<label class="theme-preference-control">[\s\S]*<span class="theme-preference-control__label">ገጽታ \/ Theme<\/span>[\s\S]*<select/);
   assert.ok(themeControl.includes('value="system"'));
   assert.ok(themeControl.includes('value="light"'));
   assert.ok(themeControl.includes('value="dark"'));
@@ -154,4 +156,87 @@ test('all application entry documents default to Amharic and runtime locale upda
   assert.ok(appRoot.includes('document.documentElement.lang = value'));
   assert.ok(theme.includes('html[lang="am"] body'));
   assert.ok(theme.includes('html[lang="en"] body'));
+});
+
+
+test('active application sources use only the ARNA CSS token namespace', () => {
+  const legacyPrefix = ['--', 'mases', '-'].join('');
+  const roots = ['src', 'tests', 'workspace-entry', 'portal-entry', 'admin-entry', 'public-entry'];
+  const collect = (directory) => readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const path = `${directory}/${entry.name}`;
+    if (entry.isDirectory()) return collect(path);
+    return /\.(?:vue|css|ts|tsx|js|mjs|html)$/.test(entry.name) ? [path] : [];
+  });
+  const legacyFiles = roots.flatMap(collect).filter((path) => read(path).includes(legacyPrefix));
+  assert.deepEqual(legacyFiles, [], 'active source and test files must not retain legacy CSS token references');
+  assert.match(tokens, /--arna-color-surface-page:/);
+  assert.match(theme, /--arna-color-surface-page:/);
+});
+
+
+test('every primitive component has a stable folder-level export', () => {
+  const primitiveRoot = 'src/components/primitives';
+  const directories = readdirSync(primitiveRoot, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name);
+  assert.ok(directories.length > 0, 'primitive component inventory must not be empty');
+  for (const name of directories) {
+    const files = readdirSync(`${primitiveRoot}/${name}`);
+    assert.ok(files.includes(`${name}.vue`), `${name} must provide its component SFC`);
+    assert.ok(files.includes('index.ts'), `${name} must provide a stable folder-level export`);
+  }
+});
+
+test('shared component styles use semantic color tokens instead of hardcoded color literals', () => {
+  const roots = [
+    'src/components/primitives',
+    'src/components/composites',
+    'src/components/patterns',
+  ];
+  const collectVueFiles = (directory) => readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const path = `${directory}/${entry.name}`;
+    if (entry.isDirectory()) return collectVueFiles(path);
+    return entry.name.endsWith('.vue') ? [path] : [];
+  });
+  const violations = [];
+  for (const path of roots.flatMap(collectVueFiles)) {
+    const source = read(path);
+    const styles = [...source.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/gi)]
+      .map((match) => match[1].replace(/\/\*[\s\S]*?\*\//g, ''));
+    for (const style of styles) {
+      if (/#(?:[0-9a-f]{3,8})\b|\b(?:rgba?|hsla?)\s*\(/i.test(style)) {
+        violations.push(path);
+        break;
+      }
+    }
+  }
+  assert.deepEqual(violations, [],
+    'shared component styles must use semantic tokens; put raw palette values in the token/theme layer');
+});
+
+
+test('catalogue-required orphan primitives are adopted at real consumer boundaries', () => {
+  const shareholderForm = read('src/features/shareholders/ShareholderForm/ShareholderForm.vue');
+  const accessDenied = read('src/components/patterns/AccessDeniedPage/AccessDeniedPage.vue');
+  const appHeader = read('src/layouts/AppShell/AppHeader/AppHeader.vue');
+  const maintenanceBanner = read('src/layouts/AppShell/MaintenanceBanner/MaintenanceBanner.vue');
+
+  assert.ok(shareholderForm.includes("import BaseDivider from '@/components/primitives/BaseDivider'"));
+  assert.ok(shareholderForm.includes("import BaseRadio from '@/components/primitives/BaseRadio'"));
+  assert.ok(shareholderForm.includes('name="shareholder-type"'));
+  assert.ok(shareholderForm.includes('<legend class="shareholder-form__type-legend">'));
+  assert.ok(shareholderForm.includes('shareholder-form-type-divider'));
+  assert.ok(shareholderForm.includes('shareholder-form-name-divider'));
+  assert.ok(shareholderForm.includes('shareholder-form-access-divider'));
+
+  assert.ok(accessDenied.includes("import ErrorSupportHint from '../../primitives/ErrorSupportHint'"));
+  assert.ok(accessDenied.includes('<ErrorSupportHint'));
+  assert.ok(accessDenied.includes("variant=\"warning\""));
+
+  assert.ok(appHeader.includes("import IconButton from '@/components/primitives/IconButton'"));
+  assert.ok(appHeader.includes('<IconButton'));
+  assert.ok(appHeader.includes('icon="menu"'));
+
+  assert.ok(maintenanceBanner.includes("import LinkButton from '@/components/primitives/LinkButton'"));
+  assert.ok(maintenanceBanner.includes('<LinkButton'));
 });

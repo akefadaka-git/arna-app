@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/BaseAvatar/BaseAvatar.vue
  Layer:     1 (Primitives)
- Version:   1.0.0
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.18
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -23,8 +23,8 @@
    3. Fallback    — a generic user icon, when neither image nor
                     initials is available.
 
- The accessible name is ALWAYS the value of the required `alt` prop,
- regardless of which branch renders. See the file header comment
+ The accessible name is provided by `alt`, or by `ariaLabelledBy` when supplied,
+ regardless of which branch renders. `ariaLabelledBy` takes precedence. See the file header comment
  §"The `alt` prop is required".
 
  -----------------------------------------------------------------------------
@@ -82,10 +82,10 @@
  -----------------------------------------------------------------------------
  Sizes (per Component Catalog §2.18):
 
-     xs  = 24px  =  --mases-icon-lg
-     sm  = 32px  =  --mases-icon-xl
-     md  = 40px  =  --mases-space-10
-     lg  = 56px  =  calc(--mases-space-12 + --mases-space-2)
+     xs  = 24px  =  --arna-icon-lg
+     sm  = 32px  =  --arna-icon-xl
+     md  = 40px  =  --arna-space-10
+     lg  = 56px  =  calc(--arna-space-12 + --arna-space-2)
 
  The 56px value is derived from two spacing tokens on the 4px scale;
  no arbitrary literal pixel appears in the CSS.
@@ -178,6 +178,12 @@ interface Props {
    */
   alt: string;
 
+  /**
+   * ID reference(s) of element(s) that provide the accessible name.
+   * When supplied, takes precedence over `alt`.
+   */
+  ariaLabelledBy?: string;
+
   /** Size. Defaults to 'md'. */
   size?: AvatarSize;
 
@@ -188,6 +194,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   src: undefined,
   initials: undefined,
+  ariaLabelledBy: undefined,
   size: 'md',
   shape: 'circle',
 });
@@ -265,7 +272,8 @@ function onImageError(): void {
   <img
     v-if="branch === 'image'"
     :src="src"
-    :alt="alt"
+    :alt="ariaLabelledBy ? '' : alt"
+    :aria-labelledby="ariaLabelledBy"
     :class="classes"
     loading="lazy"
     decoding="async"
@@ -285,7 +293,8 @@ function onImageError(): void {
   <span
     v-else-if="branch === 'initials'"
     role="img"
-    :aria-label="alt"
+    :aria-label="ariaLabelledBy ? undefined : alt"
+    :aria-labelledby="ariaLabelledBy"
     :class="classes"
     data-testid="base-avatar-root"
     data-avatar-branch="initials"
@@ -336,8 +345,8 @@ function onImageError(): void {
   flex-shrink: 0;
   overflow: hidden;
   vertical-align: middle;
-  background-color: var(--mases-color-surface-sunken);
-  color: var(--mases-color-text-secondary);
+  background-color: var(--arna-color-surface-sunken);
+  color: var(--arna-color-text-secondary);
   user-select: none;
 }
 
@@ -356,11 +365,11 @@ img.avatar {
    Shape variants
    ============================================================================ */
 .avatar--circle {
-  border-radius: var(--mases-radius-full);
+  border-radius: var(--arna-radius-full);
 }
 
 .avatar--rounded {
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
 }
 
 /* ============================================================================
@@ -370,30 +379,30 @@ img.avatar {
    the token derivations.
    ============================================================================ */
 .avatar--xs {
-  width: var(--mases-icon-lg);
-  height: var(--mases-icon-lg);
-  font-size: var(--mases-font-size-caption);
+  width: var(--arna-icon-lg);
+  height: var(--arna-icon-lg);
+  font-size: var(--arna-font-size-caption);
   line-height: 1;
 }
 
 .avatar--sm {
-  width: var(--mases-icon-xl);
-  height: var(--mases-icon-xl);
-  font-size: var(--mases-font-size-body-sm);
+  width: var(--arna-icon-xl);
+  height: var(--arna-icon-xl);
+  font-size: var(--arna-font-size-body-sm);
   line-height: 1;
 }
 
 .avatar--md {
-  width: var(--mases-space-10);
-  height: var(--mases-space-10);
-  font-size: var(--mases-font-size-body);
+  width: var(--arna-space-10);
+  height: var(--arna-space-10);
+  font-size: var(--arna-font-size-body);
   line-height: 1;
 }
 
 .avatar--lg {
-  width: calc(var(--mases-space-12) + var(--mases-space-2));
-  height: calc(var(--mases-space-12) + var(--mases-space-2));
-  font-size: var(--mases-font-size-body-lg);
+  width: calc(var(--arna-space-12) + var(--arna-space-2));
+  height: calc(var(--arna-space-12) + var(--arna-space-2));
+  font-size: var(--arna-font-size-body-lg);
   line-height: 1;
 }
 
@@ -406,10 +415,10 @@ img.avatar {
   justify-content: center;
   /* Font weight is set to medium so that the initials read as a
      deliberate label rather than as a text fallback. */
-  font-weight: var(--mases-font-weight-medium);
+  font-weight: var(--arna-font-weight-medium);
   /* Letter spacing normal; Amharic never uses tracking (Design System
      §3.5 B4). */
-  letter-spacing: var(--mases-letter-spacing-normal);
+  letter-spacing: var(--arna-letter-spacing-normal);
   /* No text-transform; see the file header comment §"The `initials`
      prop" for the rationale. */
 }

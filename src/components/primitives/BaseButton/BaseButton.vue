@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/BaseButton/BaseButton.vue
  Layer:     1 (Primitives)
- Version:   1.0.0
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.1
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -26,16 +26,16 @@
 
  The component catalog lists the following as its token dependencies:
 
-   --mases-color-action-primary{,-hover,-active,-disabled}
-   --mases-color-action-secondary{,-hover,-active}
-   --mases-color-action-ghost{,-hover}
-   --mases-color-action-danger{,-hover}
-   --mases-color-action-link{,-hover}
-   --mases-radius-md
-   --mases-space-{2,3,4,6}
-   --mases-duration-fast
-   --mases-easing-standard
-   --mases-font-weight-medium
+   --arna-color-action-primary{,-hover,-active,-disabled}
+   --arna-color-action-secondary{,-hover,-active}
+   --arna-color-action-ghost{,-hover}
+   --arna-color-action-danger{,-hover}
+   --arna-color-action-link{,-hover}
+   --arna-radius-md
+   --arna-space-{2,3,4,6}
+   --arna-duration-fast
+   --arna-easing-standard
+   --arna-font-weight-medium
 
  Additional tokens referenced for accessibility and disabled treatment
  are also Tier 2 (text-inverse, text-primary, text-disabled,
@@ -47,8 +47,8 @@
    - Renders a native <button> element.
    - Uses the native disabled attribute (not aria-disabled).
    - loading sets aria-busy="true" and disables the button.
-   - iconOnly requires an ariaLabel prop; a development-time warning is
-     emitted if it is missing.
+   - iconOnly requires ariaLabel or ariaLabelledBy; a development-time
+     warning is emitted if both are missing.
    - Focus ring appears only on :focus-visible (keyboard focus).
    - Loading spinner respects prefers-reduced-motion (slows, does not
      stop) per Design System §11.5.
@@ -95,6 +95,9 @@ interface Props {
    * assistive technology (the visible label remains the default name).
    */
   ariaLabel?: string;
+
+  /** ID of the element that labels the button for assistive technology. */
+  ariaLabelledBy?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -106,6 +109,7 @@ const props = withDefaults(defineProps<Props>(), {
   block: false,
   iconOnly: false,
   ariaLabel: undefined,
+  ariaLabelledBy: undefined,
 });
 
 const emit = defineEmits<{
@@ -116,14 +120,12 @@ const emit = defineEmits<{
 // imported so future revisions can filter or forward them explicitly.
 void useAttrs();
 
-// Development-time guard: an icon-only button without an aria-label has
-// no accessible name. Warn loudly in dev; in production, we render
-// aria-label="undefined" as an empty string, which browsers treat as
-// "no name".
-if (import.meta.env.DEV && props.iconOnly && !props.ariaLabel) {
+// Development-time guard: an icon-only button must have an explicit
+// accessible name, either directly or through an associated label.
+if (import.meta.env.DEV && props.iconOnly && !props.ariaLabel && !props.ariaLabelledBy) {
   // eslint-disable-next-line no-console
   console.warn(
-    '[BaseButton] iconOnly=true requires the ariaLabel prop. ' +
+    '[BaseButton] iconOnly=true requires ariaLabel or ariaLabelledBy. ' +
       'The rendered button will have no accessible name.',
   );
 }
@@ -141,12 +143,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   },
 ]);
 
-const resolvedAriaLabel = computed<string | undefined>(() => {
-  if (props.ariaLabel !== undefined) {
-    return props.ariaLabel;
-  }
-  return undefined;
-});
+const resolvedAriaLabel = computed<string | undefined>(() => props.ariaLabel);
 
 function handleClick(event: MouseEvent): void {
   if (isDisabled.value) {
@@ -168,6 +165,7 @@ function handleClick(event: MouseEvent): void {
     :disabled="isDisabled"
     :aria-busy="loading ? 'true' : undefined"
     :aria-label="resolvedAriaLabel"
+    :aria-labelledby="ariaLabelledBy"
     data-testid="base-button-root"
     @click="handleClick"
   >
@@ -231,9 +229,9 @@ function handleClick(event: MouseEvent): void {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--mases-space-2);
-  font-family: var(--mases-font-family-am);
-  font-weight: var(--mases-font-weight-medium);
+  gap: var(--arna-space-2);
+  font-family: var(--arna-font-family-am);
+  font-weight: var(--arna-font-weight-medium);
   line-height: 1;
   text-align: center;
   text-decoration: none;
@@ -241,45 +239,45 @@ function handleClick(event: MouseEvent): void {
   user-select: none;
   vertical-align: middle;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    border-color var(--mases-duration-fast) var(--mases-easing-standard),
-    color var(--mases-duration-fast) var(--mases-easing-standard),
-    box-shadow var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    border-color var(--arna-duration-fast) var(--arna-easing-standard),
+    color var(--arna-duration-fast) var(--arna-easing-standard),
+    box-shadow var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .mases-button:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
    Sizes
    ============================================================================ */
 .mases-button--sm {
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-3);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-3);
   min-height: 32px;
-  border-radius: var(--mases-radius-sm);
+  border-radius: var(--arna-radius-sm);
 }
 
 .mases-button--md {
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-4);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-4);
   min-height: 40px;
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
 }
 
 .mases-button--lg {
-  font-size: var(--mases-font-size-body-lg);
-  line-height: var(--mases-line-height-body-lg);
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-6);
+  font-size: var(--arna-font-size-body-lg);
+  line-height: var(--arna-line-height-body-lg);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-6);
   min-height: 48px;
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
 }
 
 /* Mobile touch-target enforcement (Design System §6.5). */
@@ -298,110 +296,110 @@ function handleClick(event: MouseEvent): void {
 }
 
 .mases-button--icon-only {
-  padding-inline: var(--mases-space-3);
+  padding-inline: var(--arna-space-3);
 }
 
 .mases-button--icon-only.mases-button--sm {
-  padding-inline: var(--mases-space-2);
+  padding-inline: var(--arna-space-2);
 }
 
 .mases-button--icon-only.mases-button--lg {
-  padding-inline: var(--mases-space-4);
+  padding-inline: var(--arna-space-4);
 }
 
 /* ============================================================================
    Variants — Primary
    ============================================================================ */
 .mases-button--primary {
-  background-color: var(--mases-color-action-primary);
-  border-color: var(--mases-color-action-primary);
-  color: var(--mases-color-text-inverse);
+  background-color: var(--arna-color-action-primary);
+  border-color: var(--arna-color-action-primary);
+  color: var(--arna-color-text-inverse);
 }
 
 .mases-button--primary:hover:not(:disabled) {
-  background-color: var(--mases-color-action-primary-hover);
-  border-color: var(--mases-color-action-primary-hover);
+  background-color: var(--arna-color-action-primary-hover);
+  border-color: var(--arna-color-action-primary-hover);
 }
 
 .mases-button--primary:active:not(:disabled) {
-  background-color: var(--mases-color-action-primary-active);
-  border-color: var(--mases-color-action-primary-active);
+  background-color: var(--arna-color-action-primary-active);
+  border-color: var(--arna-color-action-primary-active);
 }
 
 /* ============================================================================
    Variants — Secondary
    ============================================================================ */
 .mases-button--secondary {
-  background-color: var(--mases-color-action-secondary);
-  border-color: var(--mases-color-action-secondary);
-  color: var(--mases-color-text-inverse);
+  background-color: var(--arna-color-action-secondary);
+  border-color: var(--arna-color-action-secondary);
+  color: var(--arna-color-text-inverse);
 }
 
 .mases-button--secondary:hover:not(:disabled) {
-  background-color: var(--mases-color-action-secondary-hover);
-  border-color: var(--mases-color-action-secondary-hover);
+  background-color: var(--arna-color-action-secondary-hover);
+  border-color: var(--arna-color-action-secondary-hover);
 }
 
 .mases-button--secondary:active:not(:disabled) {
-  background-color: var(--mases-color-action-secondary-active);
-  border-color: var(--mases-color-action-secondary-active);
+  background-color: var(--arna-color-action-secondary-active);
+  border-color: var(--arna-color-action-secondary-active);
 }
 
 /* ============================================================================
    Variants — Ghost
    ============================================================================ */
 .mases-button--ghost {
-  background-color: var(--mases-color-action-ghost);
+  background-color: var(--arna-color-action-ghost);
   border-color: transparent;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
 }
 
 .mases-button--ghost:hover:not(:disabled) {
-  background-color: var(--mases-color-action-ghost-hover);
+  background-color: var(--arna-color-action-ghost-hover);
 }
 
 .mases-button--ghost:active:not(:disabled) {
-  background-color: var(--mases-color-state-hover);
+  background-color: var(--arna-color-state-hover);
 }
 
 /* ============================================================================
    Variants — Danger
    ============================================================================ */
 .mases-button--danger {
-  background-color: var(--mases-color-action-danger);
-  border-color: var(--mases-color-action-danger);
-  color: var(--mases-color-text-inverse);
+  background-color: var(--arna-color-action-danger);
+  border-color: var(--arna-color-action-danger);
+  color: var(--arna-color-text-inverse);
 }
 
 .mases-button--danger:hover:not(:disabled) {
-  background-color: var(--mases-color-action-danger-hover);
-  border-color: var(--mases-color-action-danger-hover);
+  background-color: var(--arna-color-action-danger-hover);
+  border-color: var(--arna-color-action-danger-hover);
 }
 
 .mases-button--danger:active:not(:disabled) {
-  background-color: var(--mases-color-action-danger-hover);
-  border-color: var(--mases-color-action-danger-hover);
+  background-color: var(--arna-color-action-danger-hover);
+  border-color: var(--arna-color-action-danger-hover);
 }
 
 /* ============================================================================
    Variants — Link
    ============================================================================ */
 .mases-button--link {
-  background-color: var(--mases-color-action-ghost);
+  background-color: var(--arna-color-action-ghost);
   border-color: transparent;
-  color: var(--mases-color-action-link);
+  color: var(--arna-color-action-link);
   padding: 0;
   min-height: auto;
   text-decoration: none;
 }
 
 .mases-button--link:hover:not(:disabled) {
-  color: var(--mases-color-action-link-hover);
+  color: var(--arna-color-action-link-hover);
   text-decoration: underline;
 }
 
 .mases-button--link:active:not(:disabled) {
-  color: var(--mases-color-action-link-hover);
+  color: var(--arna-color-action-link-hover);
 }
 
 /* ============================================================================
@@ -409,9 +407,9 @@ function handleClick(event: MouseEvent): void {
    (Design System §2.6 R6: never rely solely on opacity reduction.)
    ============================================================================ */
 .mases-button:disabled {
-  background-color: var(--mases-color-surface-disabled);
-  border-color: var(--mases-color-border-subtle);
-  color: var(--mases-color-text-disabled);
+  background-color: var(--arna-color-surface-disabled);
+  border-color: var(--arna-color-border-subtle);
+  color: var(--arna-color-text-disabled);
   cursor: not-allowed;
 }
 
@@ -439,7 +437,7 @@ function handleClick(event: MouseEvent): void {
   height: 1em;
   border: 2px solid currentColor;
   border-top-color: transparent;
-  border-radius: var(--mases-radius-full);
+  border-radius: var(--arna-radius-full);
   animation: mases-button-spin 0.8s linear infinite;
 }
 

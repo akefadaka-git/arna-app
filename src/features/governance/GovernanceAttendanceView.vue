@@ -18,6 +18,8 @@ import {
 } from '@/features/governance/attendance-api';
 import { listGovernanceBodies } from '@/features/governance/service';
 import type { GovernanceBody } from '@/features/governance/api';
+import { formatCalendarDate } from '@/core/dates/calendar';
+import { CalendarDateTimeInput } from '@/components/composites/DatePicker';
 
 const meetings = ref<readonly GovernanceMeeting[]>([]);
 const governanceBodies = ref<readonly GovernanceBody[]>([]);
@@ -300,9 +302,10 @@ onMounted(() => { void loadMeetings(); });
             <option value="board">የዳይሬክተሮች ቦርድ / Board</option>
           </select>
         </label>
-        <label>Meeting date and start time
-          <input v-model="createForm.starts_at" type="datetime-local" required />
-        </label>
+        <div class="date-time-field">
+          <label for="governance-meeting-starts-at">Meeting date and start time</label>
+          <CalendarDateTimeInput id="governance-meeting-starts-at" v-model="createForm.starts_at" required />
+        </div>
         <label>ርዕስ በአማርኛ
           <input v-model="createForm.title_am" maxlength="190" />
         </label>
@@ -329,13 +332,13 @@ onMounted(() => { void loadMeetings(); });
           @click="selectMeeting(meeting.id)"
         >
           <strong>{{ meeting.title_am || meeting.title_en || meeting.meeting_code }}</strong>
-          <span>{{ meeting.meeting_kind === 'board' ? 'Board' : 'General Assembly' }} · {{ new Date(meeting.starts_at).toLocaleString() }}</span>
+          <span>{{ meeting.meeting_kind === 'board' ? 'Board' : 'General Assembly' }} · {{ formatCalendarDate(meeting.starts_at, { dateStyle: 'medium', timeStyle: 'short' }) }}</span>
         </button>
       </aside>
 
       <section v-if="selected" class="panel meeting-detail">
         <h2>{{ selectedLabel }}</h2>
-        <p class="muted">{{ selected.meeting_code }} · {{ selected.meeting_kind }} · {{ new Date(selected.starts_at).toLocaleString() }}</p>
+        <p class="muted">{{ selected.meeting_code }} · {{ selected.meeting_kind }} · {{ formatCalendarDate(selected.starts_at, { dateStyle: 'medium', timeStyle: 'short' }) }}</p>
 
         <div class="section-block">
           <h3>መገኘት መመዝገብ / Record attendance</h3>
@@ -358,9 +361,10 @@ onMounted(() => { void loadMeetings(); });
                 <option value="represented">Represented</option>
               </select>
             </label>
-            <label>Arrival time (required for present / late)
-              <input v-model="attendanceForm.arrived_at" type="datetime-local" />
-            </label>
+            <div class="date-time-field">
+              <label for="governance-attendance-arrived-at">Arrival time (required for present / late)</label>
+              <CalendarDateTimeInput id="governance-attendance-arrived-at" v-model="attendanceForm.arrived_at" />
+            </div>
             <label class="wide">Notes / permission evidence reference (required for excused absence)
               <input v-model="attendanceForm.notes" maxlength="2000" :required="attendanceForm.attendance_status === 'excused'" />
             </label>
@@ -406,7 +410,7 @@ onMounted(() => { void loadMeetings(); });
           <div v-for="entry in selected.attendance" :key="entry.id" class="record-row">
             <span>{{ entry.subject_type }} #{{ entry.subject_id }}</span>
             <strong>{{ entry.attendance_status }}</strong>
-            <span>{{ entry.arrived_at ? new Date(entry.arrived_at).toLocaleString() : '—' }}</span>
+            <span>{{ entry.arrived_at ? formatCalendarDate(entry.arrived_at, { dateStyle: 'medium', timeStyle: 'short' }) : '—' }}</span>
             <button v-if="entry.attendance_status === 'late'" class="text-button" :disabled="saving" @click="assessPenalty(entry.id, 'late')">Assess ETB 50</button>
             <button v-if="entry.attendance_status === 'absent'" class="text-button" :disabled="saving" @click="assessPenalty(entry.id, 'absence')">Assess ETB 300</button>
           </div>
@@ -418,7 +422,7 @@ onMounted(() => { void loadMeetings(); });
           <div v-for="proxy in selected.proxies" :key="proxy.id" class="record-row">
             <span>{{ proxy.principal_type }} #{{ proxy.principal_id }} → {{ proxy.proxy_user_id ? 'user #' + proxy.proxy_user_id : (proxy.proxy_name_am || proxy.proxy_name_en || 'external proxy') }}</span>
             <strong>{{ proxy.status }}</strong>
-            <span>Deadline {{ new Date(proxy.deadline_at).toLocaleString() }}</span>
+            <span>Deadline {{ formatCalendarDate(proxy.deadline_at, { dateStyle: 'medium', timeStyle: 'short' }) }}</span>
             <button v-if="proxy.status === 'submitted'" class="text-button" :disabled="saving" @click="reviewProxy(proxy.id, 'approved')">Approve</button>
             <button v-if="proxy.status === 'submitted'" class="text-button danger-text" :disabled="saving" @click="reviewProxy(proxy.id, 'rejected')">Reject</button>
           </div>
@@ -433,7 +437,10 @@ onMounted(() => { void loadMeetings(); });
                 <option value="present">Present</option><option value="late">Late</option><option value="absent">Absent</option><option value="excused">Excused</option><option value="represented">Represented</option>
               </select>
             </label>
-            <label>Correct arrival time <input v-model="correctionForm.proposed_arrived_at" type="datetime-local" /></label>
+            <div class="date-time-field">
+              <label for="governance-correction-arrived-at">Correct arrival time</label>
+              <CalendarDateTimeInput id="governance-correction-arrived-at" v-model="correctionForm.proposed_arrived_at" />
+            </div>
             <label>Reason <input v-model="correctionForm.reason" minlength="5" maxlength="2000" required /></label>
             <div class="form-actions"><button type="submit" :disabled="saving">Request correction</button></div>
           </form>
@@ -482,32 +489,33 @@ onMounted(() => { void loadMeetings(); });
 <style scoped>
 .governance-attendance { display: flex; flex-direction: column; gap: 1.25rem; width: 100%; min-width: 0; }
 .page-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
-.eyebrow, .muted { color: var(--mases-color-text-muted); }
+.eyebrow, .muted { color: var(--arna-color-text-muted); }
 h1 { margin: 0 0 .4rem; font-size: clamp(1.35rem, 2.5vw, 2rem); }
 h2 { margin: 0 0 1rem; font-size: 1.1rem; }
 h3 { margin: 0 0 .8rem; font-size: 1rem; }
-.panel { min-width: 0; padding: 1.1rem; border: 1px solid var(--mases-color-border-subtle); border-radius: var(--mases-radius-lg); background: var(--mases-color-surface); }
+.panel { min-width: 0; padding: 1.1rem; border: 1px solid var(--arna-color-border-subtle); border-radius: var(--arna-radius-lg); background: var(--arna-color-surface); }
 .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem; }
 label { display: flex; flex-direction: column; gap: .35rem; font-size: .9rem; }
-input, select { width: 100%; min-height: 2.65rem; padding: .55rem .65rem; border: 1px solid var(--mases-color-border); border-radius: var(--mases-radius-md); background: var(--mases-color-surface-raised); color: var(--mases-color-text); }
-button { min-height: 2.5rem; padding: .5rem .85rem; border: 1px solid transparent; border-radius: var(--mases-radius-md); background: var(--mases-color-action-primary); color: white; cursor: pointer; }
+.date-time-field { display: flex; flex-direction: column; gap: .35rem; min-width: 0; font-size: .9rem; }
+input, select { width: 100%; min-height: 2.65rem; padding: .55rem .65rem; border: 1px solid var(--arna-color-border); border-radius: var(--arna-radius-md); background: var(--arna-color-surface-raised); color: var(--arna-color-text); }
+button { min-height: 2.5rem; padding: .5rem .85rem; border: 1px solid transparent; border-radius: var(--arna-radius-md); background: var(--arna-color-action-primary); color: white; cursor: pointer; }
 button:disabled { opacity: .55; cursor: not-allowed; }
-button.secondary, .text-button { border-color: var(--mases-color-border); background: transparent; color: var(--mases-color-text); }
+button.secondary, .text-button { border-color: var(--arna-color-border); background: transparent; color: var(--arna-color-text); }
 .text-button { min-height: 2rem; padding: .25rem .5rem; }
-.danger-text { color: var(--mases-color-state-danger); }
+.danger-text { color: var(--arna-color-state-danger); }
 .form-actions { grid-column: 1 / -1; display: flex; justify-content: flex-end; }
 .wide { grid-column: 1 / -1; }
 .workspace-grid { display: grid; grid-template-columns: minmax(220px, .75fr) minmax(0, 2fr); gap: 1rem; align-items: start; }
 .meeting-list { display: flex; flex-direction: column; gap: .55rem; }
-.meeting-choice { display: flex; flex-direction: column; align-items: flex-start; gap: .25rem; width: 100%; border: 1px solid var(--mases-color-border-subtle); background: transparent; color: var(--mases-color-text); text-align: left; }
-.meeting-choice[aria-pressed="true"] { border-color: var(--mases-color-action-primary); background: var(--mases-color-surface-raised); }
-.meeting-choice span { font-size: .8rem; color: var(--mases-color-text-muted); }
-.section-block { padding-top: 1.1rem; margin-top: 1.1rem; border-top: 1px solid var(--mases-color-border-subtle); }
-.record-row { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; padding: .65rem 0; border-bottom: 1px solid var(--mases-color-border-subtle); font-size: .88rem; }
+.meeting-choice { display: flex; flex-direction: column; align-items: flex-start; gap: .25rem; width: 100%; border: 1px solid var(--arna-color-border-subtle); background: transparent; color: var(--arna-color-text); text-align: left; }
+.meeting-choice[aria-pressed="true"] { border-color: var(--arna-color-action-primary); background: var(--arna-color-surface-raised); }
+.meeting-choice span { font-size: .8rem; color: var(--arna-color-text-muted); }
+.section-block { padding-top: 1.1rem; margin-top: 1.1rem; border-top: 1px solid var(--arna-color-border-subtle); }
+.record-row { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; padding: .65rem 0; border-bottom: 1px solid var(--arna-color-border-subtle); font-size: .88rem; }
 .record-row > span:first-child { flex: 1 1 170px; }
 .record-row strong { min-width: 80px; }
-.empty, .empty-state { color: var(--mases-color-text-muted); }
-.notice { padding: .7rem .9rem; border-radius: var(--mases-radius-md); background: var(--mases-color-state-success-subtle); }
-.error { padding: .7rem .9rem; border-radius: var(--mases-radius-md); background: var(--mases-color-state-danger-subtle); color: var(--mases-color-state-danger); }
+.empty, .empty-state { color: var(--arna-color-text-muted); }
+.notice { padding: .7rem .9rem; border-radius: var(--arna-radius-md); background: var(--arna-color-state-success-subtle); }
+.error { padding: .7rem .9rem; border-radius: var(--arna-radius-md); background: var(--arna-color-state-danger-subtle); color: var(--arna-color-state-danger); }
 @media (max-width: 760px) { .workspace-grid { grid-template-columns: minmax(0, 1fr); } .form-grid { grid-template-columns: minmax(0, 1fr); } .page-header { flex-direction: column; } }
 </style>

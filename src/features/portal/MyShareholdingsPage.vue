@@ -605,7 +605,7 @@ function formatLedgerQuantity(quantity: string): string {
 .my-shareholdings-page {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -620,27 +620,27 @@ function formatLedgerQuantity(quantity: string): string {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--mases-space-6);
-  height: var(--mases-space-6);
+  width: var(--arna-space-6);
+  height: var(--arna-space-6);
   padding: 0;
   border: 0;
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
   background-color: transparent;
-  color: var(--mases-color-icon-secondary);
+  color: var(--arna-color-icon-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
+  font-size: var(--arna-font-size-body-sm);
   line-height: 1;
   cursor: pointer;
 }
 
 .my-shareholdings-page__ledger-toggle:hover {
-  background-color: var(--mases-color-state-hover);
-  color: var(--mases-color-text-primary);
+  background-color: var(--arna-color-state-hover);
+  color: var(--arna-color-text-primary);
 }
 
 .my-shareholdings-page__ledger-toggle:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
@@ -652,11 +652,11 @@ function formatLedgerQuantity(quantity: string): string {
    ============================================================================ */
 .my-shareholdings-page__ledger-empty {
   margin: 0;
-  padding-block: var(--mases-space-6);
-  padding-inline: var(--mases-space-4);
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  padding-block: var(--arna-space-6);
+  padding-inline: var(--arna-space-4);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   text-align: center;
   overflow-wrap: anywhere;
 }

@@ -292,7 +292,7 @@ const hasIcon = computed<boolean>(() => props.icon !== undefined);
    * (4px) matches the leading-dot-to-label spacing that BaseBadge
    * itself uses for its own dot affordance.
    */
-  margin-inline-end: var(--mases-space-1);
+  margin-inline-end: var(--arna-space-1);
   /*
    * Inherit the current color so the icon matches the variant's text
    * color.

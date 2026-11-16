@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import { CalendarDateTimeInput } from '@/components/composites/DatePicker';
 import PageHeader from '@/components/patterns/PageHeader';
 import Card from '@/components/patterns/Card';
 import {
@@ -319,7 +320,7 @@ onMounted(() => void refresh());
               <button type="button" :disabled="saving" @click="editPage(page)">Edit</button>
               <button v-if="page.status === 'draft' && page.translations.am?.title && page.translations.en?.title && page.slug_am && page.slug_en" type="button" :disabled="saving" @click="pageAction(page, 'approve')">Approve</button>
               <button v-if="page.status === 'approved'" type="button" :disabled="saving" @click="pageAction(page, 'publish')">Publish</button>
-              <input v-if="page.status === 'approved'" v-model="scheduleAt" aria-label="Schedule date and time" type="datetime-local" />
+              <div v-if="page.status === 'approved'" class="corporate-admin__schedule-field"><label for="corporate-page-schedule-at">Schedule date and time</label><CalendarDateTimeInput id="corporate-page-schedule-at" v-model="scheduleAt" /></div>
               <button v-if="page.status === 'approved'" type="button" :disabled="saving || !scheduleAt" @click="pageAction(page, 'schedule')">Schedule</button>
               <button v-if="page.status === 'published' || page.status === 'scheduled'" type="button" :disabled="saving" @click="pageAction(page, 'unpublish')">Unpublish</button>
             </div>
@@ -392,6 +393,7 @@ onMounted(() => void refresh());
 .corporate-admin button:disabled { opacity: .55; cursor: not-allowed; }
 .corporate-admin__form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
 .corporate-admin__form label, .corporate-admin__inquiry label { display: grid; gap: .3rem; font-weight: 600; }
+.corporate-admin__schedule-field { display: grid; gap: .3rem; font-weight: 600; min-width: min(100%, 24rem); }
 .corporate-admin__form h3, .corporate-admin__help, .corporate-admin__wide { grid-column: 1 / -1; }
 .corporate-admin__help { margin: -.35rem 0 0; color: var(--text-muted); font-size: .85rem; line-height: 1.6; }
 .corporate-admin textarea[spellcheck="false"] { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .82rem; line-height: 1.55; }

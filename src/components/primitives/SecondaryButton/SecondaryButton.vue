@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/SecondaryButton/SecondaryButton.vue
  Layer:     1 (Primitives)
- Version:   1.0.0
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.3
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -26,7 +26,7 @@
  Visual identity
  -----------------------------------------------------------------------------
  The secondary variant renders with the aubergine brand surface
- (--mases-color-action-secondary), distinct from the crimson primary
+ (--arna-color-action-secondary), distinct from the crimson primary
  surface. It is the standard "companion action" button in MASES forms
  and dialogs — visually present but subordinated to the primary action.
 
@@ -104,9 +104,12 @@ interface Props {
   iconOnly?: boolean;
 
   /**
-   * Accessible name. Required when iconOnly is true.
+   * Accessible name. Required when iconOnly is true, unless ariaLabelledBy is supplied.
    */
   ariaLabel?: string;
+
+  /** ID of the element(s) that provide the accessible name. */
+  ariaLabelledBy?: string;
 }
 
 withDefaults(defineProps<Props>(), {
@@ -117,6 +120,7 @@ withDefaults(defineProps<Props>(), {
   block: false,
   iconOnly: false,
   ariaLabel: undefined,
+  ariaLabelledBy: undefined,
 });
 
 const emit = defineEmits<{
@@ -138,6 +142,7 @@ function handleClick(event: MouseEvent): void {
     :block="block"
     :icon-only="iconOnly"
     :aria-label="ariaLabel"
+    :aria-labelledby="ariaLabelledBy"
     data-testid="secondary-button-root"
     @click="handleClick"
   >

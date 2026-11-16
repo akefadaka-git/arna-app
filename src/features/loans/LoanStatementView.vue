@@ -898,7 +898,7 @@ const closingBalanceDisplay = computed<string>(() => {
 .loan-statement-view {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -908,13 +908,13 @@ const closingBalanceDisplay = computed<string>(() => {
 .loan-statement-view__back {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   align-self: flex-start;
-  color: var(--mases-color-text-brand);
+  color: var(--arna-color-text-brand);
   text-decoration: none;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
 }
 
 .loan-statement-view__back:hover {
@@ -922,9 +922,9 @@ const closingBalanceDisplay = computed<string>(() => {
 }
 
 .loan-statement-view__back:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
-  border-radius: var(--mases-radius-sm);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
+  border-radius: var(--arna-radius-sm);
 }
 
 /* ============================================================================
@@ -933,38 +933,38 @@ const closingBalanceDisplay = computed<string>(() => {
 .loan-statement-view__summary {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   margin: 0;
 }
 
 .loan-statement-view__summary-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   align-items: baseline;
 }
 
 @media (min-width: 640px) {
   .loan-statement-view__summary-row {
     grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-    gap: var(--mases-space-3);
+    gap: var(--arna-space-3);
   }
 }
 
 .loan-statement-view__summary-row dt {
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
   overflow-wrap: anywhere;
 }
 
 .loan-statement-view__summary-row dd {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: anywhere;
 }
 
@@ -973,10 +973,10 @@ const closingBalanceDisplay = computed<string>(() => {
    ============================================================================ */
 .loan-statement-view__section-title {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-6);
-  line-height: var(--mases-line-height-heading-6);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-6);
+  line-height: var(--arna-line-height-heading-6);
+  font-weight: var(--arna-font-weight-semibold);
   overflow-wrap: anywhere;
 }
 
@@ -985,10 +985,10 @@ const closingBalanceDisplay = computed<string>(() => {
    ============================================================================ */
 .loan-statement-view__section-empty {
   margin: 0;
-  padding-block: var(--mases-space-4);
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  padding-block: var(--arna-space-4);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   text-align: center;
   overflow-wrap: anywhere;
 }

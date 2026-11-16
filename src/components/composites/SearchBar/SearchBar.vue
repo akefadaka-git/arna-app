@@ -434,22 +434,22 @@ onBeforeUnmount(() => {
   appearance: none;
   background-color: transparent;
   border: 0;
-  border-radius: var(--mases-radius-full);
-  color: var(--mases-color-icon-secondary);
+  border-radius: var(--arna-radius-full);
+  color: var(--arna-color-icon-secondary);
   cursor: pointer;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .search-bar__clear:hover {
-  background-color: var(--mases-color-state-hover);
-  color: var(--mases-color-icon-primary);
+  background-color: var(--arna-color-state-hover);
+  color: var(--arna-color-icon-primary);
 }
 
 .search-bar__clear:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================

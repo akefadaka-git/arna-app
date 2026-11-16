@@ -453,7 +453,7 @@ function onStepClick(step: StepperStep): void {
    * formula uses this constant implicitly. See the connector rules
    * below.
    */
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
 }
 
 /* Vertical: each step is a flex: 1 row with the marker on the left and
@@ -463,7 +463,7 @@ function onStepClick(step: StepperStep): void {
   min-height: 3.5rem;
   flex-direction: row;
   align-items: flex-start;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
 }
 
 /* ============================================================================
@@ -478,12 +478,12 @@ function onStepClick(step: StepperStep): void {
 .stepper--horizontal .stepper__connector {
   position: absolute;
   top: calc(
-    /* marker height / 2 */ (var(--mases-space-8) / 2)
+    /* marker height / 2 */ (var(--arna-space-8) / 2)
   );
   left: 50%;
   width: 100%;
   height: 2px;
-  background-color: var(--mases-color-border-subtle);
+  background-color: var(--arna-color-border-subtle);
   pointer-events: none;
   z-index: 0;
 }
@@ -494,7 +494,7 @@ function onStepClick(step: StepperStep): void {
 }
 
 .stepper--horizontal .stepper__step[data-filled='true'] .stepper__connector {
-  background-color: var(--mases-color-action-primary);
+  background-color: var(--arna-color-action-primary);
 }
 
 /* ============================================================================
@@ -507,14 +507,14 @@ function onStepClick(step: StepperStep): void {
 .stepper--vertical .stepper__connector {
   position: absolute;
   top: calc(
-    /* marker height + gap between marker and connector top */ var(--mases-space-8) + 4px
+    /* marker height + gap between marker and connector top */ var(--arna-space-8) + 4px
   );
   left: calc(
-    /* marker width / 2 - line half-width */ (var(--mases-space-8) / 2) - 1px
+    /* marker width / 2 - line half-width */ (var(--arna-space-8) / 2) - 1px
   );
   width: 2px;
-  height: calc(100% - var(--mases-space-8) - 8px);
-  background-color: var(--mases-color-border-subtle);
+  height: calc(100% - var(--arna-space-8) - 8px);
+  background-color: var(--arna-color-border-subtle);
   pointer-events: none;
 }
 
@@ -523,7 +523,7 @@ function onStepClick(step: StepperStep): void {
 }
 
 .stepper--vertical .stepper__step[data-filled='true'] .stepper__connector {
-  background-color: var(--mases-color-action-primary);
+  background-color: var(--arna-color-action-primary);
 }
 
 /* ============================================================================
@@ -534,7 +534,7 @@ function onStepClick(step: StepperStep): void {
   appearance: none;
   background-color: transparent;
   border: 0;
-  padding: var(--mases-space-1);
+  padding: var(--arna-space-1);
   margin: 0;
   color: inherit;
   font-family: inherit;
@@ -542,30 +542,30 @@ function onStepClick(step: StepperStep): void {
   line-height: inherit;
   text-align: inherit;
   cursor: pointer;
-  border-radius: var(--mases-radius-sm);
+  border-radius: var(--arna-radius-sm);
   /*
    * The button is a flex container that mirrors the li's orientation.
    * See the per-orientation rules below.
    */
   position: relative;
   z-index: 1;
-  transition: background-color var(--mases-duration-fast) var(--mases-easing-standard);
+  transition: background-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .stepper__button:hover {
-  background-color: var(--mases-color-state-hover);
+  background-color: var(--arna-color-state-hover);
 }
 
 .stepper__button:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* Horizontal button: marker above, label below, both centered. */
 .stepper--horizontal .stepper__button {
   flex-direction: column;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   width: 100%;
 }
 
@@ -573,7 +573,7 @@ function onStepClick(step: StepperStep): void {
 .stepper--vertical .stepper__button {
   flex-direction: row;
   align-items: flex-start;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   width: 100%;
   text-align: start;
 }
@@ -586,35 +586,35 @@ function onStepClick(step: StepperStep): void {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: var(--mases-space-8);
-  height: var(--mases-space-8);
-  border: 2px solid var(--mases-color-border-default);
-  border-radius: var(--mases-radius-full);
-  background-color: var(--mases-color-surface-page);
-  color: var(--mases-color-text-tertiary);
+  width: var(--arna-space-8);
+  height: var(--arna-space-8);
+  border: 2px solid var(--arna-color-border-default);
+  border-radius: var(--arna-radius-full);
+  background-color: var(--arna-color-surface-page);
+  color: var(--arna-color-text-tertiary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
+  font-size: var(--arna-font-size-body-sm);
   line-height: 1;
-  font-weight: var(--mases-font-weight-semibold);
+  font-weight: var(--arna-font-weight-semibold);
   font-variant-numeric: tabular-nums;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    border-color var(--mases-duration-fast) var(--mases-easing-standard),
-    color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    border-color var(--arna-duration-fast) var(--arna-easing-standard),
+    color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 /* Completed: crimson fill, inverse text, checkmark. */
 .stepper__step--completed .stepper__marker {
-  background-color: var(--mases-color-action-primary);
-  border-color: var(--mases-color-action-primary);
-  color: var(--mases-color-text-inverse);
+  background-color: var(--arna-color-action-primary);
+  border-color: var(--arna-color-action-primary);
+  color: var(--arna-color-text-inverse);
 }
 
 /* Current: crimson border, ivory fill, crimson text. */
 .stepper__step--current .stepper__marker {
-  background-color: var(--mases-color-surface-page);
-  border-color: var(--mases-color-action-primary);
-  color: var(--mases-color-text-brand);
+  background-color: var(--arna-color-surface-page);
+  border-color: var(--arna-color-action-primary);
+  color: var(--arna-color-text-brand);
 }
 
 /* Upcoming: default muted treatment from the base rule. */
@@ -632,7 +632,7 @@ function onStepClick(step: StepperStep): void {
 .stepper__label-group {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   min-width: 0;
 }
 
@@ -652,11 +652,11 @@ function onStepClick(step: StepperStep): void {
 .stepper__label {
   display: block;
   min-width: 0;
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
   /*
    * Amharic truncates at word boundaries via the design system's
    * inherited overflow-wrap rules (Design System §3.7 W4).
@@ -665,12 +665,12 @@ function onStepClick(step: StepperStep): void {
 }
 
 .stepper__step--current .stepper__label {
-  color: var(--mases-color-text-primary);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 .stepper__step--completed .stepper__label {
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
 }
 
 /* ============================================================================
@@ -678,11 +678,11 @@ function onStepClick(step: StepperStep): void {
    ============================================================================ */
 .stepper__optional {
   display: block;
-  color: var(--mases-color-text-tertiary);
+  color: var(--arna-color-text-tertiary);
   font-family: inherit;
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
+  font-weight: var(--arna-font-weight-regular);
 }
 
 /* ============================================================================
@@ -702,13 +702,13 @@ function onStepClick(step: StepperStep): void {
     flex-direction: row;
     align-items: flex-start;
     min-height: 3.5rem;
-    gap: var(--mases-space-3);
+    gap: var(--arna-space-3);
   }
 
   .stepper--horizontal .stepper__button {
     flex-direction: row;
     align-items: flex-start;
-    gap: var(--mases-space-3);
+    gap: var(--arna-space-3);
     text-align: start;
   }
 
@@ -719,10 +719,10 @@ function onStepClick(step: StepperStep): void {
 
   /* Convert the horizontal connector to a vertical one. */
   .stepper--horizontal .stepper__connector {
-    top: calc(var(--mases-space-8) + 4px);
-    left: calc((var(--mases-space-8) / 2) - 1px);
+    top: calc(var(--arna-space-8) + 4px);
+    left: calc((var(--arna-space-8) / 2) - 1px);
     width: 2px;
-    height: calc(100% - var(--mases-space-8) - 8px);
+    height: calc(100% - var(--arna-space-8) - 8px);
   }
 }
 

@@ -70,15 +70,15 @@
  *     admin build consumes that object unchanged. Duplicating them
  *     here would produce two sources of truth for the same strings.
  *
- *   · Brand identity labels. `masesBrandLabels` (in `shell-labels.ts`)
+ *   · Brand identity labels. `aranaBrandLabels` (in `shell-labels.ts`)
  *     carries `ማሌ ዓርና` / `ማሴስ` / the full approved identity. The admin
  *     build consumes those unchanged. Note that the admin build's
  *     *application name* — `MASES አስተዳደር` — is NOT
- *     `masesBrandLabels.productName`; it is supplied by `VITE_APP_NAME`
+ *     `aranaBrandLabels.productName`; it is supplied by `VITE_APP_NAME`
  *     and composed into `document.title` by each route wrapper. The
  *     brand mark in the header remains `ማሌ ዓርና` on every build.
  *
- *   · Footer content labels. `masesFooterLabels` carries the
+ *   · Footer content labels. `aranaFooterLabels` carries the
  *     copyright template, the legal link, and the support link. Same
  *     strings on every build. The admin build consumes them
  *     unchanged.
@@ -124,7 +124,7 @@
  *
  *     {
  *       id: 'go-to-workspace',
- *       label: 'ወደ ማሴስ ወርክስፔስ',
+ *       label: 'ወደ ARNA ወርክስፔስ',
  *       icon: 'layout-grid',
  *       permission: 'app.app.access',
  *     }
@@ -152,7 +152,7 @@
  * future role with workspace access)".
  *
  * Reusing an existing confirmed slug satisfies the G1 Q6 condition:
- * "Include `ወደ ማሴስ ወርክስፔስ` only if the existing permission/launch
+ * "Include `ወደ ARNA ወርክስፔስ` only if the existing permission/launch
  * mechanism is verified. Do not invent `app.app.access`." The
  * mechanism is verified; the slug is reused verbatim.
  *
@@ -195,7 +195,7 @@
  * keeps the workspace and admin sidebars consistent in a way that
  * matters when both are open in different tabs.
  *
- * "ወደ ማሴስ ወርክስፔስ" — "To MASES Workspace". Identical to the portal's
+ * "ወደ ARNA ወርክስፔስ" — "To MASES Workspace". Identical to the portal's
  * `go-to-workspace` label. The label names the destination, which is
  * the workspace on both builds; using the same string means a user
  * who has seen the item on the portal recognizes it on the admin.
@@ -216,7 +216,7 @@
  *     reviewer's decision on the workspace label applies here without
  *     a separate review.
  *
- *   · 'ወደ ማሴስ ወርክስፔስ' — the portal's `go-to-workspace` label.
+ *   · 'ወደ ARNA ወርክስፔስ' — the portal's `go-to-workspace` label.
  *     Already on the review list under `shell-labels.ts`'s
  *     "portal back-to-workspace" block. Same reasoning: one review
  *     covers both.
@@ -240,8 +240,8 @@
  *    would show an item whose route the guard rejects, or hide an
  *    item whose route the guard accepts.
  *
- * 3. The admin build reuses `masesShellLabels`, `masesBrandLabels`,
- *    and `masesFooterLabels` from `shell-labels.ts` unchanged. A
+ * 3. The admin build reuses `masesShellLabels`, `aranaBrandLabels`,
+ *    and `aranaFooterLabels` from `shell-labels.ts` unchanged. A
  *    future CR that changes a shell label affects all three builds;
  *    the admin build does not carry an independent shell-chrome
  *    vocabulary. If the product ever needs the admin chrome to
@@ -337,7 +337,7 @@ export const adminNavItems: ReadonlyArray<NavItem> = [
 export const adminUserMenuItems: ReadonlyArray<UserMenuItem> = [
   {
     id: 'go-to-workspace',
-    label: 'ወደ ማሴስ ወርክስፔስ',
+    label: 'ወደ ARNA ወርክስፔስ',
     icon: 'layout-grid',
     permission: 'app.app.access',
   },

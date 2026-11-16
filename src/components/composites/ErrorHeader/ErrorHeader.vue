@@ -221,7 +221,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   width: 100%;
   text-align: center;
   font-family: inherit;
@@ -249,11 +249,11 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
 .error-header__title {
   margin: 0;
   max-width: 32em;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-heading-3);
-  line-height: var(--mases-line-height-heading-3);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-heading-3);
+  line-height: var(--arna-line-height-heading-3);
+  font-weight: var(--arna-font-weight-semibold);
   /*
    * Amharic truncates at word boundaries via the design system's
    * inherited overflow-wrap rules (Design System §3.7 W4).
@@ -265,12 +265,12 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    * when focus lands on it via the ErrorPage mount handler.
    */
   outline: none;
-  border-radius: var(--mases-radius-sm);
+  border-radius: var(--arna-radius-sm);
 }
 
 .error-header__title:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
@@ -279,11 +279,11 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
 .error-header__message {
   margin: 0;
   max-width: 40em;
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: anywhere;
 }
 
@@ -292,7 +292,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    ============================================================================ */
 @media (max-width: 639px) {
   .error-header {
-    gap: var(--mases-space-2);
+    gap: var(--arna-space-2);
   }
 }
 </style>

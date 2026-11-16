@@ -223,10 +223,10 @@ function onAccessDeniedLauncher(): void {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: var(--mases-space-3);
-  width: min(100%, var(--mases-container-form));
+  gap: var(--arna-space-3);
+  width: min(100%, var(--arna-container-form));
   margin: 0 auto;
-  padding: 0 var(--mases-space-6) var(--mases-space-8);
+  padding: 0 var(--arna-space-6) var(--arna-space-8);
 }
 
 .error-route-links__item {
@@ -234,14 +234,14 @@ function onAccessDeniedLauncher(): void {
   align-items: center;
   justify-content: center;
   min-height: 44px;
-  padding: var(--mases-space-2) var(--mases-space-3);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-md);
+  padding: var(--arna-space-2) var(--arna-space-3);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-md);
   background: transparent;
-  color: var(--mases-color-action-link);
+  color: var(--arna-color-action-link);
   font: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   text-decoration: none;
   cursor: pointer;
 }
@@ -257,8 +257,8 @@ function onAccessDeniedLauncher(): void {
 
 @media (max-width: 639px) {
   .error-route-links {
-    gap: var(--mases-space-2);
-    padding-inline: var(--mases-space-4);
+    gap: var(--arna-space-2);
+    padding-inline: var(--arna-space-4);
   }
 
   .error-route-links__item {

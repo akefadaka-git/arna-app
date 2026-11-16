@@ -83,15 +83,15 @@
  -----------------------------------------------------------------------------
  z-index coordination with AppHeader
  -----------------------------------------------------------------------------
- Uses --mases-z-sticky (200), placing the focused link above AppHeader.
- AppHeader should use --mases-z-raised (10) or lower for sticky
+ Uses --arna-z-sticky (200), placing the focused link above AppHeader.
+ AppHeader should use --arna-z-raised (10) or lower for sticky
  positioning; changing that relationship requires a coordinated token CR.
 
  -----------------------------------------------------------------------------
  Chrome-padding alignment
  -----------------------------------------------------------------------------
  The skip link's leading-edge inset consumes the same
- --mases-shell-chrome-padding-inline-* tokens as AppHeader and
+ --arna-shell-chrome-padding-inline-* tokens as AppHeader and
  AppFooter. See tokens.css v1.2.0 for the value provenance. The link
  appears at the header's brand-adjacent edge when focused; the token
  keeps the two aligned across breakpoints.
@@ -188,7 +188,7 @@ const props = defineProps<Props>();
    * inline padding so the link's leading edge aligns with the
    * header's brand; see tokens.css v1.2.0.
    */
-  inset-inline-start: var(--mases-shell-chrome-padding-inline-mobile);
+  inset-inline-start: var(--arna-shell-chrome-padding-inline-mobile);
   /*
    * Off-screen by pushing the element up by 100% of its own height.
    * No magic pixel value. The element stays in the tab order (it is
@@ -203,17 +203,17 @@ const props = defineProps<Props>();
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-4);
-  background-color: var(--mases-color-surface-inverse);
-  color: var(--mases-color-text-inverse);
-  border-end-start-radius: var(--mases-radius-md);
-  border-end-end-radius: var(--mases-radius-md);
-  box-shadow: var(--mases-shadow-elevation-2);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-4);
+  background-color: var(--arna-color-surface-inverse);
+  color: var(--arna-color-text-inverse);
+  border-end-start-radius: var(--arna-radius-md);
+  border-end-end-radius: var(--arna-radius-md);
+  box-shadow: var(--arna-shadow-elevation-2);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
   text-decoration: none;
   /*
    * Amharic-safe wrapping. In practice the label is short; this is a
@@ -223,22 +223,22 @@ const props = defineProps<Props>();
   overflow-wrap: break-word;
   word-break: normal;
   /*
-   * Above the AppHeader. AppHeader should remain at --mases-z-raised (10)
+   * Above the AppHeader. AppHeader should remain at --arna-z-raised (10)
    * or lower; see the file header §"z-index coordination with AppHeader".
    */
-  z-index: var(--mases-z-sticky);
+  z-index: var(--arna-z-sticky);
   /*
    * The transform is the only animated property. Duration and easing
    * come from tokens; the token substrate shortens the duration to
    * 1ms under prefers-reduced-motion.
    */
-  transition: transform var(--mases-duration-fast) var(--mases-easing-standard);
+  transition: transform var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 /* Tablet and up: track the wider shell-chrome inline padding. */
 @media (min-width: 640px) {
   .skip-to-content {
-    inset-inline-start: var(--mases-shell-chrome-padding-inline-tablet);
+    inset-inline-start: var(--arna-shell-chrome-padding-inline-tablet);
   }
 }
 
@@ -255,8 +255,8 @@ const props = defineProps<Props>();
    * The standard focus ring. Applied on top of the inverse surface
    * for contrast against the dark link background.
    */
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color-inverse);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color-inverse);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
@@ -276,7 +276,7 @@ const props = defineProps<Props>();
   .skip-to-content:focus {
     background-color: Highlight;
     color: HighlightText;
-    outline-color: Highlight;
+    outline-color: HighlightText;
   }
 }
 

@@ -116,3 +116,37 @@ Automated source contracts and successful builds do not establish:
 - Production deployment parity with the current repository head.
 
 Those checks remain separate A4/A5 acceptance work. The current programme does not authorize deployment, merge or hosting changes as part of this guide.
+
+
+## 10. Component adoption audit — 15 November 2026 (updated)
+
+This is a source-level adoption snapshot, not a replacement for the approved `MASES_PHASE_2_UI_COMPONENT_CATALOG.md` v1.0.0. That catalogue is referenced by existing component headers but is not present in this repository tree or the accessible Library listing. Exact required-component reconciliation remains **UNRESOLVED** until the authoritative catalogue text is restored and inspected.
+
+The repository contains 24 primitive component directories. The five catalogue-required primitives previously identified as having no external consumers have now been integrated into concrete frontend workflows:
+
+| Primitive | Consumer | Integration decision |
+|---|---|---|
+| BaseDivider | `ShareholderForm.vue` | Replaces the form's duplicated section-border separators; three distinct test hooks identify the section boundaries |
+| BaseRadio | `ShareholderForm.vue` | Implements the mutually exclusive shareholder-type choice with a native named radio group, translated labels, required state and edit-mode disabling |
+| ErrorSupportHint | `AccessDeniedPage.vue` | Renders the translated warning advisory only for the exact `FILE_ACCESS_DENIED` backend code |
+| IconButton | `AppHeader.vue` | Owns the icon-only mobile-menu trigger, accessible name, focus/disabled behavior and click event |
+| LinkButton | `MaintenanceBanner.vue` | Owns the inline JavaScript action; route navigation remains a link and is not converted |
+
+These are concrete consumer integrations, not claims that all 24 primitives, 26 composites and 15 patterns have been reconciled against the unavailable full catalogue.
+
+### Adoption and regression evidence
+
+- `tests/design-system-theme-contract.test.mjs` now asserts the five integrations at their consumer boundaries.
+- The shareholder type control uses a `fieldset` and `legend`; each radio shares the native `shareholder-type` name. The edit-mode lock and submitting lock remain enforced.
+- Shareholder section separators now use the shared divider primitive instead of duplicating the section border rule.
+- AccessDeniedPage retains its exact backend-code match and consumer-supplied translation; no new user-facing copy is invented.
+- The mobile-menu toggle keeps its existing test hook, `aria-haspopup="dialog"`, supplied accessible name and emitted action.
+- MaintenanceBanner retains its existing click event, label, size and inline action behavior.
+
+### Evidence boundaries and remaining work
+
+- Primitive inventory: 24 directories; 24 SFCs and 24 folder-level exports present.
+- The adoption contract test proves these five concrete import/use paths at source level. It does not prove all application roots, all composites/patterns, or runtime rendering.
+- This is not a complete AST import graph. Generate a resolved four-entrypoint graph before claiming full integration.
+- Compare all component layers and states against the restored approved catalogue; verify Amharic/English, light/dark, responsive and accessibility behavior in browsers.
+- No merge, deployment or release is authorized by this audit.

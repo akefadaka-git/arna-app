@@ -438,9 +438,9 @@ function isFirstRendered(renderedPosition: number): boolean {
   display: block;
   width: 100%;
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
 }
 
 /* ============================================================================
@@ -450,7 +450,7 @@ function isFirstRendered(renderedPosition: number): boolean {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -462,7 +462,7 @@ function isFirstRendered(renderedPosition: number): boolean {
 .breadcrumbs__item {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   /*
    * No min-width: items shrink with content. Long labels truncate via
    * the link/span rules below when needed.
@@ -477,7 +477,7 @@ function isFirstRendered(renderedPosition: number): boolean {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: var(--mases-color-icon-secondary);
+  color: var(--arna-color-icon-secondary);
 }
 
 /* ============================================================================
@@ -496,24 +496,24 @@ function isFirstRendered(renderedPosition: number): boolean {
    hover.
    ============================================================================ */
 .breadcrumbs__link {
-  color: var(--mases-color-action-link);
+  color: var(--arna-color-action-link);
   text-decoration: none;
   max-width: 20rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  transition: color var(--mases-duration-fast) var(--mases-easing-standard);
+  transition: color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .breadcrumbs__link:hover {
-  color: var(--mases-color-action-link-hover);
+  color: var(--arna-color-action-link-hover);
   text-decoration: underline;
 }
 
 .breadcrumbs__link:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
-  border-radius: var(--mases-radius-sm);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
+  border-radius: var(--arna-radius-sm);
 }
 
 /* ============================================================================
@@ -524,8 +524,8 @@ function isFirstRendered(renderedPosition: number): boolean {
    crumb (a page title or a leaf identifier).
    ============================================================================ */
 .breadcrumbs__current {
-  color: var(--mases-color-text-primary);
-  font-weight: var(--mases-font-weight-medium);
+  color: var(--arna-color-text-primary);
+  font-weight: var(--arna-font-weight-medium);
   max-width: 24rem;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -539,7 +539,7 @@ function isFirstRendered(renderedPosition: number): boolean {
    20rem cap.
    ============================================================================ */
 .breadcrumbs__text {
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   max-width: 20rem;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -550,8 +550,8 @@ function isFirstRendered(renderedPosition: number): boolean {
    Ellipsis
    ============================================================================ */
 .breadcrumbs__ellipsis {
-  color: var(--mases-color-text-tertiary);
-  font-weight: var(--mases-font-weight-regular);
+  color: var(--arna-color-text-tertiary);
+  font-weight: var(--arna-font-weight-regular);
   /* Prevent the ellipsis from collapsing to nothing on very narrow
      layouts. */
   min-width: 1ch;

@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — MASESFooterContent
+ ARNA UI — AranaFooterContent
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/MASESFooterContent/MASESFooterContent.vue
+ File:      mase_app/src/layouts/AppShell/AranaFooterContent/AranaFooterContent.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.1.0
  Status:    ENHANCEMENT — forced-colors accessibility
@@ -18,7 +18,7 @@
  1.0.0  — initial delivery (CR-FOOTER1). Renders the copyright line
           (with the current Ethiopian calendar year substituted at
           render time) and the footer's link row (legal hub + support
-          mailto). Consumes `masesFooterLabels` from
+          mailto). Consumes `aranaFooterLabels` from
           @/router/shell-labels (the companion change in the same CR).
           Rendered by AppShell as the default content of the `#footer`
           forwarding slot; a consumer of AppShell may override it.
@@ -43,7 +43,7 @@
  What this component does NOT do
  -----------------------------------------------------------------------------
    - It does NOT render the corporate brand mark. The header's
-     MASESBrand component carries the brand; the footer's copyright
+     AranaBrand component carries the brand; the footer's copyright
      line names the entity in text. Repeating the two-line wordmark
      here would be visual noise for an authenticated application
      whose header already establishes identity. A future CR may
@@ -132,7 +132,7 @@
  -----------------------------------------------------------------------------
  No hardcoded user-facing string
  -----------------------------------------------------------------------------
- Both visible strings come from `masesFooterLabels` in
+ Both visible strings come from `aranaFooterLabels` in
  @/router/shell-labels:
    · The copyright line (template → substituted string).
    · The legal and support link labels.
@@ -146,24 +146,24 @@
  -----------------------------------------------------------------------------
  Every visual value is a Tier 2 token from tokens.css (v1.2.0):
 
-     Color ........ --mases-color-text-tertiary
-                     --mases-color-action-link
-                     --mases-color-action-link-hover
-     Spacing ...... --mases-space-2
-                     --mases-space-4
-     Type ......... --mases-font-size-caption
-                     --mases-line-height-caption
+     Color ........ --arna-color-text-tertiary
+                     --arna-color-action-link
+                     --arna-color-action-link-hover
+     Spacing ...... --arna-space-2
+                     --arna-space-4
+     Type ......... --arna-font-size-caption
+                     --arna-line-height-caption
 
  No hex value appears in this file. No new token is declared.
 
  -----------------------------------------------------------------------------
  Test hooks
  -----------------------------------------------------------------------------
- data-testid="mases-footer-content-root"        on the root <div>
- data-testid="mases-footer-content-copyright"   on the copyright <span>
- data-testid="mases-footer-content-links"       on the links <ul>
- data-testid="mases-footer-content-legal-link"  on the legal <a>
- data-testid="mases-footer-content-support-link" on the support <a>
+ data-testid="arana-footer-content-root"        on the root <div>
+ data-testid="arana-footer-content-copyright"   on the copyright <span>
+ data-testid="arana-footer-content-links"       on the links <ul>
+ data-testid="arana-footer-content-legal-link"  on the legal <a>
+ data-testid="arana-footer-content-support-link" on the support <a>
 
  -----------------------------------------------------------------------------
  Accessibility
@@ -190,7 +190,7 @@
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
 
-import { masesFooterLabels } from '@/router/shell-labels';
+import { aranaFooterLabels } from '@/router/shell-labels';
 import { formatCalendarDate } from '@/core/dates/calendar';
 
 // -----------------------------------------------------------------------------
@@ -233,7 +233,7 @@ function resolveCurrentCalendarYear(): string {
  * year rollover mid-session would require a page reload to pick up,
  * which is acceptable for a footer attribution line.
  */
-const copyrightText = computed(() => masesFooterLabels.copyrightTemplate.replace(
+const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace(
   '{year}',
   resolveCurrentCalendarYear(),
 ));
@@ -241,15 +241,15 @@ const copyrightText = computed(() => masesFooterLabels.copyrightTemplate.replace
 
 <template>
   <div
-    class="mases-footer-content"
-    data-testid="mases-footer-content-root"
+    class="arana-footer-content"
+    data-testid="arana-footer-content-root"
   >
     <!-- ================================================================
          Copyright line
          ================================================================ -->
     <span
-      class="mases-footer-content__copyright"
-      data-testid="mases-footer-content-copyright"
+      class="arana-footer-content__copyright"
+      data-testid="arana-footer-content-copyright"
     >{{ copyrightText }}</span>
 
     <!-- ================================================================
@@ -264,23 +264,23 @@ const copyrightText = computed(() => masesFooterLabels.copyrightTemplate.replace
          mailto href.
          ================================================================ -->
     <ul
-      class="mases-footer-content__links"
+      class="arana-footer-content__links"
       role="list"
-      data-testid="mases-footer-content-links"
+      data-testid="arana-footer-content-links"
     >
       <li>
         <RouterLink
           :to="{ name: 'legal' }"
-          class="mases-footer-content__link"
-          data-testid="mases-footer-content-legal-link"
-        >{{ masesFooterLabels.legalLinkLabel }}</RouterLink>
+          class="arana-footer-content__link"
+          data-testid="arana-footer-content-legal-link"
+        >{{ aranaFooterLabels.legalLinkLabel }}</RouterLink>
       </li>
       <li>
         <a
           :href="`mailto:${SUPPORT_EMAIL}`"
-          class="mases-footer-content__link"
-          data-testid="mases-footer-content-support-link"
-        >{{ masesFooterLabels.supportLinkLabel }}</a>
+          class="arana-footer-content__link"
+          data-testid="arana-footer-content-support-link"
+        >{{ aranaFooterLabels.supportLinkLabel }}</a>
       </li>
     </ul>
   </div>
@@ -305,21 +305,21 @@ const copyrightText = computed(() => masesFooterLabels.copyrightTemplate.replace
    `flex: 0 0 auto` at mobile and `flex: 1 1 auto` at tablet+). The
    explicit width guarantees the same layout behaviour in both cases.
    ============================================================================ */
-.mases-footer-content {
+.arana-footer-content {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   width: 100%;
   min-width: 0;
 }
 
 @media (min-width: 640px) {
-  .mases-footer-content {
+  .arana-footer-content {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: var(--mases-space-4);
+    gap: var(--arna-space-4);
   }
 }
 
@@ -335,11 +335,11 @@ const copyrightText = computed(() => masesFooterLabels.copyrightTemplate.replace
    corporate name with its trailing Ethiopic full stop) would
    otherwise overflow a narrow container.
    ============================================================================ */
-.mases-footer-content__copyright {
+.arana-footer-content__copyright {
   min-width: 0;
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   overflow-wrap: break-word;
 }
 
@@ -355,11 +355,11 @@ const copyrightText = computed(() => masesFooterLabels.copyrightTemplate.replace
    the copyright text is long. The copyright shrinks instead (via its
    own `min-width: 0`), keeping the link text fully readable.
    ============================================================================ */
-.mases-footer-content__links {
+.arana-footer-content__links {
   display: flex;
   flex-wrap: wrap;
   flex-shrink: 0;
-  gap: var(--mases-space-2) var(--mases-space-4);
+  gap: var(--arna-space-2) var(--arna-space-4);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -376,17 +376,23 @@ const copyrightText = computed(() => masesFooterLabels.copyrightTemplate.replace
    The :focus-visible selector duplicates the hover state so keyboard
    users get the same affordance.
    ============================================================================ */
-.mases-footer-content__link {
-  color: var(--mases-color-action-link);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+.arana-footer-content__link {
+  color: var(--arna-color-action-link);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   text-decoration: none;
 }
 
-.mases-footer-content__link:hover,
-.mases-footer-content__link:focus-visible {
-  color: var(--mases-color-action-link-hover);
+.arana-footer-content__link:hover,
+.arana-footer-content__link:focus-visible {
+  color: var(--arna-color-action-link-hover);
   text-decoration: underline;
+}
+
+.arana-footer-content__link:focus-visible {
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
+  border-radius: var(--arna-radius-xs);
 }
 
 /* ============================================================================
@@ -398,7 +404,7 @@ const copyrightText = computed(() => masesFooterLabels.copyrightTemplate.replace
    documented place to gate it on the user's motion preference.
    ============================================================================ */
 @media (prefers-reduced-motion: reduce) {
-  .mases-footer-content {
+  .arana-footer-content {
     /* no-op placeholder — see comment above */
   }
 }
@@ -408,17 +414,17 @@ const copyrightText = computed(() => masesFooterLabels.copyrightTemplate.replace
    Preserve clear link affordances when authored palette tokens are suppressed.
    ============================================================================ */
 @media (forced-colors: active) {
-  .mases-footer-content__copyright {
+  .arana-footer-content__copyright {
     color: CanvasText;
   }
 
-  .mases-footer-content__link {
+  .arana-footer-content__link {
     color: LinkText;
     text-decoration: underline;
   }
 
-  .mases-footer-content__link:hover,
-  .mases-footer-content__link:focus-visible {
+  .arana-footer-content__link:hover,
+  .arana-footer-content__link:focus-visible {
     color: ActiveText;
   }
 }

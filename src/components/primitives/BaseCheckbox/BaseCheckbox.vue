@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/BaseCheckbox/BaseCheckbox.vue
  Layer:     1 (Primitives)
- Version:   1.0.0
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.11
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -249,6 +249,12 @@ interface Props {
    * exists in the DOM.
    */
   ariaDescribedBy?: string;
+
+  /** Explicit accessible name when no visible slot label is supplied. */
+  ariaLabel?: string;
+
+  /** ID reference(s) naming the checkbox from external label content. */
+  ariaLabelledBy?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -261,6 +267,8 @@ const props = withDefaults(defineProps<Props>(), {
   invalid: false,
   ariaInvalid: undefined,
   ariaDescribedBy: undefined,
+  ariaLabel: undefined,
+  ariaLabelledBy: undefined,
 });
 
 const emit = defineEmits<{
@@ -404,6 +412,8 @@ defineExpose({ focus, blur, el });
       :required="required"
       :aria-invalid="resolvedAriaInvalid"
       :aria-describedby="ariaDescribedBy"
+      :aria-label="ariaLabel"
+      :aria-labelledby="ariaLabelledBy"
       class="checkbox__input"
       data-testid="base-checkbox-control"
       @change="onChange"
@@ -446,19 +456,19 @@ defineExpose({ focus, blur, el });
 .checkbox {
   display: inline-flex;
   align-items: flex-start;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   cursor: pointer;
   user-select: none;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
 }
 
 .checkbox--disabled {
   cursor: not-allowed;
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
 }
 
 /* ============================================================================
@@ -492,35 +502,35 @@ defineExpose({ focus, blur, el });
   flex-shrink: 0;
   position: relative;
   display: inline-block;
-  width: var(--mases-icon-md);
-  height: var(--mases-icon-md);
+  width: var(--arna-icon-md);
+  height: var(--arna-icon-md);
   margin-block-start: calc(
-    (var(--mases-line-height-body) - var(--mases-icon-md)) / 2
+    (var(--arna-line-height-body) - var(--arna-icon-md)) / 2
   );
-  background-color: var(--mases-color-surface-page);
-  border: 2px solid var(--mases-color-border-default);
-  border-radius: var(--mases-radius-sm);
+  background-color: var(--arna-color-surface-page);
+  border: 2px solid var(--arna-color-border-default);
+  border-radius: var(--arna-radius-sm);
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    border-color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    border-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 /* Hover border — only when not disabled. */
 .checkbox:hover:not(.checkbox--disabled) .checkbox__box {
-  border-color: var(--mases-color-border-strong);
+  border-color: var(--arna-color-border-strong);
 }
 
 /* Checked state — brand action fill. */
 .checkbox__input:checked + .checkbox__box {
-  background-color: var(--mases-color-action-primary);
-  border-color: var(--mases-color-action-primary);
+  background-color: var(--arna-color-action-primary);
+  border-color: var(--arna-color-action-primary);
 }
 
 /* Indeterminate state — brand action fill, but with a dash instead of a
    checkmark. The dash is drawn by the ::before pseudo-element below. */
 .checkbox__input:indeterminate + .checkbox__box {
-  background-color: var(--mases-color-action-primary);
-  border-color: var(--mases-color-action-primary);
+  background-color: var(--arna-color-action-primary);
+  border-color: var(--arna-color-action-primary);
 }
 
 /* Checkmark — shown only when checked, drawn via CSS mask so that its
@@ -529,7 +539,7 @@ defineExpose({ focus, blur, el });
   content: '';
   position: absolute;
   inset: 0;
-  background-color: var(--mases-color-text-inverse);
+  background-color: var(--arna-color-text-inverse);
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
   -webkit-mask-size: 70%;
@@ -545,7 +555,7 @@ defineExpose({ focus, blur, el });
   content: '';
   position: absolute;
   inset: 0;
-  background-color: var(--mases-color-text-inverse);
+  background-color: var(--arna-color-text-inverse);
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='5' y1='12' x2='19' y2='12'/%3E%3C/svg%3E");
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='5' y1='12' x2='19' y2='12'/%3E%3C/svg%3E");
   -webkit-mask-size: 70%;
@@ -560,19 +570,19 @@ defineExpose({ focus, blur, el });
    :focus-visible. Non-editable controls only match :focus-visible for
    keyboard focus, so mouse clicks do not trigger the ring. */
 .checkbox__input:focus-visible + .checkbox__box {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* Invalid state — box border is the danger color. */
 .checkbox--invalid .checkbox__box {
-  border-color: var(--mases-color-border-danger);
+  border-color: var(--arna-color-border-danger);
 }
 
 /* Disabled state — box uses the disabled palette. */
 .checkbox--disabled .checkbox__box {
-  background-color: var(--mases-color-state-disabled-bg);
-  border-color: var(--mases-color-border-subtle);
+  background-color: var(--arna-color-state-disabled-bg);
+  border-color: var(--arna-color-border-subtle);
 }
 
 /* Disabled + checked or disabled + indeterminate — the fill is a muted
@@ -580,8 +590,8 @@ defineExpose({ focus, blur, el });
    flat; a subtle fill communicates "checked but disabled". */
 .checkbox__input:disabled:checked + .checkbox__box,
 .checkbox__input:disabled:indeterminate + .checkbox__box {
-  background-color: var(--mases-color-icon-secondary);
-  border-color: var(--mases-color-icon-secondary);
+  background-color: var(--arna-color-icon-secondary);
+  border-color: var(--arna-color-icon-secondary);
 }
 
 /* ============================================================================

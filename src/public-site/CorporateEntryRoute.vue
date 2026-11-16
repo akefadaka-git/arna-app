@@ -2,7 +2,8 @@
 import { onMounted, ref, watch } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import { fetchCorporateEntry, type CorporateLocale, type CorporatePublicEntry } from '@/features/public-site/api';
-import { masesBrandLabels } from '@/router/shell-labels';
+import { aranaBrandLabels } from '@/router/shell-labels';
+import { formatCalendarDate } from '@/core/dates/calendar';
 
 const route = useRoute();
 const entry = ref<CorporatePublicEntry | null>(null);
@@ -44,7 +45,7 @@ onMounted(() => void load());
   <div class="arna-site corporate-entry-route">
     <a class="skip-link" href="#entry-content">{{ locale === 'am' ? 'ወደ ዋናው ይዘት ይሂዱ' : 'Skip to main content' }}</a>
     <header class="site-header"><div class="site-container site-header__inner">
-      <RouterLink class="brand" to="/"><img class="public-home__emblem" src="/logo.png" alt="" width="43" height="43" /><span class="brand__wordmark"><strong>{{ masesBrandLabels.corporateName }}</strong><small>{{ masesBrandLabels.productName }}</small></span></RouterLink>
+      <RouterLink class="brand" to="/"><img class="public-home__emblem" src="/logo.png" alt="" width="43" height="43" /><span class="brand__wordmark"><strong>{{ aranaBrandLabels.corporateName }}</strong><small>{{ aranaBrandLabels.productName }}</small></span></RouterLink>
       <nav class="main-nav" :aria-label="locale === 'am' ? 'ዋና አሰሳ' : 'Main navigation'">
         <RouterLink to="/">{{ locale === 'am' ? 'መነሻ' : 'Home' }}</RouterLink>
         <RouterLink :to="`/${locale === 'am' ? 'en' : 'am'}/content/${String(route.params.type)}/${entry?.alternate_slug ?? String(route.params.slug)}`">{{ locale === 'am' ? 'English' : 'አማርኛ' }}</RouterLink>
@@ -57,7 +58,7 @@ onMounted(() => void load());
         <p class="eyebrow">{{ entry.type }}</p><h1>{{ entry.title }}</h1><p v-if="entry.summary">{{ entry.summary }}</p>
         <img v-if="entry.asset_url && entry.type === 'media'" :src="entry.asset_url" :alt="entry.title" loading="lazy" />
         <div class="corporate-entry__body">{{ entry.body }}</div>
-        <time v-if="entry.published_at" :datetime="entry.published_at">{{ new Date(entry.published_at).toLocaleDateString(locale === 'am' ? 'am-ET' : 'en-US') }}</time>
+        <time v-if="entry.published_at" :datetime="entry.published_at">{{ formatCalendarDate(entry.published_at, { dateStyle: 'medium' }, locale) }}</time>
       </article>
     </main>
   </div>

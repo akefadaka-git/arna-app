@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — AbstractBackground
+ ARNA App Shell — AbstractBackground
 =============================================================================
 
  File:      mase_app/src/layouts/AppShell/AbstractBackground/AbstractBackground.vue
@@ -24,7 +24,7 @@
  -----------------------------------------------------------------------------
  Purpose
  -----------------------------------------------------------------------------
- A subtle, decorative background layer for the MASES shell. Renders
+ A subtle, decorative background layer for the ARNA shell. Renders
  four of the five layers listed in Master Spec §28:
 
      base            —  a solid page-surface colour
@@ -48,10 +48,10 @@
  -----------------------------------------------------------------------------
  Why the component exists
  -----------------------------------------------------------------------------
- The current shell renders on flat ivory (--mases-color-surface-page,
+ The current shell renders on flat ivory (--arna-color-surface-page,
  #FFFDF7). That is a deliberate choice the shell made in v1.0.0 and
  that has not been revised. The Master Spec §28 anticipates a richer
- surface, but qualifies it as optional ("MASES may use a subtle
+ surface, but qualifies it as optional ("ARNA may use a subtle
  abstract background system").
 
  This component is the delivered implementation of that optional
@@ -86,7 +86,7 @@
  -----------------------------------------------------------------------------
  The base layer — a solid page-surface colour
  -----------------------------------------------------------------------------
- `background-color: var(--mases-color-surface-page)` — the same
+ `background-color: var(--arna-color-surface-page)` — the same
  ivory (#FFFDF7) that the shell paints today. The component is a
  drop-in replacement for the shell's own background-color; adopting
  it does not change the perceived base colour of the page.
@@ -131,7 +131,7 @@
 
  The 45° angle is chosen over 0°/90° (a grid) because:
    · A grid reads as graph paper, which conflicts with the
-     document/form affordances of MASES.
+     document/form affordances of ARNA.
    · A diagonal reads as woven fabric, which is neutral.
 
  The 14px spacing is large enough that the pattern does not alias
@@ -164,7 +164,7 @@
       `<SkipToContent />` so that it is behind every other shell
       element in the stacking order.
 
-   2. Change `.app-shell { background-color: var(--mases-color-
+   2. Change `.app-shell { background-color: var(--arna-color-
       surface-page); }` to `background-color: transparent;`. The
       AbstractBackground's own base layer now supplies this colour.
 
@@ -252,14 +252,14 @@
  -----------------------------------------------------------------------------
  The component consumes one Tier 2 token directly:
 
-     --mases-color-surface-page   (background-color, with fallback
+     --arna-color-surface-page   (background-color, with fallback
                                    #FFFDF7)
 
  The four decorative layers use literal rgba() values that are
  derived from three Tier 1 primitives:
 
-     rgba(212, 160, 23, α)   —  --mases-color-gold-500, α ∈ {0.045, 0.03}
-     rgba(31, 10, 47, α)     —  --mases-color-aubergine-900, α ∈
+     rgba(212, 160, 23, α)   —  --arna-color-gold-500, α ∈ {0.045, 0.03}
+     rgba(31, 10, 47, α)     —  --arna-color-aubergine-900, α ∈
                                   {0.04, 0.025, 0.02, 0.012}
 
  These values are literal rather than `color-mix()` expressions
@@ -276,12 +276,12 @@
       system.
 
  If a future CR establishes a general-purpose "subtle wash" token
- family (e.g. `--mases-color-wash-gold-subtle`), these values move
+ family (e.g. `--arna-color-wash-gold-subtle`), these values move
  to tokens.css in the same change. Until then, the component is
  their canonical home and its docblock is their record.
 
  No hex value appears in this file except the fallback for
- `--mases-color-surface-page` (#FFFDF7), which mirrors the design
+ `--arna-color-surface-page` (#FFFDF7), which mirrors the design
  system's Tier 1 value and is documented as such.
 
  -----------------------------------------------------------------------------
@@ -313,14 +313,14 @@
  Contrast: the base layer is the same ivory the shell paints today.
  The decorative overlays are at alphas between 1.2% and 4.5% — two
  orders of magnitude below the WCAG contrast thresholds. A text run
- on a `--mases-color-surface-page` background passes the same
+ on a `--arna-color-surface-page` background passes the same
  contrast checks with or without the AbstractBackground present.
 
  Reduced motion: the component defines no animation. There is
  nothing to disable under `prefers-reduced-motion: reduce`. The
  media query block at the end of the file is a defensive no-op
  placeholder, matching the convention used by AppHeader.vue,
- AppFooter.vue, AppShell.vue, and MASESBrand.vue.
+ AppFooter.vue, AppShell.vue, and AranaBrand.vue.
 
  Forced-colors: the component sets `display: none` under
  `@media (forced-colors: active)`. In Windows High Contrast Mode
@@ -343,12 +343,12 @@
     builds. This is deferred to a dedicated CR.
 
  2. Intensity control. A future CR may add an
-    `--mases-abstract-background-intensity` custom property or a
+    `--arna-abstract-background-intensity` custom property or a
     `variant` prop so that different surfaces can render the
     substrate at different strengths. The current component has a
     single fixed intensity.
 
- 3. Dark mode. If MASES adds a dark theme (the Master Spec §32
+ 3. Dark mode. If ARNA adds a dark theme (the Master Spec §32
     mentions dark surfaces as deferred), the component will need a
     dark-theme branch. The current values are tuned for the ivory
     light surface; on a dark surface the gold and aubergine washes
@@ -430,10 +430,10 @@
   /*
    * Base layer — the solid page-surface colour. Matches the ivory
    * (#FFFDF7) the shell paints today. The fallback is the design
-   * system's Tier 1 value for --mases-color-neutral-50, which is
-   * what --mases-color-surface-page resolves to.
+   * system's Tier 1 value for --arna-color-neutral-50, which is
+   * what --arna-color-surface-page resolves to.
    */
-  background-color: var(--mases-color-surface-page, #FFFDF7);
+  background-color: var(--arna-color-surface-page, #FFFDF7);
 
   /*
    * Decorative layers, top-first (CSS paints the first image
@@ -546,18 +546,20 @@
 }
 
 /* ============================================================================
-   Reduced motion
+   Dark theme
    ---------------------------------------------------------------------------
-   The component defines no animation. There is nothing to disable
-   under prefers-reduced-motion: reduce. This block is a defensive
-   no-op placeholder, matching the convention used by AppHeader.vue,
-   AppFooter.vue, AppShell.vue, and MASESBrand.vue, so a future
-   revision that adds a transition has a documented place to gate it
-   on the user's motion preference.
+   The shared theme layer switches the semantic page surface to a
+   dark neutral. The decorative washes below were tuned for ivory and
+   are intentionally omitted until a dark-surface treatment is
+   separately approved. The semantic base color remains active.
    ============================================================================ */
-@media (prefers-reduced-motion: reduce) {
-  .abstract-background {
-    /* no-op placeholder — see comment above */
+:global(:root[data-theme='dark']) .abstract-background {
+  background-image: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme='light'])) .abstract-background {
+    background-image: none;
   }
 }
 </style>

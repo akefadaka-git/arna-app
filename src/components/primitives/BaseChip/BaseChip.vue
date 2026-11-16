@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/BaseChip/BaseChip.vue
  Layer:     1 (Primitives)
- Version:   1.0.0
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.21
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -133,6 +133,13 @@ interface Props {
   removeAriaLabel?: string;
 
   /**
+   * ID of the element that labels the remove button. Mutually exclusive
+   * with `removeAriaLabel`; use this when the visible chip label or
+   * surrounding text provides the translated accessible name.
+   */
+  removeAriaLabelledBy?: string;
+
+  /**
    * Disabled state. Defaults to false.
    *
    * Disables the remove button natively and mutes the chip's visual
@@ -146,6 +153,7 @@ const props = withDefaults(defineProps<Props>(), {
   variant: 'default',
   removable: false,
   removeAriaLabel: undefined,
+  removeAriaLabelledBy: undefined,
   disabled: false,
 });
 
@@ -158,13 +166,12 @@ const emit = defineEmits<{
  * has a remove button with no accessible name. Warn once per module
  * load.
  */
-if (import.meta.env.DEV && props.removable && !props.removeAriaLabel) {
+if (import.meta.env.DEV && props.removable && !props.removeAriaLabel && !props.removeAriaLabelledBy) {
   __masesBaseChipWarnOnce(
     'base-chip:missing-remove-label',
-    '[BaseChip] removable=true without removeAriaLabel. The remove ' +
-      'button will render with an empty aria-label, which is an ' +
-      'accessibility defect. Supply a translated string such as ' +
-      '"Remove <label>" or "Remove filter".',
+    '[BaseChip] removable=true without removeAriaLabel or ' +
+      'removeAriaLabelledBy. The remove button has no accessible name. ' +
+      'Supply a translated label or the ID of a visible label element.',
   );
 }
 
@@ -220,7 +227,8 @@ function onRemoveClick(): void {
       v-if="removable"
       type="button"
       :disabled="disabled"
-      :aria-label="removeAriaLabel ?? ''"
+      :aria-label="removeAriaLabelledBy ? undefined : (removeAriaLabel ?? undefined)"
+      :aria-labelledby="removeAriaLabelledBy"
       class="chip__remove"
       data-testid="base-chip-remove"
       @click="onRemoveClick"
@@ -243,17 +251,17 @@ function onRemoveClick(): void {
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   vertical-align: middle;
   max-width: 100%;
-  padding-block: var(--mases-space-1);
-  padding-inline: var(--mases-space-2);
+  padding-block: var(--arna-space-1);
+  padding-inline: var(--arna-space-2);
   border: 1px solid transparent;
-  border-radius: var(--mases-radius-full);
+  border-radius: var(--arna-radius-full);
   font-family: inherit;
-  font-size: var(--mases-font-size-caption);
+  font-size: var(--arna-font-size-caption);
   line-height: 1;
-  font-weight: var(--mases-font-weight-medium);
+  font-weight: var(--arna-font-weight-medium);
   /*
    * Amharic syllables must never be uppercased.
    * Design System §3.5 B6.
@@ -266,31 +274,31 @@ function onRemoveClick(): void {
    remove button carries its own right inset. This keeps the pill's
    internal rhythm even. */
 .chip--removable {
-  padding-inline-end: var(--mases-space-1);
+  padding-inline-end: var(--arna-space-1);
 }
 
 /* ============================================================================
    Variants
    ============================================================================ */
 .chip--default {
-  background-color: var(--mases-color-surface-raised);
-  color: var(--mases-color-text-secondary);
-  border-color: var(--mases-color-border-subtle);
+  background-color: var(--arna-color-surface-raised);
+  color: var(--arna-color-text-secondary);
+  border-color: var(--arna-color-border-subtle);
 }
 
 .chip--accent {
-  background-color: var(--mases-color-surface-accent);
-  color: var(--mases-color-text-accent);
-  border-color: var(--mases-color-border-subtle);
+  background-color: var(--arna-color-surface-accent);
+  color: var(--arna-color-text-accent);
+  border-color: var(--arna-color-border-subtle);
 }
 
 /* ============================================================================
    Disabled state
    ============================================================================ */
 .chip--disabled {
-  background-color: var(--mases-color-surface-disabled);
-  color: var(--mases-color-state-disabled-text);
-  border-color: var(--mases-color-border-subtle);
+  background-color: var(--arna-color-surface-disabled);
+  color: var(--arna-color-state-disabled-text);
+  border-color: var(--arna-color-border-subtle);
   cursor: not-allowed;
 }
 
@@ -300,7 +308,7 @@ function onRemoveClick(): void {
 .chip__label {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   /*
    * The label truncates with an ellipsis when the chip's content
    * exceeds the chip's max-width. Amharic truncates at word boundaries
@@ -329,33 +337,33 @@ function onRemoveClick(): void {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: var(--mases-icon-md);
-  height: var(--mases-icon-md);
+  width: var(--arna-icon-md);
+  height: var(--arna-icon-md);
   padding: 0;
   margin: 0;
   appearance: none;
   background-color: transparent;
   border: none;
-  border-radius: var(--mases-radius-full);
+  border-radius: var(--arna-radius-full);
   color: inherit;
   cursor: pointer;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .chip__remove:hover:not(:disabled) {
-  background-color: var(--mases-color-state-hover);
+  background-color: var(--arna-color-state-hover);
 }
 
 .chip__remove:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 .chip__remove:disabled {
   cursor: not-allowed;
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
 }
 
 /* The hover background on the remove button uses a subtle state-hover
@@ -373,13 +381,13 @@ function onRemoveClick(): void {
    ============================================================================ */
 @media (max-width: 639px) {
   .chip {
-    padding-block: var(--mases-space-2);
-    font-size: var(--mases-font-size-body-sm);
+    padding-block: var(--arna-space-2);
+    font-size: var(--arna-font-size-body-sm);
   }
 
   .chip__remove {
-    width: var(--mases-icon-lg);
-    height: var(--mases-icon-lg);
+    width: var(--arna-icon-lg);
+    height: var(--arna-icon-lg);
   }
 }
 </style>

@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — CR-L3
 =============================================================================
 
- File:      mase_app/src/features/portal/PortalHomePage.vue  (AMEND)
+ File:      arna-app/src/features/portal/PortalHomePage.vue  (AMEND)
  Unit:      CR-L3 — Portal self-service loans pages (home quick-link)
  Delivery type:  Amendment — one added RouterLink block in the
                  quick-links nav, revision history, version bump.
@@ -48,7 +48,7 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — PortalHomePage
+ ARNA Platform UI — PortalHomePage
 =============================================================================
 
  File:      mase_app/src/features/portal/PortalHomePage.vue
@@ -161,7 +161,6 @@
 -->
 
 <script lang="ts">
-import { formatCalendarDate } from '@/core/dates/calendar';
 /*
  * The page's labels type is imported from ./labels and re-exported here
  * for consumers that import the type from the component module. The
@@ -172,6 +171,7 @@ export type { PortalHomePageLabels };
 </script>
 
 <script setup lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
 
@@ -356,12 +356,12 @@ function shareholderStatusVariant(active: boolean): 'success' | 'neutral' {
 
           <div class="portal-home-page__row">
             <dt>{{ labels.identityCreated }}</dt>
-            <dd>{{ formatCalendarDate(shareholder.created_at) }}</dd>
+            <dd><time :datetime="shareholder.created_at">{{ formatCalendarDate(shareholder.created_at) }}</time></dd>
           </div>
 
           <div class="portal-home-page__row">
             <dt>{{ labels.identityUpdated }}</dt>
-            <dd>{{ formatCalendarDate(shareholder.updated_at) }}</dd>
+            <dd><time :datetime="shareholder.updated_at">{{ formatCalendarDate(shareholder.updated_at) }}</time></dd>
           </div>
         </dl>
       </Card>
@@ -442,7 +442,7 @@ function shareholderStatusVariant(active: boolean): 'success' | 'neutral' {
 .portal-home-page {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -459,10 +459,10 @@ function shareholderStatusVariant(active: boolean): 'success' | 'neutral' {
    ============================================================================ */
 .portal-home-page__section-title {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-6);
-  line-height: var(--mases-line-height-heading-6);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-6);
+  line-height: var(--arna-line-height-heading-6);
+  font-weight: var(--arna-font-weight-semibold);
   overflow-wrap: anywhere;
 }
 
@@ -474,31 +474,31 @@ function shareholderStatusVariant(active: boolean): 'success' | 'neutral' {
 .portal-home-page__identity {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   margin: 0;
 }
 
 .portal-home-page__row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   align-items: baseline;
 }
 
 .portal-home-page__row dt {
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
   overflow-wrap: anywhere;
 }
 
 .portal-home-page__row dd {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: anywhere;
 }
 
@@ -514,48 +514,48 @@ function shareholderStatusVariant(active: boolean): 'success' | 'neutral' {
 .portal-home-page__links {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: var(--mases-space-4);
+  gap: var(--arna-space-4);
 }
 
 .portal-home-page__link {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-1);
-  padding-block: var(--mases-space-5);
-  padding-inline: var(--mases-space-5);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-lg);
-  background-color: var(--mases-color-surface-page);
-  color: var(--mases-color-text-primary);
+  gap: var(--arna-space-1);
+  padding-block: var(--arna-space-5);
+  padding-inline: var(--arna-space-5);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-lg);
+  background-color: var(--arna-color-surface-page);
+  color: var(--arna-color-text-primary);
   text-decoration: none;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    border-color var(--mases-duration-fast) var(--mases-easing-standard),
-    box-shadow var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    border-color var(--arna-duration-fast) var(--arna-easing-standard),
+    box-shadow var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .portal-home-page__link:hover {
-  border-color: var(--mases-color-border-strong);
-  box-shadow: var(--mases-shadow-elevation-2);
+  border-color: var(--arna-color-border-strong);
+  box-shadow: var(--arna-shadow-elevation-2);
 }
 
 .portal-home-page__link:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 .portal-home-page__link-title {
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-semibold);
   overflow-wrap: anywhere;
 }
 
 .portal-home-page__link-description {
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: anywhere;
 }
 
@@ -565,7 +565,7 @@ function shareholderStatusVariant(active: boolean): 'success' | 'neutral' {
 @media (max-width: 639px) {
   .portal-home-page__row {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--mases-space-1);
+    gap: var(--arna-space-1);
   }
 }
 

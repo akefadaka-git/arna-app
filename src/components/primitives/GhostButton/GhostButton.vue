@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/GhostButton/GhostButton.vue
  Layer:     1 (Primitives)
- Version:   1.0.0
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.4
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -27,7 +27,7 @@
  -----------------------------------------------------------------------------
  The ghost variant renders with a transparent background and the
  primary text color, receiving a hover background
- (--mases-color-action-ghost-hover) on pointer or keyboard interaction.
+ (--arna-color-action-ghost-hover) on pointer or keyboard interaction.
  It is the standard "tertiary action" button in MASES surfaces — used
  for dismissals, secondary navigation, disclosure toggles, and any
  action that should be reachable without competing visually with
@@ -120,6 +120,9 @@ interface Props {
    * Accessible name. Required when iconOnly is true.
    */
   ariaLabel?: string;
+
+  /** ID reference for an external accessible name. */
+  ariaLabelledBy?: string;
 }
 
 withDefaults(defineProps<Props>(), {
@@ -130,6 +133,7 @@ withDefaults(defineProps<Props>(), {
   block: false,
   iconOnly: false,
   ariaLabel: undefined,
+  ariaLabelledBy: undefined,
 });
 
 const emit = defineEmits<{
@@ -151,6 +155,7 @@ function handleClick(event: MouseEvent): void {
     :block="block"
     :icon-only="iconOnly"
     :aria-label="ariaLabel"
+    :aria-labelledby="ariaLabelledBy"
     data-testid="ghost-button-root"
     @click="handleClick"
   >

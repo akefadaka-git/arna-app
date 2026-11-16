@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import type { RouteLocationRaw } from 'vue-router';
 import BaseButton from '@/components/primitives/BaseButton';
@@ -42,9 +42,20 @@ const breadcrumbs = computed(() => route.matched
   .filter((item, index, all) => index === 0 || item.path !== all[index - 1]?.path));
 
 function openSearch(): void {
+  if (dialog.value?.open) return;
   query.value = '';
   dialog.value?.showModal();
 }
+
+function onGlobalKeydown(event: KeyboardEvent): void {
+  if ((event.metaKey || event.ctrlKey) && !event.altKey && event.key.toLowerCase() === 'k') {
+    event.preventDefault();
+    openSearch();
+  }
+}
+
+onMounted(() => window.addEventListener('keydown', onGlobalKeydown));
+onBeforeUnmount(() => window.removeEventListener('keydown', onGlobalKeydown));
 
 function closeSearch(): void {
   dialog.value?.close();
@@ -80,7 +91,7 @@ function navigate(item: SearchNavItem): void {
     >
       <BaseIcon name="search" size="sm" />
       <span class="app-header-navigation__search-label">Search ARNA</span>
-      <kbd>⌘ K</kbd>
+      <kbd>Ctrl / ⌘ K</kbd>
     </BaseButton>
 
     <dialog ref="dialog" class="app-header-navigation__dialog" aria-labelledby="app-header-search-title">
@@ -95,9 +106,9 @@ function navigate(item: SearchNavItem): void {
       </form>
       <label class="app-header-navigation__input-wrap">
         <BaseIcon name="search" size="sm" />
-        <input v-model="query" autofocus type="search" placeholder="Search modules and pages…" />
+        <input v-model="query" autofocus type="search" aria-label="Search modules and pages" aria-controls="app-header-search-results" placeholder="Search modules and pages…" />
       </label>
-      <ul class="app-header-navigation__results">
+      <ul id="app-header-search-results" class="app-header-navigation__results" aria-live="polite" aria-relevant="additions text">
         <li v-for="item in results" :key="item.id">
           <button type="button" @click="navigate(item)">
             <span>{{ item.label }}</span>
@@ -115,7 +126,7 @@ function navigate(item: SearchNavItem): void {
 .app-header-navigation {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   min-width: 0;
   width: 100%;
 }
@@ -126,7 +137,7 @@ function navigate(item: SearchNavItem): void {
 .app-header-navigation__breadcrumbs ol {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -136,14 +147,14 @@ function navigate(item: SearchNavItem): void {
 .app-header-navigation__breadcrumbs li {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   min-width: 0;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-caption);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-caption);
 }
 .app-header-navigation__breadcrumbs [aria-current="page"] {
-  color: var(--mases-color-text-primary);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-weight: var(--arna-font-weight-semibold);
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -155,52 +166,52 @@ function navigate(item: SearchNavItem): void {
   display: inline;
 }
 .app-header-navigation__search-trigger kbd {
-  margin-inline-start: var(--mases-space-3);
-  padding: 1px var(--mases-space-1);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-sm);
-  color: var(--mases-color-text-muted);
-  font-size: var(--mases-font-size-caption);
+  margin-inline-start: var(--arna-space-3);
+  padding: 1px var(--arna-space-1);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-sm);
+  color: var(--arna-color-text-muted);
+  font-size: var(--arna-font-size-caption);
 }
 .app-header-navigation__dialog {
   width: min(42rem, calc(100vw - 2rem));
   max-height: min(80dvh, 42rem);
   margin: auto;
-  padding: var(--mases-space-5);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-xl);
-  background: var(--mases-color-surface-raised);
-  color: var(--mases-color-text-primary);
-  box-shadow: var(--mases-shadow-elevation-4);
+  padding: var(--arna-space-5);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-xl);
+  background: var(--arna-color-surface-raised);
+  color: var(--arna-color-text-primary);
+  box-shadow: var(--arna-shadow-elevation-4);
 }
 .app-header-navigation__dialog::backdrop {
-  background: var(--mases-color-overlay-scrim);
+  background: var(--arna-color-overlay-scrim);
 }
 .app-header-navigation__dialog-head {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--mases-space-3);
-  margin-bottom: var(--mases-space-4);
+  gap: var(--arna-space-3);
+  margin-bottom: var(--arna-space-4);
 }
 .app-header-navigation__dialog-head h2 {
   margin: 0;
-  font-size: var(--mases-font-size-heading-md);
+  font-size: var(--arna-font-size-heading-md);
 }
 .app-header-navigation__dialog-head p,
 .app-header-navigation__hint {
-  margin: var(--mases-space-1) 0 0;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-caption);
+  margin: var(--arna-space-1) 0 0;
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-caption);
 }
 .app-header-navigation__input-wrap {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-2);
-  padding: var(--mases-space-3);
-  border: 1px solid var(--mases-color-border-default);
-  border-radius: var(--mases-radius-md);
-  background: var(--mases-color-surface-page);
+  gap: var(--arna-space-2);
+  padding: var(--arna-space-3);
+  border: 1px solid var(--arna-color-border-default);
+  border-radius: var(--arna-radius-md);
+  background: var(--arna-color-surface-page);
 }
 .app-header-navigation__input-wrap input {
   width: 100%;
@@ -213,10 +224,10 @@ function navigate(item: SearchNavItem): void {
 }
 .app-header-navigation__results {
   display: grid;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   max-height: 42dvh;
   overflow: auto;
-  margin: var(--mases-space-3) 0;
+  margin: var(--arna-space-3) 0;
   padding: 0;
   list-style: none;
 }
@@ -225,9 +236,9 @@ function navigate(item: SearchNavItem): void {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: var(--mases-space-3);
+  padding: var(--arna-space-3);
   border: 0;
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
   background: transparent;
   color: inherit;
   text-align: start;
@@ -235,11 +246,11 @@ function navigate(item: SearchNavItem): void {
 }
 .app-header-navigation__results button:hover,
 .app-header-navigation__results button:focus-visible {
-  background: var(--mases-color-state-hover);
+  background: var(--arna-color-state-hover);
 }
 .app-header-navigation__empty {
-  padding: var(--mases-space-4);
-  color: var(--mases-color-text-secondary);
+  padding: var(--arna-space-4);
+  color: var(--arna-color-text-secondary);
   text-align: center;
 }
 @media (max-width: 767px) {

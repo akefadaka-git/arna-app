@@ -285,7 +285,7 @@ const hasHeaderContent = computed<boolean>(
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   flex-wrap: wrap;
 }
 
@@ -295,7 +295,7 @@ const hasHeaderContent = computed<boolean>(
 .detail-card__title-block {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   /*
    * The title block grows to fill available width; the actions row
    * takes only as much as its content requires (see below).
@@ -310,11 +310,11 @@ const hasHeaderContent = computed<boolean>(
 .detail-card__title {
   margin: 0;
   max-width: 40em;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-heading-6);
-  line-height: var(--mases-line-height-heading-6);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-heading-6);
+  line-height: var(--arna-line-height-heading-6);
+  font-weight: var(--arna-font-weight-semibold);
   /*
    * Amharic truncation uses word-boundary wrapping
    * (Design System §3.7 W4).
@@ -328,11 +328,11 @@ const hasHeaderContent = computed<boolean>(
 .detail-card__subtitle {
   margin: 0;
   max-width: 60em;
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: anywhere;
 }
 
@@ -342,7 +342,7 @@ const hasHeaderContent = computed<boolean>(
 .detail-card__actions {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-wrap: wrap;
   flex-shrink: 0;
   /*
@@ -361,7 +361,7 @@ const hasHeaderContent = computed<boolean>(
    * a distinct sub-region rather than being squeezed against the
    * fields.
    */
-  margin-block-start: var(--mases-space-4);
+  margin-block-start: var(--arna-space-4);
 }
 
 /* ============================================================================

@@ -198,7 +198,7 @@ import BaseInput from '../../primitives/BaseInput';
 import BaseSelect from '../../primitives/BaseSelect';
 import BaseCheckbox from '../../primitives/BaseCheckbox';
 import BaseIcon from '../../primitives/BaseIcon';
-import DatePicker from '@/components/composites/DatePicker';
+import DatePicker, { CalendarDateInput } from '@/components/composites/DatePicker';
 import type { DatePickerLabels } from '@/components/composites/DatePicker';
 
 interface Props {
@@ -466,16 +466,11 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
           data-testid="filter-bar-label"
         >{{ filter.label }}</label>
 
-        <input
+        <CalendarDateInput
           :id="filterInputIdFor(filter.key)"
-          type="date"
-          class="filter-bar__date-fallback"
-          :value="valueAsDateString(filter.value) ?? ''"
+          :model-value="valueAsDateString(filter.value)"
           data-testid="filter-bar-date-fallback"
-          @input="onDateChange(
-            filter,
-            ($event.target as HTMLInputElement).value || null,
-          )"
+          @update:model-value="(value: string) => onDateChange(filter, value || null)"
         />
       </template>
 
@@ -543,7 +538,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .filter-bar {
   display: flex;
   align-items: flex-end; /* bottom-align controls across all filter types */
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   flex-wrap: wrap;
   width: 100%;
   font-family: inherit;
@@ -555,7 +550,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .filter-bar__filter {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   /*
    * A minimum width so short labels (e.g., "Type") do not collapse the
    * control to an unusable sliver. Growing up to 16rem on desktop keeps
@@ -572,18 +567,18 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
   max-width: none;
   flex-direction: row;
   align-items: center;
-  padding-block-end: var(--mases-space-2); /* align bottom with controls */
+  padding-block-end: var(--arna-space-2); /* align bottom with controls */
 }
 
 /* ============================================================================
    Label
    ============================================================================ */
 .filter-bar__label {
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
+  font-weight: var(--arna-font-weight-medium);
   /*
    * Amharic truncation uses word-boundary wrapping (Design System
    * §3.7 W4).
@@ -604,27 +599,27 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .filter-bar__date-fallback {
   width: 100%;
   min-height: 40px;
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-3);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-3);
   appearance: none;
-  background-color: var(--mases-color-surface-page);
-  border: 1px solid var(--mases-color-border-default);
-  border-radius: var(--mases-radius-md);
-  color: var(--mases-color-text-primary);
+  background-color: var(--arna-color-surface-page);
+  border: 1px solid var(--arna-color-border-default);
+  border-radius: var(--arna-radius-md);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
-  transition: border-color var(--mases-duration-fast) var(--mases-easing-standard);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
+  transition: border-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .filter-bar__date-fallback:hover {
-  border-color: var(--mases-color-border-strong);
+  border-color: var(--arna-color-border-strong);
 }
 
 .filter-bar__date-fallback:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
@@ -633,7 +628,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .filter-bar__custom-slot {
   display: flex;
   align-items: flex-end;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   flex-wrap: wrap;
 }
 
@@ -666,24 +661,24 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
   appearance: none;
   background-color: transparent;
   border: 1px solid transparent;
-  border-radius: var(--mases-radius-md);
-  color: var(--mases-color-icon-secondary);
+  border-radius: var(--arna-radius-md);
+  color: var(--arna-color-icon-secondary);
   cursor: pointer;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    border-color var(--mases-duration-fast) var(--mases-easing-standard),
-    color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    border-color var(--arna-duration-fast) var(--arna-easing-standard),
+    color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .filter-bar__clear:hover {
-  background-color: var(--mases-color-state-hover);
-  border-color: var(--mases-color-border-subtle);
-  color: var(--mases-color-icon-primary);
+  background-color: var(--arna-color-state-hover);
+  border-color: var(--arna-color-border-subtle);
+  color: var(--arna-color-icon-primary);
 }
 
 .filter-bar__clear:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
@@ -692,7 +687,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .filter-bar__actions {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-shrink: 0;
 }
 
@@ -701,7 +696,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
    ============================================================================ */
 @media (max-width: 639px) {
   .filter-bar {
-    gap: var(--mases-space-2);
+    gap: var(--arna-space-2);
   }
 
   .filter-bar__filter {

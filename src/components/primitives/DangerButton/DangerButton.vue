@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/DangerButton/DangerButton.vue
  Layer:     1 (Primitives)
- Version:   1.0.0
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.5
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -26,7 +26,7 @@
  Visual identity
  -----------------------------------------------------------------------------
  The danger variant renders with the darkest crimson surface
- (--mases-color-action-danger, resolving to crimson-700). It is visually
+ (--arna-color-action-danger, resolving to crimson-700). It is visually
  distinct from the primary button's crimson-600 surface, so a
  confirmation dialog with "Save" (primary) and "Delete" (danger) does
  not present two identical-looking buttons.
@@ -137,6 +137,9 @@ interface Props {
    * Accessible name. Required when iconOnly is true.
    */
   ariaLabel?: string;
+
+  /** ID reference for an external accessible name. */
+  ariaLabelledBy?: string;
 }
 
 withDefaults(defineProps<Props>(), {
@@ -147,6 +150,7 @@ withDefaults(defineProps<Props>(), {
   block: false,
   iconOnly: false,
   ariaLabel: undefined,
+  ariaLabelledBy: undefined,
 });
 
 const emit = defineEmits<{
@@ -168,6 +172,7 @@ function handleClick(event: MouseEvent): void {
     :block="block"
     :icon-only="iconOnly"
     :aria-label="ariaLabel"
+    :aria-labelledby="ariaLabelledBy"
     data-testid="danger-button-root"
     @click="handleClick"
   >

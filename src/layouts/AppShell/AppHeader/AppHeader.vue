@@ -127,7 +127,7 @@
       caller — is a composition decision. Composition belongs to the
       shell, not to the frame. This file decides the three-region
       skeleton; the shell decides what fills it. The current fill is
-      documented in AppShell.vue's §"Composition": MASESBrand into
+      documented in AppShell.vue's §"Composition": AranaBrand into
       #brand, breadcrumbs into #nav, and the notifications bell +
       tenant switcher + user menu into #actions. A future revision
       of that composition (reordering, adding a language selector)
@@ -153,7 +153,7 @@
    · The sticky/relative variant, selected by the `sticky` prop, and
      the z-index token that variant consumes.
    · The optional default mobile-menu toggle, which composes
-     BaseButton and BaseIcon rather than reimplementing either.
+     IconButton rather than reimplementing icon-only button behavior.
    · The scoped CSS that expresses the above.
 
  This file does NOT own:
@@ -162,7 +162,7 @@
    · Any store reads, route reads, or user-identity affordances.
    · The decision of which controls render in each region. That is
      AppShell's composition decision (see its §"Composition").
-   · The brand mark. When AppShell supplies MASESBrand into #brand,
+   · The brand mark. When AppShell supplies AranaBrand into #brand,
      that component owns the brand strings; this file forwards
      whatever #brand receives.
    · Any navigation behaviour. A slot-rendered control that navigates
@@ -177,15 +177,15 @@
  -----------------------------------------------------------------------------
  z-index constraint (from Unit 11.1)
  -----------------------------------------------------------------------------
- Uses --mases-z-raised (10). Must be at or below that token so the
- SkipToContent link (--mases-z-sticky, 200) renders above the header
+ Uses --arna-z-raised (10). Must be at or below that token so the
+ SkipToContent link (--arna-z-sticky, 200) renders above the header
  when focused.
 
  The constraint is stated here because the header is the most likely
  surface for a future contributor to raise a z-index — a "the dropdown
  is behind the header" report, for example, that gets fixed by
  bumping this file's value instead of the dropdown's. Raising the
- header above --mases-z-sticky would break the skip link's visibility
+ header above --arna-z-sticky would break the skip link's visibility
  for keyboard users, which is a WCAG 2.4.1 concern. If a specific
  component needs to render above the header, that component's
  z-index token is the correct place to change.
@@ -194,8 +194,7 @@
  Composition
  -----------------------------------------------------------------------------
  COMPOSES:
-   BaseButton (Unit 8.2)  — the default mobile-menu toggle
-   BaseIcon   (Unit 8.19) — the toggle's hamburger glyph
+   IconButton (Unit 8.7) — the default mobile-menu toggle
 
  Does not reimplement either primitive.
 
@@ -220,7 +219,7 @@
 
  No hex value appears in this file.
 
- The inline padding consumes --mases-shell-chrome-padding-inline-*,
+ The inline padding consumes --arna-shell-chrome-padding-inline-*,
  the shared chrome rhythm also used by AppFooter and SkipToContent
  (tokens.css v1.2.0 §"Shell chrome inline padding"). Selecting the
  mobile or tablet variant of that token pair is this file's choice;
@@ -248,12 +247,12 @@
  The toggle region renders when either (a) the consumer supplies a
  #mobile-menu-trigger slot, or (b) the consumer supplies a non-empty
  mobileMenuLabel prop. In case (a) the slot content wins and the
- default BaseButton is not rendered; in case (b) the default renders
+ default IconButton is not rendered; in case (b) the default renders
  with the supplied label as its aria-label.
 
  When the override path is taken, the `data-testid="app-header-
  mobile-toggle"` hook is not present in the DOM, because the hook is
- bound on the default BaseButton. A test that asserts on the toggle's
+ bound on the default IconButton. A test that asserts on the toggle's
  presence should therefore either assert on the outer
  `.app-header__mobile-toggle` wrapper (which is rendered in both
  cases) or supply a mobileMenuLabel and rely on the default branch.
@@ -282,11 +281,10 @@
      would announce both. If a feature page needs a header-like
      region (a card header, a section header), it uses a plain
      <header> without the role, or a <div>.
-   - The default mobile toggle uses BaseButton with an explicit
+   - The default mobile toggle uses IconButton with an explicit
      aria-label from mobileMenuLabel. The hamburger glyph inside it
-     is decorative — BaseIcon defaults to aria-hidden="true" when no
-     ariaLabel is supplied, which is the correct behaviour here
-     because the button element already carries the accessible name.
+     is decorative — IconButton renders its glyph as aria-hidden, while
+     the button carries the explicit accessible name.
    - The mobile toggle is hidden on desktop via CSS (display: none),
      so it does not appear in the tab order on desktop. A screen
      reader running on a desktop viewport does not encounter it.
@@ -306,8 +304,7 @@
 
 <script setup lang="ts">
 import { computed, useSlots } from 'vue';
-import BaseButton from '@/components/primitives/BaseButton';
-import BaseIcon from '@/components/primitives/BaseIcon';
+import IconButton from '@/components/primitives/IconButton';
 
 interface Props {
   /**
@@ -318,7 +315,7 @@ interface Props {
    * content. Useful for shells that place the header inside a
    * fixed-height grid layout where only <main> scrolls.
    *
-   * The sticky variant consumes --mases-z-raised (10). See the file
+   * The sticky variant consumes --arna-z-raised (10). See the file
    * header §"z-index constraint" before changing this value's
    * companion token.
    */
@@ -360,7 +357,7 @@ const emit = defineEmits<{
  * Slots.
  *
  * brand                 — the brand/logo region (left). Typically the
- *                         MASESBrand component; AppShell supplies it
+ *                         AranaBrand component; AppShell supplies it
  *                         as the fallback content when no consumer
  *                         overrides the slot.
  * nav                   — the navigation region (center). Typically
@@ -474,23 +471,22 @@ function onToggleClick(): void {
       class="app-header__mobile-toggle"
     >
       <slot name="mobile-menu-trigger">
-        <BaseButton
+        <IconButton
+          icon="menu"
           variant="ghost"
           size="sm"
           :aria-label="mobileMenuLabel"
           aria-haspopup="dialog"
           data-testid="app-header-mobile-toggle"
           @click="onToggleClick"
-        >
-          <BaseIcon name="menu" size="md" />
-        </BaseButton>
+        />
       </slot>
     </div>
 
     <!-- ============================================================
          Brand region
 
-         Left-anchored, does not shrink. AppShell supplies MASESBrand
+         Left-anchored, does not shrink. AppShell supplies AranaBrand
          as its fallback content; a consumer of AppShell that wants a
          different brand supplies its own #brand and this region
          receives that instead. See the file header §"Ownership" for
@@ -552,11 +548,11 @@ function onToggleClick(): void {
 
    TABLET AND UP: the gap widens and the inline padding increases at
    the min-width breakpoint below, matching the wider spacing rhythm
-   of --mases-shell-chrome-padding-inline-tablet. The three regions
+   of --arna-shell-chrome-padding-inline-tablet. The three regions
    return to one row; the mobile drawer remains the primary mobile
    navigation surface.
 
-   The inline padding consumes --mases-shell-chrome-padding-inline-*,
+   The inline padding consumes --arna-shell-chrome-padding-inline-*,
    the shared chrome rhythm used by AppFooter and SkipToContent. See
    tokens.css v1.2.0 for the value provenance; the header widens by
    one spacing step on desktop relative to its own pre-1.2.0 value as
@@ -566,12 +562,12 @@ function onToggleClick(): void {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   width: 100%;
-  min-height: var(--mases-shell-header-height);
+  min-height: var(--arna-shell-header-height);
   height: auto;
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-shell-chrome-padding-inline-mobile);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-shell-chrome-padding-inline-mobile);
   /*
    * A single subtle rule separates the header from the content below.
    * Matches the rule treatment used by MaintenanceBanner (Unit 11.3).
@@ -579,10 +575,10 @@ function onToggleClick(): void {
    * so a page whose content begins without a border still gets a
    * clean transition under the header.
    */
-  border-block-start: 3px solid var(--mases-color-gold-500);
-  border-block-end: 1px solid var(--mases-color-border-brand);
-  background-color: var(--mases-color-surface-raised);
-  color: var(--mases-color-text-primary);
+  border-block-start: 3px solid var(--arna-color-gold-500);
+  border-block-end: 1px solid var(--arna-color-border-brand);
+  background-color: var(--arna-color-surface-raised);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
 }
 
@@ -599,19 +595,19 @@ function onToggleClick(): void {
 
   .app-header {
     flex-wrap: nowrap;
-    gap: var(--mases-space-4);
-    padding-block: var(--mases-space-3);
-    padding-inline: var(--mases-shell-chrome-padding-inline-tablet);
+    gap: var(--arna-space-4);
+    padding-block: var(--arna-space-3);
+    padding-inline: var(--arna-shell-chrome-padding-inline-tablet);
   }
 }
 
 /* ---------------------------------------------------------------------------
    Sticky variant
    ---------------------------------------------------------------------------
-   Uses --mases-z-raised (10) — see the file header §"z-index
+   Uses --arna-z-raised (10) — see the file header §"z-index
    constraint". The value must remain at or below this token so the
-   SkipToContent link (--mases-z-sticky, 200) renders above the header
-   when focused. Raising it above --mases-z-sticky would put the header
+   SkipToContent link (--arna-z-sticky, 200) renders above the header
+   when focused. Raising it above --arna-z-sticky would put the header
    above the skip link and hide the link from keyboard users, which is
    a WCAG 2.4.1 concern.
 
@@ -625,7 +621,7 @@ function onToggleClick(): void {
 .app-header[data-sticky='true'] {
   position: sticky;
   top: 0;
-  z-index: var(--mases-z-raised);
+  z-index: var(--arna-z-raised);
 }
 
 /* ============================================================================
@@ -665,7 +661,7 @@ function onToggleClick(): void {
 .app-header__brand {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-shrink: 0;
   min-width: 0;
 }
@@ -687,13 +683,13 @@ function onToggleClick(): void {
   order: 4;
   flex: 1 1 100%;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   min-width: 0;
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior-inline: contain;
-  scroll-padding-inline: var(--mases-space-2);
-  scrollbar-color: var(--mases-color-border-strong) transparent;
+  scroll-padding-inline: var(--arna-space-2);
+  scrollbar-color: var(--arna-color-border-strong) transparent;
   scrollbar-width: thin;
 }
 
@@ -712,7 +708,7 @@ function onToggleClick(): void {
   display: flex;
   order: 3;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-shrink: 0;
 }
 

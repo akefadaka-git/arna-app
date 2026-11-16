@@ -476,14 +476,14 @@ function onPerform(actionId: string): void {
 .error-page {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
-  max-width: var(--mases-container-form);
+  max-width: var(--arna-container-form);
   margin-inline: auto;
-  padding-block: var(--mases-space-12);
-  padding-inline: var(--mases-space-6);
+  padding-block: var(--arna-space-12);
+  padding-inline: var(--arna-space-6);
   font-family: inherit;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
 }
 
 /* ============================================================================
@@ -519,9 +519,9 @@ function onPerform(actionId: string): void {
    ============================================================================ */
 @media (max-width: 639px) {
   .error-page {
-    gap: var(--mases-space-4);
-    padding-block: var(--mases-space-8);
-    padding-inline: var(--mases-space-4);
+    gap: var(--arna-space-4);
+    padding-block: var(--arna-space-8);
+    padding-inline: var(--arna-space-4);
   }
 }
 

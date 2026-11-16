@@ -346,6 +346,14 @@ const auth = useAuthStore();
 const user = computed(() => auth.user);
 const displayName = computed<string>(() => auth.userName ?? '');
 
+// Keep the authenticated identity in the trigger's accessible name, even
+// when the visual name is hidden at the mobile breakpoint.
+const triggerAccessibleLabel = computed(() =>
+  displayName.value
+    ? `${props.labels.triggerAriaLabel}: ${displayName.value}`
+    : props.labels.triggerAriaLabel,
+);
+
 // -----------------------------------------------------------------------------
 // Menu open state (single-instance controlled state)
 // -----------------------------------------------------------------------------
@@ -459,7 +467,7 @@ function onMenuSelect(key: string): void {
           :aria-haspopup="ariaHaspopup"
           :aria-expanded="ariaExpanded"
           :aria-controls="ariaControls"
-          :aria-label="labels.triggerAriaLabel"
+          :aria-label="triggerAccessibleLabel"
           data-testid="user-menu-trigger"
           @click="toggle"
         >
@@ -511,7 +519,7 @@ function onMenuSelect(key: string): void {
 .user-menu__trigger-content {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   min-width: 0;
 }
 
@@ -524,7 +532,7 @@ function onMenuSelect(key: string): void {
 
    Truncated with an ellipsis when the header is crowded. This is a
    deliberate departure from the design system's wrap-first rule: the
-   header has a fixed height (--mases-shell-header-height, 64px) and
+   header has a fixed height (--arna-shell-header-height, 64px) and
    wrapping the name would push it taller. The full name is available
    on the profile page and via the title attribute; the trigger is
    chrome.
@@ -542,10 +550,10 @@ function onMenuSelect(key: string): void {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
-  color: var(--mases-color-text-primary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
+  color: var(--arna-color-text-primary);
 }
 
 /* Tablet and up: show the name. */
@@ -563,8 +571,8 @@ function onMenuSelect(key: string): void {
    is set by the [data-menu-open='true'] rule below.
    ============================================================================ */
 .user-menu__chevron {
-  color: var(--mases-color-icon-secondary);
-  transition: transform var(--mases-duration-fast) var(--mases-easing-standard);
+  color: var(--arna-color-icon-secondary);
+  transition: transform var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .user-menu[data-menu-open='true'] .user-menu__chevron {

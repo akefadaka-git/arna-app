@@ -38,6 +38,18 @@ jobs:
           '
       - name: Block high and critical dependency advisories
         run: npm audit --audit-level=high
+      - name: Generate four-application AST import graph
+        run: npm run analyze:imports
+      - name: Upload import graph audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arna-import-graph-${{ github.sha }}
+          path: |
+            artifacts/arna-application-import-graph.json
+            artifacts/ARNA_APPLICATION_IMPORT_GRAPH.md
+          if-no-files-found: warn
+          retention-days: 14
       - name: Type-check and build all applications
         run: npm run build
       - name: Verify root entry points, local assets, and deployment policy
@@ -54,6 +66,10 @@ jobs:
         run: npm run test:wallet-open-form-contract
       - name: Verify workspace dashboard route integration
         run: npm run test:workspace-dashboard-route-contract
+      - name: Verify selected-calendar date rendering contract
+        run: node --test tests/calendar-preference-contract.test.mjs
+      - name: Verify Ethiopian calendar conversion and date-entry controls
+        run: node --test tests/ethiopic-calendar-contract.test.mjs
       - name: Install Chromium for public browser contracts
         run: npx playwright install --with-deps chromium
       - name: Verify public browser and WCAG 2.2 accessibility contracts
@@ -70,6 +86,20 @@ jobs:
           done
           curl --fail --silent http://127.0.0.1:4173/ >/dev/null
           PUBLIC_SITE_URL=http://127.0.0.1:4173/ npm run test:public-browser
+      - name: Verify shared DatePicker browser interactions
+        shell: bash
+        run: |
+          npx vite --mode workspace --host 127.0.0.1 --port 4174 --strictPort > "$RUNNER_TEMP/date-picker-preview.log" 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4174/tests/fixtures/date-picker.html >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4174/tests/fixtures/date-picker.html >/dev/null
+          DATE_PICKER_URL=http://127.0.0.1:4174/tests/fixtures/date-picker.html npx playwright test tests/date-picker-browser.spec.mjs
       - name: Upload versioned static build outputs
         uses: actions/upload-artifact@v4
         with:

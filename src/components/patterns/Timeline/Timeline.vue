@@ -369,12 +369,12 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
    * span. It is referenced by the marker's ::after rule via the same
    * --timeline-gap variable.
    */
-  --timeline-gap: var(--mases-space-4);
+  --timeline-gap: var(--arna-space-4);
   gap: var(--timeline-gap);
 }
 
 .timeline--dense {
-  --timeline-gap: var(--mases-space-3);
+  --timeline-gap: var(--arna-space-3);
 }
 
 /* ============================================================================
@@ -386,8 +386,8 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
    ============================================================================ */
 .timeline__item {
   display: grid;
-  grid-template-columns: var(--mases-space-8) minmax(0, 1fr);
-  column-gap: var(--mases-space-3);
+  grid-template-columns: var(--arna-space-8) minmax(0, 1fr);
+  column-gap: var(--arna-space-3);
   align-items: start;
   position: relative;
 }
@@ -397,16 +397,16 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
  * dot or a 32px circle.
  */
 .timeline__item[data-has-icon='false'] {
-  --timeline-line-start: calc(var(--mases-space-3) + var(--mases-space-1));
+  --timeline-line-start: calc(var(--arna-space-3) + var(--arna-space-1));
   /*
-   * 12px (dot) + 4px (gap) = 16px, which is --mases-space-4. Written
+   * 12px (dot) + 4px (gap) = 16px, which is --arna-space-4. Written
    * above as space-3 + space-1 for readability in the source; the
    * compiled value is 12 + 4 = 16.
    */
 }
 
 .timeline__item[data-has-icon='true'] {
-  --timeline-line-start: var(--mases-space-8);
+  --timeline-line-start: var(--arna-space-8);
 }
 
 /* ============================================================================
@@ -417,7 +417,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  width: var(--mases-space-8);
+  width: var(--arna-space-8);
   /*
    * The marker column stretches to the full height of the row (grid
    * default). This is what allows the connector line to span from the
@@ -428,7 +428,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
    * A small top margin aligns the marker's vertical center with the
    * first content line (the timestamp).
    */
-  padding-block-start: var(--mases-space-1);
+  padding-block-start: var(--arna-space-1);
 }
 
 /* ============================================================================
@@ -452,7 +452,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
    * the line down through the ol's gap to the next item.
    */
   height: calc(100% - var(--timeline-line-start) + var(--timeline-gap));
-  background-color: var(--mases-color-border-subtle);
+  background-color: var(--arna-color-border-subtle);
   pointer-events: none;
 }
 
@@ -469,23 +469,23 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: var(--mases-space-3); /* 12px — the dot's diameter */
-  height: var(--mases-space-3);
-  border-radius: var(--mases-radius-full);
+  width: var(--arna-space-3); /* 12px — the dot's diameter */
+  height: var(--arna-space-3);
+  border-radius: var(--arna-radius-full);
   /*
    * The default variant uses a border-strong colored dot. Other
    * variants override the background-color below.
    */
-  background-color: var(--mases-color-border-strong);
-  color: var(--mases-color-text-inverse);
-  transition: background-color var(--mases-duration-fast) var(--mases-easing-standard);
+  background-color: var(--arna-color-border-strong);
+  color: var(--arna-color-text-inverse);
+  transition: background-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 /* Icon mode: the visual becomes a 32px colored circle with the icon
    inside. */
 .timeline__item[data-has-icon='true'] .timeline__marker-visual {
-  width: var(--mases-space-8);
-  height: var(--mases-space-8);
+  width: var(--arna-space-8);
+  height: var(--arna-space-8);
 }
 
 /* ============================================================================
@@ -497,19 +497,19 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
    crimson-500).
    ============================================================================ */
 .timeline__item[data-variant='default'] .timeline__marker-visual {
-  background-color: var(--mases-color-border-strong);
+  background-color: var(--arna-color-border-strong);
 }
 
 .timeline__item[data-variant='success'] .timeline__marker-visual {
-  background-color: var(--mases-color-success-500);
+  background-color: var(--arna-color-success-500);
 }
 
 .timeline__item[data-variant='warning'] .timeline__marker-visual {
-  background-color: var(--mases-color-warning-500);
+  background-color: var(--arna-color-warning-500);
 }
 
 .timeline__item[data-variant='danger'] .timeline__marker-visual {
-  background-color: var(--mases-color-crimson-500);
+  background-color: var(--arna-color-crimson-500);
 }
 
 /* ============================================================================
@@ -518,14 +518,14 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .timeline__content {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   min-width: 0;
   /*
    * A small top padding aligns the content's first line with the
    * marker's visual center, matching the marker column's padding-block-
    * start logic.
    */
-  padding-block-start: var(--mases-space-1);
+  padding-block-start: var(--arna-space-1);
 }
 
 /* ============================================================================
@@ -533,11 +533,11 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
    ============================================================================ */
 .timeline__timestamp {
   display: block;
-  color: var(--mases-color-text-tertiary);
+  color: var(--arna-color-text-tertiary);
   font-family: inherit;
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
+  font-weight: var(--arna-font-weight-medium);
   /*
    * Amharic truncation uses word-boundary wrapping
    * (Design System §3.7 W4).
@@ -550,11 +550,11 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
    ============================================================================ */
 .timeline__title {
   margin: 0;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-medium);
   overflow-wrap: anywhere;
 }
 
@@ -563,19 +563,19 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
    ============================================================================ */
 .timeline__description {
   margin: 0;
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: anywhere;
 }
 
 /* Compact density reduces the title font scale. The gap change is
    expressed via the ol's --timeline-gap; no per-item rule is needed. */
 .timeline--dense .timeline__title {
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
 }
 
 /* ============================================================================
@@ -588,16 +588,16 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
    ============================================================================ */
 @media (max-width: 639px) {
   .timeline__item {
-    grid-template-columns: var(--mases-space-6) minmax(0, 1fr);
+    grid-template-columns: var(--arna-space-6) minmax(0, 1fr);
   }
 
   .timeline__marker {
-    width: var(--mases-space-6);
+    width: var(--arna-space-6);
   }
 
   .timeline__item[data-has-icon='true'] .timeline__marker-visual {
-    width: var(--mases-space-6);
-    height: var(--mases-space-6);
+    width: var(--arna-space-6);
+    height: var(--arna-space-6);
   }
 }
 

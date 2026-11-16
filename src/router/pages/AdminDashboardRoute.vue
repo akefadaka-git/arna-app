@@ -217,18 +217,18 @@
  appears in this file.
 
  Colors used:
-   --mases-color-text-primary     (heading text)
-   --mases-color-text-secondary   (body text)
+   --arna-color-text-primary     (heading text)
+   --arna-color-text-secondary   (body text)
 
  Typography used:
-   --mases-font-size-heading-6    (card heading)
-   --mases-line-height-heading-6
-   --mases-font-weight-semibold
-   --mases-font-size-body         (body paragraph)
-   --mases-line-height-body
+   --arna-font-size-heading-6    (card heading)
+   --arna-line-height-heading-6
+   --arna-font-weight-semibold
+   --arna-font-size-body         (body paragraph)
+   --arna-line-height-body
 
  Spacing used:
-   --mases-space-6                (gap between page header and card)
+   --arna-space-6                (gap between page header and card)
 
  Container used:
    none — the page fills the layout's content region. PageHeader
@@ -352,12 +352,12 @@ onMounted(() => {
    ---------------------------------------------------------------------------
    A vertical stack. The gap between the page header and the welcome
    card matches the gap used by MyWalletPage.vue, MyLoansPage.vue, and
-   the portal feature pages (--mases-space-6).
+   the portal feature pages (--arna-space-6).
    ============================================================================ */
 .admin-dashboard-route {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -370,10 +370,10 @@ onMounted(() => {
    ============================================================================ */
 .admin-dashboard-route__welcome-heading {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-6);
-  line-height: var(--mases-line-height-heading-6);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-6);
+  line-height: var(--arna-line-height-heading-6);
+  font-weight: var(--arna-font-weight-semibold);
   /*
    * Amharic-safe wrapping. A long translation of the heading, or a
    * language switch that lengthens it, breaks across lines rather
@@ -386,15 +386,15 @@ onMounted(() => {
    Welcome card — body
    ---------------------------------------------------------------------------
    A single paragraph of secondary-weight text. The primary
-   typography tokens (--mases-font-size-body / --mases-line-height-
+   typography tokens (--arna-font-size-body / --arna-line-height-
    body) are used for the size; the secondary colour is used to
    de-emphasize the body relative to the heading above it.
    ============================================================================ */
 .admin-dashboard-route__welcome-body {
   margin: 0;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
   overflow-wrap: anywhere;
 }
 

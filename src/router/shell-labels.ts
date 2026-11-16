@@ -6,7 +6,7 @@
  * File:      mase_app/src/router/shell-labels.ts  (AMEND)
  * Unit:      CR-FOOTER1 — footer content labels
  * Delivery type:  Amendment — one new exported const
- *                 (`masesFooterLabels`), a new consumer in the
+ *                 (`aranaFooterLabels`), a new consumer in the
  *                 §"Consumed by" list, a new export group, a new
  *                 paragraph in §"Terms handled deliberately" on the
  *                 copyright string and its computed year, revision
@@ -21,9 +21,9 @@
  *   number in the bottom-right corner.
  *
  * After (v1.10.0):
- *   A new exported const `masesFooterLabels` is added:
+ *   A new exported const `aranaFooterLabels` is added:
  *
- *       masesFooterLabels = {
+ *       aranaFooterLabels = {
  *         copyrightTemplate:
  *           '© 2016 - {year} ማሌ ዓርና አክሲዮን ማኅበር፥ መብቱ የተጠበቀ ነው።',
  *         legalLinkLabel:   'ሕጋዊ መረጃ',
@@ -129,7 +129,7 @@
  * File:      mase_app/src/router/shell-labels.ts  (AMEND)
  * Unit:      CR-BRAND1 — corporate brand identity labels
  * Delivery type:  Amendment — one new exported const
- *                 (`masesBrandLabels`), three header additions
+ *                 (`aranaBrandLabels`), three header additions
  *                 (purpose-sentence, exports list, a new note on the
  *                 corporate name in §"Terms handled deliberately"),
  *                 a new consumer in the §"Consumed by" list,
@@ -155,12 +155,12 @@
  *   derived short form is used (see After).
  *
  * After (v1.9.0):
- *   A new exported const `masesBrandLabels` is added:
+ *   A new exported const `aranaBrandLabels` is added:
  *
- *       masesBrandLabels = {
+ *       aranaBrandLabels = {
  *         corporateName:         'ማሌ ዓርና',
  *         productName:           'ማሴስ',
- *         fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ማሴስ)',
+ *         fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ARNA)',
  *       } as const;
  *
  *   The header renders the two-line short form:
@@ -217,8 +217,8 @@
  * requires that all such strings come from a label file. Placing
  * them here — in the same file that already carries the shell chrome
  * labels and the nav trees — keeps the shell's user-facing text in
- * one place. MASESBrand.vue (the next file in this CR) imports
- * `masesBrandLabels` from here, the same way AppShell, both layouts,
+ * one place. AranaBrand.vue (the next file in this CR) imports
+ * `aranaBrandLabels` from here, the same way AppShell, both layouts,
  * and the launcher route import their respective labels.
  *
  * A separate brand-labels file (e.g. router/brand-labels.ts) was
@@ -831,7 +831,7 @@
  * Revision history
  * -----------------------------------------------------------------------------
  * 1.10.0 — footer content labels (CR-FOOTER1). One new exported const
- *          `masesFooterLabels`, carrying the copyright template
+ *          `aranaFooterLabels`, carrying the copyright template
  *          ('© 2016 - {year} ማሌ ዓርና አክሲዮን ማኅበር፥ መብቱ የተጠበቀ ነው።'),
  *          the legal link label ('ሕጋዊ መረጃ'), and the support link
  *          label ('ድጋፍ'). Consumed by MASESFooterContent.vue (a
@@ -849,10 +849,10 @@
  *          items, or existing nav items.
  *
  * 1.9.0  — corporate brand identity (CR-BRAND1). One new exported
- *          const `masesBrandLabels`, carrying the corporate name
+ *          const `aranaBrandLabels`, carrying the corporate name
  *          'ማሌ ዓርና', the product code 'ማሴስ', and the full approved
  *          corporate identity 'ማሌ ዓርና ስማርት ሲስተም (ማሴስ)'. Consumed by
- *          MASESBrand.vue (a companion change in the same CR) via the
+ *          AranaBrand.vue (a companion change in the same CR) via the
  *          AppShell `#brand` slot. See the CR-BRAND1 block at the top
  *          of this file for the rationale and for why
  *          ማሌ ዓርና + ማሴስ is the header's short form.
@@ -1038,7 +1038,7 @@
  * Consumed by:
  *   layouts/AuthenticatedLayout/AuthenticatedLayout.vue   (workspace)
  *   features/portal/PortalLayout.vue                      (portal)
- *   layouts/AppShell/MASESBrand/MASESBrand.vue            (brand labels)
+ *   layouts/AppShell/AranaBrand/AranaBrand.vue            (brand labels)
  *   layouts/AppShell/MASESFooterContent/MASESFooterContent.vue
  *                                                         (footer labels)
  *
@@ -1048,11 +1048,11 @@
  * Seven constants, in six groups:
  *
  *   1. Brand identity — shared by both builds.
- *          masesBrandLabels: { corporateName, productName,
+ *          aranaBrandLabels: { corporateName, productName,
  *                              fullCorporateIdentity }
  *
  *   2. Footer content — shared by both builds.
- *          masesFooterLabels: { copyrightTemplate, legalLinkLabel,
+ *          aranaFooterLabels: { copyrightTemplate, legalLinkLabel,
  *                               supportLinkLabel }
  *
  *   3. Shell chrome labels — shared by both builds.
@@ -1126,12 +1126,12 @@
  * workspace governance-bodies nav item. `landmark` is verified against
  * BaseIcon.vue v2.0.0 in this session.
  *
- * The 1.9.0 revision adds no icon: `masesBrandLabels` carries no icon
+ * The 1.9.0 revision adds no icon: `aranaBrandLabels` carries no icon
  * field. The brand mark is text-only — see the CR-BRAND1 block at the
  * top of this file for why the corporate emblem is not rendered in the
  * header.
  *
- * The 1.10.0 revision adds no icon either. `masesFooterLabels` carries
+ * The 1.10.0 revision adds no icon either. `aranaFooterLabels` carries
  * no icon field — the footer's legal and support links are text
  * labels. Social link labels, which would require icon support, are
  * deferred; see the CR-FOOTER1 block for why the BaseIcon registry
@@ -1420,7 +1420,7 @@ import type {
  * usual sense — there is no English counterpart that would be shown
  * in an English locale. But they ARE user-facing strings, so per the
  * project's "no hardcoded user-facing string" policy they live here
- * rather than inside MASESBrand.vue.
+ * rather than inside AranaBrand.vue.
  *
  * The full approved corporate identity, confirmed by the brand owner
  * for CR-BRAND1, is:
@@ -1445,9 +1445,9 @@ import type {
  * the change as a brand decision, not a translation decision, and
  * route it through the brand owner.
  */
-export const masesBrandLabels = {
+export const aranaBrandLabels = {
   corporateName: 'ማሌ ዓርና',
-  productName: 'ማሴስ',
+  productName: 'ARNA',
   tagline: 'Lead by example • Build lasting trust',
   fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ማሴስ)',
 } as const;
@@ -1480,7 +1480,7 @@ export const masesBrandLabels = {
  * text-only social links wait for the official URLs and the Amharic
  * label forms.
  */
-export const masesFooterLabels = {
+export const aranaFooterLabels = {
   /**
    * The copyright line. `{year}` is replaced by the current Ethiopian
    * calendar year at render time.

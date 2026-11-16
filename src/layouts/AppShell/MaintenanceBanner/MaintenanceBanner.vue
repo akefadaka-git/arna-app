@@ -1,12 +1,12 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — MaintenanceBanner
+ ARNA UI — MaintenanceBanner
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/MaintenanceBanner/MaintenanceBanner.vue
+ File:      arna-app/src/layouts/AppShell/MaintenanceBanner/MaintenanceBanner.vue
  Layer:     4 (Shell — AppShell family)
- Version:   1.1.0
- Status:    ENHANCEMENT — forced-colors accessibility
+ Version:   1.2.0
+ Status:    ENHANCEMENT — responsive action wrapping and ARNA naming
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §6.x (Layout)
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
             MASES_PHASE_2_UI_ARCHITECTURE_FREEZE.md §15.1, §22 STAGE 11
@@ -27,6 +27,11 @@
             variants instead of relying on theme-specific backgrounds.
           · Keep the live-region role and variant metadata unchanged;
             announcement urgency remains intact.
+
+ 1.2.0  — allow action controls to wrap below long translated notices
+          on narrow screens instead of forcing the message into an
+          unusably narrow flex column; rename active internal warning
+          identifiers to the ARNA namespace.
 
  -----------------------------------------------------------------------------
  Purpose
@@ -68,7 +73,8 @@
  Composition
  -----------------------------------------------------------------------------
  COMPOSES:
-   BaseButton (Unit 8.2)  — the action link and the dismiss button
+   LinkButton (Unit 8.8) — the inline JavaScript action
+  BaseButton (Unit 8.2)  — the dismiss button
    BaseIcon   (Unit 8.19) — the variant glyph and the close glyph
 
  Does not reimplement either primitive.
@@ -102,7 +108,7 @@
  data-testid="maintenance-banner-title"   on the title <p> (rendered
                                           only when title is supplied)
  data-testid="maintenance-banner-message" on the message <p>
- data-testid="maintenance-banner-action"  on the action BaseButton
+ data-testid="maintenance-banner-action"  on the action LinkButton
                                           (rendered only when
                                           actionLabel is supplied)
  data-testid="maintenance-banner-dismiss" on the dismiss BaseButton
@@ -137,7 +143,7 @@
      text carries the meaning; the icon reinforces.
    - The dismiss button uses BaseButton with an explicit aria-label
      sourced from `dismissLabel`.
-   - The action link uses BaseButton with a visible label
+   - The action link uses LinkButton with a visible label
      (`actionLabel`), which is the accessible name.
    - Reduced motion: this file defines no animation.
 
@@ -176,11 +182,11 @@ export type MaintenanceBannerVariant = 'info' | 'warning' | 'danger';
  * Module-level Set for deduplicated development warnings.
  * See design-system rule 8.
  */
-const __masesMaintenanceBannerWarned = new Set<string>();
+const __arnaMaintenanceBannerWarned = new Set<string>();
 
-function __masesMaintenanceBannerWarnOnce(key: string, message: string): void {
-  if (__masesMaintenanceBannerWarned.has(key)) return;
-  __masesMaintenanceBannerWarned.add(key);
+function __arnaMaintenanceBannerWarnOnce(key: string, message: string): void {
+  if (__arnaMaintenanceBannerWarned.has(key)) return;
+  __arnaMaintenanceBannerWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -188,7 +194,7 @@ function __masesMaintenanceBannerWarnOnce(key: string, message: string): void {
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import BaseButton from '@/components/primitives/BaseButton';
+import LinkButton from '@/components/primitives/LinkButton';
 import BaseIcon from '@/components/primitives/BaseIcon';
 import type { IconName } from '@/components/primitives/BaseIcon';
 
@@ -279,7 +285,7 @@ const hasDismiss = computed<boolean>(() => {
 // Development guard — dismissible without dismissLabel
 // -----------------------------------------------------------------------------
 if (import.meta.env.DEV && props.dismissible && !hasDismiss.value) {
-  __masesMaintenanceBannerWarnOnce(
+  __arnaMaintenanceBannerWarnOnce(
     'dismissible-without-label',
     '[MaintenanceBanner] `dismissible` is true but `dismissLabel` is ' +
       'missing or empty. The dismiss button will not be rendered. ' +
@@ -368,13 +374,12 @@ function onDismiss(): void {
       v-if="hasAction || hasDismiss"
       class="maintenance-banner__actions"
     >
-      <BaseButton
+      <LinkButton
         v-if="hasAction"
-        variant="link"
         size="sm"
         data-testid="maintenance-banner-action"
         @click="onAction"
-      >{{ actionLabel }}</BaseButton>
+      >{{ actionLabel }}</LinkButton>
 
       <BaseButton
         v-if="hasDismiss"
@@ -401,18 +406,19 @@ function onDismiss(): void {
 .maintenance-banner {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-3);
+  flex-wrap: wrap;
+  gap: var(--arna-space-3);
   width: 100%;
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-3);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-3);
   /*
    * A single subtle rule separates the banner from the header or
    * content immediately below it.
    */
-  border-block-end: 1px solid var(--mases-color-border-subtle);
+  border-block-end: 1px solid var(--arna-color-border-subtle);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   /*
    * Amharic-safe wrapping on the message and title (inherited).
    */
@@ -423,7 +429,7 @@ function onDismiss(): void {
 /* Tablet and up: the wider chrome rhythm. */
 @media (min-width: 640px) {
   .maintenance-banner {
-    padding-inline: var(--mases-space-4);
+    padding-inline: var(--arna-space-4);
   }
 }
 
@@ -431,18 +437,18 @@ function onDismiss(): void {
    Variant palettes
    ============================================================================ */
 .maintenance-banner[data-variant='info'] {
-  background-color: var(--mases-color-surface-info);
-  color: var(--mases-color-text-info);
+  background-color: var(--arna-color-surface-info);
+  color: var(--arna-color-text-info);
 }
 
 .maintenance-banner[data-variant='warning'] {
-  background-color: var(--mases-color-surface-warning);
-  color: var(--mases-color-text-warning);
+  background-color: var(--arna-color-surface-warning);
+  color: var(--arna-color-text-warning);
 }
 
 .maintenance-banner[data-variant='danger'] {
-  background-color: var(--mases-color-surface-danger);
-  color: var(--mases-color-text-danger);
+  background-color: var(--arna-color-surface-danger);
+  color: var(--arna-color-text-danger);
 }
 
 /* ============================================================================
@@ -484,21 +490,21 @@ function onDismiss(): void {
 .maintenance-banner__content {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-1);
-  flex: 1 1 auto;
+  gap: var(--arna-space-1);
+  flex: 1 1 12rem;
   min-width: 0;
 }
 
 .maintenance-banner__title {
   margin: 0;
-  font-weight: var(--mases-font-weight-semibold);
+  font-weight: var(--arna-font-weight-semibold);
   overflow-wrap: break-word;
   word-break: normal;
 }
 
 .maintenance-banner__message {
   margin: 0;
-  font-weight: var(--mases-font-weight-regular);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: break-word;
   word-break: normal;
 }
@@ -513,8 +519,9 @@ function onDismiss(): void {
 .maintenance-banner__actions {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-2);
-  flex-shrink: 0;
+  gap: var(--arna-space-2);
+  flex: 0 0 auto;
+  margin-inline-start: auto;
 }
 
 /* ============================================================================

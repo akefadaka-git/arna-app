@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — TenantSwitcher
+ ARNA Phase 2 UI — TenantSwitcher
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/TenantSwitcher/TenantSwitcher.vue
+ File:      arna_app/src/layouts/AppShell/TenantSwitcher/TenantSwitcher.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.1.0
  Status:    ENHANCEMENT — forced-colors accessibility
@@ -29,6 +29,9 @@
           · Dropped the unused `const props = ` binding from the
             `defineProps` call (noUnusedLocals). The call is retained
             as a bare expression.
+  1.2.0  — expose current tenant in the trigger's accessible name and
+          remove an empty reduced-motion placeholder; motion reduction
+          remains owned by shared token durations.
 
  -----------------------------------------------------------------------------
  Purpose
@@ -319,7 +322,7 @@ function onSelect(key: string): void {
           :aria-haspopup="ariaHaspopup"
           :aria-expanded="ariaExpanded"
           :aria-controls="ariaControls"
-          :aria-label="labels.triggerAriaLabel"
+          :aria-label="effectiveTenantName ? `${labels.triggerAriaLabel}: ${effectiveTenantName}` : labels.triggerAriaLabel"
           data-testid="tenant-switcher-trigger"
           @click="toggle"
         >
@@ -372,7 +375,7 @@ function onSelect(key: string): void {
 .tenant-switcher__trigger-content {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   min-width: 0;
 }
 
@@ -380,7 +383,7 @@ function onSelect(key: string): void {
    Building icon
    ============================================================================ */
 .tenant-switcher__icon {
-  color: var(--mases-color-icon-secondary);
+  color: var(--arna-color-icon-secondary);
 }
 
 /* ============================================================================
@@ -392,7 +395,7 @@ function onSelect(key: string): void {
 
    Truncated with an ellipsis when the header is crowded. Same
    truncation rationale as UserMenu: the header has a fixed height
-   (--mases-shell-header-height, 64px), and wrapping the tenant name
+   (--arna-shell-header-height, 64px), and wrapping the tenant name
    would push it taller. The full name is available in the switcher's
    dropdown menu and via the title attribute.
 
@@ -409,10 +412,10 @@ function onSelect(key: string): void {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
-  color: var(--mases-color-text-primary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
+  color: var(--arna-color-text-primary);
 }
 
 /* Tablet and up: show the name. */
@@ -432,8 +435,8 @@ function onSelect(key: string): void {
    no rule ever set a transform.
    ============================================================================ */
 .tenant-switcher__chevron {
-  color: var(--mases-color-icon-secondary);
-  transition: transform var(--mases-duration-fast) var(--mases-easing-standard);
+  color: var(--arna-color-icon-secondary);
+  transition: transform var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .tenant-switcher[data-menu-open='true'] .tenant-switcher__chevron {
@@ -456,17 +459,4 @@ function onSelect(key: string): void {
   }
 }
 
-/* ============================================================================
-   Reduced motion
-   ---------------------------------------------------------------------------
-   The chevron's transition duration comes from a token, which the
-   substrate shortens to 1ms under prefers-reduced-motion. This block
-   is a defensive no-op placeholder for any future revision that adds
-   a non-token animation.
-   ============================================================================ */
-@media (prefers-reduced-motion: reduce) {
-  .tenant-switcher {
-    /* no-op placeholder — see comment above */
-  }
-}
 </style>

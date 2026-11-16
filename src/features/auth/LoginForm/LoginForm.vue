@@ -1049,7 +1049,7 @@ const passwordToggleLabel = computed<string>(() =>
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-5);
+  gap: var(--arna-space-5);
   width: 100%;
 }
 
@@ -1057,27 +1057,27 @@ const passwordToggleLabel = computed<string>(() =>
    Session-expired notice
    ============================================================================ */
 .login-form__notice {
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-4);
-  border: 1px solid var(--mases-color-border-info);
-  border-radius: var(--mases-radius-md);
-  background-color: var(--mases-color-surface-info);
-  color: var(--mases-color-text-info);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-4);
+  border: 1px solid var(--arna-color-border-info);
+  border-radius: var(--arna-radius-md);
+  background-color: var(--arna-color-surface-info);
+  color: var(--arna-color-text-info);
   overflow-wrap: anywhere;
 }
 
 .login-form__notice-title {
   margin: 0;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 .login-form__notice-message {
   margin: 0;
-  margin-block-start: var(--mases-space-1);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  margin-block-start: var(--arna-space-1);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
 }
 
 /* ============================================================================
@@ -1086,31 +1086,31 @@ const passwordToggleLabel = computed<string>(() =>
 .login-form__mfa {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   min-width: 0;
 }
 
 .login-form__mfa-instructions {
   margin: 0;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   overflow-wrap: anywhere;
 }
 
 .login-form__mfa-cancel {
   align-self: flex-start;
   border: 0;
-  padding: var(--mases-space-1) 0;
+  padding: var(--arna-space-1) 0;
   background: transparent;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font: inherit;
   text-decoration: underline;
   cursor: pointer;
 }
 
 .login-form__mfa-cancel:focus-visible {
-  outline: 2px solid var(--mases-color-border-focus);
+  outline: 2px solid var(--arna-color-border-focus);
   outline-offset: 3px;
 }
 
@@ -1129,10 +1129,10 @@ const passwordToggleLabel = computed<string>(() =>
 
 .login-form__banner-reference {
   margin: 0;
-  margin-block-start: var(--mases-space-1);
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  margin-block-start: var(--arna-space-1);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   overflow-wrap: anywhere;
 }
 
@@ -1164,36 +1164,36 @@ const passwordToggleLabel = computed<string>(() =>
   height: 28px;
   padding: 0;
   border: 0;
-  border-radius: var(--mases-radius-sm);
+  border-radius: var(--arna-radius-sm);
   background-color: transparent;
   /*
    * The button inherits color from the surrounding suffix <span>,
-   * which BaseInput colors with --mases-color-text-tertiary. Setting
+   * which BaseInput colors with --arna-color-text-tertiary. Setting
    * color: inherit here makes that inheritance explicit and means a
    * future change to the suffix's color automatically propagates.
    */
   color: inherit;
   cursor: pointer;
   transition:
-    color var(--mases-duration-fast) var(--mases-easing-standard),
-    background-color var(--mases-duration-fast) var(--mases-easing-standard);
+    color var(--arna-duration-fast) var(--arna-easing-standard),
+    background-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .login-form__password-toggle:hover:not(:disabled) {
-  color: var(--mases-color-text-primary);
-  background-color: var(--mases-color-state-hover);
+  color: var(--arna-color-text-primary);
+  background-color: var(--arna-color-state-hover);
 }
 
 .login-form__password-toggle:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 .login-form__password-toggle:disabled {
   cursor: not-allowed;
   /*
    * The wrapper's disabled state already colors the suffix span with
-   * --mases-color-state-disabled-text. The button inherits that via
+   * --arna-color-state-disabled-text. The button inherits that via
    * `color: inherit` above. No explicit disabled color is needed, but
    * the cursor change is.
    */
@@ -1208,10 +1208,10 @@ const passwordToggleLabel = computed<string>(() =>
    ============================================================================ */
 .login-form__caps-lock {
   margin: 0;
-  margin-block-start: calc(-1 * var(--mases-space-3));
-  color: var(--mases-color-text-warning);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  margin-block-start: calc(-1 * var(--arna-space-3));
+  color: var(--arna-color-text-warning);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   overflow-wrap: anywhere;
 }
 
@@ -1223,17 +1223,17 @@ const passwordToggleLabel = computed<string>(() =>
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--mases-space-2) var(--mases-space-4);
+  gap: var(--arna-space-2) var(--arna-space-4);
   width: 100%;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
 }
 
 .login-form__remember {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-2);
-  color: var(--mases-color-text-secondary);
+  gap: var(--arna-space-2);
+  color: var(--arna-color-text-secondary);
   cursor: pointer;
   user-select: none;
 }
@@ -1247,7 +1247,7 @@ const passwordToggleLabel = computed<string>(() =>
   width: 16px;
   height: 16px;
   margin: 0;
-  accent-color: var(--mases-color-action-primary);
+  accent-color: var(--arna-color-action-primary);
   cursor: pointer;
 }
 
@@ -1265,8 +1265,8 @@ const passwordToggleLabel = computed<string>(() =>
 .login-form__actions {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
-  margin-block-start: var(--mases-space-1);
+  gap: var(--arna-space-2);
+  margin-block-start: var(--arna-space-1);
 }
 
 /* ============================================================================
@@ -1275,19 +1275,19 @@ const passwordToggleLabel = computed<string>(() =>
 .login-form__links {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
-  margin-block-start: var(--mases-space-3);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  gap: var(--arna-space-2);
+  margin-block-start: var(--arna-space-3);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
 }
 
 .login-form__register-prompt {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   margin: 0;
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   overflow-wrap: anywhere;
 }
 

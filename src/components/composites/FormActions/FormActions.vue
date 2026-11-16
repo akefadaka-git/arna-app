@@ -339,7 +339,7 @@ function onTertiaryClick(): void {
 .form-actions {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-wrap: wrap;
   width: 100%;
 }

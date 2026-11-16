@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/IconButton/IconButton.vue
  Layer:     1 (Primitives)
- Version:   1.0.1
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.7
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -31,8 +31,7 @@
  Purpose
  -----------------------------------------------------------------------------
  A square, icon-only button. It renders exactly one icon and carries no
- visible text label. The accessible name is carried by the mandatory
- `ariaLabel` prop.
+ visible text label. The accessible name is carried by `ariaLabel` or `ariaLabelledBy`.
 
  -----------------------------------------------------------------------------
  Composition
@@ -112,9 +111,8 @@
  -----------------------------------------------------------------------------
  The icon receives no aria-label. It is passed to BaseIcon without an
  `ariaLabel` prop, which causes BaseIcon to render it with
- aria-hidden="true". The accessible name of the button is carried
- entirely by the button's own `aria-label` attribute (from the
- `ariaLabel` prop).
+ aria-hidden="true". The accessible name of the button is carried by its `aria-label`
+ or `aria-labelledby` attribute.
 
  This avoids the double-announcement problem: screen readers announce
  the button's accessible name once, without repeating the icon.
@@ -122,14 +120,12 @@
  -----------------------------------------------------------------------------
  Mandatory ariaLabel
  -----------------------------------------------------------------------------
- The `ariaLabel` prop is REQUIRED by the TypeScript interface. A
- consumer that omits it will receive a compile-time error.
+ An accessible name is REQUIRED: provide either `ariaLabel` or
+ `ariaLabelledBy`. A development-time warning is emitted if both
+ are omitted.
 
- This is stricter than BaseButton, where ariaLabel is optional and
- enforced only by a runtime warning when iconOnly is true. IconButton
- tightens the constraint at the type level because every IconButton
- is icon-only by definition — there is no non-icon-only mode to
- relax into.
+ This matches BaseButton's icon-only accessibility contract while
+ allowing either a direct string name or an external labelled element.
 
  -----------------------------------------------------------------------------
  Token discipline
@@ -184,7 +180,7 @@ interface Props {
    * Lucide icon name. Rendered by BaseIcon.
    *
    * The icon is decorative; the button's accessible name comes from
-   * `ariaLabel`, not from this prop.
+   * `ariaLabel` or `ariaLabelledBy`, not from this prop.
    *
    * Typed `string` rather than `IconName` so consumers can populate
    * it from arbitrary data without a compile-time cast. See the file
@@ -193,12 +189,12 @@ interface Props {
   icon: string;
 
   /**
-   * Accessible name for the button. Required.
-   *
-   * This is the only source of the button's accessible name. A screen
-   * reader announces this string when the button receives focus.
+   * Accessible name for the button. Provide this or ariaLabelledBy.
    */
-  ariaLabel: string;
+  ariaLabel?: string;
+
+  /** ID of the element that labels the button for assistive technology. */
+  ariaLabelledBy?: string;
 
   /**
    * Visual variant. Defaults to 'ghost'.
@@ -226,7 +222,17 @@ const props = withDefaults(defineProps<Props>(), {
   type: 'button',
   disabled: false,
   loading: false,
+  ariaLabel: undefined,
+  ariaLabelledBy: undefined,
 });
+
+if (import.meta.env.DEV && !props.ariaLabel && !props.ariaLabelledBy) {
+  // eslint-disable-next-line no-console
+  console.warn(
+    '[IconButton] Provide ariaLabel or ariaLabelledBy. ' +
+      'The icon-only button will otherwise have no accessible name.',
+  );
+}
 
 const emit = defineEmits<{
   (event: 'click', payload: MouseEvent): void;
@@ -273,6 +279,7 @@ function handleClick(event: MouseEvent): void {
     :loading="loading"
     :icon-only="true"
     :aria-label="ariaLabel"
+    :aria-labelledby="ariaLabelledBy"
     class="icon-button"
     data-testid="icon-button-root"
     @click="handleClick"
@@ -287,8 +294,8 @@ function handleClick(event: MouseEvent): void {
       did. BaseIcon's runtime registry check still runs.
 
       No ariaLabel is passed to BaseIcon: the icon is decorative, and
-      the button's accessible name comes from the aria-label attribute
-      rendered by BaseButton.
+      the button's accessible name comes from aria-label or
+      aria-labelledby rendered by BaseButton.
     -->
     <BaseIcon :name="iconName(icon)" :size="iconSize" />
   </BaseButton>

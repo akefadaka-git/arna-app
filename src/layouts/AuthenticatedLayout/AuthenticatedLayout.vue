@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — AuthenticatedLayout
+ ARNA Platform UI — AuthenticatedLayout
 =============================================================================
 
- File:      mase_app/src/layouts/AuthenticatedLayout/AuthenticatedLayout.vue
+ File:      arna-app/src/layouts/AuthenticatedLayout/AuthenticatedLayout.vue
  Layer:     Core (routing layout)
  Version:   1.0.3
  Status:    FROZEN
@@ -221,8 +221,8 @@ import AppShell from '@/layouts/AppShell';
 import { logout } from '@/features/auth/service';
 
 import {
-  masesShellLabels,
-  masesUserMenuItems,
+  masesShellLabels as arnaShellLabels,
+  masesUserMenuItems as arnaUserMenuItems,
   authenticatedNavItems,
 } from '@/router/shell-labels';
 
@@ -289,8 +289,8 @@ async function onUserMenuSelect(payload: { id: string }): Promise<void> {
 <template>
   <AppShell
     :nav-items="authenticatedNavItems"
-    :user-menu-items="masesUserMenuItems"
-    :labels="masesShellLabels"
+    :user-menu-items="arnaUserMenuItems"
+    :labels="arnaShellLabels"
     :footer-version="footerVersion"
     @user-menu-select="onUserMenuSelect"
   >

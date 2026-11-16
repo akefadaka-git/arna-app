@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/BaseLabel/BaseLabel.vue
  Layer:     1 (Primitives)
- Version:   1.0.1
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.13
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -131,6 +131,12 @@ import { computed } from 'vue';
 
 interface Props {
   /**
+   * Optional DOM id for this label. Allows controls to reference this
+   * label with aria-labelledby when native `for` association is unsuitable.
+   */
+  id?: string;
+
+  /**
    * The `id` of the control this label is associated with.
    *
    * When supplied, the label's native `for` attribute is set, and
@@ -189,6 +195,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  id: undefined,
   for: undefined,
   required: false,
   disabled: false,
@@ -234,6 +241,7 @@ const showSrRequired = computed<boolean>(
 
 <template>
   <label
+    :id="props.id"
     :for="props.for"
     :class="classes"
     data-testid="base-label-root"
@@ -292,46 +300,46 @@ const showSrRequired = computed<boolean>(
 .label {
   display: inline-flex;
   align-items: baseline;
-  gap: var(--mases-space-1);
-  color: var(--mases-color-text-secondary);
+  gap: var(--arna-space-1);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
 }
 
 /* ============================================================================
    Disabled state
    ============================================================================ */
 .label--disabled {
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
 }
 
 /* ============================================================================
    Error state
    ============================================================================ */
 .label--error {
-  color: var(--mases-color-text-danger);
+  color: var(--arna-color-text-danger);
 }
 
 /* ============================================================================
    Required asterisk
    ============================================================================ */
 .label__required-marker {
-  color: var(--mases-color-text-danger);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-danger);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 .label--disabled .label__required-marker {
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
 }
 
 /* ============================================================================
    Optional marker
    ============================================================================ */
 .label__optional {
-  color: var(--mases-color-text-tertiary);
-  font-weight: var(--mases-font-weight-regular);
+  color: var(--arna-color-text-tertiary);
+  font-weight: var(--arna-font-weight-regular);
 }
 
 /* ============================================================================

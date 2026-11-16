@@ -448,6 +448,7 @@ export type { GovernanceBodyListViewLabels } from './labels';
 </script>
 
 <script setup lang="ts">
+import { formatCalendarDate } from '@/core/dates/calendar';
 import { computed, onMounted, ref, watch } from 'vue';
 import { RouterLink } from 'vue-router';
 
@@ -887,7 +888,7 @@ function statusLabel(isActive: boolean): string {
             nullable. An open-start body renders an empty cell.
           -->
           <template #cell:effective_from="{ row }">
-            {{ asBody(row).effective_from_display ?? '' }}
+            {{ asBody(row).effective_from ? formatCalendarDate(asBody(row).effective_from) : '' }}
           </template>
         </DataTable>
 
@@ -938,7 +939,7 @@ function statusLabel(isActive: boolean): string {
 .governance-body-list-view {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -946,24 +947,24 @@ function statusLabel(isActive: boolean): string {
 .governance-body-list-view__filters {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--mases-space-3);
-  padding: var(--mases-space-4);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-lg);
-  background: var(--mases-color-surface-raised);
+  gap: var(--arna-space-3);
+  padding: var(--arna-space-4);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-lg);
+  background: var(--arna-color-surface-raised);
 }
 
 .governance-body-list-view__filter-field {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   min-width: 0;
 }
 
 .governance-body-list-view__filter-field label {
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body-sm);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body-sm);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 .governance-body-list-view__filter-field input,
@@ -971,10 +972,10 @@ function statusLabel(isActive: boolean): string {
   width: 100%;
   min-height: 2.75rem;
   padding: 0.65rem 0.75rem;
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-md);
-  color: var(--mases-color-text-primary);
-  background: var(--mases-color-surface-page);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-md);
+  color: var(--arna-color-text-primary);
+  background: var(--arna-color-surface-page);
   font: inherit;
 }
 
@@ -982,14 +983,14 @@ function statusLabel(isActive: boolean): string {
 .governance-body-list-view__filter-field select:focus-visible,
 .governance-body-list-view__apply:focus-visible,
 .governance-body-list-view__clear:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 .governance-body-list-view__filter-actions {
   display: flex;
   align-items: end;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-wrap: wrap;
 }
 
@@ -997,22 +998,22 @@ function statusLabel(isActive: boolean): string {
 .governance-body-list-view__clear {
   min-height: 2.75rem;
   padding: 0.65rem 0.9rem;
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
   font: inherit;
-  font-weight: var(--mases-font-weight-semibold);
+  font-weight: var(--arna-font-weight-semibold);
   cursor: pointer;
 }
 
 .governance-body-list-view__apply {
-  border: 1px solid var(--mases-color-action-primary);
-  color: var(--mases-color-text-inverse);
-  background: var(--mases-color-action-primary);
+  border: 1px solid var(--arna-color-action-primary);
+  color: var(--arna-color-text-inverse);
+  background: var(--arna-color-action-primary);
 }
 
 .governance-body-list-view__clear {
-  border: 1px solid var(--mases-color-border-subtle);
-  color: var(--mases-color-text-primary);
-  background: var(--mases-color-surface-page);
+  border: 1px solid var(--arna-color-border-subtle);
+  color: var(--arna-color-text-primary);
+  background: var(--arna-color-surface-page);
 }
 
 @media (min-width: 640px) {
@@ -1030,9 +1031,9 @@ function statusLabel(isActive: boolean): string {
    an underline on hover and a visible focus ring.
    ============================================================================ */
 .governance-body-list-view__code-link {
-  color: var(--mases-color-text-brand);
+  color: var(--arna-color-text-brand);
   text-decoration: none;
-  font-weight: var(--mases-font-weight-medium);
+  font-weight: var(--arna-font-weight-medium);
   font-variant-numeric: tabular-nums;
 }
 
@@ -1041,9 +1042,9 @@ function statusLabel(isActive: boolean): string {
 }
 
 .governance-body-list-view__code-link:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
-  border-radius: var(--mases-radius-sm);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
+  border-radius: var(--arna-radius-sm);
 }
 
 /* ============================================================================
@@ -1055,9 +1056,9 @@ function statusLabel(isActive: boolean): string {
 .governance-body-list-view__pagination {
   display: flex;
   justify-content: center;
-  padding-block: var(--mases-space-4);
-  padding-inline: var(--mases-space-4);
-  border-block-start: 1px solid var(--mases-color-border-subtle);
+  padding-block: var(--arna-space-4);
+  padding-inline: var(--arna-space-4);
+  border-block-start: 1px solid var(--arna-color-border-subtle);
 }
 
 /* ============================================================================
