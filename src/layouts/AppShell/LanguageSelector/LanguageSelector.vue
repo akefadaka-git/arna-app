@@ -139,7 +139,7 @@ export interface LanguageSelectorLabels {
    * The trigger's aria-label. Typically a short phrase: "Select
    * language", "ቋንቋ ይምረጡ".
    */
-  readonly triggerAriaLabel: string;
+  readonly triggerAriaLabel: Readonly<Record<'am' | 'en', string>>;
 }
 </script>
 
@@ -152,20 +152,19 @@ import BaseIcon from '@/components/primitives/BaseIcon';
 import DropdownMenu from '@/components/composites/DropdownMenu';
 
 interface Props {
-  /**
-   * Consumer-supplied, translated labels. Required.
-   */
+  /** Consumer-supplied, localized labels. Required. */
   labels: LanguageSelectorLabels;
+  /** Temporarily prevents selection while the preference is being saved. */
+  disabled?: boolean;
 }
 
-defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), { disabled: false });
 
 const emit = defineEmits<{
   /**
    * Fires when the user picks a locale. The consumer (the shell)
-   * calls localeStore.setLocale(code) in response, and — once the
-   * localization service exists — also calls it to POST to
-   * /api/locale.
+   * persists the preference and updates the locale store only after
+   * the account-level API confirms the change.
    */
   (event: 'select', payload: { code: SupportedLocale }): void;
 }>();
@@ -214,7 +213,7 @@ function onSelect(key: string): void {
    * key (e.g. a future DropdownMenu feature adds a non-locale action),
    * this silently ignores it rather than emitting an invalid code.
    */
-  if (!isSupportedLocale(key)) return;
+  if (props.disabled || !isSupportedLocale(key)) return;
   emit('select', { code: key });
 }
 </script>
@@ -255,7 +254,9 @@ function onSelect(key: string): void {
         :aria-haspopup="ariaHaspopup"
         :aria-expanded="ariaExpanded"
         :aria-controls="ariaControls"
-        :aria-label="labels.triggerAriaLabel"
+        :aria-label="labels.triggerAriaLabel[locale.locale]"
+        :disabled="disabled"
+        :aria-busy="disabled ? 'true' : undefined"
         data-testid="language-selector-trigger"
         @click="toggle"
       >
