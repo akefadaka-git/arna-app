@@ -402,10 +402,9 @@ defineExpose({ focus, blur, el });
     <!--
       Label region.
       Rendered only when the default slot has content. When the consumer
-      supplies no label, the radio renders without a text region, which
-      is valid when the accessible name is provided externally (an
-      aria-label on the consumer's wrapper, or an aria-labelledby
-      pointing at a sibling element).
+      supplies no label, the radio renders without a text region. The
+      accessible name must be supplied through the ariaLabel or
+      ariaLabelledBy prop, which is forwarded to the native input.
     -->
     <span
       v-if="$slots.default"
