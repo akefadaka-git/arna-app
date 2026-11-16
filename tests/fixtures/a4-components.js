@@ -119,6 +119,7 @@ const app = createApp({
           name: 'base-radio-typed-group',
           value: '1',
           modelValue: baseRadioValue.value,
+          onChange: (value) => { baseRadioEvents.value.change += 1; baseRadioLastEvent.value = String(value) + ':' + typeof value; },
           'onUpdate:modelValue': (value) => { baseRadioValue.value = value; },
         }, { default: () => 'String one' }),
         h(BaseRadio, {
@@ -126,6 +127,7 @@ const app = createApp({
           name: 'base-radio-typed-group',
           value: 'two',
           modelValue: baseRadioValue.value,
+          onChange: (value) => { baseRadioEvents.value.change += 1; baseRadioLastEvent.value = String(value) + ':' + typeof value; },
           'onUpdate:modelValue': (value) => { baseRadioValue.value = value; },
         }, { default: () => 'Option two' }),
         h(BaseRadio, { id: 'base-radio-disabled', name: 'base-radio-other-group', value: 'disabled', disabled: true }, { default: () => 'Disabled radio' }),
