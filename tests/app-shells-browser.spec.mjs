@@ -22,6 +22,7 @@ for (const surface of surfaces) {
     const runtimeErrors = [];
     page.on('pageerror', (error) => runtimeErrors.push(error.stack || error.message));
     page.on('console', (message) => { if (message.type() === 'error') runtimeErrors.push(message.text()); });
+    await page.addInitScript(() => window.localStorage.removeItem('arna.theme'));
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`${baseUrl}?surface=${surface.key}`);
 
@@ -36,6 +37,22 @@ for (const surface of surfaces) {
     await expect(page.getByTestId('arana-brand-product')).toContainText('ARNA');
     await expect(page.getByTestId('app-shell-main')).toHaveAttribute('id', 'arna-main-content');
     await expect(page.getByTestId('shell-child-page')).toContainText(surface.label);
+
+    const themeControl = page.getByTestId('theme-preference-control');
+    await expect(themeControl).toBeVisible();
+    await expect(themeControl.locator('option')).toHaveCount(3);
+    await themeControl.selectOption('dark');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('arna.theme'))).toBe('dark');
+    await page.reload();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+    await expect(page.getByTestId('theme-preference-control')).toHaveValue('dark');
+    await page.getByTestId('theme-preference-control').selectOption('light');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('arna.theme'))).toBe('light');
+    await page.getByTestId('theme-preference-control').selectOption('system');
+    await expect(page.locator('html')).not.toHaveAttribute('data-theme');
+    await expect.poll(() => page.evaluate(() => localStorage.getItem('arna.theme'))).toBe('system');
 
     const skip = page.locator('a[href="#arna-main-content"]').first();
     await expect(skip).toBeAttached();
