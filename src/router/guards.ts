@@ -405,6 +405,13 @@ export interface AuthGuardRouteMeta {
    * Ignored when `permission` is a single string.
    */
   readonly permissionMode?: 'any' | 'all';
+
+  /**
+   * Optional UX-level audience roles. A route is visible only when
+   * the authenticated user holds at least one listed role. The API
+   * must independently enforce tenant-bound role and permission scope.
+   */
+  readonly requiredRoles?: readonly string[];
 }
 
 /*
@@ -638,7 +645,9 @@ function authGuard(
    * question.
    */
   const requiresAuth =
-    to.meta.requiresAuth === true || to.meta.permission !== undefined;
+    to.meta.requiresAuth === true
+    || to.meta.permission !== undefined
+    || to.meta.requiredRoles !== undefined;
 
   if (!requiresAuth) {
     return true;
@@ -679,6 +688,14 @@ function authGuard(
   // Evaluate each matched route record so a child feature permission
   // cannot overwrite the Admin application's parent access boundary.
   for (const record of to.matched) {
+    const requiredRoles = record.meta.requiredRoles;
+    if (requiredRoles !== undefined && !requiredRoles.some((role) => auth.hasRole(role))) {
+      return {
+        path: ACCESS_DENIED_PATH,
+        query: { from: to.fullPath },
+      };
+    }
+
     const permission = record.meta.permission;
     if (permission === undefined) continue;
 

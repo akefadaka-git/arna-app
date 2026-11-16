@@ -611,7 +611,7 @@ function entryDirection(row: WalletEntry, cur: string): { debit: string; credit:
             html-for="statement-from"
             class="wallet-statement-view__filter-field"
           >
-            <template #default="{ id, 'aria-describedby': describedBy }">
+            <template #default="{ id, ariaDescribedby: describedBy }">
               <BaseInput
                 :id="id"
                 v-model="from"
@@ -627,7 +627,7 @@ function entryDirection(row: WalletEntry, cur: string): { debit: string; credit:
             html-for="statement-to"
             class="wallet-statement-view__filter-field"
           >
-            <template #default="{ id, 'aria-describedby': describedBy }">
+            <template #default="{ id, ariaDescribedby: describedBy }">
               <BaseInput
                 :id="id"
                 v-model="to"

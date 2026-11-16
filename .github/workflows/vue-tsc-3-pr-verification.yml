@@ -1,0 +1,49 @@
+name: ARNA App vue-tsc 3 pull request verification
+
+on:
+  pull_request:
+    branches:
+      - feat/executive-overview-a3
+    paths:
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/vue-tsc-3-audit-fix.yml"
+      - ".github/workflows/vue-tsc-3-pr-verification.yml"
+      - "src/components/composites/DatePicker/DatePicker.vue"
+      - "src/components/composites/FormField/FormField.vue"
+      - "src/components/composites/FormField/index.ts"
+      - "src/components/patterns/ErrorPage/ErrorPage.vue"
+      - "src/features/wallet/WalletStatementView.vue"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vue-tsc-3-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  dependency-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.12.0"
+          cache: npm
+      - name: Verify exact pull request checkout
+        run: |
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+          echo "App maintenance target SHA: ${{ github.event.pull_request.head.sha }}"
+      - name: Install locked dependencies
+        run: npm ci --no-fund
+      - name: Require no moderate or higher npm advisories
+        run: npm audit --audit-level=moderate
+      - name: Vue and TypeScript type check
+        run: npm run type-check
+      - name: Verify all four production builds
+        run: npm run build:all

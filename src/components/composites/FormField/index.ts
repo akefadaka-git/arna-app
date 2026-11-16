@@ -16,7 +16,7 @@
  * The component's public API is documented in FormField.vue's header
  * comment. The scoped default slot exposes:
  *
- *     { id, aria-describedby, invalid, required, disabled }
+ *     { id, ariaDescribedby, invalid, required, disabled }
  *
  * Consumers bind these onto their control inside the slot.
  * =============================================================================

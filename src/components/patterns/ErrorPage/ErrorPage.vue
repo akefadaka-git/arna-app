@@ -454,7 +454,7 @@ function onPerform(actionId: string): void {
     <ErrorSupportPanel
       v-if="hasSupportInfo"
       class="error-page__support"
-      :code="code"
+      :code="code ?? ''"
       :request-id="requestId"
       :timestamp="timestamp"
       :labels="labels.support"

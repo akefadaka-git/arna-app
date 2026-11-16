@@ -426,6 +426,10 @@ const rootRef = ref<HTMLElement | null>(null);
 const inputRef = ref<HTMLInputElement | null>(null);
 const triggerRef = ref<HTMLButtonElement | null>(null);
 const popupRef = ref<HTMLElement | null>(null);
+
+// Template string refs are not counted as script references by vue-tsc.
+void triggerRef;
+void popupRef;
 const gridRef = ref<HTMLTableElement | null>(null);
 
 // -----------------------------------------------------------------------------
