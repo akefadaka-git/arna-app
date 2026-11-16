@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/BaseRadio/BaseRadio.vue
  Layer:     1 (Primitives)
- Version:   1.1.0
+ Version:   1.2.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.12
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -304,24 +304,17 @@ const resolvedAriaInvalid = computed<boolean | undefined>(() => {
 /*
  * Whether this radio is currently selected.
  *
- * Comparison uses loose equality via String() on both sides. The reason:
- * the DOM's `<input type="radio" value="...">` attribute is always a
- * string, so a numeric modelValue (e.g., 1) would not match a numeric
- * value prop against the string-coerced DOM. Normalizing both sides
- * through String() ensures the comparison is stable regardless of
- * whether the consumer used a number or a string for the same logical
- * value.
- *
- * The `modelValue === null` case is handled by the same normalization:
- * String(null) is "null", which will not match any real `value` unless
- * the consumer literally passed "null" as the value. That is the
- * desired behavior.
+ * Comparison is intentionally strict. The public contract preserves the
+ * value type (`string | number`): numeric 1 and string "1" are distinct
+ * values and must never select one another. The DOM input's string-valued
+ * `value` attribute is not used for model comparison; selection is driven
+ * by the typed Vue props.
  */
 const isChecked = computed<boolean>(() => {
   if (props.modelValue === null) {
     return false;
   }
-  return String(props.modelValue) === String(props.value);
+  return props.modelValue === props.value;
 });
 
 const nativeInput = ref<HTMLInputElement | null>(null);
@@ -557,12 +550,18 @@ defineExpose({ focus, blur, el });
    ============================================================================ */
 @media (max-width: 639px) {
   .radio {
+    min-width: 44px;
     min-height: 44px;
     align-items: center;
   }
 
   .radio__circle {
     margin-block-start: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .radio__circle {
+    transition: none;
   }
 }
 </style>
