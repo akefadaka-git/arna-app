@@ -50,8 +50,7 @@
    - iconOnly requires ariaLabel or ariaLabelledBy; a development-time
      warning is emitted if both are missing.
    - Focus ring appears only on :focus-visible (keyboard focus).
-   - Loading spinner respects prefers-reduced-motion (slows, does not
-     stop) per Design System §11.5.
+   - Loading spinner respects prefers-reduced-motion without forced motion.
 
  -----------------------------------------------------------------------------
  Test hook
@@ -174,8 +173,7 @@ function handleClick(event: MouseEvent): void {
       The spinner is additive and remains decorative to assistive technology.
     -->
     <span
-      v-if="loading"
-      class="arna-button__spinner"
+      :class="['arna-button__spinner', { 'arna-button__spinner--hidden': !loading }]"
       aria-hidden="true"
       data-testid="base-button-spinner"
     />
@@ -443,13 +441,20 @@ function handleClick(event: MouseEvent): void {
   border: 2px solid currentColor;
   border-top-color: transparent;
   border-radius: var(--arna-radius-full);
-  animation: arna-button-spin var(--arna-duration-slow, 800ms) linear infinite;
+  animation: arna-button-spin var(--arna-duration-slower) linear infinite;
 }
 
 @keyframes arna-button-spin {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Keep the spinner's inline space reserved in every state to avoid layout
+   shifts; hide it visually when idle. */
+.arna-button__spinner--hidden {
+  visibility: hidden;
+  animation: none;
 }
 
 /* Respect reduced-motion: retain a static progress indicator instead of
