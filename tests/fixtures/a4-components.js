@@ -87,6 +87,7 @@ const app = createApp({
       ]),
       h(RouterView),
       h('section', { 'aria-label': 'BaseButton enhancement test' }, [
+        h('button', { type: 'button', 'data-testid': 'base-button-focus-sentinel' }, 'Focus sentinel'),
         h(BaseButton, {
           variant: 'primary',
           size: 'md',
