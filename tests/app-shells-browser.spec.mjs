@@ -40,6 +40,13 @@ for (const surface of surfaces) {
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await expect(page.getByRole('link', { name: 'Skip to main content' })).toBeAttached();
     await expect(page.getByRole('navigation', { name: 'Main navigation' }).first()).toBeVisible();
+    const englishNavLabel = {
+      workspace: 'Dashboard',
+      portal: 'My holdings',
+      admin: 'Audit and security',
+    }[surface.key];
+    await page.setViewportSize({ width: 1440, height: 960 });
+    await expect(page.getByRole('link', { name: englishNavLabel }).first()).toBeVisible();
 
     const themeControl = page.getByTestId('theme-preference-control');
     await expect(themeControl).toBeVisible();
@@ -61,6 +68,12 @@ for (const surface of surfaces) {
     await expect(page.locator('html')).toHaveAttribute('lang', 'am');
     await expect(page.getByRole('link', { name: 'ወደ ዋና ይዘት ዝለል' })).toBeAttached();
     await expect(page.getByRole('navigation', { name: 'ዋና ዳሰሳ' }).first()).toBeVisible();
+    const amharicNavLabel = {
+      workspace: 'ዳሽቦርድ',
+      portal: 'አክሲዮኖቼ',
+      admin: 'ኦዲት እና ደህንነት',
+    }[surface.key];
+    await expect(page.getByRole('link', { name: amharicNavLabel }).first()).toBeVisible();
 
     const skip = page.locator('a[href="#arna-main-content"]').first();
     await expect(skip).toBeAttached();
