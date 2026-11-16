@@ -101,3 +101,88 @@ for (const surface of surfaces) {
     }
   });
 }
+
+
+test('language preference is persisted and notification actions navigate to allowlisted in-app routes', async ({ page }) => {
+  const localeRequests = [];
+  await page.route('**/api/locale', async (route) => {
+    localeRequests.push({ method: route.request().method(), body: route.request().postDataJSON() });
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ success: true, data: { locale: 'en' } }),
+    });
+  });
+
+  await page.route('**/api/notifications**', async (route) => {
+    const request = route.request();
+    const pathname = new URL(request.url()).pathname;
+
+    if (pathname.endsWith('/unread-count')) {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ success: true, data: { unread_count: 1 } }),
+      });
+      return;
+    }
+
+    if (pathname.endsWith('/read')) {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ success: true, data: { unread_count: 0 } }),
+      });
+      return;
+    }
+
+    if (request.method() === 'GET') {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          success: true,
+          data: {
+            items: [{
+              id: '00000000-0000-4000-8000-000000000001',
+              title: { am: 'ሰነድ ዝግጁ ነው', en: 'Document ready' },
+              body: { am: 'ሰነዱን ለማየት ይክፈቱ።', en: 'Open to review the document.' },
+              category: 'documents',
+              priority: 'normal',
+              is_read: false,
+              created_at: '2026-11-16T12:00:00.000Z',
+              action: { route_name: 'file-detail', resource_ref: { id: '42' } },
+            }],
+            pagination: { page: 1, per_page: 20, total: 1 },
+            unread_count: 1,
+          },
+        }),
+      });
+      return;
+    }
+
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ success: true, data: { updated: 1, unread_count: 0 } }),
+    });
+  });
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`${baseUrl}?surface=workspace`);
+
+  const languageTrigger = page.getByTestId('language-selector-trigger');
+  await expect(languageTrigger).toBeVisible();
+  await languageTrigger.click();
+  await expect(languageTrigger).toHaveAttribute('aria-expanded', 'true');
+  await page.getByRole('menuitem', { name: 'English' }).click();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  expect(localeRequests).toEqual([{ method: 'POST', body: { locale: 'en' } }]);
+
+  await page.getByTestId('notifications-bell-trigger').click();
+  await expect(page.getByTestId('notification-center')).toBeVisible();
+  await page.getByText('Document ready').click();
+  await expect(page).toHaveURL(/\\/workspace\\/files\\/42$/);
+  await expect(page.getByTestId('shell-child-page')).toContainText('File detail');
+  await expect(page.getByTestId('notification-center')).toHaveCount(0);
+});
