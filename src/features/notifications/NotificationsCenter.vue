@@ -310,6 +310,7 @@ onUnmounted(() => {
               <span
                 v-if="!item.is_read"
                 class="notification-center__dot"
+                role="img"
                 :aria-label="labels.unread"
               ></span>
             </span>
