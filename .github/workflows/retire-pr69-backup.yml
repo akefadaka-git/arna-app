@@ -23,10 +23,11 @@ jobs:
           branch="backup/pr69-legacy-head-2026-11-17"
           expected="d06ec9205c8fd19dd1781178d12a0084efb789b2"
           api="https://api.github.com/repos/${repo}/git/ref/heads/${branch}"
+          delete_api="https://api.github.com/repos/${repo}/git/refs/heads/${branch}"
           actual="$(curl --fail --silent --show-error -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" "${api}" | jq -r '.object.sha')"
           test "${actual}" = "${expected}" || { echo "FAIL: exact-head mismatch; expected ${expected}, got ${actual}"; exit 1; }
           echo "PASS: exact head verified: ${branch} @ ${actual}"
-          code="$(curl --silent --show-error -o /tmp/delete-response.json -w '%{http_code}' -X DELETE -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" "${api}")"
+          code="$(curl --silent --show-error -o /tmp/delete-response.json -w '%{http_code}' -X DELETE -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" "${delete_api}")"
           test "${code}" = "204" || { cat /tmp/delete-response.json; echo "FAIL: deletion returned HTTP ${code}"; exit 1; }
           echo "PASS: deletion accepted for the single authorized branch"
           verify_code="$(curl --silent --show-error -o /tmp/verify-response.json -w '%{http_code}' -H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" "${api}")"
