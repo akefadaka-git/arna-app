@@ -636,7 +636,7 @@ import { aranaBrandLabels } from '@/router/shell-labels';
 }
 
 .arana-brand__tagline {
-  color: var(--arna-color-text-tertiary);
+  color: var(--arna-color-text-secondary);
   font-size: var(--arna-font-size-caption);
   line-height: 1.15;
   font-weight: var(--arna-font-weight-regular);
@@ -652,6 +652,12 @@ import { aranaBrandLabels } from '@/router/shell-labels';
    kept for future revisions, matching the convention used by
    AppHeader.vue, AppFooter.vue, and AppShell.vue.
    ============================================================================ */
+@media (forced-colors: active) {
+  .arana-brand__tagline {
+    color: CanvasText;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .arana-brand {
     /* no-op placeholder — see comment above */
