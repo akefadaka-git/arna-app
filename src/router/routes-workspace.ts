@@ -676,7 +676,10 @@ export const routesWorkspace: RouteRecordRaw[] = [
         name: 'loans',
         component: () => import('@/features/loans/LoanListView.vue'),
         props: { labels: loanListViewLabels },
-        meta: { permission: 'loan.view' },
+        meta: {
+          permission: ['loan.view', 'loan.view_own'],
+          permissionMode: 'any',
+        },
       },
       {
         path: 'loans/:id',
@@ -712,7 +715,7 @@ export const routesWorkspace: RouteRecordRaw[] = [
         name: 'loan-products',
         component: () => import('@/features/loans/LoanProductListView.vue'),
         props: { labels: loanProductListViewLabels },
-        meta: { permission: 'loan_product.view' },
+        meta: { permission: 'loan.view' },
       },
 
       // -----------------------------------------------------------------------
