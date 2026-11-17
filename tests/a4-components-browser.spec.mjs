@@ -203,11 +203,14 @@ test.describe('Mounted DataTable behavior', () => {
 
   test('selects individual rows and all rows on the current page', async ({ page }) => {
     const tableRegion = page.getByTestId('data-table-table-region');
-    await tableRegion.getByTestId('data-table-row').filter({ hasText: 'Alpha account' }).getByTestId('base-checkbox-box').click();
+    const alphaCheckbox = tableRegion.getByRole('row').filter({ hasText: 'Alpha account' }).getByRole('checkbox');
+    await alphaCheckbox.evaluate((element) => (element).click());
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1');
-    await tableRegion.getByTestId('data-table-header-select-all').getByTestId('base-checkbox-box').click();
+
+    const selectAllCheckbox = tableRegion.getByTestId('data-table-header-select-all').getByRole('checkbox');
+    await selectAllCheckbox.evaluate((element) => (element).click());
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1,row-2');
-    await tableRegion.getByTestId('data-table-header-select-all').getByTestId('base-checkbox-box').click();
+    await selectAllCheckbox.evaluate((element) => (element).click());
     await expect(page.getByTestId('table-selected-keys')).toHaveText('');
   });
 
