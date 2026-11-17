@@ -474,25 +474,26 @@ test.describe('Mounted navigation-search edge interactions', () => {
 
 
 test.describe('PR #87 regression repairs', () => {
-  test('keeps search aria-expanded synchronized for open, Escape, and close-button paths', async ({ page }) => {
+  test('keeps the search combobox aria-expanded synchronized for open, Escape, and close-button paths', async ({ page }) => {
     const trigger = page.getByTestId('app-header-search-trigger');
-    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    const searchInput = page.locator('.app-header-navigation__dialog input[role="combobox"]');
+    await expect(searchInput).toHaveAttribute('aria-expanded', 'false');
 
     await trigger.click();
     const dialog = page.getByRole('dialog', { name: 'ARNA ይፈልጉ' });
     await expect(dialog).toBeVisible();
-    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    await expect(searchInput).toHaveAttribute('aria-expanded', 'true');
 
     await page.keyboard.press('Escape');
     await expect(dialog).toBeHidden();
-    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    await expect(searchInput).toHaveAttribute('aria-expanded', 'false');
     await expect(trigger).toBeFocused();
 
     await trigger.click();
-    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    await expect(searchInput).toHaveAttribute('aria-expanded', 'true');
     await dialog.getByRole('button', { name: 'ፍለጋን ዝጋ' }).click();
     await expect(dialog).toBeHidden();
-    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    await expect(searchInput).toHaveAttribute('aria-expanded', 'false');
   });
 
   test('does not let an older locale-refresh response overwrite the newest inbox data', async ({ page }) => {
