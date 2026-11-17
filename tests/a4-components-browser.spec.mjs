@@ -162,7 +162,7 @@ test.describe('Mounted ErrorSupportPanel privacy and clipboard behavior', () => 
       'Request reference: req-12345',
       'Timestamp: 2026-11-15T12:00:00Z',
       'Local time: 15/11/2019 15:00 E.C.',
-    ].join('\\n'));
+    ].join('\n'));
     expect(copied).not.toMatch(/password|token|stack trace|SQL|filesystem|private form/i);
 
     const results = await new AxeBuilder({ page })
