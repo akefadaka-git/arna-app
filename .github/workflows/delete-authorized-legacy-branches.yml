@@ -1,0 +1,88 @@
+name: Delete authorized legacy ARNA branches
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: delete-authorized-arna-legacy-branches
+  cancel-in-progress: false
+
+jobs:
+  delete-authorized-branches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify exact authorized branch heads
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          verify_branch() {
+            local branch="$1"
+            local expected="$2"
+            local actual
+            actual="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${branch}" --jq '.object.sha' 2>/dev/null || true)"
+
+            if [[ -z "$actual" ]]; then
+              echo "Already absent: $branch"
+            elif [[ "$actual" != "$expected" ]]; then
+              echo "::error::Refusing to delete $branch: expected $expected but found $actual"
+              exit 1
+            else
+              echo "Verified authorized head: $branch @ $actual"
+            fi
+          }
+
+          verify_branch "feat/arna-visual-panels-integration" "3b5231f1b07d7e984d968619b5d7d7ebfd95d3b6"
+          verify_branch "feat/arna-visual-media-motion-library" "ca861c87d0386d9ef5fd148670219726cb605174"
+
+      - name: Delete only the two authorized legacy branches
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          delete_if_expected() {
+            local branch="$1"
+            local expected="$2"
+            local actual
+            actual="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${branch}" --jq '.object.sha' 2>/dev/null || true)"
+
+            if [[ -z "$actual" ]]; then
+              echo "Already absent; nothing to delete: $branch"
+              return
+            fi
+
+            if [[ "$actual" != "$expected" ]]; then
+              echo "::error::Refusing deletion because $branch changed: expected $expected but found $actual"
+              exit 1
+            fi
+
+            gh api --method DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${branch}"
+            echo "Deletion requested for verified branch: $branch"
+          }
+
+          delete_if_expected "feat/arna-visual-panels-integration" "3b5231f1b07d7e984d968619b5d7d7ebfd95d3b6"
+          delete_if_expected "feat/arna-visual-media-motion-library" "ca861c87d0386d9ef5fd148670219726cb605174"
+
+      - name: Verify both branches are absent
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          for branch in \
+            "feat/arna-visual-panels-integration" \
+            "feat/arna-visual-media-motion-library"; do
+            if gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${branch}" >/dev/null 2>&1; then
+              echo "::error::Branch still exists: $branch"
+              exit 1
+            fi
+            echo "Verified absent: $branch"
+          done
