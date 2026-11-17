@@ -11,6 +11,7 @@ on:
       - "src/layouts/AppShell/AppShell.vue"
       - "tests/locale-api-integration.spec.mjs"
       - "tests/admin-route-authz-contract.test.mjs"
+      - "src/router/admin-labels.ts"
       - "tests/fixtures/locale-api-integration.*"
   workflow_dispatch:
     inputs:
