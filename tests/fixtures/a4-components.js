@@ -13,6 +13,7 @@ import DataTable from '../../src/components/patterns/DataTable/DataTable.vue';
 import BaseButton from '../../src/components/primitives/BaseButton/BaseButton.vue';
 import BaseInput from '../../src/components/primitives/BaseInput/BaseInput.vue';
 import BaseCheckbox from '../../src/components/primitives/BaseCheckbox/BaseCheckbox.vue';
+import BaseRadio from '../../src/components/primitives/BaseRadio/BaseRadio.vue';
 
 const router = createRouter({
   history: createMemoryHistory(),
@@ -44,6 +45,10 @@ const app = createApp({
     const baseCheckboxValue = ref(undefined);
     const baseCheckboxRef = ref(null);
     const baseCheckboxEvents = ref({ change: 0, focus: 0, blur: 0 });
+    const baseRadioValue = ref(1);
+    const baseRadioRef = ref(null);
+    const baseRadioEvents = ref({ change: 0, focus: 0, blur: 0 });
+    const baseRadioLastEvent = ref('none');
     const tableRows = [
       { id: 'row-1', name: 'Alpha account', status: 'Active' },
       { id: 'row-2', name: 'Beta account', status: 'Pending' },
@@ -95,6 +100,50 @@ const app = createApp({
         }, 'Set Amharic'),
       ]),
       h(RouterView),
+      h('section', { 'aria-label': 'BaseRadio enhancement test', 'data-testid': 'base-radio-section', style: 'min-width: 0; width: 100%; --arna-focus-ring-width: 3px; --arna-focus-ring-offset: 2px; --arna-focus-ring-color: #1F0A2F;' }, [
+        h('button', { type: 'button', 'data-testid': 'base-radio-focus-sentinel' }, 'Radio focus sentinel'),
+        h(BaseRadio, {
+          ref: baseRadioRef,
+          id: 'base-radio-number',
+          name: 'base-radio-typed-group',
+          value: 1,
+          modelValue: baseRadioValue.value,
+          ariaDescribedBy: 'base-radio-help',
+          onFocus: () => { baseRadioEvents.value.focus += 1; },
+          onBlur: () => { baseRadioEvents.value.blur += 1; },
+          onChange: (value) => { baseRadioEvents.value.change += 1; baseRadioLastEvent.value = String(value) + ':' + typeof value; },
+          'onUpdate:modelValue': (value) => { baseRadioValue.value = value; },
+        }, { default: () => 'ቁጥር አንድ' }),
+        h(BaseRadio, {
+          id: 'base-radio-string-one',
+          name: 'base-radio-typed-group',
+          value: '1',
+          modelValue: baseRadioValue.value,
+          onChange: (value) => { baseRadioEvents.value.change += 1; baseRadioLastEvent.value = String(value) + ':' + typeof value; },
+          'onUpdate:modelValue': (value) => { baseRadioValue.value = value; },
+        }, { default: () => 'String one' }),
+        h(BaseRadio, {
+          id: 'base-radio-two',
+          name: 'base-radio-typed-group',
+          value: 'two',
+          modelValue: baseRadioValue.value,
+          onChange: (value) => { baseRadioEvents.value.change += 1; baseRadioLastEvent.value = String(value) + ':' + typeof value; },
+          'onUpdate:modelValue': (value) => { baseRadioValue.value = value; },
+        }, { default: () => 'Option two' }),
+        h(BaseRadio, { id: 'base-radio-disabled', name: 'base-radio-other-group', value: 'disabled', disabled: true }, { default: () => 'Disabled radio' }),
+        h(BaseRadio, { id: 'base-radio-required', name: 'base-radio-required-group', value: 'required', required: true }, { default: () => 'Required radio' }),
+        h(BaseRadio, { id: 'base-radio-valid-override', name: 'base-radio-valid-group', value: 'valid', invalid: true, ariaInvalid: false }, { default: () => 'Valid override radio' }),
+        h(BaseRadio, { id: 'base-radio-invalid-override', name: 'base-radio-invalid-group', value: 'invalid', invalid: false, ariaInvalid: true }, { default: () => 'Invalid override radio' }),
+        h(BaseRadio, { id: 'base-radio-aria-label', name: 'base-radio-label-group', value: 'named', ariaLabel: 'Standalone radio name' }),
+        h('span', { id: 'base-radio-labelledby-text' }, 'Referenced radio name'),
+        h(BaseRadio, { id: 'base-radio-labelledby', name: 'base-radio-labelledby-group', value: 'referenced', ariaLabelledBy: 'base-radio-labelledby-text' }),
+        h('p', { id: 'base-radio-help' }, 'Choose one account option.'),
+        h('output', { 'data-testid': 'base-radio-value' }, String(baseRadioValue.value) + ':' + typeof baseRadioValue.value),
+        h('output', { 'data-testid': 'base-radio-events' }, JSON.stringify(baseRadioEvents.value)),
+        h('output', { 'data-testid': 'base-radio-last-event' }, baseRadioLastEvent.value),
+        h('button', { type: 'button', 'data-testid': 'base-radio-focus', onClick: () => baseRadioRef.value?.focus() }, 'Focus BaseRadio'),
+        h('button', { type: 'button', 'data-testid': 'base-radio-blur', onMousedown: (event) => event.preventDefault(), onClick: () => baseRadioRef.value?.blur() }, 'Blur BaseRadio'),
+      ]),
       h('section', { 'aria-label': 'BaseCheckbox enhancement test', 'data-testid': 'base-checkbox-section', style: 'min-width: 0; width: 100%; --arna-focus-ring-width: 3px; --arna-focus-ring-offset: 2px; --arna-focus-ring-color: #1F0A2F;' }, [
         h('button', { type: 'button', 'data-testid': 'base-checkbox-keyboard-sentinel' }, 'Keyboard focus sentinel'),
         h(BaseCheckbox, {
