@@ -1,4 +1,9 @@
 import { createApp, h, ref } from 'vue';
+import { createPinia } from 'pinia';
+import { createMemoryHistory, createRouter, RouterView } from 'vue-router';
+import { useLocaleStore } from '../../src/stores/locale';
+import AppHeaderNavigation from '../../src/layouts/AppShell/AppHeaderNavigation/AppHeaderNavigation.vue';
+import NotificationsCenter from '../../src/features/notifications/NotificationsCenter.vue';
 import Combobox from '../../src/components/composites/Combobox/Combobox.vue';
 import Modal from '../../src/components/composites/Modal/Modal.vue';
 import Drawer from '../../src/components/composites/Drawer/Drawer.vue';
@@ -6,11 +11,22 @@ import FormField from '../../src/components/composites/FormField/FormField.vue';
 import ErrorSupportPanel from '../../src/components/composites/ErrorSupportPanel/ErrorSupportPanel.vue';
 import DataTable from '../../src/components/patterns/DataTable/DataTable.vue';
 
-createApp({
+const router = createRouter({
+  history: createMemoryHistory(),
+  routes: [
+    { path: '/', name: 'a4-home', component: { render: () => h('div', 'A4 home') } },
+    { path: '/files', name: 'a4-files', component: { render: () => h('div', { 'data-testid': 'a4-files-route' }, 'Files route') } },
+    { path: '/shareholders', name: 'a4-shareholders', component: { render: () => h('div', { 'data-testid': 'a4-shareholders-route' }, 'Shareholders route') } },
+  ],
+});
+
+const app = createApp({
   setup() {
+    const localeStore = useLocaleStore();
     const selected = ref(null);
     const modalOpen = ref(false);
     const drawerOpen = ref(false);
+    const notificationsOpen = ref(false);
     const modalCloseEvents = ref(0);
     const drawerCloseEvents = ref(0);
     const tableSelectedKeys = ref([]);
@@ -46,6 +62,34 @@ createApp({
     ];
 
     return () => h('main', { style: 'padding: 2rem; display: grid; gap: 2rem; max-width: 42rem;' }, [
+      h('section', { 'aria-label': 'Header navigation search test' }, [
+        h(AppHeaderNavigation, {
+          items: [
+            { id: 'files', label: 'ፋይሎች', to: '/files' },
+            { id: 'shareholders', label: 'ባለአክሲዮኖች', to: '/shareholders' },
+          ],
+        }),
+        h('button', {
+          type: 'button',
+          'data-testid': 'set-locale-en',
+          style: 'min-height: 44px;',
+          onClick: () => { localeStore.setLocale('en'); document.documentElement.lang = 'en'; },
+        }, 'Set English'),
+        h('button', {
+          type: 'button',
+          'data-testid': 'set-locale-am',
+          style: 'min-height: 44px;',
+          onClick: () => { localeStore.setLocale('am'); document.documentElement.lang = 'am'; },
+        }, 'Set Amharic'),
+      ]),
+      h(RouterView),
+      h('section', { 'aria-label': 'Notifications center test' }, [
+        h('button', { type: 'button', 'data-testid': 'open-notifications', onClick: () => { notificationsOpen.value = true; } }, 'Open notifications'),
+        h(NotificationsCenter, {
+          open: notificationsOpen.value,
+          onClose: () => { notificationsOpen.value = false; },
+        }),
+      ]),
       h('section', { 'aria-label': 'Error support panel test' }, [
         h(ErrorSupportPanel, {
           code: 'AUTH_PERMISSION_DENIED',
@@ -98,7 +142,7 @@ createApp({
           'onUpdate:sort': (sort) => { tableSort.value = sort; },
           onRowClick: () => { tableRowClicks.value += 1; },
         }, {
-          'row-actions': ({ row }) => h('button', { type: 'button', 'data-testid': `table-action-${row.id}` }, 'Open'),
+          'row-actions': ({ row }) => h('button', { type: 'button', 'aria-label': `Open ${row.name}`, 'data-testid': `table-action-${row.id}` }, 'Open'),
         }),
         h('output', { 'data-testid': 'table-selected-keys' }, tableSelectedKeys.value.join(',')),
         h('output', { 'data-testid': 'table-sort' }, `${tableSort.value.key}:${tableSort.value.dir}`),
@@ -128,4 +172,7 @@ createApp({
       ]),
     ]);
   },
-}).mount('#app');
+});
+app.use(createPinia());
+app.use(router);
+app.mount('#app');
