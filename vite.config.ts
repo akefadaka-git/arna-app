@@ -57,6 +57,9 @@ function resolveBuildMode(mode: string): BuildMode {
 export default defineConfig(({ mode }) => {
   const buildMode = resolveBuildMode(mode);
   const descriptor = BUILD_DESCRIPTORS[buildMode];
+  // Test-only reverse proxy keeps the browser request same-origin while the
+  // integration suite exercises the real Laravel API rather than a mock.
+  const localeIntegrationApiTarget = process.env.ARNA_LOCALE_INTEGRATION_API_TARGET;
 
   return {
     plugins: [vue()],
@@ -76,6 +79,16 @@ export default defineConfig(({ mode }) => {
     server: {
       open: descriptor.devOpen,
       port: 5173,
+      ...(localeIntegrationApiTarget
+        ? {
+            proxy: {
+              '/api': {
+                target: localeIntegrationApiTarget,
+                changeOrigin: true,
+              },
+            },
+          }
+        : {}),
     },
     preview: {
       port: 4173,

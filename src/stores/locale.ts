@@ -30,10 +30,11 @@
  * -----------------------------------------------------------------------------
  *   - It does not perform translation. Translations live in the i18n
  *     layer; this store only says which locale is active.
- *   - It does not call the API. POST /api/locale does not exist
- *     (Architecture Freeze §9.3); when it does, the localization
- *     service (not this store) will call it. This store remains pure
- *     state, mirroring the pattern set by Units 11.4 and 11.5.
+ *   - It does not call the API. The account preference adapter
+ *     (src/features/locale/api.ts) persists the authenticated user's
+ *     choice; AppShell calls that adapter before committing this store.
+ *     This store remains pure state, mirroring the pattern set by Units
+ *     11.4 and 11.5.
  *   - It does not touch the DOM. Setting <html lang="am"> is the
  *     shell's responsibility via a watcher on this store.
  *
@@ -61,12 +62,10 @@
  *        - update the active locale and persist to localStorage
  *        - do NOT call the backend (no endpoint exists)
  *
- * Acknowledged interim behavior: an in-session change survives reloads
- * within the same login, but is overwritten on next login by user.locale
- * until POST /api/locale exists. Once the endpoint exists, the
- * localization service will call it after setLocale, the backend value
- * will match, and the divergence will vanish without any change to this
- * file.
+ * Account preference synchronization: the shell persists an explicit
+ * selection through POST /api/locale before calling setLocale(). The
+ * backend user.locale and local preference therefore move together;
+ * hydrateFromUser() remains the fallback for a new browser or device.
  *
  * -----------------------------------------------------------------------------
  * Multi-user safety (shared machines)
@@ -263,9 +262,8 @@ export const useLocaleStore = defineStore('locale', () => {
 
   /**
    * Set the active locale. Updates the store and persists to the storage
-   * backend. Does NOT call the backend — POST /api/locale does not exist
-   * (§9.3). The localization service (Stage 12+) will call the endpoint
-   * after this action succeeds.
+   * backend. The AppShell locale preference adapter persists the
+   * account preference before this action is called.
    *
    * The caller must pass a SupportedLocale. Values arriving from
    * untyped sources (route params, storage, API payloads) should be

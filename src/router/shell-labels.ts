@@ -1294,7 +1294,7 @@
  * other per-component groups:
  *
  *     languageSelector: {
- *       triggerAriaLabel: string;   // "Change language" / "ቋንቋ ቀይር"
+ *       triggerAriaLabel: { am: string; en: string };
  *       optionAm: string;           // "አማርኛ"
  *       optionEn: string;           // "English"
  *     }
@@ -1541,6 +1541,18 @@ export const arnaShellLabels: AppShellLabels = {
     triggerAriaLabelWithUnread: (count: number) =>
       `ማሳወቂያዎች፣ ${count} ያልተነበዩ`,
     disabledReason: 'ማሳወቂያዎች በቅርቡ ይመጣሉ',
+  },
+
+  languageSelector: {
+    triggerAriaLabel: {
+      am: 'ቋንቋ ይምረጡ',
+      en: 'Select language',
+    },
+  },
+
+  languageSaveError: {
+    am: 'የቋንቋ ምርጫዎን ማስቀመጥ አልተቻለም። እንደገና ይሞክሩ።',
+    en: 'Your language preference could not be saved. Please try again.',
   },
 
   tenantSwitcher: {

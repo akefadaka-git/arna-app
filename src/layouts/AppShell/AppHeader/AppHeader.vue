@@ -707,9 +707,23 @@ function onToggleClick(): void {
 .app-header__actions {
   display: flex;
   order: 3;
+  flex: 1 1 auto;
   align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
   gap: var(--arna-space-2);
-  flex-shrink: 0;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Preserve the intrinsic, right-anchored utility cluster once the
+   header has enough horizontal room for its desktop single-row layout. */
+@media (min-width: 640px) {
+  .app-header__actions {
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+    max-width: none;
+  }
 }
 
 /* ============================================================================
