@@ -1,0 +1,67 @@
+name: Retire owner-authorized ARNA Finance branch
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/retire-arna-finance-a3-workspace.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: retire-arna-finance-a3-workspace
+  cancel-in-progress: false
+
+jobs:
+  retire-exact-branch:
+    if: github.event.head_commit.message == 'Install owner-authorized ARNA Finance branch retirement workflow'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Recheck exact authorized head
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          branch="feat/arna-finance-a3-workspace"
+          expected="9beac0ca20c5331c17050b3ae6781effe58f9ff0"
+          actual="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${branch}" --jq '.object.sha')"
+          if [[ "$actual" != "$expected" ]]; then
+            echo "::error::STOP: expected $expected but found $actual"
+            exit 1
+          fi
+          echo "PASS exact head: $branch @ $actual"
+
+      - name: Delete only the exact authorized branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          branch="feat/arna-finance-a3-workspace"
+          expected="9beac0ca20c5331c17050b3ae6781effe58f9ff0"
+          actual="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${branch}" --jq '.object.sha')"
+          if [[ "$actual" != "$expected" ]]; then
+            echo "::error::STOP before deletion: expected $expected but found $actual"
+            exit 1
+          fi
+          gh api --method DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${branch}"
+          echo "DELETE accepted for $branch @ $expected"
+
+      - name: Verify exact branch absence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          branch="feat/arna-finance-a3-workspace"
+          response="$(gh api --include "repos/${GITHUB_REPOSITORY}/git/ref/heads/${branch}" 2>&1 || true)"
+          status="$(printf '%s\\n' "$response" | awk 'toupper($1) ~ /^HTTP\\// { code=$2 } END { print code }')"
+          if [[ "$status" != "404" ]]; then
+            echo "::error::Expected HTTP 404 for deleted ref; got status ${status:-unknown}"
+            printf '%s\\n' "$response"
+            exit 1
+          fi
+          echo "PASS verified absent: $branch"
