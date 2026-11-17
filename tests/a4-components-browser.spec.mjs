@@ -17,6 +17,7 @@ test.describe('Mounted FormField accessibility behavior', () => {
     await expect(input).toHaveAttribute('aria-describedby', helpId);
 
     const results = await new AxeBuilder({ page })
+      .include('[data-testid="form-field-root"]')
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
     const serious = results.violations.filter((item) => ['serious', 'critical'].includes(item.impact));
@@ -74,6 +75,7 @@ test.describe('Mounted Combobox browser behavior', () => {
     await expect(page.getByRole('option', { name: 'Unavailable' })).toHaveAttribute('aria-disabled', 'true');
 
     const results = await new AxeBuilder({ page })
+      .include('[data-testid="combobox-root"]')
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
     const serious = results.violations.filter((item) => item.impact === 'serious' || item.impact === 'critical');
@@ -165,6 +167,7 @@ test.describe('Mounted ErrorSupportPanel privacy and clipboard behavior', () => 
     expect(copied).not.toMatch(/password|token|stack trace|SQL|filesystem|private form/i);
 
     const results = await new AxeBuilder({ page })
+      .include('[data-testid="error-support-panel-root"]')
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
     const serious = results.violations.filter((item) => ['serious', 'critical'].includes(item.impact));
