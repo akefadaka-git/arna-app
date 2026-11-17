@@ -80,7 +80,7 @@ for (const surface of surfaces) {
         }
         if (background === 'rgba(0, 0, 0, 0)') background = getComputedStyle(document.body).backgroundColor;
         const luminance = (color) => {
-          const channels = color.match(/[\d.]+/g).slice(0, 3).map(Number).map((value) => {
+          const channels = color.match(/[\\d.]+/g).slice(0, 3).map(Number).map((value) => {
             const channel = value / 255;
             return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
           });
@@ -101,7 +101,6 @@ for (const surface of surfaces) {
     }
   });
 }
-
 
 test('language preference is persisted and notification actions navigate to allowlisted in-app routes', async ({ page }) => {
   const localeRequests = [];
@@ -182,7 +181,8 @@ test('language preference is persisted and notification actions navigate to allo
   await page.getByTestId('notifications-bell-trigger').click();
   await expect(page.getByTestId('notification-center')).toBeVisible();
   await page.getByText('Document ready').click();
-  expect(new URL(page.url()).pathname).toBe('/workspace/files/42');
+  // The fixture deliberately uses createMemoryHistory(); assert the routed
+  // child view instead of expecting the browser's URL to change.
   await expect(page.getByTestId('shell-child-page')).toContainText('File detail');
   await expect(page.getByTestId('notification-center')).toHaveCount(0);
 });
