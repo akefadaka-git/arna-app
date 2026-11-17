@@ -1,4 +1,6 @@
 import { createApp, h } from 'vue';
+import '../../src/styles/reset.css';
+import '../../src/styles/tokens.css';
 import { createPinia } from 'pinia';
 import { createMemoryHistory, createRouter, RouterView } from 'vue-router';
 import AuthenticatedLayout from '../../src/layouts/AuthenticatedLayout/AuthenticatedLayout.vue';

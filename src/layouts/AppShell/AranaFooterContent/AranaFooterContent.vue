@@ -337,7 +337,7 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
    ============================================================================ */
 .arana-footer-content__copyright {
   min-width: 0;
-  color: var(--arna-color-text-tertiary);
+  color: var(--arna-color-text-secondary);
   font-size: var(--arna-font-size-caption);
   line-height: var(--arna-line-height-caption);
   overflow-wrap: break-word;

@@ -10,6 +10,7 @@ import Drawer from '../../src/components/composites/Drawer/Drawer.vue';
 import FormField from '../../src/components/composites/FormField/FormField.vue';
 import ErrorSupportPanel from '../../src/components/composites/ErrorSupportPanel/ErrorSupportPanel.vue';
 import DataTable from '../../src/components/patterns/DataTable/DataTable.vue';
+import BaseButton from '../../src/components/primitives/BaseButton/BaseButton.vue';
 
 const router = createRouter({
   history: createMemoryHistory(),
@@ -32,6 +33,8 @@ const app = createApp({
     const tableSelectedKeys = ref([]);
     const tableSort = ref({ key: 'name', dir: 'asc' });
     const tableRowClicks = ref(0);
+    const baseButtonLoading = ref(false);
+    const baseButtonClicks = ref(0);
     const tableRows = [
       { id: 'row-1', name: 'Alpha account', status: 'Active' },
       { id: 'row-2', name: 'Beta account', status: 'Pending' },
@@ -83,6 +86,29 @@ const app = createApp({
         }, 'Set Amharic'),
       ]),
       h(RouterView),
+      h('section', { 'aria-label': 'BaseButton enhancement test' }, [
+        h('button', { type: 'button', 'data-testid': 'base-button-focus-sentinel' }, 'Focus sentinel'),
+        h(BaseButton, {
+          variant: 'primary',
+          size: 'md',
+          loading: baseButtonLoading.value,
+          onClick: () => { baseButtonClicks.value += 1; },
+          'data-testid': 'enhanced-base-button',
+        }, { default: () => 'የአርና መድረክ አስተዳደር እና የባለአክሲዮኖች የፋይናንስ አገልግሎት መቆጣጠሪያ አዝራር' }),
+        h('button', {
+          type: 'button',
+          'data-testid': 'toggle-base-button-loading',
+          onClick: () => { baseButtonLoading.value = !baseButtonLoading.value; },
+        }, 'Toggle button loading'),
+        h(BaseButton, {
+          variant: 'secondary',
+          size: 'md',
+          iconOnly: true,
+          ariaLabel: 'More actions',
+          'data-testid': 'enhanced-base-button-icon-only',
+        }, { default: () => '⋯' }),
+        h('output', { 'data-testid': 'enhanced-base-button-clicks' }, String(baseButtonClicks.value)),
+      ]),
       h('section', { 'aria-label': 'Notifications center test' }, [
         h('button', { type: 'button', 'data-testid': 'open-notifications', onClick: () => { notificationsOpen.value = true; } }, 'Open notifications'),
         h(NotificationsCenter, {
