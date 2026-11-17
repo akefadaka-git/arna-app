@@ -16,6 +16,7 @@ const localeStore = useLocaleStore();
 const busyId = ref<string | null>(null);
 const mutationBusy = ref(false);
 const page = ref(1);
+let latestLoadRequest = 0;
 const locale = computed(() => localeStore.locale);
 const labels = computed(() => locale.value === 'am'
   ? { title: 'ማሳወቂያዎች', close: 'ዝጋ', markAll: 'ሁሉንም እንደተነበቡ ምልክት አድርግ', empty: 'አዲስ ማሳወቂያ የለም', loading: 'በመጫን ላይ…', retry: 'እንደገና ሞክር', unread: 'ያልተነበበ', previous: 'ቀዳሚ', next: 'ቀጣይ', error: 'ማሳወቂያዎችን ማምጣት አልተቻለም' }
@@ -26,13 +27,17 @@ function formatDate(value: string): string {
 }
 
 async function load(targetPage = 1): Promise<void> {
+  // Locale changes, retries, and pagination can overlap. Only the newest
+  // request may publish data or alter the shared fetch lifecycle.
+  const requestId = ++latestLoadRequest;
   store.beginFetch();
   try {
     const result = await fetchNotifications(targetPage);
+    if (requestId !== latestLoadRequest) return;
     page.value = result.page;
     store.setNotifications(result.items, result.unreadCount);
   } catch (error) {
-    store.failFetch(error);
+    if (requestId === latestLoadRequest) store.failFetch(error);
   }
 }
 
@@ -81,7 +86,10 @@ watch(() => localeStore.locale, (next, previous) => {
   if (props.open && next !== previous) void load(page.value);
 });
 onMounted(() => window.addEventListener('keydown', onKeydown));
-onUnmounted(() => window.removeEventListener('keydown', onKeydown));
+onUnmounted(() => {
+  latestLoadRequest += 1;
+  window.removeEventListener('keydown', onKeydown);
+});
 </script>
 
 <template>
