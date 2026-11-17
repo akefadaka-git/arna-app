@@ -51,12 +51,11 @@
  the tooltip and the disabled-reason text reach every user.
 
  -----------------------------------------------------------------------------
- Consumer contract for the eventual enabled state
+ Consumer contract for the enabled state
  -----------------------------------------------------------------------------
- When disabled is false, the bell becomes interactive and emits `open`
- on activation. The consumer (AppShell) is expected to respond by
- opening the notification center — typically a route change to
- /notifications or a drawer. This file does not navigate.
+ When disabled is false, the bell is interactive and emits `open` on
+ activation. The current AppShell consumer opens the in-shell
+ NotificationsCenter; this component itself does not navigate.
 
  -----------------------------------------------------------------------------
  Badge sizing — pre-work for the 99+ case
@@ -351,9 +350,8 @@ function onClick(): void {
    a two-digit badge or "99+" fills the 20px minimum and grows
    beyond it if needed. The height stays 16px in every case.
 
-   See the file header comment §"Badge sizing — pre-work for the 99+
-   case". The badge is dormant in the current build (the bell is
-   disabled), so this sizing change is forward-looking pre-work.
+   The badge is active when unread notifications exist and the bell is
+   enabled. The sizing supports the component's 99+ display cap.
    ============================================================================ */
 .notifications-bell__badge {
   position: absolute;
