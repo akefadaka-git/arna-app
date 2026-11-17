@@ -170,7 +170,7 @@ const COPIED_REVERT_MS = 3000;
 /*
  * Module-level counter for auto-generated ids.
  */
-let __arnaErrorSupportPanelIdCounter = 0;
+let __masesErrorSupportPanelIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -230,7 +230,7 @@ const emit = defineEmits<{
 // -----------------------------------------------------------------------------
 // Generated id
 // -----------------------------------------------------------------------------
-const baseId = `arna-error-support-panel-${++__arnaErrorSupportPanelIdCounter}`;
+const baseId = `mases-error-support-panel-${++__masesErrorSupportPanelIdCounter}`;
 const fallbackInstructionId = `${baseId}-fallback-instruction`;
 
 // -----------------------------------------------------------------------------
@@ -513,7 +513,8 @@ function onToggle(event: Event): void {
    ============================================================================ */
 .error-support-panel__summary {
   cursor: pointer;
-  padding-block: var(--arna-space-1);
+  min-height: 44px;
+  padding-block: var(--arna-space-2);
   color: inherit;
   font-weight: var(--arna-font-weight-medium);
   /*
