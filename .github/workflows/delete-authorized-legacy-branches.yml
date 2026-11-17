@@ -1,20 +1,26 @@
-name: Delete authorized legacy ARNA branches
+name: Delete owner-authorized ARNA App branches
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/delete-authorized-legacy-branches.yml
 
 permissions:
   contents: write
 
 concurrency:
-  group: delete-authorized-arna-legacy-branches
+  group: owner-authorized-arna-app-branch-retirement
   cancel-in-progress: false
 
 jobs:
   delete-authorized-branches:
+    if: github.event_name == 'workflow_dispatch' || github.event.head_commit.message == 'Install owner-authorized ARNA branch retirement workflow'
     runs-on: ubuntu-latest
     steps:
-      - name: Verify exact authorized branch heads
+      - name: Verify all four exact branch heads before any deletion
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -25,64 +31,66 @@ jobs:
             local branch="$1"
             local expected="$2"
             local actual
-            actual="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${branch}" --jq '.object.sha' 2>/dev/null || true)"
-
-            if [[ -z "$actual" ]]; then
-              echo "Already absent: $branch"
-            elif [[ "$actual" != "$expected" ]]; then
-              echo "::error::Refusing to delete $branch: expected $expected but found $actual"
+            actual="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${branch}" --jq '.object.sha')"
+            if [[ "$actual" != "$expected" ]]; then
+              echo "::error::STOP: $branch expected $expected but found $actual"
               exit 1
-            else
-              echo "Verified authorized head: $branch @ $actual"
             fi
+            echo "PASS exact head: $branch @ $actual"
           }
 
-          verify_branch "feat/arna-visual-panels-integration" "3b5231f1b07d7e984d968619b5d7d7ebfd95d3b6"
-          verify_branch "feat/arna-visual-media-motion-library" "ca861c87d0386d9ef5fd148670219726cb605174"
+          verify_branch "integration/pr69-on-main-2026-11-17" "f251f62446d443b2366fb33c9e92105509ba46d9"
+          verify_branch "fix/arna-public-emblem" "e7047770e8f0a35d659ccfa258acbb4806d91f30"
+          verify_branch "feat/p1-4-people-domain-ui" "ee82cf6c4b6e8ebbeb6543ce044d9241a83f3101"
+          verify_branch "feat/people-lifecycle-display-a3" "e231fc299eb24a7c73ce55d17ae8e5f4f4fcfaf7"
 
-      - name: Delete only the two authorized legacy branches
+      - name: Delete only the four exact authorized refs
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
 
-          delete_if_expected() {
+          delete_if_exact() {
             local branch="$1"
             local expected="$2"
             local actual
-            actual="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${branch}" --jq '.object.sha' 2>/dev/null || true)"
-
-            if [[ -z "$actual" ]]; then
-              echo "Already absent; nothing to delete: $branch"
-              return
-            fi
-
+            actual="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${branch}" --jq '.object.sha')"
             if [[ "$actual" != "$expected" ]]; then
-              echo "::error::Refusing deletion because $branch changed: expected $expected but found $actual"
+              echo "::error::STOP before deleting $branch: expected $expected but found $actual"
               exit 1
             fi
-
             gh api --method DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${branch}"
-            echo "Deletion requested for verified branch: $branch"
+            echo "DELETE accepted for exact authorized ref: $branch @ $expected"
           }
 
-          delete_if_expected "feat/arna-visual-panels-integration" "3b5231f1b07d7e984d968619b5d7d7ebfd95d3b6"
-          delete_if_expected "feat/arna-visual-media-motion-library" "ca861c87d0386d9ef5fd148670219726cb605174"
+          delete_if_exact "integration/pr69-on-main-2026-11-17" "f251f62446d443b2366fb33c9e92105509ba46d9"
+          delete_if_exact "fix/arna-public-emblem" "e7047770e8f0a35d659ccfa258acbb4806d91f30"
+          delete_if_exact "feat/p1-4-people-domain-ui" "ee82cf6c4b6e8ebbeb6543ce044d9241a83f3101"
+          delete_if_exact "feat/people-lifecycle-display-a3" "e231fc299eb24a7c73ce55d17ae8e5f4f4fcfaf7"
 
-      - name: Verify both branches are absent
+      - name: Verify only the four authorized refs are absent
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
 
-          for branch in \
-            "feat/arna-visual-panels-integration" \
-            "feat/arna-visual-media-motion-library"; do
-            if gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/${branch}" >/dev/null 2>&1; then
-              echo "::error::Branch still exists: $branch"
+          verify_absent() {
+            local branch="$1"
+            local response
+            local status
+            response="$(gh api --include "repos/${GITHUB_REPOSITORY}/git/ref/heads/${branch}" 2>&1 || true)"
+            status="$(printf '%s\n' "$response" | awk 'toupper($1) ~ /^HTTP\// { code=$2 } END { print code }')"
+            if [[ "$status" != "404" ]]; then
+              echo "::error::Expected HTTP 404 for deleted ref $branch; got status ${status:-unknown}"
+              printf '%s\n' "$response"
               exit 1
             fi
-            echo "Verified absent: $branch"
-          done
+            echo "PASS verified absent: $branch"
+          }
+
+          verify_absent "integration/pr69-on-main-2026-11-17"
+          verify_absent "fix/arna-public-emblem"
+          verify_absent "feat/p1-4-people-domain-ui"
+          verify_absent "feat/people-lifecycle-display-a3"
