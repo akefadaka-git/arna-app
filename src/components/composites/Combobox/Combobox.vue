@@ -143,13 +143,13 @@ export type ComboboxValue = string | number | Array<string | number> | null;
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesComboboxWarned = new Set<string>();
+const __arnaComboboxWarned = new Set<string>();
 
-function __masesComboboxWarnOnce(key: string, message: string): void {
-  if (__masesComboboxWarned.has(key)) {
+function __arnaComboboxWarnOnce(key: string, message: string): void {
+  if (__arnaComboboxWarned.has(key)) {
     return;
   }
-  __masesComboboxWarned.add(key);
+  __arnaComboboxWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -158,7 +158,7 @@ function __masesComboboxWarnOnce(key: string, message: string): void {
  * Module-level counter for auto-generated ids.
  * Distinct prefix from the other components' counters.
  */
-let __masesComboboxIdCounter = 0;
+let __arnaComboboxIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -235,6 +235,17 @@ interface Props {
   chipRemoveLabel?: string;
 
   /**
+   * Explicit accessible name for the input. Prefer this over the
+   * placeholder fallback so the name remains available after typing.
+   */
+  ariaLabel?: string;
+
+  /**
+   * ID of an external label element naming the input.
+   */
+  ariaLabelledBy?: string;
+
+  /**
    * aria-describedby target id. Forwarded verbatim to the input.
    */
   ariaDescribedBy?: string;
@@ -249,6 +260,8 @@ const props = withDefaults(defineProps<Props>(), {
   invalid: false,
   maxVisible: 50,
   chipRemoveLabel: undefined,
+  ariaLabel: undefined,
+  ariaLabelledBy: undefined,
   ariaDescribedBy: undefined,
 });
 
@@ -277,7 +290,7 @@ defineSlots<{
 // -----------------------------------------------------------------------------
 // Generated ids
 // -----------------------------------------------------------------------------
-const componentId = `mases-combobox-${++__masesComboboxIdCounter}`;
+const componentId = `arna-combobox-${++__arnaComboboxIdCounter}`;
 const listboxId = `${componentId}-listbox`;
 function optionId(index: number): string {
   return `${componentId}-option-${index}`;
@@ -301,8 +314,15 @@ const highlightedIndex = ref(-1);
  * Development-time guard: multi-select without chipRemoveLabel means
  * chips are not removable via a button. Warn once.
  */
+if (import.meta.env.DEV && !props.ariaLabel && !props.ariaLabelledBy && !props.placeholder) {
+  __arnaComboboxWarnOnce(
+    'combobox:missing-accessible-name',
+    '[Combobox] No accessible name was supplied. Provide ariaLabel or ariaLabelledBy; placeholder is only a fallback.',
+  );
+}
+
 if (import.meta.env.DEV && props.multiple && !props.chipRemoveLabel) {
-  __masesComboboxWarnOnce(
+  __arnaComboboxWarnOnce(
     'combobox:multi-no-chip-remove-label',
     '[Combobox] multiple=true without chipRemoveLabel. Chips will not ' +
       'render a remove button. Supply a translated verb (e.g., "Remove") ' +
@@ -780,6 +800,8 @@ void _toggle;
         type="text"
         role="combobox"
         :id="`${componentId}-input`"
+        :aria-label="ariaLabel ?? (ariaLabelledBy ? undefined : placeholder)"
+        :aria-labelledby="ariaLabelledBy"
         :aria-expanded="isOpen ? 'true' : 'false'"
         :aria-controls="listboxId"
         :aria-activedescendant="highlightedOptionId"
@@ -881,42 +903,42 @@ void _toggle;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   width: 100%;
   min-height: 40px;
-  padding-block: var(--mases-space-1);
-  padding-inline: var(--mases-space-2);
-  background-color: var(--mases-color-surface-page);
-  border: 1px solid var(--mases-color-border-default);
-  border-radius: var(--mases-radius-md);
-  color: var(--mases-color-text-primary);
+  padding-block: var(--arna-space-1);
+  padding-inline: var(--arna-space-2);
+  background-color: var(--arna-color-surface-page);
+  border: 1px solid var(--arna-color-border-default);
+  border-radius: var(--arna-radius-md);
+  color: var(--arna-color-text-primary);
   cursor: text;
   transition:
-    border-color var(--mases-duration-fast) var(--mases-easing-standard),
-    background-color var(--mases-duration-fast) var(--mases-easing-standard);
+    border-color var(--arna-duration-fast) var(--arna-easing-standard),
+    background-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 /* Focus ring on the control when the input inside is focus-visible. */
 .combobox__control:has(.combobox__input:focus-visible) {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* Hover border — not disabled, not readonly. */
 .combobox:not(.combobox--disabled):hover .combobox__control {
-  border-color: var(--mases-color-border-strong);
+  border-color: var(--arna-color-border-strong);
 }
 
 /* Invalid state. */
 .combobox--invalid .combobox__control {
-  border-color: var(--mases-color-border-danger);
+  border-color: var(--arna-color-border-danger);
 }
 
 /* Disabled state. */
 .combobox--disabled .combobox__control {
-  background-color: var(--mases-color-state-disabled-bg);
-  border-color: var(--mases-color-border-subtle);
-  color: var(--mases-color-state-disabled-text);
+  background-color: var(--arna-color-state-disabled-bg);
+  border-color: var(--arna-color-border-subtle);
+  color: var(--arna-color-state-disabled-text);
   cursor: not-allowed;
 }
 
@@ -947,9 +969,9 @@ void _toggle;
   outline: none;
   color: inherit;
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
   /*
    * Trim the input's vertical box so that chips, input, and chevron all
    * share the same baseline. The control's own padding-block provides
@@ -959,7 +981,7 @@ void _toggle;
 }
 
 .combobox__input::placeholder {
-  color: var(--mases-color-text-tertiary);
+  color: var(--arna-color-text-tertiary);
   opacity: 1;
 }
 
@@ -975,9 +997,9 @@ void _toggle;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: var(--mases-color-icon-secondary);
+  color: var(--arna-color-icon-secondary);
   /* Rotate the chevron when the dropdown is open (subtle affordance). */
-  transition: transform var(--mases-duration-fast) var(--mases-easing-standard);
+  transition: transform var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .combobox--open .combobox__indicator {
@@ -985,7 +1007,7 @@ void _toggle;
 }
 
 .combobox--disabled .combobox__indicator {
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
 }
 
 /* ============================================================================
@@ -996,14 +1018,14 @@ void _toggle;
   top: 100%;
   left: 0;
   right: 0;
-  z-index: var(--mases-z-dropdown);
-  margin: var(--mases-space-1) 0 0 0;
-  padding: var(--mases-space-1) 0;
+  z-index: var(--arna-z-dropdown);
+  margin: var(--arna-space-1) 0 0 0;
+  padding: var(--arna-space-1) 0;
   list-style: none;
-  background-color: var(--mases-color-surface-overlay);
-  border: 1px solid var(--mases-color-border-default);
-  border-radius: var(--mases-radius-md);
-  box-shadow: var(--mases-shadow-elevation-2);
+  background-color: var(--arna-color-surface-overlay);
+  border: 1px solid var(--arna-color-border-default);
+  border-radius: var(--arna-radius-md);
+  box-shadow: var(--arna-shadow-elevation-2);
   max-height: 18rem;
   overflow-y: auto;
   /*
@@ -1011,7 +1033,7 @@ void _toggle;
    * Reduced-motion makes this effectively instant.
    */
   opacity: 1;
-  transition: opacity var(--mases-duration-fast) var(--mases-easing-standard);
+  transition: opacity var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 /* ============================================================================
@@ -1022,33 +1044,33 @@ void _toggle;
   align-items: center;
   min-height: 32px;
   min-height: 32px;
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-3);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-3);
   cursor: pointer;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
-  transition: background-color var(--mases-duration-fast) var(--mases-easing-standard);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
+  transition: background-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .combobox__option[data-highlighted='true'] {
-  background-color: var(--mases-color-state-hover);
+  background-color: var(--arna-color-state-hover);
 }
 
 .combobox__option[data-selected='true'] {
-  background-color: var(--mases-color-state-selected);
-  color: var(--mases-color-text-brand);
-  font-weight: var(--mases-font-weight-medium);
+  background-color: var(--arna-color-state-selected);
+  color: var(--arna-color-text-brand);
+  font-weight: var(--arna-font-weight-medium);
 }
 
 .combobox__option[data-selected='true'][data-highlighted='true'] {
-  background-color: var(--mases-color-state-selected);
+  background-color: var(--arna-color-state-selected);
 }
 
 .combobox__option[data-disabled='true'] {
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
   cursor: not-allowed;
 }
 
@@ -1057,12 +1079,12 @@ void _toggle;
    ============================================================================ */
 .combobox__empty {
   display: block;
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-3);
-  color: var(--mases-color-text-tertiary);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-3);
+  color: var(--arna-color-text-tertiary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   font-style: normal;
 }
 
