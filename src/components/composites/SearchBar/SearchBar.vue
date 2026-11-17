@@ -191,7 +191,7 @@ interface Props {
    * value triggers a deduplicated dev warning; in production, the
    * button renders with an empty aria-label (visible defect).
    */
-  clearLabel?: string;
+  clearLabel: string;
 
   /**
    * Translated accessible name for the loading spinner.
@@ -209,7 +209,6 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false,
   autoFocus: false,
   ariaLabel: undefined,
-  clearLabel: undefined,
   loadingLabel: undefined,
 });
 

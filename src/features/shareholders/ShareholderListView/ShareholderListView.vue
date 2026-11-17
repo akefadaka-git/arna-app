@@ -289,6 +289,7 @@ export interface ShareholderListViewLabels {
   /* Search */
   readonly searchPlaceholder: string;
   readonly searchAriaLabel: string;
+  readonly searchClearLabel: string;
 
   /* Type filter */
   readonly typeFilterLabel: string;
@@ -703,6 +704,7 @@ async function onCreate(): Promise<void> {
         v-model="search"
         :placeholder="labels.searchPlaceholder"
         :aria-label="labels.searchAriaLabel"
+        :clear-label="labels.searchClearLabel"
         data-testid="shareholder-list-view-search"
       />
 

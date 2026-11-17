@@ -271,6 +271,7 @@ export interface FilesListViewLabels {
   /* Search + filter */
   readonly searchPlaceholder: string;
   readonly searchAriaLabel: string;
+  readonly searchClearLabel: string;
   readonly statusFilterLabel: string;
   readonly statusFilterAll: string;
   readonly statusFilterPublished: string;
@@ -747,6 +748,7 @@ async function onUploadCompleted(): Promise<void> {
         v-model="search"
         :placeholder="labels.searchPlaceholder"
         :aria-label="labels.searchAriaLabel"
+        :clear-label="labels.searchClearLabel"
         data-testid="files-list-view-search"
       />
 

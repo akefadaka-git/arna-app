@@ -209,6 +209,7 @@ import { RouterLink } from 'vue-router';
 
 import PageHeader from '@/components/patterns/PageHeader';
 import BaseIcon from '@/components/primitives/BaseIcon';
+import VisualLibraryShowcase from '@/components/visual/VisualLibraryShowcase.vue';
 import type { IconName } from '@/components/primitives/BaseIcon';
 import { useAuthStore } from '@/stores/auth';
 
@@ -371,6 +372,7 @@ const visibleTiles = computed<readonly TileDefinition[]>(() =>
         {{ props.labels.emptyDescription }}
       </p>
     </div>
+    <VisualLibraryShowcase />
   </div>
 </template>
 

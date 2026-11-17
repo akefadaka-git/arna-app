@@ -692,6 +692,7 @@ function onWalletOpened(): void {
         v-model="search"
         :placeholder="labels.searchPlaceholder"
         :aria-label="labels.searchAriaLabel"
+        :clear-label="labels.searchClearLabel"
         data-testid="wallet-list-view-search"
       />
 

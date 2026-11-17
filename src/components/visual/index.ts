@@ -6,3 +6,5 @@ export { default as PromoBanner } from './PromoBanner.vue';
 export { default as AbstractBackdrop } from './AbstractBackdrop.vue';
 export { default as TextEffect } from './TextEffect.vue';
 export { default as MotionReveal } from './MotionReveal.vue';
+export { default as VisualPanel } from './VisualPanel.vue';
+export { default as VisualLibraryShowcase } from './VisualLibraryShowcase.vue';

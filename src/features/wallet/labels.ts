@@ -313,6 +313,7 @@ export interface WalletListViewLabels extends WalletSharedLabels {
 
   readonly searchPlaceholder: string;
   readonly searchAriaLabel: string;
+  readonly searchClearLabel: string;
 
   readonly columnOwner: string;
   readonly columnBalance: string;
@@ -343,6 +344,7 @@ export const walletListViewLabels: WalletListViewLabels = {
 
   searchPlaceholder: 'በባለቤት ስም ይፈልጉ…',
   searchAriaLabel: 'የገንዘብ ማስቀመጫዎችን ይፈልጉ',
+  searchClearLabel: 'የፍለጋ ጽሑፉን አጽዳ',
 
   columnOwner: 'ባለቤት',
   columnBalance: 'ቀሪ ሂሳብ',
