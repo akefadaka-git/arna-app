@@ -164,9 +164,10 @@ async function openNotification(id: string): Promise<void> {
         return;
       }
       await router.push(target);
+      emit('close');
     }
-
-    emit('close');
+    // A notification without an action is still a useful inbox item. Keep
+    // the center open after marking it read so the user can continue reading.
   } catch (error) {
     if (tenantId === tenantStore.effectiveTenantId) store.failFetch(error);
   } finally {
