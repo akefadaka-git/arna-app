@@ -39,7 +39,7 @@
  COMPOSES:
    BaseButton   (Unit  8.2)  — the bell button
    BaseIcon     (Unit  8.19) — the bell glyph
-   BaseTooltip  (Unit  8.21) — the disabled-reason tooltip
+   BaseTooltip  (Unit  8.21) — the disabled-state tooltip
 
  Does not reimplement any of the above.
 
