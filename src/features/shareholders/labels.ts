@@ -281,6 +281,7 @@ export const shareholderListViewLabels: ShareholderListViewLabels = {
   newShareholderLabel: 'አዲስ ባለአክሲዮን',
   searchPlaceholder: 'በስም ይፈልጉ…',
   searchAriaLabel: 'ባለአክሲዮኖችን ይፈልጉ',
+  searchClearLabel: 'የፍለጋ ጽሑፉን አጽዳ',
   typeFilterLabel: 'የዓይነት ማጣሪያ',
   typeFilterAll: 'ሁሉም ዓይነቶች',
   typeFilterIndividual: 'ግለሰብ',

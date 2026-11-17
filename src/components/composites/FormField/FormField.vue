@@ -229,7 +229,7 @@ function __masesFormFieldWarnOnce(key: string, message: string): void {
 </script>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, useSlots } from 'vue';
 import BaseLabel from '../../primitives/BaseLabel';
 import BaseIcon from '../../primitives/BaseIcon';
 
@@ -404,6 +404,9 @@ if (import.meta.env.DEV && resolvedInvalid.value && !hasError.value) {
 const errorId = computed<string>(() => `${props.htmlFor}-error`);
 const helpId = computed<string>(() => `${props.htmlFor}-help`);
 
+const slots = useSlots();
+const hasHelpSlot = computed<boolean>(() => Boolean(slots.help));
+
 const helpTextTrimmed = computed<string>(() =>
   props.helpText?.trim() ?? '',
 );
@@ -415,7 +418,7 @@ const helpTextTrimmed = computed<string>(() =>
  * helpText prop has non-empty content.
  */
 const hasHelp = computed<boolean>(() => {
-  return helpTextTrimmed.value.length > 0;
+  return hasHelpSlot.value || helpTextTrimmed.value.length > 0;
 });
 
 /*
@@ -486,7 +489,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
     >
       <slot
         :id="htmlFor"
-        :aria-describedby="ariaDescribedBy"
+        v-bind="{ 'aria-describedby': ariaDescribedBy }"
         :invalid="resolvedInvalid"
         :required="required"
         :disabled="disabled"
@@ -552,7 +555,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
       helpText is non-empty. The slot takes precedence over the prop.
     -->
     <div
-      v-if="hasHelp || $slots.help"
+      v-if="hasHelp"
       :id="helpId"
       class="form-field__help"
       data-testid="form-field-help"

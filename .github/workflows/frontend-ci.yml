@@ -50,6 +50,10 @@ jobs:
         run: npm run test:design-system-theme-contract
       - name: Verify visual, media and motion library contracts
         run: npm run test:visual-library-contract
+      - name: Verify 2D/3D visual panels and workspace integration
+        run: npm run test:visual-panel-integration-contract
+      - name: Verify A4 high-risk component API and lifecycle contracts
+        run: npm run test:a4-component-risk-contract
       - name: Verify responsive App Shell layout and accessibility contracts
         run: npm run test:app-shell-responsive-contract
       - name: Verify wallet opening form integration
@@ -72,6 +76,50 @@ jobs:
           done
           curl --fail --silent http://127.0.0.1:4173/ >/dev/null
           PUBLIC_SITE_URL=http://127.0.0.1:4173/ npm run test:public-browser
+      - name: Render visual library across mobile, tablet, desktop, locales and themes
+        shell: bash
+        run: |
+          npx vite --mode workspace --host 127.0.0.1 --port 4175 --strictPort > "$RUNNER_TEMP/visual-review-preview.log" 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4175/tests/fixtures/visual-library.html >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4175/tests/fixtures/visual-library.html >/dev/null
+          VISUAL_LIBRARY_URL=http://127.0.0.1:4175/tests/fixtures/visual-library.html npx playwright test tests/visual-library-rendered.spec.mjs
+      - name: Upload rendered visual review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arna-visual-review-${{ github.sha }}
+          path: artifacts/visual-review/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Verify mounted Combobox, Modal and Drawer browser interactions
+        shell: bash
+        run: |
+          npx vite --mode workspace --host 127.0.0.1 --port 4176 --strictPort > "$RUNNER_TEMP/a4-components-preview.log" 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4176/tests/fixtures/a4-components.html >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4176/tests/fixtures/a4-components.html >/dev/null
+          A4_COMPONENTS_URL=http://127.0.0.1:4176/tests/fixtures/a4-components.html npm run test:a4-components-browser
+      - name: Verify mounted FileUploader lifecycle and accessibility
+        shell: bash
+        run: |
+          npx vite --mode workspace --host 127.0.0.1 --port 4177 --strictPort > "$RUNNER_TEMP/a4-file-uploader-preview.log" 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4177/tests/fixtures/a4-file-uploader.html >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4177/tests/fixtures/a4-file-uploader.html >/dev/null
+          A4_FILE_UPLOADER_URL=http://127.0.0.1:4177/tests/fixtures/a4-file-uploader.html npm run test:a4-file-uploader-browser
       - name: Upload versioned static build outputs
         uses: actions/upload-artifact@v4
         with:

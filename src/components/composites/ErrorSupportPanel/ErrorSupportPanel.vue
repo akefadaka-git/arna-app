@@ -513,7 +513,8 @@ function onToggle(event: Event): void {
    ============================================================================ */
 .error-support-panel__summary {
   cursor: pointer;
-  padding-block: var(--mases-space-1);
+  min-height: 44px;
+  padding-block: var(--mases-space-2);
   color: inherit;
   font-weight: var(--mases-font-weight-medium);
   /*

@@ -268,6 +268,7 @@ export const filesListViewLabels: FilesListViewLabels = {
 
   searchPlaceholder: 'ሰነዶችን ይፈልጉ…',
   searchAriaLabel: 'ሰነዶችን ይፈልጉ',
+  searchClearLabel: 'የፍለጋ ጽሑፉን አጽዳ',
   statusFilterLabel: 'የሁኔታ ማጣሪያ',
   statusFilterAll: 'ሁሉም ሁኔታዎች',
   statusFilterPublished: 'የታተመ',

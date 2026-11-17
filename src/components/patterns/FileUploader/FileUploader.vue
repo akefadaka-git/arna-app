@@ -299,7 +299,7 @@ let __masesFileUploaderIdCounter = 0;
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref } from 'vue';
 import FileInput from '../../composites/FileInput';
-import type { FileInputLabels } from '../../composites/FileInput';
+import type { FileInputLabels, FileInputRejectReason } from '../../composites/FileInput';
 import BaseButton from '../../primitives/BaseButton';
 import BaseIcon from '../../primitives/BaseIcon';
 import BaseProgressBar from '../../primitives/BaseProgressBar';
@@ -566,6 +566,10 @@ function maybeEmitCompleted(): void {
 // -----------------------------------------------------------------------------
 // File selection
 // -----------------------------------------------------------------------------
+function onInputReject(payload: { file: File; reason: FileInputRejectReason }): void {
+  emit('rejected', { file: payload.file, reason: payload.reason === 'too-large' ? 'size' : 'type' });
+}
+
 function onSelect(files: File[]): void {
   if (props.disabled) return;
 
@@ -598,7 +602,8 @@ function onSelect(files: File[]): void {
     };
 
     items.value.push(item);
-    startUpload(item);
+    const queuedItem = items.value.find((queued) => queued.localId === item.localId);
+    if (queuedItem !== undefined) startUpload(queuedItem);
   }
 }
 
@@ -620,6 +625,7 @@ function cancel(item: FileUploaderQueueItem): void {
   // The rejection handler will not re-mark the item — we do it here
   // so the state is correct synchronously, before the microtask queue.
   item.status = 'cancelled';
+  maybeEmitCompleted();
 }
 
 function remove(item: FileUploaderQueueItem): void {
@@ -698,6 +704,7 @@ onBeforeUnmount(() => {
       :disabled="isDisabled"
       :labels="dropZoneLabels"
       @select="onSelect"
+      @reject-file="onInputReject"
     />
 
     <!-- ==============================================================

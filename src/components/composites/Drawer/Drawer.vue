@@ -530,6 +530,10 @@ function onCloseButtonClick(): void {
    */
 }
 
+.drawer:not([open]) {
+  display: none;
+}
+
 .drawer--right {
   justify-content: flex-end;
 }
