@@ -23,6 +23,8 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci
+      - name: Verify Wallet reversal and Loan route permission contracts
+        run: node --test tests/p0-wallet-reversal-permission.test.mjs tests/p0-loan-route-permissions.test.mjs
       - name: Verify canonical ARNA brand identity
         run: npm run test:brand-identity-contract
       - name: Report dependency vulnerability inventory
