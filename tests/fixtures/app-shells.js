@@ -1,7 +1,8 @@
-import { createApp, h } from 'vue';
+import { createApp, h, watch } from 'vue';
 import '../../src/styles/reset.css';
 import '../../src/styles/tokens.css';
 import { createPinia } from 'pinia';
+import { useLocaleStore } from '../../src/stores/locale';
 import { createMemoryHistory, createRouter, RouterView } from 'vue-router';
 import AuthenticatedLayout from '../../src/layouts/AuthenticatedLayout/AuthenticatedLayout.vue';
 import PortalLayout from '../../src/features/portal/PortalLayout.vue';
@@ -33,6 +34,16 @@ window.addEventListener('error', (event) => { window.__ARNA_SHELL_FIXTURE_ERROR_
 window.addEventListener('unhandledrejection', (event) => { window.__ARNA_SHELL_FIXTURE_ERROR__ = String(event.reason); });
 app.use(createPinia());
 app.use(router);
+
+// Mirror the production root's locale-to-document synchronization. The
+// fixture mounts layouts directly, bypassing src/App.vue by design.
+const localeStore = useLocaleStore(app._context.provides.pinia);
+watch(() => localeStore.locale, (value) => {
+  document.documentElement.lang = value;
+}, { immediate: true });
+watch(() => localeStore.direction, (value) => {
+  document.documentElement.dir = value;
+}, { immediate: true });
 
 const requested = new URLSearchParams(window.location.search).get('surface') || 'workspace';
 const surface = ['workspace', 'portal', 'admin'].includes(requested) ? requested : 'workspace';
