@@ -77,14 +77,14 @@ test('header exposes route breadcrumbs and accessible navigation search', () => 
   const shell = readFileSync('src/layouts/AppShell/AppShell.vue', 'utf8');
   const navigation = readFileSync('src/layouts/AppShell/AppHeaderNavigation/AppHeaderNavigation.vue', 'utf8');
   assert.match(shell, /<AppHeaderNavigation :items="navItems"/);
-  assert.match(navigation, /:aria-label="labels\\.breadcrumb"/);
+  assert.match(navigation, /:aria-label="labels\.breadcrumb"/);
   assert.match(navigation, /data-testid="app-header-search-trigger"/);
   assert.match(navigation, /<dialog[\s\S]*aria-labelledby="app-header-search-title"/);
   assert.match(navigation, /results\.value|v-for="item in results"/);
   assert.match(navigation, /router\.push\(item\.to\)/);
-  assert.match(navigation, /labels\\.hint/);
+  assert.match(navigation, /labels\.hint/);
   assert.match(navigation, /useLocaleStore/);
-  assert.match(navigation, /localeStore\\.locale === 'en'/);
+  assert.match(navigation, /localeStore\.locale === 'en'/);
 });
 
 test('E.C. is the default calendar and G.C. is a mutually exclusive preference', () => {
