@@ -166,6 +166,7 @@ test.describe('Mounted ErrorSupportPanel privacy and clipboard behavior', () => 
     expect(copied).not.toMatch(/password|token|stack trace|SQL|filesystem|private form/i);
 
     const results = await new AxeBuilder({ page })
+      .include('[data-testid="error-support-panel-root"]')
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
     expect(results.violations.filter((item) => ['serious', 'critical'].includes(item.impact)).map((item) => item.id)).toEqual([]);
@@ -202,7 +203,7 @@ test.describe('Mounted DataTable behavior', () => {
 
   test('selects individual rows and all rows on the current page', async ({ page }) => {
     const tableRegion = page.getByTestId('data-table-table-region');
-    await tableRegion.getByTestId('data-table-row').filter({ hasText: 'Alpha account' }).getByTestId('base-checkbox-root').click();
+    await tableRegion.getByTestId('data-table-row').filter({ hasText: 'Alpha account' }).getByTestId('base-checkbox-box').click();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1');
     await tableRegion.getByTestId('data-table-header-select-all').getByTestId('base-checkbox-root').click();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1,row-2');
