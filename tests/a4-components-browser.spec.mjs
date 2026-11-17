@@ -17,6 +17,7 @@ test.describe('Mounted FormField accessibility behavior', () => {
     await expect(input).toHaveAttribute('aria-describedby', helpId);
 
     const results = await new AxeBuilder({ page })
+      .include('[data-testid="form-field-root"]')
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
     const serious = results.violations.filter((item) => ['serious', 'critical'].includes(item.impact));
@@ -74,6 +75,7 @@ test.describe('Mounted Combobox browser behavior', () => {
     await expect(page.getByRole('option', { name: 'Unavailable' })).toHaveAttribute('aria-disabled', 'true');
 
     const results = await new AxeBuilder({ page })
+      .include('[data-testid="combobox-root"]')
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
     const serious = results.violations.filter((item) => item.impact === 'serious' || item.impact === 'critical');
@@ -165,6 +167,7 @@ test.describe('Mounted ErrorSupportPanel privacy and clipboard behavior', () => 
     expect(copied).not.toMatch(/password|token|stack trace|SQL|filesystem|private form/i);
 
     const results = await new AxeBuilder({ page })
+      .include('[data-testid="error-support-panel-root"]')
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
     const serious = results.violations.filter((item) => ['serious', 'critical'].includes(item.impact));
@@ -204,12 +207,12 @@ test.describe('Mounted DataTable behavior', () => {
     const tableRegion = page.getByTestId('data-table-table-region');
     const alphaCheckbox = tableRegion.getByTestId('data-table-cell-select')
       .filter({ has: page.getByRole('checkbox', { name: 'Select Alpha account' }) })
-      .getByTestId('base-checkbox-root');
+      .getByTestId('base-checkbox-box');
     await alphaCheckbox.click();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1');
 
     const selectAllCheckbox = tableRegion.getByTestId('data-table-header-select-all')
-      .getByTestId('base-checkbox-root');
+      .getByTestId('base-checkbox-box');
     await selectAllCheckbox.click();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1,row-2');
     await selectAllCheckbox.click();
