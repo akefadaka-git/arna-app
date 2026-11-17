@@ -17,6 +17,13 @@ const viewports = [
   { width: 1440, height: 960 },
 ];
 
+const shellTextSelectors = [
+  '.app-header-navigation__search-shortcut',
+  '.arana-brand__tagline',
+  '.calendar-context',
+  '.arana-footer-content__copyright',
+];
+
 for (const surface of surfaces) {
   test(`mounted ${surface.label} shell renders ARNA chrome and remains responsive`, async ({ page }) => {
     const runtimeErrors = [];
@@ -58,5 +65,39 @@ for (const surface of surfaces) {
       .analyze();
     const serious = results.violations.filter((item) => ['serious', 'critical'].includes(item.impact));
     expect(serious.map((item) => item.id + ': ' + item.help), JSON.stringify(serious, null, 2)).toEqual([]);
+
+    for (const theme of ['light', 'dark']) {
+      await page.evaluate((mode) => { document.documentElement.dataset.theme = mode; }, theme);
+      const contrast = await page.evaluate((selectors) => selectors.map((selector) => {
+        const element = document.querySelector(selector);
+        if (!element) return { selector, missing: true };
+        const foreground = getComputedStyle(element).color;
+        let ancestor = element;
+        let background = 'rgba(0, 0, 0, 0)';
+        while (ancestor && background === 'rgba(0, 0, 0, 0)') {
+          background = getComputedStyle(ancestor).backgroundColor;
+          ancestor = ancestor.parentElement;
+        }
+        if (background === 'rgba(0, 0, 0, 0)') background = getComputedStyle(document.body).backgroundColor;
+        const luminance = (color) => {
+          const channels = color.match(/[\d.]+/g).slice(0, 3).map(Number).map((value) => {
+            const channel = value / 255;
+            return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+          });
+          return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
+        };
+        const values = [luminance(foreground), luminance(background)].sort((a, b) => b - a);
+        return { selector, ratio: (values[0] + 0.05) / (values[1] + 0.05), foreground, background };
+      }), shellTextSelectors);
+      for (const item of contrast) {
+        expect(item.missing, `${surface.label} ${theme} missing ${item.selector}`).toBeFalsy();
+        expect(item.ratio, `${surface.label} ${theme} ${item.selector}: ${JSON.stringify(item)}`).toBeGreaterThanOrEqual(4.5);
+      }
+    }
+
+    await page.emulateMedia({ forcedColors: 'active' });
+    for (const selector of shellTextSelectors) {
+      await expect(page.locator(selector), `${surface.label} forced-colors ${selector}`).toBeVisible();
+    }
   });
 }
