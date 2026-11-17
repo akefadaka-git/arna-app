@@ -13,6 +13,7 @@ import DataTable from '../../src/components/patterns/DataTable/DataTable.vue';
 import BaseButton from '../../src/components/primitives/BaseButton/BaseButton.vue';
 import BaseInput from '../../src/components/primitives/BaseInput/BaseInput.vue';
 import BaseCheckbox from '../../src/components/primitives/BaseCheckbox/BaseCheckbox.vue';
+import BaseSelect from '../../src/components/primitives/BaseSelect/BaseSelect.vue';
 
 const router = createRouter({
   history: createMemoryHistory(),
@@ -44,6 +45,11 @@ const app = createApp({
     const baseCheckboxValue = ref(undefined);
     const baseCheckboxRef = ref(null);
     const baseCheckboxEvents = ref({ change: 0, focus: 0, blur: 0 });
+    const baseSelectValue = ref('1');
+    const baseSelectRef = ref(null);
+    const baseSelectDisabled = ref(false);
+    const baseSelectError = ref('Choose a valid account type.');
+    const baseSelectEvents = ref({ change: 0, focus: 0, blur: 0 });
     const tableRows = [
       { id: 'row-1', name: 'Alpha account', status: 'Active' },
       { id: 'row-2', name: 'Beta account', status: 'Pending' },
@@ -160,6 +166,51 @@ const app = createApp({
         h(BaseInput, { id: 'base-input-aria-label', ariaLabel: 'Standalone accessible name' }),
         h('span', { id: 'base-input-labelledby-text' }, 'Referenced accessible name'),
         h(BaseInput, { id: 'base-input-labelledby', ariaLabelledBy: 'base-input-labelledby-text' }),
+      ]),
+      h('section', { 'aria-label': 'BaseSelect enhancement test', 'data-testid': 'base-select-section', style: 'min-width: 0; width: 100%; --arna-focus-ring-width: 3px; --arna-focus-ring-offset: 2px; --arna-focus-ring-color: #1F0A2F;' }, [
+        h('button', { type: 'button', 'data-testid': 'base-select-keyboard-sentinel' }, 'Select focus sentinel'),
+        h(FormField, {
+          label: 'Account type',
+          htmlFor: 'base-select-primary',
+          required: true,
+          error: baseSelectError.value,
+          disabled: baseSelectDisabled.value,
+        }, {
+          default: ({ id, 'aria-describedby': describedBy, invalid, required, disabled }) => h(BaseSelect, {
+            ref: baseSelectRef,
+            id,
+            name: 'accountType',
+            modelValue: baseSelectValue.value,
+            options: [
+              { value: 1, label: 'Numeric account' },
+              { value: 'two', label: 'Standard account' },
+              { value: 'blocked', label: 'Blocked account', disabled: true },
+            ],
+            placeholder: 'Choose an account type',
+            ariaDescribedBy: describedBy,
+            invalid,
+            required,
+            disabled,
+            title: 'Choose the account type',
+            onFocus: () => { baseSelectEvents.value.focus += 1; },
+            onBlur: () => { baseSelectEvents.value.blur += 1; },
+            onChange: () => { baseSelectEvents.value.change += 1; },
+            'onUpdate:modelValue': (value) => { baseSelectValue.value = value; },
+            'data-testid': 'base-select-primary-root',
+          }),
+          help: () => h('span', { 'data-testid': 'base-select-help-slot' }, 'Select the account category.'),
+        }),
+        h('output', { 'data-testid': 'base-select-value' }, String(baseSelectValue.value)),
+        h('output', { 'data-testid': 'base-select-events' }, JSON.stringify(baseSelectEvents.value)),
+        h('button', { type: 'button', 'data-testid': 'base-select-disable', onClick: () => { baseSelectDisabled.value = true; } }, 'Disable BaseSelect'),
+        h('button', { type: 'button', 'data-testid': 'base-select-enable', onClick: () => { baseSelectDisabled.value = false; } }, 'Enable BaseSelect'),
+        h('button', { type: 'button', 'data-testid': 'base-select-clear-error', onClick: () => { baseSelectError.value = undefined; } }, 'Clear BaseSelect error'),
+        h('button', { type: 'button', 'data-testid': 'base-select-focus', onClick: () => baseSelectRef.value?.focus() }, 'Focus BaseSelect'),
+        h('button', { type: 'button', 'data-testid': 'base-select-blur', onMousedown: (event) => event.preventDefault(), onClick: () => baseSelectRef.value?.blur() }, 'Blur BaseSelect'),
+        h(BaseSelect, { id: 'base-select-disabled', ariaLabel: 'Disabled standalone select', options: [{ value: 'one', label: 'One' }], disabled: true }),
+        h(BaseSelect, { id: 'base-select-invalid-override', ariaLabel: 'Explicit valid override select', options: [{ value: 'one', label: 'One' }], invalid: true, ariaInvalid: false, required: true }),
+        h('span', { id: 'base-select-labelledby-text' }, 'Referenced select name'),
+        h(BaseSelect, { id: 'base-select-labelledby', ariaLabelledBy: 'base-select-labelledby-text', options: [{ value: 'one', label: 'One' }] }),
       ]),
       h('section', { 'aria-label': 'BaseButton enhancement test' }, [
         h('button', { type: 'button', 'data-testid': 'base-button-focus-sentinel' }, 'Focus sentinel'),

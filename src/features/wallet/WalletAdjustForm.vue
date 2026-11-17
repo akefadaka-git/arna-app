@@ -434,12 +434,16 @@ const submitLabel = computed<string>(() =>
         :error="directionError"
         :disabled="isSubmitting"
         required
+        v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
       >
         <BaseSelect
-          id="wallet-adjust-direction"
           v-model="direction"
           :options="directionOptions"
-          :disabled="isSubmitting"
+          :id="fieldId"
+          :aria-describedby="describedBy"
+          :invalid="fieldInvalid"
+          :required="fieldRequired"
+          :disabled="fieldDisabled"
           data-testid="wallet-adjust-form-direction"
         />
       </FormField>

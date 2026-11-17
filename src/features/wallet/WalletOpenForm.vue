@@ -522,13 +522,17 @@ const submitLabel = computed<string>(() =>
         :error="shareholderError"
         :disabled="isSubmitting"
         required
+        v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
       >
         <BaseSelect
-          id="wallet-open-shareholder"
           v-model="shareholderId"
           :options="shareholderOptions"
           :placeholder="labels.shareholderPlaceholder"
-          :disabled="isSubmitting"
+          :id="fieldId"
+          :aria-describedby="describedBy"
+          :invalid="fieldInvalid"
+          :required="fieldRequired"
+          :disabled="fieldDisabled"
           data-testid="wallet-open-form-shareholder"
         />
       </FormField>
@@ -541,13 +545,17 @@ const submitLabel = computed<string>(() =>
         :error="currencyError"
         :disabled="isSubmitting"
         required
+        v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
       >
         <BaseSelect
-          id="wallet-open-currency"
           v-model="currency"
           :options="currencyOptions"
           :placeholder="labels.currencyPlaceholder"
-          :disabled="isSubmitting"
+          :id="fieldId"
+          :aria-describedby="describedBy"
+          :invalid="fieldInvalid"
+          :required="fieldRequired"
+          :disabled="fieldDisabled"
           data-testid="wallet-open-form-currency"
         />
       </FormField>

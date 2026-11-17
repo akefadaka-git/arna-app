@@ -451,13 +451,17 @@ const canSubmit = computed<boolean>(
         :error="shareClassError"
         :disabled="isSubmitting"
         required
+        v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
       >
         <BaseSelect
-          id="certificate-share-class"
           v-model="shareClassId"
           :options="classOptions"
-          :disabled="isSubmitting"
           :placeholder="labels.shareClassPlaceholder"
+          :id="fieldId"
+          :aria-describedby="describedBy"
+          :invalid="fieldInvalid"
+          :required="fieldRequired"
+          :disabled="fieldDisabled"
           data-testid="certificate-issue-form-share-class"
         />
       </FormField>

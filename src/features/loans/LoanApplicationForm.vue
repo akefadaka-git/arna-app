@@ -757,13 +757,17 @@ const submitLabel = computed<string>(() =>
         :error="borrowerError"
         :disabled="isSubmitting"
         required
+        v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
       >
         <BaseSelect
-          id="loan-application-borrower"
           v-model="borrowerShareholderId"
           :options="borrowerOptions"
           :placeholder="labels.borrowerPlaceholder"
-          :disabled="isSubmitting"
+          :id="fieldId"
+          :aria-describedby="describedBy"
+          :invalid="fieldInvalid"
+          :required="fieldRequired"
+          :disabled="fieldDisabled"
           data-testid="loan-application-form-borrower"
         />
       </FormField>
@@ -775,13 +779,17 @@ const submitLabel = computed<string>(() =>
         :error="productError"
         :disabled="isSubmitting"
         required
+        v-slot="{ id: fieldId, 'aria-describedby': describedBy, invalid: fieldInvalid, required: fieldRequired, disabled: fieldDisabled }"
       >
         <BaseSelect
-          id="loan-application-product"
           v-model="loanProductId"
           :options="productOptions"
           :placeholder="labels.productPlaceholder"
-          :disabled="isSubmitting"
+          :id="fieldId"
+          :aria-describedby="describedBy"
+          :invalid="fieldInvalid"
+          :required="fieldRequired"
+          :disabled="fieldDisabled"
           data-testid="loan-application-form-product"
         />
       </FormField>

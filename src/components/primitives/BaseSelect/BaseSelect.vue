@@ -183,7 +183,7 @@ let __arnaSelectIdCounter = 0;
 </script>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 /**
  * One option in the select.
@@ -209,6 +209,11 @@ interface Props {
 
   /**
    * The list of options to render. Order is preserved.
+   *
+   * Option values must be unique after String(value) serialization. Native
+   * select values are strings, so numeric 1 and string '1' collide. The
+   * component rejects duplicate serialized values rather than allowing
+   * duplicate Vue keys.
    *
    * Options are NOT keyed by index in the DOM. Vue keys them by `value`
    * so that dynamic option lists re-render correctly.
@@ -283,6 +288,24 @@ const props = withDefaults(defineProps<Props>(), {
   ariaDescribedBy: undefined,
   ariaLabel: undefined,
   ariaLabelledBy: undefined,
+});
+
+function validateOptionValues(options: ReadonlyArray<SelectOption>): void {
+  const seen = new Set<string>();
+  for (const option of options) {
+    const serializedValue = String(option.value);
+    if (seen.has(serializedValue)) {
+      throw new Error(
+        `[BaseSelect] option values must be unique after DOM string serialization: "${serializedValue}" is duplicated.`,
+      );
+    }
+    seen.add(serializedValue);
+  }
+}
+
+watch(() => props.options, validateOptionValues, {
+  deep: true,
+  immediate: true,
 });
 
 const emit = defineEmits<{
