@@ -22,8 +22,10 @@ The library is presentation-only. It does not create advertising campaigns, trac
 | Abstract elements | Decorative, non-semantic branded backdrops | AbstractBackdrop |
 | Animation | Opt-in entrance treatment and token-based motion | MotionReveal and TextEffect |
 | GIF | Render through ImageFrame; honor alt text and reduced-motion guidance | Supported as media; no autoplay gallery |
-| 3D elements | Isolated renderer, asset budget, fallback and device policy | Deferred; no 3D runtime dependency added |
+| 3D elements | Isolated renderer, asset budget, fallback and device policy | CSS perspective panels delivered; WebGL/model rendering deferred |
 | Text effects | Controlled gradient, shimmer and outline treatments | TextEffect |
+| Panel surfaces | Reusable flat, raised, glass, split, tilted, isometric, floating and stacked surfaces | VisualPanel (2D and CSS 3D) |
+| Application integration | Live component catalogue mounted on a real application surface | VisualLibraryShowcase on the permission-aware workspace dashboard |
 | Advertising | Clearly identified promotional/announcement banner | PromoBanner; no ad network, tracking or targeting |
 | 3D logo | Brand-approved source model, static fallback and motion policy | Deferred pending approved 3D source asset |
 
@@ -47,6 +49,7 @@ Every component must work in light and dark themes, inherit the active document 
 - Prefer optimized WebP/AVIF for raster imagery where supported; retain suitable fallbacks.
 - Use lazy loading for below-the-fold images and provide explicit dimensions/aspect ratio to limit layout shift.
 - GIF files can be displayed as images, but the initial ImageFrame does not provide per-GIF pause controls. Do not use animated GIFs for essential information or where users need motion control; prefer a user-controllable video treatment or a static poster. Large GIFs should be converted to video for production delivery where appropriate.
+- CSS perspective transforms provide dimensional panel treatments without a WebGL renderer or downloaded model assets. They are presentation effects, not manipulable 3D objects.
 - 3D models are deferred until a specific use case, approved asset, renderer, device fallback, performance budget and security review are available.
 - Avoid bundling a large general-purpose 3D engine merely to satisfy a catalogue checkbox.
 
@@ -62,8 +65,14 @@ Every component must work in light and dark themes, inherit the active document 
 
 ## 7. Explicitly deferred
 
-3D model rendering, 3D logo animation, advanced particle systems, video authoring, ad-network integration, audience targeting and campaign analytics are not included in this initial implementation. They require separate architecture, asset, privacy, performance and approval gates.
+3D model rendering, 3D logo animation, advanced particle systems, video authoring, ad-network integration, audience targeting and campaign analytics are not included. CSS-based 3D panel treatments are included; they do not constitute a model viewer. They require separate architecture, asset, privacy, performance and approval gates.
 
-## 8. Acceptance status
+## 8. Workspace integration update
+
+The workspace dashboard now mounts `VisualLibraryShowcase`, which consumes every visual-library component and presents 2D and CSS 3D panel variants. Chart values are explicitly identified as synthetic examples, and the KPI widget displays an em dash with a no-live-data explanation. The image preview uses a checked-in local SVG asset. Labels react to the active Amharic/English locale. The showcase does not introduce API calls, live metrics, third-party media, ad tracking or a 3D engine.
+
+The showcase is a component demonstration surface, not an operational dashboard. The remaining 3D model and 3D logo work is deferred as described above.
+
+## 9. Acceptance status
 
 This specification and the initial source components establish the library structure. They do not by themselves certify exhaustive cross-application visual QA, WCAG 2.2 AA, or production media performance.
