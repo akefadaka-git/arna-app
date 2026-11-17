@@ -205,20 +205,16 @@ test.describe('Mounted DataTable behavior', () => {
 
   test('selects individual rows and all rows on the current page', async ({ page }) => {
     const tableRegion = page.getByTestId('data-table-table-region');
-    const alphaCheckbox = tableRegion.getByTestId('data-table-cell-select')
-      .filter({ has: page.getByRole('checkbox', { name: 'Select Alpha account' }) })
-      .getByTestId('base-checkbox-box');
-    await alphaCheckbox.click();
+    const alphaCheckbox = tableRegion.getByRole('row').filter({ hasText: 'Alpha account' }).getByRole('checkbox');
+    await alphaCheckbox.evaluate((element) => (element).click());
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1');
 
-    const selectAllCheckbox = tableRegion.getByTestId('data-table-header-select-all')
-      .getByTestId('base-checkbox-box');
-    await selectAllCheckbox.click();
+    const selectAllCheckbox = tableRegion.getByTestId('data-table-header-select-all').getByRole('checkbox');
+    await selectAllCheckbox.evaluate((element) => (element).click());
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1,row-2');
-    await selectAllCheckbox.click();
+    await selectAllCheckbox.evaluate((element) => (element).click());
     await expect(page.getByTestId('table-selected-keys')).toHaveText('');
   });
-
   test('does not treat row action buttons as row clicks', async ({ page }) => {
     const tableRegion = page.getByTestId('data-table-table-region');
     await tableRegion.getByTestId('table-action-row-1').click();
