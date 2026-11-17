@@ -939,8 +939,9 @@ const currency = computed<string>(() => wallet.value?.currency ?? '');
               The trigger element is supplied via the `#default` scoped
               slot.
             -->
-            <DropdownMenu
-              v-if="allocationActionsFor(asAllocation(row)).length > 0"
+            <PermissionGate permission="wallet.allocation.reverse">
+              <DropdownMenu
+                v-if="allocationActionsFor(asAllocation(row)).length > 0"
               :open="isAllocationMenuOpen(String(asAllocation(row).id))"
               :items="allocationActionsFor(asAllocation(row))"
               @update:open="
@@ -970,7 +971,8 @@ const currency = computed<string>(() => wallet.value?.currency ?? '');
                   ⋯
                 </button>
               </template>
-            </DropdownMenu>
+              </DropdownMenu>
+            </PermissionGate>
           </template>
         </DataTable>
 
