@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - ".github/workflows/locale-api-integration.yml"
+      - ".github/workflows/admin-route-contract.yml"
       - "vite.config.ts"
       - "src/core/api/client.ts"
       - "src/features/locale/**"
