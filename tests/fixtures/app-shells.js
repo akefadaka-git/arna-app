@@ -37,7 +37,7 @@ app.use(router);
 
 // Mirror the production root's locale-to-document synchronization. The
 // fixture mounts layouts directly, bypassing src/App.vue by design.
-const localeStore = useLocaleStore(app._context.provides.pinia);
+const localeStore = useLocaleStore();
 watch(() => localeStore.locale, (value) => {
   document.documentElement.lang = value;
 }, { immediate: true });
