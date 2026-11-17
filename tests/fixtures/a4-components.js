@@ -144,6 +144,7 @@ const app = createApp({
         h('button', { type: 'button', 'data-testid': 'base-radio-focus', onClick: () => baseRadioRef.value?.focus() }, 'Focus BaseRadio'),
         h('button', { type: 'button', 'data-testid': 'base-radio-blur', onMousedown: (event) => event.preventDefault(), onClick: () => baseRadioRef.value?.blur() }, 'Blur BaseRadio'),
       ]),
+        h('button', { type: 'button', 'data-testid': 'base-checkbox-keyboard-sentinel' }, 'Keyboard focus sentinel'),
       h('section', { 'aria-label': 'BaseCheckbox enhancement test', 'data-testid': 'base-checkbox-section', style: 'min-width: 0; width: 100%; --arna-focus-ring-width: 3px; --arna-focus-ring-offset: 2px; --arna-focus-ring-color: #1F0A2F;' }, [
         h(BaseCheckbox, {
           ref: baseCheckboxRef,
