@@ -12,12 +12,12 @@
  *
  * Before (v1.0.1):
  *   The layout bound AppShell's `:user-menu-items` to the shared
- *   `masesUserMenuItems` (just `logout`). It had no way to render a
+ *   `arnaUserMenuItems` (just `logout`). It had no way to render a
  *   portal-specific entry, and its `onUserMenuSelect` handler
  *   dispatched on exactly one id ('logout').
  *
  *   The companion file `shell-labels.ts` now exports
- *   `portalUserMenuItems` — `[go-to-workspace] ++ masesUserMenuItems`
+ *   `portalUserMenuItems` — `[go-to-workspace] ++ arnaUserMenuItems`
  *   — but no file consumed it. The `go-to-workspace` entry was
  *   therefore inert.
  *
@@ -69,7 +69,7 @@
  Revision history
  -----------------------------------------------------------------------------
  1.2.0  — align active shell identity with ARNA (local alias only):
-          · Imports the shared masesShellLabels export as
+          · Imports the shared arnaShellLabels export as
             arnaShellLabels and binds that local name in AppShell.
           · The shared export remains unchanged for compatibility.
           · No runtime behavior, labels, routing, or permissions change.
@@ -149,7 +149,7 @@
 
  DATA SOURCES:
    @/router/shell-labels:
-     · masesShellLabels         — shell chrome labels (shared)
+     · arnaShellLabels         — shell chrome labels (shared)
      · portalUserMenuItems      — portal user menu (this layout's
                                    binding; extends the shared items
                                    with go-to-workspace)
@@ -285,7 +285,7 @@ import { logout } from '@/features/auth/service';
 import { provideMyShareholder } from './useMyShareholder';
 
 import {
-  masesShellLabels as arnaShellLabels,
+  arnaShellLabels as arnaShellLabels,
   portalUserMenuItems,
   portalNavItems,
 } from '@/router/shell-labels';

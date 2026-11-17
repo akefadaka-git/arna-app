@@ -146,13 +146,13 @@
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesModalWarned = new Set<string>();
+const __arnaModalWarned = new Set<string>();
 
-function __masesModalWarnOnce(key: string, message: string): void {
-  if (__masesModalWarned.has(key)) {
+function __arnaModalWarnOnce(key: string, message: string): void {
+  if (__arnaModalWarned.has(key)) {
     return;
   }
-  __masesModalWarned.add(key);
+  __arnaModalWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -160,7 +160,7 @@ function __masesModalWarnOnce(key: string, message: string): void {
 /*
  * Module-level counter for auto-generated title ids.
  */
-let __masesModalIdCounter = 0;
+let __arnaModalIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -255,7 +255,7 @@ defineSlots<{
 // -----------------------------------------------------------------------------
 // Generated id
 // -----------------------------------------------------------------------------
-const titleId = `mases-modal-title-${++__masesModalIdCounter}`;
+const titleId = `arna-modal-title-${++__arnaModalIdCounter}`;
 
 // -----------------------------------------------------------------------------
 // Refs
@@ -266,7 +266,7 @@ const dialogRef = ref<HTMLDialogElement | null>(null);
 // Development-time guard
 // -----------------------------------------------------------------------------
 if (import.meta.env.DEV && props.dismissible && !props.closeLabel) {
-  __masesModalWarnOnce(
+  __arnaModalWarnOnce(
     'modal:missing-close-label',
     '[Modal] dismissible=true without closeLabel. The close button ' +
       'will render with an empty aria-label, which is an ' +

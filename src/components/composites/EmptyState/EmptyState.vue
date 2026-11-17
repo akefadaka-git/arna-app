@@ -136,13 +136,13 @@ export type EmptyStateActionVariant = 'primary' | 'secondary' | 'ghost';
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesEmptyStateWarned = new Set<string>();
+const __arnaEmptyStateWarned = new Set<string>();
 
-function __masesEmptyStateWarnOnce(key: string, message: string): void {
-  if (__masesEmptyStateWarned.has(key)) {
+function __arnaEmptyStateWarnOnce(key: string, message: string): void {
+  if (__arnaEmptyStateWarned.has(key)) {
     return;
   }
-  __masesEmptyStateWarned.add(key);
+  __arnaEmptyStateWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -242,7 +242,7 @@ const hasActionSlot = computed<boolean>(() => slots.action !== undefined);
  * Guard: both `icon` and the `illustration` slot supplied.
  */
 if (import.meta.env.DEV && props.icon !== undefined && hasIllustrationSlot.value) {
-  __masesEmptyStateWarnOnce(
+  __arnaEmptyStateWarnOnce(
     'empty-state:icon-and-illustration',
     '[EmptyState] both `icon` and the `illustration` slot are supplied. ' +
       'The slot takes precedence; `icon` is ignored. Supply only one.',
@@ -258,7 +258,7 @@ if (
   props.actionLabel.trim() !== '' &&
   hasActionSlot.value
 ) {
-  __masesEmptyStateWarnOnce(
+  __arnaEmptyStateWarnOnce(
     'empty-state:action-label-and-slot',
     '[EmptyState] both `actionLabel` and the `action` slot are ' +
       'supplied. The slot takes precedence; the default button is not ' +

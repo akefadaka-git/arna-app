@@ -130,13 +130,13 @@ export type FileInputRejectReason = 'too-large' | 'wrong-type' | 'unknown';
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesFileInputWarned = new Set<string>();
+const __arnaFileInputWarned = new Set<string>();
 
-function __masesFileInputWarnOnce(key: string, message: string): void {
-  if (__masesFileInputWarned.has(key)) {
+function __arnaFileInputWarnOnce(key: string, message: string): void {
+  if (__arnaFileInputWarned.has(key)) {
     return;
   }
-  __masesFileInputWarned.add(key);
+  __arnaFileInputWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -144,7 +144,7 @@ function __masesFileInputWarnOnce(key: string, message: string): void {
 /*
  * Module-level counter for auto-generated input ids.
  */
-let __masesFileInputIdCounter = 0;
+let __arnaFileInputIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -240,7 +240,7 @@ const hasCustomSlot = computed<boolean>(() => slots.default !== undefined);
 if (import.meta.env.DEV && !hasCustomSlot.value) {
   const l = props.labels;
   if (!l || !l.chooseFile || !l.chooseFiles || !l.dropHere || !l.dropZone) {
-    __masesFileInputWarnOnce(
+    __arnaFileInputWarnOnce(
       'file-input:missing-labels',
       '[FileInput] the default presentation is rendering but the ' +
         '`labels` prop is missing or incomplete. All four strings ' +
@@ -254,7 +254,7 @@ if (import.meta.env.DEV && !hasCustomSlot.value) {
 // -----------------------------------------------------------------------------
 // Generated id
 // -----------------------------------------------------------------------------
-const inputId = `mases-file-input-${++__masesFileInputIdCounter}`;
+const inputId = `arna-file-input-${++__arnaFileInputIdCounter}`;
 
 // -----------------------------------------------------------------------------
 // Refs

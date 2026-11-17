@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { RouterLink, useRoute, useRouter } from 'vue-router';
 import { api } from '@/core/api/client';
+import ThemePreferenceControl from '@/layouts/ThemePreferenceControl.vue';
 import { formatCalendarDate } from '@/core/dates/calendar';
 import { fetchCorporateHome, fetchCorporatePages, fetchCorporateEntries, submitCorporateInquiry, submitCorporateOpportunity, type CorporateLocale, type CorporateSitePage, type CorporateSiteSection, type CorporatePublicEntry } from '@/features/public-site/api';
 
@@ -104,8 +105,8 @@ async function load(): Promise<void> {
       contributorContent.value = [];
       contributorContentFailed.value = true;
     }
-    if (home?.seo?.title) document.title = home.seo.title;
-    else document.title = home?.title ? `${home.title} | Maale Arna` : 'Maale Arna | Official Website';
+    if (home?.seo?.title) document.title = `${home.seo.title} | ARNA`;
+    else document.title = home?.title ? `${home.title} | ARNA` : 'ARNA | Official Website';
     let description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
     if (!description) {
       description = document.createElement('meta');
@@ -115,7 +116,8 @@ async function load(): Promise<void> {
     description.content = home?.seo?.description || home?.summary || '';
     if (home?.seo?.robots) upsertMeta('robots', home.seo.robots);
     if (home?.seo?.title) {
-      upsertMeta('og:title', home.seo.title, 'property');
+      upsertMeta('og:title', `${home.seo.title} | ARNA`, 'property');
+      upsertMeta('og:site_name', 'ARNA', 'property');
       upsertMeta('twitter:title', home.seo.title);
     }
     if (home?.seo?.description || home?.summary) {
@@ -178,7 +180,7 @@ watch(() => route.query.locale, (value) => {
     <a class="skip-link" href="#main-content">{{ locale === 'am' ? 'ወደ ዋናው ይዘት ይሂዱ' : 'Skip to main content' }}</a>
     <header class="site-header">
       <div class="site-header__inner">
-        <a class="brand" href="/">
+        <a class="brand" :href="locale === 'en' ? '/?locale=en' : '/'">
           <img src="/logo.png" alt="" width="44" height="44">
           <span><strong>{{ page?.title || 'Maale Arna' }}</strong><small>ARNA</small></span>
         </a>
@@ -188,11 +190,12 @@ watch(() => route.query.locale, (value) => {
           </a>
           <a v-for="item in pages" :key="item.public_id" :href="`/${locale}/${item.slug}`">{{ item.title }}</a>
         </nav>
+        <ThemePreferenceControl />
         <button type="button" class="locale-switch" @click="switchLocale">{{ locale === 'am' ? 'English' : 'አማርኛ' }}</button>
       </div>
     </header>
 
-    <main id="main-content">
+    <main id="main-content" tabindex="-1">
       <div v-if="loading" class="state-panel" role="status">{{ locale === 'am' ? 'ይዘት በመጫን ላይ…' : 'Loading published content…' }}</div>
       <template v-else-if="error">
         <div class="state-panel" role="alert">{{ locale === 'am' ? 'ይዘቱን ማምጣት አልተቻለም። እባክዎ ቆይተው ይሞክሩ።' : 'Published content could not be loaded. Please try again later.' }}</div>

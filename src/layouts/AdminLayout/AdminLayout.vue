@@ -27,7 +27,7 @@
  1.0.2  — align active shell identity with ARNA (local alias only):
           · Imports the shared shell-label export under the local name
             arnaShellLabels, matching the active product identity.
-          · The exported masesShellLabels API remains unchanged for
+          · The exported arnaShellLabels API remains unchanged for
             compatibility with other consumers.
           · No runtime behavior, routing, authorization, or menu
             contracts changed.
@@ -69,7 +69,7 @@
 
    @/router/shell-labels:
      · arnaShellLabels         — local alias for the shared
-                                 masesShellLabels export; consumed
+                                 arnaShellLabels export; consumed
                                  by the admin build without API changes
 
    @/features/auth/service:
@@ -238,7 +238,7 @@
     does not exist. The workspace user menu carries only logout today.
     Adding one is a future CR, not a defect.
 
- 3. The admin build reuses masesShellLabels, aranaBrandLabels, and
+ 3. The admin build reuses arnaShellLabels, aranaBrandLabels, and
     aranaFooterLabels unchanged from shell-labels.ts. If a future CR
     diverges admin chrome from workspace chrome, the divergence is a
     new export in shell-labels.ts, not a per-build override here.
@@ -251,7 +251,7 @@ import { useRouter, RouterView } from 'vue-router';
 import AppShell from '@/layouts/AppShell';
 import { logout } from '@/features/auth/service';
 
-import { masesShellLabels as arnaShellLabels } from '@/router/shell-labels';
+import { arnaShellLabels as arnaShellLabels } from '@/router/shell-labels';
 import {
   adminNavItems,
   adminUserMenuItems,

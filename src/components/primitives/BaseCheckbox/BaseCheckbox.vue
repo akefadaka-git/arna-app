@@ -106,7 +106,7 @@
  Same pattern as BaseInput (Unit 8.9), BaseTextarea (Unit 8.10), and
  BaseSelect (Unit 8.11). If the consumer does not supply an `id`, one is
  generated internally. The generator uses a distinct prefix
- ("mases-checkbox-") so no collision is possible across the four
+ ("arna-checkbox-") so no collision is possible across the four
  primitives.
 
  The generated id exists for two purposes:
@@ -192,7 +192,7 @@
  * Distinct prefix from the other primitives' counters, so no collision
  * is possible in a document that uses several of them.
  */
-let __masesCheckboxIdCounter = 0;
+let __arnaCheckboxIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -281,7 +281,7 @@ const emit = defineEmits<{
 /*
  * Generated id — evaluated once per component instance.
  */
-const generatedId = `mases-checkbox-${++__masesCheckboxIdCounter}`;
+const generatedId = `arna-checkbox-${++__arnaCheckboxIdCounter}`;
 
 const inputId = computed<string>(() => props.id ?? generatedId);
 

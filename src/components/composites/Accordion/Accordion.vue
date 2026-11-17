@@ -165,7 +165,7 @@ export interface AccordionItem {
 /*
  * Module-level counter for auto-generated accordion ids.
  */
-let __masesAccordionIdCounter = 0;
+let __arnaAccordionIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -215,7 +215,7 @@ defineSlots<{
 // -----------------------------------------------------------------------------
 // Generated base id (per instance)
 // -----------------------------------------------------------------------------
-const baseId = `mases-accordion-${++__masesAccordionIdCounter}`;
+const baseId = `arna-accordion-${++__arnaAccordionIdCounter}`;
 
 function headerIdFor(itemId: string): string {
   return `${baseId}-header-${itemId}`;

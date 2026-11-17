@@ -3,6 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import { aranaBrandLabels } from '@/router/shell-labels';
 import { api } from '@/core/api/client';
+import ThemePreferenceControl from '@/layouts/ThemePreferenceControl.vue';
 
 type SubmissionKind = 'news' | 'article' | 'announcement' | 'press-release';
 const title = ref('');
@@ -26,6 +27,9 @@ const endpointAvailable = computed(() => Boolean(import.meta.env.VITE_API_BASE_U
 
 const route = useRoute();
 const locale = computed(() => route.query.locale === 'en' ? 'en' : 'am');
+onMounted(() => { document.documentElement.lang = locale.value; });
+watch(locale, (value) => { document.documentElement.lang = value; });
+watch(locale, (value) => { document.title = value === 'am' ? 'ይዘት ያቅርቡ | ARNA' : 'Submit content | ARNA'; }, { immediate: true });
 const copy = computed(() => locale.value === 'am' ? {
   invalidEmail: 'እባክዎ ትክክለኛ ኢሜይል ያስገቡ።',
   verificationSent: 'የማረጋገጫ ኮድ ወደ ኢሜይልዎ ተልኳል።',
@@ -203,15 +207,20 @@ async function submitContent(): Promise<void> {
 
 <template>
   <div class="contribute-page" :lang="locale">
+    <a class="contribute-skip-link" href="#contribute-main">{{ locale === 'am' ? 'ወደ ዋናው ይዘት ዝለል' : 'Skip to main content' }}</a>
     <header class="contribute-header">
       <RouterLink class="contribute-brand" :to="{ path: '/', query: { locale } }">
         <img src="/logo.png" alt="" width="42" height="42" />
         <span><strong>{{ aranaBrandLabels.corporateName }}</strong><small>{{ aranaBrandLabels.productName }} · PUBLIC</small></span>
       </RouterLink>
       <RouterLink class="contribute-back" :to="{ path: '/', query: { locale } }">{{ copy.back }}</RouterLink>
+      <RouterLink class="contribute-locale-switch" :to="{ path: route.path, query: locale === 'am' ? { locale: 'en' } : {} }">
+        {{ locale === 'am' ? 'English' : 'አማርኛ' }}
+      </RouterLink>
+      <ThemePreferenceControl />
     </header>
 
-    <main class="contribute-main">
+    <main id="contribute-main" class="contribute-main" tabindex="-1">
       <p class="contribute-eyebrow">{{ copy.eyebrow }}</p>
       <h1>{{ copy.title }}</h1>
       <p class="contribute-lead">{{ copy.lead }}</p>
@@ -282,16 +291,18 @@ async function submitContent(): Promise<void> {
 </template>
 
 <style scoped>
+ .contribute-skip-link{position:absolute;z-index:1000;inset-block-start:.5rem;inset-inline-start:.5rem;padding:.65rem .9rem;color:var(--arna-navy);background:var(--arna-public-surface-soft);border:2px solid currentColor;transform:translateY(calc(-100% - 1rem))}.contribute-skip-link:focus{transform:translateY(0)}
 .contribute-page{min-height:100vh;color:var(--arna-navy);background:var(--arna-public-page-surface);font-family:inherit}
-.contribute-header{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem max(1.25rem,calc((100vw - 1120px)/2));border-bottom:1px solid var(--arna-line);background:var(--arna-public-surface-soft)}
+ .contribute-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;padding:1rem max(1.25rem,calc((100vw - 1120px)/2));border-bottom:1px solid var(--arna-line);background:var(--arna-public-surface-soft)}
 .contribute-brand{display:flex;align-items:center;gap:.75rem;color:inherit;text-decoration:none}
 .contribute-brand img{object-fit:contain}
 .contribute-brand span{display:grid;gap:.12rem}
 .contribute-brand strong{font-size:1.05rem}
 .contribute-brand small{color:var(--arna-public-text-secondary);font-size:.65rem;letter-spacing:.12em}
-.contribute-back{color:var(--arna-public-accent);font-size:.85rem;font-weight:650;text-decoration:none}
+.contribute-back{color:var(--arna-navy);font-size:.85rem;font-weight:650;text-decoration:none;margin-inline-end:auto}
+.contribute-locale-switch{display:inline-flex;align-items:center;min-height:40px;padding:.5rem .8rem;border:1px solid var(--arna-public-border-subtle);border-radius:999px;color:inherit;text-decoration:none;font-size:.85rem;font-weight:650}
 .contribute-main{width:min(100% - 2rem,760px);margin:0 auto;padding:clamp(2.5rem,7vw,5rem) 0}
-.contribute-eyebrow{color:var(--arna-public-accent);font-size:.72rem;font-weight:800;letter-spacing:.1em}
+.contribute-eyebrow{color:var(--arna-navy);font-size:.72rem;font-weight:800;letter-spacing:.1em}
 .contribute-main h1{margin:.65rem 0;color:var(--arna-navy);font-size:clamp(2rem,5vw,3.2rem)}
 .contribute-lead{color:var(--arna-public-text-secondary);line-height:1.9}
 .governance-note{margin:2rem 0;padding:1.2rem 1.35rem;border-inline-start:4px solid var(--arna-gold);background:var(--arna-public-surface-soft)}

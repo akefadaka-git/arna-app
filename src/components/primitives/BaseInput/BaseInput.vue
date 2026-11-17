@@ -252,7 +252,7 @@
  * Runs once when the module is evaluated. Shared across all instances
  * of BaseInput. Not exposed to consumers.
  */
-let __masesInputIdCounter = 0;
+let __arnaInputIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -390,7 +390,7 @@ const emit = defineEmits<{
  * Generated id — evaluated once per component instance.
  * See the file header comment §"Auto-generated id".
  */
-const generatedId = `mases-input-${++__masesInputIdCounter}`;
+const generatedId = `arna-input-${++__arnaInputIdCounter}`;
 
 const inputId = computed<string>(() => props.id ?? generatedId);
 

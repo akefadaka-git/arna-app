@@ -3,7 +3,7 @@
   <head>
     <!--
       =====================================================================
-      MASES Phase 2 UI — Workspace entry HTML
+      ARNA Phase 2 UI — Workspace entry HTML
       =====================================================================
 
       File:    mase_app/workspace-entry/index.html
@@ -35,7 +35,7 @@
                  contentful paint on the login page; preloading lets
                  the browser fetch it in parallel with the JS bundle
                  instead of discovering it after Vue mounts.
-               · Added Open Graph and Twitter Card meta tags. MASES
+               · Added Open Graph and Twitter Card meta tags. ARNA
                  links are commonly shared over messaging apps in
                  Ethiopia; without these tags, every share unfurls as
                  a blank card.
@@ -72,7 +72,7 @@
                Vue 3 replaces the contents of the mount target when
                app.mount('#app') runs; no cleanup code is required.
                The inline <style> block becomes inert once the
-               .mases-preloader element is removed from the DOM.
+               .arna-preloader element is removed from the DOM.
 
                No other change. The metadata, performance hints,
                favicon references, noscript fallback, and the Vite
@@ -132,7 +132,7 @@
       languages.
 
       ---------------------------------------------------------------------
-      Why <title>MASES</title>
+      Why <title>ARNA Workspace</title>
       ---------------------------------------------------------------------
       Pre-JS default only. App.vue mounts and PageTitle (Unit 11.9)
       overwrites document.title on every route change. The initial
@@ -187,7 +187,7 @@
       ---------------------------------------------------------------------
       Open Graph and Twitter Card
       ---------------------------------------------------------------------
-      When a MASES URL is pasted into a messaging app or social
+      When a ARNA URL is pasted into a messaging app or social
       platform, the platform fetches the HTML and reads the og:* and
       twitter:* meta tags to construct a link preview. Without them,
       the preview is a blank card showing only the URL.
@@ -263,9 +263,9 @@
 
     <!--
       Title. Overwritten by the router on mount; see the file header
-      comment §"Why <title>MASES</title>".
+      comment §"Why <title>ARNA</title>".
     -->
-    <title>MASES</title>
+    <title>ARNA</title>
 
     <!--
       Description. Consumed by search engines and by social-platform
@@ -274,7 +274,7 @@
     -->
     <meta
       name="description"
-      content="MASES — the Maale Arna shared-equity management platform for Ethiopian enterprises."
+      content="ARNA Workspace — the Maale Arna shared-equity management platform for Ethiopian enterprises."
     />
 
     <!--
@@ -315,13 +315,13 @@
       home screen. On iOS, the equivalent is
       apple-mobile-web-app-title below.
     -->
-    <meta name="application-name" content="MASES" />
+    <meta name="application-name" content="ARNA Workspace" />
 
     <!--
       iOS home-screen title. Kept short because iOS truncates long
       titles to approximately 12 characters on the home screen.
     -->
-    <meta name="apple-mobile-web-app-title" content="MASES" />
+    <meta name="apple-mobile-web-app-title" content="ARNA" />
 
     <!--
       iOS status bar style. "default" renders the status bar in the
@@ -344,11 +344,11 @@
 
     <!--
       Open Graph. Read by Facebook, LinkedIn, Slack, WhatsApp,
-      Telegram, and most other platforms when a MASES URL is shared.
+      Telegram, and most other platforms when a ARNA URL is shared.
     -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="MASES" />
-    <meta property="og:title" content="MASES" />
+    <meta property="og:site_name" content="ARNA" />
+    <meta property="og:title" content="ARNA Workspace" />
     <meta
       property="og:description"
       content="The Maale Arna shared-equity management platform."
@@ -364,7 +364,7 @@
       twitter:image at that asset.
     -->
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="MASES" />
+    <meta name="twitter:title" content="ARNA Workspace" />
     <meta
       name="twitter:description"
       content="The Maale Arna shared-equity management platform."
@@ -454,7 +454,7 @@
     <!--
       Preloader styles. See the file header comment §"The preloader"
       and the 1.2.0 revision note. Once Vue mounts and replaces the
-      #app contents, the .mases-preloader element is removed and
+      #app contents, the .arna-preloader element is removed and
       these rules become inert.
 
       The four colour literals below are drawn from the design
@@ -462,7 +462,7 @@
       mapping. Keep them in sync if the Tier 1 values change.
     -->
     <style>
-      .mases-preloader {
+      .arna-preloader {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -477,22 +477,22 @@
         background-color: #FFFDF7;
       }
 
-      .mases-preloader__spinner {
+      .arna-preloader__spinner {
         display: block;
         width: 32px;
         height: 32px;
         border: 3px solid #DDD5C0;
         border-top-color: #9B1B30;
         border-radius: 50%;
-        animation: mases-preloader-spin 0.8s linear infinite;
+        animation: arna-preloader-spin 0.8s linear infinite;
       }
 
-      @keyframes mases-preloader-spin {
+      @keyframes arna-preloader-spin {
         to { transform: rotate(360deg); }
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .mases-preloader__spinner {
+        .arna-preloader__spinner {
           animation: none;
           border-top-color: #DDD5C0;
         }
@@ -511,13 +511,13 @@
     -->
     <noscript>
       <p>
-        JavaScript is required to use MASES. Please enable JavaScript in
+        JavaScript is required to use ARNA Workspace. Please enable JavaScript in
         your browser settings and reload this page.
       </p>
     </noscript>
 
     <!--
-      Mount point. The .mases-preloader block below is visible until
+      Mount point. The .arna-preloader block below is visible until
       Vue replaces the contents of this element. See the file header
       comment §"The preloader" and the 1.2.0 revision note.
 
@@ -526,9 +526,9 @@
       The spinner itself is decorative; only the label is read aloud.
     -->
     <div id="app">
-      <div class="mases-preloader" role="status" aria-live="polite">
-        <span class="mases-preloader__spinner" aria-hidden="true"></span>
-        <span class="mases-preloader__label">በመጫን ላይ...</span>
+      <div class="arna-preloader" role="status" aria-live="polite">
+        <span class="arna-preloader__spinner" aria-hidden="true"></span>
+        <span class="arna-preloader__label">በመጫን ላይ...</span>
       </div>
     </div>
 

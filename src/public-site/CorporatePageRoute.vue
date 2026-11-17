@@ -3,6 +3,7 @@ import { onMounted, ref, watch } from 'vue';
 import { useRoute, RouterLink } from 'vue-router';
 import { fetchCorporatePage, type CorporateLocale, type CorporateSitePage, type CorporateSiteSection } from '@/features/public-site/api';
 import { aranaBrandLabels } from '@/router/shell-labels';
+import ThemePreferenceControl from '@/layouts/ThemePreferenceControl.vue';
 
 const route = useRoute();
 const page = ref<CorporateSitePage | null>(null);
@@ -32,7 +33,8 @@ async function loadPage(): Promise<void> {
   try {
     page.value = await fetchCorporatePage(locale.value, slug);
     const seo = page.value.seo;
-    if (seo?.title) document.title = seo.title;
+    if (seo?.title) document.title = `${seo.title} | ARNA`;
+    else document.title = `${page.value.title} | ARNA`;
     document.documentElement.lang = locale.value;
     if (seo?.robots) {
       let robots = document.querySelector<HTMLMetaElement>('meta[name=\"robots\"]');
@@ -47,7 +49,10 @@ async function loadPage(): Promise<void> {
     if (seo?.title) {
       let ogTitle = document.querySelector<HTMLMetaElement>('meta[property=\"og:title\"]');
       if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.append(ogTitle); }
-      ogTitle.content = seo.title;
+      ogTitle.content = `${seo.title} | ARNA`;
+      let siteName = document.querySelector<HTMLMetaElement>('meta[property="og:site_name"]');
+      if (!siteName) { siteName = document.createElement('meta'); siteName.setAttribute('property', 'og:site_name'); document.head.append(siteName); }
+      siteName.content = 'ARNA';
     }
     if (seo?.description) {
       let description = document.querySelector<HTMLMetaElement>('meta[name="description"]');
@@ -75,21 +80,22 @@ onMounted(() => void loadPage());
     <a class="skip-link" href="#page-content">{{ locale === 'am' ? 'ወደ ዋናው ይዘት ይሂዱ' : 'Skip to main content' }}</a>
     <header class="site-header">
       <div class="site-container site-header__inner">
-        <RouterLink class="brand" to="/">
+        <RouterLink class="brand" :to="{ path: '/', query: { locale } }">
           <img class="public-home__emblem" src="/logo.png" alt="" width="43" height="43" />
           <span class="brand__wordmark"><strong>{{ aranaBrandLabels.corporateName }}</strong><small>{{ aranaBrandLabels.productName }}</small></span>
         </RouterLink>
         <nav class="main-nav" :aria-label="locale === 'am' ? 'ዋና አሰሳ' : 'Main navigation'">
-          <RouterLink to="/">{{ locale === 'am' ? 'መነሻ' : 'Home' }}</RouterLink>
+          <RouterLink :to="{ path: '/', query: { locale } }">{{ locale === 'am' ? 'መነሻ' : 'Home' }}</RouterLink>
           <RouterLink :to="`/${locale === 'am' ? 'en' : 'am'}/${page?.alternate_slug || String(route.params.slug)}`">{{ locale === 'am' ? 'English' : 'አማርኛ' }}</RouterLink>
+          <ThemePreferenceControl />
         </nav>
       </div>
     </header>
-    <main id="page-content" class="site-container" aria-live="polite">
+    <main id="page-content" class="site-container" aria-live="polite" tabindex="-1">
       <p v-if="loading">{{ locale === 'am' ? 'በመጫን ላይ…' : 'Loading…' }}</p>
       <section v-else-if="failed || !page" role="status">
         <h1>{{ locale === 'am' ? 'ይህ ገጽ አልተገኘም' : 'Page not found' }}</h1>
-        <RouterLink to="/">{{ locale === 'am' ? 'ወደ መነሻ ይመለሱ' : 'Return home' }}</RouterLink>
+        <RouterLink :to="{ path: '/', query: { locale } }">{{ locale === 'am' ? 'ወደ መነሻ ይመለሱ' : 'Return home' }}</RouterLink>
       </section>
       <article v-else>
         <p class="eyebrow">{{ page.page_key }}</p>
@@ -104,3 +110,14 @@ onMounted(() => void loadPage());
     </main>
   </div>
 </template>
+
+<style scoped>
+.site-container { width: min(100% - 2rem, 900px); margin-inline: auto; }
+.site-header { border-bottom: 1px solid var(--arna-public-border-subtle); }
+.site-header__inner { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.brand { display: inline-flex; align-items: center; gap: .7rem; text-decoration: none; }
+.brand__wordmark { display: grid; gap: .2rem; }
+.brand__wordmark small { color: var(--arna-public-text-secondary); }
+.main-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; }
+@media (max-width: 36rem) { .site-header__inner { padding-block: .75rem; } .main-nav { width: 100%; } }
+</style>

@@ -214,10 +214,10 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   border-color: currentColor;
   border-top-color: transparent;
   border-radius: var(--arna-radius-full);
-  animation: mases-spinner-rotate 0.8s linear infinite;
+  animation: arna-spinner-rotate 0.8s linear infinite;
 }
 
-@keyframes mases-spinner-rotate {
+@keyframes arna-spinner-rotate {
   to {
     transform: rotate(360deg);
   }

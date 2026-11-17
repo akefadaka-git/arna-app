@@ -129,13 +129,13 @@
  * Module-level Set for deduplicated development warnings.
  * Same pattern as BaseChip (Unit 8.22) and BaseLink (Unit 8.18).
  */
-const __masesErrorCodeBadgeWarned = new Set<string>();
+const __arnaErrorCodeBadgeWarned = new Set<string>();
 
-function __masesErrorCodeBadgeWarnOnce(key: string, message: string): void {
-  if (__masesErrorCodeBadgeWarned.has(key)) {
+function __arnaErrorCodeBadgeWarnOnce(key: string, message: string): void {
+  if (__arnaErrorCodeBadgeWarned.has(key)) {
     return;
   }
-  __masesErrorCodeBadgeWarned.add(key);
+  __arnaErrorCodeBadgeWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -202,7 +202,7 @@ if (
   import.meta.env.DEV &&
   (props.httpStatus < 100 || props.httpStatus > 599)
 ) {
-  __masesErrorCodeBadgeWarnOnce(
+  __arnaErrorCodeBadgeWarnOnce(
     'error-code-badge:invalid-status',
     `[ErrorCodeBadge] httpStatus=${props.httpStatus} is outside the ` +
       `valid HTTP status range (100–599). The value will be rendered ` +
@@ -215,7 +215,7 @@ if (
  * only the code, which may be confusing. Warn once per module load.
  */
 if (import.meta.env.DEV && props.label.trim().length === 0) {
-  __masesErrorCodeBadgeWarnOnce(
+  __arnaErrorCodeBadgeWarnOnce(
     'error-code-badge:empty-label',
     '[ErrorCodeBadge] label is empty or whitespace-only. Only the ' +
       'code will be rendered. Supply a translated archetype label ' +

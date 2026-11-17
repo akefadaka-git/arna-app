@@ -106,13 +106,13 @@
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesSearchBarWarned = new Set<string>();
+const __arnaSearchBarWarned = new Set<string>();
 
-function __masesSearchBarWarnOnce(key: string, message: string): void {
-  if (__masesSearchBarWarned.has(key)) {
+function __arnaSearchBarWarnOnce(key: string, message: string): void {
+  if (__arnaSearchBarWarned.has(key)) {
     return;
   }
-  __masesSearchBarWarned.add(key);
+  __arnaSearchBarWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -231,7 +231,7 @@ defineSlots<{
 // -----------------------------------------------------------------------------
 
 if (import.meta.env.DEV && !props.clearLabel) {
-  __masesSearchBarWarnOnce(
+  __arnaSearchBarWarnOnce(
     'search-bar:missing-clear-label',
     '[SearchBar] clearLabel is not supplied. The clear button will ' +
       'render with an empty aria-label, which is an accessibility ' +

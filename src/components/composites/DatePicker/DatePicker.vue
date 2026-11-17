@@ -176,13 +176,13 @@ interface DateParts {
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesDatePickerWarned = new Set<string>();
+const __arnaDatePickerWarned = new Set<string>();
 
-function __masesDatePickerWarnOnce(key: string, message: string): void {
-  if (__masesDatePickerWarned.has(key)) {
+function __arnaDatePickerWarnOnce(key: string, message: string): void {
+  if (__arnaDatePickerWarned.has(key)) {
     return;
   }
-  __masesDatePickerWarned.add(key);
+  __arnaDatePickerWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -190,7 +190,7 @@ function __masesDatePickerWarnOnce(key: string, message: string): void {
 /*
  * Module-level counter for auto-generated ids.
  */
-let __masesDatePickerIdCounter = 0;
+let __arnaDatePickerIdCounter = 0;
 
 // -----------------------------------------------------------------------------
 // Date helpers — pure functions, no side effects
@@ -399,7 +399,7 @@ const emit = defineEmits<{
 // -----------------------------------------------------------------------------
 // Generated ids
 // -----------------------------------------------------------------------------
-const componentId = `mases-date-picker-${++__masesDatePickerIdCounter}`;
+const componentId = `arna-date-picker-${++__arnaDatePickerIdCounter}`;
 const popupId = `${componentId}-popup`;
 
 // -----------------------------------------------------------------------------
@@ -409,7 +409,7 @@ if (import.meta.env.DEV) {
   const l = props.labels;
 
   if (!Array.isArray(l.weekdaysShort) || l.weekdaysShort.length !== 7) {
-    __masesDatePickerWarnOnce(
+    __arnaDatePickerWarnOnce(
       'date-picker:weekdays-length',
       '[DatePicker] labels.weekdaysShort must be an array of exactly ' +
         '7 items (index 0 = Sunday). Received: ' +
@@ -418,7 +418,7 @@ if (import.meta.env.DEV) {
   }
 
   if (!Array.isArray(l.monthsLong) || l.monthsLong.length !== 12) {
-    __masesDatePickerWarnOnce(
+    __arnaDatePickerWarnOnce(
       'date-picker:months-length',
       '[DatePicker] labels.monthsLong must be an array of exactly ' +
         '12 items (index 0 = January). Received: ' +
@@ -427,19 +427,19 @@ if (import.meta.env.DEV) {
   }
 
   if (l.previousMonth.trim() === '') {
-    __masesDatePickerWarnOnce(
+    __arnaDatePickerWarnOnce(
       'date-picker:empty-previous',
       '[DatePicker] labels.previousMonth is empty.',
     );
   }
   if (l.nextMonth.trim() === '') {
-    __masesDatePickerWarnOnce(
+    __arnaDatePickerWarnOnce(
       'date-picker:empty-next',
       '[DatePicker] labels.nextMonth is empty.',
     );
   }
   if (l.openCalendar.trim() === '') {
-    __masesDatePickerWarnOnce(
+    __arnaDatePickerWarnOnce(
       'date-picker:empty-open',
       '[DatePicker] labels.openCalendar is empty.',
     );

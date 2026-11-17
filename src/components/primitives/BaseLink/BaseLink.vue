@@ -126,13 +126,13 @@
  * The Sets are module-scoped (evaluated once when the module is first
  * imported) and are not exposed to consumers.
  */
-const __masesBaseLinkWarned = new Set<string>();
+const __arnaBaseLinkWarned = new Set<string>();
 
-function __masesBaseLinkWarnOnce(key: string, message: string): void {
-  if (__masesBaseLinkWarned.has(key)) {
+function __arnaBaseLinkWarnOnce(key: string, message: string): void {
+  if (__arnaBaseLinkWarned.has(key)) {
     return;
   }
-  __masesBaseLinkWarned.add(key);
+  __arnaBaseLinkWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -217,7 +217,7 @@ const props = withDefaults(defineProps<Props>(), {
  */
 if (import.meta.env.DEV) {
   if (!props.to && !props.href) {
-    __masesBaseLinkWarnOnce(
+    __arnaBaseLinkWarnOnce(
       'base-link:no-target',
       '[BaseLink] neither `to` nor `href` was supplied. Rendering an ' +
         'anchor with href="#", which is a placeholder. Supply `to` for ' +
@@ -226,7 +226,7 @@ if (import.meta.env.DEV) {
   }
 
   if (props.to && props.href) {
-    __masesBaseLinkWarnOnce(
+    __arnaBaseLinkWarnOnce(
       'base-link:both-targets',
       '[BaseLink] both `to` and `href` were supplied. The `to` prop takes ' +
         'precedence; the `href` prop is ignored. Supply only one.',

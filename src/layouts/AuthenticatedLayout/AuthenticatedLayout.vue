@@ -221,8 +221,8 @@ import AppShell from '@/layouts/AppShell';
 import { logout } from '@/features/auth/service';
 
 import {
-  masesShellLabels as arnaShellLabels,
-  masesUserMenuItems as arnaUserMenuItems,
+  arnaShellLabels as arnaShellLabels,
+  arnaUserMenuItems as arnaUserMenuItems,
   authenticatedNavItems,
 } from '@/router/shell-labels';
 

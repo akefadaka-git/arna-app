@@ -112,7 +112,7 @@
  -----------------------------------------------------------------------------
  Same pattern as the other primitives. If the consumer does not supply
  an `id`, one is generated internally. The generator uses a distinct
- prefix ("mases-radio-") so no collision is possible across the five
+ prefix ("arna-radio-") so no collision is possible across the five
  input primitives delivered in this stage.
 
  -----------------------------------------------------------------------------
@@ -193,7 +193,7 @@
  * Distinct prefix from the other primitives' counters, so no collision
  * is possible in a document that uses several of them.
  */
-let __masesRadioIdCounter = 0;
+let __arnaRadioIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -287,7 +287,7 @@ const emit = defineEmits<{
 /*
  * Generated id — evaluated once per component instance.
  */
-const generatedId = `mases-radio-${++__masesRadioIdCounter}`;
+const generatedId = `arna-radio-${++__arnaRadioIdCounter}`;
 
 const inputId = computed<string>(() => props.id ?? generatedId);
 

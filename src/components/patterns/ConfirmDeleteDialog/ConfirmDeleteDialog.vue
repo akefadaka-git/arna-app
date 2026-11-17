@@ -199,7 +199,7 @@ export interface ConfirmDeleteDialogLabels {
 /*
  * Module-level counter for auto-generated ids.
  */
-let __masesConfirmDeleteDialogIdCounter = 0;
+let __arnaConfirmDeleteDialogIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -277,7 +277,7 @@ const emit = defineEmits<{
 // -----------------------------------------------------------------------------
 // Generated ids
 // -----------------------------------------------------------------------------
-const baseId = `mases-confirm-delete-${++__masesConfirmDeleteDialogIdCounter}`;
+const baseId = `arna-confirm-delete-${++__arnaConfirmDeleteDialogIdCounter}`;
 const inputId = `${baseId}-input`;
 const errorId = `${baseId}-error`;
 

@@ -49,7 +49,7 @@
  The default target id is defined in three places that must agree:
 
    1. AppShell.vue — the `skipToContentTargetId` prop's default value
-      ('mases-main-content').
+      ('arna-main-content').
    2. AppShell.vue — the same value assigned to the id attribute on
       the <main> element.
    3. This file — the `href` rendered from the `targetId` prop.

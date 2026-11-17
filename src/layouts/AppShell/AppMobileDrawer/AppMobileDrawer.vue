@@ -503,7 +503,7 @@ onBeforeUnmount(() => {
    * synchronously; see the file header comment §"Exit-animation
    * decision".
    */
-  animation: mases-drawer-slide-in var(--arna-duration-slow) var(--arna-easing-decelerate);
+  animation: arna-drawer-slide-in var(--arna-duration-slow) var(--arna-easing-decelerate);
 }
 
 /*
@@ -515,7 +515,7 @@ html[dir='rtl'] .app-mobile-drawer {
   --arna-drawer-offset: 100%;
 }
 
-@keyframes mases-drawer-slide-in {
+@keyframes arna-drawer-slide-in {
   from {
     transform: translateX(var(--arna-drawer-offset));
   }

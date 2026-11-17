@@ -4,6 +4,7 @@ import { RouterLink, useRoute } from 'vue-router';
 import { fetchCorporateEntry, type CorporateLocale, type CorporatePublicEntry } from '@/features/public-site/api';
 import { aranaBrandLabels } from '@/router/shell-labels';
 import { formatCalendarDate } from '@/core/dates/calendar';
+import ThemePreferenceControl from '@/layouts/ThemePreferenceControl.vue';
 
 const route = useRoute();
 const entry = ref<CorporatePublicEntry | null>(null);
@@ -22,7 +23,7 @@ async function load(): Promise<void> {
   loading.value = true; failed.value = false;
   try {
     entry.value = await fetchCorporateEntry(type, locale.value, slug);
-    document.title = entry.value.seo?.title ?? entry.value.title;
+    document.title = `${entry.value.seo?.title ?? entry.value.title} | ARNA`;
     document.documentElement.lang = locale.value;
     const description = entry.value.summary || entry.value.body.slice(0, 160);
     let meta = document.querySelector<HTMLMetaElement>('meta[name="description"]');
@@ -31,6 +32,9 @@ async function load(): Promise<void> {
     let ogTitle = document.querySelector<HTMLMetaElement>('meta[property=\"og:title\"]');
     if (!ogTitle) { ogTitle = document.createElement('meta'); ogTitle.setAttribute('property', 'og:title'); document.head.append(ogTitle); }
     ogTitle.content = document.title;
+    let siteName = document.querySelector<HTMLMetaElement>('meta[property="og:site_name"]');
+    if (!siteName) { siteName = document.createElement('meta'); siteName.setAttribute('property', 'og:site_name'); document.head.append(siteName); }
+    siteName.content = 'ARNA';
     let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.append(canonical); }
     canonical.href = entry.value.seo?.canonical_url ?? window.location.href;
@@ -45,15 +49,16 @@ onMounted(() => void load());
   <div class="arna-site corporate-entry-route">
     <a class="skip-link" href="#entry-content">{{ locale === 'am' ? 'ወደ ዋናው ይዘት ይሂዱ' : 'Skip to main content' }}</a>
     <header class="site-header"><div class="site-container site-header__inner">
-      <RouterLink class="brand" to="/"><img class="public-home__emblem" src="/logo.png" alt="" width="43" height="43" /><span class="brand__wordmark"><strong>{{ aranaBrandLabels.corporateName }}</strong><small>{{ aranaBrandLabels.productName }}</small></span></RouterLink>
+      <RouterLink class="brand" :to="{ path: '/', query: { locale } }"><img class="public-home__emblem" src="/logo.png" alt="" width="43" height="43" /><span class="brand__wordmark"><strong>{{ aranaBrandLabels.corporateName }}</strong><small>{{ aranaBrandLabels.productName }}</small></span></RouterLink>
       <nav class="main-nav" :aria-label="locale === 'am' ? 'ዋና አሰሳ' : 'Main navigation'">
-        <RouterLink to="/">{{ locale === 'am' ? 'መነሻ' : 'Home' }}</RouterLink>
+        <RouterLink :to="{ path: '/', query: { locale } }">{{ locale === 'am' ? 'መነሻ' : 'Home' }}</RouterLink>
         <RouterLink :to="`/${locale === 'am' ? 'en' : 'am'}/content/${String(route.params.type)}/${entry?.alternate_slug ?? String(route.params.slug)}`">{{ locale === 'am' ? 'English' : 'አማርኛ' }}</RouterLink>
+        <ThemePreferenceControl />
       </nav>
     </div></header>
-    <main id="entry-content" class="site-container" aria-live="polite">
+    <main id="entry-content" class="site-container" aria-live="polite" tabindex="-1">
       <p v-if="loading">{{ locale === 'am' ? 'በመጫን ላይ…' : 'Loading…' }}</p>
-      <section v-else-if="failed || !entry" role="status"><h1>{{ locale === 'am' ? 'ይዘቱ አልተገኘም' : 'Content not found' }}</h1><RouterLink to="/">{{ locale === 'am' ? 'ወደ መነሻ ይመለሱ' : 'Return home' }}</RouterLink></section>
+      <section v-else-if="failed || !entry" role="status"><h1>{{ locale === 'am' ? 'ይዘቱ አልተገኘም' : 'Content not found' }}</h1><RouterLink :to="{ path: '/', query: { locale } }">{{ locale === 'am' ? 'ወደ መነሻ ይመለሱ' : 'Return home' }}</RouterLink></section>
       <article v-else class="corporate-entry">
         <p class="eyebrow">{{ entry.type }}</p><h1>{{ entry.title }}</h1><p v-if="entry.summary">{{ entry.summary }}</p>
         <img v-if="entry.asset_url && entry.type === 'media'" :src="entry.asset_url" :alt="entry.title" loading="lazy" />
@@ -72,11 +77,12 @@ onMounted(() => void load());
 .brand { display: inline-flex; align-items: center; gap: .7rem; text-decoration: none; }
 .brand__wordmark { display: grid; gap: .2rem; }
 .brand__wordmark small { color: var(--arna-public-text-secondary); }
-.main-nav { display: flex; gap: 1rem; }
+.main-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; }
 .corporate-entry { max-width: 760px; margin: 3rem auto; line-height: 1.9; }
 .corporate-entry h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.3; }
 .corporate-entry img { max-width: 100%; height: auto; border-radius: .75rem; }
 .corporate-entry__body { white-space: pre-wrap; }
 .skip-link { position: absolute; transform: translateY(-200%); }
 .skip-link:focus { transform: translateY(0); }
+@media (max-width: 36rem) { .site-header__inner { padding-block: .75rem; flex-wrap: wrap; } .main-nav { width: 100%; } }
 </style>

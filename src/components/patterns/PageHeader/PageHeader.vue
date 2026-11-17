@@ -466,18 +466,18 @@
  * so a document containing all four primitives never produces a
  * colliding id.
  */
-let __masesPageHeaderIdCounter = 0;
+let __arnaPageHeaderIdCounter = 0;
 
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesPageHeaderWarned = new Set<string>();
+const __arnaPageHeaderWarned = new Set<string>();
 
-function __masesPageHeaderWarnOnce(key: string, message: string): void {
-  if (__masesPageHeaderWarned.has(key)) {
+function __arnaPageHeaderWarnOnce(key: string, message: string): void {
+  if (__arnaPageHeaderWarned.has(key)) {
     return;
   }
-  __masesPageHeaderWarned.add(key);
+  __arnaPageHeaderWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -666,7 +666,7 @@ if (
   (props.breadcrumbsAriaLabel === undefined ||
     props.breadcrumbsAriaLabel.trim() === '')
 ) {
-  __masesPageHeaderWarnOnce(
+  __arnaPageHeaderWarnOnce(
     'page-header:missing-breadcrumbs-aria-label',
     '[PageHeader] breadcrumbs are supplied but `breadcrumbsAriaLabel` ' +
       'is missing or empty. The breadcrumbs nav will render with ' +
@@ -706,7 +706,7 @@ const hasBreadcrumbs = computed<boolean>(
  * instance. Only emitted to the template (and only linked via
  * aria-labelledby) when the title is non-empty.
  */
-const titleId = `mases-page-header-title-${++__masesPageHeaderIdCounter}`;
+const titleId = `arna-page-header-title-${++__arnaPageHeaderIdCounter}`;
 
 // =============================================================================
 // Computed — classes

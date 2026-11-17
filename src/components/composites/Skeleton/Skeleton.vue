@@ -253,10 +253,10 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    only the compositor is involved.
    ============================================================================ */
 .skeleton--pulse {
-  animation: mases-skeleton-pulse 1.5s var(--arna-easing-standard) infinite;
+  animation: arna-skeleton-pulse 1.5s var(--arna-easing-standard) infinite;
 }
 
-@keyframes mases-skeleton-pulse {
+@keyframes arna-skeleton-pulse {
   0%,
   100% {
     opacity: 1;
@@ -285,10 +285,10 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   );
   background-size: 200% 100%;
   background-repeat: no-repeat;
-  animation: mases-skeleton-shimmer 1.6s linear infinite;
+  animation: arna-skeleton-shimmer 1.6s linear infinite;
 }
 
-@keyframes mases-skeleton-shimmer {
+@keyframes arna-skeleton-shimmer {
   0% {
     background-position: -100% 0;
   }

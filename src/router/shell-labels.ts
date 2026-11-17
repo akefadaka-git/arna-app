@@ -137,8 +137,8 @@
  * Net lines:      +~110 docblock; +1 export (~20 lines).
  *
  * Before (v1.8.0):
- *   The file exported five constants: masesShellLabels,
- *   masesUserMenuItems, portalUserMenuItems, authenticatedNavItems,
+ *   The file exported five constants: arnaShellLabels,
+ *   arnaUserMenuItems, portalUserMenuItems, authenticatedNavItems,
  *   portalNavItems. No export carried the corporate brand identity
  *   (ማሌ ዓርና / ማሴስ). The two shell layouts (AuthenticatedLayout,
  *   PortalLayout) bound AppShell's `#brand` slot to nothing, so the
@@ -372,7 +372,7 @@
  *     leaf points at.
  *   · The icon name `landmark` is verified against BaseIcon.vue
  *     v2.0.0.
- *   · No change to masesShellLabels, masesUserMenuItems,
+ *   · No change to arnaShellLabels, arnaUserMenuItems,
  *     portalUserMenuItems, or portalNavItems.
  *
  * Files modified:  this file only
@@ -503,15 +503,15 @@
  * Before (v1.6.1):
  *   The file exported five constants:
  *
- *     masesShellLabels        — shell chrome labels, shared
- *     masesUserMenuItems      — the user-menu items, shared
+ *     arnaShellLabels        — shell chrome labels, shared
+ *     arnaUserMenuItems      — the user-menu items, shared
  *                               (currently just `logout`)
  *     authenticatedNavItems   — the workspace nav tree
  *     portalNavItems          — the portal nav tree
  *     (plus the re-exported type aliases imported from
  *      @/layouts/AppShell)
  *
- *   `masesUserMenuItems` was consumed by BOTH layouts
+ *   `arnaUserMenuItems` was consumed by BOTH layouts
  *   (AuthenticatedLayout and PortalLayout) via AppShell's
  *   `:user-menu-items` binding. Any addition to that array would
  *   therefore render on both surfaces — a portal-only entry could not
@@ -522,10 +522,10 @@
  *
  *     portalUserMenuItems = [
  *       { id: 'go-to-workspace',
- *         label: 'ወደ ማሴስ ወርክስፔስ',
+ *         label: 'ወደ ARNA ወርክስፔስ',
  *         icon: 'layout-grid',
  *         permission: 'app.app.access' },
- *       ...masesUserMenuItems,       // the shared `logout`
+ *       ...arnaUserMenuItems,       // the shared `logout`
  *     ]
  *
  *   The new entry is a cross-domain navigation link to the workspace
@@ -536,7 +536,7 @@
  *   access). A caller who cannot reach the workspace does not see the
  *   item.
  *
- *   `masesUserMenuItems` itself is UNCHANGED. It continues to be the
+ *   `arnaUserMenuItems` itself is UNCHANGED. It continues to be the
  *   workspace's user menu (just `logout`) and the base for the
  *   portal's menu.
  *
@@ -735,7 +735,7 @@
  *     path with no registered component.
  *   · The icon name `package` is NOT yet verified against the
  *     registry — see §"The icon name — please verify".
- *   · No change to masesShellLabels, masesUserMenuItems, or
+ *   · No change to arnaShellLabels, arnaUserMenuItems, or
  *     portalNavItems. Only authenticatedNavItems is amended.
  *
  * =============================================================================
@@ -808,7 +808,7 @@
  *     '@/layouts/AppShell'.
  *   · The icon name `handshake` is verified against the registry — see
  *     the file header §"Icon registry".
- *   · No change to masesShellLabels, masesUserMenuItems, or
+ *   · No change to arnaShellLabels, arnaUserMenuItems, or
  *     portalNavItems. Only authenticatedNavItems is amended.
  *
  * =============================================================================
@@ -907,8 +907,8 @@
  *
  * 1.7.0  — portal user-menu extension (back-to-workspace). One new
  *          exported const `portalUserMenuItems` = [go-to-workspace]
- *          ++ masesUserMenuItems. The new entry is gated on
- *          `app.app.access`. `masesUserMenuItems` and both nav trees
+ *          ++ arnaUserMenuItems. The new entry is gated on
+ *          `app.app.access`. `arnaUserMenuItems` and both nav trees
  *          are byte-for-byte unchanged.
  *
  * 1.6.1  — documentation restoration (CR-LW3). No field changes:
@@ -990,7 +990,7 @@
  *              - §"Future hooks — breadcrumbs aria label"
  *              - §"Language selector — label gap"
  *              - §"Flat nav tree — deliberate"
- *          · Added an inline comment inside `masesShellLabels` marking
+ *          · Added an inline comment inside `arnaShellLabels` marking
  *            where the future `breadcrumbsAriaLabel` field will go
  *            when the Breadcrumbs-to-AppHeader wiring CR ships.
  *          · No value was added, removed, or renamed. The exported
@@ -1056,10 +1056,10 @@
  *                               supportLinkLabel }
  *
  *   3. Shell chrome labels — shared by both builds.
- *          masesShellLabels: AppShellLabels
+ *          arnaShellLabels: AppShellLabels
  *
  *   4. The user menu items — shared by both builds.
- *          masesUserMenuItems:    ReadonlyArray<UserMenuItem>
+ *          arnaUserMenuItems:    ReadonlyArray<UserMenuItem>
  *
  *   5. The portal's user menu items — the shared items PLUS a
  *      cross-domain link back to the workspace. Declared separately so
@@ -1101,7 +1101,7 @@
  *     my-wallet         → 'wallet'        (Wallet)
  *     my-loans          → 'coins'         (Coins)
  *
- * User menu — workspace (masesUserMenuItems):
+ * User menu — workspace (arnaUserMenuItems):
  *     logout            → 'log-out'       (LogOut)
  *
  * User menu — portal (portalUserMenuItems):
@@ -1270,7 +1270,7 @@
  * -----------------------------------------------------------------------------
  * The AppHeader's `nav` slot is currently unpopulated: no consumer
  * supplies a breadcrumb trail. When a future CR wires Breadcrumbs into
- * that slot, this file gains a new field on `masesShellLabels`:
+ * that slot, this file gains a new field on `arnaShellLabels`:
  *
  *     breadcrumbsAriaLabel: 'የገጽ ዱካ'
  *
@@ -1290,7 +1290,7 @@
  * -----------------------------------------------------------------------------
  * AppShell does not currently render a LanguageSelector. When the
  * POST /api/locale endpoint exists and the selector is added (Freeze
- * §9.3 / §20.3), its labels belong in `masesShellLabels` alongside the
+ * §9.3 / §20.3), its labels belong in `arnaShellLabels` alongside the
  * other per-component groups:
  *
  *     languageSelector: {
@@ -1449,7 +1449,7 @@ export const aranaBrandLabels = {
   corporateName: 'ማሌ ዓርና',
   productName: 'ARNA',
   tagline: 'Lead by example • Build lasting trust',
-  fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ማሴስ)',
+  fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ARNA)',
 } as const;
 
 /**
@@ -1523,7 +1523,7 @@ export const aranaFooterLabels = {
  * after `mobileMenu` — see the file header comment §"Future hooks —
  * breadcrumbs aria label".
  */
-export const masesShellLabels: AppShellLabels = {
+export const arnaShellLabels: AppShellLabels = {
   skipToContent: 'ወደ ዋና ይዘት ዝለል',
   mobileMenu: 'የማውጫ ዝርዝር ክፈት',
 
@@ -1570,7 +1570,7 @@ export const masesShellLabels: AppShellLabels = {
  * directly — a workspace user does not see a "back to workspace" entry
  * (they are already there).
  */
-export const masesUserMenuItems: ReadonlyArray<UserMenuItem> = [
+export const arnaUserMenuItems: ReadonlyArray<UserMenuItem> = [
   {
     id: 'logout',
     label: 'ውጣ',
@@ -1582,7 +1582,7 @@ export const masesUserMenuItems: ReadonlyArray<UserMenuItem> = [
 /**
  * The portal's user-menu items.
  *
- * Extends `masesUserMenuItems` with a cross-domain "back to workspace"
+ * Extends `arnaUserMenuItems` with a cross-domain "back to workspace"
  * entry, gated on `app.app.access` — the permission that identifies a
  * caller who can reach https://app.maalearna.com.et. A caller who does
  * not hold the permission (a shareholder, a board member whose role is
@@ -1628,7 +1628,7 @@ export const portalUserMenuItems: ReadonlyArray<UserMenuItem> = [
     icon: 'layout-grid',
     permission: 'app.app.access',
   },
-  ...masesUserMenuItems,
+  ...arnaUserMenuItems,
 ];
 
 /**

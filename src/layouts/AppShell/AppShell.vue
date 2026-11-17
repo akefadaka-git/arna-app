@@ -295,7 +295,7 @@
  composed units' own labels (all forwarded from `labels` here, except
  AranaBrand and AranaFooterContent, which read their own strings from
  @/router/shell-labels). The only string literal in this file is the
- default `skipToContentTargetId` (`'mases-main-content'`), which is a
+ default `skipToContentTargetId` (`'arna-main-content'`), which is a
  DOM id — not user-facing text.
 
  -----------------------------------------------------------------------------
@@ -329,9 +329,9 @@
  BASIC + COMPOSITE:
 
    - SkipToContent is the first element in DOM order. Its target is the
-     <main> with id `mases-main-content` and tabindex="-1" — see the
+     <main> with id `arna-main-content` and tabindex="-1" — see the
      response preamble §"Skip target".
-   - <main id="mases-main-content" tabindex="-1"> is the page's primary
+   - <main id="arna-main-content" tabindex="-1"> is the page's primary
      landmark. tabindex="-1" is required so keyboard focus follows the
      skip-link's hash navigation.
    - <aside> wraps the sidebar column: complementary-landmark semantics.
@@ -465,7 +465,7 @@ interface Props {
 
   /**
    * The id of the skip-link's target element. Defaults to
-   * 'mases-main-content' — the id this component assigns to its
+   * 'arna-main-content' — the id this component assigns to its
    * <main>. Consumers should not override this unless they are also
    * rendering their own <main> (see the file header comment
    * §"Accessibility").
@@ -499,7 +499,7 @@ withDefaults(defineProps<Props>(), {
   maintenance: null,
   footerCopyright: undefined,
   footerVersion: undefined,
-  skipToContentTargetId: 'mases-main-content',
+  skipToContentTargetId: 'arna-main-content',
 });
 
 const emit = defineEmits<{

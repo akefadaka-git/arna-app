@@ -134,7 +134,7 @@
  * Distinct prefix from the other primitives so no collision is possible
  * in a document that uses several of them.
  */
-let __masesTooltipIdCounter = 0;
+let __arnaTooltipIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -193,7 +193,7 @@ defineSlots<{
 /*
  * Generated id — evaluated once per component instance.
  */
-const tooltipId = `mases-tooltip-${++__masesTooltipIdCounter}`;
+const tooltipId = `arna-tooltip-${++__arnaTooltipIdCounter}`;
 
 /*
  * Dismissed state. Set to true on Escape; reset on mouseleave or on

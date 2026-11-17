@@ -314,6 +314,7 @@ function onClick(): void {
       type="button"
       variant="ghost"
       size="md"
+      icon-only
       :aria-label="triggerAriaLabel"
       aria-disabled="true"
       data-disabled="true"
@@ -334,6 +335,7 @@ function onClick(): void {
     type="button"
     variant="ghost"
     size="md"
+    icon-only
     :aria-label="triggerAriaLabel"
     data-testid="notifications-bell-trigger"
     @click="onClick"

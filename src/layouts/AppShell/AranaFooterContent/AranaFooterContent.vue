@@ -376,7 +376,11 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
    The :focus-visible selector duplicates the hover state so keyboard
    users get the same affordance.
    ============================================================================ */
-.arana-footer-content__link {
+ .arana-footer-content__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding-block: 0.2rem;
   color: var(--arna-color-action-link);
   font-size: var(--arna-font-size-caption);
   line-height: var(--arna-line-height-caption);

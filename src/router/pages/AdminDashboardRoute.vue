@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — AdminDashboardRoute
+ ARNA Phase 2 UI — AdminDashboardRoute
 =============================================================================
 
  File:      mase_app/src/router/pages/AdminDashboardRoute.vue
@@ -140,10 +140,10 @@
 
      `${pageLabel} — ${appName}`
 
- The admin build's VITE_APP_NAME is "MASES አስተዳደር" (per the
+ The admin build's VITE_APP_NAME is "ARNA አስተዳደር" (per the
  approved G1 Q2 decision), so the browser tab reads:
 
-     ዳሽቦርድ — MASES አስተዳደር
+     ዳሽቦርድ — ARNA አስተዳደር
 
  If VITE_APP_NAME is absent — a build with a misconfigured
  environment — the title falls back to just pageLabel, matching the
@@ -285,7 +285,7 @@ const labels = {
    * The page header's description line. A single noun phrase that
    * names what the page is.
    */
-  pageDescription: 'የMASES አስተዳደር መተግበሪያ መነሻ ገጽ።',
+  pageDescription: 'የARNA አስተዳደር መተግበሪያ መነሻ ገጽ።',
 
   /**
    * The welcome card's heading. The Amharic greeting
@@ -299,7 +299,7 @@ const labels = {
    * see the file header §"Static content" for the G1 Q4 decision
    * that governs this.
    */
-  welcomeBody: 'ይህ የMASES መድረክ አስተዳደር መተግበሪያ ነው።',
+  welcomeBody: 'ይህ የARNA መድረክ አስተዳደር መተግበሪያ ነው።',
 } as const;
 
 /*
@@ -307,8 +307,8 @@ const labels = {
  * other route page in this codebase: `${pageLabel} — ${appName}`
  * when VITE_APP_NAME is present, else just `${pageLabel}`.
  *
- * VITE_APP_NAME for the admin build is "MASES አስተዳደር" (approved
- * G1 Q2 decision). The resulting title is "ዳሽቦርድ — MASES አስተዳደር".
+ * VITE_APP_NAME for the admin build is "ARNA አስተዳደር" (approved
+ * G1 Q2 decision). The resulting title is "ዳሽቦርድ — ARNA አስተዳደር".
  */
 onMounted(() => {
   const pageLabel = labels.pageTitle;

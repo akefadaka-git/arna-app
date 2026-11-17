@@ -186,7 +186,7 @@
  * Separate counter from BaseInput's so that a document containing both
  * primitives does not produce duplicate ids.
  */
-let __masesTextareaIdCounter = 0;
+let __arnaTextareaIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -308,7 +308,7 @@ const emit = defineEmits<{
  * Generated id — evaluated once per component instance.
  * See the file header comment §"Auto-generated id".
  */
-const generatedId = `mases-textarea-${++__masesTextareaIdCounter}`;
+const generatedId = `arna-textarea-${++__arnaTextareaIdCounter}`;
 
 const inputId = computed<string>(() => props.id ?? generatedId);
 

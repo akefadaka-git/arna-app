@@ -135,13 +135,13 @@ export type AlertVariant =
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesAlertWarned = new Set<string>();
+const __arnaAlertWarned = new Set<string>();
 
-function __masesAlertWarnOnce(key: string, message: string): void {
-  if (__masesAlertWarned.has(key)) {
+function __arnaAlertWarnOnce(key: string, message: string): void {
+  if (__arnaAlertWarned.has(key)) {
     return;
   }
-  __masesAlertWarned.add(key);
+  __arnaAlertWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -250,7 +250,7 @@ if (
   !props.dismissLabel &&
   !props.dismissLabelledBy
 ) {
-  __masesAlertWarnOnce(
+  __arnaAlertWarnOnce(
     'alert:missing-dismiss-label',
     '[Alert] dismissible=true without dismissLabel or dismissLabelledBy. ' +
       'Supply a translated accessible name for the dismiss button.',

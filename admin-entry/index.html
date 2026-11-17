@@ -3,7 +3,7 @@
   <head>
     <!--
       =====================================================================
-      MASES Phase 2 UI — Admin entry HTML
+      ARNA Phase 2 UI — Admin entry HTML
       =====================================================================
 
       File:    mase_app/admin-entry/index.html
@@ -43,14 +43,14 @@
       ---------------------------------------------------------------------
       The four label deltas — why admin differs
       ---------------------------------------------------------------------
-      1. <title>            "MASES"  →  "MASES አስተዳደር"
-      2. application-name   "MASES"  →  "MASES አስተዳደር"
-      3. og:title           "MASES"  →  "MASES አስተዳደር"
+      1. <title>            "ARNA"  →  "ARNA አስተዳደር"
+      2. application-name   "ARNA"  →  "ARNA አስተዳደር"
+      3. og:title           "ARNA"  →  "ARNA አስተዳደር"
       4. og:description     the workspace's description of the shared-
                             equity management platform, replaced with a
                             description of the administration console.
 
-      The value "MASES አስተዳደር" is the admin build's application name.
+      The value "ARNA አስተዳደር" is the admin build's application name.
       It is the string that VITE_APP_NAME carries for the admin build
       (see the environment configuration delivered at G2.10), and it
       is the string the router composes into document.title on every
@@ -74,11 +74,11 @@
       switches languages.
 
       ---------------------------------------------------------------------
-      Why <title>MASES አስተዳደር</title>
+      Why <title>ARNA Administration</title>
       ---------------------------------------------------------------------
       Pre-JS default only. App.vue mounts and the active route wrapper's
       onMounted hook overwrites document.title on every route change
-      (e.g. "ዳሽቦርድ — MASES አስተዳደር"). The initial value exists so the
+      (e.g. "ዳሽቦርድ — ARNA አስተዳደር"). The initial value exists so the
       browser tab shows something meaningful during the ~100ms before
       Vue mounts, and so a user who opens the page in a new tab and
       navigates away before the JS loads still has a sensible history
@@ -159,7 +159,7 @@
       Additional consistency deltas — noted but NOT applied in 1.0.0
       ---------------------------------------------------------------------
       Five meta tags remain at their workspace values. Each identifies
-      the product as "MASES" rather than "MASES አስተዳደር". A reviewer
+      the product as "ARNA" rather than "ARNA አስተዳደር". A reviewer
       who determines they should be aligned in a follow-up revision
       may approve a change to:
 
@@ -181,9 +181,9 @@
 
     <!--
       Title. Overwritten by the router on mount; see the file header
-      comment §"Why <title>MASES አስተዳደር</title>".
+      comment §"Why <title>ARNA አስተዳደር</title>".
     -->
-    <title>MASES አስተዳደር</title>
+    <title>ARNA አስተዳደር</title>
 
     <!--
       Description. Consumed by search engines and by social-platform
@@ -196,7 +196,7 @@
     -->
     <meta
       name="description"
-      content="MASES — the Maale Arna shared-equity management platform for Ethiopian enterprises."
+      content="ARNA Administration — administration console for the Maale Arna platform."
     />
 
     <!--
@@ -228,18 +228,18 @@
 
     <!--
       Application name. Used by Android when the site is added to the
-      home screen. For the admin build, this is "MASES አስተዳደር" so
+      home screen. For the admin build, this is "ARNA አስተዳደር" so
       that an installed admin tile is distinguishable from an
       installed workspace tile.
     -->
-    <meta name="application-name" content="MASES አስተዳደር" />
+    <meta name="application-name" content="ARNA Administration" />
 
     <!--
       iOS home-screen title. Unchanged from the workspace file in this
       initial delivery. See the file header comment §"Additional
       consistency deltas".
     -->
-    <meta name="apple-mobile-web-app-title" content="MASES" />
+    <meta name="apple-mobile-web-app-title" content="ARNA" />
 
     <!--
       iOS status bar style. Same value as the workspace file.
@@ -255,17 +255,17 @@
       Open Graph. Read by Facebook, LinkedIn, Slack, WhatsApp,
       Telegram, and most other platforms when a URL is shared.
 
-      og:title is changed to "MASES አስተዳደር" and og:description to the
+      og:title is changed to "ARNA አስተዳደር" and og:description to the
       admin-specific description. og:site_name is unchanged in this
       initial delivery; see the file header comment §"Additional
       consistency deltas".
     -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="MASES" />
-    <meta property="og:title" content="MASES አስተዳደር" />
+    <meta property="og:site_name" content="ARNA" />
+    <meta property="og:title" content="ARNA Administration" />
     <meta
       property="og:description"
-      content="The MASES administration console."
+      content="The ARNA administration console."
     />
     <meta property="og:image" content="/logo.png" />
     <meta property="og:locale" content="am_ET" />
@@ -277,10 +277,10 @@
       deltas".
     -->
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="MASES" />
+    <meta name="twitter:title" content="ARNA" />
     <meta
       name="twitter:description"
-      content="The Maale Arna shared-equity management platform."
+      content="The ARNA shared-equity management platform."
     />
     <meta name="twitter:image" content="/logo.png" />
 
@@ -321,7 +321,7 @@
       header comment §"The preloader".
     -->
     <style>
-      .mases-preloader {
+      .arna-preloader {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -336,22 +336,22 @@
         background-color: #FFFDF7;
       }
 
-      .mases-preloader__spinner {
+      .arna-preloader__spinner {
         display: block;
         width: 32px;
         height: 32px;
         border: 3px solid #DDD5C0;
         border-top-color: #9B1B30;
         border-radius: 50%;
-        animation: mases-preloader-spin 0.8s linear infinite;
+        animation: arna-preloader-spin 0.8s linear infinite;
       }
 
-      @keyframes mases-preloader-spin {
+      @keyframes arna-preloader-spin {
         to { transform: rotate(360deg); }
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .mases-preloader__spinner {
+        .arna-preloader__spinner {
           animation: none;
           border-top-color: #DDD5C0;
         }
@@ -364,7 +364,7 @@
     -->
     <noscript>
       <p>
-        JavaScript is required to use MASES. Please enable JavaScript in
+        JavaScript is required to use ARNA Administration. Please enable JavaScript in
         your browser settings and reload this page.
       </p>
     </noscript>
@@ -374,9 +374,9 @@
       Amharic label matches the workspace file's ("loading...").
     -->
     <div id="app">
-      <div class="mases-preloader" role="status" aria-live="polite">
-        <span class="mases-preloader__spinner" aria-hidden="true"></span>
-        <span class="mases-preloader__label">በመጫን ላይ...</span>
+      <div class="arna-preloader" role="status" aria-live="polite">
+        <span class="arna-preloader__spinner" aria-hidden="true"></span>
+        <span class="arna-preloader__label">በመጫን ላይ...</span>
       </div>
     </div>
 

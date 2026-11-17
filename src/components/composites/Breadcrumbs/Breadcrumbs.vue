@@ -163,13 +163,13 @@ export interface BreadcrumbItem {
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesBreadcrumbsWarned = new Set<string>();
+const __arnaBreadcrumbsWarned = new Set<string>();
 
-function __masesBreadcrumbsWarnOnce(key: string, message: string): void {
-  if (__masesBreadcrumbsWarned.has(key)) {
+function __arnaBreadcrumbsWarnOnce(key: string, message: string): void {
+  if (__arnaBreadcrumbsWarned.has(key)) {
     return;
   }
-  __masesBreadcrumbsWarned.add(key);
+  __arnaBreadcrumbsWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -233,7 +233,7 @@ const props = withDefaults(defineProps<Props>(), {
  * Falls back to no collapse. Warn once per module load.
  */
 if (import.meta.env.DEV && props.maxItems < MIN_COLLAPSE_SLOTS) {
-  __masesBreadcrumbsWarnOnce(
+  __arnaBreadcrumbsWarnOnce(
     'breadcrumbs:max-items-below-minimum',
     `[Breadcrumbs] maxItems=${props.maxItems} is below the minimum of ` +
       `${MIN_COLLAPSE_SLOTS}. Collapse is disabled and every item will ` +
@@ -248,7 +248,7 @@ if (import.meta.env.DEV && props.maxItems < MIN_COLLAPSE_SLOTS) {
  * navigational value.
  */
 if (import.meta.env.DEV && props.items.length === 0) {
-  __masesBreadcrumbsWarnOnce(
+  __arnaBreadcrumbsWarnOnce(
     'breadcrumbs:empty-items',
     '[Breadcrumbs] items is empty. The component will render an empty ' +
       '<nav> element. Either supply at least one item or conditionally ' +
@@ -264,7 +264,7 @@ if (import.meta.env.DEV && props.items.length === 0) {
 if (import.meta.env.DEV) {
   const lastItem = props.items[props.items.length - 1];
   if (lastItem !== undefined && lastItem.to !== undefined) {
-    __masesBreadcrumbsWarnOnce(
+    __arnaBreadcrumbsWarnOnce(
       'breadcrumbs:last-item-has-to',
       `[Breadcrumbs] the last item ("${lastItem.label}") carries a ` +
         `'to' value, but the last item is always rendered as ` +
