@@ -74,6 +74,8 @@ jobs:
         run: npm run test:wallet-open-form-contract
       - name: Verify workspace dashboard route integration
         run: npm run test:workspace-dashboard-route-contract
+      - name: Verify admin authentication and feature permission boundaries
+        run: npm run test:admin-route-authz-contract
       - name: Verify selected-calendar date rendering contract
         run: node --test tests/calendar-preference-contract.test.mjs
       - name: Verify Ethiopian calendar conversion and date-entry controls

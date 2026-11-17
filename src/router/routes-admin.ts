@@ -29,6 +29,11 @@
  *          tree. It therefore fell through to the catch-all and
  *          rendered the SPA's 404 page — not the dashboard.
  *
+ * 1.0.3  — Admin authorization contract correction. Keep the parent
+ *          authentication-only so the dashboard remains reachable by
+ *          every authenticated caller. Preserve confirmed permissions
+ *          on their individual feature children.
+ *
  * 1.0.2  — /launcher compatibility shim. A `launcher` child is added
  *          that redirects to `/admin`.
  *
@@ -181,24 +186,16 @@
  * inline labels (G2.9).
  *
  * -----------------------------------------------------------------------------
- * No meta.permission on any route
+ * Permission placement
  * -----------------------------------------------------------------------------
- * No route in this file carries a `meta.permission`. This is
- * deliberate and reflects the G0-B status:
+ * The parent route carries `requiresAuth: true` and no `permission`.
+ * This keeps the dashboard available to every authenticated caller.
  *
- *   · The dashboard is a landing surface that any authenticated
- *     caller may reach. It makes no fetch, and it exposes no data.
- *
- *   · The permission slugs for future admin features are backend-
- *     owned and are not confirmed until G0-B closes. Adding a
- *     `meta.permission` before its slug is confirmed would violate
- *     Section 82 ("no invented API") in spirit — the slug is a
- *     contract with the backend's permission table, and guessing
- *     it is an invented contract.
- *
- * When G0-B confirms a slug for a feature, that feature's route is
- * added to this file with the confirmed `meta.permission` in the
- * same bounded change.
+ * Administrative feature children carry their own confirmed
+ * `meta.permission` values. The shared guard evaluates each matched
+ * route record, so a child permission is enforced without becoming
+ * a parent-wide access boundary. Permission slugs must be confirmed
+ * against backend evidence (G0-B); do not invent new slugs.
  * =============================================================================
  */
 
@@ -233,7 +230,7 @@ export const routesAdmin: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('@/layouts/AdminLayout'),
-    meta: { requiresAuth: true, permission: 'app.admin.access' },
+    meta: { requiresAuth: true },
     children: [
       // -----------------------------------------------------------------------
       // Subdomain root — / → /admin

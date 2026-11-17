@@ -1,0 +1,28 @@
+name: ARNA Admin route and navigation contract
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [main, "feat/**", "fix/**"]
+    paths:
+      - "src/router/routes-admin.ts"
+      - "src/router/admin-labels.ts"
+      - "src/router/guards.ts"
+      - "tests/admin-route-authz-contract.test.mjs"
+
+permissions:
+  contents: read
+
+jobs:
+  admin-route-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out exact pull request revision
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify Admin parent, child and navigation authorization contract
+        run: node --test tests/admin-route-authz-contract.test.mjs
