@@ -205,9 +205,9 @@ test.describe('Mounted DataTable behavior', () => {
     const tableRegion = page.getByTestId('data-table-table-region');
     await tableRegion.getByTestId('data-table-row').filter({ hasText: 'Alpha account' }).getByTestId('base-checkbox-box').click();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1');
-    await tableRegion.getByTestId('data-table-header-select-all').getByTestId('base-checkbox-root').click();
+    await tableRegion.getByTestId('data-table-header-select-all').getByTestId('base-checkbox-box').click();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1,row-2');
-    await tableRegion.getByTestId('data-table-header-select-all').getByTestId('base-checkbox-root').click();
+    await tableRegion.getByTestId('data-table-header-select-all').getByTestId('base-checkbox-box').click();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('');
   });
 
