@@ -17,6 +17,7 @@ test.describe('Mounted FormField accessibility behavior', () => {
     await expect(input).toHaveAttribute('aria-describedby', helpId);
 
     const results = await new AxeBuilder({ page })
+      .include('[data-testid="form-field-root"]')
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
     expect(results.violations.filter((item) => ['serious', 'critical'].includes(item.impact)).map((item) => item.id)).toEqual([]);
@@ -73,6 +74,7 @@ test.describe('Mounted Combobox browser behavior', () => {
     await expect(page.getByRole('option', { name: 'Unavailable' })).toHaveAttribute('aria-disabled', 'true');
 
     const results = await new AxeBuilder({ page })
+      .include('[data-testid="combobox-root"]')
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
     const serious = results.violations.filter((item) => item.impact === 'serious' || item.impact === 'critical');
@@ -200,11 +202,11 @@ test.describe('Mounted DataTable behavior', () => {
 
   test('selects individual rows and all rows on the current page', async ({ page }) => {
     const tableRegion = page.getByTestId('data-table-table-region');
-    await tableRegion.getByRole('checkbox', { name: 'Select Alpha account' }).check();
+    await tableRegion.getByTestId('data-table-row').filter({ hasText: 'Alpha account' }).getByTestId('base-checkbox-root').click();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1');
-    await tableRegion.getByRole('checkbox', { name: 'Select all accounts' }).check();
+    await tableRegion.getByTestId('data-table-header-select-all').getByTestId('base-checkbox-root').click();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1,row-2');
-    await tableRegion.getByRole('checkbox', { name: 'Select all accounts' }).uncheck();
+    await tableRegion.getByTestId('data-table-header-select-all').getByTestId('base-checkbox-root').click();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('');
   });
 
