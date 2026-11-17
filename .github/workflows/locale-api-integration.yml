@@ -62,7 +62,7 @@ jobs:
         with:
           repository: akefadaka-git/arna-api
           ref: ${{ inputs.api_sha || '60d08e2f1f224b48d1086b8a2bde0b50b2296487' }}
-          path: ../arna-api
+          path: arna-api
           persist-credentials: false
 
       - name: Set up PHP 8.3
@@ -74,18 +74,18 @@ jobs:
           coverage: none
 
       - name: Install API dependencies
-        working-directory: ../arna-api
+        working-directory: arna-api
         run: composer install --prefer-dist --no-interaction --no-progress
 
       - name: Migrate the disposable MySQL database
-        working-directory: ../arna-api
+        working-directory: arna-api
         run: |
           touch .env
           php artisan migrate --force
 
       - name: Provision an isolated API integration user
         id: integration-user
-        working-directory: ../arna-api
+        working-directory: arna-api
         shell: bash
         run: |
           set -euo pipefail
@@ -95,7 +95,7 @@ jobs:
           echo "LOCALE_INTEGRATION_TOKEN=$token" >> "$GITHUB_ENV"
 
       - name: Start the real Laravel API
-        working-directory: ../arna-api
+        working-directory: arna-api
         shell: bash
         run: |
           set -euo pipefail
