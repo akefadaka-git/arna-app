@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/BaseInput/BaseInput.vue
  Layer:     1 (Primitives)
- Version:   1.1.0
+ Version:   1.2.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.8
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -591,6 +591,7 @@ defineExpose({ focus, blur, el });
 .input-wrapper__input {
   flex: 1 1 auto;
   min-width: 0;
+  min-height: 24px;
   padding: 0;
   margin: 0;
   appearance: none;
