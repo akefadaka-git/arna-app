@@ -2,9 +2,10 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-const [routes, guards] = await Promise.all([
+const [routes, guards, nav] = await Promise.all([
   readFile(new URL('../src/router/routes-admin.ts', import.meta.url), 'utf8'),
   readFile(new URL('../src/router/guards.ts', import.meta.url), 'utf8'),
+  readFile(new URL('../src/router/admin-labels.ts', import.meta.url), 'utf8'),
 ]);
 
 test('admin parent requires authentication without imposing a parent-wide permission', () => {
@@ -41,6 +42,12 @@ test('administrative feature routes retain their individual confirmed permission
     routes,
     /name:\s*'admin-audit-security',[\s\S]*?meta:\s*\{\s*permission:\s*\[\s*'audit\.view',\s*'security-event\.view'\s*\],\s*permissionMode:\s*'any'\s*\}/,
   );
+});
+
+test('admin sidebar exposes each feature route with matching permission filtering', () => {
+  assert.match(nav, /id:\s*'audit-security-center',[\s\S]*?to:\s*'\/admin\/audit-security',[\s\S]*?permission:\s*\['audit\.view',\s*'security-event\.view'\],[\s\S]*?permissionMode:\s*'any'/);
+  assert.match(nav, /id:\s*'public-content-review',[\s\S]*?to:\s*'\/admin\/public-content',[\s\S]*?permission:\s*'public-content\.review'/);
+  assert.match(nav, /id:\s*'corporate-site',[\s\S]*?to:\s*'\/admin\/corporate-site',[\s\S]*?permission:\s*'public-content\.review'/);
 });
 
 test('auth guard evaluates permissions on matched route records', () => {
