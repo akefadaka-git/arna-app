@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import type { RouteLocationRaw } from 'vue-router';
 import BaseButton from '@/components/primitives/BaseButton';
 import BaseIcon from '@/components/primitives/BaseIcon';
+import { useLocaleStore } from '@/stores/locale';
 
 interface SearchNavItem {
   readonly id: string;
@@ -19,8 +20,58 @@ interface Props {
 const props = defineProps<Props>();
 const route = useRoute();
 const router = useRouter();
+const localeStore = useLocaleStore();
+
+const ENGLISH_DESTINATION_LABELS: Readonly<Record<string, string>> = {
+  dashboard: 'Dashboard',
+  'go-to-workspace': 'Go to workspace',
+  launcher: 'Home',
+  files: 'Documents',
+  shareholders: 'Shareholders',
+  'share-classes': 'Share classes',
+  wallets: 'Wallets',
+  loans: 'Loans',
+  'loan-products': 'Loan products',
+  governance: 'Governance',
+  'portal-home': 'Home',
+  'my-holdings': 'My holdings',
+  'my-certificates': 'My certificates',
+  'my-wallet': 'My wallet',
+  'my-loans': 'My loans',
+};
+
+function displayLabel(item: SearchNavItem): string {
+  if (localeStore.locale !== 'en') return item.label;
+  return ENGLISH_DESTINATION_LABELS[item.id] ?? item.label;
+}
+
+const labels = computed(() => localeStore.locale === 'en'
+  ? {
+      breadcrumb: 'Breadcrumb',
+      triggerText: 'Search ARNA',
+      title: 'Search ARNA',
+      description: 'Find an available module or page',
+      close: 'Close search',
+      input: 'Search modules and pages…',
+      placeholder: 'Search modules and pages…',
+      empty: 'No matching modules or pages',
+      hint: 'Search covers the navigation destinations currently available to your account.',
+    }
+  : {
+      breadcrumb: 'የገጽ አቅጣጫ',
+      triggerText: 'ARNA ይፈልጉ',
+      title: 'ARNA ይፈልጉ',
+      description: 'የሚገኝ ሞጁል ወይም ገጽ ያግኙ',
+      close: 'ፍለጋን ዝጋ',
+      input: 'ሞጁሎችን እና ገጾችን ይፈልጉ…',
+      placeholder: 'ሞጁሎችን እና ገጾችን ይፈልጉ…',
+      empty: 'የሚዛመድ ሞጁል ወይም ገጽ አልተገኘም',
+      hint: 'ፍለጋው በመለያዎ ሊደረስባቸው የሚችሉ የአሰሳ መዳረሻዎችን ይመለከታል።',
+    });
+const navigationRoot = ref<HTMLElement | null>(null);
 const dialog = ref<HTMLDialogElement | null>(null);
 const query = ref('');
+const activeResultIndex = ref(-1);
 
 const searchItems = computed(() => props.items.flatMap((item) =>
   item.to ? [item] : [...(item.visibleChildren ?? item.children ?? [])],
@@ -29,9 +80,33 @@ const searchItems = computed(() => props.items.flatMap((item) =>
 const results = computed(() => {
   const term = query.value.trim().toLocaleLowerCase();
   return searchItems.value.filter((item) =>
-    item.to && (!term || item.label.toLocaleLowerCase().includes(term)),
+    item.to && (!term || displayLabel(item).toLocaleLowerCase().includes(term)),
   );
 });
+
+watch(results, () => {
+  activeResultIndex.value = -1;
+});
+
+function onSearchKeydown(event: KeyboardEvent): void {
+  if (!results.value.length) return;
+
+  if (event.key === 'ArrowDown') {
+    event.preventDefault();
+    activeResultIndex.value = activeResultIndex.value < results.value.length - 1
+      ? activeResultIndex.value + 1
+      : 0;
+  } else if (event.key === 'ArrowUp') {
+    event.preventDefault();
+    activeResultIndex.value = activeResultIndex.value > 0
+      ? activeResultIndex.value - 1
+      : results.value.length - 1;
+  } else if (event.key === 'Enter' && activeResultIndex.value >= 0) {
+    event.preventDefault();
+    const selected = results.value[activeResultIndex.value];
+    if (selected) navigate(selected);
+  }
+}
 
 const breadcrumbs = computed(() => route.matched
   .filter((record) => typeof record.meta.breadcrumb === 'string' || typeof record.meta.title === 'string')
@@ -42,8 +117,24 @@ const breadcrumbs = computed(() => route.matched
   .filter((item, index, all) => index === 0 || item.path !== all[index - 1]?.path));
 
 function openSearch(): void {
+  if (dialog.value?.open) return;
   query.value = '';
+  activeResultIndex.value = -1;
   dialog.value?.showModal();
+}
+
+function onGlobalKeydown(event: KeyboardEvent): void {
+  if ((event.metaKey || event.ctrlKey) && !event.altKey && event.key.toLowerCase() === 'k') {
+    event.preventDefault();
+    openSearch();
+  }
+}
+
+onMounted(() => window.addEventListener('keydown', onGlobalKeydown));
+onBeforeUnmount(() => window.removeEventListener('keydown', onGlobalKeydown));
+
+function restoreSearchFocus(): void {
+  navigationRoot.value?.querySelector<HTMLButtonElement>('[data-testid="app-header-search-trigger"]')?.focus();
 }
 
 function closeSearch(): void {
@@ -58,8 +149,8 @@ function navigate(item: SearchNavItem): void {
 </script>
 
 <template>
-  <div class="app-header-navigation" data-testid="app-header-navigation">
-    <nav v-if="breadcrumbs.length" aria-label="Breadcrumb" class="app-header-navigation__breadcrumbs">
+  <div ref="navigationRoot" class="app-header-navigation" data-testid="app-header-navigation">
+    <nav v-if="breadcrumbs.length" :aria-label="labels.breadcrumb" class="app-header-navigation__breadcrumbs">
       <ol>
         <li v-for="(crumb, index) in breadcrumbs" :key="`${crumb.path}-${index}`">
           <span :aria-current="index === breadcrumbs.length - 1 ? 'page' : undefined">{{ crumb.label }}</span>
@@ -68,45 +159,68 @@ function navigate(item: SearchNavItem): void {
       </ol>
     </nav>
 
-    <BaseButton
-      type="button"
-      variant="ghost"
-      size="sm"
-      class="app-header-navigation__search-trigger"
-      aria-haspopup="dialog"
-      aria-label="Search ARNA modules and pages"
-      data-testid="app-header-search-trigger"
-      @click="openSearch"
-    >
-      <BaseIcon name="search" size="sm" />
-      <span class="app-header-navigation__search-label">Search ARNA</span>
-      <kbd>⌘ K</kbd>
-    </BaseButton>
+    <div class="app-header-navigation__search-control">
+      <BaseButton
+        type="button"
+        variant="ghost"
+        size="sm"
+        class="app-header-navigation__search-trigger"
+        aria-labelledby="app-header-search-trigger-label"
+        aria-haspopup="dialog"
+        data-testid="app-header-search-trigger"
+        @click="openSearch"
+      >
+        <BaseIcon name="search" size="sm" />
+        <span id="app-header-search-trigger-label" class="app-header-navigation__search-label">{{ labels.triggerText }}</span>
+      </BaseButton>
+      <kbd class="app-header-navigation__search-shortcut">Ctrl / ⌘ K</kbd>
+    </div>
 
-    <dialog ref="dialog" class="app-header-navigation__dialog" aria-labelledby="app-header-search-title">
+    <dialog ref="dialog" class="app-header-navigation__dialog" aria-labelledby="app-header-search-title" @close="restoreSearchFocus">
       <form method="dialog" class="app-header-navigation__dialog-head">
         <div>
-          <h2 id="app-header-search-title">Search ARNA</h2>
-          <p>Find an available module or page</p>
+          <h2 id="app-header-search-title">{{ labels.title }}</h2>
+          <p>{{ labels.description }}</p>
         </div>
-        <BaseButton type="button" variant="ghost" size="sm" aria-label="Close search" @click="closeSearch">
+        <BaseButton type="button" variant="ghost" size="sm" :aria-label="labels.close" @click="closeSearch">
           <BaseIcon name="close" size="md" />
         </BaseButton>
       </form>
       <label class="app-header-navigation__input-wrap">
         <BaseIcon name="search" size="sm" />
-        <input v-model="query" autofocus type="search" placeholder="Search modules and pages…" />
+        <input
+          v-model="query"
+          autofocus
+          type="search"
+          role="combobox"
+          aria-autocomplete="list"
+          :aria-label="labels.input"
+          aria-controls="app-header-search-results"
+          :aria-expanded="dialog?.open ? 'true' : 'false'"
+          :aria-activedescendant="activeResultIndex >= 0 ? `app-header-search-option-${activeResultIndex}` : undefined"
+          :placeholder="labels.placeholder"
+          @keydown="onSearchKeydown"
+        />
       </label>
-      <ul class="app-header-navigation__results">
-        <li v-for="item in results" :key="item.id">
-          <button type="button" @click="navigate(item)">
-            <span>{{ item.label }}</span>
+      <ul id="app-header-search-results" class="app-header-navigation__results" role="listbox" :aria-label="labels.input" aria-live="polite" aria-relevant="additions text">
+        <li v-for="(item, index) in results" :key="item.id" role="presentation">
+          <button
+            :id="`app-header-search-option-${index}`"
+            type="button"
+            role="option"
+            tabindex="-1"
+            :aria-selected="activeResultIndex === index"
+            :class="{ 'is-active': activeResultIndex === index }"
+            @click="navigate(item)"
+            @mouseenter="activeResultIndex = index"
+          >
+            <span>{{ displayLabel(item) }}</span>
             <BaseIcon name="arrow-up-right" size="sm" />
           </button>
         </li>
-        <li v-if="!results.length" class="app-header-navigation__empty">No matching modules or pages</li>
+        <li v-if="!results.length" class="app-header-navigation__empty">{{ labels.empty }}</li>
       </ul>
-      <p class="app-header-navigation__hint">Search covers the navigation destinations currently available to your account.</p>
+      <p class="app-header-navigation__hint">{{ labels.hint }}</p>
     </dialog>
   </div>
 </template>
@@ -147,15 +261,20 @@ function navigate(item: SearchNavItem): void {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.app-header-navigation__search-trigger {
+.app-header-navigation__search-control {
+  display: flex;
+  align-items: center;
+  gap: var(--mases-space-2);
   margin-inline-start: auto;
+  flex-shrink: 0;
+}
+.app-header-navigation__search-trigger {
   flex-shrink: 0;
 }
 .app-header-navigation__search-label {
   display: inline;
 }
-.app-header-navigation__search-trigger kbd {
-  margin-inline-start: var(--mases-space-3);
+.app-header-navigation__search-shortcut {
   padding: 1px var(--mases-space-1);
   border: 1px solid var(--mases-color-border-subtle);
   border-radius: var(--mases-radius-sm);
@@ -233,8 +352,9 @@ function navigate(item: SearchNavItem): void {
   text-align: start;
   cursor: pointer;
 }
-.app-header-navigation__results button:hover,
-.app-header-navigation__results button:focus-visible {
+ .app-header-navigation__results button:hover,
+.app-header-navigation__results button:focus-visible,
+.app-header-navigation__results button.is-active {
   background: var(--mases-color-state-hover);
 }
 .app-header-navigation__empty {

@@ -28,11 +28,10 @@
  The shell's notifications bell. Renders a bell icon, optionally with
  an unread-count badge, in AppHeader's `actions` slot.
 
- By Architecture Freeze §20.2, the bell is rendered DISABLED with a
- tooltip ("Notifications coming soon") until the four notification
- endpoints exist. The shell passes :disabled="true" for now; when the
- endpoints land, the shell removes that prop and the bell becomes
- interactive without any change to this file.
+ The notification routes are registered in arna-api main at
+ 84b53abb69c83e22bc9bdaccc64bdb3cf30e73ed. AppShell enables this bell
+ and opens the in-shell NotificationsCenter. Route registration alone
+ does not prove production migration or deployment status.
 
  -----------------------------------------------------------------------------
  Composition
@@ -70,10 +69,9 @@
  badge therefore remains circular, and a two-digit or "99+" badge
  becomes a horizontal pill.
 
- The change is forward-looking pre-work: the bell is disabled in the
- current build, so no live badge renders today. When the notifications
- endpoints land and the bell is enabled, the wider minimum inline size
- gives the cap value room without clipping.
+ The bell is enabled in the current AppShell integration. The badge
+ displays the tenant-scoped unread count, capped at 99+ for display;
+ the backend remains authoritative for the full count.
 
  -----------------------------------------------------------------------------
  No hardcoded user-facing string
@@ -179,9 +177,9 @@ interface Props {
   /**
    * Whether the bell is disabled. Defaults to false.
    *
-   * The shell passes true for now (Architecture Freeze §20.2: the
-   * notification endpoints do not yet exist). When the endpoints land,
-   * the shell removes this prop and the bell becomes interactive.
+   * The shell passes false now that the notification routes are
+   * registered and the in-shell NotificationsCenter is integrated.
+   * Production migration/deployment status is verified separately.
    *
    * When disabled, the component:
    *   - marks the button with aria-disabled="true"

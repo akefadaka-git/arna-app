@@ -126,3 +126,37 @@ test('all SearchBar consumers provide a translated clear-button accessible name'
     assert.equal(match[1], 'የፍለጋ ጽሑፉን አጽዳ', `${path} must use the approved Amharic clear label`);
   }
 });
+
+
+test('AppHeaderNavigation search chrome follows the active Amharic or English locale', () => {
+  const source = read('src/layouts/AppShell/AppHeaderNavigation/AppHeaderNavigation.vue');
+  assert.match(source, /useLocaleStore/);
+  assert.match(source, /localeStore\.locale === 'en'/);
+  assert.match(source, /function displayLabel\(item: SearchNavItem\): string/);
+  for (const label of ['Dashboard', 'Documents', 'Shareholders', 'Wallets', 'Loans', 'Governance']) {
+    assert.ok(source.includes(`'${label}'`), `missing English destination label: ${label}`);
+  }
+  assert.match(source, /displayLabel\(item\)\.toLocaleLowerCase\(\)\.includes\(term\)/);
+  for (const label of [
+    'Search ARNA',
+    'Find an available module or page',
+    'Close search',
+    'Search modules and pages…',
+    'No matching modules or pages',
+    'ARNA ይፈልጉ',
+    'የሚገኝ ሞጁል ወይም ገጽ ያግኙ',
+    'ፍለጋን ዝጋ',
+    'የሚዛመድ ሞጁል ወይም ገጽ አልተገኘም',
+  ]) {
+    assert.ok(source.includes(label), `missing localized search label: ${label}`);
+  }
+  assert.doesNotMatch(source, /aria-label="Search ARNA modules and pages"|>Search ARNA<|>No matching modules or pages</);
+});
+
+test('checkbox and Combobox pointer targets meet the compact-control minimum', () => {
+  const checkbox = read('src/components/primitives/BaseCheckbox/BaseCheckbox.vue');
+  assert.match(checkbox, /min-width:\s*24px/);
+  assert.match(checkbox, /min-height:\s*24px/);
+  const combobox = read('src/components/composites/Combobox/Combobox.vue');
+  assert.match(combobox, /\.combobox__option\s*\{[^}]*min-height:\s*32px/s);
+});

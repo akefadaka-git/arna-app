@@ -445,7 +445,12 @@ defineExpose({ focus, blur, el });
    ============================================================================ */
 .checkbox {
   display: inline-flex;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: flex-start;
+  /* Keep the complete label hit area at least WCAG 2.2 AA's 24px minimum,
+     including compact icon-only checkboxes used in data tables. */
+  min-width: 24px;
+  min-height: 24px;
   gap: var(--mases-space-2);
   cursor: pointer;
   user-select: none;

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useNotificationsStore } from '@/stores/notifications';
+import { useLocaleStore } from '@/stores/locale';
 import { formatCalendarDate } from '@/core/dates/calendar';
 import {
   fetchNotifications,
@@ -11,10 +12,11 @@ import {
 const props = defineProps<{ open: boolean }>();
 const emit = defineEmits<{ (event: 'close'): void }>();
 const store = useNotificationsStore();
+const localeStore = useLocaleStore();
 const busyId = ref<string | null>(null);
 const mutationBusy = ref(false);
 const page = ref(1);
-const locale = computed(() => document.documentElement.lang.toLowerCase().startsWith('en') ? 'en' : 'am');
+const locale = computed(() => localeStore.locale);
 const labels = computed(() => locale.value === 'am'
   ? { title: 'ማሳወቂያዎች', close: 'ዝጋ', markAll: 'ሁሉንም እንደተነበቡ ምልክት አድርግ', empty: 'አዲስ ማሳወቂያ የለም', loading: 'በመጫን ላይ…', retry: 'እንደገና ሞክር', unread: 'ያልተነበበ', previous: 'ቀዳሚ', next: 'ቀጣይ', error: 'ማሳወቂያዎችን ማምጣት አልተቻለም' }
   : { title: 'Notifications', close: 'Close', markAll: 'Mark all as read', empty: 'You are all caught up', loading: 'Loading…', retry: 'Try again', unread: 'Unread', previous: 'Previous', next: 'Next', error: 'Could not load notifications' });
@@ -70,6 +72,14 @@ function onKeydown(event: KeyboardEvent): void {
 watch(() => props.open, (opened) => {
   if (opened && (store.isStale || !store.hasFetched)) void load(1);
 });
+
+// API titles and bodies are localized by the adapter at fetch time. Refresh
+// the currently visible page after an in-session locale change so cached
+// notification text follows the selected language without inventing a
+// locale-persistence endpoint or changing the backend contract.
+watch(() => localeStore.locale, (next, previous) => {
+  if (props.open && next !== previous) void load(page.value);
+});
 onMounted(() => window.addEventListener('keydown', onKeydown));
 onUnmounted(() => window.removeEventListener('keydown', onKeydown));
 </script>
@@ -119,12 +129,12 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown));
 .notification-center {
   position: fixed;
   z-index: 1200;
-  inset-block-start: calc(var(--mases-shell-header-height) + 0.5rem);
+  inset-block-start: calc(var(--mases-shell-header-height, 4rem) + 0.5rem);
   inset-inline-end: clamp(0.75rem, 2vw, 2rem);
   display: flex;
   flex-direction: column;
   width: min(28rem, calc(100vw - 1.5rem));
-  max-height: min(42rem, calc(100dvh - var(--mases-shell-header-height) - 1.5rem));
+  max-height: min(42rem, calc(100dvh - var(--mases-shell-header-height, 4rem) - 1.5rem));
   overflow: hidden;
   color: var(--mases-color-text-primary);
   background: var(--mases-color-surface-raised);
@@ -153,7 +163,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKeydown));
 .notification-center__text-button:disabled { opacity: 0.45; cursor: not-allowed; }
 .notification-center__close { width: 2rem; height: 2rem; border-radius: 0.4rem; font-size: 1.5rem; }
 .notification-center__close:hover { background: var(--mases-color-surface-hover); }
-.notification-center__list { overflow: auto; margin: 0; padding: 0; list-style: none; }
+.notification-center__list { flex: 1 1 auto; min-height: 0; overflow: auto; margin: 0; padding: 0; list-style: none; }
 .notification-center__list li + li { border-block-start: 1px solid var(--mases-color-border-subtle); }
 .notification-center__item { display: flex; flex-direction: column; gap: 0.35rem; width: 100%; padding: 0.9rem 1rem; color: inherit; text-align: start; background: transparent; border: 0; cursor: pointer; }
 .notification-center__item:hover { background: var(--mases-color-surface-hover); }

@@ -41,27 +41,18 @@
  *     call them (see the response preamble).
  *
  * -----------------------------------------------------------------------------
- * The GET /api/notifications/* endpoints are DEPENDENCY MISSING
- * -----------------------------------------------------------------------------
- * Architecture Freeze §20.2 records four endpoints as Phase 2 backend
- * tasks:
+ * Notification API route registrations are present in arna-api main
+ * at 84b53abb69c83e22bc9bdaccc64bdb3cf30e73ed:
  *
- *   GET  /api/notifications                 — paginated list
- *   GET  /api/notifications/unread-count    — badge count
+ *   GET  /api/notifications                 — paginated inbox
+ *   GET  /api/notifications/unread-count    — unread badge count
  *   POST /api/notifications/{id}/read       — mark one read
  *   POST /api/notifications/read-all        — mark all read
  *
- * §20.2 also states plainly that the notification SCHEMA does not
- * currently exist in the database, and that the response shape is "to
- * be defined by backend". The MasesNotification interface below is
- * therefore a PROPOSAL, derived from the shape hints in the master
- * prompt §28 and Catalog §24.18. See the response preamble §"Design
- * note — the notification schema is a proposal".
- *
- * Stage 11 (shell) will render the notifications bell DISABLED with a
- * tooltip ("Notifications coming soon") until the endpoint exists
- * (§20.2). This store is delivered now because path B was chosen
- * (deliver all five stores before shell chrome).
+ * This store is the frontend presentation state. Route registration
+ * does not by itself establish response compatibility, tenant isolation,
+ * migration execution, or production deployment; those require separate
+ * API-side and operational verification.
  *
  * -----------------------------------------------------------------------------
  * unreadCount is stored separately from the list — why

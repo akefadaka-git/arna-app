@@ -17,10 +17,10 @@ test.describe('Mounted FormField accessibility behavior', () => {
     await expect(input).toHaveAttribute('aria-describedby', helpId);
 
     const results = await new AxeBuilder({ page })
-      .include('[data-testid="form-field-root"]')
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
-    expect(results.violations.filter((item) => ['serious', 'critical'].includes(item.impact)).map((item) => item.id)).toEqual([]);
+    const serious = results.violations.filter((item) => ['serious', 'critical'].includes(item.impact));
+    expect(serious.map((item) => item.id), JSON.stringify(serious, null, 2)).toEqual([]);
   });
 });
 
@@ -74,11 +74,10 @@ test.describe('Mounted Combobox browser behavior', () => {
     await expect(page.getByRole('option', { name: 'Unavailable' })).toHaveAttribute('aria-disabled', 'true');
 
     const results = await new AxeBuilder({ page })
-      .include('[data-testid="combobox-root"]')
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
     const serious = results.violations.filter((item) => item.impact === 'serious' || item.impact === 'critical');
-    expect(serious.map((item) => item.id + ': ' + item.help)).toEqual([]);
+    expect(serious.map((item) => item.id + ': ' + item.help), JSON.stringify(serious, null, 2)).toEqual([]);
   });
 });
 
@@ -166,10 +165,10 @@ test.describe('Mounted ErrorSupportPanel privacy and clipboard behavior', () => 
     expect(copied).not.toMatch(/password|token|stack trace|SQL|filesystem|private form/i);
 
     const results = await new AxeBuilder({ page })
-      .include('[data-testid="error-support-panel-root"]')
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
-    expect(results.violations.filter((item) => ['serious', 'critical'].includes(item.impact)).map((item) => item.id)).toEqual([]);
+    const serious = results.violations.filter((item) => ['serious', 'critical'].includes(item.impact));
+    expect(serious.map((item) => ({ id: item.id, help: item.help, nodes: item.nodes.map((node) => ({ target: node.target, html: node.html, failureSummary: node.failureSummary })) }))).toEqual([]);
   });
 
   test('shows a labeled manual-copy fallback when clipboard access is unavailable', async ({ page }) => {
@@ -203,14 +202,17 @@ test.describe('Mounted DataTable behavior', () => {
 
   test('selects individual rows and all rows on the current page', async ({ page }) => {
     const tableRegion = page.getByTestId('data-table-table-region');
-    const alphaCheckbox = tableRegion.getByRole('row').filter({ hasText: 'Alpha account' }).getByRole('checkbox');
-    await alphaCheckbox.evaluate((element) => (element).click());
+    const alphaCheckbox = tableRegion.getByTestId('data-table-cell-select')
+      .filter({ has: page.getByRole('checkbox', { name: 'Select Alpha account' }) })
+      .getByTestId('base-checkbox-root');
+    await alphaCheckbox.click();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1');
 
-    const selectAllCheckbox = tableRegion.getByTestId('data-table-header-select-all').getByRole('checkbox');
-    await selectAllCheckbox.evaluate((element) => (element).click());
+    const selectAllCheckbox = tableRegion.getByTestId('data-table-header-select-all')
+      .getByTestId('base-checkbox-root');
+    await selectAllCheckbox.click();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1,row-2');
-    await selectAllCheckbox.evaluate((element) => (element).click());
+    await selectAllCheckbox.click();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('');
   });
 
@@ -233,6 +235,236 @@ test.describe('Mounted DataTable behavior', () => {
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
-    expect(results.violations.filter((item) => ['serious', 'critical'].includes(item.impact)).map((item) => item.id)).toEqual([]);
+    const serious = results.violations.filter((item) => ['serious', 'critical'].includes(item.impact));
+    expect(serious.map((item) => ({ id: item.id, help: item.help, nodes: item.nodes.map((node) => ({ target: node.target, html: node.html, failureSummary: node.failureSummary })) }))).toEqual([]);
+  });
+});
+
+
+test.describe('Mounted localized shell navigation search', () => {
+  test('switches Amharic and English search labels and navigates to an available destination', async ({ page }) => {
+    const trigger = page.getByTestId('app-header-search-trigger');
+    await expect(trigger).toHaveAccessibleName('ARNA ይፈልጉ');
+
+    await trigger.focus();
+    await page.keyboard.press('Control+k');
+    const amharicDialog = page.getByRole('dialog', { name: 'ARNA ይፈልጉ' });
+    await expect(amharicDialog).toBeVisible();
+    await expect(amharicDialog.getByRole('combobox', { name: 'ሞጁሎችን እና ገጾችን ይፈልጉ…' })).toHaveAttribute('placeholder', 'ሞጁሎችን እና ገጾችን ይፈልጉ…');
+    await amharicDialog.getByRole('button', { name: 'ፍለጋን ዝጋ' }).click();
+    await expect(amharicDialog).toBeHidden();
+    await expect(trigger).toBeFocused();
+
+    await page.getByTestId('set-locale-en').click();
+    await expect(trigger).toHaveAccessibleName('Search ARNA');
+    await trigger.focus();
+
+    await page.keyboard.press('Control+k');
+    const englishDialog = page.getByRole('dialog', { name: 'Search ARNA' });
+    await expect(englishDialog).toBeVisible();
+    await expect(englishDialog.getByRole('heading', { name: 'Search ARNA' })).toBeVisible();
+    const input = englishDialog.getByRole('combobox', { name: 'Search modules and pages…' });
+    await expect(input).toHaveAttribute('placeholder', 'Search modules and pages…');
+
+    await input.press('ArrowDown');
+    await expect(input).toHaveAttribute('aria-activedescendant', 'app-header-search-option-0');
+    await input.press('ArrowDown');
+    await expect(input).toHaveAttribute('aria-activedescendant', 'app-header-search-option-1');
+    await input.press('ArrowDown');
+    await expect(input).toHaveAttribute('aria-activedescendant', 'app-header-search-option-0');
+    await input.press('ArrowUp');
+    await expect(input).toHaveAttribute('aria-activedescendant', 'app-header-search-option-1');
+
+    await input.fill('Documents');
+    await expect(input).not.toHaveAttribute('aria-activedescendant', /.+/);
+    const documentsOption = englishDialog.getByRole('option', { name: 'Documents' });
+    await expect(documentsOption).toBeVisible();
+    await expect(documentsOption).toHaveAttribute('tabindex', '-1');
+    await input.press('ArrowDown');
+    await expect(input).toHaveAttribute('aria-activedescendant', 'app-header-search-option-0');
+    await expect(englishDialog.getByRole('option', { name: 'Documents' })).toHaveAttribute('aria-selected', 'true');
+    await input.press('Enter');
+    await expect(page.getByTestId('a4-files-route')).toBeVisible();
+    await expect(englishDialog).toBeHidden();
+    await expect(trigger).toBeFocused();
+
+    await page.getByTestId('set-locale-am').click();
+    await expect(trigger).toHaveAccessibleName('ARNA ይፈልጉ');
+  });
+});
+
+
+test.describe('Mounted NotificationsCenter lifecycle and safety', () => {
+  const item = (id, title = 'Sample notification', is_read = false, action = null) => ({
+    id, title: { am: 'የሙከራ ማሳወቂያ', en: title },
+    body: { am: 'የሙከራ ዝርዝር', en: 'Notification details' },
+    category: 'system', priority: 'normal', is_read,
+    created_at: '2026-11-15T10:00:00Z', action,
+  });
+  const envelope = (items, page = 1, unread_count = items.filter((entry) => !entry.is_read).length, total = items.length) => ({
+    success: true,
+    data: { items, pagination: { page, per_page: 20, total }, unread_count },
+  });
+
+  test('shows a loading status while the inbox request is pending', async ({ page }) => {
+    await page.route('**/api/notifications**', async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 350));
+      await route.fulfill({ json: envelope([item('n-1')], 1, 1, 1) });
+    });
+    await page.goto(baseUrl);
+    await page.getByTestId('set-locale-en').click();
+    await page.getByTestId('open-notifications').click();
+    await expect(page.locator('.notification-center__state[role="status"]')).toContainText('Loading');
+    await expect(page.getByText('Sample notification')).toBeVisible();
+  });
+
+  test('renders unread state and marks one notification read after server confirmation', async ({ page }) => {
+    await page.route('**/api/notifications**', async (route) => {
+      if (route.request().method() === 'GET') {
+        await route.fulfill({ json: envelope([item('n-1')], 1, 1, 1) });
+      } else {
+        await route.fulfill({ json: { success: true, data: { id: 'n-1', is_read: true, unread_count: 0 } } });
+      }
+    });
+    await page.goto(baseUrl);
+    await page.getByTestId('open-notifications').click();
+    const row = page.locator('.notification-center__item');
+    await expect(row).toHaveClass(/is-unread/);
+    await row.click();
+    await expect(row).not.toHaveClass(/is-unread/);
+  });
+
+  test('marks every cached notification read after the read-all endpoint confirms success', async ({ page }) => {
+    await page.route('**/api/notifications**', async (route) => {
+      if (route.request().method() === 'GET') {
+        await route.fulfill({ json: envelope([item('all-1'), item('all-2')], 1, 2, 2) });
+      } else {
+        await route.fulfill({ json: { success: true, data: { updated: 2, unread_count: 0 } } });
+      }
+    });
+    await page.goto(baseUrl);
+    await page.getByTestId('set-locale-en').click();
+    await page.getByTestId('open-notifications').click();
+    await expect(page.locator('.notification-center__item.is-unread')).toHaveCount(2);
+    await page.getByRole('button', { name: 'Mark all as read' }).click();
+    await expect(page.locator('.notification-center__item.is-unread')).toHaveCount(0);
+  });
+
+  test('loads the next page and returns to the previous page', async ({ page }) => {
+    let inboxRequests = 0;
+    await page.route('**/api/notifications**', async (route) => {
+      if (route.request().method() !== 'GET') return route.continue();
+      inboxRequests += 1;
+      const requestedPage = inboxRequests === 2 ? 2 : 1;
+      const entries = requestedPage === 1
+        ? Array.from({ length: 20 }, (_, index) => item('p1-' + index, 'Page one ' + index))
+        : [item('p2-1', 'Page two item')];
+      await route.fulfill({ json: envelope(entries, requestedPage, 1, 21) });
+    });
+    await page.goto(baseUrl);
+    await page.getByTestId('set-locale-en').click();
+    await page.getByTestId('open-notifications').click();
+    const requestUrls = [];
+    page.on('request', (request) => { if (request.url().includes('/api/notifications')) requestUrls.push(request.url()); });
+    const rows = page.locator('.notification-center__item');
+    await expect(rows).toHaveCount(20);
+    console.log('pagination-stage: initial page loaded', JSON.stringify(requestUrls));
+    const footerButtons = page.locator('.notification-center__footer button');
+    await expect(footerButtons).toHaveCount(2);
+    await expect(footerButtons.nth(1)).toBeEnabled();
+    await expect(footerButtons.nth(1)).toBeInViewport();
+    console.log('pagination-stage: next enabled and in viewport');
+    await footerButtons.nth(1).click();
+    console.log('pagination-stage: next clicked', JSON.stringify(requestUrls));
+    await expect(rows).toHaveCount(1);
+    console.log('pagination-stage: second page row count', JSON.stringify(requestUrls));
+    await expect(page.getByText('Page two item')).toBeVisible();
+    await expect(footerButtons.nth(0)).toBeEnabled();
+    await footerButtons.nth(0).click();
+    console.log('pagination-stage: previous clicked', JSON.stringify(requestUrls));
+    await expect(rows).toHaveCount(20);
+    await expect(page.getByText('Page one 0')).toBeVisible();
+    expect(inboxRequests).toBe(3);
+  });
+
+  test('refreshes localized notification content when the active locale changes', async ({ page }) => {
+    await page.route('**/api/notifications**', async (route) => {
+      if (route.request().method() === 'GET') {
+        await route.fulfill({ json: envelope([item('locale-1', 'Hello')], 1, 1, 1) });
+      } else {
+        await route.fulfill({ json: { success: true, data: { unread_count: 0 } } });
+      }
+    });
+    await page.goto(baseUrl);
+    await page.getByTestId('open-notifications').click();
+    await expect(page.getByText('የሙከራ ማሳወቂያ')).toBeVisible();
+    await page.getByTestId('set-locale-en').click();
+    await expect(page.getByText('Hello')).toBeVisible();
+  });
+
+  test('shows a recoverable error and retries the failed inbox request', async ({ page }) => {
+    let attempts = 0;
+    await page.route('**/api/notifications**', async (route) => {
+      if (route.request().method() !== 'GET') return route.continue();
+      attempts += 1;
+      if (attempts === 1) {
+        await route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ message: 'unavailable' }) });
+      } else {
+        await route.fulfill({ json: envelope([item('retry-1')], 1, 1, 1) });
+      }
+    });
+    await page.goto(baseUrl);
+    await page.getByTestId('set-locale-en').click();
+    await page.getByTestId('open-notifications').click();
+    await expect(page.getByRole('alert')).toContainText('Could not load notifications');
+    await page.getByRole('button', { name: 'Try again' }).click();
+    await expect(page.getByText('Sample notification')).toBeVisible();
+    expect(attempts).toBe(2);
+  });
+
+  test('does not interpret an untrusted resource_ref as a URL or navigate outside the app', async ({ page }) => {
+    await page.route('**/api/notifications**', async (route) => {
+      if (route.request().method() === 'GET') {
+        await route.fulfill({ json: envelope([item('unsafe-1', 'Unsafe action', false, {
+          route_name: 'external.redirect', resource_ref: 'https://attacker.invalid/collect',
+        })], 1, 1, 1) });
+      } else {
+        await route.fulfill({ json: { success: true, data: { unread_count: 0 } } });
+      }
+    });
+    await page.goto(baseUrl);
+    await page.getByTestId('set-locale-en').click();
+    const initialUrl = page.url();
+    await page.getByTestId('open-notifications').click();
+    await page.getByText('Unsafe action').click();
+    await expect(page).toHaveURL(initialUrl);
+    expect(page.url()).not.toContain('attacker.invalid');
+  });
+});
+
+test.describe('Mounted navigation-search edge interactions', () => {
+  test('shows a localized empty state for an unmatched query and resets the active option', async ({ page }) => {
+    await page.goto(baseUrl);
+    await page.getByTestId('set-locale-en').click();
+    await page.getByTestId('app-header-search-trigger').click();
+    const dialog = page.getByRole('dialog', { name: 'Search ARNA' });
+    const input = dialog.getByRole('combobox', { name: 'Search modules and pages…' });
+    await input.fill('not-a-real-destination');
+    await expect(dialog.getByText('No matching modules or pages')).toBeVisible();
+    await expect(input).not.toHaveAttribute('aria-activedescendant', /.+/);
+  });
+
+  test('mouse hover synchronizes the active descendant and click activates the destination', async ({ page }) => {
+    await page.goto(baseUrl);
+    await page.getByTestId('set-locale-en').click();
+    await page.getByTestId('app-header-search-trigger').click();
+    const dialog = page.getByRole('dialog', { name: 'Search ARNA' });
+    const input = dialog.getByRole('combobox', { name: 'Search modules and pages…' });
+    const option = dialog.getByRole('option', { name: 'Shareholders' });
+    await option.hover();
+    await expect(input).toHaveAttribute('aria-activedescendant', await option.getAttribute('id'));
+    await option.click();
+    await expect(page.getByTestId('a4-shareholders-route')).toBeVisible();
+    await expect(dialog).toBeHidden();
   });
 });
