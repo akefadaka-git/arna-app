@@ -1,5 +1,5 @@
 /*
- * MASES UI — Vite configuration
+ * ARNA UI — Vite configuration
  *
  * Four independent static entry points:
  *   --mode workspace → workspace-entry/index.html → dist/

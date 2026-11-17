@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — portal back-to-workspace
 =============================================================================
  *
- * File:      mase_app/src/features/portal/PortalLayout.vue  (AMEND)
+ * File:      arna-app/src/features/portal/PortalLayout.vue  (AMEND)
  * Unit:      Portal user menu — back-to-workspace wiring + defensive
  *            handler
  * Delivery type:  Amendment — one import swap, one new const, one
@@ -12,12 +12,12 @@
  *
  * Before (v1.0.1):
  *   The layout bound AppShell's `:user-menu-items` to the shared
- *   `masesUserMenuItems` (just `logout`). It had no way to render a
+ *   `arnaUserMenuItems` (just `logout`). It had no way to render a
  *   portal-specific entry, and its `onUserMenuSelect` handler
  *   dispatched on exactly one id ('logout').
  *
  *   The companion file `shell-labels.ts` now exports
- *   `portalUserMenuItems` — `[go-to-workspace] ++ masesUserMenuItems`
+ *   `portalUserMenuItems` — `[go-to-workspace] ++ arnaUserMenuItems`
  *   — but no file consumed it. The `go-to-workspace` entry was
  *   therefore inert.
  *
@@ -55,7 +55,7 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — PortalLayout
+ ARNA Platform UI — PortalLayout
 =============================================================================
 
  File:      mase_app/src/features/portal/PortalLayout.vue
@@ -68,6 +68,12 @@
  -----------------------------------------------------------------------------
  Revision history
  -----------------------------------------------------------------------------
+ 1.2.0  — align active shell identity with ARNA (local alias only):
+          · Imports the shared arnaShellLabels export as
+            arnaShellLabels and binds that local name in AppShell.
+          · The shared export remains unchanged for compatibility.
+          · No runtime behavior, labels, routing, or permissions change.
+
  1.1.0  — back-to-workspace wiring:
           · AppShell's `:user-menu-items` now binds to the new
             `portalUserMenuItems` export (companion change in
@@ -143,7 +149,7 @@
 
  DATA SOURCES:
    @/router/shell-labels:
-     · masesShellLabels         — shell chrome labels (shared)
+     · arnaShellLabels         — shell chrome labels (shared)
      · portalUserMenuItems      — portal user menu (this layout's
                                    binding; extends the shared items
                                    with go-to-workspace)
@@ -279,7 +285,7 @@ import { logout } from '@/features/auth/service';
 import { provideMyShareholder } from './useMyShareholder';
 
 import {
-  masesShellLabels,
+  arnaShellLabels as arnaShellLabels,
   portalUserMenuItems,
   portalNavItems,
 } from '@/router/shell-labels';
@@ -390,7 +396,7 @@ async function onUserMenuSelect(payload: { id: string }): Promise<void> {
   <AppShell
     :nav-items="portalNavItems"
     :user-menu-items="portalUserMenuItems"
-    :labels="masesShellLabels"
+    :labels="arnaShellLabels"
     :footer-version="footerVersion"
     @user-menu-select="onUserMenuSelect"
   >

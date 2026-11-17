@@ -1021,6 +1021,7 @@ void _toggle;
   display: flex;
   align-items: center;
   min-height: 32px;
+  min-height: 32px;
   padding-block: var(--mases-space-2);
   padding-inline: var(--mases-space-3);
   cursor: pointer;
