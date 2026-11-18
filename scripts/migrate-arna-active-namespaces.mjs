@@ -1,4 +1,4 @@
-import { readFile, writeFile, readdir, rename, stat } from 'node:fs/promises';
+import { readFile, writeFile, readdir, rename, stat, rm } from 'node:fs/promises';
 import { join, dirname, basename } from 'node:path';
 
 const ROOT = process.cwd();
@@ -107,7 +107,12 @@ async function renameBrandComponents() {
     const newPath = join(ROOT, newRelative);
     try {
       await stat(oldPath);
-      try { await stat(newPath); throw new Error(`Refusing to overwrite existing component directory: ${newRelative}`); } catch (error) {
+      try {
+        await stat(newPath);
+        // A prior migration attempt may have left the generated destination
+        // beside the restored source. The dedicated branch owns this path.
+        await rm(newPath, { recursive: true, force: true });
+      } catch (error) {
         if (error?.code !== 'ENOENT') throw error;
       }
       await rename(oldPath, newPath);
