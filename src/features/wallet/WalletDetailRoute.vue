@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — WalletDetailRoute
+ MASES Phase 2 UI — WalletDetailRoute
 =============================================================================
 
  File:      mase_app/src/features/wallet/WalletDetailRoute.vue

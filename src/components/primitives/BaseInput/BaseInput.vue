@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — BaseInput
+ MASES Phase 2 UI — BaseInput
 =============================================================================
 
  File:      mase_app/src/components/primitives/BaseInput/BaseInput.vue
@@ -21,7 +21,7 @@
  1.1.0  — InputType extended to the date family:
           · Added 'date', 'datetime-local', 'time', 'month', and 'week'
             to the InputType union. The five types render natively in
-            every ARNA target browser and emit their value as a
+            every MASES target browser and emit their value as a
             string, which BaseInput already passes through unchanged
             via its string-typed `update:modelValue`.
           · The change was necessitated by the Wallet domain's forms
@@ -144,7 +144,7 @@
  referent. A consumer that supplies its own `id` overrides the
  generated one.
 
- The generator is a module-level counter. It is safe because ARNA
+ The generator is a module-level counter. It is safe because MASES
  Phase 2 UI is a client-only SPA (no server-side rendering); the
  counter's monotonic increment per instance is enough to avoid
  collisions within a document.

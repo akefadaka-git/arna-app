@@ -66,7 +66,7 @@
 
 /*
  * =============================================================================
- * ARNA Phase 2 UI — Portal Route Tree
+ * MASES Phase 2 UI — Portal Route Tree
  * =============================================================================
  *
  * File:      mase_app/src/router/routes-portal.ts

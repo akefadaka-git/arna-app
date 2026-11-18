@@ -44,9 +44,9 @@
 
    Observable behaviour on the route is identical:
 
-     VITE_APP_NAME = "ARNA"
-       v1.2.0  →  document.title = "ግባ — ARNA"
-       v1.3.0  →  document.title = "ግባ — ARNA"   (identical)
+     VITE_APP_NAME = "MASES"
+       v1.2.0  →  document.title = "ግባ — MASES"
+       v1.3.0  →  document.title = "ግባ — MASES"   (identical)
 
      VITE_APP_NAME = "" or absent at runtime
        v1.2.0  →  document.title = "ግባ"
@@ -71,7 +71,7 @@
 
 <!--
 =============================================================================
- ARNA Phase 2 UI — LoginRoute
+ MASES Phase 2 UI — LoginRoute
 =============================================================================
 
  File:      mase_app/src/router/pages/LoginRoute.vue
@@ -110,7 +110,7 @@
             "{formAriaLabel} — {appName}" where `formAriaLabel` is
             the login form's accessible name and `appName` is
             `import.meta.env.VITE_APP_NAME`. In the workspace
-            build, the title reads "ግባ — ARNA"; in the portal
+            build, the title reads "ግባ — MASES"; in the portal
             build, "ግባ — Maale Arna Portal".
 
           · No changes to the two emit handlers, the brand slot,
@@ -258,7 +258,7 @@
  level is h1, matching the accessibility convention that each page
  has exactly one h1 and it names the page's purpose.
 
- The heading is not "Log in to ARNA" or similar. Two reasons:
+ The heading is not "Log in to MASES" or similar. Two reasons:
 
    · The logo above the card already announces the product name.
      A heading that repeated it would produce a redundant
@@ -410,7 +410,7 @@ const sessionExpired = computed<boolean>(
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "ARNA"
+ *   workspace  →  "MASES"
  *   portal     →  "Maale Arna Portal"
  *
  * Passed to <PageTitle> as the title's suffix. PageTitle's own

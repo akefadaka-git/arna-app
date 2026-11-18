@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — Modal — Barrel Export
+ * MASES Phase 2 UI — Modal — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/Modal/index.ts

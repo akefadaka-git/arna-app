@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — VerifyEmailResend — Barrel Export
+ * MASES Phase 2 UI — VerifyEmailResend — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/features/auth/VerifyEmailResend/index.ts

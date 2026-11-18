@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — SkipToContent
+ MASES Phase 2 UI — SkipToContent
 =============================================================================
 
  File:      mase_app/src/layouts/AppShell/SkipToContent/SkipToContent.vue

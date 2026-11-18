@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — Timeline — Barrel Export
+ * MASES Phase 2 UI — Timeline — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/patterns/Timeline/index.ts

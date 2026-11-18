@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — WalletAllocationForm
+ MASES Phase 2 UI — WalletAllocationForm
 =============================================================================
 
  File:      mase_app/src/features/wallet/WalletAllocationForm.vue

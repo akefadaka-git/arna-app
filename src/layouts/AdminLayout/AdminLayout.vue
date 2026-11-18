@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — AdminLayout
+ MASES Phase 2 UI — AdminLayout
 =============================================================================
 
  File:      mase_app/src/layouts/AdminLayout/AdminLayout.vue

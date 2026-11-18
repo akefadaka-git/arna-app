@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — FormSection
+ MASES Phase 2 UI — FormSection
 =============================================================================
 
  File:      mase_app/src/components/composites/FormSection/FormSection.vue

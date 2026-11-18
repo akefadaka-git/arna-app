@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — ErrorSupportPanel — Barrel Export
+ * MASES Phase 2 UI — ErrorSupportPanel — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/ErrorSupportPanel/index.ts

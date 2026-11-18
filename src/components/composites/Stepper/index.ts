@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — Stepper — Barrel Export
+ * MASES Phase 2 UI — Stepper — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/Stepper/index.ts

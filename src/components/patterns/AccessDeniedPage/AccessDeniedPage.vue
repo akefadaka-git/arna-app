@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — AccessDeniedPage
+ MASES Phase 2 UI — AccessDeniedPage
 =============================================================================
 
  File:      mase_app/src/components/patterns/AccessDeniedPage/AccessDeniedPage.vue

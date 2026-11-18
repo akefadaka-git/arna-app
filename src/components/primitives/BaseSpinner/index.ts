@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — BaseSpinner — Barrel Export
+ * MASES Phase 2 UI — BaseSpinner — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/primitives/BaseSpinner/index.ts

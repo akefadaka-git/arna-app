@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — FileUploader — Barrel Export
+ * MASES Phase 2 UI — FileUploader — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/patterns/FileUploader/index.ts

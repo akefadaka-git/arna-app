@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — File Feature Labels (Amharic)
+ * MASES Phase 2 UI — File Feature Labels (Amharic)
  * =============================================================================
  *
  * File:      mase_app/src/features/files/labels.ts

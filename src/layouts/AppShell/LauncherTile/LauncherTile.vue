@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — LauncherTile
+ MASES Phase 2 UI — LauncherTile
 =============================================================================
 
  File:      mase_app/src/layouts/AppShell/LauncherTile/LauncherTile.vue

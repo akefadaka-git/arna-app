@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — AppHeader — Barrel Export
+ * MASES Phase 2 UI — AppHeader — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/layouts/AppShell/AppHeader/index.ts

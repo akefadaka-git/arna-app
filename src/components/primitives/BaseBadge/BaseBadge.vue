@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — BaseBadge
+ MASES Phase 2 UI — BaseBadge
 =============================================================================
 
  File:      mase_app/src/components/primitives/BaseBadge/BaseBadge.vue

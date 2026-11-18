@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — BaseIcon
+ MASES Phase 2 UI — BaseIcon
 =============================================================================
 
  File:      mase_app/src/components/primitives/BaseIcon/BaseIcon.vue
@@ -92,7 +92,7 @@
  Note: a token whose name collides with a valid CSS color (e.g. a
  hypothetical token literally named "red") loses to CSS. This is
  intentional — the CSS value is the more likely intent. Token names
- must use hyphenated ARNA conventions (e.g. `color-icon-primary`).
+ must use hyphenated MASES conventions (e.g. `color-icon-primary`).
 
  -----------------------------------------------------------------------------
  Accessibility
@@ -129,7 +129,7 @@
 
 <script lang="ts">
 /*
- * Frozen registry of Lucide icons used by the ARNA Phase 2 UI.
+ * Frozen registry of Lucide icons used by the MASES Phase 2 UI.
  *
  * Consumers receive the union type IconName (below) which restricts the
  * `name` prop to the keys of ICONS. Adding an icon requires a Change
@@ -691,7 +691,7 @@ const resolvedColor = computed<string>(() => {
   // 3-5. Anything the runtime recognises as a color wins.
   if (isCssColor(value)) return value;
 
-  // 6. Fallback: assume a Tier 2 ARNA token name. An unknown token
+  // 6. Fallback: assume a Tier 2 MASES token name. An unknown token
   //    produces an undefined variable; the browser falls back to the
   //    inherited color, so the icon remains visible. A dev warning is
   //    emitted below.

@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — Auth Page Labels (Amharic)
+ * MASES Phase 2 UI — Auth Page Labels (Amharic)
  * =============================================================================
  *
  * File:      mase_app/src/router/auth-labels.ts

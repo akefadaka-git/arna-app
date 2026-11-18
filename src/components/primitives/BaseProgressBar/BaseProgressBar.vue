@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — BaseProgressBar
+ MASES Phase 2 UI — BaseProgressBar
 =============================================================================
 
  File:      mase_app/src/components/primitives/BaseProgressBar/BaseProgressBar.vue

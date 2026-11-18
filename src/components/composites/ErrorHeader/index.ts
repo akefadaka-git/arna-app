@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — ErrorHeader — Barrel Export
+ * MASES Phase 2 UI — ErrorHeader — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/ErrorHeader/index.ts

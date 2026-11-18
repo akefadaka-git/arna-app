@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — FileInput — Barrel Export
+ * MASES Phase 2 UI — FileInput — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/FileInput/index.ts

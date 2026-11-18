@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA UI — Router Guards
+ * MASES UI — Router Guards
  * =============================================================================
  *
  * File:      mase_app/src/router/guards.ts
@@ -195,7 +195,7 @@
  * -----------------------------------------------------------------------------
  * The `?redirect=` query parameter is user-controllable — anyone can
  * craft a URL like `/login?redirect=//evil.com` and hand it to a
- * ARNA user. If the login flow naively trusted the value and
+ * MASES user. If the login flow naively trusted the value and
  * navigated to it after a successful login, the user would be
  * silently redirected to an attacker-controlled origin with the
  * fresh session's referer attached.

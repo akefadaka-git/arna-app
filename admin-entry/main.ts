@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — Admin Entry Point
+ * MASES Phase 2 UI — Admin Entry Point
  * =============================================================================
  *
  * File:      mase_app/admin-entry/main.ts
@@ -35,7 +35,7 @@
  * -----------------------------------------------------------------------------
  * Target deployment
  * -----------------------------------------------------------------------------
- * Build output serves https://admin.maalearna.com.et — the ARNA
+ * Build output serves https://admin.maalearna.com.et — the MASES
  * Administration application.
  *
  * -----------------------------------------------------------------------------

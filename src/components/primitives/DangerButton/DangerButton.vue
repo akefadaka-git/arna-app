@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — DangerButton
+ MASES Phase 2 UI — DangerButton
 =============================================================================
 
  File:      mase_app/src/components/primitives/DangerButton/DangerButton.vue

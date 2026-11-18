@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — API client
+ * MASES Phase 2 UI — API client
  * =============================================================================
  *
  * File:    mase_app/src/core/api/client.ts
@@ -55,10 +55,10 @@
  *
  *          · The request interceptor ALSO sets `X-XSRF-TOKEN`
  *            manually by reading `document.cookie` directly. This is
- *            the primary mechanism for ARNA, because axios's
+ *            the primary mechanism for MASES, because axios's
  *            built-in `withXSRFToken` only applies the header when
  *            the request target is the SAME ORIGIN as the page. The
- *            ARNA SPA runs on `app.maalearna.com.et` and posts to
+ *            MASES SPA runs on `app.maalearna.com.et` and posts to
  *            `api.maalearna.com.et` — a cross-origin request. In the
  *            cross-origin case, axios's built-in logic does not fire,
  *            so the manual reader is what actually delivers the CSRF
@@ -189,18 +189,18 @@
  *        proceeds to the route. Mismatch or absence → 419.
  *
  * -----------------------------------------------------------------------------
- * Why `withXSRFToken` alone is not sufficient for ARNA
+ * Why `withXSRFToken` alone is not sufficient for MASES
  * -----------------------------------------------------------------------------
  * axios's `withXSRFToken: true` option, added in axios 1.6, applies
  * the `X-XSRF-TOKEN` header only when the request target satisfies
- * axios's internal `isURLSameOrigin` check. For the ARNA SPA, the
+ * axios's internal `isURLSameOrigin` check. For the MASES SPA, the
  * page origin is `https://app.maalearna.com.et` and the API origin
  * is `https://api.maalearna.com.et`. Different origins. axios
  * therefore skips the header, and Sanctum returns 419 on every
  * stateful POST.
  *
  * The manual cookie reader in the request interceptor is what
- * actually delivers the header for ARNA. `withXSRFToken` remains
+ * actually delivers the header for MASES. `withXSRFToken` remains
  * enabled because it is harmless and covers the case where a future
  * deployment (or a test harness) serves the frontend from the same
  * origin as the API.
@@ -229,7 +229,7 @@
  * 12.13) writes from the locale store's `locale` value on every
  * change and on initial mount.
  *
- * The header solves a specific problem in the ARNA deployment:
+ * The header solves a specific problem in the MASES deployment:
  * the API's LocalizationMiddleware resolves the request's locale
  * through a priority chain —
  *
@@ -757,7 +757,7 @@ const baseURL: string = import.meta.env.VITE_API_BASE_URL;
  * -----------------------------------------------------------------------------
  * axios ≥ 1.6 option. When true, axios reads the `XSRF-TOKEN`
  * cookie and sets the `X-XSRF-TOKEN` request header — but only on
- * same-origin requests. For ARNA's cross-origin topology
+ * same-origin requests. For MASES's cross-origin topology
  * (`app.*` → `api.*`), axios's internal same-origin check fails and
  * the header is NOT applied. The manual reader in the request
  * interceptor (below) covers that case. This flag is kept for
@@ -869,11 +869,11 @@ instance.interceptors.request.use(
      * session's CSRF token; on a match, the request proceeds.
      *
      * This manual reader is what actually delivers the header for
-     * ARNA, because axios's built-in `withXSRFToken` mechanism
+     * MASES, because axios's built-in `withXSRFToken` mechanism
      * (enabled on the instance above) only fires on same-origin
-     * requests, and the ARNA SPA is cross-origin relative to the
+     * requests, and the MASES SPA is cross-origin relative to the
      * API. See the file header §"Why `withXSRFToken` alone is not
-     * sufficient for ARNA".
+     * sufficient for MASES".
      *
      * Behavior on absence: when the cookie is missing — the
      * handshake was not performed, the session has expired, or the
@@ -1538,7 +1538,7 @@ function logError(error: NormalizedApiError): void {
 /**
  * Generate a UUID v4 string.
  *
- * Prefers `crypto.randomUUID()`, available in every ARNA target
+ * Prefers `crypto.randomUUID()`, available in every MASES target
  * browser and in Node 20+. Falls back to a manual implementation
  * using `crypto.getRandomValues()` for environments where
  * `randomUUID` is unavailable (older test runners, non-browser

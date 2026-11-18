@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — Modal
+ MASES Phase 2 UI — Modal
 =============================================================================
 
  File:      mase_app/src/components/composites/Modal/Modal.vue

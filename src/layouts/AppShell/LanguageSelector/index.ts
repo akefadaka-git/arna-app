@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — LanguageSelector — Barrel Export
+ * MASES Phase 2 UI — LanguageSelector — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/layouts/AppShell/LanguageSelector/index.ts

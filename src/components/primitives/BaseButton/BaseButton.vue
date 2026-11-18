@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — BaseButton
+ MASES Phase 2 UI — BaseButton
 =============================================================================
 
  File:      mase_app/src/components/primitives/BaseButton/BaseButton.vue

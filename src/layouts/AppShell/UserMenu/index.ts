@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — UserMenu — Barrel Export
+ * MASES Phase 2 UI — UserMenu — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/layouts/AppShell/UserMenu/index.ts

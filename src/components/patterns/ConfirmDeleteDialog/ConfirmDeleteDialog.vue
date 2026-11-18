@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — ConfirmDeleteDialog
+ MASES Phase 2 UI — ConfirmDeleteDialog
 =============================================================================
 
  File:      mase_app/src/components/patterns/ConfirmDeleteDialog/ConfirmDeleteDialog.vue

@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — LoadingState — Barrel Export
+ * MASES Phase 2 UI — LoadingState — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/LoadingState/index.ts

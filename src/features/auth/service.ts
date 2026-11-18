@@ -60,7 +60,7 @@
 
 /*
  * =============================================================================
- * ARNA Phase 2 UI — Authentication Service
+ * MASES Phase 2 UI — Authentication Service
  * =============================================================================
  *
  * File:      mase_app/src/features/auth/service.ts
@@ -259,7 +259,7 @@
  * -----------------------------------------------------------------------------
  * SSO across sibling subdomains
  * -----------------------------------------------------------------------------
- * ARNA is deployed as multiple SPAs on sibling subdomains of
+ * MASES is deployed as multiple SPAs on sibling subdomains of
  * maalearna.com.et (app, portal, and future surfaces). Sanctum's
  * session cookie is scoped to `.maalearna.com.et`
  * (SESSION_DOMAIN=.maalearna.com.et in the API's .env), so a login

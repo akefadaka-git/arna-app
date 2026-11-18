@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — LauncherRoute
+ MASES Phase 2 UI — LauncherRoute
 =============================================================================
 
  File:      mase_app/src/router/pages/LauncherRoute.vue

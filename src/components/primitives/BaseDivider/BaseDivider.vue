@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — BaseDivider
+ MASES Phase 2 UI — BaseDivider
 =============================================================================
 
  File:      mase_app/src/components/primitives/BaseDivider/BaseDivider.vue

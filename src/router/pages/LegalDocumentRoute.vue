@@ -80,16 +80,16 @@
    Observable behaviour on the route is identical:
 
      Navigating to /legal/terms   (workspace build)
-       v1.0.0  →  document.title = "የአጠቃቀም ውሎች — ARNA"
-       v1.1.0  →  document.title = "የአጠቃቀም ውሎች — ARNA"           (identical)
+       v1.0.0  →  document.title = "የአጠቃቀም ውሎች — MASES"
+       v1.1.0  →  document.title = "የአጠቃቀም ውሎች — MASES"           (identical)
 
      Then navigating to /legal/privacy  (slug change, component reuse)
-       v1.0.0  →  document.title = "የግላዊነትና የውሂብ ጠበቃ ፖሊሲ — ARNA"
-       v1.1.0  →  document.title = "የግላዊነትና የውሂብ ጠበቃ ፖሊሲ — ARNA"  (identical)
+       v1.0.0  →  document.title = "የግላዊነትና የውሂብ ጠበቃ ፖሊሲ — MASES"
+       v1.1.0  →  document.title = "የግላዊነትና የውሂብ ጠበቃ ፖሊሲ — MASES"  (identical)
 
      Navigating to /legal/unresolvable-slug
-       v1.0.0  →  document.title = "ሰነዱ አልተገኘም — ARNA"
-       v1.1.0  →  document.title = "ሰነዱ አልተገኘም — ARNA"           (identical)
+       v1.0.0  →  document.title = "ሰነዱ አልተገኘም — MASES"
+       v1.1.0  →  document.title = "ሰነዱ አልተገኘም — MASES"           (identical)
 
      VITE_APP_NAME = "" or absent at runtime
        v1.0.0  →  document.title = "<pageLabel>"
@@ -118,7 +118,7 @@
 
 <!--
 =============================================================================
- ARNA Phase 2 UI — LegalDocumentRoute
+ MASES Phase 2 UI — LegalDocumentRoute
 =============================================================================
 
  File:      mase_app/src/router/pages/LegalDocumentRoute.vue
@@ -389,7 +389,7 @@
      appName   = import.meta.env.VITE_APP_NAME
 
  In the workspace build, a document titled "የአጠቃቀም ውሎች" produces
- the tab title "የአጠቃቀም ውሎች — ARNA". In the portal build, the
+ the tab title "የአጠቃቀም ውሎች — MASES". In the portal build, the
  same document produces "የአጠቃቀም ውሎች — Maale Arna Portal".
 
  The page label is the same string the article's own <h1> renders
@@ -729,7 +729,7 @@ const pageTitle = computed<string>(() => {
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "ARNA"
+ *   workspace  →  "MASES"
  *   portal     →  "Maale Arna Portal"
  *
  * Passed to <PageTitle> as the title's suffix. PageTitle's own

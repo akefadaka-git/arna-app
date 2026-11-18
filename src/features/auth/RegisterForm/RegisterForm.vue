@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — RegisterForm
+ MASES Phase 2 UI — RegisterForm
 =============================================================================
 
  File:      mase_app/src/features/auth/RegisterForm/RegisterForm.vue
@@ -101,7 +101,7 @@
  -----------------------------------------------------------------------------
  Name fields — bilingual Ethiopian naming convention
  -----------------------------------------------------------------------------
- The ARNA users table stores Ethiopian names in six separate
+ The MASES users table stores Ethiopian names in six separate
  bilingual columns (CR-005):
 
      first_name_am  /  first_name_en
@@ -119,7 +119,7 @@
  This form does not send the legacy `name` field. It sends the six
  structured fields only. The backend's resolver composes a `name`
  value from whatever structured fields are present (preferring
- Amharic per the ARNA Amharic-first policy).
+ Amharic per the MASES Amharic-first policy).
 
  The client-side "at least one name" check mirrors the backend's
  `required_without_all:first_name_am,name` rule. It is enforced

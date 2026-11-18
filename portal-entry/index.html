@@ -3,7 +3,7 @@
   <head>
     <!--
       =====================================================================
-      ARNA Phase 2 UI — Portal entry HTML
+      MASES Phase 2 UI — Portal entry HTML
       =====================================================================
 
       File:    mase_app/portal-entry/index.html
@@ -115,7 +115,7 @@
       ---------------------------------------------------------------------
       The portal is presented to shareholders as the public-facing
       brand surface. The workspace uses the shorter project name
-      (ARNA); the portal uses the longer formal name. Pre-JS default
+      (MASES); the portal uses the longer formal name. Pre-JS default
       only — App.vue (Unit 12.13) overwrites document.title on every
       route change, and PageTitle (Unit 11.9) is the same component
       in both entries.
@@ -128,7 +128,7 @@
       recommended way to give each its own application name is two
       mode-specific environment files at the project root:
 
-          mase_app/.env.workspace   VITE_APP_NAME="ARNA"
+          mase_app/.env.workspace   VITE_APP_NAME="MASES"
           mase_app/.env.portal      VITE_APP_NAME="Maale Arna Portal"
 
       Vite loads .env.<mode> automatically when --mode <mode> is
@@ -139,7 +139,7 @@
 
       AuthLayout.vue (Unit 12.1 v1.1.0) reads VITE_APP_NAME to
       supply the default alt text for the logo. Setting it per-mode
-      means the workspace's logo alt reads "ARNA" and the portal's
+      means the workspace's logo alt reads "MASES" and the portal's
       reads "Maale Arna Portal" without any per-file branching.
 
       If those .env.<mode> files do not yet exist, they need to be

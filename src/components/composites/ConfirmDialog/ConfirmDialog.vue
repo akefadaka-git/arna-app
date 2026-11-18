@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — ConfirmDialog
+ MASES Phase 2 UI — ConfirmDialog
 =============================================================================
 
  File:      mase_app/src/components/composites/ConfirmDialog/ConfirmDialog.vue

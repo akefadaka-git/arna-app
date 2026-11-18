@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — MetaList
+ MASES Phase 2 UI — MetaList
 =============================================================================
 
  File:      mase_app/src/components/composites/MetaList/MetaList.vue

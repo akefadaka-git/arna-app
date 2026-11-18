@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — PrimaryButton — Barrel Export
+ * MASES Phase 2 UI — PrimaryButton — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/primitives/PrimaryButton/index.ts

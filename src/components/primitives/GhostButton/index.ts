@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — GhostButton — Barrel Export
+ * MASES Phase 2 UI — GhostButton — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/primitives/GhostButton/index.ts

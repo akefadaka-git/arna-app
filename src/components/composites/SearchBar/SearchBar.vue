@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — SearchBar
+ MASES Phase 2 UI — SearchBar
 =============================================================================
 
  File:      mase_app/src/components/composites/SearchBar/SearchBar.vue

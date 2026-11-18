@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — DatePicker
+ MASES Phase 2 UI — DatePicker
 =============================================================================
 
  File:      mase_app/src/components/composites/DatePicker/DatePicker.vue

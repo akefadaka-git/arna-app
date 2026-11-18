@@ -62,7 +62,7 @@
 
 <!--
 =============================================================================
- ARNA Phase 2 UI — LoanDisburseForm
+ MASES Phase 2 UI — LoanDisburseForm
 =============================================================================
 
  File:      mase_app/src/features/loans/LoanDisburseForm.vue

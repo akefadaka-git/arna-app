@@ -55,7 +55,7 @@
 
 <!--
 =============================================================================
- ARNA Phase 2 UI — PortalLayout
+ MASES Phase 2 UI — PortalLayout
 =============================================================================
 
  File:      mase_app/src/features/portal/PortalLayout.vue

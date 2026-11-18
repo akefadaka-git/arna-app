@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — WalletObligationForm
+ MASES Phase 2 UI — WalletObligationForm
 =============================================================================
 
  File:      mase_app/src/features/wallet/WalletObligationForm.vue

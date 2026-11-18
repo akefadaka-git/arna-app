@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — ErrorActions — Barrel Export
+ * MASES Phase 2 UI — ErrorActions — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/ErrorActions/index.ts

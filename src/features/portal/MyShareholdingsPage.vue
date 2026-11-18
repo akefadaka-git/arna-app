@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — MyShareholdingsPage
+ MASES Phase 2 UI — MyShareholdingsPage
 =============================================================================
 
  File:      mase_app/src/features/portal/MyShareholdingsPage.vue

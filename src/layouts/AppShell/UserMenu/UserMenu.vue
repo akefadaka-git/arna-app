@@ -42,7 +42,7 @@
 
 <!--
 =============================================================================
- ARNA Phase 2 UI — UserMenu
+ MASES Phase 2 UI — UserMenu
 =============================================================================
 
  File:      mase_app/src/layouts/AppShell/UserMenu/UserMenu.vue

@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — WalletAllocationReverseDialog
+ MASES Phase 2 UI — WalletAllocationReverseDialog
 =============================================================================
 
  File:      mase_app/src/features/wallet/WalletAllocationReverseDialog.vue

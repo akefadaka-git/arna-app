@@ -66,7 +66,7 @@
 
 <!--
 =============================================================================
- ARNA Phase 2 UI — LoanApproveForm
+ MASES Phase 2 UI — LoanApproveForm
 =============================================================================
 
  File:      mase_app/src/features/loans/LoanApproveForm.vue

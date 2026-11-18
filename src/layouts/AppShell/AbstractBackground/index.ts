@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — AbstractBackground barrel
+ * MASES Phase 2 UI — AbstractBackground barrel
  * =============================================================================
  *
  * File:      mase_app/src/layouts/AppShell/AbstractBackground/index.ts

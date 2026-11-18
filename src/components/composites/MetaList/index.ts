@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — MetaList — Barrel Export
+ * MASES Phase 2 UI — MetaList — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/MetaList/index.ts

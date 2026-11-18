@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — LoginForm — Barrel Export
+ * MASES Phase 2 UI — LoginForm — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/features/auth/LoginForm/index.ts

@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — FilePreview — Barrel Export
+ * MASES Phase 2 UI — FilePreview — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/patterns/FilePreview/index.ts

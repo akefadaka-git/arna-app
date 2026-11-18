@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — WalletPaymentForm
+ MASES Phase 2 UI — WalletPaymentForm
 =============================================================================
 
  File:      mase_app/src/features/wallet/WalletPaymentForm.vue

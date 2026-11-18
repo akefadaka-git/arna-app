@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — BaseRadio
+ MASES Phase 2 UI — BaseRadio
 =============================================================================
 
  File:      mase_app/src/components/primitives/BaseRadio/BaseRadio.vue

@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — FileDetailView — Barrel Export
+ * MASES Phase 2 UI — FileDetailView — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/features/files/FileDetailView/index.ts

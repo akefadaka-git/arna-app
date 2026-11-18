@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — BaseDivider — Barrel Export
+ * MASES Phase 2 UI — BaseDivider — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/primitives/BaseDivider/index.ts

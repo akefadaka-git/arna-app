@@ -14,14 +14,14 @@
  Before (v1.0.2):
    The view set no document.title. The browser tab showed whatever
    the previously-visited route had left, or the entry HTML's
-   pre-JS default ("ARNA") on a cold load directly at
+   pre-JS default ("MASES") on a cold load directly at
    /wallets/:id/statement.
 
  After (v1.0.3):
    The view sets document.title via <PageTitle>, bound to the
    existing labels.pageTitle and to import.meta.env.VITE_APP_NAME.
 
-     Workspace build    →  "መግለጫ — ARNA"
+     Workspace build    →  "መግለጫ — MASES"
      Empty VITE_APP_NAME →  "መግለጫ"
 
    The portal build does not mount this view (the wallet vertical is
@@ -44,7 +44,7 @@
 
 <!--
 =============================================================================
- ARNA Phase 2 UI — WalletStatementView
+ MASES Phase 2 UI — WalletStatementView
 =============================================================================
 
  File:      mase_app/src/features/wallet/WalletStatementView.vue
@@ -352,7 +352,7 @@ const route = useRoute();
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "ARNA"
+ *   workspace  →  "MASES"
  *   portal     →  "Maale Arna Portal"
  *
  * This view is mounted in the workspace build only. The portal has no

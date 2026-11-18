@@ -3,7 +3,7 @@
   <head>
     <!--
       =====================================================================
-      ARNA Phase 2 UI — Admin entry HTML
+      MASES Phase 2 UI — Admin entry HTML
       =====================================================================
 
       File:    mase_app/admin-entry/index.html
@@ -43,14 +43,14 @@
       ---------------------------------------------------------------------
       The four label deltas — why admin differs
       ---------------------------------------------------------------------
-      1. <title>            "ARNA"  →  "ARNA አስተዳደር"
-      2. application-name   "ARNA"  →  "ARNA አስተዳደር"
-      3. og:title           "ARNA"  →  "ARNA አስተዳደር"
+      1. <title>            "MASES"  →  "MASES አስተዳደር"
+      2. application-name   "MASES"  →  "MASES አስተዳደር"
+      3. og:title           "MASES"  →  "MASES አስተዳደር"
       4. og:description     the workspace's description of the shared-
                             equity management platform, replaced with a
                             description of the administration console.
 
-      The value "ARNA አስተዳደር" is the admin build's application name.
+      The value "MASES አስተዳደር" is the admin build's application name.
       It is the string that VITE_APP_NAME carries for the admin build
       (see the environment configuration delivered at G2.10), and it
       is the string the router composes into document.title on every
@@ -78,7 +78,7 @@
       ---------------------------------------------------------------------
       Pre-JS default only. App.vue mounts and the active route wrapper's
       onMounted hook overwrites document.title on every route change
-      (e.g. "ዳሽቦርድ — ARNA አስተዳደር"). The initial value exists so the
+      (e.g. "ዳሽቦርድ — MASES አስተዳደር"). The initial value exists so the
       browser tab shows something meaningful during the ~100ms before
       Vue mounts, and so a user who opens the page in a new tab and
       navigates away before the JS loads still has a sensible history
@@ -159,7 +159,7 @@
       Additional consistency deltas — noted but NOT applied in 1.0.0
       ---------------------------------------------------------------------
       Five meta tags remain at their workspace values. Each identifies
-      the product as "ARNA" rather than "ARNA አስተዳደር". A reviewer
+      the product as "MASES" rather than "MASES አስተዳደር". A reviewer
       who determines they should be aligned in a follow-up revision
       may approve a change to:
 
@@ -181,9 +181,9 @@
 
     <!--
       Title. Overwritten by the router on mount; see the file header
-      comment §"Why <title>ARNA አስተዳደር</title>".
+      comment §"Why <title>MASES አስተዳደር</title>".
     -->
-    <title>ARNA አስተዳደር</title>
+    <title>MASES አስተዳደር</title>
 
     <!--
       Description. Consumed by search engines and by social-platform
@@ -196,7 +196,7 @@
     -->
     <meta
       name="description"
-      content="ARNA — the Maale Arna shared-equity management platform for Ethiopian enterprises."
+      content="MASES — the Maale Arna shared-equity management platform for Ethiopian enterprises."
     />
 
     <!--
@@ -228,18 +228,18 @@
 
     <!--
       Application name. Used by Android when the site is added to the
-      home screen. For the admin build, this is "ARNA አስተዳደር" so
+      home screen. For the admin build, this is "MASES አስተዳደር" so
       that an installed admin tile is distinguishable from an
       installed workspace tile.
     -->
-    <meta name="application-name" content="ARNA አስተዳደር" />
+    <meta name="application-name" content="MASES አስተዳደር" />
 
     <!--
       iOS home-screen title. Unchanged from the workspace file in this
       initial delivery. See the file header comment §"Additional
       consistency deltas".
     -->
-    <meta name="apple-mobile-web-app-title" content="ARNA" />
+    <meta name="apple-mobile-web-app-title" content="MASES" />
 
     <!--
       iOS status bar style. Same value as the workspace file.
@@ -255,17 +255,17 @@
       Open Graph. Read by Facebook, LinkedIn, Slack, WhatsApp,
       Telegram, and most other platforms when a URL is shared.
 
-      og:title is changed to "ARNA አስተዳደር" and og:description to the
+      og:title is changed to "MASES አስተዳደር" and og:description to the
       admin-specific description. og:site_name is unchanged in this
       initial delivery; see the file header comment §"Additional
       consistency deltas".
     -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="ARNA" />
-    <meta property="og:title" content="ARNA አስተዳደር" />
+    <meta property="og:site_name" content="MASES" />
+    <meta property="og:title" content="MASES አስተዳደር" />
     <meta
       property="og:description"
-      content="The ARNA administration console."
+      content="The MASES administration console."
     />
     <meta property="og:image" content="/logo.png" />
     <meta property="og:locale" content="am_ET" />
@@ -277,7 +277,7 @@
       deltas".
     -->
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="ARNA" />
+    <meta name="twitter:title" content="MASES" />
     <meta
       name="twitter:description"
       content="The Maale Arna shared-equity management platform."
@@ -364,7 +364,7 @@
     -->
     <noscript>
       <p>
-        JavaScript is required to use ARNA. Please enable JavaScript in
+        JavaScript is required to use MASES. Please enable JavaScript in
         your browser settings and reload this page.
       </p>
     </noscript>

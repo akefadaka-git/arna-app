@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — Accordion — Barrel Export
+ * MASES Phase 2 UI — Accordion — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/Accordion/index.ts

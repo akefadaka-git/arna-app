@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — AuthLayout — Barrel Export
+ * MASES Phase 2 UI — AuthLayout — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/features/auth/AuthLayout/index.ts

@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — ArnaFooterContent
+ MASES Phase 2 UI — ArnaFooterContent
 =============================================================================
 
  File:      mase_app/src/layouts/AppShell/ArnaFooterContent/ArnaFooterContent.vue

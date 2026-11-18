@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — Popover
+ MASES Phase 2 UI — Popover
 =============================================================================
 
  File:      mase_app/src/components/composites/Popover/Popover.vue

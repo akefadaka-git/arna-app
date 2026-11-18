@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — DownloadButton
+ MASES Phase 2 UI — DownloadButton
 =============================================================================
 
  File:      mase_app/src/components/patterns/DownloadButton/DownloadButton.vue

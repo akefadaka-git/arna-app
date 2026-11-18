@@ -1,5 +1,5 @@
 /* =============================================================================
- * ARNA PHASE 2 UI — DESIGN TOKEN SUBSTRATE
+ * MASES PHASE 2 UI — DESIGN TOKEN SUBSTRATE
  * =============================================================================
  *
  * File:      mase_app/src/styles/tokens.css
@@ -109,7 +109,7 @@
  * -----------------------------------------------------------------------------
  * Purpose
  * -----------------------------------------------------------------------------
- * Single source of truth for every design value used in the ARNA
+ * Single source of truth for every design value used in the MASES
  * Phase 2 UI. Every component consumes tokens from this file. No
  * component may hardcode a color, spacing value, radius, shadow, font
  * size, duration, easing, or z-index.
@@ -252,7 +252,7 @@
   /* ---------------------------------------------------------------------------
    * ARNA brand palette — additive CR candidate v1.4.0
    * Canonical values from docs/BRAND_IDENTITY_MASTER_SPEC_V1.0.md §6.
-   * These namespaced primitives do not rename or reassign frozen ARNA tokens.
+   * These namespaced primitives do not rename or reassign frozen MASES tokens.
    * --------------------------------------------------------------------------- */
   --arna-color-enterprise-blue: #123D68;
   --arna-color-action-blue: #1769AA;

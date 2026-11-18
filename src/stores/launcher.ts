@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — useLauncherStore
+ * MASES Phase 2 UI — useLauncherStore
  * =============================================================================
  *
  * File:      mase_app/src/stores/launcher.ts

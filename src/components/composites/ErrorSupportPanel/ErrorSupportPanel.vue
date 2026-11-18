@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — ErrorSupportPanel
+ MASES Phase 2 UI — ErrorSupportPanel
 =============================================================================
 
  File:      mase_app/src/components/composites/ErrorSupportPanel/ErrorSupportPanel.vue

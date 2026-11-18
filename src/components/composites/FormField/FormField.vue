@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — FormField
+ MASES Phase 2 UI — FormField
 =============================================================================
 
  File:      mase_app/src/components/composites/FormField/FormField.vue

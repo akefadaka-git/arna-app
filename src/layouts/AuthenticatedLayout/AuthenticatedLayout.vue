@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — AuthenticatedLayout
+ MASES Phase 2 UI — AuthenticatedLayout
 =============================================================================
 
  File:      mase_app/src/layouts/AuthenticatedLayout/AuthenticatedLayout.vue

@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — DataTable
+ MASES Phase 2 UI — DataTable
 =============================================================================
 
  File:      mase_app/src/components/patterns/DataTable/DataTable.vue

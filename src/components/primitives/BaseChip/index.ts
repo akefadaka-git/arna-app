@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — BaseChip — Barrel Export
+ * MASES Phase 2 UI — BaseChip — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/primitives/BaseChip/index.ts

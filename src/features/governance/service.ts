@@ -136,7 +136,7 @@
 
 /*
  * =============================================================================
- * ARNA Phase 2 UI — Governance Feature Service
+ * MASES Phase 2 UI — Governance Feature Service
  * =============================================================================
  *
  * File:      mase_app/src/features/governance/service.ts

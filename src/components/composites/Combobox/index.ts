@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — Combobox — Barrel Export
+ * MASES Phase 2 UI — Combobox — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/Combobox/index.ts

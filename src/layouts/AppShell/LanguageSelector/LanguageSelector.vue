@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — LanguageSelector
+ MASES Phase 2 UI — LanguageSelector
 =============================================================================
 
  File:      mase_app/src/layouts/AppShell/LanguageSelector/LanguageSelector.vue

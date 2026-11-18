@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — ErrorPage
+ MASES Phase 2 UI — ErrorPage
 =============================================================================
 
  File:      mase_app/src/components/patterns/ErrorPage/ErrorPage.vue

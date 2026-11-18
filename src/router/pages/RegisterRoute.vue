@@ -39,9 +39,9 @@
 
    Observable behaviour on the route is identical:
 
-     VITE_APP_NAME = "ARNA"
-       v1.3.0  →  document.title = "መለያ ይፍጠሩ — ARNA"
-       v1.4.0  →  document.title = "መለያ ይፍጠሩ — ARNA"   (identical)
+     VITE_APP_NAME = "MASES"
+       v1.3.0  →  document.title = "መለያ ይፍጠሩ — MASES"
+       v1.4.0  →  document.title = "መለያ ይፍጠሩ — MASES"   (identical)
 
      VITE_APP_NAME = "" or absent at runtime
        v1.3.0  →  document.title = "መለያ ይፍጠሩ"
@@ -66,7 +66,7 @@
 
 <!--
 =============================================================================
- ARNA Phase 2 UI — RegisterRoute
+ MASES Phase 2 UI — RegisterRoute
 =============================================================================
 
  File:      mase_app/src/router/pages/RegisterRoute.vue
@@ -289,7 +289,7 @@
      pageLabel = registerFormLabels.formAriaLabel  ("መለያ ይፍጠሩ")
      appName   = import.meta.env.VITE_APP_NAME
 
- In the workspace build, the title reads "መለያ ይፍጠሩ — ARNA"; in
+ In the workspace build, the title reads "መለያ ይፍጠሩ — MASES"; in
  the portal build, "መለያ ይፍጠሩ — Maale Arna Portal".
 
  No cleanup on unmount is required in this file: PageTitle owns
@@ -439,7 +439,7 @@ const router = useRouter();
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "ARNA"
+ *   workspace  →  "MASES"
  *   portal     →  "Maale Arna Portal"
  *
  * Passed to <PageTitle> as the title's suffix. PageTitle's own

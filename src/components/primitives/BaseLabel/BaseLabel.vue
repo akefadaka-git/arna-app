@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — BaseLabel
+ MASES Phase 2 UI — BaseLabel
 =============================================================================
 
  File:      mase_app/src/components/primitives/BaseLabel/BaseLabel.vue
@@ -201,7 +201,7 @@ const props = withDefaults(defineProps<Props>(), {
  * Development-time warning: required=true without a translated
  * requiredLabel means screen readers get the required state ONLY from
  * the native `required` attribute on the input. That is fine when the
- * input forwards `required` (all ARNA input primitives do), but the
+ * input forwards `required` (all MASES input primitives do), but the
  * warning surfaces the gap during development for custom controls
  * that do not.
  */

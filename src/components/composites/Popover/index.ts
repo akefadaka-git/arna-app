@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — Popover — Barrel Export
+ * MASES Phase 2 UI — Popover — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/Popover/index.ts

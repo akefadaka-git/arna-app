@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — AuthenticatedLayout — Barrel Export
+ * MASES Phase 2 UI — AuthenticatedLayout — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/layouts/AuthenticatedLayout/index.ts

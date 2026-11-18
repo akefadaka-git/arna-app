@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — LoadingState
+ MASES Phase 2 UI — LoadingState
 =============================================================================
 
  File:      mase_app/src/components/composites/LoadingState/LoadingState.vue

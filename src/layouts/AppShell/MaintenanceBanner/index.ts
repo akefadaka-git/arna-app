@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — MaintenanceBanner — Barrel Export
+ * MASES Phase 2 UI — MaintenanceBanner — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/layouts/AppShell/MaintenanceBanner/index.ts

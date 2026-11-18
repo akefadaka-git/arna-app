@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — DataTable — Barrel Export
+ * MASES Phase 2 UI — DataTable — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/patterns/DataTable/index.ts

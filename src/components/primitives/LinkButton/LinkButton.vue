@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — LinkButton
+ MASES Phase 2 UI — LinkButton
 =============================================================================
 
  File:      mase_app/src/components/primitives/LinkButton/LinkButton.vue

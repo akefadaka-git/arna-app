@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — BaseIcon — Barrel Export
+ * MASES Phase 2 UI — BaseIcon — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/primitives/BaseIcon/index.ts

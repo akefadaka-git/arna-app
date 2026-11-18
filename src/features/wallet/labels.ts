@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — Wallet Feature Labels (Amharic)
+ * MASES Phase 2 UI — Wallet Feature Labels (Amharic)
  * =============================================================================
  *
  * File:      mase_app/src/features/wallet/labels.ts

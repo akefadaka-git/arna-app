@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — CertificateCancelDialog — Barrel Export
+ * MASES Phase 2 UI — CertificateCancelDialog — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/features/shareholders/CertificateCancelDialog/index.ts

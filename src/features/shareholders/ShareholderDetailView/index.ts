@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — ShareholderDetailView — Barrel Export
+ * MASES Phase 2 UI — ShareholderDetailView — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/features/shareholders/ShareholderDetailView/index.ts

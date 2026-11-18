@@ -48,7 +48,7 @@
 
 <!--
 =============================================================================
- ARNA Phase 2 UI — PortalHomePage
+ MASES Phase 2 UI — PortalHomePage
 =============================================================================
 
  File:      mase_app/src/features/portal/PortalHomePage.vue

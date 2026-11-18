@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — ShareClassListView — Barrel Export
+ * MASES Phase 2 UI — ShareClassListView — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/features/shareholders/ShareClassListView/index.ts

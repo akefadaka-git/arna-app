@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — Drawer
+ MASES Phase 2 UI — Drawer
 =============================================================================
 
  File:      mase_app/src/components/composites/Drawer/Drawer.vue

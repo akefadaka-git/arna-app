@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — AppMobileDrawer
+ MASES Phase 2 UI — AppMobileDrawer
 =============================================================================
 
  File:      mase_app/src/layouts/AppShell/AppMobileDrawer/AppMobileDrawer.vue

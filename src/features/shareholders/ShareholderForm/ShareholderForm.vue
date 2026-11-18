@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — ShareholderForm
+ MASES Phase 2 UI — ShareholderForm
 =============================================================================
 
  File:      mase_app/src/features/shareholders/ShareholderForm/ShareholderForm.vue

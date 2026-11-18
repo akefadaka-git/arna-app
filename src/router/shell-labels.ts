@@ -148,7 +148,7 @@
  *   for this CR, is:
  *
  *       ማሌ ዓርና ስማርት ሲስተም (ማሴስ)
- *       ("Maale Arna Smart System (ARNA)")
+ *       ("Maale Arna Smart System (MASES)")
  *
  *   The header's brand region cannot render this in full at any
  *   realistic width — the full string exceeds the mobile budget. A
@@ -816,7 +816,7 @@
 
 /*
  * =============================================================================
- * ARNA Phase 2 UI — Shell Labels and Nav (Amharic)
+ * MASES Phase 2 UI — Shell Labels and Nav (Amharic)
  * =============================================================================
  *
  * File:      mase_app/src/router/shell-labels.ts
@@ -1197,7 +1197,7 @@
  * administration); the permission's Amharic name in the SQL dump
  * ('የአስተዳደር አካላትን ማየት') uses the same root.
  *
- * "ወደ ARNA ወርክስፔስ" (To ARNA Workspace) is used for the portal's
+ * "ወደ ARNA ወርክስፔስ" (To MASES Workspace) is used for the portal's
  * back-to-workspace user-menu item (1.7.0). The string names the
  * destination by its own application name — 'ማሴስ ወርክስፔስ' is the same
  * label the platform stores on the workspace's `platform_applications`
@@ -1426,7 +1426,7 @@ import type {
  * for CR-BRAND1, is:
  *
  *     ማሌ ዓርና ስማርት ሲስተም (ማሴስ)
- *     ("Maale Arna Smart System (ARNA)")
+ *     ("Maale Arna Smart System (MASES)")
  *
  * `corporateName` and `productName` are the header's short form — the
  * organization name on line 1, the parenthetical abbreviation on

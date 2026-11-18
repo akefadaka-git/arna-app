@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — TenantSwitcher — Barrel Export
+ * MASES Phase 2 UI — TenantSwitcher — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/layouts/AppShell/TenantSwitcher/index.ts

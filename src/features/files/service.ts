@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — File Management Service
+ * MASES Phase 2 UI — File Management Service
  * =============================================================================
  *
  * File:      mase_app/src/features/files/service.ts

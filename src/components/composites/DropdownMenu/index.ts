@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — DropdownMenu — Barrel Export
+ * MASES Phase 2 UI — DropdownMenu — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/DropdownMenu/index.ts

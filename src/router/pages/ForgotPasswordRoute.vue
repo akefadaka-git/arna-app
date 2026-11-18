@@ -38,9 +38,9 @@
 
    Observable behaviour on the route is identical:
 
-     VITE_APP_NAME = "ARNA"
-       v1.2.0  →  document.title = "የይለፍ ቃል ማስጀመሪያ ይጠይቁ — ARNA"
-       v1.3.0  →  document.title = "የይለፍ ቃል ማስጀመሪያ ይጠይቁ — ARNA"   (identical)
+     VITE_APP_NAME = "MASES"
+       v1.2.0  →  document.title = "የይለፍ ቃል ማስጀመሪያ ይጠይቁ — MASES"
+       v1.3.0  →  document.title = "የይለፍ ቃል ማስጀመሪያ ይጠይቁ — MASES"   (identical)
 
      VITE_APP_NAME = "" or absent at runtime
        v1.2.0  →  document.title = "የይለፍ ቃል ማስጀመሪያ ይጠይቁ"
@@ -65,7 +65,7 @@
 
 <!--
 =============================================================================
- ARNA Phase 2 UI — ForgotPasswordRoute
+ MASES Phase 2 UI — ForgotPasswordRoute
 =============================================================================
 
  File:      mase_app/src/router/pages/ForgotPasswordRoute.vue
@@ -212,7 +212,7 @@
      appName   = import.meta.env.VITE_APP_NAME
 
  In the workspace build, the title reads
- "የይለፍ ቃል ማስጀመሪያ ይጠይቁ — ARNA"; in the portal build,
+ "የይለፍ ቃል ማስጀመሪያ ይጠይቁ — MASES"; in the portal build,
  "የይለፍ ቃል ማስጀመሪያ ይጠይቁ — Maale Arna Portal".
 
  No cleanup on unmount is required in this file: PageTitle owns
@@ -325,7 +325,7 @@ const router = useRouter();
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "ARNA"
+ *   workspace  →  "MASES"
  *   portal     →  "Maale Arna Portal"
  *
  * Passed to <PageTitle> as the title's suffix. PageTitle's own

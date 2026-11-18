@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — WalletDetailView
+ MASES Phase 2 UI — WalletDetailView
 =============================================================================
 
  File:      mase_app/src/features/wallet/WalletDetailView.vue

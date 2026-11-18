@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — ArnaFooterContent barrel
+ * MASES Phase 2 UI — ArnaFooterContent barrel
  * =============================================================================
  *
  * File:      mase_app/src/layouts/AppShell/ArnaFooterContent/index.ts

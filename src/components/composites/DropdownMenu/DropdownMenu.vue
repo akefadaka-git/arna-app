@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — DropdownMenu
+ MASES Phase 2 UI — DropdownMenu
 =============================================================================
 
  File:      mase_app/src/components/composites/DropdownMenu/DropdownMenu.vue

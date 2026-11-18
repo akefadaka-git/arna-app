@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — FormField — Barrel Export
+ * MASES Phase 2 UI — FormField — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/FormField/index.ts

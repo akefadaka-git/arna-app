@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — LauncherGrid — Barrel Export
+ * MASES Phase 2 UI — LauncherGrid — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/layouts/AppShell/LauncherGrid/index.ts

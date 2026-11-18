@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — Skeleton — Barrel Export
+ * MASES Phase 2 UI — Skeleton — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/Skeleton/index.ts

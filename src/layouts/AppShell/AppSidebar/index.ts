@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * ARNA Phase 2 UI — AppSidebar — Barrel Export
+ * MASES Phase 2 UI — AppSidebar — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/layouts/AppShell/AppSidebar/index.ts

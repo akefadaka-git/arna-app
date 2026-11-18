@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- ARNA Phase 2 UI — VerifyEmailPanel
+ MASES Phase 2 UI — VerifyEmailPanel
 =============================================================================
 
  File:      mase_app/src/features/auth/VerifyEmailPanel/VerifyEmailPanel.vue
