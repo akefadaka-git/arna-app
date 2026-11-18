@@ -37,6 +37,8 @@ function onChange(event: Event): void {
   white-space: nowrap;
 }
 .calendar-preference select {
+  min-inline-size: 24px;
+  flex-shrink: 0;
   min-height: 2.25rem;
   max-width: 9.5rem;
   padding: 0.35rem 1.6rem 0.35rem 0.55rem;
