@@ -150,6 +150,14 @@ jobs:
         with:
           node-version-file: .node-version
           cache: npm
+      - name: Preserve acceptance test and restore clean source baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp tests/brand-identity-contract.test.mjs "$RUNNER_TEMP/brand-identity-contract.test.mjs"
+          git fetch origin main
+          git checkout origin/main -- src workspace-entry portal-entry admin-entry public-entry tests
+          cp "$RUNNER_TEMP/brand-identity-contract.test.mjs" tests/brand-identity-contract.test.mjs
       - name: Install locked dependencies
         run: npm ci
       - name: Apply deterministic ARNA namespace migration
