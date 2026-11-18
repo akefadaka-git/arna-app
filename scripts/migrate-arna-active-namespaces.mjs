@@ -16,36 +16,8 @@ async function walk(directory) {
   return out;
 }
 
-function maskComments(source) {
-  const comments = [];
-  const hold = (value) => {
-    const marker = `\u0000ARNA_COMMENT_${comments.length}\u0000`;
-    comments.push(value);
-    return marker;
-  };
-  let code = source
-    .replace(/\/\*[\s\S]*?\*\//g, hold)
-    .replace(/<!--[\s\S]*?-->/g, hold)
-    .replace(/^\s*\/\/.*$/gm, hold)
-    .replace(/(\s+)\/\/[^\r\n]*$/gm, (_match, prefix) => prefix + hold(_match.slice(prefix.length)));
-  code = code.replace(/\u0000ARNA_COMMENT_(\d+)\u0000/g, (_match, index) => comments[Number(index)]);
-  return code;
-}
-
 function transformExecutable(source) {
-  const comments = [];
-  const hold = (value) => {
-    const marker = `\u0000ARNA_COMMENT_${comments.length}\u0000`;
-    comments.push(value);
-    return marker;
-  };
-  let code = source
-    .replace(/\/\*[\s\S]*?\*\//g, hold)
-    .replace(/<!--[\s\S]*?-->/g, hold)
-    .replace(/^\s*\/\/.*$/gm, hold)
-    .replace(/(\s+)\/\/[^\r\n]*$/gm, (_match, prefix) => prefix + hold(_match.slice(prefix.length)));
-
-  code = code
+  return source
     .replace(/MASESBrand/g, 'ArnaBrand')
     .replace(/MASESFooterContent/g, 'ArnaFooterContent')
     .replace(/masesBrandLabels/g, 'arnaBrandLabels')
@@ -57,14 +29,7 @@ function transformExecutable(source) {
     .replace(/__mases/g, '__arna')
     .replace(/--mases-/g, '--arna-')
     .replace(/mases-/g, 'arna-')
-    .replace(/\bMASES\b/g, 'ARNA');
-
-  return code.replace(/\u0000ARNA_COMMENT_(\d+)\u0000/g, (_match, index) => {
-    return comments[Number(index)]
-      .replace(/--mases-/g, '--arna-')
-      .replace(/__mases/g, '__arna')
-      .replace(/mases-/g, 'arna-');
-  });
+    .replace(/\\bMASES\\b/g, 'ARNA');
 }
 
 function replaceRequired(source, from, to, label) {
@@ -173,6 +138,12 @@ async function main() {
     try { source = await readFile(absolute, 'utf8'); } catch { continue; }
     let next = absolute.endsWith('README.md') ? source : transformExecutable(source);
     if (absolute.endsWith('vite.config.ts')) next = next.replace('MASES UI — Vite configuration', 'ARNA UI — Vite configuration');
+    if (absolute.endsWith('src/layouts/PublicSiteLayout.vue')) {
+      next = next.replace('<a class="public-site-layout__skip-link" href="#public-site-main">', '<a class="public-site-layout__skip-link" href="#public-site-main" aria-label="Skip to main content / ወደ ዋናው ይዘት ዝለል">');
+      next = next.replace('<nav class="public-site-layout__nav" aria-label="ዋና አሰሳ">', '<nav class="public-site-layout__nav" aria-label="Main navigation / ዋና አሰሳ">');
+      next = next.replace('<RouterLink to="/verify">ሰነድ ማረጋገጫ</RouterLink>', '<RouterLink to="/verify" aria-label="Document verification / ሰነድ ማረጋገጫ">ሰነድ ማረጋገጫ</RouterLink>');
+      next = next.replace('<RouterLink to="/legal">ሕጋዊ መረጃ</RouterLink>', '<RouterLink to="/legal" aria-label="Legal information / ሕጋዊ መረጃ">ሕጋዊ መረጃ</RouterLink>');
+    }
     if (absolute.endsWith('README.md')) {
       next = next.replace(
         '**ARNA is the master name for the Maale Arna Smart System. MASES is the established legacy/product name used during the transition.**',
