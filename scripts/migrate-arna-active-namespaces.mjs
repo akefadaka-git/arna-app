@@ -159,14 +159,15 @@ async function main() {
   for (const absolute of [...new Set(files)]) {
     const ext = absolute.slice(absolute.lastIndexOf('.'));
     if (!TEXT_EXTENSIONS.has(ext) && !['.env.workspace', '.env.portal', '.env.admin'].some((suffix) => absolute.endsWith(suffix))) continue;
+    if (absolute.endsWith('tests/brand-identity-contract.test.mjs')) continue;
     let source;
     try { source = await readFile(absolute, 'utf8'); } catch { continue; }
     let next = transformExecutable(source);
     if (absolute.endsWith('vite.config.ts')) next = next.replace('MASES UI — Vite configuration', 'ARNA UI — Vite configuration');
     if (absolute.endsWith('README.md')) {
-      next = next.replace(/^\*\*ARNA is the master name for the Maale Arna Smart System\. MASES is the established legacy\/product name used during the transition\.\*\*/m,
+      next = next.replace(/^\\*\\*ARNA is the master name for the Maale Arna Smart System\\. ARNA is the established legacy\\/product name used during the transition\\.\\*\\*/m,
         '**ARNA is the canonical product name for the Maale Arna Smart System. Historical MASES references are retained only as provenance or read-only migration compatibility.**');
-      if (!next.includes('ARNA is the canonical product name')) next = '**ARNA is the canonical product name for the Maale Arna Smart System.**\n\n' + next;
+      if (!next.includes('ARNA is the canonical product name')) next = '**ARNA is the canonical product name for the Maale Arna Smart System.**\\n\\n' + next;
     }
     if (absolute.endsWith('package.json')) {
       const manifest = JSON.parse(next);
