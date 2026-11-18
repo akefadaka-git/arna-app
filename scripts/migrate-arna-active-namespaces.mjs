@@ -28,8 +28,7 @@ function transformExecutable(source) {
     .replace(/masesFooter/g, 'arnaFooter')
     .replace(/__mases/g, '__arna')
     .replace(/--mases-/g, '--arna-')
-    .replace(/mases-/g, 'arna-')
-    .replace(/\bMASES\b/g, 'ARNA');
+    .replace(/mases-/g, 'arna-');
 }
 
 function replaceRequired(source, from, to, label) {
@@ -143,6 +142,20 @@ async function main() {
     try { source = await readFile(absolute, 'utf8'); } catch { continue; }
     let next = absolute.endsWith('README.md') ? source : transformExecutable(source);
     if (absolute.endsWith('vite.config.ts')) next = next.replace('MASES UI — Vite configuration', 'ARNA UI — Vite configuration');
+    if (absolute.endsWith('src/components/patterns/AccessDeniedPage/AccessDeniedPage.vue')) {
+      next = next.replace("[MASES] Access denied", "[ARNA] Access denied");
+    }
+    if (absolute.endsWith('src/components/primitives/BaseIcon/BaseIcon.vue')) {
+      next = next.replace('treating it as the MASES token', 'treating it as the ARNA token');
+    }
+    if (
+      absolute.endsWith('src/router/legal-content.ts') ||
+      absolute.endsWith('src/router/pages/AdminDashboardRoute.vue') ||
+      absolute.endsWith('workspace-entry/index.html') ||
+      absolute.endsWith('admin-entry/index.html')
+    ) {
+      next = next.replace(/\\bMASES\\b/g, 'ARNA');
+    }
     if (absolute.endsWith('src/layouts/PublicSiteLayout.vue')) {
       next = next.replace('<a class="public-site-layout__skip-link" href="#public-site-main">', '<a class="public-site-layout__skip-link" href="#public-site-main" aria-label="Skip to main content / ወደ ዋናው ይዘት ዝለል">');
       next = next.replace('<nav class="public-site-layout__nav" aria-label="ዋና አሰሳ">', '<nav class="public-site-layout__nav" aria-label="Main navigation / ዋና አሰሳ">');
