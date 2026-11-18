@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — L-2.1 (brand mark, emblem interim)
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/MASESBrand/MASESBrand.vue  (AMEND)
+ File:      mase_app/src/layouts/AppShell/ArnaBrand/ArnaBrand.vue  (AMEND)
  Unit:      L-2.1 — Shell brand mark, emblem interim
  Delivery type:  Enhancement — one new child element in the template,
                  one new media query in the scoped styles.
@@ -66,14 +66,14 @@
    the touchpoints.
 
  Dependency note:
-   · No new import. The component continues to import masesBrandLabels
+   · No new import. The component continues to import arnaBrandLabels
      from @/router/shell-labels (v1.10.0).
    · No new token. The <img> sizing uses component-local dimensions
      documented in §"Token discipline". The surrounding text styles
      consume tokens already declared in tokens.css v1.2.0.
    · No change to AuthenticatedLayout.vue or PortalLayout.vue. Both
      continue to supply no `#brand` slot; AppShell's default fallback
-     (MASESBrand) is what renders, as before.
+     (ArnaBrand) is what renders, as before.
    · Relies on public/logo.png, which the two entry-point index.html
      files already preload with fetchpriority="high" (v1.2.0 of each).
 
@@ -85,10 +85,10 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — MASESBrand
+ MASES Phase 2 UI — ArnaBrand
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/MASESBrand/MASESBrand.vue
+ File:      mase_app/src/layouts/AppShell/ArnaBrand/ArnaBrand.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.1.0
  Status:    FROZEN
@@ -131,7 +131,7 @@
  The full approved corporate identity is
  `ማሌ ዓርና ስማርት ሲስተም (ማሴስ)` ("Maale Arna Smart System (MASES)"). It
  is exported from @/router/shell-labels as
- `masesBrandLabels.fullCorporateIdentity` for surfaces with more room
+ `arnaBrandLabels.fullCorporateIdentity` for surfaces with more room
  (page titles, document.title, About panels). The header's brand
  region renders the short form.
 
@@ -255,7 +255,7 @@
       in chrome, the full emblem on the focal auth surface. This is
       the intended end state, not a divergence to be reconciled.
 
- No consumer of MASESBrand is affected by the eventual migration —
+ No consumer of ArnaBrand is affected by the eventual migration —
  the component has no props, no slots, and no emits.
 
  -----------------------------------------------------------------------------

@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — MASESFooterContent barrel
+ * MASES Phase 2 UI — ArnaFooterContent barrel
  * =============================================================================
  *
- * File:      mase_app/src/layouts/AppShell/MASESFooterContent/index.ts
+ * File:      mase_app/src/layouts/AppShell/ArnaFooterContent/index.ts
  * Layer:     4 (Shell — AppShell family)
  * Version:   1.0.0
  * Status:    FROZEN
@@ -14,22 +14,22 @@
  * Revision history
  * -----------------------------------------------------------------------------
  * 1.0.0  — initial delivery (CR-FOOTER1). Re-exports the
- *          MASESFooterContent component so consumers import from
- *          `@/layouts/AppShell/MASESFooterContent` rather than from
+ *          ArnaFooterContent component so consumers import from
+ *          `@/layouts/AppShell/ArnaFooterContent` rather than from
  *          the component file directly, matching the import path the
  *          other AppShell components use.
  *
  * -----------------------------------------------------------------------------
  * Purpose
  * -----------------------------------------------------------------------------
- * The public entry point for the MASESFooterContent component.
+ * The public entry point for the ArnaFooterContent component.
  * Consumers import:
  *
- *     import MASESFooterContent from '@/layouts/AppShell/MASESFooterContent';
+ *     import ArnaFooterContent from '@/layouts/AppShell/ArnaFooterContent';
  *
  * The barrel exists so that:
  *
- *   · The component's internal file name (`MASESFooterContent.vue`)
+ *   · The component's internal file name (`ArnaFooterContent.vue`)
  *     is not part of any consumer's import path. A future rename of
  *     the `.vue` file — a split into sub-components, a move — does
  *     not require editing the import sites.
@@ -40,13 +40,13 @@
  *
  *   · The import path matches the convention used throughout
  *     `layouts/AppShell/`: AppShell, AppHeader, AppFooter,
- *     AppSidebar, UserMenu, MASESBrand, and the rest are all
+ *     AppSidebar, UserMenu, ArnaBrand, and the rest are all
  *     imported through their directory's `index.ts`.
  *
  * -----------------------------------------------------------------------------
  * What this file exports
  * -----------------------------------------------------------------------------
- * The MASESFooterContent component, as the default export. The
+ * The ArnaFooterContent component, as the default export. The
  * component has no props, no emits, no slots, and no auxiliary types
  * in its v1.0.0 delivery; the barrel therefore re-exports exactly one
  * value.
@@ -60,14 +60,14 @@
  * -----------------------------------------------------------------------------
  * The barrel does not re-export anything from the design system, the
  * label files, or any other module. Consumers that need
- * `masesFooterLabels` import it from `@/router/shell-labels` directly,
+ * `arnaFooterLabels` import it from `@/router/shell-labels` directly,
  * which is where it is declared. The barrel's job is to expose the
  * component; it is not a convenience aggregator.
  *
  * This matches the pattern the sibling barrels follow. `AppShell`'s
  * barrel re-exports the AppShell component and the types declared in
  * AppShell.vue's `<script lang="ts">` block; it does not re-export
- * the label files, the stores, or the router. `MASESBrand`'s barrel
+ * the label files, the stores, or the router. `ArnaBrand`'s barrel
  * re-exports the component and nothing else. Neither is a bulk
  * re-export of unrelated modules.
  * =============================================================================

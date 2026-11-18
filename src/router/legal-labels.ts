@@ -289,7 +289,7 @@
  *
  * 3. The footer's legal link — "ሕጋዊ መረጃ" — is not defined here.
  *    It belongs to the footer integration CR (L-8), which adds
- *    `masesFooterLabels` to shell-labels.ts. This file supplies
+ *    `arnaFooterLabels` to shell-labels.ts. This file supplies
  *    the label for the destination page's <h1>, which the footer's
  *    link label will match by convention.
  * =============================================================================

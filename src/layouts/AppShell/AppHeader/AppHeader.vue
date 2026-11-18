@@ -127,7 +127,7 @@
       caller — is a composition decision. Composition belongs to the
       shell, not to the frame. This file decides the three-region
       skeleton; the shell decides what fills it. The current fill is
-      documented in AppShell.vue's §"Composition": MASESBrand into
+      documented in AppShell.vue's §"Composition": ArnaBrand into
       #brand, breadcrumbs into #nav, and the notifications bell +
       tenant switcher + user menu into #actions. A future revision
       of that composition (reordering, adding a language selector)
@@ -162,7 +162,7 @@
    · Any store reads, route reads, or user-identity affordances.
    · The decision of which controls render in each region. That is
      AppShell's composition decision (see its §"Composition").
-   · The brand mark. When AppShell supplies MASESBrand into #brand,
+   · The brand mark. When AppShell supplies ArnaBrand into #brand,
      that component owns the brand strings; this file forwards
      whatever #brand receives.
    · Any navigation behaviour. A slot-rendered control that navigates
@@ -360,7 +360,7 @@ const emit = defineEmits<{
  * Slots.
  *
  * brand                 — the brand/logo region (left). Typically the
- *                         MASESBrand component; AppShell supplies it
+ *                         ArnaBrand component; AppShell supplies it
  *                         as the fallback content when no consumer
  *                         overrides the slot.
  * nav                   — the navigation region (center). Typically
@@ -490,7 +490,7 @@ function onToggleClick(): void {
     <!-- ============================================================
          Brand region
 
-         Left-anchored, does not shrink. AppShell supplies MASESBrand
+         Left-anchored, does not shrink. AppShell supplies ArnaBrand
          as its fallback content; a consumer of AppShell that wants a
          different brand supplies its own #brand and this region
          receives that instead. See the file header §"Ownership" for

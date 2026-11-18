@@ -19,8 +19,8 @@
  *     import AbstractBackground from '@/layouts/AppShell/AbstractBackground';
  *
  * matching the import pattern used by every other component in the
- * AppShell family (AppHeader, AppSidebar, AppFooter, MASESBrand,
- * MASESFooterContent, SkipToContent, MaintenanceBanner, UserMenu,
+ * AppShell family (AppHeader, AppSidebar, AppFooter, ArnaBrand,
+ * ArnaFooterContent, SkipToContent, MaintenanceBanner, UserMenu,
  * NotificationsBell, TenantSwitcher, CalendarContext,
  * LanguageSelector, LauncherGrid, LauncherTile, AppMobileDrawer,
  * PageTitle).

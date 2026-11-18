@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — MASESFooterContent
+ MASES Phase 2 UI — ArnaFooterContent
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/MASESFooterContent/MASESFooterContent.vue
+ File:      mase_app/src/layouts/AppShell/ArnaFooterContent/ArnaFooterContent.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.1.0
  Status:    ENHANCEMENT — forced-colors accessibility
@@ -18,7 +18,7 @@
  1.0.0  — initial delivery (CR-FOOTER1). Renders the copyright line
           (with the current Ethiopian calendar year substituted at
           render time) and the footer's link row (legal hub + support
-          mailto). Consumes `masesFooterLabels` from
+          mailto). Consumes `arnaFooterLabels` from
           @/router/shell-labels (the companion change in the same CR).
           Rendered by AppShell as the default content of the `#footer`
           forwarding slot; a consumer of AppShell may override it.
@@ -43,7 +43,7 @@
  What this component does NOT do
  -----------------------------------------------------------------------------
    - It does NOT render the corporate brand mark. The header's
-     MASESBrand component carries the brand; the footer's copyright
+     ArnaBrand component carries the brand; the footer's copyright
      line names the entity in text. Repeating the two-line wordmark
      here would be visual noise for an authenticated application
      whose header already establishes identity. A future CR may
@@ -132,7 +132,7 @@
  -----------------------------------------------------------------------------
  No hardcoded user-facing string
  -----------------------------------------------------------------------------
- Both visible strings come from `masesFooterLabels` in
+ Both visible strings come from `arnaFooterLabels` in
  @/router/shell-labels:
    · The copyright line (template → substituted string).
    · The legal and support link labels.

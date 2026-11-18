@@ -13,8 +13,8 @@
  * Before (v1.0.2):
  *   UserMenuItem carried `id`, `label`, `icon?`, `variant?`. Every
  *   item supplied in `items` was rendered by DropdownMenu without
- *   filtering. The workspace's `masesUserMenuItems` and the portal's
- *   `masesUserMenuItems` were the same array; a portal-only item
+ *   filtering. The workspace's `arnaUserMenuItems` and the portal's
+ *   `arnaUserMenuItems` were the same array; a portal-only item
  *   (such as a "back to workspace" affordance) could not be declared
  *   without also appearing in the workspace, where it makes no sense.
  *
@@ -65,7 +65,7 @@
             `dropdownItems` is re-derived from `visibleItems`.
           · No change to the public item shape beyond the additive
             `permission` field. No change to the `select` event
-            payload. Existing consumers (workspace `masesUserMenuItems`
+            payload. Existing consumers (workspace `arnaUserMenuItems`
             with just `logout`) are unaffected — `logout` carries no
             `permission` and continues to render for every
             authenticated caller.
@@ -120,7 +120,7 @@
  Catalog §12.1 lists expected items (Profile, Preferences, Language,
  Security, Logout). This component does NOT hardcode them. The
  workspace and the portal each declare their own arrays; the two
- share the `masesUserMenuItems` export (just `logout`) and the portal
+ share the `arnaUserMenuItems` export (just `logout`) and the portal
  extends it with a "back to workspace" entry gated on
  `app.app.access`.
 

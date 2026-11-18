@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — MASESBrand barrel
+ * MASES Phase 2 UI — ArnaBrand barrel
  * =============================================================================
  *
- * File:      mase_app/src/layouts/AppShell/MASESBrand/index.ts
+ * File:      mase_app/src/layouts/AppShell/ArnaBrand/index.ts
  * Layer:     4 (Shell — AppShell family)
  * Version:   1.0.0
  * Status:    FROZEN
@@ -13,23 +13,23 @@
  * -----------------------------------------------------------------------------
  * Revision history
  * -----------------------------------------------------------------------------
- * 1.0.0  — initial delivery (CR-BRAND1). Re-exports the MASESBrand
+ * 1.0.0  — initial delivery (CR-BRAND1). Re-exports the ArnaBrand
  *          component so consumers import from
- *          `@/layouts/AppShell/MASESBrand` rather than from the
+ *          `@/layouts/AppShell/ArnaBrand` rather than from the
  *          component file directly, matching the import path the
  *          other AppShell components use.
  *
  * -----------------------------------------------------------------------------
  * Purpose
  * -----------------------------------------------------------------------------
- * The public entry point for the MASESBrand component. Consumers
+ * The public entry point for the ArnaBrand component. Consumers
  * import:
  *
- *     import MASESBrand from '@/layouts/AppShell/MASESBrand';
+ *     import ArnaBrand from '@/layouts/AppShell/ArnaBrand';
  *
  * The barrel exists so that:
  *
- *   · The component's internal file name (`MASESBrand.vue`) is not
+ *   · The component's internal file name (`ArnaBrand.vue`) is not
  *     part of any consumer's import path. A future rename of the
  *     `.vue` file — a split into sub-components, a move — does not
  *     require editing the import sites.
@@ -46,7 +46,7 @@
  * -----------------------------------------------------------------------------
  * What this file exports
  * -----------------------------------------------------------------------------
- * The MASESBrand component, as the default export. The component has
+ * The ArnaBrand component, as the default export. The component has
  * no props, no emits, no slots, and no auxiliary types in its v1.0.0
  * delivery; the barrel therefore re-exports exactly one value.
  *
@@ -59,7 +59,7 @@
  * -----------------------------------------------------------------------------
  * The barrel does not re-export anything from the design system, the
  * label files, or any other module. Consumers that need
- * `masesBrandLabels` import it from `@/router/shell-labels` directly,
+ * `arnaBrandLabels` import it from `@/router/shell-labels` directly,
  * which is where it is declared. The barrel's job is to expose the
  * component; it is not a convenience aggregator.
  *

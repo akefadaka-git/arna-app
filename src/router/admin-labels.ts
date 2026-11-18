@@ -28,10 +28,10 @@
  *          entry (gated on `app.app.access`, which is a confirmed
  *          permission slug — reused from `portalUserMenuItems`, not
  *          invented) spread together with the shared
- *          `masesUserMenuItems`.
+ *          `arnaUserMenuItems`.
  *
  *          Shell chrome labels are NOT declared here. The admin build
- *          reuses `masesShellLabels` from `shell-labels.ts` verbatim —
+ *          reuses `arnaShellLabels` from `shell-labels.ts` verbatim —
  *          the same labels the workspace and portal consume. Only the
  *          admin-specific navigation tree and user-menu items are
  *          declared in this file.
@@ -46,7 +46,7 @@
  *
  * This file is a leaf. Its only dependencies are `@/layouts/AppShell`
  * (for the `NavItem` and `UserMenuItem` types) and
- * `@/router/shell-labels` (for the shared `masesUserMenuItems` value).
+ * `@/router/shell-labels` (for the shared `arnaUserMenuItems` value).
  * Neither of those dependencies is created by the admin scaffold;
  * both exist and are frozen.
  *
@@ -66,19 +66,19 @@
  *     the workspace and portal — the skip link, the mobile-menu
  *     toggle, the user-menu trigger, the notifications bell, the
  *     tenant switcher, the sidebar landmark, and the drawer. Their
- *     labels live in `shell-labels.ts` as `masesShellLabels`, and the
+ *     labels live in `shell-labels.ts` as `arnaShellLabels`, and the
  *     admin build consumes that object unchanged. Duplicating them
  *     here would produce two sources of truth for the same strings.
  *
- *   · Brand identity labels. `masesBrandLabels` (in `shell-labels.ts`)
+ *   · Brand identity labels. `arnaBrandLabels` (in `shell-labels.ts`)
  *     carries `ማሌ ዓርና` / `ማሴስ` / the full approved identity. The admin
  *     build consumes those unchanged. Note that the admin build's
  *     *application name* — `MASES አስተዳደር` — is NOT
- *     `masesBrandLabels.productName`; it is supplied by `VITE_APP_NAME`
+ *     `arnaBrandLabels.productName`; it is supplied by `VITE_APP_NAME`
  *     and composed into `document.title` by each route wrapper. The
  *     brand mark in the header remains `ማሌ ዓርና` on every build.
  *
- *   · Footer content labels. `masesFooterLabels` carries the
+ *   · Footer content labels. `arnaFooterLabels` carries the
  *     copyright template, the legal link, and the support link. Same
  *     strings on every build. The admin build consumes them
  *     unchanged.
@@ -117,7 +117,7 @@
  * -----------------------------------------------------------------------------
  * The go-to-workspace item — reuse of the portal pattern
  * -----------------------------------------------------------------------------
- * The admin user menu extends the shared `masesUserMenuItems` with a
+ * The admin user menu extends the shared `arnaUserMenuItems` with a
  * cross-domain navigation link back to the workspace. The link is
  * identical in shape and destination to the portal's
  * `go-to-workspace` item, defined in `shell-labels.ts`:
@@ -183,7 +183,7 @@
  * Both names are verified against `BaseIcon.vue` and both are
  * currently referenced by existing code — `layout-grid` by the
  * portal's `go-to-workspace` and the workspace's `dashboard` nav
- * item, `log-out` by `masesUserMenuItems`. No new icon name is
+ * item, `log-out` by `arnaUserMenuItems`. No new icon name is
  * introduced by this file.
  *
  * -----------------------------------------------------------------------------
@@ -200,7 +200,7 @@
  * the workspace on both builds; using the same string means a user
  * who has seen the item on the portal recognizes it on the admin.
  *
- * The shared "ውጣ" (Log out) — inherited from `masesUserMenuItems`,
+ * The shared "ውጣ" (Log out) — inherited from `arnaUserMenuItems`,
  * not declared here. See `shell-labels.ts` §"Terms handled
  * deliberately" for the singular-imperative rationale.
  *
@@ -240,8 +240,8 @@
  *    would show an item whose route the guard rejects, or hide an
  *    item whose route the guard accepts.
  *
- * 3. The admin build reuses `masesShellLabels`, `masesBrandLabels`,
- *    and `masesFooterLabels` from `shell-labels.ts` unchanged. A
+ * 3. The admin build reuses `arnaShellLabels`, `arnaBrandLabels`,
+ *    and `arnaFooterLabels` from `shell-labels.ts` unchanged. A
  *    future CR that changes a shell label affects all three builds;
  *    the admin build does not carry an independent shell-chrome
  *    vocabulary. If the product ever needs the admin chrome to
@@ -320,7 +320,7 @@ export const adminNavItems: ReadonlyArray<NavItem> = [
  *
  * The array is composed in the same shape as `portalUserMenuItems`
  * (see `shell-labels.ts`): a cross-surface navigation entry followed
- * by the shared `logout`, spread from `masesUserMenuItems`.
+ * by the shared `logout`, spread from `arnaUserMenuItems`.
  *
  * The `go-to-workspace` entry navigates to the workspace's launcher
  * at a different origin. The `permission` field is filtered by
@@ -328,7 +328,7 @@ export const adminNavItems: ReadonlyArray<NavItem> = [
  * the entry from callers who cannot reach the workspace. The
  * workspace's own route guard is the authoritative check.
  *
- * The `logout` item — spread in from `masesUserMenuItems` — is
+ * The `logout` item — spread in from `arnaUserMenuItems` — is
  * declared once in `shell-labels.ts` and shared by all three builds.
  * `AdminLayout.vue`'s `onUserMenuSelect` handler dispatches on the
  * item's `id`; the ids this menu can carry are `'go-to-workspace'`
