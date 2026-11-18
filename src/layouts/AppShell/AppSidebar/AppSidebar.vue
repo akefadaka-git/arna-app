@@ -689,6 +689,7 @@ function groupToggleAriaDisabled(): 'true' | undefined {
    ============================================================================ */
 .app-sidebar__link {
   display: flex;
+  min-block-size: 24px;
   border-inline-start: var(--arna-space-1) solid transparent;
   align-items: center;
   gap: var(--arna-space-3);
