@@ -121,7 +121,7 @@
    - border: 1px           (structural)
    - appearance: none      (browser reset)
 
- All other values are --mases-* tokens.
+ All other values are --arna-* tokens.
 
  -----------------------------------------------------------------------------
  Test hook

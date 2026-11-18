@@ -26,16 +26,16 @@
 
  The component catalog lists the following as its token dependencies:
 
-   --mases-color-action-primary{,-hover,-active,-disabled}
-   --mases-color-action-secondary{,-hover,-active}
-   --mases-color-action-ghost{,-hover}
-   --mases-color-action-danger{,-hover}
-   --mases-color-action-link{,-hover}
-   --mases-radius-md
-   --mases-space-{2,3,4,6}
-   --mases-duration-fast
-   --mases-easing-standard
-   --mases-font-weight-medium
+   --arna-color-action-primary{,-hover,-active,-disabled}
+   --arna-color-action-secondary{,-hover,-active}
+   --arna-color-action-ghost{,-hover}
+   --arna-color-action-danger{,-hover}
+   --arna-color-action-link{,-hover}
+   --arna-radius-md
+   --arna-space-{2,3,4,6}
+   --arna-duration-fast
+   --arna-easing-standard
+   --arna-font-weight-medium
 
  Additional tokens referenced for accessibility and disabled treatment
  are also Tier 2 (text-inverse, text-primary, text-disabled,

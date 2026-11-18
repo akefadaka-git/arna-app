@@ -146,24 +146,24 @@
  -----------------------------------------------------------------------------
  Every visual value is a Tier 2 token from tokens.css (v1.2.0):
 
-     Color ........ --mases-color-text-tertiary
-                     --mases-color-action-link
-                     --mases-color-action-link-hover
-     Spacing ...... --mases-space-2
-                     --mases-space-4
-     Type ......... --mases-font-size-caption
-                     --mases-line-height-caption
+     Color ........ --arna-color-text-tertiary
+                     --arna-color-action-link
+                     --arna-color-action-link-hover
+     Spacing ...... --arna-space-2
+                     --arna-space-4
+     Type ......... --arna-font-size-caption
+                     --arna-line-height-caption
 
  No hex value appears in this file. No new token is declared.
 
  -----------------------------------------------------------------------------
  Test hooks
  -----------------------------------------------------------------------------
- data-testid="mases-footer-content-root"        on the root <div>
- data-testid="mases-footer-content-copyright"   on the copyright <span>
- data-testid="mases-footer-content-links"       on the links <ul>
- data-testid="mases-footer-content-legal-link"  on the legal <a>
- data-testid="mases-footer-content-support-link" on the support <a>
+ data-testid="arna-footer-content-root"        on the root <div>
+ data-testid="arna-footer-content-copyright"   on the copyright <span>
+ data-testid="arna-footer-content-links"       on the links <ul>
+ data-testid="arna-footer-content-legal-link"  on the legal <a>
+ data-testid="arna-footer-content-support-link" on the support <a>
 
  -----------------------------------------------------------------------------
  Accessibility

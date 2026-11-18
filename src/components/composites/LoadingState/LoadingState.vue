@@ -51,7 +51,7 @@
  fullPage mode — see the response preamble
  -----------------------------------------------------------------------------
  When fullPage=true, the wrapper becomes a fixed full-viewport overlay
- at z-index --mases-z-overlay-backdrop (500), with a page-surface
+ at z-index --arna-z-overlay-backdrop (500), with a page-surface
  background. See the response preamble §"Design note — the fullPage
  mode".
 
@@ -131,9 +131,9 @@ interface Props {
   /**
    * Size of the spinner. Defaults to 'md'.
    *
-   *   sm  →  16px  (--mases-icon-sm)
-   *   md  →  24px  (--mases-icon-lg)
-   *   lg  →  48px  (--mases-icon-2xl)
+   *   sm  →  16px  (--arna-icon-sm)
+   *   md  →  24px  (--arna-icon-lg)
+   *   lg  →  48px  (--arna-icon-2xl)
    *
    * See the response preamble §"Design note — the three sizes".
    */

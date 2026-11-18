@@ -47,9 +47,9 @@
  -----------------------------------------------------------------------------
  Sizes
  -----------------------------------------------------------------------------
- sm  →  --mases-icon-sm   (16px)
- md  →  --mases-icon-lg   (24px)  — default
- lg  →  --mases-icon-2xl  (48px)
+ sm  →  --arna-icon-sm   (16px)
+ md  →  --arna-icon-lg   (24px)  — default
+ lg  →  --arna-icon-2xl  (48px)
 
  Border width scales with the visual size so that the ring remains
  legible at all three sizes:
@@ -60,7 +60,7 @@
  -----------------------------------------------------------------------------
  Color
  -----------------------------------------------------------------------------
- The wrapper sets `color: var(--mases-color-icon-primary)` as the
+ The wrapper sets `color: var(--arna-color-icon-primary)` as the
  default. The visual uses `currentColor`, so the spinner inherits any
  color the surrounding context applies to the wrapper — including the
  inverse text color on a primary button.
@@ -121,9 +121,9 @@ interface Props {
   /**
    * Size. Defaults to 'md'.
    *
-   *   sm  →  16px  (--mases-icon-sm)
-   *   md  →  24px  (--mases-icon-lg)
-   *   lg  →  48px  (--mases-icon-2xl)
+   *   sm  →  16px  (--arna-icon-sm)
+   *   md  →  24px  (--arna-icon-lg)
+   *   lg  →  48px  (--arna-icon-2xl)
    */
   size?: SpinnerSize;
 

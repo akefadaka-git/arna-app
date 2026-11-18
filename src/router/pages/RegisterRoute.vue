@@ -98,7 +98,7 @@
           undefined or invalid.
 
           WHY: The `:deep()` override that widens the register
-          card references `--mases-container-auth-card-wide`. With
+          card references `--arna-container-auth-card-wide`. With
           no fallback, an undefined token makes the whole
           declaration invalid and the browser drops it — the
           register card collapses to AuthLayout's default 448px,
@@ -179,7 +179,7 @@
  other with visible tightness, and the three English inputs
  below them produce a scrollable form with very little
  breathing room. At 560px — the
- `--mases-container-auth-card-wide` token — the fieldsets have
+ `--arna-container-auth-card-wide` token — the fieldsets have
  adequate horizontal space and the form's vertical rhythm is
  preserved.
 
@@ -356,20 +356,20 @@
  fallback value that mirrors a token.
 
  Colors used:
-   --mases-color-text-primary   (h1 text color)
+   --arna-color-text-primary   (h1 text color)
      fallback: #141009 — the resolved value of
-     --mases-color-neutral-900, which is what the token
+     --arna-color-neutral-900, which is what the token
      resolves to.
 
  Sizing used:
-   --mases-container-auth-card-wide  (the card's max-width
+   --arna-container-auth-card-wide  (the card's max-width
                                       override)
      fallback: 560px — the resolved value of the token.
 
  Typography used:
-   --mases-font-size-heading-4        fallback: 24px
-   --mases-line-height-heading-4      fallback: 32px
-   --mases-font-weight-semibold       fallback: 600
+   --arna-font-size-heading-4        fallback: 24px
+   --arna-line-height-heading-4      fallback: 32px
+   --arna-font-weight-semibold       fallback: 600
 
  -----------------------------------------------------------------------------
  Production readiness
@@ -504,7 +504,7 @@ async function onLogin(): Promise<void> {
    is affected.
 
    The fallback value (560px) is the exact value that
-   --mases-container-auth-card-wide resolves to in tokens.css. If
+   --arna-container-auth-card-wide resolves to in tokens.css. If
    the token is present, the token's value is used and the
    fallback is never consulted. If the token is absent for any
    reason, the fallback keeps the register card wide.
@@ -533,20 +533,20 @@ async function onLogin(): Promise<void> {
 
   /*
    * Fallback #141009 is the resolved value of
-   * --mases-color-neutral-900, which is what
-   * --mases-color-text-primary resolves to.
+   * --arna-color-neutral-900, which is what
+   * --arna-color-text-primary resolves to.
    */
   color: var(--arna-color-text-primary, #141009);
 
   font-family: inherit;
 
-  /* Fallback 24px matches --mases-font-size-heading-4. */
+  /* Fallback 24px matches --arna-font-size-heading-4. */
   font-size: var(--arna-font-size-heading-4, 24px);
 
-  /* Fallback 32px matches --mases-line-height-heading-4. */
+  /* Fallback 32px matches --arna-line-height-heading-4. */
   line-height: var(--arna-line-height-heading-4, 32px);
 
-  /* Fallback 600 matches --mases-font-weight-semibold. */
+  /* Fallback 600 matches --arna-font-weight-semibold. */
   font-weight: var(--arna-font-weight-semibold, 600);
 
   text-align: center;

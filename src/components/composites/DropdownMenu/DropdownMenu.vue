@@ -678,7 +678,7 @@ function iconName(value: string): IconName {
    Wrapper
    ---------------------------------------------------------------------------
    position: relative anchors the panel's absolute positioning. The
-   --mases-dropdown-origin-x custom property is set here and drives
+   --arna-dropdown-origin-x custom property is set here and drives
    the panel's transform-origin so the entrance scale animation grows
    from the trigger-aligned edge rather than from the panel's centre.
    The value flips with `data-align` and with document direction.
@@ -741,7 +741,7 @@ html[dir='rtl'] .dropdown-menu[data-align='end'] {
   outline: none;
   /*
    * The scale animation grows from the trigger-aligned top corner.
-   * The horizontal axis is set by --mases-dropdown-origin-x (see the
+   * The horizontal axis is set by --arna-dropdown-origin-x (see the
    * wrapper rules above); the vertical axis is always top, matching
    * the panel's `top: 100%` anchoring.
    */

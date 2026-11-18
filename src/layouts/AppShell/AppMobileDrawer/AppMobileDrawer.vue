@@ -94,8 +94,8 @@
  backdrop styling, and overflow control).
 
  No hex value appears in this file. The backdrop colour is expressed
- via --mases-color-overlay-scrim (tokens.css v1.2.0), which resolves
- to the aubergine base (--mases-color-aubergine-900, #1F0A2F) at 50%
+ via --arna-color-overlay-scrim (tokens.css v1.2.0), which resolves
+ to the aubergine base (--arna-color-aubergine-900, #1F0A2F) at 50%
  alpha — the same value the previous revision hardcoded.
 
  -----------------------------------------------------------------------------
@@ -339,7 +339,7 @@ watch(
  * The manual `overflow: hidden` on <body> will not shift layout on
  * mobile browsers (overlay scrollbars). If this component is ever
  * reused above 640px, a `scrollbar-gutter: stable` or a
- * `padding-right: var(--mases-scrollbar-width)` compensation would be
+ * `padding-right: var(--arna-scrollbar-width)` compensation would be
  * required to avoid a horizontal layout shift when the scrollbar
  * disappears.
  */
@@ -517,8 +517,8 @@ html[dir='rtl'] .app-mobile-drawer {
    ---------------------------------------------------------------------------
    The ::backdrop pseudo-element only applies when the <dialog> is
    shown modally (showModal()). The colour is the shared overlay scrim
-   (--mases-color-overlay-scrim, tokens.css v1.2.0), which resolves to
-   the aubergine base (--mases-color-aubergine-900, #1F0A2F) at 50%
+   (--arna-color-overlay-scrim, tokens.css v1.2.0), which resolves to
+   the aubergine base (--arna-color-aubergine-900, #1F0A2F) at 50%
    alpha — the same value the previous revision hardcoded.
    ============================================================================ */
 .app-mobile-drawer::backdrop {

@@ -1085,8 +1085,8 @@ void _showTable;
 /* ============================================================================
    Head cells
    ---------------------------------------------------------------------------
-   MOBILE BASE: cell inline padding is compact (`--mases-space-2`); tablet
-   and desktop widen to `--mases-space-3` at the min-width breakpoint
+   MOBILE BASE: cell inline padding is compact (`--arna-space-2`); tablet
+   and desktop widen to `--arna-space-3` at the min-width breakpoint
    below.
    ============================================================================ */
 .data-table__th {
@@ -1180,8 +1180,8 @@ void _showTable;
 /* ============================================================================
    Body rows and cells
    ---------------------------------------------------------------------------
-   MOBILE BASE: cell inline padding is compact (`--mases-space-2`); tablet
-   and desktop widen to `--mases-space-3` at the min-width breakpoint
+   MOBILE BASE: cell inline padding is compact (`--arna-space-2`); tablet
+   and desktop widen to `--arna-space-3` at the min-width breakpoint
    below.
    ============================================================================ */
 .data-table__row {

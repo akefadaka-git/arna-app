@@ -49,7 +49,7 @@
  The default target id is defined in three places that must agree:
 
    1. AppShell.vue — the `skipToContentTargetId` prop's default value
-      ('mases-main-content').
+      ('arna-main-content').
    2. AppShell.vue — the same value assigned to the id attribute on
       the <main> element.
    3. This file — the `href` rendered from the `targetId` prop.
@@ -83,15 +83,15 @@
  -----------------------------------------------------------------------------
  z-index coordination with AppHeader
  -----------------------------------------------------------------------------
- Uses --mases-z-sticky (200), placing the focused link above AppHeader.
- AppHeader should use --mases-z-raised (10) or lower for sticky
+ Uses --arna-z-sticky (200), placing the focused link above AppHeader.
+ AppHeader should use --arna-z-raised (10) or lower for sticky
  positioning; changing that relationship requires a coordinated token CR.
 
  -----------------------------------------------------------------------------
  Chrome-padding alignment
  -----------------------------------------------------------------------------
  The skip link's leading-edge inset consumes the same
- --mases-shell-chrome-padding-inline-* tokens as AppHeader and
+ --arna-shell-chrome-padding-inline-* tokens as AppHeader and
  AppFooter. See tokens.css v1.2.0 for the value provenance. The link
  appears at the header's brand-adjacent edge when focused; the token
  keeps the two aligned across breakpoints.
@@ -223,7 +223,7 @@ const props = defineProps<Props>();
   overflow-wrap: break-word;
   word-break: normal;
   /*
-   * Above the AppHeader. AppHeader should remain at --mases-z-raised (10)
+   * Above the AppHeader. AppHeader should remain at --arna-z-raised (10)
    * or lower; see the file header §"z-index coordination with AppHeader".
    */
   z-index: var(--arna-z-sticky);

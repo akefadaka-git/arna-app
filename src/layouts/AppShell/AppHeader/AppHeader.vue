@@ -177,15 +177,15 @@
  -----------------------------------------------------------------------------
  z-index constraint (from Unit 11.1)
  -----------------------------------------------------------------------------
- Uses --mases-z-raised (10). Must be at or below that token so the
- SkipToContent link (--mases-z-sticky, 200) renders above the header
+ Uses --arna-z-raised (10). Must be at or below that token so the
+ SkipToContent link (--arna-z-sticky, 200) renders above the header
  when focused.
 
  The constraint is stated here because the header is the most likely
  surface for a future contributor to raise a z-index — a "the dropdown
  is behind the header" report, for example, that gets fixed by
  bumping this file's value instead of the dropdown's. Raising the
- header above --mases-z-sticky would break the skip link's visibility
+ header above --arna-z-sticky would break the skip link's visibility
  for keyboard users, which is a WCAG 2.4.1 concern. If a specific
  component needs to render above the header, that component's
  z-index token is the correct place to change.
@@ -220,7 +220,7 @@
 
  No hex value appears in this file.
 
- The inline padding consumes --mases-shell-chrome-padding-inline-*,
+ The inline padding consumes --arna-shell-chrome-padding-inline-*,
  the shared chrome rhythm also used by AppFooter and SkipToContent
  (tokens.css v1.2.0 §"Shell chrome inline padding"). Selecting the
  mobile or tablet variant of that token pair is this file's choice;
@@ -318,7 +318,7 @@ interface Props {
    * content. Useful for shells that place the header inside a
    * fixed-height grid layout where only <main> scrolls.
    *
-   * The sticky variant consumes --mases-z-raised (10). See the file
+   * The sticky variant consumes --arna-z-raised (10). See the file
    * header §"z-index constraint" before changing this value's
    * companion token.
    */
@@ -552,11 +552,11 @@ function onToggleClick(): void {
 
    TABLET AND UP: the gap widens and the inline padding increases at
    the min-width breakpoint below, matching the wider spacing rhythm
-   of --mases-shell-chrome-padding-inline-tablet. The three regions
+   of --arna-shell-chrome-padding-inline-tablet. The three regions
    return to one row; the mobile drawer remains the primary mobile
    navigation surface.
 
-   The inline padding consumes --mases-shell-chrome-padding-inline-*,
+   The inline padding consumes --arna-shell-chrome-padding-inline-*,
    the shared chrome rhythm used by AppFooter and SkipToContent. See
    tokens.css v1.2.0 for the value provenance; the header widens by
    one spacing step on desktop relative to its own pre-1.2.0 value as
@@ -608,10 +608,10 @@ function onToggleClick(): void {
 /* ---------------------------------------------------------------------------
    Sticky variant
    ---------------------------------------------------------------------------
-   Uses --mases-z-raised (10) — see the file header §"z-index
+   Uses --arna-z-raised (10) — see the file header §"z-index
    constraint". The value must remain at or below this token so the
-   SkipToContent link (--mases-z-sticky, 200) renders above the header
-   when focused. Raising it above --mases-z-sticky would put the header
+   SkipToContent link (--arna-z-sticky, 200) renders above the header
+   when focused. Raising it above --arna-z-sticky would put the header
    above the skip link and hide the link from keyboard users, which is
    a WCAG 2.4.1 concern.
 

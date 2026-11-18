@@ -22,7 +22,7 @@
  1.2.0  — design-system compliance: removed the gradient (the design
           system prohibits gradients); removed the color-mix() inner
           ring (browser-matrix incompatibility); flat background via
-          the new --mases-color-surface-auth-backdrop token.
+          the new --arna-color-surface-auth-backdrop token.
 
  1.3.0  — CSS custom property fallbacks. Every var() reference in
           this file's stylesheet now carries a fallback value:
@@ -71,14 +71,14 @@
           · Card surface comment corrected. The previous comment
             described the card's surface as "white, distinct from the
             auth backdrop (ivory)". Both tokens resolve to the same
-            ivory value (--mases-color-surface-page = neutral-50 =
+            ivory value (--arna-color-surface-page = neutral-50 =
             #FFFDF7); the comment now states this and names the
             border and shadow as the sole carriers of elevation.
           · Register-card size prop. A new optional prop, `size`
             ('default' | 'wide', default 'default'), binds to
             data-size on the <main> element. The wide variant uses
-            --mases-container-auth-card-wide (560px) instead of
-            --mases-container-auth-card (448px). This closes the
+            --arna-container-auth-card-wide (560px) instead of
+            --arna-container-auth-card (448px). This closes the
             "560px register card" promise that the file header has
             carried since 1.0.0 without a mechanism.
           · Removed the no-op `outline: none` on .auth-layout__main.
@@ -135,11 +135,11 @@
  -----------------------------------------------------------------------------
  The `size` prop selects between two container widths:
 
-   · 'default' (448px, --mases-container-auth-card) — used by the
+   · 'default' (448px, --arna-container-auth-card) — used by the
      login, forgot-password, reset-password, and email-verification
      cards.
 
-   · 'wide'    (560px, --mases-container-auth-card-wide) — used by
+   · 'wide'    (560px, --arna-container-auth-card-wide) — used by
      the register card, whose six bilingual Ethiopian name inputs,
      email field, and two password fields need more horizontal room
      without forcing the name inputs into a single-column stack.
@@ -190,7 +190,7 @@
       sidebar, no navigation chrome, no competing visual weight.
 
    2. Flat backdrop. The page background is a solid fill from
-      --mases-color-surface-auth-backdrop, with a fallback of
+      --arna-color-surface-auth-backdrop, with a fallback of
       #FFFDF7 (the ivory page surface). The design system prohibits
       gradients; the flat fill removes any ambiguity.
 
@@ -200,7 +200,7 @@
       "for free" and cannot accidentally produce a second card.
 
       Note (1.4.0): the card surface and the auth backdrop share the
-      same resolved colour — both are --mases-color-surface-page
+      same resolved colour — both are --arna-color-surface-page
       (ivory, #FFFDF7). The card is distinguished from the backdrop
       by its 1px border and its elevation-2 shadow, not by a colour
       difference. See the corrected comment on .auth-layout__card in
@@ -356,11 +356,11 @@ import ThemePreferenceControl from '@/layouts/ThemePreferenceControl.vue';
 /**
  * The card width variant.
  *
- *   'default' → 448px (--mases-container-auth-card)
+ *   'default' → 448px (--arna-container-auth-card)
  *     Used by the login, forgot-password, reset-password, and
  *     email-verification cards.
  *
- *   'wide'    → 560px (--mases-container-auth-card-wide)
+ *   'wide'    → 560px (--arna-container-auth-card-wide)
  *     Used by the register card, whose six bilingual Ethiopian name
  *     inputs plus the email and two password fields need more
  *     horizontal room.
@@ -597,13 +597,13 @@ const resolvedLogoAlt = computed<string>(() => {
   width: 100%;
   min-height: 100dvh;
 
-  /* Fallbacks match --mases-space-6 (24px) and --mases-space-3 (12px). */
+  /* Fallbacks match --arna-space-6 (24px) and --arna-space-3 (12px). */
   padding-block: var(--arna-space-6, 24px);
   padding-inline: var(--arna-space-3, 12px);
 
   /*
    * The ivory background. Fallback #FFFDF7 is the resolved value of
-   * --mases-color-neutral-50, which is what --mases-color-surface-auth-backdrop
+   * --arna-color-neutral-50, which is what --arna-color-surface-auth-backdrop
    * resolves to. If the token fails to load, the page still renders
    * with the correct ivory surface — not the browser default (black
    * in dark mode).
@@ -612,7 +612,7 @@ const resolvedLogoAlt = computed<string>(() => {
 
   /*
    * Text color fallback #141009 is the resolved value of
-   * --mases-color-neutral-900, which is what --mases-color-text-primary
+   * --arna-color-neutral-900, which is what --arna-color-text-primary
    * resolves to.
    */
   color: var(--arna-color-text-primary, #141009);
@@ -658,7 +658,7 @@ const resolvedLogoAlt = computed<string>(() => {
 /* Tablet and up: the wider desktop padding. */
 @media (min-width: 640px) {
   .auth-layout {
-    /* Fallbacks match --mases-space-8 (32px) and --mases-space-4 (16px). */
+    /* Fallbacks match --arna-space-8 (32px) and --arna-space-4 (16px). */
     padding-block: var(--arna-space-8, 32px);
     padding-inline: var(--arna-space-4, 16px);
   }
@@ -690,13 +690,13 @@ const resolvedLogoAlt = computed<string>(() => {
   flex-direction: column;
   align-items: center;
 
-  /* Fallback matches --mases-space-4 (16px). */
+  /* Fallback matches --arna-space-4 (16px). */
   gap: var(--arna-space-4, 16px);
 
   width: 100%;
 
   /*
-   * Fallback 448px matches --mases-container-auth-card. This is the
+   * Fallback 448px matches --arna-container-auth-card. This is the
    * constraint that keeps the card from stretching side-to-side.
    * Even if the token fails to load, the fallback still constrains
    * the width to a readable single-column form.
@@ -707,14 +707,14 @@ const resolvedLogoAlt = computed<string>(() => {
 /* Tablet and up: the wider desktop gap. */
 @media (min-width: 640px) {
   .auth-layout__main {
-    /* Fallback matches --mases-space-6 (24px). */
+    /* Fallback matches --arna-space-6 (24px). */
     gap: var(--arna-space-6, 24px);
   }
 }
 
 /*
  * The `wide` size variant for the register card. Fallback 560px
- * matches --mases-container-auth-card-wide. See the file header
+ * matches --arna-container-auth-card-wide. See the file header
  * comment §"Card size — register variant".
  */
 .auth-layout__main[data-size='wide'] {
@@ -735,8 +735,8 @@ const resolvedLogoAlt = computed<string>(() => {
   display: block;
 
   /*
-   * Fallbacks match --mases-size-auth-logo-max-width (180px) and
-   * --mases-size-auth-logo-max-height (72px). Bounds are applied to
+   * Fallbacks match --arna-size-auth-logo-max-width (180px) and
+   * --arna-size-auth-logo-max-height (72px). Bounds are applied to
    * keep any reasonable logo aspect ratio proportionate above the
    * card; the image never upscales.
    */
@@ -765,14 +765,14 @@ const resolvedLogoAlt = computed<string>(() => {
 
    Border, radius, and shadow all carry fallbacks. The fallback for
    the border color (#EFEADB) is the resolved value of
-   --mases-color-neutral-200. The fallback for the shadow is the
+   --arna-color-neutral-200. The fallback for the shadow is the
    literal elevation-2 shadow definition from tokens.css.
 
    Surface note: the card's own background resolves to
-   --mases-color-surface-page (ivory, #FFFDF7), which is the SAME
+   --arna-color-surface-page (ivory, #FFFDF7), which is the SAME
    value the auth backdrop resolves to via
-   --mases-color-surface-auth-backdrop. The card is distinguished
-   from the backdrop by its 1px border (--mases-color-border-subtle)
+   --arna-color-surface-auth-backdrop. The card is distinguished
+   from the backdrop by its 1px border (--arna-color-border-subtle)
    and its elevation-2 shadow — not by a colour difference. This
    was previously mis-described in the stylesheet comment as a
    "white card against an ivory backdrop"; both surfaces are ivory.
@@ -784,7 +784,7 @@ const resolvedLogoAlt = computed<string>(() => {
 
   border: 1px solid var(--arna-color-border-subtle, #EFEADB);
 
-  /* Fallback matches --mases-radius-lg (12px). */
+  /* Fallback matches --arna-radius-lg (12px). */
   border-radius: var(--arna-radius-lg, 12px);
 
   /*
@@ -813,7 +813,7 @@ const resolvedLogoAlt = computed<string>(() => {
    desktop padding at the min-width breakpoint below.
    ============================================================================ */
 .auth-layout__content {
-  /* Fallbacks match --mases-space-4 (16px). */
+  /* Fallbacks match --arna-space-4 (16px). */
   padding-block: var(--arna-space-4, 16px);
   padding-inline: var(--arna-space-4, 16px);
 
@@ -824,7 +824,7 @@ const resolvedLogoAlt = computed<string>(() => {
 /* Tablet and up: the wider desktop interior padding. */
 @media (min-width: 640px) {
   .auth-layout__content {
-    /* Fallbacks match --mases-space-6 (24px). */
+    /* Fallbacks match --arna-space-6 (24px). */
     padding-block: var(--arna-space-6, 24px);
     padding-inline: var(--arna-space-6, 24px);
   }
@@ -840,12 +840,12 @@ const resolvedLogoAlt = computed<string>(() => {
   width: 100%;
 
   /*
-   * Fallback #8C8170 matches --mases-color-neutral-500, which is
-   * what --mases-color-text-tertiary resolves to.
+   * Fallback #8C8170 matches --arna-color-neutral-500, which is
+   * what --arna-color-text-tertiary resolves to.
    */
   color: var(--arna-color-text-tertiary, #8C8170);
 
-  /* Fallbacks match --mases-font-size-caption (12px) and its line height (16px). */
+  /* Fallbacks match --arna-font-size-caption (12px) and its line height (16px). */
   font-size: var(--arna-font-size-caption, 12px);
   line-height: var(--arna-line-height-caption, 16px);
 
@@ -864,7 +864,7 @@ const resolvedLogoAlt = computed<string>(() => {
    English wordmark.
    ============================================================================ */
 .auth-layout__branding {
-  /* Fallback matches --mases-space-2 (8px). */
+  /* Fallback matches --arna-space-2 (8px). */
   margin-block-start: var(--arna-space-2, 8px);
 
   /*
@@ -873,11 +873,11 @@ const resolvedLogoAlt = computed<string>(() => {
    */
   color: var(--arna-color-text-auth-attribution, #8C8170);
 
-  /* Fallbacks match --mases-font-size-caption (12px) and its line height (16px). */
+  /* Fallbacks match --arna-font-size-caption (12px) and its line height (16px). */
   font-size: var(--arna-font-size-caption, 12px);
   line-height: var(--arna-line-height-caption, 16px);
 
-  /* Fallback matches --mases-letter-spacing-wide (0.02em). */
+  /* Fallback matches --arna-letter-spacing-wide (0.02em). */
   letter-spacing: var(--arna-letter-spacing-wide, 0.02em);
 
   text-align: center;

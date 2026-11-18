@@ -219,8 +219,8 @@
  The document is capped at the form-reading width. Two tokens are
  consulted, in order:
 
-   --mases-container-form              (first choice)
-   --mases-container-auth-card-wide    (fallback)
+   --arna-container-form              (first choice)
+   --arna-container-auth-card-wide    (fallback)
    560px                               (final fallback)
 
  A narrow single-column layout is correct for long-form legal text
@@ -430,41 +430,41 @@
  fallback value that mirrors a token.
 
  Colors used:
-   --mases-color-text-primary      (title, section headings,
+   --arna-color-text-primary      (title, section headings,
                                     metadata labels)
-   --mases-color-text-secondary    (body paragraphs, metadata
+   --arna-color-text-secondary    (body paragraphs, metadata
                                     values, draft notice, TOC
                                     links, related-document links,
                                     back-link)
-   --mases-color-border-subtle     (section separators, metadata
+   --arna-color-border-subtle     (section separators, metadata
                                     block, draft notice box)
 
  Typography used:
-   --mases-font-size-heading-2     (page title)
-   --mases-line-height-heading-2
+   --arna-font-size-heading-2     (page title)
+   --arna-line-height-heading-2
 
-   --mases-font-size-heading-4     (section headings, metadata /
+   --arna-font-size-heading-4     (section headings, metadata /
                                     TOC / version history /
                                     related documents headings)
-   --mases-line-height-heading-4
+   --arna-line-height-heading-4
 
-   --mases-font-size-body          (paragraphs)
-   --mases-line-height-body
+   --arna-font-size-body          (paragraphs)
+   --arna-line-height-body
 
-   --mases-font-size-body-sm       (metadata rows, draft notice,
+   --arna-font-size-body-sm       (metadata rows, draft notice,
                                     version-history rows)
-   --mases-line-height-body-sm
+   --arna-line-height-body-sm
 
-   --mases-font-weight-semibold    (page title, headings, metadata
+   --arna-font-weight-semibold    (page title, headings, metadata
                                     labels)
 
  Spacing used:
-   --mases-space-2, --mases-space-3, --mases-space-4,
-   --mases-space-6, --mases-space-8, --mases-space-10
+   --arna-space-2, --arna-space-3, --arna-space-4,
+   --arna-space-6, --arna-space-8, --arna-space-10
 
  Container used:
-   --mases-container-form          (preferred reading width)
-   --mases-container-auth-card-wide (fallback)
+   --arna-container-form          (preferred reading width)
+   --arna-container-auth-card-wide (fallback)
 
  -----------------------------------------------------------------------------
  Production readiness
@@ -982,8 +982,8 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 
   /*
    * Reading width. Consulted in order:
-   *   1. --mases-container-form             (first choice)
-   *   2. --mases-container-auth-card-wide   (fallback)
+   *   1. --arna-container-form             (first choice)
+   *   2. --arna-container-auth-card-wide   (fallback)
    *   3. 560px                              (final fallback)
    */
   max-width: var(

@@ -341,7 +341,7 @@ onMounted(() => {
   padding-inline: var(--arna-space-4);
   background-color: var(--arna-color-surface-warning);
   /*
-   * Left accent bar — 4px, expressed as --mases-space-1 so it is a
+   * Left accent bar — 4px, expressed as --arna-space-1 so it is a
    * token rather than a bare pixel value. The inset inline-start
    * direction ensures the accent sits on the reading-start edge for
    * both LTR and any future RTL locale.

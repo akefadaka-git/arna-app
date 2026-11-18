@@ -113,7 +113,7 @@ import { formatCalendarDate } from '@/core/dates/calendar';` block now uses pure
               - `.wallet-statement-view__filter-field` no longer needs
                 to declare `display: flex; flex-direction: column; gap`.
                 FormField provides its own column layout and a
-                `--mases-space-2` gap between the label and the
+                `--arna-space-2` gap between the label and the
                 control. The rule now only carries the flex sizing
                 (`flex: 1 1 180px; min-width: 0`) that the parent
                 filter row relies on.
@@ -787,7 +787,7 @@ function entryDirection(row: WalletEntry, cur: string): { debit: string; credit:
    Filter field (applied to the FormField root)
    ---------------------------------------------------------------------------
    FormField provides the column layout and the label/control gap
-   (--mases-space-2). This rule only carries the flex sizing that the
+   (--arna-space-2). This rule only carries the flex sizing that the
    parent filter row relies on: the two fields share the row's free
    space equally at the base, and can shrink below their content width
    without pushing the action row off the row.

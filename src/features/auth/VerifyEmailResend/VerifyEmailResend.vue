@@ -189,9 +189,9 @@
  literals.
 
  Colors used:
-   --mases-color-text-primary      (confirmation titles)
-   --mases-color-text-secondary    (confirmation bodies, prompts)
-   --mases-color-text-tertiary     (request-id reference line)
+   --arna-color-text-primary      (confirmation titles)
+   --arna-color-text-secondary    (confirmation bodies, prompts)
+   --arna-color-text-tertiary     (request-id reference line)
 
  -----------------------------------------------------------------------------
  Production readiness

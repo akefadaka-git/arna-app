@@ -164,12 +164,12 @@
  literals.
 
  Colors used:
-   --mases-color-icon-secondary    (verifying icon)
-   --mases-color-icon-success      (verified, already-verified)
-   --mases-color-icon-danger       (failed)
-   --mases-color-text-primary      (state titles)
-   --mases-color-text-secondary    (state messages)
-   --mases-color-text-tertiary     (reference line)
+   --arna-color-icon-secondary    (verifying icon)
+   --arna-color-icon-success      (verified, already-verified)
+   --arna-color-icon-danger       (failed)
+   --arna-color-text-primary      (state titles)
+   --arna-color-text-secondary    (state messages)
+   --arna-color-text-tertiary     (reference line)
 
  -----------------------------------------------------------------------------
  Production readiness

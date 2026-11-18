@@ -106,7 +106,7 @@
  Same pattern as BaseInput (Unit 8.9), BaseTextarea (Unit 8.10), and
  BaseSelect (Unit 8.11). If the consumer does not supply an `id`, one is
  generated internally. The generator uses a distinct prefix
- ("mases-checkbox-") so no collision is possible across the four
+ ("arna-checkbox-") so no collision is possible across the four
  primitives.
 
  The generated id exists for two purposes:

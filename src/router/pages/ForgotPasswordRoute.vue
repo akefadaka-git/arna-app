@@ -96,10 +96,10 @@
           undefined or invalid.
 
           WHY: The heading styles reference
-          --mases-color-text-primary,
-          --mases-font-size-heading-4,
-          --mases-line-height-heading-4, and
-          --mases-font-weight-semibold. With no fallbacks, an
+          --arna-color-text-primary,
+          --arna-font-size-heading-4,
+          --arna-line-height-heading-4, and
+          --arna-font-weight-semibold. With no fallbacks, an
           undefined token makes the individual declaration
           invalid and the browser drops it — the heading renders
           with the browser's default font size, color, and line
@@ -247,15 +247,15 @@
  fallback value that mirrors a token.
 
  Colors used:
-   --mases-color-text-primary   (h1 text color)
+   --arna-color-text-primary   (h1 text color)
      fallback: #141009 — the resolved value of
-     --mases-color-neutral-900, which is what the token
+     --arna-color-neutral-900, which is what the token
      resolves to.
 
  Typography used:
-   --mases-font-size-heading-4        fallback: 24px
-   --mases-line-height-heading-4      fallback: 32px
-   --mases-font-weight-semibold       fallback: 600
+   --arna-font-size-heading-4        fallback: 24px
+   --arna-line-height-heading-4      fallback: 32px
+   --arna-font-weight-semibold       fallback: 600
 
  -----------------------------------------------------------------------------
  Production readiness
@@ -388,20 +388,20 @@ async function onBackToLogin(): Promise<void> {
 
   /*
    * Fallback #141009 is the resolved value of
-   * --mases-color-neutral-900, which is what
-   * --mases-color-text-primary resolves to.
+   * --arna-color-neutral-900, which is what
+   * --arna-color-text-primary resolves to.
    */
   color: var(--arna-color-text-primary, #141009);
 
   font-family: inherit;
 
-  /* Fallback 24px matches --mases-font-size-heading-4. */
+  /* Fallback 24px matches --arna-font-size-heading-4. */
   font-size: var(--arna-font-size-heading-4, 24px);
 
-  /* Fallback 32px matches --mases-line-height-heading-4. */
+  /* Fallback 32px matches --arna-line-height-heading-4. */
   line-height: var(--arna-line-height-heading-4, 32px);
 
-  /* Fallback 600 matches --mases-font-weight-semibold. */
+  /* Fallback 600 matches --arna-font-weight-semibold. */
   font-weight: var(--arna-font-weight-semibold, 600);
 
   text-align: center;

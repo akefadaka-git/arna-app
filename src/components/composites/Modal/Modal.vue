@@ -92,10 +92,10 @@
  max-height, overflow).
 
  The modal's max-width values come from the container tokens:
-   --mases-container-modal-sm   (448px)
-   --mases-container-modal-md   (640px)
-   --mases-container-modal-lg   (896px)
-   --mases-container-modal-full (calc(100vw - 64px))
+   --arna-container-modal-sm   (448px)
+   --arna-container-modal-md   (640px)
+   --arna-container-modal-lg   (896px)
+   --arna-container-modal-full (calc(100vw - 64px))
 
  The backdrop color is a scrim, not a shadow. It uses the aubergine
  base color at low alpha (31, 10, 47 = #1F0A2F) so that the scrim
@@ -192,10 +192,10 @@ interface Props {
   /**
    * Visual size. Defaults to 'md'.
    *
-   *   sm    →  max-width 448px  (--mases-container-modal-sm)
-   *   md    →  max-width 640px  (--mases-container-modal-md)
-   *   lg    →  max-width 896px  (--mases-container-modal-lg)
-   *   full  →  max-width calc(100vw - 64px)  (--mases-container-modal-full)
+   *   sm    →  max-width 448px  (--arna-container-modal-sm)
+   *   md    →  max-width 640px  (--arna-container-modal-md)
+   *   lg    →  max-width 896px  (--arna-container-modal-lg)
+   *   full  →  max-width calc(100vw - 64px)  (--arna-container-modal-full)
    *
    * On mobile (< 640px), every size renders as a nearly-full-width
    * card. See the CSS.
@@ -580,7 +580,7 @@ function onCloseButtonClick(): void {
    Header
    ---------------------------------------------------------------------------
    MOBILE BASE: mobile inline padding. Tablet and desktop widen to
-   --mases-space-6 at the min-width breakpoint above (with the size
+   --arna-space-6 at the min-width breakpoint above (with the size
    rules).
    ============================================================================ */
 .modal__header {
@@ -656,7 +656,7 @@ function onCloseButtonClick(): void {
    Body
    ---------------------------------------------------------------------------
    MOBILE BASE: mobile inline padding. Tablet and desktop widen to
-   --mases-space-6 at the min-width breakpoint above.
+   --arna-space-6 at the min-width breakpoint above.
    ============================================================================ */
 .modal__body {
   flex: 1 1 auto;
@@ -673,7 +673,7 @@ function onCloseButtonClick(): void {
    Footer
    ---------------------------------------------------------------------------
    MOBILE BASE: mobile inline padding. Tablet and desktop widen to
-   --mases-space-6 at the min-width breakpoint above.
+   --arna-space-6 at the min-width breakpoint above.
    ============================================================================ */
 .modal__footer {
   flex-shrink: 0;

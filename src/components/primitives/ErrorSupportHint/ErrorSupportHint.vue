@@ -222,7 +222,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    calc grows with it, the icon stays optically centered on the first
    line).
 
-   The 16px value is expressed as --mases-icon-sm.
+   The 16px value is expressed as --arna-icon-sm.
    ============================================================================ */
 .error-support-hint__icon {
   display: inline-flex;

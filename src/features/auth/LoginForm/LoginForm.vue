@@ -1173,7 +1173,7 @@ const passwordToggleLabel = computed<string>(() =>
   background-color: transparent;
   /*
    * The button inherits color from the surrounding suffix <span>,
-   * which BaseInput colors with --mases-color-text-tertiary. Setting
+   * which BaseInput colors with --arna-color-text-tertiary. Setting
    * color: inherit here makes that inheritance explicit and means a
    * future change to the suffix's color automatically propagates.
    */
@@ -1198,7 +1198,7 @@ const passwordToggleLabel = computed<string>(() =>
   cursor: not-allowed;
   /*
    * The wrapper's disabled state already colors the suffix span with
-   * --mases-color-state-disabled-text. The button inherits that via
+   * --arna-color-state-disabled-text. The button inherits that via
    * `color: inherit` above. No explicit disabled color is needed, but
    * the cursor change is.
    */

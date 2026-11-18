@@ -27,7 +27,7 @@
  -----------------------------------------------------------------------------
  The ghost variant renders with a transparent background and the
  primary text color, receiving a hover background
- (--mases-color-action-ghost-hover) on pointer or keyboard interaction.
+ (--arna-color-action-ghost-hover) on pointer or keyboard interaction.
  It is the standard "tertiary action" button in MASES surfaces — used
  for dismissals, secondary navigation, disclosure toggles, and any
  action that should be reachable without competing visually with

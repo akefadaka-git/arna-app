@@ -82,10 +82,10 @@
  -----------------------------------------------------------------------------
  Sizes (per Component Catalog §2.18):
 
-     xs  = 24px  =  --mases-icon-lg
-     sm  = 32px  =  --mases-icon-xl
-     md  = 40px  =  --mases-space-10
-     lg  = 56px  =  calc(--mases-space-12 + --mases-space-2)
+     xs  = 24px  =  --arna-icon-lg
+     sm  = 32px  =  --arna-icon-xl
+     md  = 40px  =  --arna-space-10
+     lg  = 56px  =  calc(--arna-space-12 + --arna-space-2)
 
  The 56px value is derived from two spacing tokens on the 4px scale;
  no arbitrary literal pixel appears in the CSS.

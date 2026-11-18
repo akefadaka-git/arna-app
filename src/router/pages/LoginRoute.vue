@@ -310,10 +310,10 @@
  `color-mix()`, no `calc()` on colors.
 
  Colors used:
-   --mases-color-text-primary       (h1 text color)
-   --mases-font-size-heading-4
-   --mases-line-height-heading-4
-   --mases-font-weight-semibold
+   --arna-color-text-primary       (h1 text color)
+   --arna-font-size-heading-4
+   --arna-line-height-heading-4
+   --arna-font-weight-semibold
 
  No hex value appears in this file.
 

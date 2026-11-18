@@ -87,7 +87,7 @@
  Card width
  -----------------------------------------------------------------------------
  This form is designed for the wide auth card:
- `--mases-container-auth-card-wide` (560px). The form itself does
+ `--arna-container-auth-card-wide` (560px). The form itself does
  NOT set that width — AuthLayout's `.auth-layout__main` element
  owns it, and the route wrapper (`RegisterRoute.vue`, delivered
  separately) overrides the layout's default at that level. The form
@@ -270,16 +270,16 @@
  LoginForm.vue's approach.
 
  Colors used in this file:
-   --mases-color-text-secondary         (legend, prompt)
-   --mases-color-text-tertiary          (helper, request-id line)
-   --mases-color-text-primary           (toggle hover)
-   --mases-color-text-warning           (caps lock warning)
-   --mases-color-text-info              (notice body)
-   --mases-color-text-disabled          (disabled toggle)
-   --mases-color-state-hover            (toggle hover background)
-   --mases-color-border-info            (notice border)
-   --mases-color-surface-info           (notice background)
-   --mases-color-focus-ring-*           (toggle focus ring)
+   --arna-color-text-secondary         (legend, prompt)
+   --arna-color-text-tertiary          (helper, request-id line)
+   --arna-color-text-primary           (toggle hover)
+   --arna-color-text-warning           (caps lock warning)
+   --arna-color-text-info              (notice body)
+   --arna-color-text-disabled          (disabled toggle)
+   --arna-color-state-hover            (toggle hover background)
+   --arna-color-border-info            (notice border)
+   --arna-color-surface-info           (notice background)
+   --arna-color-focus-ring-*           (toggle focus ring)
 
  -----------------------------------------------------------------------------
  Production readiness

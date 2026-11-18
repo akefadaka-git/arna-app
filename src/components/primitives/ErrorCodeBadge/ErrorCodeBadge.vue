@@ -54,7 +54,7 @@
  Mono code and tabular numerals
  -----------------------------------------------------------------------------
  The numeric code renders in the mono font stack
- (--mases-font-family-mono) with font-variant-numeric: tabular-nums.
+ (--arna-font-family-mono) with font-variant-numeric: tabular-nums.
  See the response preamble §"Design note — the monospace code" for the
  rationale (visual signal + numerical alignment).
 

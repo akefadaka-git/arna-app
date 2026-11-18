@@ -160,8 +160,8 @@
  The hub renders inside a container capped at the form-reading
  width. Two tokens are consulted, in order:
 
-   --mases-container-form              (first choice)
-   --mases-container-auth-card-wide    (fallback)
+   --arna-container-form              (first choice)
+   --arna-container-auth-card-wide    (fallback)
    560px                               (final fallback)
 
  The form-reading width keeps the card list scannable. A wider
@@ -295,32 +295,32 @@
  fallback value that mirrors a token.
 
  Colors used:
-   --mases-color-text-primary      (page title, group headings,
+   --arna-color-text-primary      (page title, group headings,
                                     card titles)
-   --mases-color-text-secondary    (intro, card summaries, draft
+   --arna-color-text-secondary    (intro, card summaries, draft
                                     chip text)
-   --mases-color-border-subtle     (card border, chip border)
+   --arna-color-border-subtle     (card border, chip border)
 
  Typography used:
-   --mases-font-size-heading-4     (page title)
-   --mases-line-height-heading-4
-   --mases-font-weight-semibold
+   --arna-font-size-heading-4     (page title)
+   --arna-line-height-heading-4
+   --arna-font-weight-semibold
 
-   --mases-font-size-body          (intro, group headings, card
+   --arna-font-size-body          (intro, group headings, card
                                     titles)
-   --mases-line-height-body
+   --arna-line-height-body
 
-   --mases-font-size-body-sm       (card summaries, draft chip,
+   --arna-font-size-body-sm       (card summaries, draft chip,
                                     back-to-login link)
-   --mases-line-height-body-sm
+   --arna-line-height-body-sm
 
  Spacing used:
-   --mases-space-2, --mases-space-3, --mases-space-4,
-   --mases-space-6, --mases-space-8, --mases-space-10
+   --arna-space-2, --arna-space-3, --arna-space-4,
+   --arna-space-6, --arna-space-8, --arna-space-10
 
  Container used:
-   --mases-container-form          (preferred hub width)
-   --mases-container-auth-card-wide (fallback)
+   --arna-container-form          (preferred hub width)
+   --arna-container-auth-card-wide (fallback)
 
  -----------------------------------------------------------------------------
  Production readiness
@@ -622,8 +622,8 @@ function headingForGroup(group: LegalHubGroup): string {
 
   /*
    * Reading width. Consulted in order:
-   *   1. --mases-container-form             (first choice)
-   *   2. --mases-container-auth-card-wide   (fallback)
+   *   1. --arna-container-form             (first choice)
+   *   2. --arna-container-auth-card-wide   (fallback)
    *   3. 560px                              (final fallback)
    *
    * The nested var() chain is standard CSS: if the outer token is

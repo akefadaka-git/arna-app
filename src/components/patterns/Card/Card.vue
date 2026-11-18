@@ -37,8 +37,8 @@
  -----------------------------------------------------------------------------
  Radius — deliberate divergence from Modal and AuthLayout
  -----------------------------------------------------------------------------
- Card uses --mases-radius-md (8px). Modal.vue and AuthLayout.vue use
- --mases-radius-lg (12px). The divergence is intentional:
+ Card uses --arna-radius-md (8px). Modal.vue and AuthLayout.vue use
+ --arna-radius-lg (12px). The divergence is intentional:
 
    · A Card is a repeated, structural surface. Many cards appear in
      a list or a grid, and a smaller radius reads as "one of many."
@@ -55,8 +55,8 @@
  -----------------------------------------------------------------------------
  Elevation — deliberate relationship with AuthLayout
  -----------------------------------------------------------------------------
- The Card's `raised` variant uses --mases-shadow-elevation-1;
- AuthLayout's card uses --mases-shadow-elevation-2. The difference
+ The Card's `raised` variant uses --arna-shadow-elevation-1;
+ AuthLayout's card uses --arna-shadow-elevation-2. The difference
  is intentional: the auth card is the sole focal point of its page
  and sits one elevation step above the generic raised card, which is
  typically one of several surfaces on a content page.
@@ -368,7 +368,7 @@ void ___arnaCardWarnOnce;
    * border-bottom does not extend past the top-left and top-right
    * curves.
    *
-   * --mases-radius-md is deliberate. See the file header comment
+   * --arna-radius-md is deliberate. See the file header comment
    * §"Radius — deliberate divergence from Modal and AuthLayout".
    */
   border-radius: var(--arna-radius-md);

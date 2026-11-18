@@ -28,11 +28,11 @@
  The catalog declares four sizes. Their widths are derived from the
  design system's single drawer container token:
 
-     --mases-container-drawer = 480px
+     --arna-container-drawer = 480px
 
-     sm   →  320px  =  calc(var(--mases-container-drawer) * 2 / 3)
-     md   →  480px  =  var(--mases-container-drawer)          (default)
-     lg   →  640px  =  calc(var(--mases-container-drawer) * 4 / 3)
+     sm   →  320px  =  calc(var(--arna-container-drawer) * 2 / 3)
+     md   →  480px  =  var(--arna-container-drawer)          (default)
+     lg   →  640px  =  calc(var(--arna-container-drawer) * 4 / 3)
      full →  100vw
 
  The derivations use the 480px token as their single source; no
@@ -171,9 +171,9 @@ interface Props {
   /**
    * Drawer width. Defaults to 'md'.
    *
-   *   sm   →  320px  (calc of --mases-container-drawer)
-   *   md   →  480px  (--mases-container-drawer)
-   *   lg   →  640px  (calc of --mases-container-drawer)
+   *   sm   →  320px  (calc of --arna-container-drawer)
+   *   md   →  480px  (--arna-container-drawer)
+   *   lg   →  640px  (calc of --arna-container-drawer)
    *   full →  100vw
    *
    * On mobile (< 640px), every size renders at 100vw.
@@ -555,7 +555,7 @@ function onCloseButtonClick(): void {
    ============================================================================ */
 .drawer__container {
   /*
-   * Width is driven by the --mases-drawer-width variable set by the
+   * Width is driven by the --arna-drawer-width variable set by the
    * size class below. Default = 480px (the design system's drawer
    * width token).
    */

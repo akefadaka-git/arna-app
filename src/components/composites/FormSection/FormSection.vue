@@ -38,8 +38,8 @@
  -----------------------------------------------------------------------------
  Two modes:
 
-   default  →  gap between children = var(--mases-space-4)   (16px)
-   compact  →  gap between children = var(--mases-space-2)   (8px)
+   default  →  gap between children = var(--arna-space-4)   (16px)
+   compact  →  gap between children = var(--arna-space-2)   (8px)
 
  The gap applies between:
 
@@ -162,8 +162,8 @@ interface Props {
   /**
    * Internal spacing. Defaults to 'default'.
    *
-   *   default  →  var(--mases-space-4)  (16px)
-   *   compact  →  var(--mases-space-2)  ( 8px)
+   *   default  →  var(--arna-space-4)  (16px)
+   *   compact  →  var(--arna-space-2)  ( 8px)
    */
   spacing?: FormSectionSpacing;
 }

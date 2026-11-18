@@ -524,7 +524,7 @@ function onMenuSelect(key: string): void {
 
    Truncated with an ellipsis when the header is crowded. This is a
    deliberate departure from the design system's wrap-first rule: the
-   header has a fixed height (--mases-shell-header-height, 64px) and
+   header has a fixed height (--arna-shell-header-height, 64px) and
    wrapping the name would push it taller. The full name is available
    on the profile page and via the title attribute; the trigger is
    chrome.

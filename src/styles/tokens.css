@@ -19,8 +19,8 @@
  *          section below. No existing token renamed, removed, or
  *          reassigned. Additive.
  *
- * 1.2.0  — shell chrome additions: --mases-color-overlay-scrim plus the
- *          three --mases-shell-chrome-padding-inline-* tokens. No
+ * 1.2.0  — shell chrome additions: --arna-color-overlay-scrim plus the
+ *          three --arna-shell-chrome-padding-inline-* tokens. No
  *          existing token renamed, removed, or reassigned. Additive.
  *
  * 1.3.0  — L-0 audit follow-up. Four additive runtime tokens plus one
@@ -40,7 +40,7 @@
  * -----------------------------------------------------------------------------
  * CLASS 1 — RUNTIME TOKENS (4). Consumed or consumable today.
  * -----------------------------------------------------------------------------
- *   · --mases-color-surface-subtle
+ *   · --arna-color-surface-subtle
  *       Tier 2 surface role. Referenced by four feature views:
  *         - GovernanceBodyDetailView.vue (quorum rule <pre>)
  *         - DashboardView.vue (empty-state panel)
@@ -53,25 +53,25 @@
  *       additive: the token resolves to the same family of surfaces
  *       the surrounding components already assume.
  *
- *   · --mases-letter-spacing-caption
+ *   · --arna-letter-spacing-caption
  *       Typography tracking. Referenced by two feature views:
  *         - LoanProductListView.vue (thead th cells, uppercase)
  *         - LoanCollateralForm.vue (fieldset legend, uppercase)
  *       Prior to this revision, those declarations resolved to
  *       undefined and the browser fell back to normal tracking.
- *       The declared value matches --mases-letter-spacing-wide
+ *       The declared value matches --arna-letter-spacing-wide
  *       today, but is declared under its own name so a future CR can
  *       diverge the two without touching consumers.
  *
- *   · --mases-z-arna
+ *   · --arna-z-arna
  *       Z-index scale. Reserved for the ARNA floating assistant family
  *       (Master Spec §35–§38, §61). No consumer yet. Declared now so
  *       that a future ARNA CR does not introduce an off-scale value.
  *
- *   · --mases-z-command-palette
+ *   · --arna-z-command-palette
  *       Z-index scale. Reserved for the command palette (Master Spec
  *       §49, §61). No consumer yet. Same reservation rationale as
- *       --mases-z-arna.
+ *       --arna-z-arna.
  *
  * -----------------------------------------------------------------------------
  * CLASS 2 — SPEC-TARGET DIMENSIONS (1 inert group, 5 declarations).
@@ -82,11 +82,11 @@
  * declares the targets as TOKENS with no consumer, so a future
  * visual-QA-gated CR does not have to invent names. The tokens are:
  *
- *     --mases-shell-header-height-desktop          72px
- *     --mases-shell-header-height-tablet           68px
- *     --mases-shell-header-height-mobile           60px
- *     --mases-shell-sidebar-width-expanded-target  260px
- *     --mases-shell-sidebar-width-collapsed-target 76px
+ *     --arna-shell-header-height-desktop          72px
+ *     --arna-shell-header-height-tablet           68px
+ *     --arna-shell-header-height-mobile           60px
+ *     --arna-shell-sidebar-width-expanded-target  260px
+ *     --arna-shell-sidebar-width-collapsed-target 76px
  *
  * The tokens are inert in this revision. Adoption requires:
  *
@@ -94,11 +94,11 @@
  *      on every authenticated page.
  *   2. A coordinated edit to AppShell.vue, AppHeader.vue,
  *      AppSidebar.vue, AppMobileDrawer.vue, SkipToContent.vue, and
- *      any layout that reads --mases-shell-header-height or
- *      --mases-shell-sidebar-width today.
+ *      any layout that reads --arna-shell-header-height or
+ *      --arna-shell-sidebar-width today.
  *   3. Deprecation of the legacy single-value tokens
- *      (--mases-shell-header-height, --mases-shell-sidebar-width,
- *      --mases-shell-sidebar-width-collapsed) once no consumer reads
+ *      (--arna-shell-header-height, --arna-shell-sidebar-width,
+ *      --arna-shell-sidebar-width-collapsed) once no consumer reads
  *      them.
  *
  * This revision deliberately does NOT change the current header height
@@ -469,16 +469,16 @@
    *
    * Conceptual layer map (Master Spec §61):
    *
-   *     background          → --mases-z-base (0)
-   *     content             → --mases-z-base (0)
-   *     sticky header       → --mases-z-raised (10)
-   *     sidebar             → --mases-z-raised (10)
-   *     dropdown            → --mases-z-dropdown (100)
-   *     popover             → --mases-z-popover (600)
-   *     modal               → --mases-z-modal (510)
-   *     command palette     → --mases-z-command-palette (650)  [1.3.0, reserved]
-   *     toast               → --mases-z-toast (800)
-   *     ARNA (floating)     → --mases-z-arna (900)             [1.3.0, reserved]
+   *     background          → --arna-z-base (0)
+   *     content             → --arna-z-base (0)
+   *     sticky header       → --arna-z-raised (10)
+   *     sidebar             → --arna-z-raised (10)
+   *     dropdown            → --arna-z-dropdown (100)
+   *     popover             → --arna-z-popover (600)
+   *     modal               → --arna-z-modal (510)
+   *     command palette     → --arna-z-command-palette (650)  [1.3.0, reserved]
+   *     toast               → --arna-z-toast (800)
+   *     ARNA (floating)     → --arna-z-arna (900)             [1.3.0, reserved]
    *     system overlay      → (no token; not yet specified)
    * ===========================================================================
    */
@@ -655,8 +655,8 @@
    *   2. Editing AppShell.vue / AppHeader.vue / AppSidebar.vue to
    *      consume the new tokens in preference to the legacy single-value
    *      tokens.
-   *   3. Deprecating --mases-shell-header-height (single value) and
-   *      --mases-shell-sidebar-width (256px) / --mases-shell-sidebar-
+   *   3. Deprecating --arna-shell-header-height (single value) and
+   *      --arna-shell-sidebar-width (256px) / --arna-shell-sidebar-
    *      width-collapsed (64px) once no consumer reads them.
    *
    * The tokens are declared now so a future CR does not invent names.

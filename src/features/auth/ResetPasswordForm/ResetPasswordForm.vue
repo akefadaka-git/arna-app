@@ -300,13 +300,13 @@
  literals.
 
  Colors used:
-   --mases-color-text-primary      (all panel titles, toggle hover)
-   --mases-color-text-secondary    (all panel bodies)
-   --mases-color-text-tertiary     (request-id reference line)
-   --mases-color-text-warning      (caps lock warning)
-   --mases-color-text-disabled     (disabled toggle)
-   --mases-color-state-hover       (toggle hover background)
-   --mases-color-focus-ring-*      (toggle focus ring)
+   --arna-color-text-primary      (all panel titles, toggle hover)
+   --arna-color-text-secondary    (all panel bodies)
+   --arna-color-text-tertiary     (request-id reference line)
+   --arna-color-text-warning      (caps lock warning)
+   --arna-color-text-disabled     (disabled toggle)
+   --arna-color-state-hover       (toggle hover background)
+   --arna-color-focus-ring-*      (toggle focus ring)
 
  -----------------------------------------------------------------------------
  Production readiness

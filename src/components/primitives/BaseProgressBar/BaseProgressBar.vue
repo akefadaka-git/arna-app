@@ -23,8 +23,8 @@
  -----------------------------------------------------------------------------
  Sizes
  -----------------------------------------------------------------------------
-   sm  →  4px track height  (--mases-space-1)
-   md  →  8px track height  (--mases-space-2)  — default
+   sm  →  4px track height  (--arna-space-1)
+   md  →  8px track height  (--arna-space-2)  — default
 
  No size selection is required for most consumers; the default 'md'
  reads correctly in cards, forms, and page headers.

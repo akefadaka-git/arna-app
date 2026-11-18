@@ -222,8 +222,8 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    Leading dot
    ---------------------------------------------------------------------------
    The dot's diameter is derived from Tier 2 spacing tokens:
-     sm  →  calc(--mases-space-1 * 1.5)  =  6px
-     md  →  --mases-space-2              =  8px
+     sm  →  calc(--arna-space-1 * 1.5)  =  6px
+     md  →  --arna-space-2              =  8px
    See the response preamble §"Design note" for the derivation rationale.
    ============================================================================ */
 .badge__dot {

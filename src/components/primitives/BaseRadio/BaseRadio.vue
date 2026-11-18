@@ -112,7 +112,7 @@
  -----------------------------------------------------------------------------
  Same pattern as the other primitives. If the consumer does not supply
  an `id`, one is generated internally. The generator uses a distinct
- prefix ("mases-radio-") so no collision is possible across the five
+ prefix ("arna-radio-") so no collision is possible across the five
  input primitives delivered in this stage.
 
  -----------------------------------------------------------------------------
@@ -137,7 +137,7 @@
    - display, position, width, height  (layout constraints)
    - border: 2px                       (structural: the outer circle)
    - border-radius: 9999px             (already a token:
-                                        --mases-radius-full)
+                                        --arna-radius-full)
    - transform: translate(-50%, -50%)  (centering the inner dot)
    - appearance: none                  (browser reset on the native input)
 

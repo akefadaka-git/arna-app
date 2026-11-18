@@ -392,7 +392,7 @@ function onSelect(key: string): void {
 
    Truncated with an ellipsis when the header is crowded. Same
    truncation rationale as UserMenu: the header has a fixed height
-   (--mases-shell-header-height, 64px), and wrapping the tenant name
+   (--arna-shell-header-height, 64px), and wrapping the tenant name
    would push it taller. The full name is available in the switcher's
    dropdown menu and via the title attribute.
 

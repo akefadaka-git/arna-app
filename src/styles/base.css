@@ -23,7 +23,7 @@
  * file:
  *
  *   · every component's `font-family: inherit` inherits from the
- *     browser default rather than from --mases-font-family-am;
+ *     browser default rather than from --arna-font-family-am;
  *   · `body` carries the browser's default 8px margin, and the shell's
  *     edges do not reach the viewport edges;
  *   · elements are `content-box` by default, so `padding` on an element
@@ -41,7 +41,7 @@
  *   · Not a design-token file — every visual value comes from tokens.css.
  *   · Not a component stylesheet — component-scoped rules belong in the
  *     component's <style scoped> block.
- *   · Not a utility framework — the single `.mases-visually-hidden`
+ *   · Not a utility framework — the single `.arna-visually-hidden`
  *     utility is the only exception; it is foundational, not a
  *     general-purpose utility.
  *   · Not an opinionated reset — element semantics are preserved. No
@@ -53,7 +53,7 @@
  * Token discipline
  * -----------------------------------------------------------------------------
  * Every value that has a design-system representation is consumed via a
- * var(--mases-*) reference. The only literals in this file are:
+ * var(--arna-*) reference. The only literals in this file are:
  *
  *   · structural CSS keywords (block, none, inherit, transparent, …);
  *   · `100%` on `max-width` media containment;
@@ -65,7 +65,7 @@
  * -----------------------------------------------------------------------------
  * Amharic-first considerations
  * -----------------------------------------------------------------------------
- * --mases-font-family-am is set as the default on `body`. The stack is:
+ * --arna-font-family-am is set as the default on `body`. The stack is:
  *
  *     "Noto Sans Ethiopic", "Inter", system-ui, sans-serif
  *
@@ -115,7 +115,7 @@
  * -----------------------------------------------------------------------------
  * App.vue imports tokens.css first, then base.css. Vite hoists both
  * imports to the module top and emits the CSS in import order, so every
- * var(--mases-*) reference in base.css resolves against the token
+ * var(--arna-*) reference in base.css resolves against the token
  * declarations. If the order is reversed, base.css becomes a no-op at
  * first paint and the browser paints with defaults before the tokens
  * settle.

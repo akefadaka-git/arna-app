@@ -514,7 +514,7 @@ const fallbackIconName = computed<IconName>(() => {
   font-family: inherit;
 }
 
-/* Size ladder — expressed as multiples of --mases-space-20 (80px). */
+/* Size ladder — expressed as multiples of --arna-space-20 (80px). */
 .file-preview[data-size='sm'] {
   height: calc(var(--arna-space-20) * 2); /* 160px */
 }

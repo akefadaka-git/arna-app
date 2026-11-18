@@ -165,10 +165,10 @@
  no `color-mix()`, no `calc()` on colors, no rgba literals.
 
  Colors used:
-   --mases-color-text-secondary   (back-to-login prompt)
-   --mases-color-text-tertiary    (request-id reference line)
-   --mases-color-text-primary     (success title)
-   --mases-color-text-secondary   (success body)
+   --arna-color-text-secondary   (back-to-login prompt)
+   --arna-color-text-tertiary    (request-id reference line)
+   --arna-color-text-primary     (success title)
+   --arna-color-text-secondary   (success body)
 
  -----------------------------------------------------------------------------
  Production readiness

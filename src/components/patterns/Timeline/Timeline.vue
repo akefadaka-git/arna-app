@@ -399,7 +399,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .timeline__item[data-has-icon='false'] {
   --timeline-line-start: calc(var(--arna-space-3) + var(--arna-space-1));
   /*
-   * 12px (dot) + 4px (gap) = 16px, which is --mases-space-4. Written
+   * 12px (dot) + 4px (gap) = 16px, which is --arna-space-4. Written
    * above as space-3 + space-1 for readability in the source; the
    * compiled value is 12 + 4 = 16.
    */

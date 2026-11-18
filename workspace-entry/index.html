@@ -72,7 +72,7 @@
                Vue 3 replaces the contents of the mount target when
                app.mount('#app') runs; no cleanup code is required.
                The inline <style> block becomes inert once the
-               .mases-preloader element is removed from the DOM.
+               .arna-preloader element is removed from the DOM.
 
                No other change. The metadata, performance hints,
                favicon references, noscript fallback, and the Vite
@@ -214,10 +214,10 @@
       The literals used here are drawn from the design system's Tier 1
       palette:
 
-        text         #615847   (--mases-color-neutral-600)
-        background   #FFFDF7   (--mases-color-neutral-50)
-        track        #DDD5C0   (--mases-color-neutral-300)
-        spinner head #9B1B30   (--mases-color-crimson-600)
+        text         #615847   (--arna-color-neutral-600)
+        background   #FFFDF7   (--arna-color-neutral-50)
+        track        #DDD5C0   (--arna-color-neutral-300)
+        spinner head #9B1B30   (--arna-color-crimson-600)
 
       If any of these Tier 1 values change in tokens.css, update the
       four literals here to match. A future iteration could extract
@@ -286,7 +286,7 @@
 
     <!--
       Theme color. Two entries, selected by the browser based on the
-      user's preference. The light value matches --mases-color-surface-page
+      user's preference. The light value matches --arna-color-surface-page
       (white); the dark value is a neutral near-black used as the
       fallback before tokens.css loads. If the design system's dark
       surface token changes, update the dark value here to match.
@@ -454,7 +454,7 @@
     <!--
       Preloader styles. See the file header comment §"The preloader"
       and the 1.2.0 revision note. Once Vue mounts and replaces the
-      #app contents, the .mases-preloader element is removed and
+      #app contents, the .arna-preloader element is removed and
       these rules become inert.
 
       The four colour literals below are drawn from the design
@@ -517,7 +517,7 @@
     </noscript>
 
     <!--
-      Mount point. The .mases-preloader block below is visible until
+      Mount point. The .arna-preloader block below is visible until
       Vue replaces the contents of this element. See the file header
       comment §"The preloader" and the 1.2.0 revision note.
 

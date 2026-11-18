@@ -303,7 +303,7 @@ const regionCount = computed<number>(() => {
    widths. Tablet and desktop switch to a horizontal row at the
    min-width breakpoint below.
 
-   Inline padding consumes --mases-shell-chrome-padding-inline-*, the
+   Inline padding consumes --arna-shell-chrome-padding-inline-*, the
    shared chrome rhythm used by AppHeader, AppFooter, and
    SkipToContent. See tokens.css v1.2.0 for the value provenance. The
    values are numerically identical to the previous space-4 (mobile)

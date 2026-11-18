@@ -53,9 +53,9 @@
    Screen-reader reading order is unchanged.
 
    No existing prop, slot, emit, testid, class, or DOM element is
-   removed. The two existing text testids (mases-brand-corporate,
-   mases-brand-product) are preserved unchanged. One new testid is
-   added: mases-brand-symbol.
+   removed. The two existing text testids (arna-brand-corporate,
+   arna-brand-product) are preserved unchanged. One new testid is
+   added: arna-brand-symbol.
 
  Forthcoming (Path B):
    A design pass will produce a compact SVG mark derived from the
@@ -240,13 +240,13 @@
       file with an inline SVG that draws the compact mark. The CR
       updates:
         · the `<img>` block in the template (replaced by `<svg>`);
-        · the `.mases-brand__symbol-image` rule (replaced by
-          `.mases-brand__symbol-svg` + child path rules);
+        · the `.arna-brand__symbol-image` rule (replaced by
+          `.arna-brand__symbol-svg` + child path rules);
         · this docblock's §"The emblem — what it is" and §"Why the
           emblem, not a derived compact mark" sections;
         · the version to 2.0.0 (the mark's identity changes; the
           mark itself is no longer "the emblem as-is");
-        · the test hook `mases-brand-symbol` remains (the wrapper is
+        · the test hook `arna-brand-symbol` remains (the wrapper is
           unchanged); no consumer is affected.
 
    4. The emblem continues to render on the auth surface (via
@@ -294,7 +294,7 @@
      .app-header__brand {
        display: flex;
        align-items: center;
-       gap: var(--mases-space-2);
+       gap: var(--arna-space-2);
        flex-shrink: 0;      ← reserves intrinsic width
        min-width: 0;
      }
@@ -324,14 +324,14 @@
  The text column's visual values are Tier 2 tokens from tokens.css
  (v1.2.0):
 
-     Color ........ --mases-color-text-brand
-                     --mases-color-text-secondary
-     Spacing ...... --mases-space-1
-                     --mases-space-3
-     Type ......... --mases-font-size-body
-                     --mases-font-size-caption
-                     --mases-font-weight-semibold
-                     --mases-font-weight-medium
+     Color ........ --arna-color-text-brand
+                     --arna-color-text-secondary
+     Spacing ...... --arna-space-1
+                     --arna-space-3
+     Type ......... --arna-font-size-body
+                     --arna-font-size-caption
+                     --arna-font-weight-semibold
+                     --arna-font-weight-medium
 
  No hex value appears in this file. No new token is declared.
 
@@ -363,8 +363,8 @@
  -----------------------------------------------------------------------------
  Test hooks
  -----------------------------------------------------------------------------
- data-testid="mases-brand-root"       on the root <span>
- data-testid="mases-brand-symbol"     on the emblem wrapper <span>
+ data-testid="arna-brand-root"       on the root <span>
+ data-testid="arna-brand-symbol"     on the emblem wrapper <span>
                                        (present in the DOM at all
                                        viewports; its `display: none`
                                        at mobile removes it from
@@ -374,11 +374,11 @@
                                        DOM so a test can assert its
                                        presence and the `src` it
                                        carries at any breakpoint)
- data-testid="mases-brand-corporate"  on the corporate name <span>
- data-testid="mases-brand-product"    on the product code <span>
+ data-testid="arna-brand-corporate"  on the corporate name <span>
+ data-testid="arna-brand-product"    on the product code <span>
 
  The hooks are named by semantic role, not by CSS structure. The
- `mases-brand-symbol` hook name is preserved from the withdrawn
+ `arna-brand-symbol` hook name is preserved from the withdrawn
  v1.1.0 draft so the eventual Path B migration does not rename the
  hook — a test written today against the emblem continues to
  resolve after the migration.
@@ -528,7 +528,7 @@ import { arnaBrandLabels } from '@/router/shell-labels';
    Root — emblem + text column
    ---------------------------------------------------------------------------
    A horizontal flex row. The gap between the emblem and the text column
-   is --mases-space-3 (12px). At mobile the emblem is display: none, so
+   is --arna-space-3 (12px). At mobile the emblem is display: none, so
    the gap has no effect and the layout is identical to v1.0.0.
    ============================================================================ */
 .arna-brand {

@@ -16,11 +16,11 @@
  Renders a Lucide icon from a frozen, statically-imported registry.
 
    - TypeScript-safe `name` prop (IconName union derived from ICONS).
-   - Size resolves through Tier 2 CSS variables (`--mases-icon-*`) with
+   - Size resolves through Tier 2 CSS variables (`--arna-icon-*`) with
      pixel fallbacks so the primitive is correct even when tokens are
      not yet loaded (SSR, isolated storybook, test environment).
    - Stroke weight per size, frozen by Design System §7.4.
-   - Color accepts Tier 2 token names, `--mases-*` var names, CSS-wide
+   - Color accepts Tier 2 token names, `--arna-*` var names, CSS-wide
      keywords, `currentColor`, and any CSS color the runtime browser
      understands (hex / rgb / hsl / hwb / lab / lch / oklab / oklch /
      color() / named colors).
@@ -41,19 +41,19 @@
  -----------------------------------------------------------------------------
  Size mapping — CSS-variable-first
  -----------------------------------------------------------------------------
- Each size resolves to `var(--mases-icon-<size>, <fallback>px)`:
+ Each size resolves to `var(--arna-icon-<size>, <fallback>px)`:
 
-   xs  → --mases-icon-xs   12px   stroke 1.75
-   sm  → --mases-icon-sm   16px   stroke 1.75
-   md  → --mases-icon-md   20px   stroke 2      (default)
-   lg  → --mases-icon-lg   24px   stroke 2
-   xl  → --mases-icon-xl   32px   stroke 2
-   2xl → --mases-icon-2xl  48px   stroke 1.5
-   3xl → --mases-icon-3xl  64px   stroke 1.5
-   4xl → --mases-icon-4xl  96px   stroke 1.5
+   xs  → --arna-icon-xs   12px   stroke 1.75
+   sm  → --arna-icon-sm   16px   stroke 1.75
+   md  → --arna-icon-md   20px   stroke 2      (default)
+   lg  → --arna-icon-lg   24px   stroke 2
+   xl  → --arna-icon-xl   32px   stroke 2
+   2xl → --arna-icon-2xl  48px   stroke 1.5
+   3xl → --arna-icon-3xl  64px   stroke 1.5
+   4xl → --arna-icon-4xl  96px   stroke 1.5
 
  The pixel values are fallbacks, not the source of truth. When the
- Design System retunes `--mases-icon-md`, every BaseIcon follows. The
+ Design System retunes `--arna-icon-md`, every BaseIcon follows. The
  fallback exists only so that the primitive is correct in contexts
  where the token stylesheet is not yet applied.
 
@@ -87,7 +87,7 @@
  5. Runtime CSS color        → pass through               (via CSS.supports
                                                            in the browser;
                                                            regex in SSR)
- 6. Anything else            → var(--mases-<value>)       (Tier 2 token)
+ 6. Anything else            → var(--arna-<value>)       (Tier 2 token)
 
  Note: a token whose name collides with a valid CSS color (e.g. a
  hypothetical token literally named "red") loses to CSS. This is
@@ -594,7 +594,7 @@ const props = withDefaults(defineProps<Props>(), {
  * ──────────────────────────────────────────────────────────────────────── */
 
 interface SizeSpec {
-  /** Fallback pixel size used only when `--mases-icon-<size>` is undefined. */
+  /** Fallback pixel size used only when `--arna-icon-<size>` is undefined. */
   readonly px: number;
   /** Frozen stroke weight (Design System §7.4). */
   readonly stroke: number;

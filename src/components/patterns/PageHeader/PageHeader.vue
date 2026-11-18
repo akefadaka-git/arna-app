@@ -276,7 +276,7 @@
  Sticky behavior
  -----------------------------------------------------------------------------
  When `sticky=true`, the header sticks to the top of its scroll
- container using position: sticky and --mases-z-sticky (200). A
+ container using position: sticky and --arna-z-sticky (200). A
  background-color is applied when sticky so that scrolled content does
  not show through the header. When not sticky, the background is
  transparent (the page surface shows through).
@@ -296,7 +296,7 @@
 
  The technique is correct inside the shell's content column, where the
  parent's inline padding is at least 4px on each side
- (--mases-shell-content-padding-desktop is 32px; -tablet is 24px;
+ (--arna-shell-content-padding-desktop is 32px; -tablet is 24px;
  -mobile is 16px). It is unsafe inside a nested container whose own
  inline padding is smaller than 4px (a tightly-padded Card, a Modal
  body, a tooltip), because the negative margin would pull the
@@ -889,7 +889,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
    Sticky
    ---------------------------------------------------------------------------
    The header sticks to the top of its scroll container. Uses the
-   design system's --mases-z-sticky token (200).
+   design system's --arna-z-sticky token (200).
 
    Sticky mode assumes this component is a direct child of the main
    content column. The negative-margin/padding trick below extends the

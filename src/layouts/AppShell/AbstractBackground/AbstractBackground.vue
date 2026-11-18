@@ -48,7 +48,7 @@
  -----------------------------------------------------------------------------
  Why the component exists
  -----------------------------------------------------------------------------
- The current shell renders on flat ivory (--mases-color-surface-page,
+ The current shell renders on flat ivory (--arna-color-surface-page,
  #FFFDF7). That is a deliberate choice the shell made in v1.0.0 and
  that has not been revised. The Master Spec §28 anticipates a richer
  surface, but qualifies it as optional ("MASES may use a subtle
@@ -86,7 +86,7 @@
  -----------------------------------------------------------------------------
  The base layer — a solid page-surface colour
  -----------------------------------------------------------------------------
- `background-color: var(--mases-color-surface-page)` — the same
+ `background-color: var(--arna-color-surface-page)` — the same
  ivory (#FFFDF7) that the shell paints today. The component is a
  drop-in replacement for the shell's own background-color; adopting
  it does not change the perceived base colour of the page.
@@ -164,7 +164,7 @@
       `<SkipToContent />` so that it is behind every other shell
       element in the stacking order.
 
-   2. Change `.app-shell { background-color: var(--mases-color-
+   2. Change `.app-shell { background-color: var(--arna-color-
       surface-page); }` to `background-color: transparent;`. The
       AbstractBackground's own base layer now supplies this colour.
 
@@ -252,14 +252,14 @@
  -----------------------------------------------------------------------------
  The component consumes one Tier 2 token directly:
 
-     --mases-color-surface-page   (background-color, with fallback
+     --arna-color-surface-page   (background-color, with fallback
                                    #FFFDF7)
 
  The four decorative layers use literal rgba() values that are
  derived from three Tier 1 primitives:
 
-     rgba(212, 160, 23, α)   —  --mases-color-gold-500, α ∈ {0.045, 0.03}
-     rgba(31, 10, 47, α)     —  --mases-color-aubergine-900, α ∈
+     rgba(212, 160, 23, α)   —  --arna-color-gold-500, α ∈ {0.045, 0.03}
+     rgba(31, 10, 47, α)     —  --arna-color-aubergine-900, α ∈
                                   {0.04, 0.025, 0.02, 0.012}
 
  These values are literal rather than `color-mix()` expressions
@@ -276,12 +276,12 @@
       system.
 
  If a future CR establishes a general-purpose "subtle wash" token
- family (e.g. `--mases-color-wash-gold-subtle`), these values move
+ family (e.g. `--arna-color-wash-gold-subtle`), these values move
  to tokens.css in the same change. Until then, the component is
  their canonical home and its docblock is their record.
 
  No hex value appears in this file except the fallback for
- `--mases-color-surface-page` (#FFFDF7), which mirrors the design
+ `--arna-color-surface-page` (#FFFDF7), which mirrors the design
  system's Tier 1 value and is documented as such.
 
  -----------------------------------------------------------------------------
@@ -313,7 +313,7 @@
  Contrast: the base layer is the same ivory the shell paints today.
  The decorative overlays are at alphas between 1.2% and 4.5% — two
  orders of magnitude below the WCAG contrast thresholds. A text run
- on a `--mases-color-surface-page` background passes the same
+ on a `--arna-color-surface-page` background passes the same
  contrast checks with or without the AbstractBackground present.
 
  Reduced motion: the component defines no animation. There is
@@ -343,7 +343,7 @@
     builds. This is deferred to a dedicated CR.
 
  2. Intensity control. A future CR may add an
-    `--mases-abstract-background-intensity` custom property or a
+    `--arna-abstract-background-intensity` custom property or a
     `variant` prop so that different surfaces can render the
     substrate at different strengths. The current component has a
     single fixed intensity.
@@ -430,8 +430,8 @@
   /*
    * Base layer — the solid page-surface colour. Matches the ivory
    * (#FFFDF7) the shell paints today. The fallback is the design
-   * system's Tier 1 value for --mases-color-neutral-50, which is
-   * what --mases-color-surface-page resolves to.
+   * system's Tier 1 value for --arna-color-neutral-50, which is
+   * what --arna-color-surface-page resolves to.
    */
   background-color: var(--arna-color-surface-page, #FFFDF7);
 

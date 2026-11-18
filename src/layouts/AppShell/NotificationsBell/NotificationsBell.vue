@@ -60,11 +60,11 @@
  -----------------------------------------------------------------------------
  Badge sizing — pre-work for the 99+ case
  -----------------------------------------------------------------------------
- The badge's `min-width` was raised from --mases-space-4 (16px) to
- --mases-space-5 (20px). At Amharic caption size (13px), the previous
+ The badge's `min-width` was raised from --arna-space-4 (16px) to
+ --arna-space-5 (20px). At Amharic caption size (13px), the previous
  16px square was a tight fit for the "99+" string, which is the
  widest badge the component can produce (see BADGE_MAX_DISPLAY). The
- badge's `height` is unchanged at --mases-space-4; a single-digit
+ badge's `height` is unchanged at --arna-space-4; a single-digit
  badge therefore remains circular, and a two-digit or "99+" badge
  becomes a horizontal pill.
 
@@ -343,8 +343,8 @@ function onClick(): void {
    icon. Uses logical properties so an eventual RTL locale places it on
    the top-left without any change here.
 
-   Sizing: the badge's height is --mases-space-4 (16px). Its
-   min-width is --mases-space-5 (20px), giving the "99+" string room
+   Sizing: the badge's height is --arna-space-4 (16px). Its
+   min-width is --arna-space-5 (20px), giving the "99+" string room
    at the caption font size. A single-digit badge stretches to the
    20px minimum width but is centred, so it remains visually a pill;
    a two-digit badge or "99+" fills the 20px minimum and grows
@@ -358,7 +358,7 @@ function onClick(): void {
   /*
    * -4px offsets pull the badge slightly outside the icon's bounds so
    * it overlaps the bell's top-trailing corner without covering the
-   * glyph. calc(-1 * var(--mases-space-1)) is used instead of a
+   * glyph. calc(-1 * var(--arna-space-1)) is used instead of a
    * negative literal so the token scale remains the source of truth.
    */
   inset-block-start: calc(-1 * var(--arna-space-1));
