@@ -361,19 +361,19 @@ function onClick(): void {
    * glyph. calc(-1 * var(--mases-space-1)) is used instead of a
    * negative literal so the token scale remains the source of truth.
    */
-  inset-block-start: calc(-1 * var(--mases-space-1));
-  inset-inline-end: calc(-1 * var(--mases-space-1));
-  min-width: var(--mases-space-5);
-  height: var(--mases-space-4);
+  inset-block-start: calc(-1 * var(--arna-space-1));
+  inset-inline-end: calc(-1 * var(--arna-space-1));
+  min-width: var(--arna-space-5);
+  height: var(--arna-space-4);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--mases-radius-full);
-  background-color: var(--mases-color-action-primary);
-  color: var(--mases-color-text-inverse);
+  border-radius: var(--arna-radius-full);
+  background-color: var(--arna-color-action-primary);
+  color: var(--arna-color-text-inverse);
   font-family: inherit;
-  font-size: var(--mases-font-size-caption);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-caption);
+  font-weight: var(--arna-font-weight-semibold);
   /*
    * The badge is a visual indicator only — pointer-events: none lets
    * clicks pass through to the surrounding button. Combined with

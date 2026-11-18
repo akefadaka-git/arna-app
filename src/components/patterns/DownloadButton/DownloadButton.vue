@@ -372,7 +372,7 @@ const currentIcon = computed<IconName>(() => {
 .download-button__content {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   min-width: 0;
 }
 

@@ -32,23 +32,23 @@ function onChange(event: Event): void {
   min-width: 0;
 }
 .calendar-preference__label {
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-caption);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-caption);
   white-space: nowrap;
 }
 .calendar-preference select {
   min-height: 2.25rem;
   max-width: 9.5rem;
   padding: 0.35rem 1.6rem 0.35rem 0.55rem;
-  color: var(--mases-color-text-primary);
-  background: var(--mases-color-surface-raised);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-md);
+  color: var(--arna-color-text-primary);
+  background: var(--arna-color-surface-raised);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-md);
   font: inherit;
-  font-size: var(--mases-font-size-caption);
+  font-size: var(--arna-font-size-caption);
 }
 .calendar-preference select:focus-visible {
-  outline: 3px solid var(--mases-color-state-focus-ring);
+  outline: 3px solid var(--arna-color-state-focus-ring);
   outline-offset: 2px;
 }
 </style>

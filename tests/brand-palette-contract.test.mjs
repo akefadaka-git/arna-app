@@ -73,8 +73,8 @@ test('public branding uses approved emblem and shared semantic roles', () => {
   assert.match(publicHome, /src="\/logo\.png"/);
   assert.match(publicHome, /page\?\.title \|\| 'Maale Arna'/);
   assert.match(publicHome, /<small>ARNA<\/small>/);
-  assert.doesNotMatch(publicHome, /masesBrandLabels\.productName/);
-  assert.match(publicLayout, /masesBrandLabels\.fullCorporateIdentity/);
+  assert.doesNotMatch(publicHome, /arnaBrandLabels\.productName/);
+  assert.match(publicLayout, /arnaBrandLabels\.fullCorporateIdentity/);
   assert.match(publicHome, /class="brand"/);
   assert.match(publicLayout, /--arna-public-page-surface/);
   assert.match(publicLayout, /--arna-public-text-primary/);

@@ -680,7 +680,7 @@ function statusLabel(product: LoanProduct): string {
 .loan-product-list-view {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-5);
+  gap: var(--arna-space-5);
   width: 100%;
 }
 
@@ -690,22 +690,22 @@ function statusLabel(product: LoanProduct): string {
 .loan-product-list-view__header {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
 }
 
 .loan-product-list-view__title {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-1);
-  line-height: var(--mases-line-height-heading-1);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-1);
+  line-height: var(--arna-line-height-heading-1);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 .loan-product-list-view__description {
   margin: 0;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
 }
 
 /* ============================================================================
@@ -728,9 +728,9 @@ function statusLabel(product: LoanProduct): string {
    Loading
    ============================================================================ */
 .loan-product-list-view__loading {
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
 }
 
 /* ============================================================================
@@ -739,7 +739,7 @@ function statusLabel(product: LoanProduct): string {
 .loan-product-list-view__error {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
 }
 
 .loan-product-list-view__error-message {
@@ -749,10 +749,10 @@ function statusLabel(product: LoanProduct): string {
 
 .loan-product-list-view__error-reference {
   margin: 0;
-  margin-block-start: var(--mases-space-1);
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  margin-block-start: var(--arna-space-1);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   overflow-wrap: anywhere;
 }
 
@@ -775,27 +775,27 @@ function statusLabel(product: LoanProduct): string {
 .loan-product-list-view__empty {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-1);
-  padding: var(--mases-space-5);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-md);
-  background-color: var(--mases-color-surface-subtle);
+  gap: var(--arna-space-1);
+  padding: var(--arna-space-5);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-md);
+  background-color: var(--arna-color-surface-subtle);
   text-align: center;
 }
 
 .loan-product-list-view__empty-title {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-3);
-  line-height: var(--mases-line-height-heading-3);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-3);
+  line-height: var(--arna-line-height-heading-3);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 .loan-product-list-view__empty-description {
   margin: 0;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
 }
 
 /* ============================================================================
@@ -813,9 +813,9 @@ function statusLabel(product: LoanProduct): string {
   display: block;
   width: 100%;
   border-collapse: collapse;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
 }
 
 .loan-product-list-view__table thead {
@@ -830,10 +830,10 @@ function statusLabel(product: LoanProduct): string {
 }
 
 .loan-product-list-view__table tr {
-  padding: var(--mases-space-3);
-  border: 1px solid var(--mases-color-border-default);
-  border-radius: var(--mases-radius-md);
-  margin-block-end: var(--mases-space-3);
+  padding: var(--arna-space-3);
+  border: 1px solid var(--arna-color-border-default);
+  border-radius: var(--arna-radius-md);
+  margin-block-end: var(--arna-space-3);
 }
 
 .loan-product-list-view__table tr:last-child {
@@ -844,8 +844,8 @@ function statusLabel(product: LoanProduct): string {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: var(--mases-space-3);
-  padding-block: var(--mases-space-1);
+  gap: var(--arna-space-3);
+  padding-block: var(--arna-space-1);
   overflow-wrap: anywhere;
 }
 
@@ -860,10 +860,10 @@ function statusLabel(product: LoanProduct): string {
 .loan-product-list-view__table td::before {
   content: attr(data-label);
   flex-shrink: 0;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 /* ----------------------------------------------------------------------------
@@ -888,7 +888,7 @@ function statusLabel(product: LoanProduct): string {
     margin: 0;
     border: none;
     border-radius: 0;
-    border-block-end: 1px solid var(--mases-color-border-subtle);
+    border-block-end: 1px solid var(--arna-color-border-subtle);
   }
 
   .loan-product-list-view__table tr:last-child {
@@ -898,8 +898,8 @@ function statusLabel(product: LoanProduct): string {
   .loan-product-list-view__table th,
   .loan-product-list-view__table td {
     display: table-cell;
-    padding-block: var(--mases-space-3);
-    padding-inline: var(--mases-space-3);
+    padding-block: var(--arna-space-3);
+    padding-inline: var(--arna-space-3);
     text-align: start;
     vertical-align: top;
     white-space: nowrap;
@@ -910,13 +910,13 @@ function statusLabel(product: LoanProduct): string {
   }
 
   .loan-product-list-view__table th {
-    color: var(--mases-color-text-secondary);
-    font-size: var(--mases-font-size-caption);
-    line-height: var(--mases-line-height-caption);
-    font-weight: var(--mases-font-weight-semibold);
+    color: var(--arna-color-text-secondary);
+    font-size: var(--arna-font-size-caption);
+    line-height: var(--arna-line-height-caption);
+    font-weight: var(--arna-font-weight-semibold);
     text-transform: uppercase;
-    letter-spacing: var(--mases-letter-spacing-caption);
-    border-block-end: 1px solid var(--mases-color-border-default);
+    letter-spacing: var(--arna-letter-spacing-caption);
+    border-block-end: 1px solid var(--arna-color-border-default);
   }
 }
 </style>

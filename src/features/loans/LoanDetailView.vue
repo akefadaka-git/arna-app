@@ -1441,7 +1441,7 @@ function statusVariant(
 .loan-detail-view {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -1452,38 +1452,38 @@ function statusVariant(
 .loan-detail-view__loan-list {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   margin: 0;
 }
 
 .loan-detail-view__loan-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   align-items: baseline;
 }
 
 @media (min-width: 640px) {
   .loan-detail-view__loan-row {
     grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-    gap: var(--mases-space-3);
+    gap: var(--arna-space-3);
   }
 }
 
 .loan-detail-view__loan-row dt {
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
   overflow-wrap: anywhere;
 }
 
 .loan-detail-view__loan-row dd {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: anywhere;
 }
 
@@ -1492,10 +1492,10 @@ function statusVariant(
    ============================================================================ */
 .loan-detail-view__section-title {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-6);
-  line-height: var(--mases-line-height-heading-6);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-6);
+  line-height: var(--arna-line-height-heading-6);
+  font-weight: var(--arna-font-weight-semibold);
   overflow-wrap: anywhere;
 }
 
@@ -1509,7 +1509,7 @@ function statusVariant(
 .loan-detail-view__section-header {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   align-items: stretch;
 }
 
@@ -1526,10 +1526,10 @@ function statusVariant(
    ============================================================================ */
 .loan-detail-view__section-empty {
   margin: 0;
-  padding-block: var(--mases-space-4);
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  padding-block: var(--arna-space-4);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   text-align: center;
   overflow-wrap: anywhere;
 }

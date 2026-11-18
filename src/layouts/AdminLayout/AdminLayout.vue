@@ -243,7 +243,7 @@ import { useRouter, RouterView } from 'vue-router';
 import AppShell from '@/layouts/AppShell';
 import { logout } from '@/features/auth/service';
 
-import { masesShellLabels } from '@/router/shell-labels';
+import { arnaShellLabels } from '@/router/shell-labels';
 import {
   adminNavItems,
   adminUserMenuItems,
@@ -352,7 +352,7 @@ async function onUserMenuSelect(payload: { id: string }): Promise<void> {
   <AppShell
     :nav-items="adminNavItems"
     :user-menu-items="adminUserMenuItems"
-    :labels="masesShellLabels"
+    :labels="arnaShellLabels"
     :footer-version="footerVersion"
     @user-menu-select="onUserMenuSelect"
   >

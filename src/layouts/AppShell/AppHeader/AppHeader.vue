@@ -566,12 +566,12 @@ function onToggleClick(): void {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   width: 100%;
-  min-height: var(--mases-shell-header-height);
+  min-height: var(--arna-shell-header-height);
   height: auto;
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-shell-chrome-padding-inline-mobile);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-shell-chrome-padding-inline-mobile);
   /*
    * A single subtle rule separates the header from the content below.
    * Matches the rule treatment used by MaintenanceBanner (Unit 11.3).
@@ -579,10 +579,10 @@ function onToggleClick(): void {
    * so a page whose content begins without a border still gets a
    * clean transition under the header.
    */
-  border-block-start: 3px solid var(--mases-color-gold-500);
-  border-block-end: 1px solid var(--mases-color-border-brand);
-  background-color: var(--mases-color-surface-raised);
-  color: var(--mases-color-text-primary);
+  border-block-start: 3px solid var(--arna-color-gold-500);
+  border-block-end: 1px solid var(--arna-color-border-brand);
+  background-color: var(--arna-color-surface-raised);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
 }
 
@@ -599,9 +599,9 @@ function onToggleClick(): void {
 
   .app-header {
     flex-wrap: nowrap;
-    gap: var(--mases-space-4);
-    padding-block: var(--mases-space-3);
-    padding-inline: var(--mases-shell-chrome-padding-inline-tablet);
+    gap: var(--arna-space-4);
+    padding-block: var(--arna-space-3);
+    padding-inline: var(--arna-shell-chrome-padding-inline-tablet);
   }
 }
 
@@ -625,7 +625,7 @@ function onToggleClick(): void {
 .app-header[data-sticky='true'] {
   position: sticky;
   top: 0;
-  z-index: var(--mases-z-raised);
+  z-index: var(--arna-z-raised);
 }
 
 /* ============================================================================
@@ -665,7 +665,7 @@ function onToggleClick(): void {
 .app-header__brand {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-shrink: 0;
   min-width: 0;
 }
@@ -687,13 +687,13 @@ function onToggleClick(): void {
   order: 4;
   flex: 1 1 100%;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   min-width: 0;
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior-inline: contain;
-  scroll-padding-inline: var(--mases-space-2);
-  scrollbar-color: var(--mases-color-border-strong) transparent;
+  scroll-padding-inline: var(--arna-space-2);
+  scrollbar-color: var(--arna-color-border-strong) transparent;
   scrollbar-width: thin;
 }
 
@@ -712,7 +712,7 @@ function onToggleClick(): void {
   display: flex;
   order: 3;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-shrink: 0;
 }
 

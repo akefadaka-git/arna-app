@@ -193,7 +193,7 @@
  * Distinct prefix from the other primitives' counters, so no collision
  * is possible in a document that uses several of them.
  */
-let __masesRadioIdCounter = 0;
+let __arnaRadioIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -279,7 +279,7 @@ const emit = defineEmits<{
 /*
  * Generated id — evaluated once per component instance.
  */
-const generatedId = `mases-radio-${++__masesRadioIdCounter}`;
+const generatedId = `arna-radio-${++__arnaRadioIdCounter}`;
 
 const inputId = computed<string>(() => props.id ?? generatedId);
 
@@ -421,19 +421,19 @@ defineExpose({ focus, blur, el });
 .radio {
   display: inline-flex;
   align-items: flex-start;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   cursor: pointer;
   user-select: none;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
 }
 
 .radio--disabled {
   cursor: not-allowed;
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
 }
 
 /* ============================================================================
@@ -467,28 +467,28 @@ defineExpose({ focus, blur, el });
   flex-shrink: 0;
   position: relative;
   display: inline-block;
-  width: var(--mases-icon-md);
-  height: var(--mases-icon-md);
+  width: var(--arna-icon-md);
+  height: var(--arna-icon-md);
   margin-block-start: calc(
-    (var(--mases-line-height-body) - var(--mases-icon-md)) / 2
+    (var(--arna-line-height-body) - var(--arna-icon-md)) / 2
   );
-  background-color: var(--mases-color-surface-page);
-  border: 2px solid var(--mases-color-border-default);
-  border-radius: var(--mases-radius-full);
+  background-color: var(--arna-color-surface-page);
+  border: 2px solid var(--arna-color-border-default);
+  border-radius: var(--arna-radius-full);
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    border-color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    border-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 /* Hover border — only when not disabled. */
 .radio:hover:not(.radio--disabled) .radio__circle {
-  border-color: var(--mases-color-border-strong);
+  border-color: var(--arna-color-border-strong);
 }
 
 /* Selected state — outer circle border is the brand action color, and
    the inner dot fills the center. */
 .radio__input:checked + .radio__circle {
-  border-color: var(--mases-color-action-primary);
+  border-color: var(--arna-color-action-primary);
 }
 
 /* Inner dot — shown only when the radio is selected. */
@@ -500,38 +500,38 @@ defineExpose({ focus, blur, el });
   width: 45%;
   height: 45%;
   transform: translate(-50%, -50%);
-  background-color: var(--mases-color-action-primary);
-  border-radius: var(--mases-radius-full);
+  background-color: var(--arna-color-action-primary);
+  border-radius: var(--arna-radius-full);
 }
 
 /* Focus ring on the custom circle when the native input receives
    :focus-visible. Non-editable controls only match :focus-visible for
    keyboard focus, so mouse clicks do not trigger the ring. */
 .radio__input:focus-visible + .radio__circle {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* Invalid state — outer circle border is the danger color. */
 .radio--invalid .radio__circle {
-  border-color: var(--mases-color-border-danger);
+  border-color: var(--arna-color-border-danger);
 }
 
 /* Disabled state — outer circle uses the disabled palette. */
 .radio--disabled .radio__circle {
-  background-color: var(--mases-color-state-disabled-bg);
-  border-color: var(--mases-color-border-subtle);
+  background-color: var(--arna-color-state-disabled-bg);
+  border-color: var(--arna-color-border-subtle);
 }
 
 /* Disabled + selected — muted fill. Uses the icon-secondary color at
    the same weight as the checkbox's disabled+checked fill, for
    consistency. */
 .radio__input:disabled:checked + .radio__circle {
-  border-color: var(--mases-color-icon-secondary);
+  border-color: var(--arna-color-icon-secondary);
 }
 
 .radio__input:disabled:checked + .radio__circle::before {
-  background-color: var(--mases-color-icon-secondary);
+  background-color: var(--arna-color-icon-secondary);
 }
 
 /* ============================================================================

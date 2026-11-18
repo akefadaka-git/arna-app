@@ -194,7 +194,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--mases-color-icon-primary);
+  color: var(--arna-color-icon-primary);
 }
 
 /* ============================================================================
@@ -206,11 +206,11 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   border-style: solid;
   border-color: currentColor;
   border-top-color: transparent;
-  border-radius: var(--mases-radius-full);
-  animation: mases-spinner-rotate 0.8s linear infinite;
+  border-radius: var(--arna-radius-full);
+  animation: arna-spinner-rotate 0.8s linear infinite;
 }
 
-@keyframes mases-spinner-rotate {
+@keyframes arna-spinner-rotate {
   to {
     transform: rotate(360deg);
   }
@@ -220,20 +220,20 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    Sizes
    ============================================================================ */
 .spinner--sm .spinner__visual {
-  width: var(--mases-icon-sm);
-  height: var(--mases-icon-sm);
+  width: var(--arna-icon-sm);
+  height: var(--arna-icon-sm);
   border-width: 2px;
 }
 
 .spinner--md .spinner__visual {
-  width: var(--mases-icon-lg);
-  height: var(--mases-icon-lg);
+  width: var(--arna-icon-lg);
+  height: var(--arna-icon-lg);
   border-width: 2px;
 }
 
 .spinner--lg .spinner__visual {
-  width: var(--mases-icon-2xl);
-  height: var(--mases-icon-2xl);
+  width: var(--arna-icon-2xl);
+  height: var(--arna-icon-2xl);
   border-width: 3px;
 }
 

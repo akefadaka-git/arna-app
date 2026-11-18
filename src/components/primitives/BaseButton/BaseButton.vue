@@ -131,13 +131,13 @@ if (import.meta.env.DEV && props.iconOnly && !props.ariaLabel) {
 const isDisabled = computed<boolean>(() => props.disabled || props.loading);
 
 const classes = computed<Array<string | Record<string, boolean>>>(() => [
-  'mases-button',
-  `mases-button--${props.variant}`,
-  `mases-button--${props.size}`,
+  'arna-button',
+  `arna-button--${props.variant}`,
+  `arna-button--${props.size}`,
   {
-    'mases-button--block': props.block,
-    'mases-button--icon-only': props.iconOnly,
-    'mases-button--loading': props.loading,
+    'arna-button--block': props.block,
+    'arna-button--icon-only': props.iconOnly,
+    'arna-button--loading': props.loading,
   },
 ]);
 
@@ -177,7 +177,7 @@ function handleClick(event: MouseEvent): void {
     -->
     <span
       v-if="loading"
-      class="mases-button__spinner"
+      class="arna-button__spinner"
       aria-hidden="true"
       data-testid="base-button-spinner"
     />
@@ -194,7 +194,7 @@ function handleClick(event: MouseEvent): void {
     <template v-else>
       <span
         v-if="$slots.leading"
-        class="mases-button__leading"
+        class="arna-button__leading"
         aria-hidden="true"
         data-testid="base-button-leading"
       >
@@ -202,7 +202,7 @@ function handleClick(event: MouseEvent): void {
       </span>
 
       <span
-        class="mases-button__label"
+        class="arna-button__label"
         data-testid="base-button-label"
       >
         <slot />
@@ -210,7 +210,7 @@ function handleClick(event: MouseEvent): void {
 
       <span
         v-if="$slots.trailing"
-        class="mases-button__trailing"
+        class="arna-button__trailing"
         aria-hidden="true"
         data-testid="base-button-trailing"
       >
@@ -224,16 +224,16 @@ function handleClick(event: MouseEvent): void {
 /* ============================================================================
    Base
    ============================================================================ */
-.mases-button {
+.arna-button {
   appearance: none;
   border: 1px solid transparent;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--mases-space-2);
-  font-family: var(--mases-font-family-am);
-  font-weight: var(--mases-font-weight-medium);
+  gap: var(--arna-space-2);
+  font-family: var(--arna-font-family-am);
+  font-weight: var(--arna-font-weight-medium);
   line-height: 1;
   text-align: center;
   text-decoration: none;
@@ -241,51 +241,51 @@ function handleClick(event: MouseEvent): void {
   user-select: none;
   vertical-align: middle;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    border-color var(--mases-duration-fast) var(--mases-easing-standard),
-    color var(--mases-duration-fast) var(--mases-easing-standard),
-    box-shadow var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    border-color var(--arna-duration-fast) var(--arna-easing-standard),
+    color var(--arna-duration-fast) var(--arna-easing-standard),
+    box-shadow var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
-.mases-button:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+.arna-button:focus-visible {
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
    Sizes
    ============================================================================ */
-.mases-button--sm {
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-3);
+.arna-button--sm {
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-3);
   min-height: 32px;
-  border-radius: var(--mases-radius-sm);
+  border-radius: var(--arna-radius-sm);
 }
 
-.mases-button--md {
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-4);
+.arna-button--md {
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-4);
   min-height: 40px;
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
 }
 
-.mases-button--lg {
-  font-size: var(--mases-font-size-body-lg);
-  line-height: var(--mases-line-height-body-lg);
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-6);
+.arna-button--lg {
+  font-size: var(--arna-font-size-body-lg);
+  line-height: var(--arna-line-height-body-lg);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-6);
   min-height: 48px;
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
 }
 
 /* Mobile touch-target enforcement (Design System §6.5). */
 @media (max-width: 639px) {
-  .mases-button--sm,
-  .mases-button--md {
+  .arna-button--sm,
+  .arna-button--md {
     min-height: 44px;
   }
 }
@@ -293,136 +293,136 @@ function handleClick(event: MouseEvent): void {
 /* ============================================================================
    Layout modifiers
    ============================================================================ */
-.mases-button--block {
+.arna-button--block {
   width: 100%;
 }
 
-.mases-button--icon-only {
-  padding-inline: var(--mases-space-3);
+.arna-button--icon-only {
+  padding-inline: var(--arna-space-3);
 }
 
-.mases-button--icon-only.mases-button--sm {
-  padding-inline: var(--mases-space-2);
+.arna-button--icon-only.arna-button--sm {
+  padding-inline: var(--arna-space-2);
 }
 
-.mases-button--icon-only.mases-button--lg {
-  padding-inline: var(--mases-space-4);
+.arna-button--icon-only.arna-button--lg {
+  padding-inline: var(--arna-space-4);
 }
 
 /* ============================================================================
    Variants — Primary
    ============================================================================ */
-.mases-button--primary {
-  background-color: var(--mases-color-action-primary);
-  border-color: var(--mases-color-action-primary);
-  color: var(--mases-color-text-inverse);
+.arna-button--primary {
+  background-color: var(--arna-color-action-primary);
+  border-color: var(--arna-color-action-primary);
+  color: var(--arna-color-text-inverse);
 }
 
-.mases-button--primary:hover:not(:disabled) {
-  background-color: var(--mases-color-action-primary-hover);
-  border-color: var(--mases-color-action-primary-hover);
+.arna-button--primary:hover:not(:disabled) {
+  background-color: var(--arna-color-action-primary-hover);
+  border-color: var(--arna-color-action-primary-hover);
 }
 
-.mases-button--primary:active:not(:disabled) {
-  background-color: var(--mases-color-action-primary-active);
-  border-color: var(--mases-color-action-primary-active);
+.arna-button--primary:active:not(:disabled) {
+  background-color: var(--arna-color-action-primary-active);
+  border-color: var(--arna-color-action-primary-active);
 }
 
 /* ============================================================================
    Variants — Secondary
    ============================================================================ */
-.mases-button--secondary {
-  background-color: var(--mases-color-action-secondary);
-  border-color: var(--mases-color-action-secondary);
-  color: var(--mases-color-text-inverse);
+.arna-button--secondary {
+  background-color: var(--arna-color-action-secondary);
+  border-color: var(--arna-color-action-secondary);
+  color: var(--arna-color-text-inverse);
 }
 
-.mases-button--secondary:hover:not(:disabled) {
-  background-color: var(--mases-color-action-secondary-hover);
-  border-color: var(--mases-color-action-secondary-hover);
+.arna-button--secondary:hover:not(:disabled) {
+  background-color: var(--arna-color-action-secondary-hover);
+  border-color: var(--arna-color-action-secondary-hover);
 }
 
-.mases-button--secondary:active:not(:disabled) {
-  background-color: var(--mases-color-action-secondary-active);
-  border-color: var(--mases-color-action-secondary-active);
+.arna-button--secondary:active:not(:disabled) {
+  background-color: var(--arna-color-action-secondary-active);
+  border-color: var(--arna-color-action-secondary-active);
 }
 
 /* ============================================================================
    Variants — Ghost
    ============================================================================ */
-.mases-button--ghost {
-  background-color: var(--mases-color-action-ghost);
+.arna-button--ghost {
+  background-color: var(--arna-color-action-ghost);
   border-color: transparent;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
 }
 
-.mases-button--ghost:hover:not(:disabled) {
-  background-color: var(--mases-color-action-ghost-hover);
+.arna-button--ghost:hover:not(:disabled) {
+  background-color: var(--arna-color-action-ghost-hover);
 }
 
-.mases-button--ghost:active:not(:disabled) {
-  background-color: var(--mases-color-state-hover);
+.arna-button--ghost:active:not(:disabled) {
+  background-color: var(--arna-color-state-hover);
 }
 
 /* ============================================================================
    Variants — Danger
    ============================================================================ */
-.mases-button--danger {
-  background-color: var(--mases-color-action-danger);
-  border-color: var(--mases-color-action-danger);
-  color: var(--mases-color-text-inverse);
+.arna-button--danger {
+  background-color: var(--arna-color-action-danger);
+  border-color: var(--arna-color-action-danger);
+  color: var(--arna-color-text-inverse);
 }
 
-.mases-button--danger:hover:not(:disabled) {
-  background-color: var(--mases-color-action-danger-hover);
-  border-color: var(--mases-color-action-danger-hover);
+.arna-button--danger:hover:not(:disabled) {
+  background-color: var(--arna-color-action-danger-hover);
+  border-color: var(--arna-color-action-danger-hover);
 }
 
-.mases-button--danger:active:not(:disabled) {
-  background-color: var(--mases-color-action-danger-hover);
-  border-color: var(--mases-color-action-danger-hover);
+.arna-button--danger:active:not(:disabled) {
+  background-color: var(--arna-color-action-danger-hover);
+  border-color: var(--arna-color-action-danger-hover);
 }
 
 /* ============================================================================
    Variants — Link
    ============================================================================ */
-.mases-button--link {
-  background-color: var(--mases-color-action-ghost);
+.arna-button--link {
+  background-color: var(--arna-color-action-ghost);
   border-color: transparent;
-  color: var(--mases-color-action-link);
+  color: var(--arna-color-action-link);
   padding: 0;
   min-height: auto;
   text-decoration: none;
 }
 
-.mases-button--link:hover:not(:disabled) {
-  color: var(--mases-color-action-link-hover);
+.arna-button--link:hover:not(:disabled) {
+  color: var(--arna-color-action-link-hover);
   text-decoration: underline;
 }
 
-.mases-button--link:active:not(:disabled) {
-  color: var(--mases-color-action-link-hover);
+.arna-button--link:active:not(:disabled) {
+  color: var(--arna-color-action-link-hover);
 }
 
 /* ============================================================================
    Disabled — single treatment across all variants
    (Design System §2.6 R6: never rely solely on opacity reduction.)
    ============================================================================ */
-.mases-button:disabled {
-  background-color: var(--mases-color-surface-disabled);
-  border-color: var(--mases-color-border-subtle);
-  color: var(--mases-color-text-disabled);
+.arna-button:disabled {
+  background-color: var(--arna-color-surface-disabled);
+  border-color: var(--arna-color-border-subtle);
+  color: var(--arna-color-text-disabled);
   cursor: not-allowed;
 }
 
-.mases-button--ghost:disabled,
-.mases-button--link:disabled {
+.arna-button--ghost:disabled,
+.arna-button--link:disabled {
   background-color: transparent;
   border-color: transparent;
   text-decoration: none;
 }
 
-.mases-button--link:disabled {
+.arna-button--link:disabled {
   padding: 0;
   min-height: auto;
 }
@@ -432,18 +432,18 @@ function handleClick(event: MouseEvent): void {
    (Inline; BaseSpinner is a separate primitive delivered in a later unit.
     BaseButton declares its own spinner to remain self-contained.)
    ============================================================================ */
-.mases-button__spinner {
+.arna-button__spinner {
   display: inline-block;
   flex-shrink: 0;
   width: 1em;
   height: 1em;
   border: 2px solid currentColor;
   border-top-color: transparent;
-  border-radius: var(--mases-radius-full);
-  animation: mases-button-spin 0.8s linear infinite;
+  border-radius: var(--arna-radius-full);
+  animation: arna-button-spin 0.8s linear infinite;
 }
 
-@keyframes mases-button-spin {
+@keyframes arna-button-spin {
   to {
     transform: rotate(360deg);
   }
@@ -452,7 +452,7 @@ function handleClick(event: MouseEvent): void {
 /* Design System §11.5 — the loading spinner is the single permitted
    exception to reduced-motion; it slows to 2x duration but does not stop. */
 @media (prefers-reduced-motion: reduce) {
-  .mases-button__spinner {
+  .arna-button__spinner {
     animation-duration: 1.6s;
   }
 }
@@ -460,15 +460,15 @@ function handleClick(event: MouseEvent): void {
 /* ============================================================================
    Slot wrappers
    ============================================================================ */
-.mases-button__leading,
-.mases-button__trailing {
+.arna-button__leading,
+.arna-button__trailing {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-.mases-button__label {
+.arna-button__label {
   display: inline-flex;
   align-items: center;
 }

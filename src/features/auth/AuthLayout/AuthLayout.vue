@@ -598,8 +598,8 @@ const resolvedLogoAlt = computed<string>(() => {
   min-height: 100dvh;
 
   /* Fallbacks match --mases-space-6 (24px) and --mases-space-3 (12px). */
-  padding-block: var(--mases-space-6, 24px);
-  padding-inline: var(--mases-space-3, 12px);
+  padding-block: var(--arna-space-6, 24px);
+  padding-inline: var(--arna-space-3, 12px);
 
   /*
    * The ivory background. Fallback #FFFDF7 is the resolved value of
@@ -608,14 +608,14 @@ const resolvedLogoAlt = computed<string>(() => {
    * with the correct ivory surface — not the browser default (black
    * in dark mode).
    */
-  background-color: var(--mases-color-surface-auth-backdrop, #FFFDF7);
+  background-color: var(--arna-color-surface-auth-backdrop, #FFFDF7);
 
   /*
    * Text color fallback #141009 is the resolved value of
    * --mases-color-neutral-900, which is what --mases-color-text-primary
    * resolves to.
    */
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 
   font-family: inherit;
 }
@@ -626,16 +626,16 @@ const resolvedLogoAlt = computed<string>(() => {
   inset-block-start: 0.5rem;
   inset-inline-start: 0.5rem;
   padding: 0.65rem 0.9rem;
-  border: 2px solid var(--mases-color-border-focus, currentColor);
-  border-radius: var(--mases-radius-sm, 4px);
-  color: var(--mases-color-text-inverse, #FFFDF7);
-  background: var(--mases-color-surface-inverse, #24132E);
+  border: 2px solid var(--arna-color-border-focus, currentColor);
+  border-radius: var(--arna-radius-sm, 4px);
+  color: var(--arna-color-text-inverse, #FFFDF7);
+  background: var(--arna-color-surface-inverse, #24132E);
   transform: translateY(calc(-100% - 1rem));
 }
 
 .auth-layout__skip-link:focus-visible {
   transform: translateY(0);
-  outline: 3px solid var(--mases-color-state-focus-ring, #D4A017);
+  outline: 3px solid var(--arna-color-state-focus-ring, #D4A017);
   outline-offset: 2px;
 }
 
@@ -659,8 +659,8 @@ const resolvedLogoAlt = computed<string>(() => {
 @media (min-width: 640px) {
   .auth-layout {
     /* Fallbacks match --mases-space-8 (32px) and --mases-space-4 (16px). */
-    padding-block: var(--mases-space-8, 32px);
-    padding-inline: var(--mases-space-4, 16px);
+    padding-block: var(--arna-space-8, 32px);
+    padding-inline: var(--arna-space-4, 16px);
   }
 }
 
@@ -691,7 +691,7 @@ const resolvedLogoAlt = computed<string>(() => {
   align-items: center;
 
   /* Fallback matches --mases-space-4 (16px). */
-  gap: var(--mases-space-4, 16px);
+  gap: var(--arna-space-4, 16px);
 
   width: 100%;
 
@@ -701,14 +701,14 @@ const resolvedLogoAlt = computed<string>(() => {
    * Even if the token fails to load, the fallback still constrains
    * the width to a readable single-column form.
    */
-  max-width: var(--mases-container-auth-card, 448px);
+  max-width: var(--arna-container-auth-card, 448px);
 }
 
 /* Tablet and up: the wider desktop gap. */
 @media (min-width: 640px) {
   .auth-layout__main {
     /* Fallback matches --mases-space-6 (24px). */
-    gap: var(--mases-space-6, 24px);
+    gap: var(--arna-space-6, 24px);
   }
 }
 
@@ -718,7 +718,7 @@ const resolvedLogoAlt = computed<string>(() => {
  * comment §"Card size — register variant".
  */
 .auth-layout__main[data-size='wide'] {
-  max-width: var(--mases-container-auth-card-wide, 560px);
+  max-width: var(--arna-container-auth-card-wide, 560px);
 }
 
 /* ============================================================================
@@ -740,8 +740,8 @@ const resolvedLogoAlt = computed<string>(() => {
    * keep any reasonable logo aspect ratio proportionate above the
    * card; the image never upscales.
    */
-  max-width: var(--mases-size-auth-logo-max-width, 180px);
-  max-height: var(--mases-size-auth-logo-max-height, 72px);
+  max-width: var(--arna-size-auth-logo-max-width, 180px);
+  max-height: var(--arna-size-auth-logo-max-height, 72px);
 
   width: auto;
   height: auto;
@@ -782,16 +782,16 @@ const resolvedLogoAlt = computed<string>(() => {
   flex-direction: column;
   width: 100%;
 
-  border: 1px solid var(--mases-color-border-subtle, #EFEADB);
+  border: 1px solid var(--arna-color-border-subtle, #EFEADB);
 
   /* Fallback matches --mases-radius-lg (12px). */
-  border-radius: var(--mases-radius-lg, 12px);
+  border-radius: var(--arna-radius-lg, 12px);
 
   /*
    * The card's own background resolves to the same ivory the auth
    * backdrop uses. See the surface note above.
    */
-  background-color: var(--mases-color-surface-page, #FFFDF7);
+  background-color: var(--arna-color-surface-page, #FFFDF7);
 
   /*
    * Elevation-2 shadow, inlined as a fallback. If the token is
@@ -800,7 +800,7 @@ const resolvedLogoAlt = computed<string>(() => {
    * read as an elevated surface against the matching backdrop.
    */
   box-shadow: var(
-    --mases-shadow-elevation-2,
+    --arna-shadow-elevation-2,
     0 2px 4px rgba(31, 10, 47, 0.06),
     0 4px 8px rgba(31, 10, 47, 0.08)
   );
@@ -814,8 +814,8 @@ const resolvedLogoAlt = computed<string>(() => {
    ============================================================================ */
 .auth-layout__content {
   /* Fallbacks match --mases-space-4 (16px). */
-  padding-block: var(--mases-space-4, 16px);
-  padding-inline: var(--mases-space-4, 16px);
+  padding-block: var(--arna-space-4, 16px);
+  padding-inline: var(--arna-space-4, 16px);
 
   overflow-wrap: break-word;
   word-break: normal;
@@ -825,8 +825,8 @@ const resolvedLogoAlt = computed<string>(() => {
 @media (min-width: 640px) {
   .auth-layout__content {
     /* Fallbacks match --mases-space-6 (24px). */
-    padding-block: var(--mases-space-6, 24px);
-    padding-inline: var(--mases-space-6, 24px);
+    padding-block: var(--arna-space-6, 24px);
+    padding-inline: var(--arna-space-6, 24px);
   }
 }
 
@@ -843,11 +843,11 @@ const resolvedLogoAlt = computed<string>(() => {
    * Fallback #8C8170 matches --mases-color-neutral-500, which is
    * what --mases-color-text-tertiary resolves to.
    */
-  color: var(--mases-color-text-tertiary, #8C8170);
+  color: var(--arna-color-text-tertiary, #8C8170);
 
   /* Fallbacks match --mases-font-size-caption (12px) and its line height (16px). */
-  font-size: var(--mases-font-size-caption, 12px);
-  line-height: var(--mases-line-height-caption, 16px);
+  font-size: var(--arna-font-size-caption, 12px);
+  line-height: var(--arna-line-height-caption, 16px);
 
   overflow-wrap: break-word;
   word-break: normal;
@@ -865,20 +865,20 @@ const resolvedLogoAlt = computed<string>(() => {
    ============================================================================ */
 .auth-layout__branding {
   /* Fallback matches --mases-space-2 (8px). */
-  margin-block-start: var(--mases-space-2, 8px);
+  margin-block-start: var(--arna-space-2, 8px);
 
   /*
    * The attribution color token resolves to tertiary by default;
    * fallback matches the same tertiary color.
    */
-  color: var(--mases-color-text-auth-attribution, #8C8170);
+  color: var(--arna-color-text-auth-attribution, #8C8170);
 
   /* Fallbacks match --mases-font-size-caption (12px) and its line height (16px). */
-  font-size: var(--mases-font-size-caption, 12px);
-  line-height: var(--mases-line-height-caption, 16px);
+  font-size: var(--arna-font-size-caption, 12px);
+  line-height: var(--arna-line-height-caption, 16px);
 
   /* Fallback matches --mases-letter-spacing-wide (0.02em). */
-  letter-spacing: var(--mases-letter-spacing-wide, 0.02em);
+  letter-spacing: var(--arna-letter-spacing-wide, 0.02em);
 
   text-align: center;
   overflow-wrap: break-word;

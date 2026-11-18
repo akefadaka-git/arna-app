@@ -1255,7 +1255,7 @@ const passwordConfirmToggleLabel = computed<string>(() =>
 .register-form {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-5);
+  gap: var(--arna-space-5);
   width: 100%;
 }
 
@@ -1269,10 +1269,10 @@ const passwordConfirmToggleLabel = computed<string>(() =>
 
 .register-form__banner-reference {
   margin: 0;
-  margin-block-start: var(--mases-space-1);
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  margin-block-start: var(--arna-space-1);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   overflow-wrap: anywhere;
 }
 
@@ -1289,17 +1289,17 @@ const passwordConfirmToggleLabel = computed<string>(() =>
 
 .register-form__legend {
   padding: 0;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-semibold);
   overflow-wrap: anywhere;
 }
 
 .register-form__fields {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-4);
+  gap: var(--arna-space-4);
 }
 
 /* ============================================================================
@@ -1317,23 +1317,23 @@ const passwordConfirmToggleLabel = computed<string>(() =>
   height: 28px;
   padding: 0;
   border: 0;
-  border-radius: var(--mases-radius-sm);
+  border-radius: var(--arna-radius-sm);
   background-color: transparent;
   color: inherit;
   cursor: pointer;
   transition:
-    color var(--mases-duration-fast) var(--mases-easing-standard),
-    background-color var(--mases-duration-fast) var(--mases-easing-standard);
+    color var(--arna-duration-fast) var(--arna-easing-standard),
+    background-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .register-form__password-toggle:hover:not(:disabled) {
-  color: var(--mases-color-text-primary);
-  background-color: var(--mases-color-state-hover);
+  color: var(--arna-color-text-primary);
+  background-color: var(--arna-color-state-hover);
 }
 
 .register-form__password-toggle:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 .register-form__password-toggle:disabled {
@@ -1348,10 +1348,10 @@ const passwordConfirmToggleLabel = computed<string>(() =>
    ============================================================================ */
 .register-form__caps-lock {
   margin: 0;
-  margin-block-start: calc(-1 * var(--mases-space-3));
-  color: var(--mases-color-text-warning);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  margin-block-start: calc(-1 * var(--arna-space-3));
+  color: var(--arna-color-text-warning);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   overflow-wrap: anywhere;
 }
 
@@ -1361,8 +1361,8 @@ const passwordConfirmToggleLabel = computed<string>(() =>
 .register-form__actions {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
-  margin-block-start: var(--mases-space-1);
+  gap: var(--arna-space-2);
+  margin-block-start: var(--arna-space-1);
 }
 
 /* ============================================================================
@@ -1371,19 +1371,19 @@ const passwordConfirmToggleLabel = computed<string>(() =>
 .register-form__links {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
-  margin-block-start: var(--mases-space-3);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  gap: var(--arna-space-2);
+  margin-block-start: var(--arna-space-3);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
 }
 
 .register-form__login-prompt {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   margin: 0;
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   overflow-wrap: anywhere;
 }
 

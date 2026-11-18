@@ -72,4 +72,4 @@
  * =============================================================================
  */
 
-export { default } from './MASESBrand.vue';
+export { default } from './ArnaBrand.vue';

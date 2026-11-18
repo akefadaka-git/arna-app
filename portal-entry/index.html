@@ -111,7 +111,7 @@
       and are not repeated here.
 
       ---------------------------------------------------------------------
-      Why <title>Maale Arna Portal</title>
+      Why <title>ARNA Shareholder Portal</title>
       ---------------------------------------------------------------------
       The portal is presented to shareholders as the public-facing
       brand surface. The workspace uses the shorter project name
@@ -382,7 +382,7 @@
       block if the Tier 1 values change.
     -->
     <style>
-      .mases-preloader {
+      .arna-preloader {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -397,22 +397,22 @@
         background-color: #FFFDF7;
       }
 
-      .mases-preloader__spinner {
+      .arna-preloader__spinner {
         display: block;
         width: 32px;
         height: 32px;
         border: 3px solid #DDD5C0;
         border-top-color: #9B1B30;
         border-radius: 50%;
-        animation: mases-preloader-spin 0.8s linear infinite;
+        animation: arna-preloader-spin 0.8s linear infinite;
       }
 
-      @keyframes mases-preloader-spin {
+      @keyframes arna-preloader-spin {
         to { transform: rotate(360deg); }
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .mases-preloader__spinner {
+        .arna-preloader__spinner {
           animation: none;
           border-top-color: #DDD5C0;
         }
@@ -443,9 +443,9 @@
       The spinner itself is decorative; only the label is read aloud.
     -->
     <div id="app">
-      <div class="mases-preloader" role="status" aria-live="polite">
-        <span class="mases-preloader__spinner" aria-hidden="true"></span>
-        <span class="mases-preloader__label">በመጫን ላይ...</span>
+      <div class="arna-preloader" role="status" aria-live="polite">
+        <span class="arna-preloader__spinner" aria-hidden="true"></span>
+        <span class="arna-preloader__label">በመጫን ላይ...</span>
       </div>
     </div>
 

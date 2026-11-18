@@ -129,13 +129,13 @@
  * Module-level Set for deduplicated development warnings.
  * Same pattern as BaseChip (Unit 8.22) and BaseLink (Unit 8.18).
  */
-const __masesErrorCodeBadgeWarned = new Set<string>();
+const __arnaErrorCodeBadgeWarned = new Set<string>();
 
-function __masesErrorCodeBadgeWarnOnce(key: string, message: string): void {
-  if (__masesErrorCodeBadgeWarned.has(key)) {
+function __arnaErrorCodeBadgeWarnOnce(key: string, message: string): void {
+  if (__arnaErrorCodeBadgeWarned.has(key)) {
     return;
   }
-  __masesErrorCodeBadgeWarned.add(key);
+  __arnaErrorCodeBadgeWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -202,7 +202,7 @@ if (
   import.meta.env.DEV &&
   (props.httpStatus < 100 || props.httpStatus > 599)
 ) {
-  __masesErrorCodeBadgeWarnOnce(
+  __arnaErrorCodeBadgeWarnOnce(
     'error-code-badge:invalid-status',
     `[ErrorCodeBadge] httpStatus=${props.httpStatus} is outside the ` +
       `valid HTTP status range (100–599). The value will be rendered ` +
@@ -215,7 +215,7 @@ if (
  * only the code, which may be confusing. Warn once per module load.
  */
 if (import.meta.env.DEV && props.label.trim().length === 0) {
-  __masesErrorCodeBadgeWarnOnce(
+  __arnaErrorCodeBadgeWarnOnce(
     'error-code-badge:empty-label',
     '[ErrorCodeBadge] label is empty or whitespace-only. Only the ' +
       'code will be rendered. Supply a translated archetype label ' +
@@ -283,16 +283,16 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
 .error-code-badge {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   vertical-align: middle;
   white-space: nowrap;
-  padding-block: var(--mases-space-1);
-  padding-inline: var(--mases-space-2);
-  border-radius: var(--mases-radius-full);
+  padding-block: var(--arna-space-1);
+  padding-inline: var(--arna-space-2);
+  border-radius: var(--arna-radius-full);
   font-family: inherit;
-  font-size: var(--mases-font-size-caption);
+  font-size: var(--arna-font-size-caption);
   line-height: 1;
-  font-weight: var(--mases-font-weight-medium);
+  font-weight: var(--arna-font-weight-medium);
   /*
    * Amharic syllables must never be uppercased.
    * Design System §3.5 B6.
@@ -305,14 +305,14 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    Code
    ============================================================================ */
 .error-code-badge__code {
-  font-family: var(--mases-font-family-mono);
+  font-family: var(--arna-font-family-mono);
   /*
    * Tabular numerals ensure every digit has the same advance width,
    * so "403", "404", and "500" render at identical widths. See the
    * file header comment §"Mono code and tabular numerals".
    */
   font-variant-numeric: tabular-nums;
-  font-weight: var(--mases-font-weight-semibold);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 /* ============================================================================
@@ -343,23 +343,23 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    Variant — Danger (default)
    ============================================================================ */
 .error-code-badge--danger {
-  background-color: var(--mases-color-surface-danger);
-  color: var(--mases-color-text-danger);
+  background-color: var(--arna-color-surface-danger);
+  color: var(--arna-color-text-danger);
 }
 
 /* ============================================================================
    Variant — Warning
    ============================================================================ */
 .error-code-badge--warning {
-  background-color: var(--mases-color-surface-warning);
-  color: var(--mases-color-text-warning);
+  background-color: var(--arna-color-surface-warning);
+  color: var(--arna-color-text-warning);
 }
 
 /* ============================================================================
    Variant — Neutral
    ============================================================================ */
 .error-code-badge--neutral {
-  background-color: var(--mases-color-surface-raised);
-  color: var(--mases-color-text-secondary);
+  background-color: var(--arna-color-surface-raised);
+  color: var(--arna-color-text-secondary);
 }
 </style>

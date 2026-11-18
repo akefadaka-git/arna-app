@@ -466,18 +466,18 @@
  * so a document containing all four primitives never produces a
  * colliding id.
  */
-let __masesPageHeaderIdCounter = 0;
+let __arnaPageHeaderIdCounter = 0;
 
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesPageHeaderWarned = new Set<string>();
+const __arnaPageHeaderWarned = new Set<string>();
 
-function __masesPageHeaderWarnOnce(key: string, message: string): void {
-  if (__masesPageHeaderWarned.has(key)) {
+function __arnaPageHeaderWarnOnce(key: string, message: string): void {
+  if (__arnaPageHeaderWarned.has(key)) {
     return;
   }
-  __masesPageHeaderWarned.add(key);
+  __arnaPageHeaderWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -666,7 +666,7 @@ if (
   (props.breadcrumbsAriaLabel === undefined ||
     props.breadcrumbsAriaLabel.trim() === '')
 ) {
-  __masesPageHeaderWarnOnce(
+  __arnaPageHeaderWarnOnce(
     'page-header:missing-breadcrumbs-aria-label',
     '[PageHeader] breadcrumbs are supplied but `breadcrumbsAriaLabel` ' +
       'is missing or empty. The breadcrumbs nav will render with ' +
@@ -706,7 +706,7 @@ const hasBreadcrumbs = computed<boolean>(
  * instance. Only emitted to the template (and only linked via
  * aria-labelledby) when the title is non-empty.
  */
-const titleId = `mases-page-header-title-${++__masesPageHeaderIdCounter}`;
+const titleId = `arna-page-header-title-${++__arnaPageHeaderIdCounter}`;
 
 // =============================================================================
 // Computed — classes
@@ -848,24 +848,24 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .page-header {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   width: 100%;
   font-family: inherit;
 }
 
 @media (min-width: 640px) {
   .page-header {
-    gap: var(--mases-space-4);
+    gap: var(--arna-space-4);
   }
 }
 
 .page-header--compact {
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
 }
 
 @media (min-width: 640px) {
   .page-header--compact {
-    gap: var(--mases-space-3);
+    gap: var(--arna-space-3);
   }
 }
 
@@ -877,12 +877,12 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
    two are mutually exclusive in effect.
    ============================================================================ */
 .page-header[data-dividers='true']:not(.page-header--sticky) {
-  padding-block-end: var(--mases-space-4);
-  border-block-end: 1px solid var(--mases-color-border-subtle);
+  padding-block-end: var(--arna-space-4);
+  border-block-end: 1px solid var(--arna-color-border-subtle);
 }
 
 .page-header[data-dividers='true']:not(.page-header--sticky).page-header--compact {
-  padding-block-end: var(--mases-space-3);
+  padding-block-end: var(--arna-space-3);
 }
 
 /* ============================================================================
@@ -903,12 +903,12 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .page-header--sticky {
   position: sticky;
   top: 0;
-  z-index: var(--mases-z-sticky);
-  background-color: var(--mases-color-surface-page);
-  margin-inline: calc(var(--mases-space-1) * -1);
-  padding-inline: var(--mases-space-1);
-  padding-block: var(--mases-space-1);
-  border-block-end: 1px solid var(--mases-color-border-subtle);
+  z-index: var(--arna-z-sticky);
+  background-color: var(--arna-color-surface-page);
+  margin-inline: calc(var(--arna-space-1) * -1);
+  padding-inline: var(--arna-space-1);
+  padding-block: var(--arna-space-1);
+  border-block-end: 1px solid var(--arna-color-border-subtle);
 }
 
 /* ============================================================================
@@ -929,7 +929,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   flex-wrap: wrap;
 }
 
@@ -938,17 +938,17 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-between;
-    gap: var(--mases-space-4);
+    gap: var(--arna-space-4);
   }
 }
 
 .page-header--compact .page-header__top-row {
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
 }
 
 @media (min-width: 640px) {
   .page-header--compact .page-header__top-row {
-    gap: var(--mases-space-3);
+    gap: var(--arna-space-3);
   }
 }
 
@@ -968,7 +968,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .page-header__title-column {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   /*
    * The title column is the primary region; the actions column
    * occupies only as much width as its content needs.
@@ -985,11 +985,11 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
    ============================================================================ */
 .page-header__eyebrow {
   margin: 0;
-  color: var(--mases-color-text-tertiary);
+  color: var(--arna-color-text-tertiary);
   font-family: inherit;
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
+  font-weight: var(--arna-font-weight-medium);
   overflow-wrap: anywhere;
 }
 
@@ -1001,7 +1001,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
   flex-direction: row;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   min-width: 0;
 }
 
@@ -1009,7 +1009,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
   display: inline-flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   min-width: 0;
 }
 
@@ -1019,11 +1019,11 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .page-header__title {
   margin: 0;
   max-width: 40em;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-heading-3);
-  line-height: var(--mases-line-height-heading-3);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-heading-3);
+  line-height: var(--arna-line-height-heading-3);
+  font-weight: var(--arna-font-weight-semibold);
   /*
    * Amharic truncation uses word-boundary wrapping (Design System
    * §3.7 W4). `anywhere` is a stronger fallback for pathological
@@ -1046,11 +1046,11 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .page-header__description {
   margin: 0;
   max-width: 60em;
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: anywhere;
   word-break: normal;
 }
@@ -1066,7 +1066,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .page-header__actions {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-wrap: wrap;
   flex-shrink: 0;
   margin-inline-start: 0;
@@ -1088,11 +1088,11 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   width: 100%;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
 }
 
 /* ============================================================================

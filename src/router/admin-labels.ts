@@ -256,7 +256,7 @@ import type {
   UserMenuItem,
 } from '@/layouts/AppShell';
 
-import { masesUserMenuItems } from '@/router/shell-labels';
+import { arnaUserMenuItems } from '@/router/shell-labels';
 
 /**
  * The admin build's sidebar navigation tree.
@@ -341,5 +341,5 @@ export const adminUserMenuItems: ReadonlyArray<UserMenuItem> = [
     icon: 'layout-grid',
     permission: 'app.app.access',
   },
-  ...masesUserMenuItems,
+  ...arnaUserMenuItems,
 ];

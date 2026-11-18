@@ -134,7 +134,7 @@
  * Distinct prefix from the primitives' counters so no collision is
  * possible in a document that uses both.
  */
-let __masesFormSectionIdCounter = 0;
+let __arnaFormSectionIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -188,7 +188,7 @@ defineSlots<{
 /*
  * Generated id — evaluated once per component instance.
  */
-const descriptionId = `mases-form-section-desc-${++__masesFormSectionIdCounter}`;
+const descriptionId = `arna-form-section-desc-${++__arnaFormSectionIdCounter}`;
 
 /*
  * Whether the description should render.
@@ -293,11 +293,11 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    Spacing variants
    ============================================================================ */
 .form-section--default {
-  gap: var(--mases-space-4);
+  gap: var(--arna-space-4);
 }
 
 .form-section--compact {
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
 }
 
 /* ============================================================================
@@ -314,11 +314,11 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   width: 100%;
   margin: 0;
   padding: 0;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-heading-6);
-  line-height: var(--mases-line-height-heading-6);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-heading-6);
+  line-height: var(--arna-line-height-heading-6);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 /* ============================================================================
@@ -326,11 +326,11 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    ============================================================================ */
 .form-section__description {
   margin: 0;
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
 }
 
 /* ============================================================================
@@ -369,7 +369,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-wrap: wrap;
 }
 </style>

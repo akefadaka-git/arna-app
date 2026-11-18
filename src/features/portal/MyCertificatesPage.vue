@@ -295,7 +295,7 @@ function asCertificate(row: unknown): ShareCertificate {
 .my-certificates-page {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 

@@ -704,7 +704,7 @@ const canSubmit = computed<boolean>(
 .holding-entry-form {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-5);
+  gap: var(--arna-space-5);
   width: 100%;
 }
 
@@ -715,10 +715,10 @@ const canSubmit = computed<boolean>(
 
 .holding-entry-form__banner-reference {
   margin: 0;
-  margin-block-start: var(--mases-space-1);
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  margin-block-start: var(--arna-space-1);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   overflow-wrap: anywhere;
 }
 
@@ -728,7 +728,7 @@ const canSubmit = computed<boolean>(
 .holding-entry-form__load-error {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-4);
+  gap: var(--arna-space-4);
   width: 100%;
 }
 
@@ -743,8 +743,8 @@ const canSubmit = computed<boolean>(
 .holding-entry-form__actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--mases-space-3);
-  padding-block-start: var(--mases-space-2);
+  gap: var(--arna-space-3);
+  padding-block-start: var(--arna-space-2);
 }
 
 /* ============================================================================

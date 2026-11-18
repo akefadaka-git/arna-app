@@ -138,7 +138,7 @@ export type TabsValue = string | number;
 /*
  * Module-level counter for auto-generated ids.
  */
-let __masesTabsIdCounter = 0;
+let __arnaTabsIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -201,7 +201,7 @@ defineSlots<{
 // -----------------------------------------------------------------------------
 // Generated ids
 // -----------------------------------------------------------------------------
-const baseId = `mases-tabs-${++__masesTabsIdCounter}`;
+const baseId = `arna-tabs-${++__arnaTabsIdCounter}`;
 function tabId(index: number): string {
   return `${baseId}-tab-${index}`;
 }
@@ -515,38 +515,38 @@ watch(
 .tabs__tab {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-2);
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-4);
+  gap: var(--arna-space-2);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-4);
   appearance: none;
   background-color: transparent;
   border: 0;
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-medium);
   text-align: center;
   white-space: nowrap;
   cursor: pointer;
   transition:
-    color var(--mases-duration-fast) var(--mases-easing-standard),
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    border-color var(--mases-duration-fast) var(--mases-easing-standard);
+    color var(--arna-duration-fast) var(--arna-easing-standard),
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    border-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .tabs__tab:hover:not(:disabled) {
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
 }
 
 .tabs__tab:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: calc(var(--mases-focus-ring-offset) * -1);
-  border-radius: var(--mases-radius-sm);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: calc(var(--arna-focus-ring-offset) * -1);
+  border-radius: var(--arna-radius-sm);
 }
 
 .tabs__tab:disabled {
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
   cursor: not-allowed;
 }
 
@@ -564,11 +564,11 @@ watch(
   display: inline-block;
   min-width: 1.25rem;
   padding-block: 0;
-  padding-inline: var(--mases-space-1);
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
+  padding-inline: var(--arna-space-1);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
   line-height: 1;
-  font-weight: var(--mases-font-weight-medium);
+  font-weight: var(--arna-font-weight-medium);
   /* Tabular numerals so columns of counts align. */
   font-variant-numeric: tabular-nums;
   text-align: center;
@@ -585,7 +585,7 @@ watch(
    the active tab is indicated by a crimson underline on top of it.
    ============================================================================ */
 .tabs--underline .tabs__list {
-  border-block-end: 1px solid var(--mases-color-border-subtle);
+  border-block-end: 1px solid var(--arna-color-border-subtle);
 }
 
 .tabs--underline .tabs__tab {
@@ -599,9 +599,9 @@ watch(
 }
 
 .tabs--underline .tabs__tab[data-active='true'] {
-  color: var(--mases-color-text-primary);
-  font-weight: var(--mases-font-weight-semibold);
-  border-block-end-color: var(--mases-color-action-primary);
+  color: var(--arna-color-text-primary);
+  font-weight: var(--arna-font-weight-semibold);
+  border-block-end-color: var(--arna-color-action-primary);
 }
 
 /* ============================================================================
@@ -611,27 +611,27 @@ watch(
    have rounded corners and a small gap between them.
    ============================================================================ */
 .tabs--pill .tabs__list {
-  gap: var(--mases-space-1);
-  padding: var(--mases-space-1);
-  background-color: var(--mases-color-surface-sunken);
-  border-radius: var(--mases-radius-md);
+  gap: var(--arna-space-1);
+  padding: var(--arna-space-1);
+  background-color: var(--arna-color-surface-sunken);
+  border-radius: var(--arna-radius-md);
 }
 
 .tabs--pill .tabs__tab {
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-3);
-  border-radius: var(--mases-radius-sm);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-3);
+  border-radius: var(--arna-radius-sm);
 }
 
 .tabs--pill .tabs__tab[data-active='true'] {
-  background-color: var(--mases-color-surface-overlay);
-  color: var(--mases-color-text-primary);
-  font-weight: var(--mases-font-weight-semibold);
-  box-shadow: var(--mases-shadow-elevation-1);
+  background-color: var(--arna-color-surface-overlay);
+  color: var(--arna-color-text-primary);
+  font-weight: var(--arna-font-weight-semibold);
+  box-shadow: var(--arna-shadow-elevation-1);
 }
 
 .tabs--pill .tabs__tab:focus-visible {
-  outline-offset: var(--mases-focus-ring-offset);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
@@ -646,7 +646,7 @@ watch(
    * No focus ring on the panel itself — the tab's own focus ring is
    * sufficient indication of the user's position in the tab sequence.
    */
-  padding-block-start: var(--mases-space-4);
+  padding-block-start: var(--arna-space-4);
 }
 
 .tabs__panel:focus {
@@ -658,8 +658,8 @@ watch(
    ============================================================================ */
 @media (max-width: 639px) {
   .tabs__tab {
-    padding-block: var(--mases-space-3);
-    padding-inline: var(--mases-space-3);
+    padding-block: var(--arna-space-3);
+    padding-inline: var(--arna-space-3);
     /* Ensure tap target height meets 44px with padding + line-height. */
     min-height: 44px;
   }

@@ -977,7 +977,7 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-8, 32px);
+  gap: var(--arna-space-8, 32px);
   width: 100%;
 
   /*
@@ -987,8 +987,8 @@ const appName: string = import.meta.env.VITE_APP_NAME;
    *   3. 560px                              (final fallback)
    */
   max-width: var(
-    --mases-container-form,
-    var(--mases-container-auth-card-wide, 560px)
+    --arna-container-form,
+    var(--arna-container-auth-card-wide, 560px)
   );
   margin-inline: auto;
 
@@ -1005,7 +1005,7 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__not-found {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-4, 16px);
+  gap: var(--arna-space-4, 16px);
 }
 
 /* ============================================================================
@@ -1014,12 +1014,12 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__title {
   margin: 0;
 
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 
   font-family: inherit;
-  font-size: var(--mases-font-size-heading-2, 32px);
-  line-height: var(--mases-line-height-heading-2, 40px);
-  font-weight: var(--mases-font-weight-semibold, 600);
+  font-size: var(--arna-font-size-heading-2, 32px);
+  line-height: var(--arna-line-height-heading-2, 40px);
+  font-weight: var(--arna-font-weight-semibold, 600);
 
   text-align: start;
   overflow-wrap: anywhere;
@@ -1031,10 +1031,10 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__back-link {
   display: inline-block;
 
-  color: var(--mases-color-text-secondary, #3F382B);
+  color: var(--arna-color-text-secondary, #3F382B);
 
-  font-size: var(--mases-font-size-body-sm, 14px);
-  line-height: var(--mases-line-height-body-sm, 22px);
+  font-size: var(--arna-font-size-body-sm, 14px);
+  line-height: var(--arna-line-height-body-sm, 22px);
   text-decoration: underline;
 
   transition: color 120ms ease;
@@ -1044,7 +1044,7 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 
 .legal-document__back-link:hover,
 .legal-document__back-link:focus-visible {
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 }
 
 /* ============================================================================
@@ -1058,16 +1058,16 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__draft-notice {
   margin: 0;
 
-  padding-block: var(--mases-space-3, 12px);
-  padding-inline: var(--mases-space-4, 16px);
+  padding-block: var(--arna-space-3, 12px);
+  padding-inline: var(--arna-space-4, 16px);
 
-  border: 1px solid var(--mases-color-border-subtle, #E5E0D2);
-  border-radius: var(--mases-radius-md, 8px);
+  border: 1px solid var(--arna-color-border-subtle, #E5E0D2);
+  border-radius: var(--arna-radius-md, 8px);
 
-  color: var(--mases-color-text-secondary, #3F382B);
+  color: var(--arna-color-text-secondary, #3F382B);
 
-  font-size: var(--mases-font-size-body-sm, 14px);
-  line-height: var(--mases-line-height-body-sm, 22px);
+  font-size: var(--arna-font-size-body-sm, 14px);
+  line-height: var(--arna-line-height-body-sm, 22px);
 
   text-align: start;
   overflow-wrap: anywhere;
@@ -1085,13 +1085,13 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 
 .legal-document__heading {
   margin: 0;
-  margin-block-end: var(--mases-space-3, 12px);
+  margin-block-end: var(--arna-space-3, 12px);
 
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 
-  font-size: var(--mases-font-size-heading-4, 24px);
-  line-height: var(--mases-line-height-heading-4, 32px);
-  font-weight: var(--mases-font-weight-semibold, 600);
+  font-size: var(--arna-font-size-heading-4, 24px);
+  line-height: var(--arna-line-height-heading-4, 32px);
+  font-weight: var(--arna-font-weight-semibold, 600);
 
   text-align: start;
   overflow-wrap: anywhere;
@@ -1108,7 +1108,7 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__metadata-list {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3, 12px);
+  gap: var(--arna-space-3, 12px);
 
   margin: 0;
 }
@@ -1116,7 +1116,7 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__metadata-row {
   display: grid;
   grid-template-columns: max-content 1fr;
-  gap: var(--mases-space-3, 12px);
+  gap: var(--arna-space-3, 12px);
 
   margin: 0;
 }
@@ -1124,11 +1124,11 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__metadata-label {
   margin: 0;
 
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 
-  font-size: var(--mases-font-size-body-sm, 14px);
-  line-height: var(--mases-line-height-body-sm, 22px);
-  font-weight: var(--mases-font-weight-semibold, 600);
+  font-size: var(--arna-font-size-body-sm, 14px);
+  line-height: var(--arna-line-height-body-sm, 22px);
+  font-weight: var(--arna-font-weight-semibold, 600);
 
   overflow-wrap: anywhere;
 }
@@ -1136,10 +1136,10 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__metadata-value {
   margin: 0;
 
-  color: var(--mases-color-text-secondary, #3F382B);
+  color: var(--arna-color-text-secondary, #3F382B);
 
-  font-size: var(--mases-font-size-body-sm, 14px);
-  line-height: var(--mases-line-height-body-sm, 22px);
+  font-size: var(--arna-font-size-body-sm, 14px);
+  line-height: var(--arna-line-height-body-sm, 22px);
 
   overflow-wrap: anywhere;
 }
@@ -1169,16 +1169,16 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 }
 
 .legal-document__toc-list li + li {
-  margin-block-start: var(--mases-space-2, 8px);
+  margin-block-start: var(--arna-space-2, 8px);
 }
 
 .legal-document__toc-list a {
   display: inline-block;
 
-  color: var(--mases-color-text-secondary, #3F382B);
+  color: var(--arna-color-text-secondary, #3F382B);
 
-  font-size: var(--mases-font-size-body-sm, 14px);
-  line-height: var(--mases-line-height-body-sm, 22px);
+  font-size: var(--arna-font-size-body-sm, 14px);
+  line-height: var(--arna-line-height-body-sm, 22px);
   text-decoration: underline;
 
   overflow-wrap: anywhere;
@@ -1186,7 +1186,7 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 
 .legal-document__toc-list a:hover,
 .legal-document__toc-list a:focus-visible {
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 }
 
 /* ============================================================================
@@ -1201,29 +1201,29 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__body {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-8, 32px);
+  gap: var(--arna-space-8, 32px);
 }
 
 .legal-document__section {
   margin: 0;
 
-  scroll-margin-top: var(--mases-space-4, 16px);
+  scroll-margin-top: var(--arna-space-4, 16px);
 }
 
 .legal-document__paragraph {
   margin: 0;
 
-  color: var(--mases-color-text-secondary, #3F382B);
+  color: var(--arna-color-text-secondary, #3F382B);
 
-  font-size: var(--mases-font-size-body, 16px);
-  line-height: var(--mases-line-height-body, 26px);
+  font-size: var(--arna-font-size-body, 16px);
+  line-height: var(--arna-line-height-body, 26px);
 
   text-align: start;
   overflow-wrap: anywhere;
 }
 
 .legal-document__paragraph + .legal-document__paragraph {
-  margin-block-start: var(--mases-space-3, 12px);
+  margin-block-start: var(--arna-space-3, 12px);
 }
 
 /* ============================================================================
@@ -1236,7 +1236,7 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__version-list {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-4, 16px);
+  gap: var(--arna-space-4, 16px);
 
   margin: 0;
 }
@@ -1244,7 +1244,7 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__version-row {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2, 8px);
+  gap: var(--arna-space-2, 8px);
 
   margin: 0;
 }
@@ -1252,11 +1252,11 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__version-term {
   margin: 0;
 
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 
-  font-size: var(--mases-font-size-body-sm, 14px);
-  line-height: var(--mases-line-height-body-sm, 22px);
-  font-weight: var(--mases-font-weight-semibold, 600);
+  font-size: var(--arna-font-size-body-sm, 14px);
+  line-height: var(--arna-line-height-body-sm, 22px);
+  font-weight: var(--arna-font-weight-semibold, 600);
 
   overflow-wrap: anywhere;
 }
@@ -1281,16 +1281,16 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 }
 
 .legal-document__related-list li + li {
-  margin-block-start: var(--mases-space-2, 8px);
+  margin-block-start: var(--arna-space-2, 8px);
 }
 
 .legal-document__related-list a {
   display: inline-block;
 
-  color: var(--mases-color-text-secondary, #3F382B);
+  color: var(--arna-color-text-secondary, #3F382B);
 
-  font-size: var(--mases-font-size-body-sm, 14px);
-  line-height: var(--mases-line-height-body-sm, 22px);
+  font-size: var(--arna-font-size-body-sm, 14px);
+  line-height: var(--arna-line-height-body-sm, 22px);
   text-decoration: underline;
 
   overflow-wrap: anywhere;
@@ -1298,7 +1298,7 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 
 .legal-document__related-list a:hover,
 .legal-document__related-list a:focus-visible {
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 }
 
 /* ============================================================================

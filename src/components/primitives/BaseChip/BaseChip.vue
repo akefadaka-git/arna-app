@@ -85,13 +85,13 @@
  * Module-level Set for deduplicated development warnings.
  * See the file header comment §"The remove button".
  */
-const __masesBaseChipWarned = new Set<string>();
+const __arnaBaseChipWarned = new Set<string>();
 
-function __masesBaseChipWarnOnce(key: string, message: string): void {
-  if (__masesBaseChipWarned.has(key)) {
+function __arnaBaseChipWarnOnce(key: string, message: string): void {
+  if (__arnaBaseChipWarned.has(key)) {
     return;
   }
-  __masesBaseChipWarned.add(key);
+  __arnaBaseChipWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -159,7 +159,7 @@ const emit = defineEmits<{
  * load.
  */
 if (import.meta.env.DEV && props.removable && !props.removeAriaLabel) {
-  __masesBaseChipWarnOnce(
+  __arnaBaseChipWarnOnce(
     'base-chip:missing-remove-label',
     '[BaseChip] removable=true without removeAriaLabel. The remove ' +
       'button will render with an empty aria-label, which is an ' +
@@ -243,17 +243,17 @@ function onRemoveClick(): void {
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   vertical-align: middle;
   max-width: 100%;
-  padding-block: var(--mases-space-1);
-  padding-inline: var(--mases-space-2);
+  padding-block: var(--arna-space-1);
+  padding-inline: var(--arna-space-2);
   border: 1px solid transparent;
-  border-radius: var(--mases-radius-full);
+  border-radius: var(--arna-radius-full);
   font-family: inherit;
-  font-size: var(--mases-font-size-caption);
+  font-size: var(--arna-font-size-caption);
   line-height: 1;
-  font-weight: var(--mases-font-weight-medium);
+  font-weight: var(--arna-font-weight-medium);
   /*
    * Amharic syllables must never be uppercased.
    * Design System §3.5 B6.
@@ -266,31 +266,31 @@ function onRemoveClick(): void {
    remove button carries its own right inset. This keeps the pill's
    internal rhythm even. */
 .chip--removable {
-  padding-inline-end: var(--mases-space-1);
+  padding-inline-end: var(--arna-space-1);
 }
 
 /* ============================================================================
    Variants
    ============================================================================ */
 .chip--default {
-  background-color: var(--mases-color-surface-raised);
-  color: var(--mases-color-text-secondary);
-  border-color: var(--mases-color-border-subtle);
+  background-color: var(--arna-color-surface-raised);
+  color: var(--arna-color-text-secondary);
+  border-color: var(--arna-color-border-subtle);
 }
 
 .chip--accent {
-  background-color: var(--mases-color-surface-accent);
-  color: var(--mases-color-text-accent);
-  border-color: var(--mases-color-border-subtle);
+  background-color: var(--arna-color-surface-accent);
+  color: var(--arna-color-text-accent);
+  border-color: var(--arna-color-border-subtle);
 }
 
 /* ============================================================================
    Disabled state
    ============================================================================ */
 .chip--disabled {
-  background-color: var(--mases-color-surface-disabled);
-  color: var(--mases-color-state-disabled-text);
-  border-color: var(--mases-color-border-subtle);
+  background-color: var(--arna-color-surface-disabled);
+  color: var(--arna-color-state-disabled-text);
+  border-color: var(--arna-color-border-subtle);
   cursor: not-allowed;
 }
 
@@ -300,7 +300,7 @@ function onRemoveClick(): void {
 .chip__label {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   /*
    * The label truncates with an ellipsis when the chip's content
    * exceeds the chip's max-width. Amharic truncates at word boundaries
@@ -329,33 +329,33 @@ function onRemoveClick(): void {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: var(--mases-icon-md);
-  height: var(--mases-icon-md);
+  width: var(--arna-icon-md);
+  height: var(--arna-icon-md);
   padding: 0;
   margin: 0;
   appearance: none;
   background-color: transparent;
   border: none;
-  border-radius: var(--mases-radius-full);
+  border-radius: var(--arna-radius-full);
   color: inherit;
   cursor: pointer;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .chip__remove:hover:not(:disabled) {
-  background-color: var(--mases-color-state-hover);
+  background-color: var(--arna-color-state-hover);
 }
 
 .chip__remove:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 .chip__remove:disabled {
   cursor: not-allowed;
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
 }
 
 /* The hover background on the remove button uses a subtle state-hover
@@ -373,13 +373,13 @@ function onRemoveClick(): void {
    ============================================================================ */
 @media (max-width: 639px) {
   .chip {
-    padding-block: var(--mases-space-2);
-    font-size: var(--mases-font-size-body-sm);
+    padding-block: var(--arna-space-2);
+    font-size: var(--arna-font-size-body-sm);
   }
 
   .chip__remove {
-    width: var(--mases-icon-lg);
-    height: var(--mases-icon-lg);
+    width: var(--arna-icon-lg);
+    height: var(--arna-icon-lg);
   }
 }
 </style>

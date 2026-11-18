@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
-import { masesBrandLabels } from '@/router/shell-labels';
+import { arnaBrandLabels } from '@/router/shell-labels';
 import { api } from '@/core/api/client';
 
 type SubmissionKind = 'news' | 'article' | 'announcement' | 'press-release';
@@ -206,7 +206,7 @@ async function submitContent(): Promise<void> {
     <header class="contribute-header">
       <RouterLink class="contribute-brand" :to="{ path: '/', query: { locale } }">
         <img src="/logo.png" alt="" width="42" height="42" />
-        <span><strong>{{ masesBrandLabels.corporateName }}</strong><small>{{ masesBrandLabels.productName }} · PUBLIC</small></span>
+        <span><strong>{{ arnaBrandLabels.corporateName }}</strong><small>{{ arnaBrandLabels.productName }} · PUBLIC</small></span>
       </RouterLink>
       <RouterLink class="contribute-back" :to="{ path: '/', query: { locale } }">{{ copy.back }}</RouterLink>
     </header>
@@ -277,7 +277,7 @@ async function submitContent(): Promise<void> {
         </button>
       </form>
     </main>
-    <footer class="contribute-footer">© {{ new Date().getFullYear() }} {{ masesBrandLabels.corporateName }} · {{ copy.footer }}</footer>
+    <footer class="contribute-footer">© {{ new Date().getFullYear() }} {{ arnaBrandLabels.corporateName }} · {{ copy.footer }}</footer>
   </div>
 </template>
 

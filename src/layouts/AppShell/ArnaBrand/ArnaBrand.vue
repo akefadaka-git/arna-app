@@ -453,13 +453,13 @@
 -->
 
 <script setup lang="ts">
-import { masesBrandLabels } from '@/router/shell-labels';
+import { arnaBrandLabels } from '@/router/shell-labels';
 </script>
 
 <template>
   <span
-    class="mases-brand"
-    data-testid="mases-brand-root"
+    class="arna-brand"
+    data-testid="arna-brand-root"
   >
     <!-- ================================================================
          Emblem (Path A interim)
@@ -488,11 +488,11 @@ import { masesBrandLabels } from '@/router/shell-labels';
          class, testid, or display rules.
          ================================================================ -->
     <span
-      class="mases-brand__symbol"
-      data-testid="mases-brand-symbol"
+      class="arna-brand__symbol"
+      data-testid="arna-brand-symbol"
     >
       <img
-        class="mases-brand__symbol-image"
+        class="arna-brand__symbol-image"
         src="/logo.png"
         alt=""
         width="56"
@@ -506,19 +506,19 @@ import { masesBrandLabels } from '@/router/shell-labels';
     <!-- ================================================================
          Text column — corporate name over product code
          ================================================================ -->
-    <span class="mases-brand__text">
+    <span class="arna-brand__text">
       <span
-        class="mases-brand__corporate"
-        data-testid="mases-brand-corporate"
-      >{{ masesBrandLabels.corporateName }}</span>
+        class="arna-brand__corporate"
+        data-testid="arna-brand-corporate"
+      >{{ arnaBrandLabels.corporateName }}</span>
       <span
-        class="mases-brand__product"
-        data-testid="mases-brand-product"
-      >{{ masesBrandLabels.productName }}</span>
+        class="arna-brand__product"
+        data-testid="arna-brand-product"
+      >{{ arnaBrandLabels.productName }}</span>
       <span
-        class="mases-brand__tagline"
-        data-testid="mases-brand-tagline"
-      >{{ masesBrandLabels.tagline }}</span>
+        class="arna-brand__tagline"
+        data-testid="arna-brand-tagline"
+      >{{ arnaBrandLabels.tagline }}</span>
     </span>
   </span>
 </template>
@@ -531,10 +531,10 @@ import { masesBrandLabels } from '@/router/shell-labels';
    is --mases-space-3 (12px). At mobile the emblem is display: none, so
    the gap has no effect and the layout is identical to v1.0.0.
    ============================================================================ */
-.mases-brand {
+.arna-brand {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   min-width: 0;
   max-width: 100%;
 }
@@ -552,7 +552,7 @@ import { masesBrandLabels } from '@/router/shell-labels';
    contract for Path B: the eventual compact SVG replaces the <img>
    inside this wrapper; the wrapper itself is unchanged.
    ============================================================================ */
-.mases-brand__symbol {
+.arna-brand__symbol {
   display: none;
   align-items: center;
   justify-content: center;
@@ -560,13 +560,13 @@ import { masesBrandLabels } from '@/router/shell-labels';
 }
 
 @media (min-width: 640px) {
-  .mases-brand__symbol {
+  .arna-brand__symbol {
     display: inline-flex;
   }
 }
 
 @media (max-width: 639px) {
-  .mases-brand__tagline {
+  .arna-brand__tagline {
     display: none;
   }
 }
@@ -584,14 +584,14 @@ import { masesBrandLabels } from '@/router/shell-labels';
    image will scale to fit the 44×44 box without distortion rather
    than overflowing.
    --------------------------------------------------------------------------- */
-.mases-brand__symbol-image {
+.arna-brand__symbol-image {
   display: block;
   width: 56px;
   height: 56px;
-  border: 1px solid var(--mases-color-border-subtle);
+  border: 1px solid var(--arna-color-border-subtle);
   border-radius: 50%;
-  background-color: var(--mases-color-surface-raised);
-  box-shadow: var(--mases-shadow-elevation-1);
+  background-color: var(--arna-color-surface-raised);
+  box-shadow: var(--arna-shadow-elevation-1);
   object-fit: cover;
 }
 
@@ -602,11 +602,11 @@ import { masesBrandLabels } from '@/router/shell-labels';
    lines are a single visual mark, not body text. A larger line-height
    would read as two unrelated pieces of text.
    ============================================================================ */
-.mases-brand__text {
+.arna-brand__text {
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   min-width: 0;
   line-height: 1.2;
 }
@@ -617,10 +617,10 @@ import { masesBrandLabels } from '@/router/shell-labels';
    The primary line. Brand-colored, body size, semibold — the header's
    identity anchor.
    ============================================================================ */
-.mases-brand__corporate {
-  color: var(--mases-color-text-brand);
-  font-size: var(--mases-font-size-body);
-  font-weight: var(--mases-font-weight-semibold);
+.arna-brand__corporate {
+  color: var(--arna-color-text-brand);
+  font-size: var(--arna-font-size-body);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 /* ============================================================================
@@ -629,17 +629,17 @@ import { masesBrandLabels } from '@/router/shell-labels';
    The secondary line. Secondary text color, caption size, medium
    weight — clearly subordinate to the corporate name.
    ============================================================================ */
-.mases-brand__product {
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-caption);
-  font-weight: var(--mases-font-weight-medium);
+.arna-brand__product {
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-caption);
+  font-weight: var(--arna-font-weight-medium);
 }
 
-.mases-brand__tagline {
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
+.arna-brand__tagline {
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
   line-height: 1.15;
-  font-weight: var(--mases-font-weight-regular);
+  font-weight: var(--arna-font-weight-regular);
   max-width: 20rem;
 }
 
@@ -653,7 +653,7 @@ import { masesBrandLabels } from '@/router/shell-labels';
    AppHeader.vue, AppFooter.vue, and AppShell.vue.
    ============================================================================ */
 @media (prefers-reduced-motion: reduce) {
-  .mases-brand {
+  .arna-brand {
     /* no-op placeholder — see comment above */
   }
 }

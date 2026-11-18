@@ -279,7 +279,7 @@ import { logout } from '@/features/auth/service';
 import { provideMyShareholder } from './useMyShareholder';
 
 import {
-  masesShellLabels,
+  arnaShellLabels,
   portalUserMenuItems,
   portalNavItems,
 } from '@/router/shell-labels';
@@ -390,7 +390,7 @@ async function onUserMenuSelect(payload: { id: string }): Promise<void> {
   <AppShell
     :nav-items="portalNavItems"
     :user-menu-items="portalUserMenuItems"
-    :labels="masesShellLabels"
+    :labels="arnaShellLabels"
     :footer-version="footerVersion"
     @user-menu-select="onUserMenuSelect"
   >

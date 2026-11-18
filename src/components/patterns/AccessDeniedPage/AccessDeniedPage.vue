@@ -288,7 +288,7 @@ onMounted(() => {
    * console log".
    */
   // eslint-disable-next-line no-console
-  console.warn('[MASES] Access denied', {
+  console.warn('[ARNA] Access denied', {
     path: props.from,
     code: props.code,
     requestId: props.requestId,
@@ -337,22 +337,22 @@ onMounted(() => {
    ============================================================================ */
 .access-denied__file-hint {
   margin: 0;
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-4);
-  background-color: var(--mases-color-surface-warning);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-4);
+  background-color: var(--arna-color-surface-warning);
   /*
    * Left accent bar — 4px, expressed as --mases-space-1 so it is a
    * token rather than a bare pixel value. The inset inline-start
    * direction ensures the accent sits on the reading-start edge for
    * both LTR and any future RTL locale.
    */
-  border-inline-start: var(--mases-space-1) solid var(--mases-color-border-warning);
-  border-radius: var(--mases-radius-sm);
-  color: var(--mases-color-text-warning);
+  border-inline-start: var(--arna-space-1) solid var(--arna-color-border-warning);
+  border-radius: var(--arna-radius-sm);
+  color: var(--arna-color-text-warning);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
   /*
    * Amharic-safe wrapping — the hint text is consumer-translated and
    * may be long in Ethiopic.

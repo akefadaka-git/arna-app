@@ -164,12 +164,12 @@ body {
  * ============================================================================= */
 
 body {
-  font-family: var(--mases-font-family-am);
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
-  color: var(--mases-color-text-primary);
-  background-color: var(--mases-color-surface-page);
+  font-family: var(--arna-font-family-am);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
+  color: var(--arna-color-text-primary);
+  background-color: var(--arna-color-surface-page);
 }
 
 /* =============================================================================
@@ -191,7 +191,7 @@ h4,
 h5,
 h6 {
   margin: 0;
-  font-weight: var(--mases-font-weight-semibold);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 /* =============================================================================
@@ -216,12 +216,12 @@ p {
  * ============================================================================= */
 
 a {
-  color: var(--mases-color-action-link);
+  color: var(--arna-color-action-link);
   text-decoration: underline;
 }
 
 a:hover {
-  color: var(--mases-color-action-link-hover);
+  color: var(--arna-color-action-link-hover);
 }
 
 /* =============================================================================
@@ -269,7 +269,7 @@ code,
 pre,
 kbd,
 samp {
-  font-family: var(--mases-font-family-mono);
+  font-family: var(--arna-font-family-mono);
 }
 
 pre {
@@ -306,8 +306,8 @@ canvas {
  * ============================================================================= */
 
 :focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* =============================================================================
@@ -324,7 +324,7 @@ canvas {
  * components that need the pattern without inlining it.
  * ============================================================================= */
 
-.mases-visually-hidden {
+.arna-visually-hidden {
   position: absolute;
   width: 1px;
   height: 1px;

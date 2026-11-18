@@ -216,13 +216,13 @@
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesFormFieldWarned = new Set<string>();
+const __arnaFormFieldWarned = new Set<string>();
 
-function __masesFormFieldWarnOnce(key: string, message: string): void {
-  if (__masesFormFieldWarned.has(key)) {
+function __arnaFormFieldWarnOnce(key: string, message: string): void {
+  if (__arnaFormFieldWarned.has(key)) {
     return;
   }
-  __masesFormFieldWarned.add(key);
+  __arnaFormFieldWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -342,7 +342,7 @@ defineSlots<{
  * contradictory. The `optional` prop is ignored in this case.
  */
 if (import.meta.env.DEV && props.required && props.optional) {
-  __masesFormFieldWarnOnce(
+  __arnaFormFieldWarnOnce(
     'form-field:required-and-optional',
     `[FormField] "${props.htmlFor}" has both required=true and ` +
       `optional=true. These are contradictory; optional is ignored.`,
@@ -393,7 +393,7 @@ const resolvedInvalid = computed<boolean>(() => {
  * without the syntax conflict.
  */
 if (import.meta.env.DEV && resolvedInvalid.value && !hasError.value) {
-  __masesFormFieldWarnOnce(
+  __arnaFormFieldWarnOnce(
     'form-field:invalid-without-error',
     `[FormField] "${props.htmlFor}" has invalid=true but no error ` +
       `content. The user will see an invalid-styled field with no ` +
@@ -574,7 +574,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
 .form-field {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   width: 100%;
 }
 
@@ -585,17 +585,17 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
 }
 
 .form-field__label-extra {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-2);
-  color: var(--mases-color-text-tertiary);
+  gap: var(--arna-space-2);
+  color: var(--arna-color-text-tertiary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
 }
 
 /* ============================================================================
@@ -610,26 +610,26 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    ============================================================================ */
 .form-field__error {
   display: block;
-  color: var(--mases-color-text-danger);
+  color: var(--arna-color-text-danger);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
 }
 
 .form-field__error-line {
   display: flex;
   align-items: flex-start;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   margin: 0;
 }
 
 .form-field__error-icon {
   flex-shrink: 0;
   margin-block-start: calc(
-    (var(--mases-line-height-body-sm) - var(--mases-icon-sm)) / 2
+    (var(--arna-line-height-body-sm) - var(--arna-icon-sm)) / 2
   );
-  color: var(--mases-color-icon-danger);
+  color: var(--arna-color-icon-danger);
 }
 
 .form-field__error-text {
@@ -645,7 +645,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
 }
 
 /* ============================================================================
@@ -653,11 +653,11 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    ============================================================================ */
 .form-field__help {
   display: block;
-  color: var(--mases-color-text-tertiary);
+  color: var(--arna-color-text-tertiary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: break-word;
   word-break: normal;
 }

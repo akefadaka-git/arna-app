@@ -276,13 +276,13 @@ export interface DataTablePaginationLabels {
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesDataTableWarned = new Set<string>();
+const __arnaDataTableWarned = new Set<string>();
 
-function __masesDataTableWarnOnce(key: string, message: string): void {
-  if (__masesDataTableWarned.has(key)) {
+function __arnaDataTableWarnOnce(key: string, message: string): void {
+  if (__arnaDataTableWarned.has(key)) {
     return;
   }
-  __masesDataTableWarned.add(key);
+  __arnaDataTableWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -435,7 +435,7 @@ const slots = useSlots();
 // -----------------------------------------------------------------------------
 
 if (import.meta.env.DEV && props.selectable && !props.selectionLabels) {
-  __masesDataTableWarnOnce(
+  __arnaDataTableWarnOnce(
     'data-table:missing-selection-labels',
     '[DataTable] selectable=true without selectionLabels. The header ' +
       'select-all checkbox and each row checkbox will have no ' +
@@ -445,7 +445,7 @@ if (import.meta.env.DEV && props.selectable && !props.selectionLabels) {
 }
 
 if (import.meta.env.DEV && props.pagination && !props.paginationLabels) {
-  __masesDataTableWarnOnce(
+  __arnaDataTableWarnOnce(
     'data-table:missing-pagination-labels',
     '[DataTable] pagination is supplied without paginationLabels. ' +
       'The Pagination composite requires translated strings for ' +
@@ -458,7 +458,7 @@ if (import.meta.env.DEV && props.columns.length > 0) {
     (c) => c.priority === 'low',
   );
   if (allLowPriority && props.mobileLayout === 'cards') {
-    __masesDataTableWarnOnce(
+    __arnaDataTableWarnOnce(
       'data-table:all-columns-low-priority',
       '[DataTable] every column is marked priority="low". The mobile ' +
         'cards will render with no fields. Mark at least one column ' +
@@ -1031,7 +1031,7 @@ void _showTable;
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   font-family: inherit;
 }
 
@@ -1042,20 +1042,20 @@ void _showTable;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   flex-wrap: wrap;
 }
 
 .data-table__bulk-actions {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   flex-wrap: wrap;
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-3);
-  background-color: var(--mases-color-state-selected);
-  border: 1px solid var(--mases-color-border-brand);
-  border-radius: var(--mases-radius-md);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-3);
+  background-color: var(--arna-color-state-selected);
+  border: 1px solid var(--arna-color-border-brand);
+  border-radius: var(--arna-radius-md);
 }
 
 /* ============================================================================
@@ -1064,9 +1064,9 @@ void _showTable;
 .data-table__table-region {
   width: 100%;
   overflow-x: auto;
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-md);
-  background-color: var(--mases-color-surface-page);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-md);
+  background-color: var(--arna-color-surface-page);
 }
 
 /* ============================================================================
@@ -1077,9 +1077,9 @@ void _showTable;
   border-collapse: collapse;
   border-spacing: 0;
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  color: var(--mases-color-text-primary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  color: var(--arna-color-text-primary);
 }
 
 /* ============================================================================
@@ -1090,23 +1090,23 @@ void _showTable;
    below.
    ============================================================================ */
 .data-table__th {
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-2);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-2);
   text-align: left; /* overridden per-column by the inline style */
   vertical-align: middle;
-  background-color: var(--mases-color-surface-raised);
-  color: var(--mases-color-text-secondary);
+  background-color: var(--arna-color-surface-raised);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
+  font-weight: var(--arna-font-weight-semibold);
   /*
    * Amharic syllables must never be uppercased.
    * Design System §3.5 B6.
    */
   text-transform: none;
   letter-spacing: normal;
-  border-block-end: 1px solid var(--mases-color-border-subtle);
+  border-block-end: 1px solid var(--arna-color-border-subtle);
   white-space: nowrap;
 }
 
@@ -1134,9 +1134,9 @@ void _showTable;
 .data-table__sort-button {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-1);
-  padding-block: var(--mases-space-1);
-  padding-inline: var(--mases-space-1);
+  gap: var(--arna-space-1);
+  padding-block: var(--arna-space-1);
+  padding-inline: var(--arna-space-1);
   margin: 0;
   appearance: none;
   background-color: transparent;
@@ -1144,17 +1144,17 @@ void _showTable;
   color: inherit;
   font: inherit;
   cursor: pointer;
-  border-radius: var(--mases-radius-sm);
-  transition: background-color var(--mases-duration-fast) var(--mases-easing-standard);
+  border-radius: var(--arna-radius-sm);
+  transition: background-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .data-table__sort-button:hover {
-  background-color: var(--mases-color-state-hover);
+  background-color: var(--arna-color-state-hover);
 }
 
 .data-table__sort-button:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: calc(var(--mases-focus-ring-offset) * -1);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: calc(var(--arna-focus-ring-offset) * -1);
 }
 
 /* The neutral-state chevron is muted; the active-state chevron is
@@ -1163,9 +1163,9 @@ void _showTable;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--mases-color-icon-secondary);
+  color: var(--arna-color-icon-secondary);
   opacity: 0.4;
-  transition: opacity var(--mases-duration-fast) var(--mases-easing-standard);
+  transition: opacity var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .data-table__sort-button:hover .data-table__sort-icon {
@@ -1173,7 +1173,7 @@ void _showTable;
 }
 
 .data-table__sort-button--active .data-table__sort-icon {
-  color: var(--mases-color-icon-primary);
+  color: var(--arna-color-icon-primary);
   opacity: 1;
 }
 
@@ -1186,19 +1186,19 @@ void _showTable;
    ============================================================================ */
 .data-table__row {
   cursor: pointer;
-  transition: background-color var(--mases-duration-fast) var(--mases-easing-standard);
+  transition: background-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .data-table__row:hover {
-  background-color: var(--mases-color-state-hover);
+  background-color: var(--arna-color-state-hover);
 }
 
 .data-table__td {
-  padding-block: var(--mases-space-4);
-  padding-inline: var(--mases-space-2);
+  padding-block: var(--arna-space-4);
+  padding-inline: var(--arna-space-2);
   text-align: left; /* overridden per-column */
   vertical-align: middle;
-  border-block-end: 1px solid var(--mases-color-border-subtle);
+  border-block-end: 1px solid var(--arna-color-border-subtle);
   /*
    * Amharic truncation uses word-boundary wrapping (Design System
    * §3.7 W4).
@@ -1221,11 +1221,11 @@ void _showTable;
    Density
    ============================================================================ */
 .data-table--density-default .data-table__td {
-  padding-block: var(--mases-space-4); /* 16 + 16 + 26 = 58px ~ 56px */
+  padding-block: var(--arna-space-4); /* 16 + 16 + 26 = 58px ~ 56px */
 }
 
 .data-table--density-compact .data-table__td {
-  padding-block: var(--mases-space-2); /* 8 + 8 + 26 = 42px ~ 44px */
+  padding-block: var(--arna-space-2); /* 8 + 8 + 26 = 42px ~ 44px */
 }
 
 /* ============================================================================
@@ -1235,7 +1235,7 @@ void _showTable;
 .data-table > :deep(.loading-state),
 .data-table > :deep(.error-state),
 .data-table > :deep(.empty-state) {
-  margin-block: var(--mases-space-4);
+  margin-block: var(--arna-space-4);
 }
 
 /* ============================================================================
@@ -1250,7 +1250,7 @@ void _showTable;
 .data-table__cards-region {
   display: none;
   flex-direction: column;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
 }
 
 /* Mobile-only: show cards when mobileLayout === 'cards'. */
@@ -1273,11 +1273,11 @@ void _showTable;
    ============================================================================ */
 @media (min-width: 640px) {
   .data-table__th {
-    padding-inline: var(--mases-space-3);
+    padding-inline: var(--arna-space-3);
   }
 
   .data-table__td {
-    padding-inline: var(--mases-space-3);
+    padding-inline: var(--arna-space-3);
   }
 
   .data-table--mobile-cards .data-table__table-region {
@@ -1295,25 +1295,25 @@ void _showTable;
 .data-table__card {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-3);
-  background-color: var(--mases-color-surface-page);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-md);
+  gap: var(--arna-space-2);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-3);
+  background-color: var(--arna-color-surface-page);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-md);
   cursor: pointer;
-  transition: background-color var(--mases-duration-fast) var(--mases-easing-standard);
+  transition: background-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .data-table__card:hover {
-  background-color: var(--mases-color-state-hover);
+  background-color: var(--arna-color-state-hover);
 }
 
 .data-table__card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   min-height: 1.75rem;
 }
 
@@ -1325,13 +1325,13 @@ void _showTable;
 .data-table__card-actions {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
 }
 
 .data-table__card-fields {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   margin: 0;
   padding: 0;
 }
@@ -1339,17 +1339,17 @@ void _showTable;
 .data-table__card-field {
   display: grid;
   grid-template-columns: minmax(6rem, max-content) minmax(0, 1fr);
-  column-gap: var(--mases-space-3);
+  column-gap: var(--arna-space-3);
   align-items: baseline;
   min-width: 0;
 }
 
 .data-table__card-label {
   margin: 0;
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
-  font-weight: var(--mases-font-weight-medium);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
+  font-weight: var(--arna-font-weight-medium);
   overflow-wrap: break-word;
   word-break: normal;
 }
@@ -1357,10 +1357,10 @@ void _showTable;
 .data-table__card-value {
   margin: 0;
   min-width: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: break-word;
   word-break: normal;
 }

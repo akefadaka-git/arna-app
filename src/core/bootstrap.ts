@@ -359,17 +359,20 @@ function installApiClientProviders(pinia: Pinia): void {
  * collide with a host page's own sessionStorage usage.
  */
 function createSessionStorageAuthTokenStorage(): AuthTokenStorage {
-  const KEY = 'mases.auth_token';
+  const KEY = 'arna.auth_token';
+  const LEGACY_KEY = 'mases.auth_token';
 
   return {
     get(): string | null {
-      return sessionStorage.getItem(KEY);
+      return sessionStorage.getItem(KEY) ?? sessionStorage.getItem(LEGACY_KEY);
     },
     set(token: string): void {
       sessionStorage.setItem(KEY, token);
+      sessionStorage.removeItem(LEGACY_KEY);
     },
     clear(): void {
       sessionStorage.removeItem(KEY);
+      sessionStorage.removeItem(LEGACY_KEY);
     },
   };
 }

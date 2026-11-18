@@ -617,7 +617,7 @@ function headingForGroup(group: LegalHubGroup): string {
 .legal-center {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-8, 32px);
+  gap: var(--arna-space-8, 32px);
   width: 100%;
 
   /*
@@ -632,8 +632,8 @@ function headingForGroup(group: LegalHubGroup): string {
    * token is also undefined.
    */
   max-width: var(
-    --mases-container-form,
-    var(--mases-container-auth-card-wide, 560px)
+    --arna-container-form,
+    var(--arna-container-auth-card-wide, 560px)
   );
   margin-inline: auto;
 
@@ -650,12 +650,12 @@ function headingForGroup(group: LegalHubGroup): string {
 .legal-center__title {
   margin: 0;
 
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 
   font-family: inherit;
-  font-size: var(--mases-font-size-heading-4, 24px);
-  line-height: var(--mases-line-height-heading-4, 32px);
-  font-weight: var(--mases-font-weight-semibold, 600);
+  font-size: var(--arna-font-size-heading-4, 24px);
+  line-height: var(--arna-line-height-heading-4, 32px);
+  font-weight: var(--arna-font-weight-semibold, 600);
 
   text-align: start;
   overflow-wrap: anywhere;
@@ -663,12 +663,12 @@ function headingForGroup(group: LegalHubGroup): string {
 
 .legal-center__intro {
   margin: 0;
-  margin-block-start: var(--mases-space-3, 12px);
+  margin-block-start: var(--arna-space-3, 12px);
 
-  color: var(--mases-color-text-secondary, #3F382B);
+  color: var(--arna-color-text-secondary, #3F382B);
 
-  font-size: var(--mases-font-size-body, 16px);
-  line-height: var(--mases-line-height-body, 26px);
+  font-size: var(--arna-font-size-body, 16px);
+  line-height: var(--arna-line-height-body, 26px);
 
   text-align: start;
   overflow-wrap: anywhere;
@@ -683,13 +683,13 @@ function headingForGroup(group: LegalHubGroup): string {
 
 .legal-center__group-heading {
   margin: 0;
-  margin-block-end: var(--mases-space-3, 12px);
+  margin-block-end: var(--arna-space-3, 12px);
 
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 
-  font-size: var(--mases-font-size-body, 16px);
-  line-height: var(--mases-line-height-body, 26px);
-  font-weight: var(--mases-font-weight-semibold, 600);
+  font-size: var(--arna-font-size-body, 16px);
+  line-height: var(--arna-line-height-body, 26px);
+  font-weight: var(--arna-font-weight-semibold, 600);
 
   text-align: start;
   overflow-wrap: anywhere;
@@ -706,7 +706,7 @@ function headingForGroup(group: LegalHubGroup): string {
 .legal-center__cards {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3, 12px);
+  gap: var(--arna-space-3, 12px);
 
   margin: 0;
   padding: 0;
@@ -728,11 +728,11 @@ function headingForGroup(group: LegalHubGroup): string {
 .legal-center__card {
   display: block;
 
-  padding-block: var(--mases-space-4, 16px);
-  padding-inline: var(--mases-space-4, 16px);
+  padding-block: var(--arna-space-4, 16px);
+  padding-inline: var(--arna-space-4, 16px);
 
-  border: 1px solid var(--mases-color-border-subtle, #E5E0D2);
-  border-radius: var(--mases-radius-md, 8px);
+  border: 1px solid var(--arna-color-border-subtle, #E5E0D2);
+  border-radius: var(--arna-radius-md, 8px);
 
   color: inherit;
   text-decoration: none;
@@ -749,17 +749,17 @@ function headingForGroup(group: LegalHubGroup): string {
 
 .legal-center__card:hover,
 .legal-center__card:focus-visible {
-  border-color: var(--mases-color-text-secondary, #3F382B);
+  border-color: var(--arna-color-text-secondary, #3F382B);
 }
 
 .legal-center__card-title {
   margin: 0;
 
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 
-  font-size: var(--mases-font-size-body, 16px);
-  line-height: var(--mases-line-height-body, 26px);
-  font-weight: var(--mases-font-weight-semibold, 600);
+  font-size: var(--arna-font-size-body, 16px);
+  line-height: var(--arna-line-height-body, 26px);
+  font-weight: var(--arna-font-weight-semibold, 600);
 
   text-align: start;
   overflow-wrap: anywhere;
@@ -767,12 +767,12 @@ function headingForGroup(group: LegalHubGroup): string {
 
 .legal-center__card-summary {
   margin: 0;
-  margin-block-start: var(--mases-space-2, 8px);
+  margin-block-start: var(--arna-space-2, 8px);
 
-  color: var(--mases-color-text-secondary, #3F382B);
+  color: var(--arna-color-text-secondary, #3F382B);
 
-  font-size: var(--mases-font-size-body-sm, 14px);
-  line-height: var(--mases-line-height-body-sm, 22px);
+  font-size: var(--arna-font-size-body-sm, 14px);
+  line-height: var(--arna-line-height-body-sm, 22px);
 
   text-align: start;
   overflow-wrap: anywhere;
@@ -781,17 +781,17 @@ function headingForGroup(group: LegalHubGroup): string {
 .legal-center__card-chip {
   display: inline-block;
 
-  margin-block-start: var(--mases-space-3, 12px);
-  padding-block: var(--mases-space-2, 8px);
-  padding-inline: var(--mases-space-3, 12px);
+  margin-block-start: var(--arna-space-3, 12px);
+  padding-block: var(--arna-space-2, 8px);
+  padding-inline: var(--arna-space-3, 12px);
 
-  border: 1px solid var(--mases-color-border-subtle, #E5E0D2);
-  border-radius: var(--mases-radius-md, 8px);
+  border: 1px solid var(--arna-color-border-subtle, #E5E0D2);
+  border-radius: var(--arna-radius-md, 8px);
 
-  color: var(--mases-color-text-secondary, #3F382B);
+  color: var(--arna-color-text-secondary, #3F382B);
 
-  font-size: var(--mases-font-size-body-sm, 14px);
-  line-height: var(--mases-line-height-body-sm, 22px);
+  font-size: var(--arna-font-size-body-sm, 14px);
+  line-height: var(--arna-line-height-body-sm, 22px);
 
   overflow-wrap: anywhere;
 }
@@ -801,18 +801,18 @@ function headingForGroup(group: LegalHubGroup): string {
    ============================================================================ */
 .legal-center__footer {
   margin: 0;
-  padding-block-start: var(--mases-space-6, 24px);
+  padding-block-start: var(--arna-space-6, 24px);
 
-  border-block-start: 1px solid var(--mases-color-border-subtle, #E5E0D2);
+  border-block-start: 1px solid var(--arna-color-border-subtle, #E5E0D2);
 }
 
 .legal-center__back-link {
   display: inline-block;
 
-  color: var(--mases-color-text-secondary, #3F382B);
+  color: var(--arna-color-text-secondary, #3F382B);
 
-  font-size: var(--mases-font-size-body-sm, 14px);
-  line-height: var(--mases-line-height-body-sm, 22px);
+  font-size: var(--arna-font-size-body-sm, 14px);
+  line-height: var(--arna-line-height-body-sm, 22px);
   text-decoration: underline;
 
   overflow-wrap: anywhere;

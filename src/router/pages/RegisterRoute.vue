@@ -513,7 +513,7 @@ async function onLogin(): Promise<void> {
    rule is removed and the prop is passed instead.
    ============================================================================ */
 .register-route__wide-card :deep(.auth-layout__main) {
-  max-width: var(--mases-container-auth-card-wide, 560px);
+  max-width: var(--arna-container-auth-card-wide, 560px);
 }
 
 /* ============================================================================
@@ -536,18 +536,18 @@ async function onLogin(): Promise<void> {
    * --mases-color-neutral-900, which is what
    * --mases-color-text-primary resolves to.
    */
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 
   font-family: inherit;
 
   /* Fallback 24px matches --mases-font-size-heading-4. */
-  font-size: var(--mases-font-size-heading-4, 24px);
+  font-size: var(--arna-font-size-heading-4, 24px);
 
   /* Fallback 32px matches --mases-line-height-heading-4. */
-  line-height: var(--mases-line-height-heading-4, 32px);
+  line-height: var(--arna-line-height-heading-4, 32px);
 
   /* Fallback 600 matches --mases-font-weight-semibold. */
-  font-weight: var(--mases-font-weight-semibold, 600);
+  font-weight: var(--arna-font-weight-semibold, 600);
 
   text-align: center;
 

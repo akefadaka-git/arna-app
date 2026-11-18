@@ -128,13 +128,13 @@ export interface ErrorAction {
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesErrorActionsWarned = new Set<string>();
+const __arnaErrorActionsWarned = new Set<string>();
 
-function __masesErrorActionsWarnOnce(key: string, message: string): void {
-  if (__masesErrorActionsWarned.has(key)) {
+function __arnaErrorActionsWarnOnce(key: string, message: string): void {
+  if (__arnaErrorActionsWarned.has(key)) {
     return;
   }
-  __masesErrorActionsWarned.add(key);
+  __arnaErrorActionsWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -192,7 +192,7 @@ if (import.meta.env.DEV) {
     .map((a) => a.action);
   const unique = new Set(ids);
   if (unique.size !== ids.length) {
-    __masesErrorActionsWarnOnce(
+    __arnaErrorActionsWarnOnce(
       'error-actions:duplicate-action-ids',
       '[ErrorActions] two or more actions share the same `action` ' +
         'identifier. The consumer\'s dispatch will be ambiguous. ' +
@@ -212,7 +212,7 @@ if (import.meta.env.DEV) {
     .filter((a): a is ErrorAction => a !== null)
     .some((a) => a.label.trim() === '');
   if (anyEmptyLabel) {
-    __masesErrorActionsWarnOnce(
+    __arnaErrorActionsWarnOnce(
       'error-actions:empty-label',
       '[ErrorActions] one or more actions have an empty `label`. The ' +
         'corresponding button(s) will render with no accessible name. ' +
@@ -323,7 +323,7 @@ function onTertiaryClick(): void {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   flex-wrap: wrap;
   width: 100%;
 }
@@ -339,7 +339,7 @@ function onTertiaryClick(): void {
   .error-actions {
     flex-direction: column;
     align-items: stretch;
-    gap: var(--mases-space-2);
+    gap: var(--arna-space-2);
   }
 
   /*

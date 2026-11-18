@@ -239,7 +239,7 @@
  * Runs once when the module is evaluated. Shared across all instances
  * of BaseInput. Not exposed to consumers.
  */
-let __masesInputIdCounter = 0;
+let __arnaInputIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -366,7 +366,7 @@ const emit = defineEmits<{
  * Generated id — evaluated once per component instance.
  * See the file header comment §"Auto-generated id".
  */
-const generatedId = `mases-input-${++__masesInputIdCounter}`;
+const generatedId = `arna-input-${++__arnaInputIdCounter}`;
 
 const inputId = computed<string>(() => props.id ?? generatedId);
 
@@ -514,17 +514,17 @@ defineExpose({ focus, blur, el });
 .input-wrapper {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   width: 100%;
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-3);
-  background-color: var(--mases-color-surface-page);
-  border: 1px solid var(--mases-color-border-default);
-  border-radius: var(--mases-radius-md);
-  color: var(--mases-color-text-primary);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-3);
+  background-color: var(--arna-color-surface-page);
+  border: 1px solid var(--arna-color-border-default);
+  border-radius: var(--arna-radius-md);
+  color: var(--arna-color-text-primary);
   transition:
-    border-color var(--mases-duration-fast) var(--mases-easing-standard),
-    background-color var(--mases-duration-fast) var(--mases-easing-standard);
+    border-color var(--arna-duration-fast) var(--arna-easing-standard),
+    background-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 /* Focus ring on the wrapper when the native input is focus-visible.
@@ -532,31 +532,31 @@ defineExpose({ focus, blur, el });
    spec, editable elements always do), so this matches the desired
    behavior for both keyboard and mouse. */
 .input-wrapper:has(.input-wrapper__input:focus-visible) {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* Hover border — only when not disabled, not readonly, and not focused. */
 .input-wrapper:not(.input-wrapper--disabled):not(.input-wrapper--readonly):hover {
-  border-color: var(--mases-color-border-strong);
+  border-color: var(--arna-color-border-strong);
 }
 
 /* Invalid state — border is the danger color. */
 .input-wrapper--invalid {
-  border-color: var(--mases-color-border-danger);
+  border-color: var(--arna-color-border-danger);
 }
 
 /* Disabled state — surface and text both change. */
 .input-wrapper--disabled {
-  background-color: var(--mases-color-state-disabled-bg);
-  border-color: var(--mases-color-border-subtle);
-  color: var(--mases-color-state-disabled-text);
+  background-color: var(--arna-color-state-disabled-bg);
+  border-color: var(--arna-color-border-subtle);
+  color: var(--arna-color-state-disabled-text);
   cursor: not-allowed;
 }
 
 /* Read-only — muted appearance without full disabled treatment. */
 .input-wrapper--readonly {
-  background-color: var(--mases-color-surface-sunken);
+  background-color: var(--arna-color-surface-sunken);
 }
 
 /* ============================================================================
@@ -573,15 +573,15 @@ defineExpose({ focus, blur, el });
   outline: none;
   color: inherit;
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
 }
 
 /* Placeholder text — muted contrast, but still AA-verified against the
    page surface (5.30:1 vs. neutral-50 per Design System §2.5.1). */
 .input-wrapper__input::placeholder {
-  color: var(--mases-color-text-tertiary);
+  color: var(--arna-color-text-tertiary);
   opacity: 1;
 }
 
@@ -640,7 +640,7 @@ defineExpose({ focus, blur, el });
   flex: 0 0 auto;
   font-size: inherit;
   line-height: inherit;
-  color: var(--mases-color-text-tertiary);
+  color: var(--arna-color-text-tertiary);
 }
 
 .input-wrapper__leading,
@@ -649,7 +649,7 @@ defineExpose({ focus, blur, el });
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--mases-color-icon-secondary);
+  color: var(--arna-color-icon-secondary);
 }
 
 /* Disabled adornments inherit the wrapper's disabled color. */
@@ -657,7 +657,7 @@ defineExpose({ focus, blur, el });
 .input-wrapper--disabled .input-wrapper__suffix,
 .input-wrapper--disabled .input-wrapper__leading,
 .input-wrapper--disabled .input-wrapper__trailing {
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
 }
 
 /* ============================================================================

@@ -190,7 +190,7 @@
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
 
-import { masesFooterLabels } from '@/router/shell-labels';
+import { arnaFooterLabels } from '@/router/shell-labels';
 import { formatCalendarDate } from '@/core/dates/calendar';
 
 // -----------------------------------------------------------------------------
@@ -233,7 +233,7 @@ function resolveCurrentCalendarYear(): string {
  * year rollover mid-session would require a page reload to pick up,
  * which is acceptable for a footer attribution line.
  */
-const copyrightText = computed(() => masesFooterLabels.copyrightTemplate.replace(
+const copyrightText = computed(() => arnaFooterLabels.copyrightTemplate.replace(
   '{year}',
   resolveCurrentCalendarYear(),
 ));
@@ -241,15 +241,15 @@ const copyrightText = computed(() => masesFooterLabels.copyrightTemplate.replace
 
 <template>
   <div
-    class="mases-footer-content"
-    data-testid="mases-footer-content-root"
+    class="arna-footer-content"
+    data-testid="arna-footer-content-root"
   >
     <!-- ================================================================
          Copyright line
          ================================================================ -->
     <span
-      class="mases-footer-content__copyright"
-      data-testid="mases-footer-content-copyright"
+      class="arna-footer-content__copyright"
+      data-testid="arna-footer-content-copyright"
     >{{ copyrightText }}</span>
 
     <!-- ================================================================
@@ -264,23 +264,23 @@ const copyrightText = computed(() => masesFooterLabels.copyrightTemplate.replace
          mailto href.
          ================================================================ -->
     <ul
-      class="mases-footer-content__links"
+      class="arna-footer-content__links"
       role="list"
-      data-testid="mases-footer-content-links"
+      data-testid="arna-footer-content-links"
     >
       <li>
         <RouterLink
           :to="{ name: 'legal' }"
-          class="mases-footer-content__link"
-          data-testid="mases-footer-content-legal-link"
-        >{{ masesFooterLabels.legalLinkLabel }}</RouterLink>
+          class="arna-footer-content__link"
+          data-testid="arna-footer-content-legal-link"
+        >{{ arnaFooterLabels.legalLinkLabel }}</RouterLink>
       </li>
       <li>
         <a
           :href="`mailto:${SUPPORT_EMAIL}`"
-          class="mases-footer-content__link"
-          data-testid="mases-footer-content-support-link"
-        >{{ masesFooterLabels.supportLinkLabel }}</a>
+          class="arna-footer-content__link"
+          data-testid="arna-footer-content-support-link"
+        >{{ arnaFooterLabels.supportLinkLabel }}</a>
       </li>
     </ul>
   </div>
@@ -305,21 +305,21 @@ const copyrightText = computed(() => masesFooterLabels.copyrightTemplate.replace
    `flex: 0 0 auto` at mobile and `flex: 1 1 auto` at tablet+). The
    explicit width guarantees the same layout behaviour in both cases.
    ============================================================================ */
-.mases-footer-content {
+.arna-footer-content {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   width: 100%;
   min-width: 0;
 }
 
 @media (min-width: 640px) {
-  .mases-footer-content {
+  .arna-footer-content {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: var(--mases-space-4);
+    gap: var(--arna-space-4);
   }
 }
 
@@ -335,11 +335,11 @@ const copyrightText = computed(() => masesFooterLabels.copyrightTemplate.replace
    corporate name with its trailing Ethiopic full stop) would
    otherwise overflow a narrow container.
    ============================================================================ */
-.mases-footer-content__copyright {
+.arna-footer-content__copyright {
   min-width: 0;
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   overflow-wrap: break-word;
 }
 
@@ -355,11 +355,11 @@ const copyrightText = computed(() => masesFooterLabels.copyrightTemplate.replace
    the copyright text is long. The copyright shrinks instead (via its
    own `min-width: 0`), keeping the link text fully readable.
    ============================================================================ */
-.mases-footer-content__links {
+.arna-footer-content__links {
   display: flex;
   flex-wrap: wrap;
   flex-shrink: 0;
-  gap: var(--mases-space-2) var(--mases-space-4);
+  gap: var(--arna-space-2) var(--arna-space-4);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -376,16 +376,16 @@ const copyrightText = computed(() => masesFooterLabels.copyrightTemplate.replace
    The :focus-visible selector duplicates the hover state so keyboard
    users get the same affordance.
    ============================================================================ */
-.mases-footer-content__link {
-  color: var(--mases-color-action-link);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+.arna-footer-content__link {
+  color: var(--arna-color-action-link);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   text-decoration: none;
 }
 
-.mases-footer-content__link:hover,
-.mases-footer-content__link:focus-visible {
-  color: var(--mases-color-action-link-hover);
+.arna-footer-content__link:hover,
+.arna-footer-content__link:focus-visible {
+  color: var(--arna-color-action-link-hover);
   text-decoration: underline;
 }
 
@@ -398,7 +398,7 @@ const copyrightText = computed(() => masesFooterLabels.copyrightTemplate.replace
    documented place to gate it on the user's motion preference.
    ============================================================================ */
 @media (prefers-reduced-motion: reduce) {
-  .mases-footer-content {
+  .arna-footer-content {
     /* no-op placeholder — see comment above */
   }
 }
@@ -408,17 +408,17 @@ const copyrightText = computed(() => masesFooterLabels.copyrightTemplate.replace
    Preserve clear link affordances when authored palette tokens are suppressed.
    ============================================================================ */
 @media (forced-colors: active) {
-  .mases-footer-content__copyright {
+  .arna-footer-content__copyright {
     color: CanvasText;
   }
 
-  .mases-footer-content__link {
+  .arna-footer-content__link {
     color: LinkText;
     text-decoration: underline;
   }
 
-  .mases-footer-content__link:hover,
-  .mases-footer-content__link:focus-visible {
+  .arna-footer-content__link:hover,
+  .arna-footer-content__link:focus-visible {
     color: ActiveText;
   }
 }

@@ -475,11 +475,11 @@ async function onRegister(): Promise<void> {
    ============================================================================ */
 .login-route__title {
   margin: 0;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-heading-4);
-  line-height: var(--mases-line-height-heading-4);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-heading-4);
+  line-height: var(--arna-line-height-heading-4);
+  font-weight: var(--arna-font-weight-semibold);
   text-align: center;
   /*
    * Amharic-safe wrapping. A long translation of "Log in" (if the

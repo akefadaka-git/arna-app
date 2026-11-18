@@ -177,13 +177,13 @@ interface DateParts {
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesDatePickerWarned = new Set<string>();
+const __arnaDatePickerWarned = new Set<string>();
 
-function __masesDatePickerWarnOnce(key: string, message: string): void {
-  if (__masesDatePickerWarned.has(key)) {
+function __arnaDatePickerWarnOnce(key: string, message: string): void {
+  if (__arnaDatePickerWarned.has(key)) {
     return;
   }
-  __masesDatePickerWarned.add(key);
+  __arnaDatePickerWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -191,7 +191,7 @@ function __masesDatePickerWarnOnce(key: string, message: string): void {
 /*
  * Module-level counter for auto-generated ids.
  */
-let __masesDatePickerIdCounter = 0;
+let __arnaDatePickerIdCounter = 0;
 
 // -----------------------------------------------------------------------------
 // Date helpers — pure functions, no side effects
@@ -372,7 +372,7 @@ const emit = defineEmits<{
 // -----------------------------------------------------------------------------
 // Generated ids
 // -----------------------------------------------------------------------------
-const componentId = `mases-date-picker-${++__masesDatePickerIdCounter}`;
+const componentId = `arna-date-picker-${++__arnaDatePickerIdCounter}`;
 const popupId = `${componentId}-popup`;
 
 // -----------------------------------------------------------------------------
@@ -382,7 +382,7 @@ if (import.meta.env.DEV) {
   const l = props.labels;
 
   if (!Array.isArray(l.weekdaysShort) || l.weekdaysShort.length !== 7) {
-    __masesDatePickerWarnOnce(
+    __arnaDatePickerWarnOnce(
       'date-picker:weekdays-length',
       '[DatePicker] labels.weekdaysShort must be an array of exactly ' +
         '7 items (index 0 = Sunday). Received: ' +
@@ -391,7 +391,7 @@ if (import.meta.env.DEV) {
   }
 
   if (!Array.isArray(l.monthsLong) || l.monthsLong.length !== 12) {
-    __masesDatePickerWarnOnce(
+    __arnaDatePickerWarnOnce(
       'date-picker:months-length',
       '[DatePicker] labels.monthsLong must be an array of exactly ' +
         '12 items (index 0 = January). Received: ' +
@@ -400,19 +400,19 @@ if (import.meta.env.DEV) {
   }
 
   if (l.previousMonth.trim() === '') {
-    __masesDatePickerWarnOnce(
+    __arnaDatePickerWarnOnce(
       'date-picker:empty-previous',
       '[DatePicker] labels.previousMonth is empty.',
     );
   }
   if (l.nextMonth.trim() === '') {
-    __masesDatePickerWarnOnce(
+    __arnaDatePickerWarnOnce(
       'date-picker:empty-next',
       '[DatePicker] labels.nextMonth is empty.',
     );
   }
   if (l.openCalendar.trim() === '') {
-    __masesDatePickerWarnOnce(
+    __arnaDatePickerWarnOnce(
       'date-picker:empty-open',
       '[DatePicker] labels.openCalendar is empty.',
     );
@@ -1060,33 +1060,33 @@ function onCellClick(cell: GridCell): void {
   align-items: center;
   width: 100%;
   min-height: 40px;
-  padding-inline-end: var(--mases-space-1);
-  background-color: var(--mases-color-surface-page);
-  border: 1px solid var(--mases-color-border-default);
-  border-radius: var(--mases-radius-md);
-  color: var(--mases-color-text-primary);
+  padding-inline-end: var(--arna-space-1);
+  background-color: var(--arna-color-surface-page);
+  border: 1px solid var(--arna-color-border-default);
+  border-radius: var(--arna-radius-md);
+  color: var(--arna-color-text-primary);
   transition:
-    border-color var(--mases-duration-fast) var(--mases-easing-standard),
-    background-color var(--mases-duration-fast) var(--mases-easing-standard);
+    border-color var(--arna-duration-fast) var(--arna-easing-standard),
+    background-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .date-picker__control:focus-within {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 .date-picker:not(.date-picker--disabled):hover .date-picker__control {
-  border-color: var(--mases-color-border-strong);
+  border-color: var(--arna-color-border-strong);
 }
 
 .date-picker--invalid .date-picker__control {
-  border-color: var(--mases-color-border-danger);
+  border-color: var(--arna-color-border-danger);
 }
 
 .date-picker--disabled .date-picker__control {
-  background-color: var(--mases-color-state-disabled-bg);
-  border-color: var(--mases-color-border-subtle);
-  color: var(--mases-color-state-disabled-text);
+  background-color: var(--arna-color-state-disabled-bg);
+  border-color: var(--arna-color-border-subtle);
+  color: var(--arna-color-state-disabled-text);
   cursor: not-allowed;
 }
 
@@ -1096,21 +1096,21 @@ function onCellClick(cell: GridCell): void {
 .date-picker__input {
   flex: 1 1 auto;
   min-width: 0;
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-3);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-3);
   appearance: none;
   background-color: transparent;
   border: none;
   outline: none;
   color: inherit;
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
 }
 
 .date-picker__input::placeholder {
-  color: var(--mases-color-text-tertiary);
+  color: var(--arna-color-text-tertiary);
   opacity: 1;
 }
 
@@ -1133,32 +1133,32 @@ function onCellClick(cell: GridCell): void {
   appearance: none;
   background-color: transparent;
   border: none;
-  border-radius: var(--mases-radius-sm);
-  color: var(--mases-color-icon-secondary);
+  border-radius: var(--arna-radius-sm);
+  color: var(--arna-color-icon-secondary);
   cursor: pointer;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .date-picker__trigger:hover:not(:disabled) {
-  background-color: var(--mases-color-state-hover);
-  color: var(--mases-color-icon-primary);
+  background-color: var(--arna-color-state-hover);
+  color: var(--arna-color-icon-primary);
 }
 
 .date-picker__trigger:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 .date-picker__trigger:disabled {
   cursor: not-allowed;
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
 }
 
 .date-picker--open .date-picker__trigger {
-  background-color: var(--mases-color-state-hover);
-  color: var(--mases-color-icon-primary);
+  background-color: var(--arna-color-state-hover);
+  color: var(--arna-color-icon-primary);
 }
 
 /* ============================================================================
@@ -1168,15 +1168,15 @@ function onCellClick(cell: GridCell): void {
   position: absolute;
   top: 100%;
   left: 0;
-  z-index: var(--mases-z-dropdown);
-  margin-block-start: var(--mases-space-1);
-  padding: var(--mases-space-3);
+  z-index: var(--arna-z-dropdown);
+  margin-block-start: var(--arna-space-1);
+  padding: var(--arna-space-3);
   min-width: 17.5rem;
-  background-color: var(--mases-color-surface-overlay);
-  border: 1px solid var(--mases-color-border-default);
-  border-radius: var(--mases-radius-md);
-  box-shadow: var(--mases-shadow-elevation-2);
-  transition: opacity var(--mases-duration-fast) var(--mases-easing-standard);
+  background-color: var(--arna-color-surface-overlay);
+  border: 1px solid var(--arna-color-border-default);
+  border-radius: var(--arna-radius-md);
+  box-shadow: var(--arna-shadow-elevation-2);
+  transition: opacity var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 /* ============================================================================
@@ -1186,18 +1186,18 @@ function onCellClick(cell: GridCell): void {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--mases-space-2);
-  margin-block-end: var(--mases-space-2);
+  gap: var(--arna-space-2);
+  margin-block-end: var(--arna-space-2);
 }
 
 .date-picker__header-label {
   flex: 1 1 auto;
   text-align: center;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 .date-picker__nav {
@@ -1211,22 +1211,22 @@ function onCellClick(cell: GridCell): void {
   appearance: none;
   background-color: transparent;
   border: none;
-  border-radius: var(--mases-radius-sm);
-  color: var(--mases-color-icon-secondary);
+  border-radius: var(--arna-radius-sm);
+  color: var(--arna-color-icon-secondary);
   cursor: pointer;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .date-picker__nav:hover {
-  background-color: var(--mases-color-state-hover);
-  color: var(--mases-color-icon-primary);
+  background-color: var(--arna-color-state-hover);
+  color: var(--arna-color-icon-primary);
 }
 
 .date-picker__nav:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
@@ -1240,13 +1240,13 @@ function onCellClick(cell: GridCell): void {
 }
 
 .date-picker__weekday-header {
-  padding-block: var(--mases-space-1);
+  padding-block: var(--arna-space-1);
   padding-inline: 0;
-  color: var(--mases-color-text-tertiary);
+  color: var(--arna-color-text-tertiary);
   font-family: inherit;
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
+  font-weight: var(--arna-font-weight-medium);
   text-align: center;
   text-transform: none;
 }
@@ -1257,24 +1257,24 @@ function onCellClick(cell: GridCell): void {
   padding: 0;
   text-align: center;
   vertical-align: middle;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
+  font-size: var(--arna-font-size-body-sm);
   line-height: 1;
-  font-weight: var(--mases-font-weight-regular);
+  font-weight: var(--arna-font-weight-regular);
   cursor: pointer;
-  border-radius: var(--mases-radius-sm);
+  border-radius: var(--arna-radius-sm);
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .date-picker__cell:hover:not(.date-picker__cell--blank):not(.date-picker__cell--disabled) {
-  background-color: var(--mases-color-state-hover);
+  background-color: var(--arna-color-state-hover);
 }
 
 .date-picker__cell:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
   outline-offset: -2px;
 }
 
@@ -1284,7 +1284,7 @@ function onCellClick(cell: GridCell): void {
 }
 
 .date-picker__cell--today {
-  font-weight: var(--mases-font-weight-semibold);
+  font-weight: var(--arna-font-weight-semibold);
   /*
    * A small dot under the number, rendered as a border-bottom on the
    * cell's inner span. Replaced by data attribute selectors so the
@@ -1300,27 +1300,27 @@ function onCellClick(cell: GridCell): void {
   transform: translateX(-50%);
   width: 4px;
   height: 4px;
-  border-radius: var(--mases-radius-full);
-  background-color: var(--mases-color-icon-brand);
+  border-radius: var(--arna-radius-full);
+  background-color: var(--arna-color-icon-brand);
   pointer-events: none;
 }
 
 .date-picker__cell--selected {
-  background-color: var(--mases-color-action-primary);
-  color: var(--mases-color-text-inverse);
-  font-weight: var(--mases-font-weight-semibold);
+  background-color: var(--arna-color-action-primary);
+  color: var(--arna-color-text-inverse);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 .date-picker__cell--selected.date-picker__cell--today::after {
-  background-color: var(--mases-color-text-inverse);
+  background-color: var(--arna-color-text-inverse);
 }
 
 .date-picker__cell--selected:hover {
-  background-color: var(--mases-color-action-primary-hover);
+  background-color: var(--arna-color-action-primary-hover);
 }
 
 .date-picker__cell--disabled {
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
   cursor: not-allowed;
   background-color: transparent;
 }

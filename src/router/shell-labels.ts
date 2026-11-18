@@ -160,7 +160,7 @@
  *       masesBrandLabels = {
  *         corporateName:         'ማሌ ዓርና',
  *         productName:           'ማሴስ',
- *         fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ማሴስ)',
+ *         fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ARNA)',
  *       } as const;
  *
  *   The header renders the two-line short form:
@@ -522,7 +522,7 @@
  *
  *     portalUserMenuItems = [
  *       { id: 'go-to-workspace',
- *         label: 'ወደ ማሴስ ወርክስፔስ',
+ *         label: 'ወደ ARNA ወርክስፔስ',
  *         icon: 'layout-grid',
  *         permission: 'app.app.access' },
  *       ...masesUserMenuItems,       // the shared `logout`
@@ -1197,7 +1197,7 @@
  * administration); the permission's Amharic name in the SQL dump
  * ('የአስተዳደር አካላትን ማየት') uses the same root.
  *
- * "ወደ ማሴስ ወርክስፔስ" (To MASES Workspace) is used for the portal's
+ * "ወደ ARNA ወርክስፔስ" (To MASES Workspace) is used for the portal's
  * back-to-workspace user-menu item (1.7.0). The string names the
  * destination by its own application name — 'ማሴስ ወርክስፔስ' is the same
  * label the platform stores on the workspace's `platform_applications`
@@ -1378,7 +1378,7 @@
  * ('የብድር ዓይነቶች'), delivered in 1.6.0, joins the list; the string
  * is shared with the destination page's pageTitle, so a reviewer's
  * decision applies to both surfaces in the same change. The portal
- * back-to-workspace user-menu label ('ወደ ማሴስ ወርክስፔስ'), delivered in
+ * back-to-workspace user-menu label ('ወደ ARNA ወርክስፔስ'), delivered in
  * 1.7.0, joins the list; the reviewer's decision applies to this
  * label alone, because it is not shared with any other surface. The
  * workspace dashboard nav label ('ዳሽቦርድ'), delivered in 1.8.0, joins
@@ -1445,9 +1445,9 @@ import type {
  * the change as a brand decision, not a translation decision, and
  * route it through the brand owner.
  */
-export const masesBrandLabels = {
+export const arnaBrandLabels = {
   corporateName: 'ማሌ ዓርና',
-  productName: 'ማሴስ',
+  productName: 'ARNA',
   tagline: 'Lead by example • Build lasting trust',
   fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ማሴስ)',
 } as const;
@@ -1480,7 +1480,7 @@ export const masesBrandLabels = {
  * text-only social links wait for the official URLs and the Amharic
  * label forms.
  */
-export const masesFooterLabels = {
+export const arnaFooterLabels = {
   /**
    * The copyright line. `{year}` is replaced by the current Ethiopian
    * calendar year at render time.
@@ -1523,7 +1523,7 @@ export const masesFooterLabels = {
  * after `mobileMenu` — see the file header comment §"Future hooks —
  * breadcrumbs aria label".
  */
-export const masesShellLabels: AppShellLabels = {
+export const arnaShellLabels: AppShellLabels = {
   skipToContent: 'ወደ ዋና ይዘት ዝለል',
   mobileMenu: 'የማውጫ ዝርዝር ክፈት',
 
@@ -1570,7 +1570,7 @@ export const masesShellLabels: AppShellLabels = {
  * directly — a workspace user does not see a "back to workspace" entry
  * (they are already there).
  */
-export const masesUserMenuItems: ReadonlyArray<UserMenuItem> = [
+export const arnaUserMenuItems: ReadonlyArray<UserMenuItem> = [
   {
     id: 'logout',
     label: 'ውጣ',
@@ -1624,11 +1624,11 @@ export const masesUserMenuItems: ReadonlyArray<UserMenuItem> = [
 export const portalUserMenuItems: ReadonlyArray<UserMenuItem> = [
   {
     id: 'go-to-workspace',
-    label: 'ወደ ማሴስ ወርክስፔስ',
+    label: 'ወደ ARNA ወርክስፔስ',
     icon: 'layout-grid',
     permission: 'app.app.access',
   },
-  ...masesUserMenuItems,
+  ...arnaUserMenuItems,
 ];
 
 /**

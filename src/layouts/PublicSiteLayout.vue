@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
-import { masesBrandLabels } from '@/router/shell-labels';
+import { arnaBrandLabels } from '@/router/shell-labels';
 import ThemePreferenceControl from '@/layouts/ThemePreferenceControl.vue';
 
 const appName: string = import.meta.env.VITE_APP_NAME || 'ARNA';
@@ -11,7 +11,7 @@ const appName: string = import.meta.env.VITE_APP_NAME || 'ARNA';
     <a class="public-site-layout__skip-link" href="#public-site-main">ወደ ዋናው ይዘት ዝለል</a>
     <header class="public-site-layout__header">
       <nav class="public-site-layout__nav" aria-label="ዋና አሰሳ">
-        <RouterLink class="public-site-layout__brand" to="/" :aria-label="masesBrandLabels.fullCorporateIdentity"><img class="public-site-layout__emblem" src="/logo.png" alt="" width="40" height="40" /><span>{{ masesBrandLabels.fullCorporateIdentity }}</span></RouterLink>
+        <RouterLink class="public-site-layout__brand" to="/" :aria-label="arnaBrandLabels.fullCorporateIdentity"><img class="public-site-layout__emblem" src="/logo.png" alt="" width="40" height="40" /><span>{{ arnaBrandLabels.fullCorporateIdentity }}</span></RouterLink>
         <div class="public-site-layout__links">
           <RouterLink to="/verify">ሰነድ ማረጋገጫ</RouterLink>
           <RouterLink to="/legal">ሕጋዊ መረጃ</RouterLink>
@@ -47,7 +47,7 @@ const appName: string = import.meta.env.VITE_APP_NAME || 'ARNA';
   border-color: var(--arna-public-border-subtle);
   border-style: solid;
   border-width: 0 0 1px;
-  padding: var(--mases-space-4) clamp(1rem, 4vw, 3rem);
+  padding: var(--arna-space-4) clamp(1rem, 4vw, 3rem);
 }
 .public-site-layout__footer {
   margin-top: auto;
@@ -70,9 +70,9 @@ const appName: string = import.meta.env.VITE_APP_NAME || 'ARNA';
 .public-site-layout__brand {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   color: var(--arna-public-text-primary);
-  font-weight: var(--mases-font-weight-semibold);
+  font-weight: var(--arna-font-weight-semibold);
   text-decoration: none;
 }
 
@@ -92,7 +92,7 @@ const appName: string = import.meta.env.VITE_APP_NAME || 'ARNA';
   color: var(--arna-public-text-primary);
   background: var(--arna-public-page-surface);
   border: 2px solid currentColor;
-  border-radius: var(--mases-radius-sm);
+  border-radius: var(--arna-radius-sm);
   transform: translateY(calc(-100% - 1rem));
 }
 .public-site-layout__skip-link:focus {

@@ -74,7 +74,7 @@
       switches languages.
 
       ---------------------------------------------------------------------
-      Why <title>MASES አስተዳደር</title>
+      Why <title>ARNA Administration</title>
       ---------------------------------------------------------------------
       Pre-JS default only. App.vue mounts and the active route wrapper's
       onMounted hook overwrites document.title on every route change
@@ -183,7 +183,7 @@
       Title. Overwritten by the router on mount; see the file header
       comment §"Why <title>MASES አስተዳደር</title>".
     -->
-    <title>MASES አስተዳደር</title>
+    <title>ARNA አስተዳደር</title>
 
     <!--
       Description. Consumed by search engines and by social-platform
@@ -196,7 +196,7 @@
     -->
     <meta
       name="description"
-      content="MASES — the Maale Arna shared-equity management platform for Ethiopian enterprises."
+      content="ARNA — the Maale Arna shared-equity management platform for Ethiopian enterprises."
     />
 
     <!--
@@ -232,14 +232,14 @@
       that an installed admin tile is distinguishable from an
       installed workspace tile.
     -->
-    <meta name="application-name" content="MASES አስተዳደር" />
+    <meta name="application-name" content="ARNA አስተዳደር" />
 
     <!--
       iOS home-screen title. Unchanged from the workspace file in this
       initial delivery. See the file header comment §"Additional
       consistency deltas".
     -->
-    <meta name="apple-mobile-web-app-title" content="MASES" />
+    <meta name="apple-mobile-web-app-title" content="ARNA" />
 
     <!--
       iOS status bar style. Same value as the workspace file.
@@ -261,11 +261,11 @@
       consistency deltas".
     -->
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="MASES" />
-    <meta property="og:title" content="MASES አስተዳደር" />
+    <meta property="og:site_name" content="ARNA" />
+    <meta property="og:title" content="ARNA አስተዳደር" />
     <meta
       property="og:description"
-      content="The MASES administration console."
+      content="The ARNA administration console."
     />
     <meta property="og:image" content="/logo.png" />
     <meta property="og:locale" content="am_ET" />
@@ -277,7 +277,7 @@
       deltas".
     -->
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="MASES" />
+    <meta name="twitter:title" content="ARNA" />
     <meta
       name="twitter:description"
       content="The Maale Arna shared-equity management platform."
@@ -321,7 +321,7 @@
       header comment §"The preloader".
     -->
     <style>
-      .mases-preloader {
+      .arna-preloader {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -336,22 +336,22 @@
         background-color: #FFFDF7;
       }
 
-      .mases-preloader__spinner {
+      .arna-preloader__spinner {
         display: block;
         width: 32px;
         height: 32px;
         border: 3px solid #DDD5C0;
         border-top-color: #9B1B30;
         border-radius: 50%;
-        animation: mases-preloader-spin 0.8s linear infinite;
+        animation: arna-preloader-spin 0.8s linear infinite;
       }
 
-      @keyframes mases-preloader-spin {
+      @keyframes arna-preloader-spin {
         to { transform: rotate(360deg); }
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .mases-preloader__spinner {
+        .arna-preloader__spinner {
           animation: none;
           border-top-color: #DDD5C0;
         }
@@ -364,7 +364,7 @@
     -->
     <noscript>
       <p>
-        JavaScript is required to use MASES. Please enable JavaScript in
+        JavaScript is required to use ARNA. Please enable JavaScript in
         your browser settings and reload this page.
       </p>
     </noscript>
@@ -374,9 +374,9 @@
       Amharic label matches the workspace file's ("loading...").
     -->
     <div id="app">
-      <div class="mases-preloader" role="status" aria-live="polite">
-        <span class="mases-preloader__spinner" aria-hidden="true"></span>
-        <span class="mases-preloader__label">በመጫን ላይ...</span>
+      <div class="arna-preloader" role="status" aria-live="polite">
+        <span class="arna-preloader__spinner" aria-hidden="true"></span>
+        <span class="arna-preloader__label">በመጫን ላይ...</span>
       </div>
     </div>
 

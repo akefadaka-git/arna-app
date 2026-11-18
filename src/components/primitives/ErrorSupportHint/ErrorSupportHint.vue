@@ -199,14 +199,14 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
 .error-support-hint {
   display: flex;
   align-items: flex-start;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   margin: 0;
   padding: 0;
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
 }
 
 /* ============================================================================
@@ -230,7 +230,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   justify-content: center;
   flex-shrink: 0;
   margin-block-start: calc(
-    (var(--mases-line-height-body-sm) - var(--mases-icon-sm)) / 2
+    (var(--arna-line-height-body-sm) - var(--arna-icon-sm)) / 2
   );
 }
 
@@ -252,14 +252,14 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    preamble §"Design note — the hint as a supplement".
    ============================================================================ */
 .error-support-hint--info .error-support-hint__icon {
-  color: var(--mases-color-icon-info);
+  color: var(--arna-color-icon-info);
 }
 
 .error-support-hint--warning .error-support-hint__icon {
-  color: var(--mases-color-icon-warning);
+  color: var(--arna-color-icon-warning);
 }
 
 .error-support-hint--neutral .error-support-hint__icon {
-  color: var(--mases-color-icon-secondary);
+  color: var(--arna-color-icon-secondary);
 }
 </style>

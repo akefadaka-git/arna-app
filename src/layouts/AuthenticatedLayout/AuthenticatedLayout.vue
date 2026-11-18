@@ -221,8 +221,8 @@ import AppShell from '@/layouts/AppShell';
 import { logout } from '@/features/auth/service';
 
 import {
-  masesShellLabels,
-  masesUserMenuItems,
+  arnaShellLabels,
+  arnaUserMenuItems,
   authenticatedNavItems,
 } from '@/router/shell-labels';
 
@@ -289,8 +289,8 @@ async function onUserMenuSelect(payload: { id: string }): Promise<void> {
 <template>
   <AppShell
     :nav-items="authenticatedNavItems"
-    :user-menu-items="masesUserMenuItems"
-    :labels="masesShellLabels"
+    :user-menu-items="arnaUserMenuItems"
+    :labels="arnaShellLabels"
     :footer-version="footerVersion"
     @user-menu-select="onUserMenuSelect"
   >

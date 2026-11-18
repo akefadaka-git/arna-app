@@ -603,14 +603,14 @@ interface SizeSpec {
 }
 
 const SIZE_MAP: Readonly<Record<IconSize, SizeSpec>> = Object.freeze({
-  'xs':  { px: 12, stroke: 1.75, token: '--mases-icon-xs'  },
-  'sm':  { px: 16, stroke: 1.75, token: '--mases-icon-sm'  },
-  'md':  { px: 20, stroke: 2,    token: '--mases-icon-md'  },
-  'lg':  { px: 24, stroke: 2,    token: '--mases-icon-lg'  },
-  'xl':  { px: 32, stroke: 2,    token: '--mases-icon-xl'  },
-  '2xl': { px: 48, stroke: 1.5,  token: '--mases-icon-2xl' },
-  '3xl': { px: 64, stroke: 1.5,  token: '--mases-icon-3xl' },
-  '4xl': { px: 96, stroke: 1.5,  token: '--mases-icon-4xl' },
+  'xs':  { px: 12, stroke: 1.75, token: '--arna-icon-xs'  },
+  'sm':  { px: 16, stroke: 1.75, token: '--arna-icon-sm'  },
+  'md':  { px: 20, stroke: 2,    token: '--arna-icon-md'  },
+  'lg':  { px: 24, stroke: 2,    token: '--arna-icon-lg'  },
+  'xl':  { px: 32, stroke: 2,    token: '--arna-icon-xl'  },
+  '2xl': { px: 48, stroke: 1.5,  token: '--arna-icon-2xl' },
+  '3xl': { px: 64, stroke: 1.5,  token: '--arna-icon-3xl' },
+  '4xl': { px: 96, stroke: 1.5,  token: '--arna-icon-4xl' },
 });
 
 /* ────────────────────────────────────────────────────────────────────────
@@ -695,7 +695,7 @@ const resolvedColor = computed<string>(() => {
   //    produces an undefined variable; the browser falls back to the
   //    inherited color, so the icon remains visible. A dev warning is
   //    emitted below.
-  return `var(--mases-${value})`;
+  return `var(--arna-${value})`;
 });
 
 /* ────────────────────────────────────────────────────────────────────────
@@ -736,7 +736,7 @@ if (import.meta.env.DEV) {
         // eslint-disable-next-line no-console
         console.info(
           `[BaseIcon] color "${value}" is not a recognised CSS color; ` +
-            `treating it as the MASES token "--mases-${value}".`,
+            `treating it as the ARNA token "--arna-${value}".`,
         );
       }
     },

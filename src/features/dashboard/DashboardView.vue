@@ -383,7 +383,7 @@ const visibleTiles = computed<readonly TileDefinition[]>(() =>
 .dashboard-view {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -401,7 +401,7 @@ const visibleTiles = computed<readonly TileDefinition[]>(() =>
 .dashboard-view__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--mases-space-4);
+  gap: var(--arna-space-4);
   width: 100%;
 }
 
@@ -428,33 +428,33 @@ const visibleTiles = computed<readonly TileDefinition[]>(() =>
 .dashboard-view__tile {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   position: relative;
   min-height: 140px;
-  padding-block: var(--mases-space-5);
-  padding-inline: var(--mases-space-5);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-lg);
-  background-color: var(--mases-color-surface-page);
-  color: var(--mases-color-text-primary);
+  padding-block: var(--arna-space-5);
+  padding-inline: var(--arna-space-5);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-lg);
+  background-color: var(--arna-color-surface-page);
+  color: var(--arna-color-text-primary);
   text-decoration: none;
   font-family: inherit;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    border-color var(--mases-duration-fast) var(--mases-easing-standard),
-    box-shadow var(--mases-duration-fast) var(--mases-easing-standard),
-    transform var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    border-color var(--arna-duration-fast) var(--arna-easing-standard),
+    box-shadow var(--arna-duration-fast) var(--arna-easing-standard),
+    transform var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .dashboard-view__tile:hover {
-  border-color: var(--mases-color-border-strong);
-  box-shadow: var(--mases-shadow-elevation-2);
+  border-color: var(--arna-color-border-strong);
+  box-shadow: var(--arna-shadow-elevation-2);
   transform: translateY(-1px);
 }
 
 .dashboard-view__tile:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
@@ -464,11 +464,11 @@ const visibleTiles = computed<readonly TileDefinition[]>(() =>
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--mases-space-10);
-  height: var(--mases-space-10);
-  border-radius: var(--mases-radius-md);
-  background-color: var(--mases-color-surface-accent);
-  color: var(--mases-color-icon-accent);
+  width: var(--arna-space-10);
+  height: var(--arna-space-10);
+  border-radius: var(--arna-radius-md);
+  background-color: var(--arna-color-surface-accent);
+  color: var(--arna-color-icon-accent);
   flex-shrink: 0;
 }
 
@@ -482,14 +482,14 @@ const visibleTiles = computed<readonly TileDefinition[]>(() =>
 .dashboard-view__tile-content {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   min-width: 0;
 }
 
 .dashboard-view__tile-name {
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-semibold);
   /*
    * Amharic-safe wrapping. Two-line clamp so a very long name does
    * not make one tile much taller than its neighbors.
@@ -502,10 +502,10 @@ const visibleTiles = computed<readonly TileDefinition[]>(() =>
 }
 
 .dashboard-view__tile-description {
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
-  color: var(--mases-color-text-secondary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
+  color: var(--arna-color-text-secondary);
   overflow-wrap: anywhere;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -519,27 +519,27 @@ const visibleTiles = computed<readonly TileDefinition[]>(() =>
 .dashboard-view__empty {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-1);
-  padding: var(--mases-space-6);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-lg);
-  background-color: var(--mases-color-surface-subtle);
+  gap: var(--arna-space-1);
+  padding: var(--arna-space-6);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-lg);
+  background-color: var(--arna-color-surface-subtle);
   text-align: center;
 }
 
 .dashboard-view__empty-title {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-3);
-  line-height: var(--mases-line-height-heading-3);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-3);
+  line-height: var(--arna-line-height-heading-3);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 .dashboard-view__empty-description {
   margin: 0;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
 }
 
 /* ============================================================================
@@ -565,56 +565,56 @@ const visibleTiles = computed<readonly TileDefinition[]>(() =>
 .dashboard-view__grid {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   align-items: stretch;
-  gap: var(--mases-space-5);
+  gap: var(--arna-space-5);
 }
 
 .dashboard-view__tile {
   min-height: 164px;
   justify-content: flex-start;
-  border-color: var(--mases-color-border-subtle);
-  border-inline-start: 3px solid var(--mases-color-border-brand);
-  background-color: var(--mases-color-surface-raised);
-  box-shadow: var(--mases-shadow-elevation-1);
+  border-color: var(--arna-color-border-subtle);
+  border-inline-start: 3px solid var(--arna-color-border-brand);
+  background-color: var(--arna-color-surface-raised);
+  box-shadow: var(--arna-shadow-elevation-1);
 }
 
 .dashboard-view__tile:hover {
-  border-color: var(--mases-color-border-brand);
-  border-inline-start-color: var(--mases-color-state-selected-accent);
-  background-color: var(--mases-color-surface-page);
-  box-shadow: var(--mases-shadow-elevation-2);
+  border-color: var(--arna-color-border-brand);
+  border-inline-start-color: var(--arna-color-state-selected-accent);
+  background-color: var(--arna-color-surface-page);
+  box-shadow: var(--arna-shadow-elevation-2);
   transform: translateY(-2px);
 }
 
 .dashboard-view__tile:active {
-  box-shadow: var(--mases-shadow-elevation-1);
+  box-shadow: var(--arna-shadow-elevation-1);
   transform: translateY(0);
 }
 
 .dashboard-view__tile.router-link-active {
-  border-color: var(--mases-color-state-selected-accent);
-  background-color: var(--mases-color-state-selected);
+  border-color: var(--arna-color-state-selected-accent);
+  background-color: var(--arna-color-state-selected);
 }
 
 .dashboard-view__tile-icon-wrapper {
   width: 2.75rem;
   height: 2.75rem;
-  border: 1px solid var(--mases-color-border-subtle);
-  background-color: var(--mases-color-surface-accent);
+  border: 1px solid var(--arna-color-border-subtle);
+  background-color: var(--arna-color-surface-accent);
 }
 
 @media (max-width: 639px) {
   .dashboard-view {
-    gap: var(--mases-space-5);
+    gap: var(--arna-space-5);
   }
 
   .dashboard-view__grid {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--mases-space-3);
+    gap: var(--arna-space-3);
   }
 
   .dashboard-view__tile {
     min-height: 132px;
-    padding: var(--mases-space-4);
+    padding: var(--arna-space-4);
   }
 }
 

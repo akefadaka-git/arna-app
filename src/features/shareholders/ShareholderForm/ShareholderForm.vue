@@ -956,7 +956,7 @@ const submitLabel = computed<string>(() => {
 .shareholder-form {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -966,7 +966,7 @@ const submitLabel = computed<string>(() => {
 .shareholder-form__form {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -977,10 +977,10 @@ const submitLabel = computed<string>(() => {
 
 .shareholder-form__banner-reference {
   margin: 0;
-  margin-block-start: var(--mases-space-1);
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  margin-block-start: var(--arna-space-1);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   overflow-wrap: anywhere;
 }
 
@@ -990,9 +990,9 @@ const submitLabel = computed<string>(() => {
 .shareholder-form__section {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-4);
-  padding-block-end: var(--mases-space-4);
-  border-block-end: 1px solid var(--mases-color-border-subtle);
+  gap: var(--arna-space-4);
+  padding-block-end: var(--arna-space-4);
+  border-block-end: 1px solid var(--arna-color-border-subtle);
 }
 
 .shareholder-form__section:last-of-type {
@@ -1002,10 +1002,10 @@ const submitLabel = computed<string>(() => {
 
 .shareholder-form__section-title {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-6);
-  line-height: var(--mases-line-height-heading-6);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-6);
+  line-height: var(--arna-line-height-heading-6);
+  font-weight: var(--arna-font-weight-semibold);
   overflow-wrap: anywhere;
 }
 
@@ -1015,22 +1015,22 @@ const submitLabel = computed<string>(() => {
 .shareholder-form__subsection {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
 }
 
 .shareholder-form__subsection-title {
   margin: 0;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-semibold);
   overflow-wrap: anywhere;
 }
 
 .shareholder-form__subsection-fields {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-4);
+  gap: var(--arna-space-4);
 }
 
 /* ============================================================================
@@ -1039,8 +1039,8 @@ const submitLabel = computed<string>(() => {
 .shareholder-form__actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--mases-space-3);
-  padding-block-start: var(--mases-space-2);
+  gap: var(--arna-space-3);
+  padding-block-start: var(--arna-space-2);
 }
 
 /* ============================================================================

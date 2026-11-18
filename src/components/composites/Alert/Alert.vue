@@ -135,13 +135,13 @@ export type AlertVariant =
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesAlertWarned = new Set<string>();
+const __arnaAlertWarned = new Set<string>();
 
-function __masesAlertWarnOnce(key: string, message: string): void {
-  if (__masesAlertWarned.has(key)) {
+function __arnaAlertWarnOnce(key: string, message: string): void {
+  if (__arnaAlertWarned.has(key)) {
     return;
   }
-  __masesAlertWarned.add(key);
+  __arnaAlertWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -242,7 +242,7 @@ defineSlots<{
 // Development-time guard
 // -----------------------------------------------------------------------------
 if (import.meta.env.DEV && props.dismissible && !props.dismissLabel) {
-  __masesAlertWarnOnce(
+  __arnaAlertWarnOnce(
     'alert:missing-dismiss-label',
     '[Alert] dismissible=true without dismissLabel. The dismiss button ' +
       'will render with an empty aria-label, which is an accessibility ' +
@@ -376,23 +376,23 @@ function onDismiss(): void {
 .alert {
   display: flex;
   align-items: flex-start;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   width: 100%;
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-4);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-4);
   border: 1px solid transparent;
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
 }
 
 /* When dismissible, reserve room on the trailing edge for the × button
    so that long messages do not run under it. */
 .alert--dismissible {
   padding-inline-end: calc(
-    var(--mases-space-4) + var(--mases-icon-sm) + var(--mases-space-2)
+    var(--arna-space-4) + var(--arna-icon-sm) + var(--arna-space-2)
   );
 }
 
@@ -404,33 +404,33 @@ function onDismiss(): void {
    verified by the design system.
    ============================================================================ */
 .alert--success {
-  background-color: var(--mases-color-surface-success);
-  color: var(--mases-color-text-success);
-  border-color: var(--mases-color-border-success);
+  background-color: var(--arna-color-surface-success);
+  color: var(--arna-color-text-success);
+  border-color: var(--arna-color-border-success);
 }
 
 .alert--warning {
-  background-color: var(--mases-color-surface-warning);
-  color: var(--mases-color-text-warning);
-  border-color: var(--mases-color-border-warning);
+  background-color: var(--arna-color-surface-warning);
+  color: var(--arna-color-text-warning);
+  border-color: var(--arna-color-border-warning);
 }
 
 .alert--info {
-  background-color: var(--mases-color-surface-info);
-  color: var(--mases-color-text-info);
-  border-color: var(--mases-color-border-info);
+  background-color: var(--arna-color-surface-info);
+  color: var(--arna-color-text-info);
+  border-color: var(--arna-color-border-info);
 }
 
 .alert--danger {
-  background-color: var(--mases-color-surface-danger);
-  color: var(--mases-color-text-danger);
-  border-color: var(--mases-color-border-danger);
+  background-color: var(--arna-color-surface-danger);
+  color: var(--arna-color-text-danger);
+  border-color: var(--arna-color-border-danger);
 }
 
 .alert--neutral {
-  background-color: var(--mases-color-surface-raised);
-  color: var(--mases-color-text-secondary);
-  border-color: var(--mases-color-border-subtle);
+  background-color: var(--arna-color-surface-raised);
+  color: var(--arna-color-text-secondary);
+  border-color: var(--arna-color-border-subtle);
 }
 
 /* ============================================================================
@@ -448,7 +448,7 @@ function onDismiss(): void {
    * respected automatically.
    */
   margin-block-start: calc(
-    (var(--mases-line-height-body-sm) - var(--mases-icon-md)) / 2
+    (var(--arna-line-height-body-sm) - var(--arna-icon-md)) / 2
   );
   color: currentColor;
 }
@@ -461,7 +461,7 @@ function onDismiss(): void {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
 }
 
 .alert__title {
@@ -470,7 +470,7 @@ function onDismiss(): void {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
-  font-weight: var(--mases-font-weight-semibold);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 .alert__message {
@@ -478,7 +478,7 @@ function onDismiss(): void {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
-  font-weight: var(--mases-font-weight-regular);
+  font-weight: var(--arna-font-weight-regular);
   /*
    * Preserve newlines that a consumer might include in a message
    * string, without collapsing spaces. Consistent with ConfirmDialog
@@ -490,7 +490,7 @@ function onDismiss(): void {
 .alert__actions {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-wrap: wrap;
 }
 
@@ -502,14 +502,14 @@ function onDismiss(): void {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: var(--mases-icon-md);
-  height: var(--mases-icon-md);
+  width: var(--arna-icon-md);
+  height: var(--arna-icon-md);
   padding: 0;
   margin: 0;
   appearance: none;
   background-color: transparent;
   border: 0;
-  border-radius: var(--mases-radius-sm);
+  border-radius: var(--arna-radius-sm);
   color: currentColor;
   cursor: pointer;
   /*
@@ -518,11 +518,11 @@ function onDismiss(): void {
    * offset uses a spacing token divided by two.
    */
   margin-block-start: calc(
-    (var(--mases-line-height-body-sm) - var(--mases-icon-md)) / 2
+    (var(--arna-line-height-body-sm) - var(--arna-icon-md)) / 2
   );
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    opacity var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    opacity var(--arna-duration-fast) var(--arna-easing-standard);
   /* Slight transparency so the icon is subordinate to the message. */
   opacity: 0.75;
 }
@@ -541,8 +541,8 @@ function onDismiss(): void {
 }
 
 .alert__dismiss:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-color-border-focus);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-color-border-focus);
+  outline-offset: var(--arna-focus-ring-offset);
   opacity: 1;
 }
 
@@ -561,13 +561,13 @@ function onDismiss(): void {
    ============================================================================ */
 @media (max-width: 639px) {
   .alert {
-    padding-block: var(--mases-space-3);
-    padding-inline: var(--mases-space-3);
+    padding-block: var(--arna-space-3);
+    padding-inline: var(--arna-space-3);
   }
 
   .alert--dismissible {
     padding-inline-end: calc(
-      var(--mases-space-3) + var(--mases-icon-sm) + var(--mases-space-2)
+      var(--arna-space-3) + var(--arna-icon-sm) + var(--arna-space-2)
     );
   }
 }

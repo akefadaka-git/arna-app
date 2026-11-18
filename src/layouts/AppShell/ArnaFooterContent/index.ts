@@ -73,4 +73,4 @@
  * =============================================================================
  */
 
-export { default } from './MASESFooterContent.vue';
+export { default } from './ArnaFooterContent.vue';

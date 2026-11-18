@@ -285,7 +285,7 @@ const labels = {
    * The page header's description line. A single noun phrase that
    * names what the page is.
    */
-  pageDescription: 'የMASES አስተዳደር መተግበሪያ መነሻ ገጽ።',
+  pageDescription: 'የARNA አስተዳደር መተግበሪያ መነሻ ገጽ።',
 
   /**
    * The welcome card's heading. The Amharic greeting
@@ -299,7 +299,7 @@ const labels = {
    * see the file header §"Static content" for the G1 Q4 decision
    * that governs this.
    */
-  welcomeBody: 'ይህ የMASES መድረክ አስተዳደር መተግበሪያ ነው።',
+  welcomeBody: 'ይህ የARNA መድረክ አስተዳደር መተግበሪያ ነው።',
 } as const;
 
 /*
@@ -357,7 +357,7 @@ onMounted(() => {
 .admin-dashboard-route {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -370,10 +370,10 @@ onMounted(() => {
    ============================================================================ */
 .admin-dashboard-route__welcome-heading {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-6);
-  line-height: var(--mases-line-height-heading-6);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-6);
+  line-height: var(--arna-line-height-heading-6);
+  font-weight: var(--arna-font-weight-semibold);
   /*
    * Amharic-safe wrapping. A long translation of the heading, or a
    * language switch that lengthens it, breaks across lines rather
@@ -392,9 +392,9 @@ onMounted(() => {
    ============================================================================ */
 .admin-dashboard-route__welcome-body {
   margin: 0;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
   overflow-wrap: anywhere;
 }
 

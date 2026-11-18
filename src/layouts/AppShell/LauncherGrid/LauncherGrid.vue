@@ -291,7 +291,7 @@ function onRetry(): void {
 .launcher-grid__list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
-  gap: var(--mases-space-4);
+  gap: var(--arna-space-4);
   list-style: none;
   margin: 0;
   padding: 0;

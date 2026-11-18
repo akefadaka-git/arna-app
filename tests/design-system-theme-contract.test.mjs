@@ -25,41 +25,41 @@ test('all four application entry points import the shared theme layer', () => {
 
 test('dark theme maps every shared semantic color family', () => {
   const requiredRoles = [
-    '--mases-color-surface-page', '--mases-color-surface-raised',
-    '--mases-color-surface-subtle', '--mases-color-surface-overlay',
-    '--mases-color-surface-sunken', '--mases-color-surface-inverse',
-    '--mases-color-surface-inverse-raised', '--mases-color-surface-brand',
-    '--mases-color-surface-accent', '--mases-color-surface-disabled',
-    '--mases-color-surface-success', '--mases-color-surface-warning',
-    '--mases-color-surface-info', '--mases-color-surface-danger',
-    '--mases-color-text-primary', '--mases-color-text-secondary',
-    '--mases-color-text-tertiary', '--mases-color-text-muted',
-    '--mases-color-text-inverse', '--mases-color-text-inverse-secondary',
-    '--mases-color-text-brand', '--mases-color-text-accent',
-    '--mases-color-text-success', '--mases-color-text-warning',
-    '--mases-color-text-info', '--mases-color-text-danger',
-    '--mases-color-text-disabled', '--mases-color-border-default',
-    '--mases-color-border-strong', '--mases-color-border-subtle',
-    '--mases-color-border-brand', '--mases-color-border-inverse',
-    '--mases-color-border-success', '--mases-color-border-warning',
-    '--mases-color-border-info', '--mases-color-border-danger',
-    '--mases-color-border-focus', '--mases-color-action-primary',
-    '--mases-color-action-primary-hover', '--mases-color-action-primary-active',
-    '--mases-color-action-primary-disabled', '--mases-color-action-secondary',
-    '--mases-color-action-secondary-hover', '--mases-color-action-secondary-active',
-    '--mases-color-action-ghost', '--mases-color-action-ghost-hover',
-    '--mases-color-action-danger', '--mases-color-action-danger-hover',
-    '--mases-color-action-link', '--mases-color-action-link-hover',
-    '--mases-color-icon-primary', '--mases-color-icon-secondary',
-    '--mases-color-icon-inverse', '--mases-color-icon-brand',
-    '--mases-color-icon-accent', '--mases-color-icon-success',
-    '--mases-color-icon-warning', '--mases-color-icon-info',
-    '--mases-color-icon-danger', '--mases-color-state-hover',
-    '--mases-color-state-selected', '--mases-color-state-selected-accent',
-    '--mases-color-state-disabled-bg', '--mases-color-state-disabled-text',
-    '--mases-color-state-focus-ring', '--mases-color-state-focus-ring-inverse',
-    '--mases-color-overlay-scrim', '--mases-color-surface-auth-backdrop',
-    '--mases-color-text-auth-attribution',
+    '--arna-color-surface-page', '--arna-color-surface-raised',
+    '--arna-color-surface-subtle', '--arna-color-surface-overlay',
+    '--arna-color-surface-sunken', '--arna-color-surface-inverse',
+    '--arna-color-surface-inverse-raised', '--arna-color-surface-brand',
+    '--arna-color-surface-accent', '--arna-color-surface-disabled',
+    '--arna-color-surface-success', '--arna-color-surface-warning',
+    '--arna-color-surface-info', '--arna-color-surface-danger',
+    '--arna-color-text-primary', '--arna-color-text-secondary',
+    '--arna-color-text-tertiary', '--arna-color-text-muted',
+    '--arna-color-text-inverse', '--arna-color-text-inverse-secondary',
+    '--arna-color-text-brand', '--arna-color-text-accent',
+    '--arna-color-text-success', '--arna-color-text-warning',
+    '--arna-color-text-info', '--arna-color-text-danger',
+    '--arna-color-text-disabled', '--arna-color-border-default',
+    '--arna-color-border-strong', '--arna-color-border-subtle',
+    '--arna-color-border-brand', '--arna-color-border-inverse',
+    '--arna-color-border-success', '--arna-color-border-warning',
+    '--arna-color-border-info', '--arna-color-border-danger',
+    '--arna-color-border-focus', '--arna-color-action-primary',
+    '--arna-color-action-primary-hover', '--arna-color-action-primary-active',
+    '--arna-color-action-primary-disabled', '--arna-color-action-secondary',
+    '--arna-color-action-secondary-hover', '--arna-color-action-secondary-active',
+    '--arna-color-action-ghost', '--arna-color-action-ghost-hover',
+    '--arna-color-action-danger', '--arna-color-action-danger-hover',
+    '--arna-color-action-link', '--arna-color-action-link-hover',
+    '--arna-color-icon-primary', '--arna-color-icon-secondary',
+    '--arna-color-icon-inverse', '--arna-color-icon-brand',
+    '--arna-color-icon-accent', '--arna-color-icon-success',
+    '--arna-color-icon-warning', '--arna-color-icon-info',
+    '--arna-color-icon-danger', '--arna-color-state-hover',
+    '--arna-color-state-selected', '--arna-color-state-selected-accent',
+    '--arna-color-state-disabled-bg', '--arna-color-state-disabled-text',
+    '--arna-color-state-focus-ring', '--arna-color-state-focus-ring-inverse',
+    '--arna-color-overlay-scrim', '--arna-color-surface-auth-backdrop',
+    '--arna-color-text-auth-attribution',
   ];
   for (const role of requiredRoles) {
     assert.ok(tokens.includes(role), `frozen token substrate must declare ${role}`);
@@ -76,13 +76,13 @@ test('system preference and explicit light/dark overrides are supported', () => 
 });
 
 test('English and Amharic typography use their approved font stacks and scales', () => {
-  assert.ok(tokens.includes('--mases-font-family-am:     "Noto Sans Ethiopic"'));
-  assert.ok(tokens.includes('--mases-font-family-en:     "Inter"'));
+  assert.ok(tokens.includes('--arna-font-family-am:     "Noto Sans Ethiopic"'));
+  assert.ok(tokens.includes('--arna-font-family-en:     "Inter"'));
   assert.ok(tokens.includes('html[lang="am"]'));
   assert.ok(theme.includes('html[lang="am"] body'));
   assert.ok(theme.includes('html[lang="en"] body'));
-  assert.ok(theme.includes('--mases-font-size-body'));
-  assert.ok(theme.includes('--mases-line-height-body'));
+  assert.ok(theme.includes('--arna-font-size-body'));
+  assert.ok(theme.includes('--arna-line-height-body'));
 });
 
 test('shared button, form, card, table and dialog contracts retain keyboard and AT semantics', () => {

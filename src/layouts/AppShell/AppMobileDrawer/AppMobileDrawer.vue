@@ -449,7 +449,7 @@ onBeforeUnmount(() => {
    * under html[dir='rtl'] (slide in from the right). One keyframe
    * block serves both directions.
    */
-  --mases-drawer-offset: -100%;
+  --arna-drawer-offset: -100%;
 
   /*
    * Native <dialog> defaults to centered + auto-sized. We override
@@ -468,7 +468,7 @@ onBeforeUnmount(() => {
   max-width: 85vw;
   max-height: 100vh;
   max-height: 100dvh;
-  width: var(--mases-shell-sidebar-width);
+  width: var(--arna-shell-sidebar-width);
   height: 100vh;
   /*
    * On supported browsers, use dvh so the iOS Safari address bar does
@@ -476,22 +476,22 @@ onBeforeUnmount(() => {
    */
   height: 100dvh;
   border: 0;
-  border-block-start: 3px solid var(--mases-color-gold-500);
-  background-color: var(--mases-color-surface-raised);
-  color: var(--mases-color-text-primary);
+  border-block-start: 3px solid var(--arna-color-gold-500);
+  background-color: var(--arna-color-surface-raised);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
   /*
    * A shadow on the trailing edge visually separates the drawer from
    * the dimmed page behind it.
    */
-  box-shadow: var(--mases-shadow-elevation-4);
+  box-shadow: var(--arna-shadow-elevation-4);
   /*
    * Slide-in animation. Disabled under prefers-reduced-motion — see
    * the media query at the end of this file. The drawer closes
    * synchronously; see the file header comment §"Exit-animation
    * decision".
    */
-  animation: mases-drawer-slide-in var(--mases-duration-slow) var(--mases-easing-decelerate);
+  animation: arna-drawer-slide-in var(--arna-duration-slow) var(--arna-easing-decelerate);
 }
 
 /*
@@ -500,12 +500,12 @@ onBeforeUnmount(() => {
  * slide-in animation flips direction accordingly.
  */
 html[dir='rtl'] .app-mobile-drawer {
-  --mases-drawer-offset: 100%;
+  --arna-drawer-offset: 100%;
 }
 
-@keyframes mases-drawer-slide-in {
+@keyframes arna-drawer-slide-in {
   from {
-    transform: translateX(var(--mases-drawer-offset));
+    transform: translateX(var(--arna-drawer-offset));
   }
   to {
     transform: translateX(0);
@@ -522,7 +522,7 @@ html[dir='rtl'] .app-mobile-drawer {
    alpha — the same value the previous revision hardcoded.
    ============================================================================ */
 .app-mobile-drawer::backdrop {
-  background-color: var(--mases-color-overlay-scrim);
+  background-color: var(--arna-color-overlay-scrim);
 }
 
 /* ============================================================================
@@ -542,9 +542,9 @@ html[dir='rtl'] .app-mobile-drawer {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  height: var(--mases-shell-header-height);
-  padding-inline: var(--mases-space-2);
-  border-block-end: 1px solid var(--mases-color-border-brand);
+  height: var(--arna-shell-header-height);
+  padding-inline: var(--arna-space-2);
+  border-block-end: 1px solid var(--arna-color-border-brand);
   flex-shrink: 0;
 }
 
@@ -570,9 +570,9 @@ html[dir='rtl'] .app-mobile-drawer {
    Extra slot region
    ============================================================================ */
 .app-mobile-drawer__extra {
-  padding-block: var(--mases-space-4);
-  padding-inline: var(--mases-space-3);
-  border-block-start: 1px solid var(--mases-color-border-subtle);
+  padding-block: var(--arna-space-4);
+  padding-inline: var(--arna-space-3);
+  border-block-start: 1px solid var(--arna-color-border-subtle);
   flex-shrink: 0;
 }
 

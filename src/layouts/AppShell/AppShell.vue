@@ -414,7 +414,7 @@ import SkipToContent from '@/layouts/AppShell/SkipToContent';
 import MaintenanceBanner from '@/layouts/AppShell/MaintenanceBanner';
 import AppHeader from '@/layouts/AppShell/AppHeader';
 import AppHeaderNavigation from '@/layouts/AppShell/AppHeaderNavigation/AppHeaderNavigation.vue';
-import MASESBrand from '@/layouts/AppShell/MASESBrand';
+import ArnaBrand from '@/layouts/AppShell/ArnaBrand';
 import UserMenu from '@/layouts/AppShell/UserMenu';
 import NotificationsBell from '@/layouts/AppShell/NotificationsBell';
 import NotificationsCenter from '@/features/notifications/NotificationsCenter.vue';
@@ -424,7 +424,7 @@ import TenantSwitcher from '@/layouts/AppShell/TenantSwitcher';
 import AppSidebar from '@/layouts/AppShell/AppSidebar';
 import CalendarContext from '@/layouts/AppShell/CalendarContext';
 import AppFooter from '@/layouts/AppShell/AppFooter';
-import MASESFooterContent from '@/layouts/AppShell/MASESFooterContent';
+import ArnaFooterContent from '@/layouts/AppShell/ArnaFooterContent';
 import AppMobileDrawer from '@/layouts/AppShell/AppMobileDrawer';
 
 interface Props {
@@ -500,7 +500,7 @@ withDefaults(defineProps<Props>(), {
   maintenance: null,
   footerCopyright: undefined,
   footerVersion: undefined,
-  skipToContentTargetId: 'mases-main-content',
+  skipToContentTargetId: 'arna-main-content',
 });
 
 const emit = defineEmits<{
@@ -624,7 +624,7 @@ function onMaintenanceDismiss(): void {
     >
       <template #brand>
         <slot name="brand">
-          <MASESBrand />
+          <ArnaBrand />
         </slot>
       </template>
 
@@ -723,7 +723,7 @@ function onMaintenanceDismiss(): void {
       :version="footerVersion"
     >
       <slot name="footer">
-        <MASESFooterContent />
+        <ArnaFooterContent />
         <div class="app-shell__footer-preferences">
           <ThemePreferenceControl />
         </div>
@@ -753,7 +753,7 @@ function onMaintenanceDismiss(): void {
   display: flex;
   justify-content: flex-end;
   width: 100%;
-  padding: var(--mases-space-2) var(--mases-space-4);
+  padding: var(--arna-space-2) var(--arna-space-4);
 }
 
 .app-shell {
@@ -761,8 +761,8 @@ function onMaintenanceDismiss(): void {
   flex-direction: column;
   min-height: 100vh;
   min-height: 100dvh;
-  background-color: var(--mases-color-surface-page);
-  color: var(--mases-color-text-primary);
+  background-color: var(--arna-color-surface-page);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
 }
 
@@ -805,12 +805,12 @@ function onMaintenanceDismiss(): void {
     flex-direction: column;
     flex-shrink: 0;
     align-self: flex-start;
-    width: var(--mases-shell-sidebar-width);
-    height: calc(100dvh - var(--mases-shell-header-height));
+    width: var(--arna-shell-sidebar-width);
+    height: calc(100dvh - var(--arna-shell-header-height));
     position: sticky;
-    top: var(--mases-shell-header-height);
-    border-inline-end: 1px solid var(--mases-color-border-subtle);
-    background-color: var(--mases-color-surface-raised);
+    top: var(--arna-shell-header-height);
+    border-inline-end: 1px solid var(--arna-color-border-subtle);
+    background-color: var(--arna-color-surface-raised);
     /*
      * `overflow: clip` (with a `hidden` fallback) keeps the aside's
      * contents from spilling past its own box without creating a
@@ -820,7 +820,7 @@ function onMaintenanceDismiss(): void {
      */
     overflow: hidden; /* fallback */
     overflow: clip;
-    overflow-clip-margin: var(--mases-space-2);
+    overflow-clip-margin: var(--arna-space-2);
   }
 }
 
@@ -859,9 +859,9 @@ function onMaintenanceDismiss(): void {
 
 .app-shell__aside-calendar {
   flex-shrink: 0;
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-3);
-  border-block-start: 1px solid var(--mases-color-border-subtle);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-3);
+  border-block-start: 1px solid var(--arna-color-border-subtle);
 }
 
 /* ============================================================================
@@ -873,8 +873,8 @@ function onMaintenanceDismiss(): void {
 .app-shell__main {
   flex: 1 1 auto;
   min-width: 0;
-  padding-block: var(--mases-shell-content-padding-mobile);
-  padding-inline: var(--mases-shell-content-padding-mobile);
+  padding-block: var(--arna-shell-content-padding-mobile);
+  padding-inline: var(--arna-shell-content-padding-mobile);
   /*
    * The main landmark is a skip-link target, so keep a visible focus
    * indicator when keyboard navigation transfers focus here. The
@@ -882,27 +882,27 @@ function onMaintenanceDismiss(): void {
    */
   outline: 3px solid transparent;
   outline-offset: -3px;
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
 }
 
 /* Tablet and up: tablet content padding. */
 @media (min-width: 640px) {
   .app-shell__main {
-    padding-block: var(--mases-shell-content-padding-tablet);
-    padding-inline: var(--mases-shell-content-padding-tablet);
+    padding-block: var(--arna-shell-content-padding-tablet);
+    padding-inline: var(--arna-shell-content-padding-tablet);
   }
 }
 
 /* Desktop and up: desktop content padding. */
 @media (min-width: 1024px) {
   .app-shell__main {
-    padding-block: var(--mases-shell-content-padding-desktop);
-    padding-inline: var(--mases-shell-content-padding-desktop);
+    padding-block: var(--arna-shell-content-padding-desktop);
+    padding-inline: var(--arna-shell-content-padding-desktop);
   }
 }
 
 .app-shell__main:focus-visible {
-  outline-color: var(--mases-color-state-focus-ring);
+  outline-color: var(--arna-color-state-focus-ring);
 }
 
 .app-shell__content {
@@ -915,7 +915,7 @@ function onMaintenanceDismiss(): void {
    * data-heavy pages on standard desktops.
    */
   width: 100%;
-  max-width: var(--mases-container-page-wide);
+  max-width: var(--arna-container-page-wide);
   margin-inline: auto;
 }
 

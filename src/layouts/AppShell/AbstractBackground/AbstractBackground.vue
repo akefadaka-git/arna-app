@@ -433,7 +433,7 @@
    * system's Tier 1 value for --mases-color-neutral-50, which is
    * what --mases-color-surface-page resolves to.
    */
-  background-color: var(--mases-color-surface-page, #FFFDF7);
+  background-color: var(--arna-color-surface-page, #FFFDF7);
 
   /*
    * Decorative layers, top-first (CSS paints the first image

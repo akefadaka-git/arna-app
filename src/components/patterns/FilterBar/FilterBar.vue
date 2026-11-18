@@ -175,13 +175,13 @@ export interface FilterUpdatePayload {
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesFilterBarWarned = new Set<string>();
+const __arnaFilterBarWarned = new Set<string>();
 
-function __masesFilterBarWarnOnce(key: string, message: string): void {
-  if (__masesFilterBarWarned.has(key)) {
+function __arnaFilterBarWarnOnce(key: string, message: string): void {
+  if (__arnaFilterBarWarned.has(key)) {
     return;
   }
-  __masesFilterBarWarned.add(key);
+  __arnaFilterBarWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -189,7 +189,7 @@ function __masesFilterBarWarnOnce(key: string, message: string): void {
 /*
  * Module-level counter for auto-generated filter input ids.
  */
-let __masesFilterBarIdCounter = 0;
+let __arnaFilterBarIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -260,7 +260,7 @@ const slots = useSlots();
 // -----------------------------------------------------------------------------
 // Generated base id
 // -----------------------------------------------------------------------------
-const baseId = `mases-filter-bar-${++__masesFilterBarIdCounter}`;
+const baseId = `arna-filter-bar-${++__arnaFilterBarIdCounter}`;
 
 function filterInputIdFor(filterKey: string): string {
   return `${baseId}-${filterKey}`;
@@ -293,7 +293,7 @@ const hasActionsSlot = computed<boolean>(() => slots.actions !== undefined);
  * default slot.
  */
 if (import.meta.env.DEV && customFilters.value.length > 0) {
-  __masesFilterBarWarnOnce(
+  __arnaFilterBarWarnOnce(
     'filter-bar:custom-filters-present',
     `[FilterBar] ${customFilters.value.length} filter(s) of type ` +
       `'custom' are declared. FilterBar does not render them; the ` +
@@ -306,7 +306,7 @@ if (import.meta.env.DEV && customFilters.value.length > 0) {
  * Guard: date filter present without datePickerLabels.
  */
 if (import.meta.env.DEV && hasDateFilter.value && !props.datePickerLabels) {
-  __masesFilterBarWarnOnce(
+  __arnaFilterBarWarnOnce(
     'filter-bar:date-labels-missing',
     '[FilterBar] a date filter is declared but `datePickerLabels` is ' +
       'not supplied. The date filter will fall back to the browser\'s ' +
@@ -543,7 +543,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .filter-bar {
   display: flex;
   align-items: flex-end; /* bottom-align controls across all filter types */
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   flex-wrap: wrap;
   width: 100%;
   font-family: inherit;
@@ -555,7 +555,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .filter-bar__filter {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   /*
    * A minimum width so short labels (e.g., "Type") do not collapse the
    * control to an unusable sliver. Growing up to 16rem on desktop keeps
@@ -572,18 +572,18 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
   max-width: none;
   flex-direction: row;
   align-items: center;
-  padding-block-end: var(--mases-space-2); /* align bottom with controls */
+  padding-block-end: var(--arna-space-2); /* align bottom with controls */
 }
 
 /* ============================================================================
    Label
    ============================================================================ */
 .filter-bar__label {
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
+  font-weight: var(--arna-font-weight-medium);
   /*
    * Amharic truncation uses word-boundary wrapping (Design System
    * §3.7 W4).
@@ -604,27 +604,27 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .filter-bar__date-fallback {
   width: 100%;
   min-height: 40px;
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-3);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-3);
   appearance: none;
-  background-color: var(--mases-color-surface-page);
-  border: 1px solid var(--mases-color-border-default);
-  border-radius: var(--mases-radius-md);
-  color: var(--mases-color-text-primary);
+  background-color: var(--arna-color-surface-page);
+  border: 1px solid var(--arna-color-border-default);
+  border-radius: var(--arna-radius-md);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
-  transition: border-color var(--mases-duration-fast) var(--mases-easing-standard);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
+  transition: border-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .filter-bar__date-fallback:hover {
-  border-color: var(--mases-color-border-strong);
+  border-color: var(--arna-color-border-strong);
 }
 
 .filter-bar__date-fallback:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
@@ -633,7 +633,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .filter-bar__custom-slot {
   display: flex;
   align-items: flex-end;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   flex-wrap: wrap;
 }
 
@@ -666,24 +666,24 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
   appearance: none;
   background-color: transparent;
   border: 1px solid transparent;
-  border-radius: var(--mases-radius-md);
-  color: var(--mases-color-icon-secondary);
+  border-radius: var(--arna-radius-md);
+  color: var(--arna-color-icon-secondary);
   cursor: pointer;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    border-color var(--mases-duration-fast) var(--mases-easing-standard),
-    color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    border-color var(--arna-duration-fast) var(--arna-easing-standard),
+    color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .filter-bar__clear:hover {
-  background-color: var(--mases-color-state-hover);
-  border-color: var(--mases-color-border-subtle);
-  color: var(--mases-color-icon-primary);
+  background-color: var(--arna-color-state-hover);
+  border-color: var(--arna-color-border-subtle);
+  color: var(--arna-color-icon-primary);
 }
 
 .filter-bar__clear:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
@@ -692,7 +692,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
 .filter-bar__actions {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-shrink: 0;
 }
 
@@ -701,7 +701,7 @@ const rootClasses = computed<Array<string | Record<string, boolean>>>(() => [
    ============================================================================ */
 @media (max-width: 639px) {
   .filter-bar {
-    gap: var(--mases-space-2);
+    gap: var(--arna-space-2);
   }
 
   .filter-bar__filter {

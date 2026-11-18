@@ -124,13 +124,13 @@
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesDrawerWarned = new Set<string>();
+const __arnaDrawerWarned = new Set<string>();
 
-function __masesDrawerWarnOnce(key: string, message: string): void {
-  if (__masesDrawerWarned.has(key)) {
+function __arnaDrawerWarnOnce(key: string, message: string): void {
+  if (__arnaDrawerWarned.has(key)) {
     return;
   }
-  __masesDrawerWarned.add(key);
+  __arnaDrawerWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -138,7 +138,7 @@ function __masesDrawerWarnOnce(key: string, message: string): void {
 /*
  * Module-level counter for auto-generated title ids.
  */
-let __masesDrawerIdCounter = 0;
+let __arnaDrawerIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -254,7 +254,7 @@ const hasHeaderSlot = computed<boolean>(() => slots.header !== undefined);
 // -----------------------------------------------------------------------------
 // Generated id
 // -----------------------------------------------------------------------------
-const titleId = `mases-drawer-title-${++__masesDrawerIdCounter}`;
+const titleId = `arna-drawer-title-${++__arnaDrawerIdCounter}`;
 
 // -----------------------------------------------------------------------------
 // Refs
@@ -265,7 +265,7 @@ const dialogRef = ref<HTMLDialogElement | null>(null);
 // Development-time guard
 // -----------------------------------------------------------------------------
 if (import.meta.env.DEV && props.dismissible && !props.closeLabel) {
-  __masesDrawerWarnOnce(
+  __arnaDrawerWarnOnce(
     'drawer:missing-close-label',
     '[Drawer] dismissible=true without closeLabel. The close button ' +
       'will render with an empty aria-label, which is an accessibility ' +
@@ -559,16 +559,16 @@ function onCloseButtonClick(): void {
    * size class below. Default = 480px (the design system's drawer
    * width token).
    */
-  --mases-drawer-width: var(--mases-container-drawer);
+  --arna-drawer-width: var(--arna-container-drawer);
 
   display: flex;
   flex-direction: column;
-  width: var(--mases-drawer-width);
+  width: var(--arna-drawer-width);
   height: 100vh;
   max-height: 100vh;
-  background-color: var(--mases-color-surface-overlay);
-  box-shadow: var(--mases-shadow-elevation-3);
-  color: var(--mases-color-text-primary);
+  background-color: var(--arna-color-surface-overlay);
+  box-shadow: var(--arna-shadow-elevation-3);
+  color: var(--arna-color-text-primary);
   overflow: hidden;
 }
 
@@ -576,19 +576,19 @@ function onCloseButtonClick(): void {
    Sizes
    ============================================================================ */
 .drawer--sm .drawer__container {
-  --mases-drawer-width: calc(var(--mases-container-drawer) * 2 / 3); /* 320px */
+  --arna-drawer-width: calc(var(--arna-container-drawer) * 2 / 3); /* 320px */
 }
 
 .drawer--md .drawer__container {
-  --mases-drawer-width: var(--mases-container-drawer); /* 480px */
+  --arna-drawer-width: var(--arna-container-drawer); /* 480px */
 }
 
 .drawer--lg .drawer__container {
-  --mases-drawer-width: calc(var(--mases-container-drawer) * 4 / 3); /* 640px */
+  --arna-drawer-width: calc(var(--arna-container-drawer) * 4 / 3); /* 640px */
 }
 
 .drawer--full .drawer__container {
-  --mases-drawer-width: 100vw;
+  --arna-drawer-width: 100vw;
 }
 
 /* ============================================================================
@@ -600,11 +600,11 @@ function onCloseButtonClick(): void {
    modern browsers.
    ============================================================================ */
 .drawer--right[open] .drawer__container {
-  animation: mases-drawer-in-right var(--mases-duration-slow)
-    var(--mases-easing-decelerate);
+  animation: arna-drawer-in-right var(--arna-duration-slow)
+    var(--arna-easing-decelerate);
 }
 
-@keyframes mases-drawer-in-right {
+@keyframes arna-drawer-in-right {
   from {
     transform: translateX(100%);
   }
@@ -614,11 +614,11 @@ function onCloseButtonClick(): void {
 }
 
 .drawer--left[open] .drawer__container {
-  animation: mases-drawer-in-left var(--mases-duration-slow)
-    var(--mases-easing-decelerate);
+  animation: arna-drawer-in-left var(--arna-duration-slow)
+    var(--arna-easing-decelerate);
 }
 
-@keyframes mases-drawer-in-left {
+@keyframes arna-drawer-in-left {
   from {
     transform: translateX(-100%);
   }
@@ -634,10 +634,10 @@ function onCloseButtonClick(): void {
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  gap: var(--mases-space-3);
-  padding-block: var(--mases-space-4);
-  padding-inline: var(--mases-space-6);
-  border-block-end: 1px solid var(--mases-color-border-subtle);
+  gap: var(--arna-space-3);
+  padding-block: var(--arna-space-4);
+  padding-inline: var(--arna-space-6);
+  border-block-end: 1px solid var(--arna-color-border-subtle);
 }
 
 .drawer__header-content {
@@ -645,17 +645,17 @@ function onCloseButtonClick(): void {
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
 }
 
 .drawer__title {
   margin: 0;
   min-width: 0;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-heading-5);
-  line-height: var(--mases-line-height-heading-5);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-heading-5);
+  line-height: var(--arna-line-height-heading-5);
+  font-weight: var(--arna-font-weight-semibold);
   /*
    * Truncate the title at one line with an ellipsis. The full title is
    * announced by screen readers via aria-labelledby; a tooltip can be
@@ -681,22 +681,22 @@ function onCloseButtonClick(): void {
   appearance: none;
   background-color: transparent;
   border: none;
-  border-radius: var(--mases-radius-sm);
-  color: var(--mases-color-icon-secondary);
+  border-radius: var(--arna-radius-sm);
+  color: var(--arna-color-icon-secondary);
   cursor: pointer;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .drawer__close:hover {
-  background-color: var(--mases-color-state-hover);
-  color: var(--mases-color-icon-primary);
+  background-color: var(--arna-color-state-hover);
+  color: var(--arna-color-icon-primary);
 }
 
 .drawer__close:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
@@ -709,8 +709,8 @@ function onCloseButtonClick(): void {
    * header and footer stay fixed because they are flex-shrink: 0.
    */
   overflow-y: auto;
-  padding-block: var(--mases-space-6);
-  padding-inline: var(--mases-space-6);
+  padding-block: var(--arna-space-6);
+  padding-inline: var(--arna-space-6);
 }
 
 /* ============================================================================
@@ -721,11 +721,11 @@ function onCloseButtonClick(): void {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-wrap: wrap;
-  padding-block: var(--mases-space-4);
-  padding-inline: var(--mases-space-6);
-  border-block-start: 1px solid var(--mases-color-border-subtle);
+  padding-block: var(--arna-space-4);
+  padding-inline: var(--arna-space-6);
+  border-block-start: 1px solid var(--arna-color-border-subtle);
 }
 
 /* ============================================================================
@@ -740,19 +740,19 @@ function onCloseButtonClick(): void {
   .drawer.drawer--md .drawer__container,
   .drawer.drawer--lg .drawer__container,
   .drawer.drawer--full .drawer__container {
-    --mases-drawer-width: 100vw;
+    --arna-drawer-width: 100vw;
   }
 
   .drawer__header {
-    padding-inline: var(--mases-space-4);
+    padding-inline: var(--arna-space-4);
   }
 
   .drawer__body {
-    padding-inline: var(--mases-space-4);
+    padding-inline: var(--arna-space-4);
   }
 
   .drawer__footer {
-    padding-inline: var(--mases-space-4);
+    padding-inline: var(--arna-space-4);
   }
 }
 

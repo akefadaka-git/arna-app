@@ -336,8 +336,8 @@ function onImageError(): void {
   flex-shrink: 0;
   overflow: hidden;
   vertical-align: middle;
-  background-color: var(--mases-color-surface-sunken);
-  color: var(--mases-color-text-secondary);
+  background-color: var(--arna-color-surface-sunken);
+  color: var(--arna-color-text-secondary);
   user-select: none;
 }
 
@@ -356,11 +356,11 @@ img.avatar {
    Shape variants
    ============================================================================ */
 .avatar--circle {
-  border-radius: var(--mases-radius-full);
+  border-radius: var(--arna-radius-full);
 }
 
 .avatar--rounded {
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
 }
 
 /* ============================================================================
@@ -370,30 +370,30 @@ img.avatar {
    the token derivations.
    ============================================================================ */
 .avatar--xs {
-  width: var(--mases-icon-lg);
-  height: var(--mases-icon-lg);
-  font-size: var(--mases-font-size-caption);
+  width: var(--arna-icon-lg);
+  height: var(--arna-icon-lg);
+  font-size: var(--arna-font-size-caption);
   line-height: 1;
 }
 
 .avatar--sm {
-  width: var(--mases-icon-xl);
-  height: var(--mases-icon-xl);
-  font-size: var(--mases-font-size-body-sm);
+  width: var(--arna-icon-xl);
+  height: var(--arna-icon-xl);
+  font-size: var(--arna-font-size-body-sm);
   line-height: 1;
 }
 
 .avatar--md {
-  width: var(--mases-space-10);
-  height: var(--mases-space-10);
-  font-size: var(--mases-font-size-body);
+  width: var(--arna-space-10);
+  height: var(--arna-space-10);
+  font-size: var(--arna-font-size-body);
   line-height: 1;
 }
 
 .avatar--lg {
-  width: calc(var(--mases-space-12) + var(--mases-space-2));
-  height: calc(var(--mases-space-12) + var(--mases-space-2));
-  font-size: var(--mases-font-size-body-lg);
+  width: calc(var(--arna-space-12) + var(--arna-space-2));
+  height: calc(var(--arna-space-12) + var(--arna-space-2));
+  font-size: var(--arna-font-size-body-lg);
   line-height: 1;
 }
 
@@ -406,10 +406,10 @@ img.avatar {
   justify-content: center;
   /* Font weight is set to medium so that the initials read as a
      deliberate label rather than as a text fallback. */
-  font-weight: var(--mases-font-weight-medium);
+  font-weight: var(--arna-font-weight-medium);
   /* Letter spacing normal; Amharic never uses tracking (Design System
      §3.5 B4). */
-  letter-spacing: var(--mases-letter-spacing-normal);
+  letter-spacing: var(--arna-letter-spacing-normal);
   /* No text-transform; see the file header comment §"The `initials`
      prop" for the rationale. */
 }

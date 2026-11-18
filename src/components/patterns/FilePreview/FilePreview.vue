@@ -507,24 +507,24 @@ const fallbackIconName = computed<IconName>(() => {
   justify-content: center;
   width: 100%;
   overflow: hidden;
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-md);
-  background-color: var(--mases-color-surface-sunken);
-  color: var(--mases-color-text-primary);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-md);
+  background-color: var(--arna-color-surface-sunken);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
 }
 
 /* Size ladder — expressed as multiples of --mases-space-20 (80px). */
 .file-preview[data-size='sm'] {
-  height: calc(var(--mases-space-20) * 2); /* 160px */
+  height: calc(var(--arna-space-20) * 2); /* 160px */
 }
 
 .file-preview[data-size='md'] {
-  height: calc(var(--mases-space-20) * 3); /* 240px */
+  height: calc(var(--arna-space-20) * 3); /* 240px */
 }
 
 .file-preview[data-size='lg'] {
-  height: calc(var(--mases-space-20) * 5); /* 400px */
+  height: calc(var(--arna-space-20) * 5); /* 400px */
 }
 
 /* ============================================================================
@@ -548,8 +548,8 @@ const fallbackIconName = computed<IconName>(() => {
   width: 100%;
   height: 100%;
   margin: 0;
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-4);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-4);
   overflow: auto;
   white-space: pre-wrap;
   /*
@@ -557,12 +557,12 @@ const fallbackIconName = computed<IconName>(() => {
    * scroll of the page; the pre scrolls internally instead.
    */
   overflow-wrap: anywhere;
-  background-color: var(--mases-color-surface-page);
-  color: var(--mases-color-text-primary);
-  font-family: var(--mases-font-family-mono);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  background-color: var(--arna-color-surface-page);
+  color: var(--arna-color-text-primary);
+  font-family: var(--arna-font-family-mono);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
 }
 
 /* ============================================================================
@@ -574,14 +574,14 @@ const fallbackIconName = computed<IconName>(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--mases-space-3);
-  padding: var(--mases-space-4);
+  gap: var(--arna-space-3);
+  padding: var(--arna-space-4);
   /*
    * Opaque backdrop — the underlying media element (if any) is
    * covered so the loading/error/unsupported state is unambiguous.
    */
-  background-color: var(--mases-color-surface-sunken);
-  color: var(--mases-color-text-secondary);
+  background-color: var(--arna-color-surface-sunken);
+  color: var(--arna-color-text-secondary);
 }
 
 .file-preview__overlay--fallback {
@@ -594,22 +594,22 @@ const fallbackIconName = computed<IconName>(() => {
    ============================================================================ */
 .file-preview__fallback-name {
   margin: 0;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
   overflow-wrap: anywhere;
   max-width: 100%;
 }
 
 .file-preview__fallback-message {
   margin: 0;
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: anywhere;
   max-width: 100%;
 }
@@ -619,11 +619,11 @@ const fallbackIconName = computed<IconName>(() => {
    ============================================================================ */
 .file-preview__pdf-fallback {
   margin: 0;
-  padding: var(--mases-space-4);
-  color: var(--mases-color-text-secondary);
+  padding: var(--arna-space-4);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   text-align: center;
   overflow-wrap: anywhere;
 }

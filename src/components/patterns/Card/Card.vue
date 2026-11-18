@@ -138,13 +138,13 @@ export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesCardWarned = new Set<string>();
+const __arnaCardWarned = new Set<string>();
 
-function ___masesCardWarnOnce(key: string, message: string): void {
-  if (__masesCardWarned.has(key)) {
+function ___arnaCardWarnOnce(key: string, message: string): void {
+  if (__arnaCardWarned.has(key)) {
     return;
   }
-  __masesCardWarned.add(key);
+  __arnaCardWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -303,7 +303,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   },
 ]);
 
-void ___masesCardWarnOnce;
+void ___arnaCardWarnOnce;
 </script>
 
 <template>
@@ -361,7 +361,7 @@ void ___masesCardWarnOnce;
   flex-direction: column;
   width: 100%;
   font-family: inherit;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   /*
    * The radius and overflow: hidden ensure child regions (header,
    * footer, body) clip to the card's rounded corners, so a header's
@@ -371,7 +371,7 @@ void ___masesCardWarnOnce;
    * --mases-radius-md is deliberate. See the file header comment
    * §"Radius — deliberate divergence from Modal and AuthLayout".
    */
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
   overflow: hidden;
 }
 
@@ -379,25 +379,25 @@ void ___masesCardWarnOnce;
    Variants
    ============================================================================ */
 .card--default {
-  background-color: var(--mases-color-surface-page);
-  border: 1px solid var(--mases-color-border-subtle);
+  background-color: var(--arna-color-surface-page);
+  border: 1px solid var(--arna-color-border-subtle);
 }
 
 .card--raised {
-  background-color: var(--mases-color-surface-page);
-  border: 1px solid var(--mases-color-border-subtle);
+  background-color: var(--arna-color-surface-page);
+  border: 1px solid var(--arna-color-border-subtle);
   /*
    * elevation-1 (not elevation-2). AuthLayout's card sits one
    * elevation step higher because it is the sole focal point of its
    * page. See the file header comment §"Elevation — deliberate
    * relationship with AuthLayout".
    */
-  box-shadow: var(--mases-shadow-elevation-1);
+  box-shadow: var(--arna-shadow-elevation-1);
 }
 
 .card--outlined {
   background-color: transparent;
-  border: 1px solid var(--mases-color-border-default);
+  border: 1px solid var(--arna-color-border-default);
 }
 
 /* ============================================================================
@@ -406,22 +406,22 @@ void ___masesCardWarnOnce;
 .card--clickable {
   cursor: pointer;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    border-color var(--mases-duration-fast) var(--mases-easing-standard),
-    box-shadow var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    border-color var(--arna-duration-fast) var(--arna-easing-standard),
+    box-shadow var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .card--clickable:hover {
-  border-color: var(--mases-color-border-strong);
+  border-color: var(--arna-color-border-strong);
 }
 
 .card--clickable.card--raised:hover {
-  box-shadow: var(--mases-shadow-elevation-2);
+  box-shadow: var(--arna-shadow-elevation-2);
 }
 
 .card--clickable:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
@@ -435,18 +435,18 @@ void ___masesCardWarnOnce;
 }
 
 .card--padding-sm .card__body {
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-3);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-3);
 }
 
 .card--padding-md .card__body {
-  padding-block: var(--mases-space-4);
-  padding-inline: var(--mases-space-4);
+  padding-block: var(--arna-space-4);
+  padding-inline: var(--arna-space-4);
 }
 
 .card--padding-lg .card__body {
-  padding-block: var(--mases-space-6);
-  padding-inline: var(--mases-space-6);
+  padding-block: var(--arna-space-6);
+  padding-inline: var(--arna-space-6);
 }
 
 /* ============================================================================
@@ -460,20 +460,20 @@ void ___masesCardWarnOnce;
    specific header density supplies their own padding inside the slot.
    ============================================================================ */
 .card__header {
-  padding-block: var(--mases-space-4);
-  padding-inline: var(--mases-space-4);
+  padding-block: var(--arna-space-4);
+  padding-inline: var(--arna-space-4);
   /*
    * A subtle rule separates the header from the body. Only drawn when
    * the header renders, which is guaranteed by the v-if on the
    * template side.
    */
-  border-block-end: 1px solid var(--mases-color-border-subtle);
+  border-block-end: 1px solid var(--arna-color-border-subtle);
   /*
    * The header's typography baseline: consumers typically render an
    * <h2> or a small row of controls. The header does not impose a
    * font-size, so the header's content controls its own typography.
    */
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
 }
 
 /* ============================================================================
@@ -485,10 +485,10 @@ void ___masesCardWarnOnce;
    default body inline padding).
    ============================================================================ */
 .card__footer {
-  padding-block: var(--mases-space-4);
-  padding-inline: var(--mases-space-4);
-  border-block-start: 1px solid var(--mases-color-border-subtle);
-  color: var(--mases-color-text-secondary);
+  padding-block: var(--arna-space-4);
+  padding-inline: var(--arna-space-4);
+  border-block-start: 1px solid var(--arna-color-border-subtle);
+  color: var(--arna-color-text-secondary);
 }
 
 /* ============================================================================
