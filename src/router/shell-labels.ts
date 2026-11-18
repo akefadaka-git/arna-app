@@ -1449,7 +1449,7 @@ export const arnaBrandLabels = {
   corporateName: 'ማሌ ዓርና',
   productName: 'ARNA',
   tagline: 'Lead by example • Build lasting trust',
-  fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ማሴስ)',
+  fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ARNA)',
 } as const;
 
 /**
