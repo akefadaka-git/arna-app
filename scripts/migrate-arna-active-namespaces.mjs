@@ -154,7 +154,7 @@ async function main() {
       absolute.endsWith('workspace-entry/index.html') ||
       absolute.endsWith('admin-entry/index.html')
     ) {
-      next = next.replace(/\\bMASES\\b/g, 'ARNA');
+      next = next.replace(/\bMASES\b/g, 'ARNA');
     }
     if (absolute.endsWith('src/layouts/PublicSiteLayout.vue')) {
       next = next.replace('<a class="public-site-layout__skip-link" href="#public-site-main">', '<a class="public-site-layout__skip-link" href="#public-site-main" aria-label="Skip to main content / ወደ ዋናው ይዘት ዝለል">');
