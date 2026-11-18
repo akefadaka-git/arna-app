@@ -132,3 +132,57 @@ jobs:
           if-no-files-found: error
           include-hidden-files: true
           retention-days: 14
+
+  a3-namespace-migration:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/feat/arna-active-namespace-migration-a3'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout migration branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/arna-active-namespace-migration-a3
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Apply deterministic ARNA namespace migration
+        run: node scripts/migrate-arna-active-namespaces.mjs
+      - name: Commit migrated namespace changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "A3.1 migrate active UI namespaces to ARNA"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          else
+            echo "No migration changes required."
+          fi
+      - name: Record exact tested SHA
+        run: |
+          echo "A3.1 exact tested SHA: $(git rev-parse HEAD)"
+          git status --short
+      - name: Verify approved brand identity and storage compatibility
+        run: npm run test:brand-identity-contract
+      - name: Verify affected token, theme, shell and component contracts
+        run: |
+          npm run test:brand-palette-contract
+          npm run test:design-system-theme-contract
+          npm run test:app-shell-responsive-contract
+          npm run test:error-handling-contract
+          npm run test:a4-component-risk-contract
+          npm run test:visual-library-contract
+          npm run test:visual-panel-integration-contract
+      - name: Type-check all applications
+        run: npm run type-check
+      - name: Build all four applications
+        run: npm run build:all
