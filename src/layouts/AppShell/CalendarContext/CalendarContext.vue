@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — CalendarContext
+ ARNA Phase 2 UI — CalendarContext
 =============================================================================
 
  File:      mase_app/src/layouts/AppShell/CalendarContext/CalendarContext.vue

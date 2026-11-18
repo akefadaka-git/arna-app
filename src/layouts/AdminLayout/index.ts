@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — AdminLayout Barrel
+ * ARNA Phase 2 UI — AdminLayout Barrel
  * =============================================================================
  *
  * File:      mase_app/src/layouts/AdminLayout/index.ts

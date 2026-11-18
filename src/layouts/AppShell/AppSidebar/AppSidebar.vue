@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — AppSidebar
+ ARNA Phase 2 UI — AppSidebar
 =============================================================================
 
  File:      mase_app/src/layouts/AppShell/AppSidebar/AppSidebar.vue

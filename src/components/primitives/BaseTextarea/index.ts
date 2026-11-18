@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — BaseTextarea — Barrel Export
+ * ARNA Phase 2 UI — BaseTextarea — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/primitives/BaseTextarea/index.ts

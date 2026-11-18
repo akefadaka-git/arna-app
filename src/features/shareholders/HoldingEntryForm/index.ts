@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — HoldingEntryForm — Barrel Export
+ * ARNA Phase 2 UI — HoldingEntryForm — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/features/shareholders/HoldingEntryForm/index.ts

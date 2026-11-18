@@ -71,7 +71,7 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — MyWalletPage
+ ARNA Phase 2 UI — MyWalletPage
 =============================================================================
 
  File:      mase_app/src/features/portal/MyWalletPage.vue

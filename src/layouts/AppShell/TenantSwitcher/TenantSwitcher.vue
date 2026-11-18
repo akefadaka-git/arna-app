@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — TenantSwitcher
+ ARNA Phase 2 UI — TenantSwitcher
 =============================================================================
 
  File:      mase_app/src/layouts/AppShell/TenantSwitcher/TenantSwitcher.vue

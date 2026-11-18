@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — BaseProgressBar — Barrel Export
+ * ARNA Phase 2 UI — BaseProgressBar — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/primitives/BaseProgressBar/index.ts

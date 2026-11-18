@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — NotificationsBell
+ ARNA Phase 2 UI — NotificationsBell
 =============================================================================
 
  File:      mase_app/src/layouts/AppShell/NotificationsBell/NotificationsBell.vue

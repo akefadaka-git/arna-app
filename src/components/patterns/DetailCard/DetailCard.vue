@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — DetailCard
+ ARNA Phase 2 UI — DetailCard
 =============================================================================
 
  File:      mase_app/src/components/patterns/DetailCard/DetailCard.vue

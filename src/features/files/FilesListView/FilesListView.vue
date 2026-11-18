@@ -14,13 +14,13 @@
  Before (v1.0.2):
    The view set no document.title. The browser tab showed whatever
    the previously-visited route had left, or the entry HTML's
-   pre-JS default ("MASES") on a cold load directly at /files.
+   pre-JS default ("ARNA") on a cold load directly at /files.
 
  After (v1.0.3):
    The view sets document.title via <PageTitle>, bound to the
    existing labels.pageTitle and to import.meta.env.VITE_APP_NAME.
 
-     Workspace build   →  "ሰነዶች — MASES"
+     Workspace build   →  "ሰነዶች — ARNA"
      Portal build      →  "ሰነዶች — Maale Arna Portal"
      Empty VITE_APP_NAME →  "ሰነዶች"
 
@@ -40,7 +40,7 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — FilesListView
+ ARNA Phase 2 UI — FilesListView
 =============================================================================
 
  File:      mase_app/src/features/files/FilesListView/FilesListView.vue
@@ -390,7 +390,7 @@ const router = useRouter();
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "MASES"
+ *   workspace  →  "ARNA"
  *   portal     →  "Maale Arna Portal"
  *
  * Passed to <PageTitle> as the title's suffix. PageTitle's own

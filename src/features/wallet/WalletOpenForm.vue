@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — WalletOpenForm
+ ARNA Phase 2 UI — WalletOpenForm
 =============================================================================
 
  File:      mase_app/src/features/wallet/WalletOpenForm.vue

@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Authentication API Module
+ * ARNA Phase 2 UI — Authentication API Module
  * =============================================================================
  *
  * File:      mase_app/src/features/auth/api.ts

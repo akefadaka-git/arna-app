@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — CalendarContext — Barrel Export
+ * ARNA Phase 2 UI — CalendarContext — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/layouts/AppShell/CalendarContext/index.ts

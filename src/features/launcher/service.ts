@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Launcher Feature Service
+ * ARNA Phase 2 UI — Launcher Feature Service
  * =============================================================================
  *
  * File:      mase_app/src/features/launcher/service.ts

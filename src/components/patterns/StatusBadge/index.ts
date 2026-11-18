@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — StatusBadge — Barrel Export
+ * ARNA Phase 2 UI — StatusBadge — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/patterns/StatusBadge/index.ts

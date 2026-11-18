@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Pagination — Barrel Export
+ * ARNA Phase 2 UI — Pagination — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/Pagination/index.ts

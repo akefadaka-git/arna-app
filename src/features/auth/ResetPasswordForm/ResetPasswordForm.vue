@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — ResetPasswordForm
+ ARNA Phase 2 UI — ResetPasswordForm
 =============================================================================
 
  File:      mase_app/src/features/auth/ResetPasswordForm/ResetPasswordForm.vue

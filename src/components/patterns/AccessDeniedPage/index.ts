@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — AccessDeniedPage — Barrel Export
+ * ARNA Phase 2 UI — AccessDeniedPage — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/patterns/AccessDeniedPage/index.ts

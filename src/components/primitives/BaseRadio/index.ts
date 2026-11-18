@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — BaseRadio — Barrel Export
+ * ARNA Phase 2 UI — BaseRadio — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/primitives/BaseRadio/index.ts

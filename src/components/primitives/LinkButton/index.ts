@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — LinkButton — Barrel Export
+ * ARNA Phase 2 UI — LinkButton — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/primitives/LinkButton/index.ts

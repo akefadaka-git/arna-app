@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — Stepper
+ ARNA Phase 2 UI — Stepper
 =============================================================================
 
  File:      mase_app/src/components/composites/Stepper/Stepper.vue

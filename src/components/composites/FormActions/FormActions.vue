@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — FormActions
+ ARNA Phase 2 UI — FormActions
 =============================================================================
 
  File:      mase_app/src/components/composites/FormActions/FormActions.vue

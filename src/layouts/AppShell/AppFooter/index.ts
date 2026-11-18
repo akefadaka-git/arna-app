@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — AppFooter — Barrel Export
+ * ARNA Phase 2 UI — AppFooter — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/layouts/AppShell/AppFooter/index.ts

@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES UI — Launcher Grid Labels (Amharic)
+ * ARNA UI — Launcher Grid Labels (Amharic)
  * =============================================================================
  *
  * File:      mase_app/src/router/launcher-labels.ts
@@ -63,7 +63,7 @@
  * Terms handled deliberately
  * -----------------------------------------------------------------------------
  * "አፕሊኬሽን" (application) is used rather than the native Amharic
- * "መተግበሪያ". Reason: it is the term the MASES registry itself uses.
+ * "መተግበሪያ". Reason: it is the term the ARNA registry itself uses.
  * The platform_applications.name_am value for the 'launcher' row is
  * "የአፕሊኬሽን መክፈቻ" (Application Launcher). Following the registry's
  * own usage keeps the launcher grid consistent with the localized
@@ -71,9 +71,9 @@
  * should change both this file and the registry row together — a
  * single-place change would create an inconsistent surface.
  *
- * "MASES" does not appear in any of these five strings. If a future
+ * "ARNA" does not appear in any of these five strings. If a future
  * CR adds a string that names the product, the convention is
- * Latin-script "MASES", matching the workspace build's VITE_APP_NAME.
+ * Latin-script "ARNA", matching the workspace build's VITE_APP_NAME.
  *
  * -----------------------------------------------------------------------------
  * Translation quality notes

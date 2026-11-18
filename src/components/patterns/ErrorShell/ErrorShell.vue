@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — ErrorShell
+ ARNA Phase 2 UI — ErrorShell
 =============================================================================
 
  File:      mase_app/src/components/patterns/ErrorShell/ErrorShell.vue

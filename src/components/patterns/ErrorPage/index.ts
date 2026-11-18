@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — ErrorPage — Barrel Export
+ * ARNA Phase 2 UI — ErrorPage — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/patterns/ErrorPage/index.ts

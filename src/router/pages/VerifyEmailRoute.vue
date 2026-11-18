@@ -49,9 +49,9 @@
 
    Observable behaviour on the route is identical:
 
-     VITE_APP_NAME = "MASES"
-       v1.2.0  →  document.title = "ኢሜይልዎን በማረጋገጥ ላይ — MASES"
-       v1.3.0  →  document.title = "ኢሜይልዎን በማረጋገጥ ላይ — MASES"   (identical)
+     VITE_APP_NAME = "ARNA"
+       v1.2.0  →  document.title = "ኢሜይልዎን በማረጋገጥ ላይ — ARNA"
+       v1.3.0  →  document.title = "ኢሜይልዎን በማረጋገጥ ላይ — ARNA"   (identical)
 
      VITE_APP_NAME = "" or absent at runtime
        v1.2.0  →  document.title = "ኢሜይልዎን በማረጋገጥ ላይ"
@@ -75,7 +75,7 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — VerifyEmailRoute
+ ARNA Phase 2 UI — VerifyEmailRoute
 =============================================================================
 
  File:      mase_app/src/router/pages/VerifyEmailRoute.vue
@@ -252,7 +252,7 @@
  introduce a second, redundant state indicator.
 
  In the workspace build, the title reads
- "ኢሜይልዎን በማረጋገጥ ላይ — MASES"; in the portal build,
+ "ኢሜይልዎን በማረጋገጥ ላይ — ARNA"; in the portal build,
  "ኢሜይልዎን በማረጋገጥ ላይ — Maale Arna Portal".
 
  No cleanup on unmount is required in this file: PageTitle owns
@@ -376,7 +376,7 @@ const router = useRouter();
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "MASES"
+ *   workspace  →  "ARNA"
  *   portal     →  "Maale Arna Portal"
  *
  * Passed to <PageTitle> as the title's suffix. PageTitle's own

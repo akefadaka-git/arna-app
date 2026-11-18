@@ -60,7 +60,7 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — LoanApplicationForm
+ ARNA Phase 2 UI — LoanApplicationForm
 =============================================================================
 
  File:      mase_app/src/features/loans/LoanApplicationForm.vue

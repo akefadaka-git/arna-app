@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Breadcrumbs — Barrel Export
+ * ARNA Phase 2 UI — Breadcrumbs — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/Breadcrumbs/index.ts

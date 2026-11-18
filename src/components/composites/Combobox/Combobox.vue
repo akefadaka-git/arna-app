@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — Combobox
+ ARNA Phase 2 UI — Combobox
 =============================================================================
 
  File:      mase_app/src/components/composites/Combobox/Combobox.vue

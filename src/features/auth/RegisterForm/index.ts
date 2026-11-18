@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — RegisterForm — Barrel Export
+ * ARNA Phase 2 UI — RegisterForm — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/features/auth/RegisterForm/index.ts

@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — FilePreview
+ ARNA Phase 2 UI — FilePreview
 =============================================================================
 
  File:      mase_app/src/components/patterns/FilePreview/FilePreview.vue

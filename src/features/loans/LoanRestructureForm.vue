@@ -81,7 +81,7 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — LoanRestructureForm
+ ARNA Phase 2 UI — LoanRestructureForm
 =============================================================================
 
  File:      mase_app/src/features/loans/LoanRestructureForm.vue

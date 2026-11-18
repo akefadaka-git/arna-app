@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — ResetPasswordForm — Barrel Export
+ * ARNA Phase 2 UI — ResetPasswordForm — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/features/auth/ResetPasswordForm/index.ts

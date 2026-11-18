@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — ConfirmDialog — Barrel Export
+ * ARNA Phase 2 UI — ConfirmDialog — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/ConfirmDialog/index.ts

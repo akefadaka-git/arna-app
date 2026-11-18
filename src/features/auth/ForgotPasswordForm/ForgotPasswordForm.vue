@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — ForgotPasswordForm
+ ARNA Phase 2 UI — ForgotPasswordForm
 =============================================================================
 
  File:      mase_app/src/features/auth/ForgotPasswordForm/ForgotPasswordForm.vue

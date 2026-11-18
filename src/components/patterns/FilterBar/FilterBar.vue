@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — FilterBar
+ ARNA Phase 2 UI — FilterBar
 =============================================================================
 
  File:      mase_app/src/components/patterns/FilterBar/FilterBar.vue

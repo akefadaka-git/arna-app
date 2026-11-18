@@ -1,5 +1,5 @@
 /* =============================================================================
- * MASES PHASE 2 UI — BASE STYLESHEET
+ * ARNA PHASE 2 UI — BASE STYLESHEET
  * =============================================================================
  *
  * File:      mase_app/src/styles/base.css
@@ -103,7 +103,7 @@
  *     applying its dark-mode defaults to form controls, scrollbars,
  *     and autofill backgrounds. It overrides the
  *     `<meta name="color-scheme" content="light dark">` in each entry's
- *     index.html. The MASES design system ships no dark theme; the
+ *     index.html. The ARNA design system ships no dark theme; the
  *     declaration makes that explicit at the stylesheet level.
  *
  *   · `text-size-adjust: 100%` prevents iOS Safari's automatic text

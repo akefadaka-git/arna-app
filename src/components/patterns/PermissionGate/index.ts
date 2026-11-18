@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — PermissionGate — Barrel Export
+ * ARNA Phase 2 UI — PermissionGate — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/patterns/PermissionGate/index.ts

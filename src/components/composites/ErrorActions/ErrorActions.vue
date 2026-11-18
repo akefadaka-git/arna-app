@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — ErrorActions
+ ARNA Phase 2 UI — ErrorActions
 =============================================================================
 
  File:      mase_app/src/components/composites/ErrorActions/ErrorActions.vue

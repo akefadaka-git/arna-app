@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — ShareholderFormRoute
+ ARNA Phase 2 UI — ShareholderFormRoute
 =============================================================================
 
  File:      mase_app/src/router/pages/ShareholderFormRoute.vue

@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — BaseSelect — Barrel Export
+ * ARNA Phase 2 UI — BaseSelect — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/primitives/BaseSelect/index.ts

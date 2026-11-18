@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Shareholder Feature Service
+ * ARNA Phase 2 UI — Shareholder Feature Service
  * =============================================================================
  *
  * File:      mase_app/src/features/shareholders/service.ts

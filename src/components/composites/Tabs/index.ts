@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Tabs — Barrel Export
+ * ARNA Phase 2 UI — Tabs — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/Tabs/index.ts

@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — FileDetailView
+ ARNA Phase 2 UI — FileDetailView
 =============================================================================
 
  File:      mase_app/src/features/files/FileDetailView/FileDetailView.vue

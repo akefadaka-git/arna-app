@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — Timeline
+ ARNA Phase 2 UI — Timeline
 =============================================================================
 
  File:      mase_app/src/components/patterns/Timeline/Timeline.vue

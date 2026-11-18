@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — AppMobileDrawer — Barrel Export
+ * ARNA Phase 2 UI — AppMobileDrawer — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/layouts/AppShell/AppMobileDrawer/index.ts

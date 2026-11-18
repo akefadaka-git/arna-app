@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — ConfirmDeleteDialog — Barrel Export
+ * ARNA Phase 2 UI — ConfirmDeleteDialog — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/patterns/ConfirmDeleteDialog/index.ts

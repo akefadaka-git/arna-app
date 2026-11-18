@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — CertificateCancelDialog
+ ARNA Phase 2 UI — CertificateCancelDialog
 =============================================================================
 
  File:      mase_app/src/features/shareholders/CertificateCancelDialog/CertificateCancelDialog.vue

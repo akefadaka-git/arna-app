@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — FilterBar — Barrel Export
+ * ARNA Phase 2 UI — FilterBar — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/patterns/FilterBar/index.ts

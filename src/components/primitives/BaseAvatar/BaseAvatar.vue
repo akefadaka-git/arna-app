@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — BaseAvatar
+ ARNA Phase 2 UI — BaseAvatar
 =============================================================================
 
  File:      mase_app/src/components/primitives/BaseAvatar/BaseAvatar.vue

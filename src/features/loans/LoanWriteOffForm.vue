@@ -63,7 +63,7 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — LoanWriteOffForm
+ ARNA Phase 2 UI — LoanWriteOffForm
 =============================================================================
 
  File:      mase_app/src/features/loans/LoanWriteOffForm.vue

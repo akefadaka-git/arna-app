@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — FormActions — Barrel Export
+ * ARNA Phase 2 UI — FormActions — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/FormActions/index.ts

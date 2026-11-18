@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — DownloadButton — Barrel Export
+ * ARNA Phase 2 UI — DownloadButton — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/patterns/DownloadButton/index.ts

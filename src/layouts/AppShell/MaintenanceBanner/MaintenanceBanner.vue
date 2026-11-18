@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — MaintenanceBanner
+ ARNA Phase 2 UI — MaintenanceBanner
 =============================================================================
 
  File:      mase_app/src/layouts/AppShell/MaintenanceBanner/MaintenanceBanner.vue

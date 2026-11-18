@@ -66,7 +66,7 @@
 
 /*
  * =============================================================================
- * MASES Phase 2 UI — Loan Feature Service
+ * ARNA Phase 2 UI — Loan Feature Service
  * =============================================================================
  *
  * File:      mase_app/src/features/loans/service.ts

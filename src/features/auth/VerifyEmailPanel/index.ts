@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — VerifyEmailPanel — Barrel Export
+ * ARNA Phase 2 UI — VerifyEmailPanel — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/features/auth/VerifyEmailPanel/index.ts

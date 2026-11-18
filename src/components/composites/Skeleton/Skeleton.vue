@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — Skeleton
+ ARNA Phase 2 UI — Skeleton
 =============================================================================
 
  File:      mase_app/src/components/composites/Skeleton/Skeleton.vue

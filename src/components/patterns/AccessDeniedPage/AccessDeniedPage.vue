@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — AccessDeniedPage
+ ARNA Phase 2 UI — AccessDeniedPage
 =============================================================================
 
  File:      mase_app/src/components/patterns/AccessDeniedPage/AccessDeniedPage.vue
@@ -288,7 +288,7 @@ onMounted(() => {
    * console log".
    */
   // eslint-disable-next-line no-console
-  console.warn('[MASES] Access denied', {
+  console.warn('[ARNA] Access denied', {
     path: props.from,
     code: props.code,
     requestId: props.requestId,

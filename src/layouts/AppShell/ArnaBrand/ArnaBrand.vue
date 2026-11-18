@@ -85,7 +85,7 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — ArnaBrand
+ ARNA Phase 2 UI — ArnaBrand
 =============================================================================
 
  File:      mase_app/src/layouts/AppShell/ArnaBrand/ArnaBrand.vue
@@ -129,7 +129,7 @@
                ማሴስ         ← product code (parenthetical abbreviation)
 
  The full approved corporate identity is
- `ማሌ ዓርና ስማርት ሲስተም (ማሴስ)` ("Maale Arna Smart System (MASES)"). It
+ `ማሌ ዓርና ስማርት ሲስተም (ማሴስ)` ("Maale Arna Smart System (ARNA)"). It
  is exported from @/router/shell-labels as
  `arnaBrandLabels.fullCorporateIdentity` for surfaces with more room
  (page titles, document.title, About panels). The header's brand
@@ -437,7 +437,7 @@
     meaningful. The current choice is alt="" (decorative), because
     the corporate name is already rendered as text immediately
     adjacent. Setting both would produce the reading
-    "Maale Arna Maale Arna MASES" — the brand name twice. The
+    "Maale Arna Maale Arna ARNA" — the brand name twice. The
     decision is deliberate; a future CR that reorders the mark
     (icon-only, no text) must revisit it.
 

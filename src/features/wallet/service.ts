@@ -56,7 +56,7 @@
 
 /*
  * =============================================================================
- * MASES Phase 2 UI — Wallet Feature Service
+ * ARNA Phase 2 UI — Wallet Feature Service
  * =============================================================================
  *
  * File:      mase_app/src/features/wallet/service.ts

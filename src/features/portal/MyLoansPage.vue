@@ -71,7 +71,7 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — MyLoansPage
+ ARNA Phase 2 UI — MyLoansPage
 =============================================================================
 
  File:      mase_app/src/features/portal/MyLoansPage.vue

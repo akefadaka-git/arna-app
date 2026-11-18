@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — SecondaryButton
+ ARNA Phase 2 UI — SecondaryButton
 =============================================================================
 
  File:      mase_app/src/components/primitives/SecondaryButton/SecondaryButton.vue
@@ -27,7 +27,7 @@
  -----------------------------------------------------------------------------
  The secondary variant renders with the aubergine brand surface
  (--arna-color-action-secondary), distinct from the crimson primary
- surface. It is the standard "companion action" button in MASES forms
+ surface. It is the standard "companion action" button in ARNA forms
  and dialogs — visually present but subordinated to the primary action.
 
  -----------------------------------------------------------------------------

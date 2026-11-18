@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — HoldingEntryForm
+ ARNA Phase 2 UI — HoldingEntryForm
 =============================================================================
 
  File:      mase_app/src/features/shareholders/HoldingEntryForm/HoldingEntryForm.vue

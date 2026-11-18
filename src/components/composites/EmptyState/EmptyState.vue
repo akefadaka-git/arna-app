@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — EmptyState
+ ARNA Phase 2 UI — EmptyState
 =============================================================================
 
  File:      mase_app/src/components/composites/EmptyState/EmptyState.vue

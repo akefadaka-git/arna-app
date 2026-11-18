@@ -80,7 +80,7 @@
 
 /*
  * =============================================================================
- * MASES Phase 2 UI — Wallet API Module
+ * ARNA Phase 2 UI — Wallet API Module
  * =============================================================================
  *
  * File:      mase_app/src/features/wallet/api.ts

@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — PageHeader — Barrel Export
+ * ARNA Phase 2 UI — PageHeader — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/patterns/PageHeader/index.ts

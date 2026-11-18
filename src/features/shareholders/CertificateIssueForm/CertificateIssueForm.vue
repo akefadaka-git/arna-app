@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — CertificateIssueForm
+ ARNA Phase 2 UI — CertificateIssueForm
 =============================================================================
 
  File:      mase_app/src/features/shareholders/CertificateIssueForm/CertificateIssueForm.vue

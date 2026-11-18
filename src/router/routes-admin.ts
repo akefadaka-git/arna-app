@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Admin Route Tree
+ * ARNA Phase 2 UI — Admin Route Tree
  * =============================================================================
  *
  * File:      mase_app/src/router/routes-admin.ts

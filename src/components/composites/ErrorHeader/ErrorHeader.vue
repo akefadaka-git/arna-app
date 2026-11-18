@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — ErrorHeader
+ ARNA Phase 2 UI — ErrorHeader
 =============================================================================
 
  File:      mase_app/src/components/composites/ErrorHeader/ErrorHeader.vue

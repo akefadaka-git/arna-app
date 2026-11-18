@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — BaseLink
+ ARNA Phase 2 UI — BaseLink
 =============================================================================
 
  File:      mase_app/src/components/primitives/BaseLink/BaseLink.vue

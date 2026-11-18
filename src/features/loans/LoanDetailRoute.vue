@@ -276,7 +276,7 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — LoanDetailRoute
+ ARNA Phase 2 UI — LoanDetailRoute
 =============================================================================
 
  File:      mase_app/src/features/loans/LoanDetailRoute.vue

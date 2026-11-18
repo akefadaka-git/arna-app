@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — LauncherTile — Barrel Export
+ * ARNA Phase 2 UI — LauncherTile — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/layouts/AppShell/LauncherTile/index.ts

@@ -200,7 +200,7 @@
 
 /*
  * =============================================================================
- * MASES Phase 2 UI — Governance Feature Labels (Amharic)
+ * ARNA Phase 2 UI — Governance Feature Labels (Amharic)
  * =============================================================================
  *
  * File:      mase_app/src/features/governance/labels.ts

@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — EmptyState — Barrel Export
+ * ARNA Phase 2 UI — EmptyState — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/EmptyState/index.ts

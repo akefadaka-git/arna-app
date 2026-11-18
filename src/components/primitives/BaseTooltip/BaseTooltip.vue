@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — BaseTooltip
+ ARNA Phase 2 UI — BaseTooltip
 =============================================================================
 
  File:      mase_app/src/components/primitives/BaseTooltip/BaseTooltip.vue

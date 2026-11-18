@@ -14,13 +14,13 @@
  Before (v1.1.0):
    The view set no document.title. The browser tab showed whatever
    the previously-visited route had left, or the entry HTML's
-   pre-JS default ("MASES") on a cold load directly at /shareholders.
+   pre-JS default ("ARNA") on a cold load directly at /shareholders.
 
  After (v1.1.1):
    The view sets document.title via <PageTitle>, bound to the
    existing labels.pageTitle and to import.meta.env.VITE_APP_NAME.
 
-     Workspace build    →  "ባለአክሲዮኖች — MASES"
+     Workspace build    →  "ባለአክሲዮኖች — ARNA"
      Empty VITE_APP_NAME →  "ባለአክሲዮኖች"
 
    The portal build does not mount this view (the shareholders
@@ -43,7 +43,7 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — ShareholderListView
+ ARNA Phase 2 UI — ShareholderListView
 =============================================================================
 
  File:      mase_app/src/features/shareholders/ShareholderListView/ShareholderListView.vue
@@ -384,7 +384,7 @@ const router = useRouter();
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "MASES"
+ *   workspace  →  "ARNA"
  *   portal     →  "Maale Arna Portal"
  *
  * This view is mounted in the workspace build only — the shareholders

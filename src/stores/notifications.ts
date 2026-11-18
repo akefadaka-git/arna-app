@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — useNotificationsStore
+ * ARNA Phase 2 UI — useNotificationsStore
  * =============================================================================
  *
  * File:      mase_app/src/stores/notifications.ts

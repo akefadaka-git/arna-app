@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — BaseSelect
+ ARNA Phase 2 UI — BaseSelect
 =============================================================================
 
  File:      mase_app/src/components/primitives/BaseSelect/BaseSelect.vue

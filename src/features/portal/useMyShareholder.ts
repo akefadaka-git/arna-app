@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — useMyShareholder
+ * ARNA Phase 2 UI — useMyShareholder
  * =============================================================================
  *
  * File:      mase_app/src/features/portal/useMyShareholder.ts

@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — BaseChip
+ ARNA Phase 2 UI — BaseChip
 =============================================================================
 
  File:      mase_app/src/components/primitives/BaseChip/BaseChip.vue

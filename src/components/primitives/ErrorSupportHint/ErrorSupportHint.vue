@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — ErrorSupportHint
+ ARNA Phase 2 UI — ErrorSupportHint
 =============================================================================
 
  File:      mase_app/src/components/primitives/ErrorSupportHint/ErrorSupportHint.vue

@@ -55,7 +55,7 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — DashboardView
+ ARNA Phase 2 UI — DashboardView
 =============================================================================
 
  File:      mase_app/src/features/dashboard/DashboardView.vue

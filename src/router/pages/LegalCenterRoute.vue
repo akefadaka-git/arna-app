@@ -40,9 +40,9 @@
 
    Observable behaviour on the route is identical:
 
-     VITE_APP_NAME = "MASES"
-       v1.0.0  →  document.title = "ሕጋዊ መረጃ — MASES"
-       v1.1.0  →  document.title = "ሕጋዊ መረጃ — MASES"           (identical)
+     VITE_APP_NAME = "ARNA"
+       v1.0.0  →  document.title = "ሕጋዊ መረጃ — ARNA"
+       v1.1.0  →  document.title = "ሕጋዊ መረጃ — ARNA"           (identical)
 
      VITE_APP_NAME = "" or absent at runtime
        v1.0.0  →  document.title = "ሕጋዊ መረጃ"
@@ -75,7 +75,7 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — LegalCenterRoute
+ ARNA Phase 2 UI — LegalCenterRoute
 =============================================================================
 
  File:      mase_app/src/router/pages/LegalCenterRoute.vue
@@ -228,7 +228,7 @@
      pageLabel = legalCenterPageLabels.pageTitle   ("ሕጋዊ መረጃ")
      appName   = import.meta.env.VITE_APP_NAME
 
- In the workspace build, the title reads "ሕጋዊ መረጃ — MASES"; in
+ In the workspace build, the title reads "ሕጋዊ መረጃ — ARNA"; in
  the portal build, "ሕጋዊ መረጃ — Maale Arna Portal".
 
  The page label is the same string the hub's own <h1> renders
@@ -411,7 +411,7 @@ import {
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "MASES"
+ *   workspace  →  "ARNA"
  *   portal     →  "Maale Arna Portal"
  *
  * Passed to <PageTitle> as the title's suffix. PageTitle's own

@@ -277,7 +277,7 @@
 
 /*
  * =============================================================================
- * MASES Phase 2 UI — Workspace Route Tree
+ * ARNA Phase 2 UI — Workspace Route Tree
  * =============================================================================
  *
  * File:      mase_app/src/router/routes-workspace.ts

@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Router Factory
+ * ARNA Phase 2 UI — Router Factory
  * =============================================================================
  *
  * File:      mase_app/src/router/index.ts
@@ -107,7 +107,7 @@
  * -----------------------------------------------------------------------------
  * Purpose
  * -----------------------------------------------------------------------------
- * The scope-aware router factory for the MASES frontend. One file,
+ * The scope-aware router factory for the ARNA frontend. One file,
  * one exported function, one scope argument. The factory returns a
  * Vue Router instance whose route table has been composed from:
  *

@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — BaseLabel — Barrel Export
+ * ARNA Phase 2 UI — BaseLabel — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/primitives/BaseLabel/index.ts

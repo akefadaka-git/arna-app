@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — LoginForm
+ ARNA Phase 2 UI — LoginForm
 =============================================================================
 
  File:      mase_app/src/features/auth/LoginForm/LoginForm.vue

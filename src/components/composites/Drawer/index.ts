@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Drawer — Barrel Export
+ * ARNA Phase 2 UI — Drawer — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/Drawer/index.ts

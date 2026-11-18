@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Shareholder Feature Labels (Amharic)
+ * ARNA Phase 2 UI — Shareholder Feature Labels (Amharic)
  * =============================================================================
  *
  * File:      mase_app/src/features/shareholders/labels.ts

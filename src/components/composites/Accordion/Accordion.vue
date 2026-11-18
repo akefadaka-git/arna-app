@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — Accordion
+ ARNA Phase 2 UI — Accordion
 =============================================================================
 
  File:      mase_app/src/components/composites/Accordion/Accordion.vue

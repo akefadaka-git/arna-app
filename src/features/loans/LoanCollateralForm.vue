@@ -72,7 +72,7 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — LoanCollateralForm
+ ARNA Phase 2 UI — LoanCollateralForm
 =============================================================================
 
  File:      mase_app/src/features/loans/LoanCollateralForm.vue

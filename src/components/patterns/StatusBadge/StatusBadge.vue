@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — StatusBadge
+ ARNA Phase 2 UI — StatusBadge
 =============================================================================
 
  File:      mase_app/src/components/patterns/StatusBadge/StatusBadge.vue
@@ -13,7 +13,7 @@
  -----------------------------------------------------------------------------
  Purpose
  -----------------------------------------------------------------------------
- The MASES-wide convention for rendering a status value. Composes
+ The ARNA-wide convention for rendering a status value. Composes
  BaseBadge (Unit 8.15) and BaseIcon (Unit 8.19) with a small enforcement
  layer that guarantees:
 

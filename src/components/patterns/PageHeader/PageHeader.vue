@@ -91,7 +91,7 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — PageHeader
+ ARNA Phase 2 UI — PageHeader
 =============================================================================
 
  File:      mase_app/src/components/patterns/PageHeader/PageHeader.vue

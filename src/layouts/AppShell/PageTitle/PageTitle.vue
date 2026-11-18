@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — PageTitle
+ ARNA Phase 2 UI — PageTitle
 =============================================================================
 
  File:      mase_app/src/layouts/AppShell/PageTitle/PageTitle.vue
@@ -15,7 +15,7 @@
  -----------------------------------------------------------------------------
  Manages document.title (the browser tab title) from a declarative
  template position. Vue Router does not set document.title; every SPA
- must do it explicitly. PageTitle is that declaration for MASES.
+ must do it explicitly. PageTitle is that declaration for ARNA.
 
  Renders nothing visible. See the response preamble §"Design note — why
  it renders nothing visible" for the rationale.
@@ -61,7 +61,7 @@
  -----------------------------------------------------------------------------
  None. The component renders nothing. Its observable behavior is the
  side effect on `document.title`, which tests assert against directly:
-     expect(document.title).toBe('Files — MASES');
+     expect(document.title).toBe('Files — ARNA');
 
  -----------------------------------------------------------------------------
  Accessibility
@@ -94,7 +94,7 @@ interface Props {
 
   /**
    * Optional suffix appended after `separator`. Typically the
-   * application name: "MASES", "Maale Arna Portal".
+   * application name: "ARNA", "Maale Arna Portal".
    *
    * When omitted or empty, document.title is just `title` with no
    * separator. See the response preamble §"Design note — the suffix".
@@ -125,7 +125,7 @@ const props = withDefaults(defineProps<Props>(), {
  * preamble §"Design note — unmount restores the previous title".
  *
  * Guarded for environments without a `document` global (Node test
- * runners, SSR). The guard is defensive: production MASES builds
+ * runners, SSR). The guard is defensive: production ARNA builds
  * always run in a browser.
  */
 const previousTitle: string =

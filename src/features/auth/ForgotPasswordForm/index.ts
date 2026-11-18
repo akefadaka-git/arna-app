@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — ForgotPasswordForm — Barrel Export
+ * ARNA Phase 2 UI — ForgotPasswordForm — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/features/auth/ForgotPasswordForm/index.ts

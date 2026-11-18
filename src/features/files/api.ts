@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — File Management API Module
+ * ARNA Phase 2 UI — File Management API Module
  * =============================================================================
  *
  * File:      mase_app/src/features/files/api.ts

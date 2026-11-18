@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — VerifyEmailResend
+ ARNA Phase 2 UI — VerifyEmailResend
 =============================================================================
 
  File:      mase_app/src/features/auth/VerifyEmailResend/VerifyEmailResend.vue

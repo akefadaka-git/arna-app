@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — Breadcrumbs
+ ARNA Phase 2 UI — Breadcrumbs
 =============================================================================
 
  File:      mase_app/src/components/composites/Breadcrumbs/Breadcrumbs.vue

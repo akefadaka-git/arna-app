@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — MyCertificatesPage
+ ARNA Phase 2 UI — MyCertificatesPage
 =============================================================================
 
  File:      mase_app/src/features/portal/MyCertificatesPage.vue

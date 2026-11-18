@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — LauncherGrid
+ ARNA Phase 2 UI — LauncherGrid
 =============================================================================
 
  File:      mase_app/src/layouts/AppShell/LauncherGrid/LauncherGrid.vue

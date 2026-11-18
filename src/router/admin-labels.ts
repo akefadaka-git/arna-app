@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Admin Labels
+ * ARNA Phase 2 UI — Admin Labels
  * =============================================================================
  *
  * File:      mase_app/src/router/admin-labels.ts
@@ -73,7 +73,7 @@
  *   · Brand identity labels. `arnaBrandLabels` (in `shell-labels.ts`)
  *     carries `ማሌ ዓርና` / `ማሴስ` / the full approved identity. The admin
  *     build consumes those unchanged. Note that the admin build's
- *     *application name* — `MASES አስተዳደር` — is NOT
+ *     *application name* — `ARNA አስተዳደር` — is NOT
  *     `arnaBrandLabels.productName`; it is supplied by `VITE_APP_NAME`
  *     and composed into `document.title` by each route wrapper. The
  *     brand mark in the header remains `ማሌ ዓርና` on every build.
@@ -195,7 +195,7 @@
  * keeps the workspace and admin sidebars consistent in a way that
  * matters when both are open in different tabs.
  *
- * "ወደ ማሴስ ወርክስፔስ" — "To MASES Workspace". Identical to the portal's
+ * "ወደ ማሴስ ወርክስፔስ" — "To ARNA Workspace". Identical to the portal's
  * `go-to-workspace` label. The label names the destination, which is
  * the workspace on both builds; using the same string means a user
  * who has seen the item on the portal recognizes it on the admin.

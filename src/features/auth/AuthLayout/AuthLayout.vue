@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — AuthLayout
+ ARNA Phase 2 UI — AuthLayout
 =============================================================================
 
  File:      mase_app/src/features/auth/AuthLayout/AuthLayout.vue
@@ -178,7 +178,7 @@
  Visual design — why the layout looks the way it does
  -----------------------------------------------------------------------------
  The auth pages are the first thing an unauthenticated user sees of
- the MASES platform. The design brief is: calm, uncluttered,
+ the ARNA platform. The design brief is: calm, uncluttered,
  brand-forward, and identical in feel across every auth screen so
  that a user moving from /login to /forgot-password does not
  perceive a jarring change.

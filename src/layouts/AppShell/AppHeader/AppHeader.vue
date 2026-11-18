@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — AppHeader
+ ARNA Phase 2 UI — AppHeader
 =============================================================================
 
  File:      mase_app/src/layouts/AppShell/AppHeader/AppHeader.vue
@@ -80,7 +80,7 @@
  -----------------------------------------------------------------------------
  Purpose
  -----------------------------------------------------------------------------
- The MASES AppShell header bar. Renders a sticky chrome frame with
+ The ARNA AppShell header bar. Renders a sticky chrome frame with
  three horizontal regions:
 
    [brand]   [nav]   [actions]
@@ -365,7 +365,7 @@ const emit = defineEmits<{
  *                         overrides the slot.
  * nav                   — the navigation region (center). Typically
  *                         breadcrumbs; currently unpopulated in the
- *                         MASES shell (see shell-labels.ts §"Future
+ *                         ARNA shell (see shell-labels.ts §"Future
  *                         hooks — breadcrumbs aria label").
  * actions               — the actions region (right). AppShell
  *                         composes the notifications bell, the
@@ -658,7 +658,7 @@ function onToggleClick(): void {
    Left-anchored. `flex-shrink: 0` reserves the brand's intrinsic
    width so a long nav or a wide actions cluster cannot squeeze it;
    `min-width: 0` is retained as a defensive declaration in case a
-   future revision changes the shrink policy. At current MASES brand
+   future revision changes the shrink policy. At current ARNA brand
    widths the region fits within the mobile budget without overflow;
    the smoke test at 375px and 320px confirmed this.
    --------------------------------------------------------------------------- */

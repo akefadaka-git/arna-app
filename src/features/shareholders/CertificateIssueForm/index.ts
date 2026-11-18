@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — CertificateIssueForm — Barrel Export
+ * ARNA Phase 2 UI — CertificateIssueForm — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/features/shareholders/CertificateIssueForm/index.ts

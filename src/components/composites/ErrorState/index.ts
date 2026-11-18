@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — ErrorState — Barrel Export
+ * ARNA Phase 2 UI — ErrorState — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/composites/ErrorState/index.ts

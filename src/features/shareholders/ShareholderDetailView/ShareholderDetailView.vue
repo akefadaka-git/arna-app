@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — ShareholderDetailView
+ ARNA Phase 2 UI — ShareholderDetailView
 =============================================================================
 
  File:      mase_app/src/features/shareholders/ShareholderDetailView/ShareholderDetailView.vue

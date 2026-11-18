@@ -14,13 +14,13 @@
  Before (v1.1.0):
    The view set no document.title. The browser tab showed whatever
    the previously-visited route had left, or the entry HTML's
-   pre-JS default ("MASES") on a cold load directly at /loans.
+   pre-JS default ("ARNA") on a cold load directly at /loans.
 
  After (v1.1.1):
    The view sets document.title via <PageTitle>, bound to the
    existing labels.pageTitle and to import.meta.env.VITE_APP_NAME.
 
-     Workspace build    →  "ብድሮች — MASES"
+     Workspace build    →  "ብድሮች — ARNA"
      Empty VITE_APP_NAME →  "ብድሮች"
 
    The portal build has its own loans list surface (MyLoansPage.vue),
@@ -189,7 +189,7 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — LoanListView
+ ARNA Phase 2 UI — LoanListView
 =============================================================================
 
  File:      mase_app/src/features/loans/LoanListView.vue
@@ -461,7 +461,7 @@ const router = useRouter();
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "MASES"
+ *   workspace  →  "ARNA"
  *   portal     →  "Maale Arna Portal"
  *
  * This view is mounted in the workspace build only. The portal has

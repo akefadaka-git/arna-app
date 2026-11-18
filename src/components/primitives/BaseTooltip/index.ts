@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — BaseTooltip — Barrel Export
+ * ARNA Phase 2 UI — BaseTooltip — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/components/primitives/BaseTooltip/index.ts

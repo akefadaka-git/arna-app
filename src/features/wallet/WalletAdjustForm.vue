@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — WalletAdjustForm
+ ARNA Phase 2 UI — WalletAdjustForm
 =============================================================================
 
  File:      mase_app/src/features/wallet/WalletAdjustForm.vue

@@ -386,7 +386,7 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — LoanDetailView
+ ARNA Phase 2 UI — LoanDetailView
 =============================================================================
 
  File:      mase_app/src/features/loans/LoanDetailView.vue

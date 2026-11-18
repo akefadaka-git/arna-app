@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — ArnaBrand barrel
+ * ARNA Phase 2 UI — ArnaBrand barrel
  * =============================================================================
  *
  * File:      mase_app/src/layouts/AppShell/ArnaBrand/index.ts

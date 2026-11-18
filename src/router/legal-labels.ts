@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Legal Center & Legal Document Labels (Amharic)
+ * ARNA Phase 2 UI — Legal Center & Legal Document Labels (Amharic)
  * =============================================================================
  *
  * File:      mase_app/src/router/legal-labels.ts
@@ -155,7 +155,7 @@
  * screen-reader user hears which surface the nav belongs to.
  *
  * "የለውጥ ታሪክ" (change history) is the version-history section's
- * heading. The same string is used by convention across MASES
+ * heading. The same string is used by convention across ARNA
  * documentation surfaces.
  *
  * "ተዛማጅ ሰነዶች" (related documents) is the cross-reference
@@ -179,7 +179,7 @@
  * Every value in this file is Amharic. There is no English
  * user-facing string. The one Latin-script term that appears
  * anywhere in the Legal Center's user-facing text is the corporate
- * brand mark ("MASES" in the shell's brand slot; "ማሴስ" in the
+ * brand mark ("ARNA" in the shell's brand slot; "ማሴስ" in the
  * Amharic-script brand labels). This file does not render the
  * brand — that is the shell's responsibility — so no Latin-script
  * string appears here at all.
@@ -241,7 +241,7 @@
  *     identifier separately.
  *
  *   · legalDocumentPageLabels.statusValues.archived — "ተቀምጧል".
- *     Literally "has been placed". Used in the MASES register for
+ *     Literally "has been placed". Used in the ARNA register for
  *     a document retained for reference. A reviewer may prefer
  *     "ተመዝግቧል" ("has been recorded") or "ወደ ማህደር ገብቷል" ("has
  *     entered the archive"). The latter is clearer but longer.

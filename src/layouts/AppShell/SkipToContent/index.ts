@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — SkipToContent — Barrel Export
+ * ARNA Phase 2 UI — SkipToContent — Barrel Export
  * =============================================================================
  *
  * File:      mase_app/src/layouts/AppShell/SkipToContent/index.ts

@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — BaseSpinner
+ ARNA Phase 2 UI — BaseSpinner
 =============================================================================
 
  File:      mase_app/src/components/primitives/BaseSpinner/BaseSpinner.vue

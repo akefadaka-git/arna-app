@@ -1,6 +1,6 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Application Bootstrap
+ * ARNA Phase 2 UI — Application Bootstrap
  * =============================================================================
  *
  * File:      mase_app/src/core/bootstrap.ts
