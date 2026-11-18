@@ -1,0 +1,73 @@
+name: PR88 mounted-shell reconciliation verification
+
+on:
+  push:
+    branches:
+      - reconcile/pr88-mounted-shell-tests-a3
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr88-mounted-shell-reconciliation-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  exact-head-mounted-shell-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      TARGET_SHA: ${{ github.sha }}
+    steps:
+      - name: Checkout exact reconciliation candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+      - name: Assert exact tested candidate SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          ACTUAL="$(git rev-parse HEAD)"
+          echo "Reconciliation target SHA: $TARGET_SHA"
+          echo "Reconciliation checked-out SHA: $ACTUAL"
+          test "$ACTUAL" = "$TARGET_SHA"
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Verify repository-wide ARNA identity contract
+        run: npm run test:brand-identity-contract
+      - name: Type-check candidate
+        run: npm run type-check
+      - name: Install Chromium and operating-system dependencies
+        run: npx playwright install --with-deps chromium
+      - name: Verify mounted Workspace, Portal and Admin shells
+        shell: bash
+        env:
+          APP_SHELLS_URL: http://127.0.0.1:4175/tests/fixtures/app-shells.html
+          PLAYWRIGHT_HTML_OPEN: never
+        run: |
+          set -euo pipefail
+          npx vite --mode workspace --host 127.0.0.1 --port 4175 --strictPort > "$RUNNER_TEMP/app-shells-preview.log" 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$APP_SHELLS_URL" >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent "$APP_SHELLS_URL" >/dev/null
+          npm run test:app-shells-browser -- --reporter=list,html
+      - name: Upload mounted-shell browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arna-pr88-mounted-shell-browser-${{ env.TARGET_SHA }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: warn
+          retention-days: 14
