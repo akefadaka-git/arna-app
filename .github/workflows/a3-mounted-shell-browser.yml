@@ -45,7 +45,8 @@ jobs:
             sleep 1
           done
           curl --fail --silent http://127.0.0.1:4175/tests/fixtures/app-shells.html >/dev/null
-          APP_SHELLS_URL=http://127.0.0.1:4175/tests/fixtures/app-shells.html npx playwright test tests/app-shells-browser.spec.mjs
+          mkdir -p playwright-report
+          PLAYWRIGHT_JUNIT_OUTPUT_FILE=playwright-report/mounted-shell-results.xml APP_SHELLS_URL=http://127.0.0.1:4175/tests/fixtures/app-shells.html npx playwright test tests/app-shells-browser.spec.mjs --reporter=list,junit
       - name: Upload Playwright report
         if: always()
         uses: actions/upload-artifact@v4
