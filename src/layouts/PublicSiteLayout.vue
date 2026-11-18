@@ -8,13 +8,13 @@ const appName: string = import.meta.env.VITE_APP_NAME || 'ARNA';
 
 <template>
   <div class="public-site-layout" data-testid="public-site-layout">
-    <a class="public-site-layout__skip-link" href="#public-site-main">ወደ ዋናው ይዘት ዝለል</a>
+    <a class="public-site-layout__skip-link" href="#public-site-main" aria-label="Skip to main content / ወደ ዋናው ይዘት ዝለል">ወደ ዋናው ይዘት ዝለል</a>
     <header class="public-site-layout__header">
-      <nav class="public-site-layout__nav" aria-label="ዋና አሰሳ">
+      <nav class="public-site-layout__nav" aria-label="Main navigation / ዋና አሰሳ">
         <RouterLink class="public-site-layout__brand" to="/" :aria-label="arnaBrandLabels.fullCorporateIdentity"><img class="public-site-layout__emblem" src="/logo.png" alt="" width="40" height="40" /><span>{{ arnaBrandLabels.fullCorporateIdentity }}</span></RouterLink>
         <div class="public-site-layout__links">
-          <RouterLink to="/verify">ሰነድ ማረጋገጫ</RouterLink>
-          <RouterLink to="/legal">ሕጋዊ መረጃ</RouterLink>
+          <RouterLink to="/verify" aria-label="Document verification / ሰነድ ማረጋገጫ">ሰነድ ማረጋገጫ</RouterLink>
+          <RouterLink to="/legal" aria-label="Legal information / ሕጋዊ መረጃ">ሕጋዊ መረጃ</RouterLink>
           <ThemePreferenceControl />
         </div>
       </nav>
