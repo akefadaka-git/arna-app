@@ -29,7 +29,7 @@ function transformExecutable(source) {
     .replace(/__mases/g, '__arna')
     .replace(/--mases-/g, '--arna-')
     .replace(/mases-/g, 'arna-')
-    .replace(/\\bMASES\\b/g, 'ARNA');
+    .replace(/\bMASES\b/g, 'ARNA');
 }
 
 function replaceRequired(source, from, to, label) {
