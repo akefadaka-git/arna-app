@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: a4-namespace-verification-\${{ github.ref }}
+  group: a4-namespace-verification-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -118,7 +118,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: arna-a4-visual-review-\${{ env.TARGET_SHA }}
+          name: arna-a4-visual-review-${{ env.TARGET_SHA }}
           path: artifacts/visual-review/
           if-no-files-found: warn
           retention-days: 14
