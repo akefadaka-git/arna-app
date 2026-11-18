@@ -169,9 +169,11 @@ async function main() {
     let next = absolute.endsWith('README.md') ? source : transformExecutable(source);
     if (absolute.endsWith('vite.config.ts')) next = next.replace('MASES UI — Vite configuration', 'ARNA UI — Vite configuration');
     if (absolute.endsWith('README.md')) {
-      next = next.replace(/^\\*\\*ARNA is the master name for the Maale Arna Smart System\\. MASES is the established legacy\\/product name used during the transition\\.\\*\\*/m,
-        '**ARNA is the canonical product name for the Maale Arna Smart System. Historical MASES references are retained only as provenance or read-only migration compatibility.**');
-      if (!next.includes('ARNA is the canonical product name')) next = '**ARNA is the canonical product name for the Maale Arna Smart System.**\\n\\n' + next;
+      next = next.replace(
+        '**ARNA is the master name for the Maale Arna Smart System. MASES is the established legacy/product name used during the transition.**',
+        '**ARNA is the canonical product name for the Maale Arna Smart System. Historical MASES references are retained only as provenance or read-only migration compatibility.**',
+      );
+      if (!next.includes('ARNA is the canonical product name')) next = '**ARNA is the canonical product name for the Maale Arna Smart System.**\n\n' + next;
     }
     if (absolute.endsWith('package.json')) {
       const manifest = JSON.parse(next);
