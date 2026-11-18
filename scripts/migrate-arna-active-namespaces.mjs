@@ -192,7 +192,7 @@ async function main() {
     if (absolute.endsWith('admin-entry/index.html')) next = next.replace(/<title>[^<]*<\/title>/i, '<title>ARNA Administration</title>');
     if (absolute.endsWith('src/router/shell-labels.ts')) {
       next = next.replace("productName: 'ማሴስ'", "productName: 'ARNA'");
-      next = next.replace("fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ማሴስ)'", "fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ARNA)'");
+      next = next.replaceAll("fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ማሴስ)'", "fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ARNA)'");
       next = next.replaceAll('ወደ ማሴስ ወርክስፔስ', 'ወደ ARNA ወርክስፔስ');
     }
     if (next !== source) {
