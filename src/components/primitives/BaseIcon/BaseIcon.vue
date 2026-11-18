@@ -736,7 +736,7 @@ if (import.meta.env.DEV) {
         // eslint-disable-next-line no-console
         console.info(
           `[BaseIcon] color "${value}" is not a recognised CSS color; ` +
-            `treating it as the ARNA token "--arna-${value}".`,
+            `treating it as the MASES token "--arna-${value}".`,
         );
       }
     },

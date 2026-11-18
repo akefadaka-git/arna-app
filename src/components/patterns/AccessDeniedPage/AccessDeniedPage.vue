@@ -288,7 +288,7 @@ onMounted(() => {
    * console log".
    */
   // eslint-disable-next-line no-console
-  console.warn('[ARNA] Access denied', {
+  console.warn('[MASES] Access denied', {
     path: props.from,
     code: props.code,
     requestId: props.requestId,

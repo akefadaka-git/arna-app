@@ -24,7 +24,7 @@ const appName: string = import.meta.env.VITE_APP_NAME || 'ARNA';
     </main>
     <footer class="public-site-layout__footer">
       <nav aria-label="የግርጌ አሰሳ">
-        <RouterLink to="/legal" aria-label="Legal information / ሕጋዊ መረጃ">ሕጋዊ መረጃ</RouterLink>
+        <RouterLink to="/legal">ሕጋዊ መረጃ</RouterLink>
         <span aria-hidden="true">·</span>
         <RouterLink to="/verify">የሰነድ ትክክለኛነት ማረጋገጫ</RouterLink>
       </nav>

@@ -406,7 +406,114 @@ function matchesAccept(file: File): boolean {
       continue;
     }
 
-    // Wildcard MIME: "image ARNA_COMMENT_21 
+    // Wildcard MIME: "image/*", "audio/*", etc.
+    if (rule.endsWith('/*')) {
+      const prefix = rule.slice(0, -1); // keep the trailing slash
+      if (mime !== '' && mime.startsWith(prefix)) {
+        return true;
+      }
+      continue;
+    }
+
+    // Exact MIME: "application/pdf", "image/png", etc.
+    if (mime === rule) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+// -----------------------------------------------------------------------------
+// Computed — trigger label for the default presentation
+// -----------------------------------------------------------------------------
+const triggerLabel = computed<string>(() => {
+  const l = props.labels;
+  if (!l) return '';
+  return props.multiple ? l.chooseFiles : l.chooseFile;
+});
+
+const dropHereLabel = computed<string>(() => props.labels?.dropHere ?? '');
+
+const dropZoneAriaLabel = computed<string | undefined>(() => {
+  const l = props.labels;
+  if (!l || !l.dropZone) return undefined;
+  return l.dropZone;
+});
+</script>
+
+<template>
+  <div
+    class="file-input"
+    :class="{ 'file-input--disabled': disabled }"
+    role="group"
+    :aria-label="dropZoneAriaLabel"
+    :data-drag-over="isDragOver ? 'true' : undefined"
+    :data-disabled="disabled ? 'true' : undefined"
+    :data-invalid="invalid ? 'true' : undefined"
+    data-testid="file-input-root"
+    @dragenter.prevent="onDragEnter"
+    @dragover="onDragOver"
+    @dragleave.prevent="onDragLeave"
+    @drop.prevent="onDrop"
+  >
+    <!--
+      Drop-zone interior.
+      The default presentation (button + hint) renders when the
+      consumer does not supply the default slot. Otherwise the
+      consumer's content renders, wired to `openFilePicker`.
+    -->
+    <slot
+      :open-file-picker="openFilePicker"
+      :is-drag-over="isDragOver"
+      :input-id="inputId"
+    >
+      <!-- Default presentation -->
+      <div class="file-input__default">
+        <button
+          type="button"
+          :disabled="disabled"
+          class="file-input__trigger"
+          data-testid="file-input-trigger"
+          @click="openFilePicker"
+        >
+          <BaseIcon name="upload" size="sm" />
+          <span class="file-input__trigger-label">{{ triggerLabel }}</span>
+        </button>
+
+        <p
+          v-if="dropHereLabel"
+          class="file-input__hint"
+        >{{ dropHereLabel }}</p>
+      </div>
+    </slot>
+
+    <!--
+      Visually hidden native file input.
+      Owns the file-selection behavior but is not reachable via Tab and
+      is not announced by screen readers; the button provides the
+      accessible identity. See the file header comment.
+    -->
+    <input
+      ref="inputRef"
+      type="file"
+      :id="inputId"
+      :accept="accept"
+      :multiple="multiple"
+      :disabled="disabled"
+      tabindex="-1"
+      aria-hidden="true"
+      class="file-input__native"
+      data-testid="file-input-native"
+      @change="onNativeChange"
+    />
+  </div>
+</template>
+
+<style scoped>
+/* ============================================================================
+   Drop zone
+   ============================================================================ */
 .file-input {
   display: flex;
   align-items: center;

@@ -285,7 +285,7 @@ const labels = {
    * The page header's description line. A single noun phrase that
    * names what the page is.
    */
-  pageDescription: 'የARNA አስተዳደር መተግበሪያ መነሻ ገጽ።',
+  pageDescription: 'የMASES አስተዳደር መተግበሪያ መነሻ ገጽ።',
 
   /**
    * The welcome card's heading. The Amharic greeting
@@ -299,7 +299,7 @@ const labels = {
    * see the file header §"Static content" for the G1 Q4 decision
    * that governs this.
    */
-  welcomeBody: 'ይህ የARNA መድረክ አስተዳደር መተግበሪያ ነው።',
+  welcomeBody: 'ይህ የMASES መድረክ አስተዳደር መተግበሪያ ነው።',
 } as const;
 
 /*
