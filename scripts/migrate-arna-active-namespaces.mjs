@@ -76,6 +76,7 @@ async function update(path, transform) {
 
 async function migrateLocaleStorage() {
   await update('src/stores/locale.ts', (source) => {
+    if (source.includes("const STORAGE_KEY = 'arna.locale'")) return source;
     source = replaceRequired(source, "const STORAGE_KEY = 'mases.locale';", "const STORAGE_KEY = 'arna.locale';\nconst LEGACY_STORAGE_KEY = 'mases.locale';", 'locale storage key');
     source = replaceRequired(source, 'return localStorage.getItem(STORAGE_KEY);', 'return localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY);', 'locale legacy read');
     source = replaceRequired(source, 'localStorage.setItem(STORAGE_KEY, value);', 'localStorage.setItem(STORAGE_KEY, value);\n      localStorage.removeItem(LEGACY_STORAGE_KEY);', 'locale new-key write');
@@ -84,6 +85,7 @@ async function migrateLocaleStorage() {
   });
 
   await update('src/stores/tenant.ts', (source) => {
+    if (source.includes("const KEY = 'arna.tenant_id'")) return source;
     source = replaceRequired(source, "const KEY = 'mases.tenant_id';", "const KEY = 'arna.tenant_id';\n  const LEGACY_KEY = 'mases.tenant_id';", 'tenant storage key');
     source = replaceRequired(source, 'const raw = localStorage.getItem(KEY);', 'const raw = localStorage.getItem(KEY) ?? localStorage.getItem(LEGACY_KEY);', 'tenant legacy read');
     source = replaceRequired(source, 'localStorage.setItem(KEY, String(id));', 'localStorage.setItem(KEY, String(id));\n      localStorage.removeItem(LEGACY_KEY);', 'tenant new-key write');
@@ -92,6 +94,7 @@ async function migrateLocaleStorage() {
   });
 
   await update('src/core/bootstrap.ts', (source) => {
+    if (source.includes("const KEY = 'arna.auth_token'")) return source;
     source = replaceRequired(source, "const KEY = 'mases.auth_token';", "const KEY = 'arna.auth_token';\n  const LEGACY_KEY = 'mases.auth_token';", 'auth token storage key');
     source = replaceRequired(source, 'return sessionStorage.getItem(KEY);', 'return sessionStorage.getItem(KEY) ?? sessionStorage.getItem(LEGACY_KEY);', 'auth token legacy read');
     source = replaceRequired(source, 'sessionStorage.setItem(KEY, token);', 'sessionStorage.setItem(KEY, token);\n      sessionStorage.removeItem(LEGACY_KEY);', 'auth token new-key write');
@@ -100,6 +103,7 @@ async function migrateLocaleStorage() {
   });
 
   await update('src/features/auth/LoginForm/LoginForm.vue', (source) => {
+    if (source.includes("const REMEMBERED_IDENTIFIER_KEY = 'arna.auth.remembered_identifier'")) return source;
     source = replaceRequired(source, "const REMEMBERED_IDENTIFIER_KEY = 'mases.auth.remembered_identifier';", "const REMEMBERED_IDENTIFIER_KEY = 'arna.auth.remembered_identifier';\nconst LEGACY_REMEMBERED_IDENTIFIER_KEY = 'mases.auth.remembered_identifier';", 'remembered identifier keys');
     source = replaceRequired(
       source,
@@ -162,10 +166,10 @@ async function main() {
     if (absolute.endsWith('tests/brand-identity-contract.test.mjs')) continue;
     let source;
     try { source = await readFile(absolute, 'utf8'); } catch { continue; }
-    let next = transformExecutable(source);
+    let next = absolute.endsWith('README.md') ? source : transformExecutable(source);
     if (absolute.endsWith('vite.config.ts')) next = next.replace('MASES UI — Vite configuration', 'ARNA UI — Vite configuration');
     if (absolute.endsWith('README.md')) {
-      next = next.replace(/^\\*\\*ARNA is the master name for the Maale Arna Smart System\\. ARNA is the established legacy\\/product name used during the transition\\.\\*\\*/m,
+      next = next.replace(/^\\*\\*ARNA is the master name for the Maale Arna Smart System\\. MASES is the established legacy\\/product name used during the transition\\.\\*\\*/m,
         '**ARNA is the canonical product name for the Maale Arna Smart System. Historical MASES references are retained only as provenance or read-only migration compatibility.**');
       if (!next.includes('ARNA is the canonical product name')) next = '**ARNA is the canonical product name for the Maale Arna Smart System.**\\n\\n' + next;
     }
