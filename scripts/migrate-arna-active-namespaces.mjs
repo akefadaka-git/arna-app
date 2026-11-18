@@ -115,15 +115,9 @@ async function migrateLocaleStorage() {
     );
     source = replaceRequired(
       source,
-      'window.localStorage.setItem(REMEMBERED_IDENTIFIER_KEY, value);',
-      'window.localStorage.setItem(REMEMBERED_IDENTIFIER_KEY, value);\n      window.localStorage.removeItem(LEGACY_REMEMBERED_IDENTIFIER_KEY);',
-      'remembered identifier new-key write',
-    );
-    source = replaceRequired(
-      source,
-      'window.localStorage.removeItem(REMEMBERED_IDENTIFIER_KEY);',
-      'window.localStorage.removeItem(REMEMBERED_IDENTIFIER_KEY);\n      window.localStorage.removeItem(LEGACY_REMEMBERED_IDENTIFIER_KEY);',
-      'remembered identifier clear both keys',
+      `    if (value !== '') {\n      window.localStorage.setItem(REMEMBERED_IDENTIFIER_KEY, value);\n    } else {\n      window.localStorage.removeItem(REMEMBERED_IDENTIFIER_KEY);\n    }`,
+      `    if (value !== '') {\n      window.localStorage.setItem(REMEMBERED_IDENTIFIER_KEY, value);\n      window.localStorage.removeItem(LEGACY_REMEMBERED_IDENTIFIER_KEY);\n    } else {\n      window.localStorage.removeItem(REMEMBERED_IDENTIFIER_KEY);\n      window.localStorage.removeItem(LEGACY_REMEMBERED_IDENTIFIER_KEY);\n    }`,
+      'remembered identifier persist and clear both keys',
     );
     return source;
   });
