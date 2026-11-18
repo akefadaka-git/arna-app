@@ -225,6 +225,7 @@ function handleClick(event: MouseEvent): void {
    Base
    ============================================================================ */
 .arna-button {
+  min-inline-size: 24px;
   appearance: none;
   border: 1px solid transparent;
   cursor: pointer;
