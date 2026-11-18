@@ -18,8 +18,11 @@ test('shared shell exposes canonical ARNA exports and brand labels', async () =>
   const source = await read('../src/router/shell-labels.ts');
   assert.match(source, /export const arnaShellLabels/);
   assert.match(source, /export const arnaUserMenuItems/);
-  assert.match(source, /productName: 'ARNA'/);
-  assert.match(source, /fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም \(ARNA\)'/);
+  const brandLabels = source.match(/export const arnaBrandLabels = \\{([\\s\\S]*?)\\} as const;/)?.[1] ?? '';
+  assert.ok(brandLabels.length > 0, 'canonical ARNA brand labels must be exported');
+  assert.match(brandLabels, /productName: 'ARNA'/);
+  assert.match(brandLabels, /fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም \\(ARNA\\)'/);
+  assert.doesNotMatch(brandLabels, /ማሴስ/, 'Amharic product identity must retain ARNA as the proper noun');
   assert.match(source, /ወደ ARNA ወርክስፔስ/);
   assert.doesNotMatch(source, /export const mases(?:ShellLabels|UserMenuItems)/);
 });
