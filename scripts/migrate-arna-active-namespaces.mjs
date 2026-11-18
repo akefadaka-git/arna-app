@@ -59,7 +59,7 @@ function transformExecutable(source) {
     .replace(/mases-/g, 'arna-')
     .replace(/\bMASES\b/g, 'ARNA');
 
-  return code.replace(/\u0000ARNA_COMMENT_(\d+)\u0000/g, (_match, index) => comments[Number(index)]);
+  return code.replace(/\u0000ARNA_COMMENT_(\d+)\u0000/g, (_match, index) => comments[Number(index)]\n    .replace(/--mases-/g, '--arna-')\n    .replace(/__mases/g, '__arna')\n    .replace(/mases-/g, 'arna-'));
 }
 
 function replaceRequired(source, from, to, label) {
