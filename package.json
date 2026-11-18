@@ -14,7 +14,8 @@
     "VERSION POLICY: direct dependencies remain exact x.y.z versions. Major upgrades require an explicit architecture decision.",
     "SECURITY: no secrets in this manifest. VITE_* values are inlined into client bundles and must contain no secrets. Production hosting serves static assets only.",
     "TOOLING DEFERRED: lint/format/test automation and dependency automation require separate bounded changes.",
-    "PUBLIC BUILD SMOKE: test:public-build-smoke verifies the independent public static build output."
+    "PUBLIC BUILD SMOKE: test:public-build-smoke verifies the independent public static build output.",
+    "DEPENDENCY SECURITY: minimatch is overridden to patched 11.0.1 for GHSA-g3hv-75wg-m249; retain only while the Vue language-core dependency requires the vulnerable 9.x range."
   ],
   "engines": {
     "node": ">=20.0.0",
