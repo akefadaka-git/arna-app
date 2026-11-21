@@ -34,10 +34,10 @@ function onChange(event: Event): void {
 .theme-preference-control {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-2, 8px);
+  gap: var(--arna-space-2, 8px);
   min-width: 0;
-  color: var(--mases-color-text-secondary, #3F382B);
-  font-size: var(--mases-font-size-body-sm, 14px);
+  color: var(--arna-color-text-secondary, #3F382B);
+  font-size: var(--arna-font-size-body-sm, 14px);
 }
 
 .theme-preference-control__label {
@@ -49,15 +49,15 @@ function onChange(event: Event): void {
   max-width: 100%;
   min-height: 2.5rem;
   padding: 0.35rem 2rem 0.35rem 0.65rem;
-  border: 1px solid var(--mases-color-border-default, #DDD5C0);
-  border-radius: var(--mases-radius-md, 8px);
-  color: var(--mases-color-text-primary, #141009);
-  background: var(--mases-color-surface-raised, #F8F5EC);
+  border: 1px solid var(--arna-color-border-default, #DDD5C0);
+  border-radius: var(--arna-radius-md, 8px);
+  color: var(--arna-color-text-primary, #141009);
+  background: var(--arna-color-surface-raised, #F8F5EC);
   font: inherit;
 }
 
 .theme-preference-control__select:focus-visible {
-  outline: 3px solid var(--mases-color-state-focus-ring, #D4A017);
+  outline: 3px solid var(--arna-color-state-focus-ring, #D4A017);
   outline-offset: 2px;
 }
 

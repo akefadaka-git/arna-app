@@ -253,7 +253,7 @@
  *
  *   · The `mases_locale` cookie is absent — the SPA's locale store
  *     persists the preference to `localStorage` under the key
- *     `mases.locale`, not to a cookie that the API can read
+ *     `arna.locale`, not to a cookie that the API can read
  *     cross-subdomain.
  *
  * Without an explicit `Accept-Language` header from the SPA, the
