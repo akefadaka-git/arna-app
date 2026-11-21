@@ -40,6 +40,8 @@ jobs:
         id: dependency_security_gate
         continue-on-error: true
         run: npm audit --audit-level=high
+      - name: Verify Wallet, Loan, Admin, notification and locale security contracts
+        run: node --test tests/p0-loan-route-permissions.test.mjs tests/p0-wallet-reversal-permission.test.mjs tests/admin-route-authz-contract.test.mjs tests/notifications-locale-contract.test.mjs
       - name: Type-check and build all applications
         run: npm run build
       - name: Verify root entry points, local assets, and deployment policy
