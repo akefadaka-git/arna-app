@@ -38,6 +38,8 @@ jobs:
           '
       - name: Block high and critical dependency advisories
         run: npm audit --audit-level=high
+      - name: Verify notification routing and account locale preference contracts
+        run: node --test tests/notifications-locale-contract.test.mjs
       - name: Type-check and build all applications
         run: npm run build
       - name: Verify root entry points, local assets, and deployment policy
