@@ -1299,7 +1299,7 @@
  *       optionEn: string;           // "English"
  *     }
  *
- * It is deliberately absent today.
+ * It is registered in `arnaShellLabels` and persisted by AppShell through the locale preference API.
  *
  * -----------------------------------------------------------------------------
  * Flat nav tree — deliberate
@@ -1541,6 +1541,18 @@ export const arnaShellLabels: AppShellLabels = {
     triggerAriaLabelWithUnread: (count: number) =>
       `ማሳወቂያዎች፣ ${count} ያልተነበዩ`,
     disabledReason: 'ማሳወቂያዎች በቅርቡ ይመጣሉ',
+  },
+
+  languageSelector: {
+    triggerAriaLabel: {
+      am: 'ቋንቋ ይምረጡ',
+      en: 'Select language',
+    },
+  },
+
+  languageSaveError: {
+    am: 'የቋንቋ ምርጫዎን ማስቀመጥ አልተቻለም። እንደገና ይሞክሩ።',
+    en: 'Your language preference could not be saved. Please try again.',
   },
 
   tenantSwitcher: {
