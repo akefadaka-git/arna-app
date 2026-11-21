@@ -304,13 +304,21 @@ export const adminNavItems: ReadonlyArray<NavItem> = [
     label: 'ኦዲት እና ደህንነት',
     to: '/admin/audit-security',
     icon: 'shield-check',
-    permission: 'audit.view',
+    permission: ['audit.view', 'security-event.view'],
+    permissionMode: 'any',
   },
   {
     id: 'public-content-review',
     label: 'ይፋዊ ይዘት ግምገማ',
     to: '/admin/public-content',
     icon: 'file-check',
+    permission: 'public-content.review',
+  },
+  {
+    id: 'corporate-site',
+    label: 'የድርጅት ድረ-ገጽ',
+    to: '/admin/corporate-site',
+    icon: 'globe',
     permission: 'public-content.review',
   },
 ];
