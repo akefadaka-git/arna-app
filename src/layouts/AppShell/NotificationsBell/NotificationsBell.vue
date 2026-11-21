@@ -61,11 +61,11 @@
  -----------------------------------------------------------------------------
  Badge sizing — pre-work for the 99+ case
  -----------------------------------------------------------------------------
- The badge's `min-width` was raised from --mases-space-4 (16px) to
- --mases-space-5 (20px). At Amharic caption size (13px), the previous
+ The badge's `min-width` was raised from --arna-space-4 (16px) to
+ --arna-space-5 (20px). At Amharic caption size (13px), the previous
  16px square was a tight fit for the "99+" string, which is the
  widest badge the component can produce (see BADGE_MAX_DISPLAY). The
- badge's `height` is unchanged at --mases-space-4; a single-digit
+ badge's `height` is unchanged at --arna-space-4; a single-digit
  badge therefore remains circular, and a two-digit or "99+" badge
  becomes a horizontal pill.
 
@@ -286,7 +286,7 @@ function onClick(): void {
       type="button"
       variant="ghost"
       size="md"
-    icon-only
+      icon-only
       :aria-label="triggerAriaLabel"
       aria-disabled="true"
       data-disabled="true"
@@ -307,7 +307,7 @@ function onClick(): void {
     type="button"
     variant="ghost"
     size="md"
-    icon-only
+      icon-only
     :aria-label="triggerAriaLabel"
     data-testid="notifications-bell-trigger"
     @click="onClick"
@@ -346,8 +346,8 @@ function onClick(): void {
    icon. Uses logical properties so an eventual RTL locale places it on
    the top-left without any change here.
 
-   Sizing: the badge's height is --mases-space-4 (16px). Its
-   min-width is --mases-space-5 (20px), giving the "99+" string room
+   Sizing: the badge's height is --arna-space-4 (16px). Its
+   min-width is --arna-space-5 (20px), giving the "99+" string room
    at the caption font size. A single-digit badge stretches to the
    20px minimum width but is centred, so it remains visually a pill;
    a two-digit badge or "99+" fills the 20px minimum and grows
@@ -362,22 +362,22 @@ function onClick(): void {
   /*
    * -4px offsets pull the badge slightly outside the icon's bounds so
    * it overlaps the bell's top-trailing corner without covering the
-   * glyph. calc(-1 * var(--mases-space-1)) is used instead of a
+   * glyph. calc(-1 * var(--arna-space-1)) is used instead of a
    * negative literal so the token scale remains the source of truth.
    */
-  inset-block-start: calc(-1 * var(--mases-space-1));
-  inset-inline-end: calc(-1 * var(--mases-space-1));
-  min-width: var(--mases-space-5);
-  height: var(--mases-space-4);
+  inset-block-start: calc(-1 * var(--arna-space-1));
+  inset-inline-end: calc(-1 * var(--arna-space-1));
+  min-width: var(--arna-space-5);
+  height: var(--arna-space-4);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--mases-radius-full);
-  background-color: var(--mases-color-action-primary);
-  color: var(--mases-color-text-inverse);
+  border-radius: var(--arna-radius-full);
+  background-color: var(--arna-color-action-primary);
+  color: var(--arna-color-text-inverse);
   font-family: inherit;
-  font-size: var(--mases-font-size-caption);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-caption);
+  font-weight: var(--arna-font-weight-semibold);
   /*
    * The badge is a visual indicator only — pointer-events: none lets
    * clicks pass through to the surrounding button. Combined with
