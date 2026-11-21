@@ -38,6 +38,8 @@ jobs:
           '
       - name: Block high and critical dependency advisories
         run: npm audit --audit-level=high
+      - name: Verify admin authentication and child permission contract
+        run: node --test tests/admin-route-authz-contract.test.mjs
       - name: Type-check and build all applications
         run: npm run build
       - name: Verify root entry points, local assets, and deployment policy
