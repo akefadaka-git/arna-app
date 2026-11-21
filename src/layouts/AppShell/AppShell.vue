@@ -381,6 +381,8 @@ export interface AppShellMaintenanceState {
  * Consumer-supplied, translated labels for every shell-region
  * component. Grouped here so AppShell has a single labels prop.
  */
+import type { LanguageSelectorLabels } from '@/layouts/AppShell/LanguageSelector/LanguageSelector.vue';
+
 export interface AppShellLabels {
   /** Skip-link text. E.g. "Skip to content" / "ወደ ዋና ይዘት ዝለል". */
   readonly skipToContent: string;
@@ -388,6 +390,8 @@ export interface AppShellLabels {
   readonly mobileMenu: string;
   readonly userMenu: UserMenuLabels;
   readonly notificationsBell: NotificationsBellLabels;
+  readonly languageSelector: LanguageSelectorLabels;
+  readonly languageSaveError: Readonly<Record<'am' | 'en', string>>;
   readonly tenantSwitcher: TenantSwitcherLabels;
   readonly sidebar: AppSidebarLabels;
   readonly drawer: AppMobileDrawerLabels;
@@ -406,8 +410,11 @@ export type {
 </script>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { nextTick, ref } from 'vue';
 import { useTenantStore } from '@/stores/tenant';
+import { useLocaleStore } from '@/stores/locale';
+import type { SupportedLocale } from '@/stores/locale';
+import { saveLocalePreference } from '@/features/locale/api';
 
 import SkipToContent from '@/layouts/AppShell/SkipToContent';
 import MaintenanceBanner from '@/layouts/AppShell/MaintenanceBanner';
@@ -417,6 +424,7 @@ import AranaBrand from '@/layouts/AppShell/AranaBrand';
 import UserMenu from '@/layouts/AppShell/UserMenu';
 import NotificationsBell from '@/layouts/AppShell/NotificationsBell';
 import NotificationsCenter from '@/features/notifications/NotificationsCenter.vue';
+import LanguageSelector from '@/layouts/AppShell/LanguageSelector/LanguageSelector.vue';
 import CalendarPreferenceControl from '@/layouts/AppShell/CalendarPreferenceControl.vue';
 import ThemePreferenceControl from '@/layouts/ThemePreferenceControl.vue';
 import TenantSwitcher from '@/layouts/AppShell/TenantSwitcher';
@@ -544,6 +552,9 @@ defineSlots<{
 // Tenant switching (internal — the shell updates the store directly)
 // -----------------------------------------------------------------------------
 const tenantStore = useTenantStore();
+const localeStore = useLocaleStore();
+const isLocaleSaving = ref(false);
+const localeSaveFailed = ref(false);
 
 function onTenantSelect(payload: { id: number }): void {
   /*
@@ -571,9 +582,34 @@ function onUserMenuSelect(payload: { id: string }): void {
   emit('user-menu-select', payload);
 }
 
+function closeNotifications(): void {
+  isNotificationsOpen.value = false;
+  void nextTick(() => {
+    document.querySelector<HTMLButtonElement>('[data-testid="notifications-bell-trigger"]')?.focus();
+  });
+}
+
 function onNotificationsOpen(): void {
-  isNotificationsOpen.value = !isNotificationsOpen.value;
-  if (isNotificationsOpen.value) emit('notifications-open');
+  if (isNotificationsOpen.value) {
+    closeNotifications();
+    return;
+  }
+  isNotificationsOpen.value = true;
+  emit('notifications-open');
+}
+
+async function onLanguageSelect(payload: { code: SupportedLocale }): Promise<void> {
+  if (isLocaleSaving.value || payload.code === localeStore.locale) return;
+  isLocaleSaving.value = true;
+  localeSaveFailed.value = false;
+  try {
+    await saveLocalePreference(payload.code);
+    localeStore.setLocale(payload.code);
+  } catch {
+    localeSaveFailed.value = true;
+  } finally {
+    isLocaleSaving.value = false;
+  }
 }
 
 function onMaintenanceAction(): void {
@@ -643,11 +679,14 @@ function onMaintenanceDismiss(): void {
           @open="onNotificationsOpen"
         />
 
-        <!--
-          LanguageSelector (Unit 11.13) is deliberately NOT rendered
-          here — Freeze §9.3 / §20.3. Add its import and composition
-          when POST /api/locale exists.
-        -->
+        <LanguageSelector
+          :labels="labels.languageSelector"
+          :disabled="isLocaleSaving"
+          @select="onLanguageSelect"
+        />
+        <span v-if="localeSaveFailed" class="app-shell__language-error" role="alert">
+          {{ labels.languageSaveError[localeStore.locale] }}
+        </span>
 
         <TenantSwitcher
           :labels="labels.tenantSwitcher"
@@ -711,7 +750,7 @@ function onMaintenanceDismiss(): void {
 
     <NotificationsCenter
       :open="isNotificationsOpen"
-      @close="isNotificationsOpen = false"
+      @close="closeNotifications"
     />
 
     <!-- ============================================================
@@ -753,6 +792,12 @@ function onMaintenanceDismiss(): void {
   justify-content: flex-end;
   width: 100%;
   padding: var(--arna-space-2) var(--arna-space-4);
+}
+
+.app-shell__language-error {
+  color: var(--arna-color-text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.25;
 }
 
 .app-shell {
