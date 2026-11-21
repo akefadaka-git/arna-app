@@ -1543,6 +1543,18 @@ export const masesShellLabels: AppShellLabels = {
     disabledReason: 'ማሳወቂያዎች በቅርቡ ይመጣሉ',
   },
 
+  languageSelector: {
+    triggerAriaLabel: {
+      am: 'ቋንቋ ይምረጡ',
+      en: 'Select language',
+    },
+  },
+
+  languageSaveError: {
+    am: 'የቋንቋ ምርጫዎን ማስቀመጥ አልተቻለም። እንደገና ይሞክሩ።',
+    en: 'Your language preference could not be saved. Please try again.',
+  },
+
   tenantSwitcher: {
     triggerAriaLabel: 'ተቋም ይምረጡ',
   },
