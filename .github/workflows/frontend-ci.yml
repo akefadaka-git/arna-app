@@ -23,6 +23,8 @@ jobs:
           cache: npm
       - name: Install locked dependencies
         run: npm ci
+      - name: Verify canonical ARNA brand identity
+        run: npm run test:brand-identity-contract
       - name: Report dependency vulnerability inventory
         shell: bash
         run: |
@@ -38,6 +40,18 @@ jobs:
           '
       - name: Block high and critical dependency advisories
         run: npm audit --audit-level=high
+      - name: Generate four-application AST import graph
+        run: npm run analyze:imports
+      - name: Upload import graph audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arna-import-graph-${{ github.sha }}
+          path: |
+            artifacts/arna-application-import-graph.json
+            artifacts/ARNA_APPLICATION_IMPORT_GRAPH.md
+          if-no-files-found: warn
+          retention-days: 14
       - name: Type-check and build all applications
         run: npm run build
       - name: Verify root entry points, local assets, and deployment policy
@@ -83,7 +97,9 @@ jobs:
           PREVIEW_PID=$!
           trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 40); do
-            if curl --fail --silent http://127.0.0.1:4175/tests/fixtures/visual-library.html >/dev/null; then break; fi
+            if curl --fail --silent http://127.0.0.1:4175/tests/fixtures/visual-library.html >/dev/null; then
+              break
+            fi
             sleep 1
           done
           curl --fail --silent http://127.0.0.1:4175/tests/fixtures/visual-library.html >/dev/null
@@ -103,7 +119,9 @@ jobs:
           PREVIEW_PID=$!
           trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 40); do
-            if curl --fail --silent http://127.0.0.1:4176/tests/fixtures/a4-components.html >/dev/null; then break; fi
+            if curl --fail --silent http://127.0.0.1:4176/tests/fixtures/a4-components.html >/dev/null; then
+              break
+            fi
             sleep 1
           done
           curl --fail --silent http://127.0.0.1:4176/tests/fixtures/a4-components.html >/dev/null
@@ -115,11 +133,41 @@ jobs:
           PREVIEW_PID=$!
           trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 40); do
-            if curl --fail --silent http://127.0.0.1:4177/tests/fixtures/a4-file-uploader.html >/dev/null; then break; fi
+            if curl --fail --silent http://127.0.0.1:4177/tests/fixtures/a4-file-uploader.html >/dev/null; then
+              break
+            fi
             sleep 1
           done
           curl --fail --silent http://127.0.0.1:4177/tests/fixtures/a4-file-uploader.html >/dev/null
           A4_FILE_UPLOADER_URL=http://127.0.0.1:4177/tests/fixtures/a4-file-uploader.html npm run test:a4-file-uploader-browser
+      - name: Verify shared DatePicker browser interactions
+        shell: bash
+        run: |
+          npx vite --mode workspace --host 127.0.0.1 --port 4174 --strictPort > "$RUNNER_TEMP/date-picker-preview.log" 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4174/tests/fixtures/date-picker.html >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4174/tests/fixtures/date-picker.html >/dev/null
+          DATE_PICKER_URL=http://127.0.0.1:4174/tests/fixtures/date-picker.html npx playwright test tests/date-picker-browser.spec.mjs
+      - name: Verify mounted Workspace, Portal and Admin shells
+        shell: bash
+        run: |
+          npx vite --mode workspace --host 127.0.0.1 --port 4175 --strictPort > "$RUNNER_TEMP/app-shells-preview.log" 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4175/tests/fixtures/app-shells.html >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4175/tests/fixtures/app-shells.html >/dev/null
+          APP_SHELLS_URL=http://127.0.0.1:4175/tests/fixtures/app-shells.html npm run test:app-shells-browser
       - name: Upload versioned static build outputs
         uses: actions/upload-artifact@v4
         with:

@@ -102,13 +102,13 @@ export type PermissionGateMode = 'any' | 'all';
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesPermissionGateWarned = new Set<string>();
+const __arnaPermissionGateWarned = new Set<string>();
 
-function __masesPermissionGateWarnOnce(key: string, message: string): void {
-  if (__masesPermissionGateWarned.has(key)) {
+function __arnaPermissionGateWarnOnce(key: string, message: string): void {
+  if (__arnaPermissionGateWarned.has(key)) {
     return;
   }
-  __masesPermissionGateWarned.add(key);
+  __arnaPermissionGateWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -179,7 +179,7 @@ const permissions = computed<string[]>(() => {
 // -----------------------------------------------------------------------------
 
 if (import.meta.env.DEV && permissions.value.length === 0) {
-  __masesPermissionGateWarnOnce(
+  __arnaPermissionGateWarnOnce(
     'permission-gate:empty-permission',
     '[PermissionGate] `permission` is empty or contains only empty ' +
       'strings. The gate will always deny. Supply at least one ' +

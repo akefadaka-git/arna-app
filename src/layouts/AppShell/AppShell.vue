@@ -43,29 +43,29 @@
             runtime behavior is unchanged.
 
  1.0.3  — brand slot fallback (CR-BRAND1):
-          · The `#brand` forwarding slot now renders <MASESBrand /> as
+          · The `#brand` forwarding slot now renders <AranaBrand /> as
             its fallback content when no consumer supplies the slot.
             Previously the region rendered empty for both current
             consumers (AuthenticatedLayout.vue v1.0.3, PortalLayout.vue
             v1.1.0), producing a header with no visible brand.
           · The `<slot name="brand" />` in the AppHeader forwarding
-            block becomes `<slot name="brand"><MASESBrand /></slot>`.
+            block becomes `<slot name="brand"><AranaBrand /></slot>`.
             Vue's standard slot-fallback semantics apply: if a
             consumer of AppShell supplies `#brand` content, that
-            content wins and MASESBrand is not rendered. This is the
+            content wins and AranaBrand is not rendered. This is the
             intended extension point for future white-label or
             embedded shells — the default brand is a convenience, not
             a lock-in.
           · A new import:
-              import MASESBrand from '@/layouts/AppShell/MASESBrand';
-            The barrel (MASESBrand/index.ts, v1.0.0) is the companion
+              import AranaBrand from '@/layouts/AppShell/AranaBrand';
+            The barrel (AranaBrand/index.ts, v1.0.0) is the companion
             file in this CR.
           · The `defineSlots` comment for `brand` is updated to
             document the fallback. The slot's type signature
             (`brand?(): unknown`) is unchanged — slot fallback does
             not affect the declared type; the same contract holds.
           · The companion change in @/router/shell-labels (v1.9.0)
-            adds `masesBrandLabels`, which MASESBrand.vue imports as
+            adds `aranaBrandLabels`, which AranaBrand.vue imports as
             its only dependency. That file is also part of CR-BRAND1.
           · No change to any other slot, prop, emit, or DOM region.
             The `nav`, `actions`, `header-actions`, `footer`, and
@@ -78,33 +78,33 @@
 
  1.0.4  — footer slot fallback (CR-FOOTER1):
           · The `#footer` forwarding slot now renders
-            <MASESFooterContent /> as its fallback content when no
+            <AranaFooterContent /> as its fallback content when no
             consumer supplies the slot. Previously the region rendered
             empty for both current consumers (AuthenticatedLayout.vue
             v1.0.3, PortalLayout.vue v1.1.0), producing a footer with
             only the version string in its end region.
           · The `<slot name="footer" />` in the AppFooter forwarding
             block becomes
-              <slot name="footer"><MASESFooterContent /></slot>.
+              <slot name="footer"><AranaFooterContent /></slot>.
             Vue's standard slot-fallback semantics apply: a consumer
-            that supplies `#footer` content wins; MASESFooterContent
+            that supplies `#footer` content wins; AranaFooterContent
             is not rendered in that case. This preserves the extension
             point for white-label shells and test harnesses.
           · A new import:
-              import MASESFooterContent
-                from '@/layouts/AppShell/MASESFooterContent';
-            The barrel (MASESFooterContent/index.ts, v1.0.0) is the
+              import AranaFooterContent
+                from '@/layouts/AppShell/AranaFooterContent';
+            The barrel (AranaFooterContent/index.ts, v1.0.0) is the
             companion file in this CR.
           · The `defineSlots` comment for `footer` is updated to
             document the fallback. The slot's type signature
             (`footer?(): unknown`) is unchanged.
           · The companion change in @/router/shell-labels (v1.10.0)
-            adds `masesFooterLabels`, which MASESFooterContent.vue
+            adds `aranaFooterLabels`, which AranaFooterContent.vue
             imports. That file is also part of CR-FOOTER1.
           · `footerVersion` and `footerCopyright` props flow to
             AppFooter unchanged. AppFooter's `version` region
             continues to render the version string at the footer's
-            end position. MASESFooterContent renders the copyright
+            end position. AranaFooterContent renders the copyright
             and the link row in the footer's middle region; the
             `footerCopyright` prop is therefore unused by MASES (the
             layouts pass no value for it) but remains available to
@@ -140,7 +140,7 @@
    │ SkipToContent (off-screen; first focusable)     │
    │ MaintenanceBanner (optional, per shell state)   │
    │ AppHeader (sticky, full width)                  │
-   │   ├── #brand     → MASESBrand (default)         │
+   │   ├── #brand     → AranaBrand (default)         │
    │   ├── #nav       → consumer-supplied            │
    │   └── #actions   → NotificationsBell,           │
    │                    TenantSwitcher, UserMenu     │
@@ -150,7 +150,7 @@
    ├──────────────────────┴──────────────────────────┤
    │ AppFooter (full width)                          │
    │   ├── start      → footerCopyright prop         │
-   │   ├── middle     → MASESFooterContent (default) │
+   │   ├── middle     → AranaFooterContent (default) │
    │   └── end        → footerVersion prop           │
    └────────────────────────────────────────────────┘
 
@@ -175,12 +175,12 @@
  -----------------------------------------------------------------------------
  Brand slot — default content (CR-BRAND1)
  -----------------------------------------------------------------------------
- The `#brand` forwarding slot renders <MASESBrand /> as its fallback
+ The `#brand` forwarding slot renders <AranaBrand /> as its fallback
  content when the consumer of AppShell supplies nothing:
 
      <template #brand>
        <slot name="brand">
-         <MASESBrand />
+         <AranaBrand />
        </slot>
      </template>
 
@@ -202,8 +202,8 @@
       default. Neither file is modified by CR-BRAND1.
 
  The brand strings live in @/router/shell-labels (v1.9.0) as
- `masesBrandLabels`. The component is
- layouts/AppShell/MASESBrand/MASESBrand.vue. See that file and the
+ `aranaBrandLabels`. The component is
+ layouts/AppShell/AranaBrand/AranaBrand.vue. See that file and the
  CR-BRAND1 block in shell-labels.ts for the derivation of the
  header's short form (ማሌ ዓርና + ማሴስ) and for why the corporate
  emblem is not rendered in the header.
@@ -211,12 +211,12 @@
  -----------------------------------------------------------------------------
  Footer slot — default content (CR-FOOTER1)
  -----------------------------------------------------------------------------
- The `#footer` forwarding slot renders <MASESFooterContent /> as its
+ The `#footer` forwarding slot renders <AranaFooterContent /> as its
  fallback content when the consumer of AppShell supplies nothing:
 
      <template #footer>
        <slot name="footer">
-         <MASESFooterContent />
+         <AranaFooterContent />
        </slot>
      </template>
 
@@ -236,11 +236,11 @@
 
    · AppFooter's `start` region is driven by its `copyright` prop.
      MASES does not supply that prop — the copyright line is rendered
-     by MASESFooterContent inside the middle region instead. The
+     by AranaFooterContent inside the middle region instead. The
      `copyright` prop remains available to other consumers of
      AppShell.
 
-   · AppFooter's `middle` region receives MASESFooterContent. Inside
+   · AppFooter's `middle` region receives AranaFooterContent. Inside
      that region the content lays out as a mobile stack and a desktop
      row — copyright at the left edge, link row at the right edge.
 
@@ -249,8 +249,8 @@
      renders at the footer's far right, as it did before this CR.
 
  The footer content strings live in @/router/shell-labels (v1.10.0)
- as `masesFooterLabels`. The component is
- layouts/AppShell/MASESFooterContent/MASESFooterContent.vue. See
+ as `aranaFooterLabels`. The component is
+ layouts/AppShell/AranaFooterContent/AranaFooterContent.vue. See
  that file and the CR-FOOTER1 block in shell-labels.ts for the
  derivation of the copyright template, the choice of the Ethiopic
  colon, and the reasons social link labels are deferred.
@@ -267,7 +267,7 @@
    SkipToContent       (11.1)  — first focusable element
    MaintenanceBanner   (11.3)  — conditional, per `maintenance` prop
    AppHeader           (11.10) — with slots populated below
-   MASESBrand      (CR-BRAND1) — default content of the #brand slot
+   AranaBrand      (CR-BRAND1) — default content of the #brand slot
    UserMenu            (11.11) — in the header's actions region
    NotificationsBell   (11.12) — in the header's actions region;
                                  disabled per §20.2
@@ -275,7 +275,7 @@
    AppSidebar          (11.16) — in the aside column
    CalendarContext     (11.15) — below the sidebar
    AppFooter           (11.2)  — bottom
-   MASESFooterContent
+   AranaFooterContent
                    (CR-FOOTER1)— default content of the #footer slot
    AppMobileDrawer     (11.17) — teleported to <body>; state-owned
 
@@ -283,8 +283,8 @@
  Sticky positioning and z-index
  -----------------------------------------------------------------------------
  The header is sticky (via AppHeader's own `sticky=true` default), using
- --mases-z-raised (10). The sidebar is also sticky (top: header height).
- The SkipToContent link uses --mases-z-sticky (200), which is above
+ --arna-z-raised (10). The sidebar is also sticky (top: header height).
+ The SkipToContent link uses --arna-z-sticky (200), which is above
  both. AppMobileDrawer uses the native top-layer of <dialog>, above
  everything.
 
@@ -293,9 +293,9 @@
  -----------------------------------------------------------------------------
  Every user-facing string is consumer-supplied via `labels`, or via the
  composed units' own labels (all forwarded from `labels` here, except
- MASESBrand and MASESFooterContent, which read their own strings from
+ AranaBrand and AranaFooterContent, which read their own strings from
  @/router/shell-labels). The only string literal in this file is the
- default `skipToContentTargetId` (`'mases-main-content'`), which is a
+ default `skipToContentTargetId` (`'arna-main-content'`), which is a
  DOM id — not user-facing text.
 
  -----------------------------------------------------------------------------
@@ -329,9 +329,9 @@
  BASIC + COMPOSITE:
 
    - SkipToContent is the first element in DOM order. Its target is the
-     <main> with id `mases-main-content` and tabindex="-1" — see the
+     <main> with id `arna-main-content` and tabindex="-1" — see the
      response preamble §"Skip target".
-   - <main id="mases-main-content" tabindex="-1"> is the page's primary
+   - <main id="arna-main-content" tabindex="-1"> is the page's primary
      landmark. tabindex="-1" is required so keyboard focus follows the
      skip-link's hash navigation.
    - <aside> wraps the sidebar column: complementary-landmark semantics.
@@ -340,15 +340,14 @@
    - The composed units carry their own semantics (AppHeader has
      role="banner"; AppFooter has role="contentinfo"; AppMobileDrawer
      is a native <dialog>).
-   - MASESBrand contributes text inside the banner landmark as its
+   - AranaBrand contributes text inside the banner landmark as its
      first content — screen readers reach it first when navigating by
      landmark. Its own accessibility notes live in that file.
-   - MASESFooterContent contributes text and links inside the
+   - AranaFooterContent contributes text and links inside the
      contentinfo landmark. Its own accessibility notes live in that
      file.
-   - Reduced motion: the only animated element in this file is the
-     AppShell itself, which has no animation. A defensive no-op block
-     is kept for future revisions.
+   - Reduced motion: this shell defines no animation or transition.
+     Composed child controls own their respective motion contracts.
 =============================================================================
 -->
 
@@ -414,7 +413,7 @@ import SkipToContent from '@/layouts/AppShell/SkipToContent';
 import MaintenanceBanner from '@/layouts/AppShell/MaintenanceBanner';
 import AppHeader from '@/layouts/AppShell/AppHeader';
 import AppHeaderNavigation from '@/layouts/AppShell/AppHeaderNavigation/AppHeaderNavigation.vue';
-import MASESBrand from '@/layouts/AppShell/MASESBrand';
+import AranaBrand from '@/layouts/AppShell/AranaBrand';
 import UserMenu from '@/layouts/AppShell/UserMenu';
 import NotificationsBell from '@/layouts/AppShell/NotificationsBell';
 import NotificationsCenter from '@/features/notifications/NotificationsCenter.vue';
@@ -424,7 +423,7 @@ import TenantSwitcher from '@/layouts/AppShell/TenantSwitcher';
 import AppSidebar from '@/layouts/AppShell/AppSidebar';
 import CalendarContext from '@/layouts/AppShell/CalendarContext';
 import AppFooter from '@/layouts/AppShell/AppFooter';
-import MASESFooterContent from '@/layouts/AppShell/MASESFooterContent';
+import AranaFooterContent from '@/layouts/AppShell/AranaFooterContent';
 import AppMobileDrawer from '@/layouts/AppShell/AppMobileDrawer';
 
 interface Props {
@@ -454,7 +453,7 @@ interface Props {
   /**
    * Footer copyright text. Passed through to AppFooter. Unused by
    * MASES today — the copyright line is rendered by
-   * MASESFooterContent in the footer's middle region. Available to
+   * AranaFooterContent in the footer's middle region. Available to
    * other consumers of AppShell.
    */
   footerCopyright?: string;
@@ -466,7 +465,7 @@ interface Props {
 
   /**
    * The id of the skip-link's target element. Defaults to
-   * 'mases-main-content' — the id this component assigns to its
+   * 'arna-main-content' — the id this component assigns to its
    * <main>. Consumers should not override this unless they are also
    * rendering their own <main> (see the file header comment
    * §"Accessibility").
@@ -500,7 +499,7 @@ withDefaults(defineProps<Props>(), {
   maintenance: null,
   footerCopyright: undefined,
   footerVersion: undefined,
-  skipToContentTargetId: 'mases-main-content',
+  skipToContentTargetId: 'arna-main-content',
 });
 
 const emit = defineEmits<{
@@ -516,7 +515,7 @@ const emit = defineEmits<{
 
 defineSlots<{
   /**
-   * The AppHeader brand region. Defaults to <MASESBrand /> when the
+   * The AppHeader brand region. Defaults to <AranaBrand /> when the
    * consumer supplies no content; supply content to override the
    * default (white-label builds, embedded surfaces, test harnesses).
    * See the file header §"Brand slot — default content (CR-BRAND1)".
@@ -530,7 +529,7 @@ defineSlots<{
    */
   'header-actions'?(): unknown;
   /**
-   * The AppFooter middle region. Defaults to <MASESFooterContent />
+   * The AppFooter middle region. Defaults to <AranaFooterContent />
    * when the consumer supplies no content; supply content to override
    * the default (white-label builds, embedded surfaces, test
    * harnesses). See the file header §"Footer slot — default content
@@ -624,7 +623,7 @@ function onMaintenanceDismiss(): void {
     >
       <template #brand>
         <slot name="brand">
-          <MASESBrand />
+          <AranaBrand />
         </slot>
       </template>
 
@@ -723,11 +722,11 @@ function onMaintenanceDismiss(): void {
       :version="footerVersion"
     >
       <slot name="footer">
-        <MASESFooterContent />
-        <div class="app-shell__footer-preferences">
-          <ThemePreferenceControl />
-        </div>
+        <AranaFooterContent />
       </slot>
+      <div class="app-shell__footer-preferences">
+        <ThemePreferenceControl />
+      </div>
     </AppFooter>
 
     <!-- ============================================================
@@ -753,7 +752,7 @@ function onMaintenanceDismiss(): void {
   display: flex;
   justify-content: flex-end;
   width: 100%;
-  padding: var(--mases-space-2) var(--mases-space-4);
+  padding: var(--arna-space-2) var(--arna-space-4);
 }
 
 .app-shell {
@@ -761,8 +760,8 @@ function onMaintenanceDismiss(): void {
   flex-direction: column;
   min-height: 100vh;
   min-height: 100dvh;
-  background-color: var(--mases-color-surface-page);
-  color: var(--mases-color-text-primary);
+  background-color: var(--arna-color-surface-page);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
 }
 
@@ -805,12 +804,12 @@ function onMaintenanceDismiss(): void {
     flex-direction: column;
     flex-shrink: 0;
     align-self: flex-start;
-    width: var(--mases-shell-sidebar-width);
-    height: calc(100dvh - var(--mases-shell-header-height));
+    width: var(--arna-shell-sidebar-width);
+    height: calc(100dvh - var(--arna-shell-header-height));
     position: sticky;
-    top: var(--mases-shell-header-height);
-    border-inline-end: 1px solid var(--mases-color-border-subtle);
-    background-color: var(--mases-color-surface-raised);
+    top: var(--arna-shell-header-height);
+    border-inline-end: 1px solid var(--arna-color-border-subtle);
+    background-color: var(--arna-color-surface-raised);
     /*
      * `overflow: clip` (with a `hidden` fallback) keeps the aside's
      * contents from spilling past its own box without creating a
@@ -820,7 +819,7 @@ function onMaintenanceDismiss(): void {
      */
     overflow: hidden; /* fallback */
     overflow: clip;
-    overflow-clip-margin: var(--mases-space-2);
+    overflow-clip-margin: var(--arna-space-2);
   }
 }
 
@@ -859,9 +858,9 @@ function onMaintenanceDismiss(): void {
 
 .app-shell__aside-calendar {
   flex-shrink: 0;
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-3);
-  border-block-start: 1px solid var(--mases-color-border-subtle);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-3);
+  border-block-start: 1px solid var(--arna-color-border-subtle);
 }
 
 /* ============================================================================
@@ -873,8 +872,8 @@ function onMaintenanceDismiss(): void {
 .app-shell__main {
   flex: 1 1 auto;
   min-width: 0;
-  padding-block: var(--mases-shell-content-padding-mobile);
-  padding-inline: var(--mases-shell-content-padding-mobile);
+  padding-block: var(--arna-shell-content-padding-mobile);
+  padding-inline: var(--arna-shell-content-padding-mobile);
   /*
    * The main landmark is a skip-link target, so keep a visible focus
    * indicator when keyboard navigation transfers focus here. The
@@ -882,53 +881,41 @@ function onMaintenanceDismiss(): void {
    */
   outline: 3px solid transparent;
   outline-offset: -3px;
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
 }
 
 /* Tablet and up: tablet content padding. */
 @media (min-width: 640px) {
   .app-shell__main {
-    padding-block: var(--mases-shell-content-padding-tablet);
-    padding-inline: var(--mases-shell-content-padding-tablet);
+    padding-block: var(--arna-shell-content-padding-tablet);
+    padding-inline: var(--arna-shell-content-padding-tablet);
   }
 }
 
 /* Desktop and up: desktop content padding. */
 @media (min-width: 1024px) {
   .app-shell__main {
-    padding-block: var(--mases-shell-content-padding-desktop);
-    padding-inline: var(--mases-shell-content-padding-desktop);
+    padding-block: var(--arna-shell-content-padding-desktop);
+    padding-inline: var(--arna-shell-content-padding-desktop);
   }
 }
 
 .app-shell__main:focus-visible {
-  outline-color: var(--mases-color-state-focus-ring);
+  outline-color: var(--arna-color-state-focus-ring);
 }
 
 .app-shell__content {
   /*
    * A wide-but-bounded content column, centered within <main>. The
-   * value comes from --mases-container-page-wide (1440px), which sits
+   * value comes from --arna-container-page-wide (1440px), which sits
    * between the standard page container (1280px) and unconstrained
    * full-width — a compromise that keeps tables and dashboards from
    * stretching indefinitely on ultra-wide monitors without clipping
    * data-heavy pages on standard desktops.
    */
   width: 100%;
-  max-width: var(--mases-container-page-wide);
+  max-width: var(--arna-container-page-wide);
   margin-inline: auto;
-}
-
-/* ============================================================================
-   Reduced motion
-   ---------------------------------------------------------------------------
-   No animation is defined in this file. A defensive no-op block is
-   kept for future revisions that might add one.
-   ============================================================================ */
-@media (prefers-reduced-motion: reduce) {
-  .app-shell {
-    /* no-op placeholder — see comment above */
-  }
 }
 
 /* ============================================================================
