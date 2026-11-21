@@ -121,9 +121,9 @@ test('application source has no active legacy MASES component or DOM namespaces'
 
 test('ARNA semantic tokens preserve the legacy token substrate through aliases', async () => {
   const source = await read('../src/styles/tokens.css');
-  assert.match(source, /--arna-space-1:\\s*var\\(--mases-space-1\\)/);
-  assert.match(source, /--arna-color-text-primary:\\s*var\\(--mases-color-text-primary\\)/);
-  assert.match(source, /--arna-focus-ring-width:\\s*var\\(--mases-focus-ring-width\\)/);
+  assert.ok(source.includes('--arna-space-1: var(--mases-space-1);'));
+  assert.ok(source.includes('--arna-color-text-primary: var(--mases-color-text-primary);'));
+  assert.ok(source.includes('--arna-focus-ring-width: var(--mases-focus-ring-width);'));
 });
 
 test('active Combobox DOM identifiers use the ARNA namespace', async () => {
