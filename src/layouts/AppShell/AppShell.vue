@@ -143,7 +143,7 @@
    │   ├── #brand     → AranaBrand (default)         │
    │   ├── #nav       → consumer-supplied            │
    │   └── #actions   → NotificationsBell,           │
-   │                    TenantSwitcher, UserMenu     │
+   │                    LanguageSelector, TenantSwitcher, UserMenu │
    ├──────────────────────┬──────────────────────────┤
    │ AppSidebar           │ <main>                   │
    │ + CalendarContext    │   <slot />               │
@@ -168,7 +168,7 @@
      main.ts (Stage 12).
    - It does NOT register the auth service, the API client, or the
      router. All of those are Stage 12+ work.
-   - It does NOT render the LanguageSelector — Freeze §9.3 / §20.3.
+   - It renders LanguageSelector and persists locale preference through the locale service; navigation remains consumer-owned.
    - It does NOT navigate. The header slot content and the launcher
      route handle navigation; AppShell only re-emits.
 
@@ -352,6 +352,8 @@
 -->
 
 <script lang="ts">
+import type { LanguageSelectorLabels } from '@/layouts/AppShell/LanguageSelector/LanguageSelector.vue';
+
 /*
  * Exported types.
  *
@@ -381,8 +383,6 @@ export interface AppShellMaintenanceState {
  * Consumer-supplied, translated labels for every shell-region
  * component. Grouped here so AppShell has a single labels prop.
  */
-import type { LanguageSelectorLabels } from '@/layouts/AppShell/LanguageSelector/LanguageSelector.vue';
-
 export interface AppShellLabels {
   /** Skip-link text. E.g. "Skip to content" / "ወደ ዋና ይዘት ዝለል". */
   readonly skipToContent: string;
