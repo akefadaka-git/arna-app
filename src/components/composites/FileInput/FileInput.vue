@@ -130,13 +130,13 @@ export type FileInputRejectReason = 'too-large' | 'wrong-type' | 'unknown';
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesFileInputWarned = new Set<string>();
+const __arnaFileInputWarned = new Set<string>();
 
-function __masesFileInputWarnOnce(key: string, message: string): void {
-  if (__masesFileInputWarned.has(key)) {
+function __arnaFileInputWarnOnce(key: string, message: string): void {
+  if (__arnaFileInputWarned.has(key)) {
     return;
   }
-  __masesFileInputWarned.add(key);
+  __arnaFileInputWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -144,7 +144,7 @@ function __masesFileInputWarnOnce(key: string, message: string): void {
 /*
  * Module-level counter for auto-generated input ids.
  */
-let __masesFileInputIdCounter = 0;
+let __arnaFileInputIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -240,7 +240,7 @@ const hasCustomSlot = computed<boolean>(() => slots.default !== undefined);
 if (import.meta.env.DEV && !hasCustomSlot.value) {
   const l = props.labels;
   if (!l || !l.chooseFile || !l.chooseFiles || !l.dropHere || !l.dropZone) {
-    __masesFileInputWarnOnce(
+    __arnaFileInputWarnOnce(
       'file-input:missing-labels',
       '[FileInput] the default presentation is rendering but the ' +
         '`labels` prop is missing or incomplete. All four strings ' +
@@ -254,7 +254,7 @@ if (import.meta.env.DEV && !hasCustomSlot.value) {
 // -----------------------------------------------------------------------------
 // Generated id
 // -----------------------------------------------------------------------------
-const inputId = `mases-file-input-${++__masesFileInputIdCounter}`;
+const inputId = `arna-file-input-${++__arnaFileInputIdCounter}`;
 
 // -----------------------------------------------------------------------------
 // Refs
@@ -520,36 +520,36 @@ const dropZoneAriaLabel = computed<string | undefined>(() => {
   justify-content: center;
   width: 100%;
   min-height: 8rem;
-  padding-block: var(--mases-space-6);
-  padding-inline: var(--mases-space-6);
-  background-color: var(--mases-color-surface-page);
-  border: 2px dashed var(--mases-color-border-default);
-  border-radius: var(--mases-radius-md);
-  color: var(--mases-color-text-secondary);
+  padding-block: var(--arna-space-6);
+  padding-inline: var(--arna-space-6);
+  background-color: var(--arna-color-surface-page);
+  border: 2px dashed var(--arna-color-border-default);
+  border-radius: var(--arna-radius-md);
+  color: var(--arna-color-text-secondary);
   text-align: center;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    border-color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    border-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 /* Drag-over state — brand-tinted drop target. */
 .file-input[data-drag-over='true'] {
-  background-color: var(--mases-color-state-selected);
-  border-color: var(--mases-color-border-brand);
-  color: var(--mases-color-text-primary);
+  background-color: var(--arna-color-state-selected);
+  border-color: var(--arna-color-border-brand);
+  color: var(--arna-color-text-primary);
 }
 
 /* Invalid state. */
 .file-input[data-invalid='true'] {
-  border-color: var(--mases-color-border-danger);
+  border-color: var(--arna-color-border-danger);
 }
 
 /* Disabled state. */
 .file-input--disabled,
 .file-input[data-disabled='true'] {
-  background-color: var(--mases-color-surface-disabled);
-  border-color: var(--mases-color-border-subtle);
-  color: var(--mases-color-state-disabled-text);
+  background-color: var(--arna-color-surface-disabled);
+  border-color: var(--arna-color-border-subtle);
+  color: var(--arna-color-state-disabled-text);
   cursor: not-allowed;
 }
 
@@ -560,49 +560,49 @@ const dropZoneAriaLabel = computed<string | undefined>(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
 }
 
 .file-input__trigger {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-2);
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-4);
+  gap: var(--arna-space-2);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-4);
   appearance: none;
-  background-color: var(--mases-color-action-secondary);
-  border: 1px solid var(--mases-color-action-secondary);
-  border-radius: var(--mases-radius-md);
-  color: var(--mases-color-text-inverse);
+  background-color: var(--arna-color-action-secondary);
+  border: 1px solid var(--arna-color-action-secondary);
+  border-radius: var(--arna-radius-md);
+  color: var(--arna-color-text-inverse);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
   cursor: pointer;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    border-color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    border-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .file-input__trigger:hover:not(:disabled) {
-  background-color: var(--mases-color-action-secondary-hover);
-  border-color: var(--mases-color-action-secondary-hover);
+  background-color: var(--arna-color-action-secondary-hover);
+  border-color: var(--arna-color-action-secondary-hover);
 }
 
 .file-input__trigger:active:not(:disabled) {
-  background-color: var(--mases-color-action-secondary-active);
-  border-color: var(--mases-color-action-secondary-active);
+  background-color: var(--arna-color-action-secondary-active);
+  border-color: var(--arna-color-action-secondary-active);
 }
 
 .file-input__trigger:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 .file-input__trigger:disabled {
-  background-color: var(--mases-color-surface-disabled);
-  border-color: var(--mases-color-border-subtle);
-  color: var(--mases-color-state-disabled-text);
+  background-color: var(--arna-color-surface-disabled);
+  border-color: var(--arna-color-border-subtle);
+  color: var(--arna-color-state-disabled-text);
   cursor: not-allowed;
 }
 
@@ -614,9 +614,9 @@ const dropZoneAriaLabel = computed<string | undefined>(() => {
   margin: 0;
   color: inherit;
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
 }
 
 /* ============================================================================
@@ -647,7 +647,7 @@ const dropZoneAriaLabel = computed<string | undefined>(() => {
 @media (max-width: 639px) {
   .file-input {
     min-height: 6rem;
-    padding-inline: var(--mases-space-4);
+    padding-inline: var(--arna-space-4);
   }
 }
 

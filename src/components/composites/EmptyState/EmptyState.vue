@@ -136,13 +136,13 @@ export type EmptyStateActionVariant = 'primary' | 'secondary' | 'ghost';
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesEmptyStateWarned = new Set<string>();
+const __arnaEmptyStateWarned = new Set<string>();
 
-function __masesEmptyStateWarnOnce(key: string, message: string): void {
-  if (__masesEmptyStateWarned.has(key)) {
+function __arnaEmptyStateWarnOnce(key: string, message: string): void {
+  if (__arnaEmptyStateWarned.has(key)) {
     return;
   }
-  __masesEmptyStateWarned.add(key);
+  __arnaEmptyStateWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -242,7 +242,7 @@ const hasActionSlot = computed<boolean>(() => slots.action !== undefined);
  * Guard: both `icon` and the `illustration` slot supplied.
  */
 if (import.meta.env.DEV && props.icon !== undefined && hasIllustrationSlot.value) {
-  __masesEmptyStateWarnOnce(
+  __arnaEmptyStateWarnOnce(
     'empty-state:icon-and-illustration',
     '[EmptyState] both `icon` and the `illustration` slot are supplied. ' +
       'The slot takes precedence; `icon` is ignored. Supply only one.',
@@ -258,7 +258,7 @@ if (
   props.actionLabel.trim() !== '' &&
   hasActionSlot.value
 ) {
-  __masesEmptyStateWarnOnce(
+  __arnaEmptyStateWarnOnce(
     'empty-state:action-label-and-slot',
     '[EmptyState] both `actionLabel` and the `action` slot are ' +
       'supplied. The slot takes precedence; the default button is not ' +
@@ -462,19 +462,19 @@ function onActionClick(): void {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   width: 100%;
-  padding-block: var(--mases-space-8);
-  padding-inline: var(--mases-space-6);
+  padding-block: var(--arna-space-8);
+  padding-inline: var(--arna-space-6);
   text-align: center;
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
 }
 
 /* Larger top padding when a visual is present so the visual reads as
    a distinct hero region rather than floating at the top edge. */
 .empty-state--has-visual {
-  padding-block-start: var(--mases-space-10);
+  padding-block-start: var(--arna-space-10);
 }
 
 /* ============================================================================
@@ -484,13 +484,13 @@ function onActionClick(): void {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--mases-color-icon-secondary);
+  color: var(--arna-color-icon-secondary);
   /*
    * Bottom margin separates the visual from the title. Uses space-4
    * (16px) so it does not compete with the root's gap for rhythm; the
    * larger visual-to-text spacing is intentional.
    */
-  margin-block-end: var(--mases-space-4);
+  margin-block-end: var(--arna-space-4);
 }
 
 /* ============================================================================
@@ -499,11 +499,11 @@ function onActionClick(): void {
 .empty-state__title {
   margin: 0;
   max-width: 32em;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-heading-4);
-  line-height: var(--mases-line-height-heading-4);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-heading-4);
+  line-height: var(--arna-line-height-heading-4);
+  font-weight: var(--arna-font-weight-semibold);
   /*
    * Amharic truncates at word boundaries via the design system's
    * inherited overflow-wrap rules (Design System §3.7 W4).
@@ -522,11 +522,11 @@ function onActionClick(): void {
    * readability bound, not a design value.
    */
   max-width: 40em;
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: anywhere;
 }
 
@@ -537,14 +537,14 @@ function onActionClick(): void {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-wrap: wrap;
   /*
    * Extra top margin separates the action from the text above it.
    * space-4 (16px) reads as a deliberate break without overwhelming
    * the tight rhythm of the text region.
    */
-  margin-block-start: var(--mases-space-4);
+  margin-block-start: var(--arna-space-4);
 }
 
 /* ============================================================================
@@ -552,12 +552,12 @@ function onActionClick(): void {
    ============================================================================ */
 @media (max-width: 639px) {
   .empty-state {
-    padding-block: var(--mases-space-6);
-    padding-inline: var(--mases-space-4);
+    padding-block: var(--arna-space-6);
+    padding-inline: var(--arna-space-4);
   }
 
   .empty-state--has-visual {
-    padding-block-start: var(--mases-space-8);
+    padding-block-start: var(--arna-space-8);
   }
 
   /*

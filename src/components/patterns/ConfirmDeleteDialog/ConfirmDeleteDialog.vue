@@ -199,7 +199,7 @@ export interface ConfirmDeleteDialogLabels {
 /*
  * Module-level counter for auto-generated ids.
  */
-let __masesConfirmDeleteDialogIdCounter = 0;
+let __arnaConfirmDeleteDialogIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -277,7 +277,7 @@ const emit = defineEmits<{
 // -----------------------------------------------------------------------------
 // Generated ids
 // -----------------------------------------------------------------------------
-const baseId = `mases-confirm-delete-${++__masesConfirmDeleteDialogIdCounter}`;
+const baseId = `arna-confirm-delete-${++__arnaConfirmDeleteDialogIdCounter}`;
 const inputId = `${baseId}-input`;
 const errorId = `${baseId}-error`;
 
@@ -493,11 +493,11 @@ function handleModalClose(): void {
    ============================================================================ */
 .confirm-delete-dialog__message {
   margin: 0;
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
   /*
    * `pre-line` preserves the newlines a consumer might include in the
    * message string, without collapsing multiple spaces. Same as
@@ -512,19 +512,19 @@ function handleModalClose(): void {
 .confirm-delete-dialog__confirmation {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
-  margin-block-start: var(--mases-space-4);
+  gap: var(--arna-space-2);
+  margin-block-start: var(--arna-space-4);
 }
 
 /* ============================================================================
    Prompt label
    ============================================================================ */
 .confirm-delete-dialog__prompt {
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
   /*
    * Amharic truncation uses word-boundary wrapping (Design System
    * §3.7 W4).
@@ -537,11 +537,11 @@ function handleModalClose(): void {
    ============================================================================ */
 .confirm-delete-dialog__error {
   margin: 0;
-  color: var(--mases-color-text-danger);
+  color: var(--arna-color-text-danger);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: anywhere;
 }
 

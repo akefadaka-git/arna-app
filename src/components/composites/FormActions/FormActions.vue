@@ -125,13 +125,13 @@
  * Module-level Set for deduplicated development warnings.
  * Same pattern as other composites and primitives.
  */
-const __masesFormActionsWarned = new Set<string>();
+const __arnaFormActionsWarned = new Set<string>();
 
-function __masesFormActionsWarnOnce(key: string, message: string): void {
-  if (__masesFormActionsWarned.has(key)) {
+function __arnaFormActionsWarnOnce(key: string, message: string): void {
+  if (__arnaFormActionsWarned.has(key)) {
     return;
   }
-  __masesFormActionsWarned.add(key);
+  __arnaFormActionsWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -253,7 +253,7 @@ const hasAnyAction = computed<boolean>(
  * Warn once per module load.
  */
 if (import.meta.env.DEV && primaryLabelTrimmed.value.length === 0) {
-  __masesFormActionsWarnOnce(
+  __arnaFormActionsWarnOnce(
     'form-actions:empty-primary-label',
     '[FormActions] primaryLabel is empty or whitespace-only. No primary ' +
       'button will be rendered. Supply a translated label such as ' +
@@ -339,7 +339,7 @@ function onTertiaryClick(): void {
 .form-actions {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-wrap: wrap;
   width: 100%;
 }

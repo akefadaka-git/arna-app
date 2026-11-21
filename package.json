@@ -1,10 +1,10 @@
 {
-  "name": "mases",
+  "name": "arna-ui",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "//": [
-    "MASES Phase 2 UI — Production Package Manifest",
+    "ARNA Platform UI — production package manifest",
     "ARCHITECTURE: one repository, one package.json, one node_modules tree, shared design system, four independent static builds, no Node.js runtime in production.",
     "ENTRY POINTS: workspace-entry/ -> workspace; portal-entry/ -> shareholder portal; admin-entry/ -> administration; public-entry/ -> public corporate website.",
     "BUILD OUTPUT: dist/; dist-portal/; dist-admin/; dist-public/.",
@@ -42,11 +42,14 @@
     "test:workspace-dashboard-route-contract": "node --test tests/workspace-dashboard-route-contract.test.mjs",
     "test:public-browser": "playwright test tests/public-browser-contract.spec.mjs",
     "test:error-handling-contract": "node --test tests/error-handling-contract.test.mjs",
+    "analyze:imports": "node scripts/build-application-import-graph.mjs",
     "test:visual-library-contract": "node --test tests/visual-library-contract.test.mjs",
     "test:visual-panel-integration-contract": "node --test tests/visual-panel-integration-contract.test.mjs",
     "test:a4-component-risk-contract": "node --test tests/a4-component-risk-contract.test.mjs",
     "test:a4-components-browser": "playwright test tests/a4-components-browser.spec.mjs",
-    "test:a4-file-uploader-browser": "playwright test tests/a4-file-uploader-browser.spec.mjs"
+    "test:a4-file-uploader-browser": "playwright test tests/a4-file-uploader-browser.spec.mjs",
+    "test:brand-identity-contract": "node --test tests/brand-identity-contract.test.mjs",
+    "test:app-shells-browser": "playwright test tests/app-shells-browser.spec.mjs"
   },
   "dependencies": {
     "axios": "1.21.0",
