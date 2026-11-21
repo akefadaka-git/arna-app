@@ -24,7 +24,8 @@ test('mobile navigation remains delegated to the existing accessible drawer', ()
 });
 
 test('shell layout retains reduced-motion and forced-colors accommodations', () => {
-  assert.match(shell, /prefers-reduced-motion:\s*reduce/);
+  // AppShell defines no animation or transition; child controls own their motion policy.
+  assert.doesNotMatch(shell, /(?:animation|transition)\s*:/);
   assert.match(shell, /forced-colors:\s*active/);
   assert.match(shell, /outline-color:\s*Highlight/);
 });
