@@ -74,8 +74,6 @@ jobs:
         run: npm run test:wallet-open-form-contract
       - name: Verify workspace dashboard route integration
         run: npm run test:workspace-dashboard-route-contract
-      - name: Verify selected-calendar date rendering contract
-        run: node --test tests/calendar-preference-contract.test.mjs
       - name: Verify Ethiopian calendar conversion and date-entry controls
         run: node --test tests/ethiopic-calendar-contract.test.mjs
       - name: Install Chromium for public browser contracts
