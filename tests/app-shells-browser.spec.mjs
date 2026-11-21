@@ -32,8 +32,8 @@ for (const surface of surfaces) {
       throw new Error(`Mounted shell missing. Runtime errors: ${runtimeErrors.join(' | ')}. Fixture error: ${fixtureError}. App markup: ${markup.slice(0, 1200)}`);
     }
     await expect(root).toBeVisible();
-    await expect(page.getByTestId('arana-brand-root')).toBeVisible();
-    await expect(page.getByTestId('arana-brand-product')).toContainText('ARNA');
+    await expect(page.getByTestId('arna-brand-root')).toBeVisible();
+    await expect(page.getByTestId('arna-brand-product')).toContainText('ARNA');
     await expect(page.getByTestId('app-shell-main')).toHaveAttribute('id', 'arna-main-content');
     await expect(page.getByTestId('shell-child-page')).toContainText(surface.label);
 
