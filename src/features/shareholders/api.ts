@@ -635,3 +635,31 @@ export function cancelCertificate(
     body,
   );
 }
+
+
+/** A read-only annual dividend statement row for the authenticated shareholder. */
+export interface MyDividendStatement {
+  readonly id: number;
+  readonly financial_year: string;
+  readonly distribution_reference: string;
+  readonly resolution_reference: string;
+  readonly declared_on: string;
+  readonly payment_due_on: string;
+  readonly currency: string;
+  readonly eligible_share_quantity: string;
+  readonly gross_amount: string;
+  readonly withholding_amount: string;
+  readonly net_amount: string;
+  readonly cash_paid_amount: string | null;
+  readonly penalty_offset_amount: string | null;
+  readonly payable_status: string | null;
+}
+
+/** GET /api/shareholders/me/dividends — server-resolved self-service history. */
+export async function getMyDividendStatements(): Promise<readonly MyDividendStatement[]> {
+  const response = await api.getWithMeta<readonly MyDividendStatement[]>(
+    '/api/shareholders/me/dividends',
+    { params: { per_page: 100 } },
+  );
+  return response.data;
+}

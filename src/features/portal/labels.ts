@@ -1312,3 +1312,41 @@ export const myLoanDetailPageLabels: MyLoanDetailPageLabels = {
   notFoundDescription:
     'ይህ ብድር አልተገኘም ወይም የማየት ፈቃድ የለዎትም።',
 };
+
+// -----------------------------------------------------------------------------
+// My annual dividends — shareholder self-service statement
+// -----------------------------------------------------------------------------
+export interface MyDividendsPageLabels extends PortalSharedLabels {
+  readonly pageTitle: string;
+  readonly pageDescription: string;
+  readonly yearLabel: string;
+  readonly referenceLabel: string;
+  readonly sharesLabel: string;
+  readonly grossLabel: string;
+  readonly taxLabel: string;
+  readonly netLabel: string;
+  readonly dueLabel: string;
+  readonly statusLabel: string;
+  readonly emptyTitle: string;
+  readonly emptyDescription: string;
+  readonly paidLabel: string;
+  readonly pendingLabel: string;
+}
+
+export const myDividendsPageLabels: MyDividendsPageLabels = {
+  ...shared,
+  pageTitle: 'የትርፍ ድርሻዬ',
+  pageDescription: 'በየዓመቱ የተፈቀዱልዎ የትርፍ ድርሻዎችና የክፍያ ሁኔታ።',
+  yearLabel: 'የሒሳብ ዓመት',
+  referenceLabel: 'የውሳኔ ማጣቀሻ',
+  sharesLabel: 'ብቁ አክሲዮኖች',
+  grossLabel: 'ጠቅላላ ድርሻ',
+  taxLabel: 'ተቀናሽ',
+  netLabel: 'የሚከፈል',
+  dueLabel: 'የመክፈያ ቀን',
+  statusLabel: 'ሁኔታ',
+  emptyTitle: 'የትርፍ ድርሻ መረጃ የለም',
+  emptyDescription: 'የተፈቀደ የትርፍ ድርሻ ሲኖር እዚህ ይታያል።',
+  paidLabel: 'ተከፍሏል',
+  pendingLabel: 'በመክፈያ ሂደት ላይ',
+};
