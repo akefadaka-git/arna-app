@@ -303,7 +303,7 @@ const regionCount = computed<number>(() => {
    widths. Tablet and desktop switch to a horizontal row at the
    min-width breakpoint below.
 
-   Inline padding consumes --mases-shell-chrome-padding-inline-*, the
+   Inline padding consumes --arna-shell-chrome-padding-inline-*, the
    shared chrome rhythm used by AppHeader, AppFooter, and
    SkipToContent. See tokens.css v1.2.0 for the value provenance. The
    values are numerically identical to the previous space-4 (mobile)
@@ -315,22 +315,22 @@ const regionCount = computed<number>(() => {
   align-items: flex-start;
   justify-content: flex-start;
   flex-wrap: wrap;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   width: 100%;
-  padding-block: var(--mases-space-4);
-  padding-inline: var(--mases-shell-chrome-padding-inline-mobile);
+  padding-block: var(--arna-space-4);
+  padding-inline: var(--arna-shell-chrome-padding-inline-mobile);
   /*
    * A single subtle rule separates the footer from the content
    * above. The rule is drawn on the footer, not as a border on the
    * content, so a page whose content ends without a border still
    * gets a clean transition into the footer.
    */
-  border-block-start: 2px solid var(--mases-color-gold-500);
-  background-color: var(--mases-color-surface-raised);
-  color: var(--mases-color-text-secondary);
+  border-block-start: 2px solid var(--arna-color-gold-500);
+  background-color: var(--arna-color-surface-raised);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   /*
    * Amharic-safe wrapping on every region — the footer is the most
    * likely place for a long, translated Ethiopic line to appear.
@@ -356,8 +356,8 @@ const regionCount = computed<number>(() => {
   .app-footer {
     flex-direction: row;
     align-items: center;
-    gap: var(--mases-space-3) var(--mases-space-6);
-    padding-inline: var(--mases-shell-chrome-padding-inline-tablet);
+    gap: var(--arna-space-3) var(--arna-space-6);
+    padding-inline: var(--arna-shell-chrome-padding-inline-tablet);
   }
 
   .app-footer[data-region-count='2'],
@@ -422,7 +422,7 @@ const regionCount = computed<number>(() => {
    * contain Ethiopic text in a future revision. The reset is deliberate,
    * not a default.
    */
-  letter-spacing: var(--mases-letter-spacing-normal);
+  letter-spacing: var(--arna-letter-spacing-normal);
   font-variant-numeric: tabular-nums;
 }
 

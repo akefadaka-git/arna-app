@@ -134,7 +134,7 @@
  * Distinct prefix from the other primitives so no collision is possible
  * in a document that uses several of them.
  */
-let __masesTooltipIdCounter = 0;
+let __arnaTooltipIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -193,7 +193,7 @@ defineSlots<{
 /*
  * Generated id — evaluated once per component instance.
  */
-const tooltipId = `mases-tooltip-${++__masesTooltipIdCounter}`;
+const tooltipId = `arna-tooltip-${++__arnaTooltipIdCounter}`;
 
 /*
  * Dismissed state. Set to true on Escape; reset on mouseleave or on
@@ -311,7 +311,7 @@ function onFocusOut(event: FocusEvent): void {
    ============================================================================ */
 .tooltip {
   position: absolute;
-  z-index: var(--mases-z-tooltip);
+  z-index: var(--arna-z-tooltip);
   display: inline-block;
   /*
    * Structural bound: roughly 20 characters per line at the current
@@ -319,17 +319,17 @@ function onFocusOut(event: FocusEvent): void {
    * See the file header comment §"Token discipline".
    */
   max-width: 20em;
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-3);
-  background-color: var(--mases-color-surface-inverse);
-  color: var(--mases-color-text-inverse);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-3);
+  background-color: var(--arna-color-surface-inverse);
+  color: var(--arna-color-text-inverse);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
   text-align: center;
   white-space: normal;
-  border-radius: var(--mases-radius-sm);
+  border-radius: var(--arna-radius-sm);
   /*
    * Hidden by default. The element remains in the DOM so that
    * aria-describedby resolves at all times.
@@ -341,8 +341,8 @@ function onFocusOut(event: FocusEvent): void {
      produce a hover/leave flicker loop. */
   pointer-events: none;
   transition:
-    opacity var(--mases-duration-fast) var(--mases-easing-standard),
-    visibility var(--mases-duration-fast) var(--mases-easing-standard);
+    opacity var(--arna-duration-fast) var(--arna-easing-standard),
+    visibility var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 /* Show on hover or keyboard focus within the wrapper. */
@@ -367,7 +367,7 @@ function onFocusOut(event: FocusEvent): void {
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
-  margin-bottom: var(--mases-space-2);
+  margin-bottom: var(--arna-space-2);
 }
 
 /* ============================================================================
@@ -377,7 +377,7 @@ function onFocusOut(event: FocusEvent): void {
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  margin-top: var(--mases-space-2);
+  margin-top: var(--arna-space-2);
 }
 
 /* ============================================================================
@@ -387,7 +387,7 @@ function onFocusOut(event: FocusEvent): void {
   right: 100%;
   top: 50%;
   transform: translateY(-50%);
-  margin-right: var(--mases-space-2);
+  margin-right: var(--arna-space-2);
 }
 
 /* ============================================================================
@@ -397,7 +397,7 @@ function onFocusOut(event: FocusEvent): void {
   left: 100%;
   top: 50%;
   transform: translateY(-50%);
-  margin-left: var(--mases-space-2);
+  margin-left: var(--arna-space-2);
 }
 
 /* ============================================================================

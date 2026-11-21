@@ -1,11 +1,11 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — BaseIcon
+ ARNA Phase 2 UI — BaseIcon
 =============================================================================
 
  File:      mase_app/src/components/primitives/BaseIcon/BaseIcon.vue
  Layer:     1 (Primitives)
- Version:   2.0.0
+ Version:   2.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.19
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -16,16 +16,16 @@
  Renders a Lucide icon from a frozen, statically-imported registry.
 
    - TypeScript-safe `name` prop (IconName union derived from ICONS).
-   - Size resolves through Tier 2 CSS variables (`--mases-icon-*`) with
+   - Size resolves through Tier 2 CSS variables (`--arna-icon-*`) with
      pixel fallbacks so the primitive is correct even when tokens are
      not yet loaded (SSR, isolated storybook, test environment).
    - Stroke weight per size, frozen by Design System §7.4.
-   - Color accepts Tier 2 token names, `--mases-*` var names, CSS-wide
+   - Color accepts Tier 2 token names, `--arna-*` var names, CSS-wide
      keywords, `currentColor`, and any CSS color the runtime browser
      understands (hex / rgb / hsl / hwb / lab / lch / oklab / oklch /
      color() / named colors).
    - Correct accessibility semantics (decorative by default; role="img"
-     + aria-label when `ariaLabel` is supplied).
+     + aria-label or aria-labelledby when an accessible name is supplied).
    - Missing icons render a layout-preserving placeholder rather than
      collapsing the surrounding layout, and warn in development.
 
@@ -41,19 +41,19 @@
  -----------------------------------------------------------------------------
  Size mapping — CSS-variable-first
  -----------------------------------------------------------------------------
- Each size resolves to `var(--mases-icon-<size>, <fallback>px)`:
+ Each size resolves to `var(--arna-icon-<size>, <fallback>px)`:
 
-   xs  → --mases-icon-xs   12px   stroke 1.75
-   sm  → --mases-icon-sm   16px   stroke 1.75
-   md  → --mases-icon-md   20px   stroke 2      (default)
-   lg  → --mases-icon-lg   24px   stroke 2
-   xl  → --mases-icon-xl   32px   stroke 2
-   2xl → --mases-icon-2xl  48px   stroke 1.5
-   3xl → --mases-icon-3xl  64px   stroke 1.5
-   4xl → --mases-icon-4xl  96px   stroke 1.5
+   xs  → --arna-icon-xs   12px   stroke 1.75
+   sm  → --arna-icon-sm   16px   stroke 1.75
+   md  → --arna-icon-md   20px   stroke 2      (default)
+   lg  → --arna-icon-lg   24px   stroke 2
+   xl  → --arna-icon-xl   32px   stroke 2
+   2xl → --arna-icon-2xl  48px   stroke 1.5
+   3xl → --arna-icon-3xl  64px   stroke 1.5
+   4xl → --arna-icon-4xl  96px   stroke 1.5
 
  The pixel values are fallbacks, not the source of truth. When the
- Design System retunes `--mases-icon-md`, every BaseIcon follows. The
+ Design System retunes `--arna-icon-md`, every BaseIcon follows. The
  fallback exists only so that the primitive is correct in contexts
  where the token stylesheet is not yet applied.
 
@@ -87,23 +87,24 @@
  5. Runtime CSS color        → pass through               (via CSS.supports
                                                            in the browser;
                                                            regex in SSR)
- 6. Anything else            → var(--mases-<value>)       (Tier 2 token)
+ 6. Anything else            → var(--arna-<value>)       (Tier 2 token)
 
  Note: a token whose name collides with a valid CSS color (e.g. a
  hypothetical token literally named "red") loses to CSS. This is
  intentional — the CSS value is the more likely intent. Token names
- must use hyphenated MASES conventions (e.g. `color-icon-primary`).
+ must use hyphenated ARNA conventions (e.g. `color-icon-primary`).
 
  -----------------------------------------------------------------------------
  Accessibility
  -----------------------------------------------------------------------------
- Decorative (ariaLabel omitted) — DEFAULT and CORRECT for the vast
- majority of uses (button icons, form field adornments, list icons,
- table cell icons). aria-hidden="true"; removed from the a11y tree.
+ Decorative (ariaLabel and ariaLabelledBy omitted) — DEFAULT and CORRECT
+ for the vast majority of uses (button icons, form field adornments,
+ list icons, table cell icons). aria-hidden="true"; removed from the a11y tree.
 
- Informative (ariaLabel provided) — role="img" + aria-label. Use only
- when the icon is the SOLE carrier of meaning (status glyph with no
- adjacent text, icon-only toolbar button whose label is on the parent).
+ Informative (ariaLabel or ariaLabelledBy provided) — role="img" with
+ the corresponding accessible-name attribute. Use only when the icon
+ is the SOLE carrier of meaning (status glyph with no adjacent text,
+ icon-only toolbar button whose label is on the parent).
 
  -----------------------------------------------------------------------------
  Test hooks
@@ -129,7 +130,7 @@
 
 <script lang="ts">
 /*
- * Frozen registry of Lucide icons used by the MASES Phase 2 UI.
+ * Frozen registry of Lucide icons used by the ARNA Phase 2 UI.
  *
  * Consumers receive the union type IconName (below) which restricts the
  * `name` prop to the keys of ICONS. Adding an icon requires a Change
@@ -576,17 +577,23 @@ interface Props {
   /** Color. See the file header §"Color resolution". */
   color?: IconColor;
   /**
-   * Accessible name. When omitted the icon is decorative
-   * (aria-hidden="true"). When provided the icon is informative
-   * (role="img" + aria-label).
+   * Accessible name. When omitted, unless ariaLabelledBy is supplied,
+   * the icon is decorative (aria-hidden="true").
    */
   ariaLabel?: string;
+
+  /**
+   * ID reference(s) of element(s) that provide the accessible name.
+   * Takes precedence over ariaLabel when both are supplied.
+   */
+  ariaLabelledBy?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   size: 'md',
   color: undefined,
   ariaLabel: undefined,
+  ariaLabelledBy: undefined,
 });
 
 /* ────────────────────────────────────────────────────────────────────────
@@ -594,7 +601,7 @@ const props = withDefaults(defineProps<Props>(), {
  * ──────────────────────────────────────────────────────────────────────── */
 
 interface SizeSpec {
-  /** Fallback pixel size used only when `--mases-icon-<size>` is undefined. */
+  /** Fallback pixel size used only when `--arna-icon-<size>` is undefined. */
   readonly px: number;
   /** Frozen stroke weight (Design System §7.4). */
   readonly stroke: number;
@@ -603,14 +610,14 @@ interface SizeSpec {
 }
 
 const SIZE_MAP: Readonly<Record<IconSize, SizeSpec>> = Object.freeze({
-  'xs':  { px: 12, stroke: 1.75, token: '--mases-icon-xs'  },
-  'sm':  { px: 16, stroke: 1.75, token: '--mases-icon-sm'  },
-  'md':  { px: 20, stroke: 2,    token: '--mases-icon-md'  },
-  'lg':  { px: 24, stroke: 2,    token: '--mases-icon-lg'  },
-  'xl':  { px: 32, stroke: 2,    token: '--mases-icon-xl'  },
-  '2xl': { px: 48, stroke: 1.5,  token: '--mases-icon-2xl' },
-  '3xl': { px: 64, stroke: 1.5,  token: '--mases-icon-3xl' },
-  '4xl': { px: 96, stroke: 1.5,  token: '--mases-icon-4xl' },
+  'xs':  { px: 12, stroke: 1.75, token: '--arna-icon-xs'  },
+  'sm':  { px: 16, stroke: 1.75, token: '--arna-icon-sm'  },
+  'md':  { px: 20, stroke: 2,    token: '--arna-icon-md'  },
+  'lg':  { px: 24, stroke: 2,    token: '--arna-icon-lg'  },
+  'xl':  { px: 32, stroke: 2,    token: '--arna-icon-xl'  },
+  '2xl': { px: 48, stroke: 1.5,  token: '--arna-icon-2xl' },
+  '3xl': { px: 64, stroke: 1.5,  token: '--arna-icon-3xl' },
+  '4xl': { px: 96, stroke: 1.5,  token: '--arna-icon-4xl' },
 });
 
 /* ────────────────────────────────────────────────────────────────────────
@@ -691,11 +698,11 @@ const resolvedColor = computed<string>(() => {
   // 3-5. Anything the runtime recognises as a color wins.
   if (isCssColor(value)) return value;
 
-  // 6. Fallback: assume a Tier 2 MASES token name. An unknown token
+  // 6. Fallback: assume a Tier 2 ARNA token name. An unknown token
   //    produces an undefined variable; the browser falls back to the
   //    inherited color, so the icon remains visible. A dev warning is
   //    emitted below.
-  return `var(--mases-${value})`;
+  return `var(--arna-${value})`;
 });
 
 /* ────────────────────────────────────────────────────────────────────────
@@ -736,7 +743,7 @@ if (import.meta.env.DEV) {
         // eslint-disable-next-line no-console
         console.info(
           `[BaseIcon] color "${value}" is not a recognised CSS color; ` +
-            `treating it as the MASES token "--mases-${value}".`,
+            `treating it as the ARNA token "--arna-${value}".`,
         );
       }
     },
@@ -759,7 +766,9 @@ const inlineStyle = computed<Record<string, string>>(() => ({
  * Accessibility
  * ──────────────────────────────────────────────────────────────────────── */
 
-const isDecorative = computed<boolean>(() => props.ariaLabel === undefined);
+const isDecorative = computed<boolean>(
+  () => props.ariaLabel === undefined && props.ariaLabelledBy === undefined,
+);
 </script>
 
 <template>
@@ -777,7 +786,8 @@ const isDecorative = computed<boolean>(() => props.ariaLabel === undefined);
     :class="['base-icon', `base-icon--${resolvedSizeKey}`]"
     :aria-hidden="isDecorative ? 'true' : undefined"
     :role="isDecorative ? undefined : 'img'"
-    :aria-label="isDecorative ? undefined : ariaLabel"
+    :aria-label="isDecorative || ariaLabelledBy !== undefined ? undefined : ariaLabel"
+    :aria-labelledby="isDecorative ? undefined : ariaLabelledBy"
     focusable="false"
     data-testid="base-icon-root"
     :data-icon-name="name"
@@ -796,7 +806,8 @@ const isDecorative = computed<boolean>(() => props.ariaLabel === undefined);
     :class="['base-icon', 'base-icon--missing', `base-icon--${resolvedSizeKey}`]"
     :aria-hidden="isDecorative ? 'true' : undefined"
     :role="isDecorative ? undefined : 'img'"
-    :aria-label="isDecorative ? undefined : ariaLabel"
+    :aria-label="isDecorative || ariaLabelledBy !== undefined ? undefined : ariaLabel"
+    :aria-labelledby="isDecorative ? undefined : ariaLabelledBy"
     data-testid="base-icon-root"
     :data-icon-name="name"
     :data-size="resolvedSizeKey"

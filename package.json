@@ -1,5 +1,5 @@
 {
-  "name": "mases",
+  "name": "arna-ui",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -14,7 +14,9 @@
     "VERSION POLICY: direct dependencies remain exact x.y.z versions. Major upgrades require an explicit architecture decision.",
     "SECURITY: no secrets in this manifest. VITE_* values are inlined into client bundles and must contain no secrets. Production hosting serves static assets only.",
     "TOOLING DEFERRED: lint/format/test automation and dependency automation require separate bounded changes.",
-    "PUBLIC BUILD SMOKE: test:public-build-smoke verifies the independent public static build output."
+    "PUBLIC BUILD SMOKE: test:public-build-smoke verifies the independent public static build output.",
+    "DEPENDENCY SECURITY: minimatch is overridden to patched 11.0.1 for GHSA-g3hv-75wg-m249; retain only while the Vue language-core dependency requires the vulnerable 9.x range.",
+    "CI POLICY: the high/critical audit remains a blocking gate, but the functional test matrix is allowed to finish first so security and compatibility evidence are not lost."
   ],
   "engines": {
     "node": ">=20.0.0",
@@ -46,7 +48,10 @@
     "test:visual-panel-integration-contract": "node --test tests/visual-panel-integration-contract.test.mjs",
     "test:a4-component-risk-contract": "node --test tests/a4-component-risk-contract.test.mjs",
     "test:a4-components-browser": "playwright test tests/a4-components-browser.spec.mjs",
-    "test:a4-file-uploader-browser": "playwright test tests/a4-file-uploader-browser.spec.mjs"
+    "test:a4-file-uploader-browser": "playwright test tests/a4-file-uploader-browser.spec.mjs",
+    "analyze:imports": "node scripts/build-application-import-graph.mjs",
+    "test:brand-identity-contract": "node --test tests/brand-identity-contract.test.mjs",
+    "test:app-shells-browser": "playwright test tests/app-shells-browser.spec.mjs"
   },
   "dependencies": {
     "axios": "1.21.0",
@@ -64,5 +69,8 @@
     "typescript": "5.7.2",
     "vite": "6.4.5",
     "vue-tsc": "2.1.10"
+  },
+  "overrides": {
+    "minimatch": "11.0.1"
   }
 }

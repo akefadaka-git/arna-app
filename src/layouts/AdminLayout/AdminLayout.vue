@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — AdminLayout
+ ARNA Platform UI — AdminLayout
 =============================================================================
 
- File:      mase_app/src/layouts/AdminLayout/AdminLayout.vue
+ File:      arna-app/src/layouts/AdminLayout/AdminLayout.vue
  Layer:     Layouts (admin application shell)
  Version:   1.0.1
  Status:    ENHANCEMENT — logout history documentation
@@ -23,6 +23,14 @@
           No provide() context is established. See §"No provider at
           1.0.0" for the G1 Q2 decision that governs this.
 
+
+ 1.0.2  — align active shell identity with ARNA (local alias only):
+          · Imports the shared shell-label export under the local name
+            arnaShellLabels, matching the active product identity.
+          · The exported arnaShellLabels API remains unchanged for
+            compatibility with other consumers.
+          · No runtime behavior, routing, authorization, or menu
+            contracts changed.
 
  1.0.1  — correct logout history explanation (documentation only):
           · Clarifies that router.push preserves the prior route in
@@ -60,9 +68,9 @@
      · adminUserMenuItems      — the admin user menu
 
    @/router/shell-labels:
-     · masesShellLabels        — shell chrome labels (shared with the
-                                 workspace and portal builds; the
-                                 admin build consumes them unchanged)
+     · arnaShellLabels         — local alias for the shared
+                                 arnaShellLabels export; consumed
+                                 by the admin build without API changes
 
    @/features/auth/service:
      · logout                  — the shared logout action
@@ -75,8 +83,8 @@
  The admin build consumes the same shell chrome as the workspace and
  portal builds. AppShell renders the header, sidebar, drawer, footer,
  notification bell, tenant switcher, brand mark, and user menu using
- the shared masesShellLabels object and the shared masesBrandLabels
- and masesFooterLabels objects from @/router/shell-labels.
+ the shared shell-label object (locally aliased as arnaShellLabels) and the shared aranaBrandLabels
+ and aranaFooterLabels objects from @/router/shell-labels.
 
  The admin build declares no chrome labels of its own. Its only
  distinct label-bearing surface is the sidebar navigation tree, which
@@ -230,8 +238,8 @@
     does not exist. The workspace user menu carries only logout today.
     Adding one is a future CR, not a defect.
 
- 3. The admin build reuses masesShellLabels, masesBrandLabels, and
-    masesFooterLabels unchanged from shell-labels.ts. If a future CR
+ 3. The admin build reuses arnaShellLabels, aranaBrandLabels, and
+    aranaFooterLabels unchanged from shell-labels.ts. If a future CR
     diverges admin chrome from workspace chrome, the divergence is a
     new export in shell-labels.ts, not a per-build override here.
 =============================================================================
@@ -243,7 +251,7 @@ import { useRouter, RouterView } from 'vue-router';
 import AppShell from '@/layouts/AppShell';
 import { logout } from '@/features/auth/service';
 
-import { masesShellLabels } from '@/router/shell-labels';
+import { arnaShellLabels as arnaShellLabels } from '@/router/shell-labels';
 import {
   adminNavItems,
   adminUserMenuItems,
@@ -352,7 +360,7 @@ async function onUserMenuSelect(payload: { id: string }): Promise<void> {
   <AppShell
     :nav-items="adminNavItems"
     :user-menu-items="adminUserMenuItems"
-    :labels="masesShellLabels"
+    :labels="arnaShellLabels"
     :footer-version="footerVersion"
     @user-menu-select="onUserMenuSelect"
   >
