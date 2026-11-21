@@ -205,14 +205,17 @@ test.describe('Mounted DataTable behavior', () => {
 
   test('selects individual rows and all rows on the current page', async ({ page }) => {
     const tableRegion = page.getByTestId('data-table-table-region');
-    const alphaCheckbox = tableRegion.getByRole('row').filter({ hasText: 'Alpha account' }).getByRole('checkbox');
-    await alphaCheckbox.evaluate((element) => (element).click());
+    const alphaCheckbox = tableRegion.getByTestId('data-table-cell-select')
+      .filter({ has: page.getByRole('checkbox', { name: 'Select Alpha account' }) })
+      .getByTestId('base-checkbox-root');
+    await alphaCheckbox.click();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1');
 
-    const selectAllCheckbox = tableRegion.getByTestId('data-table-header-select-all').getByRole('checkbox');
-    await selectAllCheckbox.evaluate((element) => (element).click());
+    const selectAllCheckbox = tableRegion.getByTestId('data-table-header-select-all')
+      .getByTestId('base-checkbox-root');
+    await selectAllCheckbox.click();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('row-1,row-2');
-    await selectAllCheckbox.evaluate((element) => (element).click());
+    await selectAllCheckbox.click();
     await expect(page.getByTestId('table-selected-keys')).toHaveText('');
   });
 
@@ -466,5 +469,78 @@ test.describe('Mounted navigation-search edge interactions', () => {
     await option.click();
     await expect(page.getByTestId('a4-shareholders-route')).toBeVisible();
     await expect(dialog).toBeHidden();
+  });
+});
+
+
+test.describe('PR #87 regression repairs', () => {
+  test('keeps the search combobox aria-expanded synchronized for open, Escape, and close-button paths', async ({ page }) => {
+    const trigger = page.getByTestId('app-header-search-trigger');
+    const searchInput = page.locator('.app-header-navigation__dialog input[role="combobox"]');
+    await expect(searchInput).toHaveAttribute('aria-expanded', 'false');
+
+    await trigger.click();
+    const dialog = page.getByRole('dialog', { name: 'ARNA ይፈልጉ' });
+    await expect(dialog).toBeVisible();
+    await expect(searchInput).toHaveAttribute('aria-expanded', 'true');
+
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+    await expect(searchInput).toHaveAttribute('aria-expanded', 'false');
+    await expect(trigger).toBeFocused();
+
+    await trigger.click();
+    await expect(searchInput).toHaveAttribute('aria-expanded', 'true');
+    await dialog.getByRole('button', { name: 'ፍለጋን ዝጋ' }).click();
+    await expect(dialog).toBeHidden();
+    await expect(searchInput).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  test('does not let an older locale-refresh response overwrite the newest inbox data', async ({ page }) => {
+    const item = (id, title) => ({
+      id,
+      title: { am: title, en: title },
+      body: null,
+      category: 'system',
+      priority: 'normal',
+      is_read: false,
+      created_at: '2026-11-15T10:00:00Z',
+      action: null,
+    });
+    const envelope = (entry) => ({
+      success: true,
+      data: {
+        items: [entry],
+        pagination: { page: 1, per_page: 20, total: 1 },
+        unread_count: 1,
+      },
+    });
+
+    let requestCount = 0;
+    let releaseFirst;
+    const firstResponseGate = new Promise((resolve) => { releaseFirst = resolve; });
+    await page.route('**/api/notifications**', async (route) => {
+      if (route.request().method() !== 'GET') return route.continue();
+      requestCount += 1;
+      if (requestCount === 1) {
+        await firstResponseGate;
+        await route.fulfill({ json: envelope(item('older', 'Older response')) });
+      } else {
+        await route.fulfill({ json: envelope(item('newer', 'Newest response')) });
+      }
+    });
+
+    await page.goto(baseUrl);
+    await page.getByTestId('open-notifications').click();
+    await expect.poll(() => requestCount).toBe(1);
+
+    // Changing locale starts a second request while the first is still pending.
+    await page.getByTestId('set-locale-en').click();
+    await expect.poll(() => requestCount).toBe(2);
+    await expect(page.getByText('Newest response')).toBeVisible();
+
+    releaseFirst();
+    await expect(page.getByText('Newest response')).toBeVisible();
+    await expect(page.getByText('Older response')).toHaveCount(0);
   });
 });

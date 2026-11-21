@@ -70,6 +70,7 @@ const labels = computed(() => localeStore.locale === 'en'
     });
 const navigationRoot = ref<HTMLElement | null>(null);
 const dialog = ref<HTMLDialogElement | null>(null);
+const isSearchOpen = ref(false);
 const query = ref('');
 const activeResultIndex = ref(-1);
 
@@ -117,10 +118,11 @@ const breadcrumbs = computed(() => route.matched
   .filter((item, index, all) => index === 0 || item.path !== all[index - 1]?.path));
 
 function openSearch(): void {
-  if (dialog.value?.open) return;
+  if (!dialog.value || dialog.value.open) return;
   query.value = '';
   activeResultIndex.value = -1;
-  dialog.value?.showModal();
+  dialog.value.showModal();
+  isSearchOpen.value = dialog.value.open;
 }
 
 function onGlobalKeydown(event: KeyboardEvent): void {
@@ -138,7 +140,16 @@ function restoreSearchFocus(): void {
 }
 
 function closeSearch(): void {
-  dialog.value?.close();
+  if (!dialog.value?.open) return;
+  dialog.value.close();
+  isSearchOpen.value = false;
+}
+
+function onSearchDialogClose(): void {
+  // Native Escape/cancel closure is outside Vue's reactive state system.
+  // Synchronize the state used by aria-expanded for every close path.
+  isSearchOpen.value = false;
+  restoreSearchFocus();
 }
 
 function navigate(item: SearchNavItem): void {
@@ -176,7 +187,7 @@ function navigate(item: SearchNavItem): void {
       <kbd class="app-header-navigation__search-shortcut">Ctrl / ⌘ K</kbd>
     </div>
 
-    <dialog ref="dialog" class="app-header-navigation__dialog" aria-labelledby="app-header-search-title" @close="restoreSearchFocus">
+    <dialog ref="dialog" class="app-header-navigation__dialog" aria-labelledby="app-header-search-title" @close="onSearchDialogClose">
       <form method="dialog" class="app-header-navigation__dialog-head">
         <div>
           <h2 id="app-header-search-title">{{ labels.title }}</h2>
@@ -196,7 +207,7 @@ function navigate(item: SearchNavItem): void {
           aria-autocomplete="list"
           :aria-label="labels.input"
           aria-controls="app-header-search-results"
-          :aria-expanded="dialog?.open ? 'true' : 'false'"
+          :aria-expanded="isSearchOpen ? 'true' : 'false'"
           :aria-activedescendant="activeResultIndex >= 0 ? `app-header-search-option-${activeResultIndex}` : undefined"
           :placeholder="labels.placeholder"
           @keydown="onSearchKeydown"
