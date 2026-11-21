@@ -127,13 +127,13 @@ export type ErrorStateVariant = 'danger' | 'warning';
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesErrorStateWarned = new Set<string>();
+const __arnaErrorStateWarned = new Set<string>();
 
-function __masesErrorStateWarnOnce(key: string, message: string): void {
-  if (__masesErrorStateWarned.has(key)) {
+function __arnaErrorStateWarnOnce(key: string, message: string): void {
+  if (__arnaErrorStateWarned.has(key)) {
     return;
   }
-  __masesErrorStateWarned.add(key);
+  __arnaErrorStateWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -255,7 +255,7 @@ if (
   hasDetailsSlot.value &&
   (props.detailsLabel === undefined || props.detailsLabel.trim() === '')
 ) {
-  __masesErrorStateWarnOnce(
+  __arnaErrorStateWarnOnce(
     'error-state:missing-details-label',
     '[ErrorState] the `details` slot is supplied but `detailsLabel` is ' +
       'empty or missing. The details content will render without the ' +
@@ -453,12 +453,12 @@ function onActionClick(): void {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   width: 100%;
-  padding-block: var(--mases-space-10);
-  padding-inline: var(--mases-space-6);
+  padding-block: var(--arna-space-10);
+  padding-inline: var(--arna-space-6);
   border: 1px solid transparent;
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
   text-align: center;
   font-family: inherit;
 }
@@ -467,15 +467,15 @@ function onActionClick(): void {
    Variants — same surface + border + text triples as Alert (Unit 9.12)
    ============================================================================ */
 .error-state--danger {
-  background-color: var(--mases-color-surface-danger);
-  border-color: var(--mases-color-border-danger);
-  color: var(--mases-color-text-danger);
+  background-color: var(--arna-color-surface-danger);
+  border-color: var(--arna-color-border-danger);
+  color: var(--arna-color-text-danger);
 }
 
 .error-state--warning {
-  background-color: var(--mases-color-surface-warning);
-  border-color: var(--mases-color-border-warning);
-  color: var(--mases-color-text-warning);
+  background-color: var(--arna-color-surface-warning);
+  border-color: var(--arna-color-border-warning);
+  color: var(--arna-color-text-warning);
 }
 
 /* ============================================================================
@@ -485,7 +485,7 @@ function onActionClick(): void {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-block-end: var(--mases-space-4);
+  margin-block-end: var(--arna-space-4);
   /* Inherits the variant's text color via currentColor. */
   color: currentColor;
 }
@@ -496,11 +496,11 @@ function onActionClick(): void {
 .error-state__title {
   margin: 0;
   max-width: 32em;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-heading-4);
-  line-height: var(--mases-line-height-heading-4);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-heading-4);
+  line-height: var(--arna-line-height-heading-4);
+  font-weight: var(--arna-font-weight-semibold);
   overflow-wrap: anywhere;
 }
 
@@ -510,11 +510,11 @@ function onActionClick(): void {
 .error-state__description {
   margin: 0;
   max-width: 40em;
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: anywhere;
 }
 
@@ -525,9 +525,9 @@ function onActionClick(): void {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-wrap: wrap;
-  margin-block-start: var(--mases-space-4);
+  margin-block-start: var(--arna-space-4);
 }
 
 /* ============================================================================
@@ -536,20 +536,20 @@ function onActionClick(): void {
 .error-state__details {
   width: 100%;
   max-width: 40em;
-  margin-block-start: var(--mases-space-4);
-  color: var(--mases-color-text-secondary);
+  margin-block-start: var(--arna-space-4);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
   text-align: start;
 }
 
 .error-state__details-summary {
   cursor: pointer;
-  padding-block: var(--mases-space-1);
+  padding-block: var(--arna-space-1);
   color: inherit;
-  font-weight: var(--mases-font-weight-medium);
+  font-weight: var(--arna-font-weight-medium);
   /*
    * The browser's default disclosure triangle is retained (browser
    * native, accessible, no JS). Customising it is deferred to a future
@@ -559,22 +559,22 @@ function onActionClick(): void {
 }
 
 .error-state__details-summary:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
-  border-radius: var(--mases-radius-sm);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
+  border-radius: var(--arna-radius-sm);
 }
 
 /* ============================================================================
    Details — body
    ============================================================================ */
 .error-state__details-body {
-  margin-block-start: var(--mases-space-2);
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-3);
-  background-color: var(--mases-color-surface-overlay);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-sm);
-  color: var(--mases-color-text-secondary);
+  margin-block-start: var(--arna-space-2);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-3);
+  background-color: var(--arna-color-surface-overlay);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-sm);
+  color: var(--arna-color-text-secondary);
   /*
    * Content is consumer-supplied. Long content (a stack trace, a
    * request id) may exceed the width; a scroll on overflow is the
@@ -590,7 +590,7 @@ function onActionClick(): void {
 .error-state__details-body--standalone {
   width: 100%;
   max-width: 40em;
-  margin-block-start: var(--mases-space-4);
+  margin-block-start: var(--arna-space-4);
   text-align: start;
 }
 
@@ -599,8 +599,8 @@ function onActionClick(): void {
    ============================================================================ */
 @media (max-width: 639px) {
   .error-state {
-    padding-block: var(--mases-space-8);
-    padding-inline: var(--mases-space-4);
+    padding-block: var(--arna-space-8);
+    padding-inline: var(--arna-space-4);
   }
 
   /* Stretch the action to full-width on mobile, matching EmptyState

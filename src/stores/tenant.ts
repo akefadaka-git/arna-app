@@ -40,10 +40,11 @@
  * -----------------------------------------------------------------------------
  * Storage (Architecture Freeze §13.4)
  * -----------------------------------------------------------------------------
- * The active tenant id is persisted under `mases.tenant_id` in
- * localStorage (§13.4, frozen). The storage is abstracted behind
- * TenantIdStorage so tests can isolate state without touching the
- * browser's global localStorage. The production default is localStorage.
+ * The active tenant id is persisted under `arna.tenant_id`; legacy
+ * `mases.tenant_id` is read as a migration fallback. New writes use
+ * the ARNA key and remove the legacy key. Storage is abstracted behind
+ * TenantIdStorage so tests can isolate state without touching the browser's
+ * global localStorage.
  *
  * -----------------------------------------------------------------------------
  * Bootstrap sequence (Stage 12 responsibility, documented here so the
@@ -89,19 +90,20 @@ export interface TenantIdStorage {
 }
 
 /**
- * The production default. Reads and writes `mases.tenant_id` in
- * localStorage, matching §13.4.
+ * The production default. Reads `arna.tenant_id` first, falls back to
+ * `mases.tenant_id`, and writes only the ARNA key.
  *
  * Parses defensively: a corrupted value (non-numeric, negative, zero,
  * or NaN) is treated as absent. The store then falls back to the
  * user's default tenant, which is the correct recovery behavior.
  */
 function createLocalStorageTenantIdStorage(): TenantIdStorage {
-  const KEY = 'mases.tenant_id';
+  const KEY = 'arna.tenant_id';
+  const LEGACY_KEY = 'mases.tenant_id';
 
   return {
     get(): number | null {
-      const raw = localStorage.getItem(KEY);
+      const raw = localStorage.getItem(KEY) ?? localStorage.getItem(LEGACY_KEY);
       if (raw === null) return null;
       const parsed = Number.parseInt(raw, 10);
       if (!Number.isFinite(parsed) || parsed <= 0) return null;
@@ -109,9 +111,11 @@ function createLocalStorageTenantIdStorage(): TenantIdStorage {
     },
     set(id: number): void {
       localStorage.setItem(KEY, String(id));
+      localStorage.removeItem(LEGACY_KEY);
     },
     clear(): void {
       localStorage.removeItem(KEY);
+      localStorage.removeItem(LEGACY_KEY);
     },
   };
 }

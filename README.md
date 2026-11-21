@@ -1,6 +1,6 @@
 # ARNA — Maale Arna Smart System | Frontend
 
-**ARNA is the master name for the Maale Arna Smart System. MASES is the established legacy/product name used during the transition.**
+**ARNA is the canonical product name for the Maale Arna Smart System. MASES is retained only as the historical/original system name and for explicitly documented migration compatibility.**
 
 ARNA is an Amharic-first, mobile-first enterprise platform. This repository contains its Vue 3 / TypeScript frontend: the enterprise workspace, shareholder portal, administration console, and public corporate website. The API/backend is maintained separately in [akefadaka-git/arna-api](https://github.com/akefadaka-git/arna-api).
 

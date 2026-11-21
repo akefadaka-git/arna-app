@@ -70,7 +70,7 @@ test.describe('Mounted Combobox browser behavior', () => {
   test('exposes a labeled combobox/listbox and has no serious axe violations', async ({ page }) => {
     const input = page.getByRole('combobox', { name: 'Choose an item' });
     await input.focus();
-    await expect(input).toHaveAttribute('aria-controls', /mases-combobox-/);
+    await expect(input).toHaveAttribute('aria-controls', /arna-combobox-/);
     await expect(page.getByRole('listbox')).toBeVisible();
     await expect(page.getByRole('option', { name: 'Unavailable' })).toHaveAttribute('aria-disabled', 'true');
 
@@ -185,7 +185,7 @@ test.describe('Mounted ErrorSupportPanel privacy and clipboard behavior', () => 
     await expect(panel).toHaveAttribute('data-copy-state', 'failed');
     const fallback = page.getByTestId('error-support-panel-fallback-textarea');
     await expect(fallback).toHaveAttribute('readonly', '');
-    await expect(fallback).toHaveAttribute('aria-labelledby', /mases-error-support-panel-\d+-fallback-instruction/);
+    await expect(fallback).toHaveAttribute('aria-labelledby', /arna-error-support-panel-\d+-fallback-instruction/);
     await expect(fallback).toHaveValue(/AUTH_PERMISSION_DENIED/);
     await expect(fallback).toHaveValue(/req-12345/);
   });
