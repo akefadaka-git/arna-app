@@ -196,7 +196,7 @@ import {
   setUnauthorizedHandler,
 } from '@/core/api/client';
 
-import { bootstrapSession } from '@/features/auth/service';
+import { bootstrapSession, setAuthTransport } from '@/features/auth/service';
 import type { BootstrapResult as SessionBootstrapResult } from '@/features/auth/service';
 
 // =============================================================================
@@ -221,6 +221,8 @@ export interface BootstrapOptions {
    *                 option for tests
    */
   readonly tokenStorage?: 'session' | 'memory';
+  /** 'cookie' uses Sanctum browser sessions; 'token' preserves PAT authentication. */
+  readonly authTransport?: 'token' | 'cookie';
 }
 
 /**
@@ -278,7 +280,13 @@ export async function bootstrapApp(
   setActivePinia(pinia);
 
   installAuthTokenStorage(options.tokenStorage);
-  installApiClientProviders(pinia);
+  const authTransport = options.authTransport ?? 'token';
+  if (authTransport === 'cookie' && typeof sessionStorage !== 'undefined') {
+    // Remove any legacy bearer token from pre-SSO builds; cookie-mode SPAs never read or send it.
+    sessionStorage.removeItem('mases.auth_token');
+  }
+  setAuthTransport(authTransport);
+  installApiClientProviders(pinia, authTransport);
   wireStoreCoordinations(pinia);
 
   const session = await bootstrapSession();
@@ -320,12 +328,12 @@ function installAuthTokenStorage(
  * before this function), so the auth store reads its storage adapter
  * correctly on first setup.
  */
-function installApiClientProviders(pinia: Pinia): void {
+function installApiClientProviders(pinia: Pinia, authTransport: 'token' | 'cookie'): void {
   /*
    * Bearer token: the client attaches `Authorization: Bearer <token>`
    * when this returns non-null.
    */
-  setAuthHeaderProvider(() => useAuthStore(pinia).token);
+  setAuthHeaderProvider(() => authTransport === 'token' ? useAuthStore(pinia).token : null);
 
   /*
    * Tenant id: the client attaches `X-Tenant-ID: <id>` when this
