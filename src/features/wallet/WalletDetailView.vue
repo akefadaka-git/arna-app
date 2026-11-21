@@ -940,7 +940,7 @@ const currency = computed<string>(() => wallet.value?.currency ?? '');
               slot.
             -->
             <PermissionGate permission="wallet.allocation.reverse">
-<DropdownMenu
+              <DropdownMenu
               v-if="allocationActionsFor(asAllocation(row)).length > 0"
               :open="isAllocationMenuOpen(String(asAllocation(row).id))"
               :items="allocationActionsFor(asAllocation(row))"
