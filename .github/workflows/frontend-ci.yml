@@ -52,6 +52,9 @@ jobs:
             artifacts/ARNA_APPLICATION_IMPORT_GRAPH.md
           if-no-files-found: warn
           retention-days: 14
+      - name: Verify Wallet, Loan, Admin, notification and locale security contracts
+        run: node --test tests/p0-loan-route-permissions.test.mjs tests/p0-wallet-reversal-permission.test.mjs tests/admin-route-authz-contract.test.mjs tests/notifications-locale-contract.test.mjs
+
       - name: Type-check and build all applications
         run: npm run build
       - name: Verify root entry points, local assets, and deployment policy
@@ -168,6 +171,10 @@ jobs:
           done
           curl --fail --silent http://127.0.0.1:4175/tests/fixtures/app-shells.html >/dev/null
           APP_SHELLS_URL=http://127.0.0.1:4175/tests/fixtures/app-shells.html npm run test:app-shells-browser
+      - name: Enforce dependency security gate after functional verification
+        if: always()
+        run: npm audit --audit-level=high
+
       - name: Upload versioned static build outputs
         uses: actions/upload-artifact@v4
         with:
