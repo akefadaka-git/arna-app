@@ -346,8 +346,8 @@
    - AranaFooterContent contributes text and links inside the
      contentinfo landmark. Its own accessibility notes live in that
      file.
-   - Reduced motion: this component defines no animation. Composed
-     child controls own their respective motion contracts.
+   - Reduced motion: this shell defines no animation or transition.
+     Composed child controls own their respective motion contracts.
 =============================================================================
 -->
 
