@@ -112,11 +112,18 @@ test('application source has no active legacy MASES component or DOM namespaces'
       .replace(/\/\*[\s\S]*?\*\//g, '')
       .replace(/<!--[\s\S]*?-->/g, '')
       .replace(/^\s*\/\/.*$/gm, '');
-    if (/__mases[A-Za-z0-9_]*|mases-[a-z0-9_-]+/i.test(executable) || /\bMASES\b/.test(executable)) {
+    if (/__mases[A-Za-z0-9_]*|(?<!-)mases-[a-z0-9_-]+/i.test(executable) || /\bMASES\b/.test(executable)) {
       findings.push(path.replace(root, '').replaceAll('\\\\', '/'));
     }
   }
   assert.deepEqual(findings, [], 'Legacy MASES identifiers must be removed or explicitly migrated');
+});
+
+test('ARNA semantic tokens preserve the legacy token substrate through aliases', async () => {
+  const source = await read('../src/styles/tokens.css');
+  assert.match(source, /--arna-space-1:\\s*var\\(--mases-space-1\\)/);
+  assert.match(source, /--arna-color-text-primary:\\s*var\\(--mases-color-text-primary\\)/);
+  assert.match(source, /--arna-focus-ring-width:\\s*var\\(--mases-focus-ring-width\\)/);
 });
 
 test('active Combobox DOM identifiers use the ARNA namespace', async () => {
