@@ -23,12 +23,12 @@ jobs:
       - name: Checkout exact requested SHA
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.target_sha || github.sha }}
+          ref: ${{ inputs.target_sha || github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
       - name: Assert exact checked-out SHA
         shell: bash
         env:
-          EXPECTED_SHA: ${{ inputs.target_sha || github.sha }}
+          EXPECTED_SHA: ${{ inputs.target_sha || github.event.pull_request.head.sha || github.sha }}
         run: |
           set -euo pipefail
           ACTUAL_SHA="$(git rev-parse HEAD)"
