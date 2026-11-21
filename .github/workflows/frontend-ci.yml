@@ -5,6 +5,12 @@ on:
     branches: [main]
   push:
     branches: [main, "feat/**", "fix/**", "test/**"]
+  workflow_dispatch:
+    inputs:
+      target_sha:
+        description: "Exact merge SHA to verify after merge"
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -14,8 +20,21 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: Checkout
+      - name: Checkout exact requested SHA
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.target_sha || github.sha }}
+          persist-credentials: false
+      - name: Assert exact checked-out SHA
+        shell: bash
+        env:
+          EXPECTED_SHA: ${{ inputs.target_sha || github.sha }}
+        run: |
+          set -euo pipefail
+          ACTUAL_SHA="$(git rev-parse HEAD)"
+          echo "Expected SHA: $EXPECTED_SHA"
+          echo "Actual SHA:   $ACTUAL_SHA"
+          test "$ACTUAL_SHA" = "$EXPECTED_SHA"
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
