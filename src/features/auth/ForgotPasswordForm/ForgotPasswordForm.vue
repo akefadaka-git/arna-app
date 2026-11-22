@@ -781,6 +781,56 @@ const successMessageComputed = computed<string>(() => {
 /* ============================================================================
    Success panel
    ============================================================================ */
+.forgot-password__auth-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mases-space-2);
+}
+
+.forgot-password__auth-methods button {
+  min-height: 36px;
+  padding: var(--mases-space-2) var(--mases-space-3);
+  border: 1px solid var(--mases-color-border-default);
+  border-radius: var(--mases-radius-md);
+  background: var(--mases-color-surface);
+  color: var(--mases-color-text-secondary);
+  font: inherit;
+  cursor: pointer;
+}
+
+.forgot-password__auth-methods button[aria-pressed="true"] {
+  border-color: var(--mases-color-border-focus);
+  background: var(--mases-color-surface-info);
+  color: var(--mases-color-text-primary);
+}
+
+.forgot-password__otp-channel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mases-space-2);
+}
+
+.forgot-password__otp-channel select {
+  min-height: 40px;
+  padding-inline: var(--mases-space-3);
+  border: 1px solid var(--mases-color-border-default);
+  border-radius: var(--mases-radius-md);
+  background: var(--mases-color-surface);
+  color: var(--mases-color-text-primary);
+  font: inherit;
+}
+
+.forgot-password__challenge {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mases-space-3);
+}
+
+.forgot-password__challenge-instructions {
+  margin: 0;
+  color: var(--mases-color-text-secondary);
+}
+
 .forgot-password__success {
   display: flex;
   flex-direction: column;
