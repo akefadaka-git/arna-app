@@ -614,7 +614,6 @@ const passwordConfirmFieldType = computed<'password' | 'text'>(() =>
 // Input refs (for programmatic focus)
 // -----------------------------------------------------------------------------
 const passwordInputRef = ref<InstanceType<typeof BaseInput> | null>(null);
-const passwordConfirmInputRef = ref<InstanceType<typeof BaseInput> | null>(null);
 
 function focusInput(
   refValue: InstanceType<typeof BaseInput> | null | undefined,
@@ -714,8 +713,7 @@ const passwordConfirmToggleLabel = computed<string>(() =>
       :aria-label="labels.formAriaLabel"
       :aria-busy="isSubmitting ? 'true' : undefined"
       data-testid="reset-password-form"
-      @submit.prevent="onSubmit"
-    >
+          >
       <!-- Banner (non-field errors) -->
       <Alert
         v-if="banner"
@@ -801,8 +799,7 @@ const passwordConfirmToggleLabel = computed<string>(() =>
       >
         <BaseInput
           id="reset-password-password-confirm"
-          ref="passwordConfirmInputRef"
-          v-model.trim="passwordConfirm"
+                    v-model.trim="passwordConfirm"
           :type="passwordConfirmFieldType"
           autocomplete="new-password"
           :disabled="isSubmitting"
