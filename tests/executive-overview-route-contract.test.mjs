@@ -84,3 +84,17 @@ test('partial-data notice is driven only by the explicit response status', async
   assert.match(view, /overview\.status === 'partial'/);
   assert.match(view, /labels\.partialDataMessage/);
 });
+
+test('workforce widget is a distinct aggregate-only card with bilingual labels', async () => {
+  const api = await read('../src/features/executive-overview/api.ts');
+  const view = await read('../src/features/executive-overview/ExecutiveOverviewView.vue');
+  const labels = await read('../src/features/executive-overview/labels.ts');
+  assert.match(api, /key: 'people\\.workforce\\.active'/);
+  assert.match(api, /readonly active: number/);
+  assert.match(view, /widget\\.key === 'people\\.workforce\\.active'/);
+  assert.match(view, /executive-overview-workforce-count/);
+  assert.match(view, /formatCalendarDate\\(widget\\.observed_at/);
+  assert.match(labels, /activeWorkforceLabel: 'ንቁ ሠራተኞች'/);
+  assert.match(labels, /activeWorkforceLabel: 'Active employees'/);
+  assert.doesNotMatch(view, /employee_number|person_id|user_id/);
+});
