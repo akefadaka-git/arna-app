@@ -21,8 +21,8 @@ test('route and sidebar UX gates require an approved audience role as well as pe
   assert.match(guards, /requiredRoles[\s\S]*?auth\.hasRole/);
   assert.match(sidebar, /passesRoleCheck[\s\S]*?auth\.hasRole/);
   const header = await read('../src/layouts/AppShell/AppHeaderNavigation/AppHeaderNavigation.vue');
-  assert.match(header, /function canSeeItem[\\s\\S]*?auth\\.hasRole[\\s\\S]*?auth\\.hasPermission/);
-  assert.match(header, /\.filter\\(canSeeItem\\)/);
+  assert.match(header, /function canSeeItem[\s\S]*?auth\.hasRole[\s\S]*?auth\.hasPermission/);
+  assert.match(header, /\.filter\(canSeeItem\)/);
 });
 
 test('Executive Overview UI consumes only returned authorized widgets', async () => {
