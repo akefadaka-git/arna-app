@@ -109,9 +109,10 @@
  * -----------------------------------------------------------------------------
  * Why the key `emailLabel` is not renamed
  * -----------------------------------------------------------------------------
- * The identifier field on the login form accepts an email address
- * OR a phone number. Its label VALUE reads "ኢሜይል / ስልክ ቁጥር"
- * ("Email / phone number"). But the KEY remains `emailLabel`.
+ * The identifier field on the login form accepts any of the six ARNA
+ * identifiers: email, username, mobile number, employee ID, shareholder
+ * number or wallet number. Its label VALUE is a neutral ARNA account label.
+ * The historical KEY remains `emailLabel` for compatibility.
  *
  * Renaming the key to `identifierLabel` would require coordinated
  * changes across three files:
@@ -264,12 +265,10 @@ export const loginFormLabels = {
    * The label for the identifier field. See the file header
    * §"Why the key `emailLabel` is not renamed".
    *
-   * The value names both accepted forms because the backend
-   * resolves either — an email via the users.email column, a
-   * phone via the users.phone column. See
-   * AuthController::resolveLoginEmail().
+   * The value is intentionally neutral because the backend resolves all six
+   * ARNA identifiers through the canonical LoginIdentifierResolver.
    */
-  emailLabel: 'ኢሜይል / ስልክ ቁጥር',
+  emailLabel: 'የARNA መለያ',
 
   // ---------------------------------------------------------------------------
   // Password
@@ -368,9 +367,9 @@ export const loginFormLabels = {
    * A future CR that renames emailLabel to identifierLabel should
    * update this title in the same change.
    */
-  invalidCredentialsTitle: 'ኢሜይል ወይም የይለፍ ቃል ትክክል አይደለም',
+  invalidCredentialsTitle: 'የARNA መለያ ወይም የይለፍ ቃል ትክክል አይደለም',
   invalidCredentialsMessage:
-    'እባክዎ ኢሜይልዎን እና የይለፍ ቃልዎን ያረጋግጡ እንደገና ይሞክሩ።',
+    'እባክዎ የARNA መለያዎን እና የይለፍ ቃልዎን ያረጋግጡ እንደገና ይሞክሩ።',
 
   /*
    * Rate-limit (HTTP 429) banner. Distinct from the generic
