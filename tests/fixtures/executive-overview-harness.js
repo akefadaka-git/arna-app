@@ -31,7 +31,9 @@ const requestExecutor = (options = {}) => new Promise((resolve, reject) => {
     reject,
   });
 });
-app.provide(executiveOverviewRequestKey, requestExecutor);
+if (!new URLSearchParams(window.location.search).has('realApi')) {
+  app.provide(executiveOverviewRequestKey, requestExecutor);
+}
 
 const makeUser = (overrides = {}) => ({
   id: 9001,

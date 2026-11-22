@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 
 const baseUrl = process.env.EXECUTIVE_OVERVIEW_TEST_URL ?? 'http://127.0.0.1:4174/tests/fixtures/executive-overview-harness.html';
 const endpoint = '**/api/dashboard/v1/overview';
+const realApiUrl = `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}realApi=1`;
 
 function envelope(entityCode = 'A4-ENTITY', status = 'complete') {
   return {
@@ -31,7 +32,7 @@ test.describe('Executive Overview authenticated browser security', () => {
       body: JSON.stringify(envelope()),
     }));
 
-    await page.goto(baseUrl);
+    await page.goto(realApiUrl);
     await expect(page.getByTestId('executive-overview-widgets')).toBeVisible();
     await expect(page.getByText('A4-ENTITY').first()).toBeVisible();
   });
@@ -71,7 +72,7 @@ test.describe('Executive Overview authenticated browser security', () => {
       });
     });
 
-    await page.goto(baseUrl);
+    await page.goto(realApiUrl);
     await expect(page.getByText('SESSION-EXPIRY-DATA').first()).toBeVisible();
     const secondRequest = page.waitForRequest((request) => request.url().includes('/api/dashboard/v1/overview') && requestCount >= 1);
     await page.evaluate(() => window.__a4.auth.setUser(window.__a4.makeUser({ name: 'Refreshed session snapshot' })));
@@ -87,7 +88,7 @@ test.describe('Executive Overview authenticated browser security', () => {
       body: JSON.stringify(envelope('REVOKED-FINANCE-DATA')),
     }));
 
-    await page.goto(baseUrl);
+    await page.goto(realApiUrl);
     await expect(page.getByText('REVOKED-FINANCE-DATA').first()).toBeVisible();
     await page.evaluate(() => window.__a4.auth.setUser(window.__a4.makeUser({ permissions: [] })));
     await expect(page.getByTestId('executive-overview-root')).not.toContainText('REVOKED-FINANCE-DATA');
@@ -149,7 +150,7 @@ test.describe('Executive Overview authenticated browser security', () => {
     });
 
     const initialRequest = page.waitForRequest((request) => request.url().includes('/api/dashboard/v1/overview'));
-    await page.goto(baseUrl);
+    await page.goto(realApiUrl);
     await initialRequest;
     await page.evaluate(() => window.__a4.unmount());
     await expect(page.getByTestId('executive-overview-root')).toHaveCount(0);
@@ -164,7 +165,7 @@ test.describe('Executive Overview authenticated browser security', () => {
       contentType: 'application/json',
       body: JSON.stringify({ success: false, error: { code: 'AUTH_PERMISSION_DENIED', message: 'You are not authorized to perform this action.' } }),
     }));
-    await page.goto(baseUrl);
+    await page.goto(realApiUrl);
     await expect(page.getByTestId('executive-overview-error')).toContainText('not authorized');
     await expect(page.getByTestId('executive-overview-root')).not.toContainText('dashboard.executive.view');
 
@@ -184,7 +185,7 @@ test.describe('Executive Overview authenticated browser security', () => {
       contentType: 'application/json',
       body: JSON.stringify(envelope('A4-PARTIAL-ENTITY', 'partial')),
     }));
-    await page.goto(baseUrl);
+    await page.goto(realApiUrl);
     await expect(page.getByTestId('executive-overview-partial')).toBeVisible();
     await expect(page.getByText('A4-PARTIAL-ENTITY').first()).toBeVisible();
   });
