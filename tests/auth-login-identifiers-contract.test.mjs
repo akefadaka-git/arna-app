@@ -27,3 +27,12 @@ test('login identifier input uses text input mode for numeric and alphanumeric i
   assert.match(identifierField, /inputmode="text"/);
   assert.match(identifierField, /autocomplete="username"/);
 });
+
+test('returning-user login exposes OTP and Google Authenticator options', () => {
+  assert.match(form, /login-form-use-otp/);
+  assert.match(form, /login-form-use-google-authenticator/);
+  assert.match(form, /login-authenticator-code/);
+  assert.match(form, /login-otp-channel/);
+  assert.match(labels, /useOtpLabel:/);
+  assert.match(labels, /useGoogleAuthenticatorLabel:/);
+});
