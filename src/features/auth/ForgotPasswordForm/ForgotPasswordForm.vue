@@ -555,9 +555,6 @@ const successMessageComputed = computed<string>(() => {
     :data-state="status"
     data-testid="forgot-password-root"
   >
-    <!-- ============================================================
-         Form state
-         ============================================================ -->
     <form
       v-if="status === 'form'"
       class="forgot-password__form"
@@ -566,7 +563,6 @@ const successMessageComputed = computed<string>(() => {
       data-testid="forgot-password-form"
       @submit.prevent="onSubmit"
     >
-      <!-- Banner (non-field errors) -->
       <Alert
         v-if="banner"
         :variant="banner.variant"
@@ -574,13 +570,11 @@ const successMessageComputed = computed<string>(() => {
         data-testid="forgot-password-banner"
       >
         <p class="forgot-password__banner-message">{{ banner.message }}</p>
-        <p
-          v-if="banner.requestId"
-          class="forgot-password__banner-reference"
-        >{{ labels.requestIdPrefix }} {{ banner.requestId }}</p>
+        <p v-if="banner.requestId" class="forgot-password__banner-reference">
+          {{ labels.requestIdPrefix }} {{ banner.requestId }}
+        </p>
       </Alert>
 
-      <!-- Email -->
       <FormField
         :label="labels.emailLabel"
         html-for="forgot-password-email"
@@ -591,42 +585,159 @@ const successMessageComputed = computed<string>(() => {
         <BaseInput
           id="forgot-password-email"
           ref="emailInputRef"
-          v-model.trim="email"
-          type="email"
-          autocomplete="email"
+          v-model.trim="identifier"
+          type="text"
+          inputmode="text"
+          autocomplete="username"
           :disabled="isSubmitting"
           data-testid="forgot-password-email"
         />
       </FormField>
 
-      <!-- Submit -->
+      <div
+        class="forgot-password__auth-methods"
+        role="group"
+        :aria-label="labels.authenticatorMethodsLabel"
+        data-testid="forgot-password-authenticator-methods"
+      >
+        <button
+          type="button"
+          :aria-pressed="authenticatorMode === 'otp'"
+          :disabled="isSubmitting"
+          data-testid="forgot-password-use-otp"
+          @click="selectAuthenticator('otp')"
+        >{{ labels.useOtpLabel }}</button>
+        <button
+          type="button"
+          :aria-pressed="authenticatorMode === 'google_authenticator'"
+          :disabled="isSubmitting"
+          data-testid="forgot-password-use-google-authenticator"
+          @click="selectAuthenticator('google_authenticator')"
+        >{{ labels.useGoogleAuthenticatorLabel }}</button>
+      </div>
+
+      <div v-if="authenticatorMode === 'otp'" class="forgot-password__otp-channel">
+        <label for="forgot-password-otp-channel">{{ labels.otpChannelLabel }}</label>
+        <select
+          id="forgot-password-otp-channel"
+          v-model="otpChannel"
+          :disabled="isSubmitting"
+          data-testid="forgot-password-otp-channel"
+        >
+          <option value="email">{{ labels.emailChannelLabel }}</option>
+          <option value="sms">{{ labels.smsChannelLabel }}</option>
+        </select>
+      </div>
+
       <div class="forgot-password__actions">
         <PrimaryButton
           type="submit"
           :loading="isSubmitting"
-          :disabled="isSubmitting"
+          :disabled="isSubmitting || identifier.trim() === ''"
           block
           data-testid="forgot-password-submit"
         >{{ submitLabel }}</PrimaryButton>
       </div>
     </form>
 
-    <!-- ============================================================
-         Success state
-         ============================================================ -->
+    <form
+      v-else-if="status === 'challenge'"
+      class="forgot-password__form forgot-password__challenge"
+      :aria-label="labels.formAriaLabel"
+      :aria-busy="isSubmitting ? 'true' : undefined"
+      data-testid="forgot-password-challenge-form"
+      @submit.prevent="onSubmit"
+    >
+      <Alert
+        v-if="banner"
+        :variant="banner.variant"
+        :title="banner.title"
+        data-testid="forgot-password-banner"
+      >
+        <p class="forgot-password__banner-message">{{ banner.message }}</p>
+      </Alert>
+
+      <p class="forgot-password__challenge-instructions" role="status" aria-live="polite">
+        {{ authenticatorMode === 'otp' ? labels.otpInstructions : labels.googleAuthenticatorInstructions }}
+      </p>
+
+      <FormField
+        :label="labels.codeLabel"
+        html-for="forgot-password-code"
+        :disabled="isSubmitting"
+        required
+      >
+        <BaseInput
+          id="forgot-password-code"
+          ref="codeInputRef"
+          v-model.trim="code"
+          type="text"
+          inputmode="numeric"
+          autocomplete="one-time-code"
+          :disabled="isSubmitting"
+          required
+          data-testid="forgot-password-code"
+        />
+      </FormField>
+
+      <FormField
+        :label="labels.newPasswordLabel"
+        html-for="forgot-password-new-password"
+        :disabled="isSubmitting"
+        required
+      >
+        <BaseInput
+          id="forgot-password-new-password"
+          v-model="newPassword"
+          type="password"
+          autocomplete="new-password"
+          :disabled="isSubmitting"
+          required
+          data-testid="forgot-password-new-password"
+        />
+      </FormField>
+
+      <FormField
+        :label="labels.confirmPasswordLabel"
+        html-for="forgot-password-confirm-password"
+        :disabled="isSubmitting"
+        required
+      >
+        <BaseInput
+          id="forgot-password-confirm-password"
+          v-model="confirmPassword"
+          type="password"
+          autocomplete="new-password"
+          :disabled="isSubmitting"
+          required
+          data-testid="forgot-password-confirm-password"
+        />
+      </FormField>
+
+      <div class="forgot-password__actions">
+        <PrimaryButton
+          type="submit"
+          :loading="isSubmitting"
+          :disabled="isSubmitting || code.trim() === '' || newPassword === '' || confirmPassword === ''"
+          block
+          data-testid="forgot-password-submit"
+        >{{ submitLabel }}</PrimaryButton>
+        <BaseLink
+          href="#"
+          data-testid="forgot-password-cancel"
+          @click="onCancelRecovery"
+        >{{ labels.cancelRecoveryLabel }}</BaseLink>
+      </div>
+    </form>
+
     <div
       v-else
       class="forgot-password__success"
       role="status"
       data-testid="forgot-password-success"
     >
-      <h2 class="forgot-password__success-title">
-        {{ labels.successTitle }}
-      </h2>
-      <p class="forgot-password__success-message">
-        {{ successMessageComputed }}
-      </p>
-
+      <h2 class="forgot-password__success-title">{{ labels.successTitle }}</h2>
+      <p class="forgot-password__success-message">{{ successMessageComputed }}</p>
       <div class="forgot-password__success-actions">
         <BaseLink
           href="#"
@@ -636,9 +747,6 @@ const successMessageComputed = computed<string>(() => {
       </div>
     </div>
 
-    <!-- ============================================================
-         Back to login (both states)
-         ============================================================ -->
     <div class="forgot-password__footer">
       <BaseLink
         href="#"
