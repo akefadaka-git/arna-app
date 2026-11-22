@@ -6,6 +6,10 @@ ARNA is an Amharic-first, mobile-first enterprise platform. This repository cont
 
 > **Repository scope:** browser-side applications and shared frontend foundations. This repository does not own backend business rules, database operations, tenant isolation, or authoritative authorization.
 
+## Public corporate website
+
+Official public website: https://www.maalearna.com.et/
+
 ## Applications
 
 The project uses one package manifest, one lockfile, one dependency tree, and four independent static application builds.
