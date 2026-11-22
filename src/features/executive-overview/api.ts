@@ -26,7 +26,7 @@ export interface ExecutiveOverviewFinanceWidget {
 }
 
 export interface ExecutiveOverviewResponse {
-  readonly status?: 'complete' | 'partial';
+  readonly status: 'complete' | 'partial';
   readonly contract_version: string;
   readonly generated_at: string;
   readonly widgets: readonly ExecutiveOverviewFinanceWidget[];
