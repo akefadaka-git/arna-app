@@ -473,6 +473,58 @@ export async function login(
  * resubmitted because the backend login controller validates it on each
  * request; the challenge token and code are sent only in this request body.
  */
+
+/**
+ * Request an OTP for a returning-user login. The backend deliberately
+ * returns the same challenge shape when the account is unknown or
+ * does not have a verified delivery channel.
+ */
+export async function requestLoginOtp(
+  identifier: string,
+  channel: 'email' | 'sms',
+  options: { readonly tenantId?: number } = {},
+): Promise<{ readonly challengeToken: string }> {
+  await api.csrfCookie();
+  const response = await authApi.requestLoginOtp({
+    identifier,
+    channel,
+    ...(options.tenantId !== undefined ? { tenant_id: options.tenantId } : {}),
+  });
+
+  return { challengeToken: response.challenge_token };
+}
+
+/**
+ * Complete a returning-user login using OTP or Google Authenticator.
+ * No password is sent; the backend enforces the first-login password gate.
+ */
+export async function completeAuthenticatorLogin(
+  identifier: string,
+  authenticator: 'otp' | 'google_authenticator',
+  code: string,
+  challengeToken?: string,
+  options: { readonly tenantId?: number } = {},
+): Promise<void> {
+  const normalizedCode = code.trim();
+  if (!normalizedCode) {
+    throw new TypeError('An authenticator code is required.');
+  }
+  if (authenticator === 'otp' && !challengeToken) {
+    throw new TypeError('An OTP challenge token is required.');
+  }
+
+  await api.csrfCookie();
+  const response = await authApi.loginWithAuthenticator({
+    identifier,
+    authenticator,
+    code: normalizedCode,
+    ...(challengeToken ? { challenge_token: challengeToken } : {}),
+    ...(options.tenantId !== undefined ? { tenant_id: options.tenantId } : {}),
+  });
+
+  await establishSession(response);
+}
+
 export async function completeMfaLogin(
   identifier: string,
   password: string,
