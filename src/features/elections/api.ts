@@ -53,3 +53,78 @@ export async function listGovernanceElections(perPage = 25): Promise<PaginatedGo
     },
   };
 }
+
+
+export interface ElectionCandidateRecord {
+  readonly id: number;
+  readonly candidate_person_id: number | null;
+  readonly candidate_name_snapshot: string | null;
+  readonly nomination_statement: string | null;
+  readonly committee_status: string;
+  readonly status?: string;
+}
+
+export interface ElectionCommitteeMemberRecord {
+  readonly id: number;
+  readonly person_id: number;
+  readonly user_id: number;
+  readonly member_role: string;
+  readonly status: string;
+  readonly appointment_reference: string;
+}
+
+export interface ElectionAuthorityEvidenceRecord {
+  readonly id: number;
+  readonly instrument_type: string;
+  readonly instrument_reference: string;
+  readonly status: string;
+}
+
+export interface ElectionRegisterSnapshot {
+  readonly id: number;
+  readonly record_date: string;
+  readonly source_reference: string;
+  readonly status: string;
+  readonly frozen_at: string | null;
+}
+
+export interface ElectionManualCountBatch {
+  readonly id: number;
+  readonly batch_reference: string;
+  readonly polling_station: string | null;
+  readonly ballots_received: number;
+  readonly ballots_valid: number;
+  readonly ballots_rejected: number;
+  readonly status: string;
+  readonly entered_by: number;
+  readonly witnessed_by: number | null;
+}
+
+export interface ElectionManualCountEvidence {
+  readonly batches: readonly ElectionManualCountBatch[];
+  readonly lines: readonly Record<string, unknown>[];
+}
+
+export function getGovernanceElection(id: number): Promise<GovernanceElection> {
+  return api.get<GovernanceElection>(\`/api/governance/elections/\${id}\`);
+}
+
+export function listElectionCandidates(id: number): Promise<readonly ElectionCandidateRecord[]> {
+  return api.get<readonly ElectionCandidateRecord[]>(\`/api/governance/elections/\${id}/candidates\`);
+}
+
+export function listElectionCommitteeMembers(id: number): Promise<readonly ElectionCommitteeMemberRecord[]> {
+  return api.get<readonly ElectionCommitteeMemberRecord[]>(\`/api/governance/elections/\${id}/committee/members\`);
+}
+
+export function listElectionAuthorityEvidence(id: number): Promise<readonly ElectionAuthorityEvidenceRecord[]> {
+  return api.get<readonly ElectionAuthorityEvidenceRecord[]>(\`/api/governance/elections/\${id}/authority-evidence\`);
+}
+
+export function getElectionRegisterSnapshot(id: number): Promise<ElectionRegisterSnapshot | null> {
+  return api.get<ElectionRegisterSnapshot | null>(\`/api/governance/elections/\${id}/registers\`);
+}
+
+export function listElectionManualCountEvidence(id: number): Promise<ElectionManualCountEvidence> {
+  return api.get<ElectionManualCountEvidence>(\`/api/governance/elections/\${id}/count-batches\`);
+}
