@@ -236,7 +236,7 @@ onMounted(() => { void load(); });
             <button v-if="!batch.witnessed_by && batch.status === 'pending_witness'" type="button" :disabled="countBusy" @click="witnessCount(batch.id)">ምስክርነት ስጥ | Witness</button>
           </li>
         </ul>
-        <form v-if="candidates.length" class="election-detail__count-form" @submit.prevent="recordCount">
+        <form v-if="candidates.length && !countAccessMessage && election.status === 'counting'" class="election-detail__count-form" @submit.prevent="recordCount">
           <h3>አዲስ የቆጠራ ማስረጃ | Record a physical count batch</h3>
           <label>የቆጠራ መለያ | Batch reference<input v-model="countForm.batch_reference" required maxlength="100" /></label>
           <label>የምርጫ ጣቢያ | Polling station<input v-model="countForm.polling_station" maxlength="120" /></label>
@@ -258,7 +258,8 @@ onMounted(() => { void load(); });
           <p v-if="countNotice" role="status">{{ countNotice }}</p>
           <button type="submit" :disabled="countBusy">ቆጠራ መዝግብ | Record count evidence</button>
         </form>
-        <p v-else>የቆጠራ ማስረጃ ለመመዝገብ ብቁ እጩዎች ያስፈልጋሉ | Candidate records are required before count entry.</p>
+        <p v-else-if="election.status !== 'counting'">የቆጠራ ሂደት አልተከፈተም | Count entry is available only while the election is in counting state.</p>
+        <p v-else-if="!candidates.length">የቆጠራ ማስረጃ ለመመዝገብ ብቁ እጩዎች ያስፈልጋሉ | Candidate records are required before count entry.</p>
       </section>
     </template>
   </main>
