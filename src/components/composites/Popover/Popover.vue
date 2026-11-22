@@ -124,7 +124,7 @@ export type PopoverPlacement =
 /*
  * Module-level counter for auto-generated ids.
  */
-let __masesPopoverIdCounter = 0;
+let __arnaPopoverIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -208,7 +208,7 @@ defineSlots<{
 // -----------------------------------------------------------------------------
 // Generated ids
 // -----------------------------------------------------------------------------
-const baseId = `mases-popover-${++__masesPopoverIdCounter}`;
+const baseId = `arna-popover-${++__arnaPopoverIdCounter}`;
 const triggerId = `${baseId}-trigger`;
 const controlsId = `${baseId}-panel`;
 
@@ -429,19 +429,19 @@ function onKeydown(event: KeyboardEvent): void {
    ============================================================================ */
 .popover__panel {
   position: absolute;
-  z-index: var(--mases-z-dropdown);
+  z-index: var(--arna-z-dropdown);
   min-width: 12rem;
   max-width: 24rem;
-  padding: var(--mases-space-3);
-  background-color: var(--mases-color-surface-overlay);
-  border: 1px solid var(--mases-color-border-default);
-  border-radius: var(--mases-radius-md);
-  box-shadow: var(--mases-shadow-elevation-2);
-  color: var(--mases-color-text-primary);
+  padding: var(--arna-space-3);
+  background-color: var(--arna-color-surface-overlay);
+  border: 1px solid var(--arna-color-border-default);
+  border-radius: var(--arna-radius-md);
+  box-shadow: var(--arna-shadow-elevation-2);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
   /*
    * Remove the browser's default focus ring on the panel; the panel
    * is focusable only as a fallback when it contains no focusable
@@ -453,11 +453,11 @@ function onKeydown(event: KeyboardEvent): void {
    * Entry transition — subtle opacity fade.
    * Reduced-motion makes it effectively instant.
    */
-  animation: mases-popover-in var(--mases-duration-fast)
-    var(--mases-easing-decelerate);
+  animation: arna-popover-in var(--arna-duration-fast)
+    var(--arna-easing-decelerate);
 }
 
-@keyframes mases-popover-in {
+@keyframes arna-popover-in {
   from {
     opacity: 0;
     transform: scale(0.98);
@@ -482,7 +482,7 @@ function onKeydown(event: KeyboardEvent): void {
 .popover[data-placement='bottom-start'] .popover__panel {
   top: 100%;
   left: 0;
-  margin-block-start: var(--mases-space-1);
+  margin-block-start: var(--arna-space-1);
 }
 
 /* ============================================================================
@@ -492,7 +492,7 @@ function onKeydown(event: KeyboardEvent): void {
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  margin-block-start: var(--mases-space-1);
+  margin-block-start: var(--arna-space-1);
 }
 
 /* ============================================================================
@@ -501,7 +501,7 @@ function onKeydown(event: KeyboardEvent): void {
 .popover[data-placement='bottom-end'] .popover__panel {
   top: 100%;
   right: 0;
-  margin-block-start: var(--mases-space-1);
+  margin-block-start: var(--arna-space-1);
 }
 
 /* ============================================================================
@@ -510,7 +510,7 @@ function onKeydown(event: KeyboardEvent): void {
 .popover[data-placement='top-start'] .popover__panel {
   bottom: 100%;
   left: 0;
-  margin-block-end: var(--mases-space-1);
+  margin-block-end: var(--arna-space-1);
 }
 
 /* ============================================================================
@@ -520,7 +520,7 @@ function onKeydown(event: KeyboardEvent): void {
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
-  margin-block-end: var(--mases-space-1);
+  margin-block-end: var(--arna-space-1);
 }
 
 /* ============================================================================
@@ -529,7 +529,7 @@ function onKeydown(event: KeyboardEvent): void {
 .popover[data-placement='top-end'] .popover__panel {
   bottom: 100%;
   right: 0;
-  margin-block-end: var(--mases-space-1);
+  margin-block-end: var(--arna-space-1);
 }
 
 /* ============================================================================
@@ -539,7 +539,7 @@ function onKeydown(event: KeyboardEvent): void {
   top: 50%;
   right: 100%;
   transform: translateY(-50%);
-  margin-inline-end: var(--mases-space-1);
+  margin-inline-end: var(--arna-space-1);
 }
 
 /* ============================================================================
@@ -549,7 +549,7 @@ function onKeydown(event: KeyboardEvent): void {
   top: 50%;
   left: 100%;
   transform: translateY(-50%);
-  margin-inline-start: var(--mases-space-1);
+  margin-inline-start: var(--arna-space-1);
 }
 
 /* ============================================================================

@@ -122,7 +122,8 @@ export const DEFAULT_LOCALE: SupportedLocale = 'am';
 /**
  * The localStorage key. Frozen by §13.4.
  */
-const STORAGE_KEY = 'mases.locale';
+const STORAGE_KEY = 'arna.locale';
+const LEGACY_STORAGE_KEY = 'mases.locale';
 
 /**
  * Type guard: is the given value a supported locale code?
@@ -146,19 +147,21 @@ export interface LocaleStorage {
 }
 
 /**
- * The production default. Reads and writes `mases.locale` in
- * localStorage.
+ * The production default. Reads `arna.locale` first, falls back to
+ * the legacy `mases.locale` key, and writes only the ARNA key.
  */
 function createLocalStorageLocaleStorage(): LocaleStorage {
   return {
     get(): string | null {
-      return localStorage.getItem(STORAGE_KEY);
+      return localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY);
     },
     set(value: string): void {
       localStorage.setItem(STORAGE_KEY, value);
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
     },
     clear(): void {
       localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
     },
   };
 }

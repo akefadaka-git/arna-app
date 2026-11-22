@@ -191,7 +191,7 @@ export interface MenuItem {
 /*
  * Module-level counter for auto-generated ids.
  */
-let __masesDropdownMenuIdCounter = 0;
+let __arnaDropdownMenuIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -271,7 +271,7 @@ defineSlots<{
 // -----------------------------------------------------------------------------
 // Generated ids
 // -----------------------------------------------------------------------------
-const baseId = `mases-dropdown-menu-${++__masesDropdownMenuIdCounter}`;
+const baseId = `arna-dropdown-menu-${++__arnaDropdownMenuIdCounter}`;
 const triggerId = `${baseId}-trigger`;
 const menuId = `${baseId}-menu`;
 
@@ -678,7 +678,7 @@ function iconName(value: string): IconName {
    Wrapper
    ---------------------------------------------------------------------------
    position: relative anchors the panel's absolute positioning. The
-   --mases-dropdown-origin-x custom property is set here and drives
+   --arna-dropdown-origin-x custom property is set here and drives
    the panel's transform-origin so the entrance scale animation grows
    from the trigger-aligned edge rather than from the panel's centre.
    The value flips with `data-align` and with document direction.
@@ -686,21 +686,21 @@ function iconName(value: string): IconName {
 .dropdown-menu {
   position: relative;
   display: inline-block;
-  --mases-dropdown-origin-x: left;
+  --arna-dropdown-origin-x: left;
 }
 
 /* align='end' anchors the panel to the trigger's inline-end edge. */
 .dropdown-menu[data-align='end'] {
-  --mases-dropdown-origin-x: right;
+  --arna-dropdown-origin-x: right;
 }
 
 /* RTL flips both alignment anchors. */
 html[dir='rtl'] .dropdown-menu {
-  --mases-dropdown-origin-x: right;
+  --arna-dropdown-origin-x: right;
 }
 
 html[dir='rtl'] .dropdown-menu[data-align='end'] {
-  --mases-dropdown-origin-x: left;
+  --arna-dropdown-origin-x: left;
 }
 
 /* ============================================================================
@@ -709,8 +709,8 @@ html[dir='rtl'] .dropdown-menu[data-align='end'] {
 .dropdown-menu__panel {
   position: absolute;
   top: 100%;
-  z-index: var(--mases-z-dropdown);
-  margin-block-start: var(--mases-space-1);
+  z-index: var(--arna-z-dropdown);
+  margin-block-start: var(--arna-space-1);
   min-width: 12rem;
   /*
    * The 24rem cap accommodates the longest Amharic tenant names and
@@ -726,12 +726,12 @@ html[dir='rtl'] .dropdown-menu[data-align='end'] {
    */
   max-height: min(24rem, 80vh);
   overflow-y: auto;
-  padding-block: var(--mases-space-1);
-  background-color: var(--mases-color-surface-overlay);
-  border: 1px solid var(--mases-color-border-default);
-  border-radius: var(--mases-radius-md);
-  box-shadow: var(--mases-shadow-elevation-2);
-  color: var(--mases-color-text-primary);
+  padding-block: var(--arna-space-1);
+  background-color: var(--arna-color-surface-overlay);
+  border: 1px solid var(--arna-color-border-default);
+  border-radius: var(--arna-radius-md);
+  box-shadow: var(--arna-shadow-elevation-2);
+  color: var(--arna-color-text-primary);
   /*
    * Remove the browser's default focus ring on the panel itself; the
    * panel is focusable only as a fallback when there are no enabled
@@ -741,16 +741,16 @@ html[dir='rtl'] .dropdown-menu[data-align='end'] {
   outline: none;
   /*
    * The scale animation grows from the trigger-aligned top corner.
-   * The horizontal axis is set by --mases-dropdown-origin-x (see the
+   * The horizontal axis is set by --arna-dropdown-origin-x (see the
    * wrapper rules above); the vertical axis is always top, matching
    * the panel's `top: 100%` anchoring.
    */
-  transform-origin: var(--mases-dropdown-origin-x) top;
-  animation: mases-dropdown-in var(--mases-duration-fast)
-    var(--mases-easing-decelerate);
+  transform-origin: var(--arna-dropdown-origin-x) top;
+  animation: arna-dropdown-in var(--arna-duration-fast)
+    var(--arna-easing-decelerate);
 }
 
-@keyframes mases-dropdown-in {
+@keyframes arna-dropdown-in {
   from {
     opacity: 0;
     transform: scale(0.98);
@@ -784,21 +784,21 @@ html[dir='rtl'] .dropdown-menu[data-align='end'] {
    ============================================================================ */
 .dropdown-menu__separator {
   height: 0;
-  margin-block: var(--mases-space-1);
-  border-block-start: 1px solid var(--mases-color-border-subtle);
+  margin-block: var(--arna-space-1);
+  border-block-start: 1px solid var(--arna-color-border-subtle);
 }
 
 /* ============================================================================
    Group header
    ============================================================================ */
 .dropdown-menu__group-header {
-  padding-block: var(--mases-space-1);
-  padding-inline: var(--mases-space-3);
-  color: var(--mases-color-text-tertiary);
+  padding-block: var(--arna-space-1);
+  padding-inline: var(--arna-space-3);
+  color: var(--arna-color-text-tertiary);
   font-family: inherit;
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
+  font-weight: var(--arna-font-weight-semibold);
   /*
    * Amharic syllables must never be uppercased.
    * Design System §3.5 B6.
@@ -818,38 +818,38 @@ html[dir='rtl'] .dropdown-menu[data-align='end'] {
 .dropdown-menu__item {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   width: 100%;
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-3);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-3);
   appearance: none;
   background-color: transparent;
   border: 0;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
   text-align: start;
   cursor: pointer;
   min-height: 44px;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .dropdown-menu__item:hover:not(:disabled),
 .dropdown-menu__item:focus-visible {
-  background-color: var(--mases-color-state-hover);
+  background-color: var(--arna-color-state-hover);
 }
 
 .dropdown-menu__item:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: calc(var(--mases-focus-ring-offset) * -1);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: calc(var(--arna-focus-ring-offset) * -1);
 }
 
 .dropdown-menu__item:disabled {
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
   cursor: not-allowed;
 }
 
@@ -857,16 +857,16 @@ html[dir='rtl'] .dropdown-menu[data-align='end'] {
    Danger variant
    ============================================================================ */
 .dropdown-menu__item[data-variant='danger'] {
-  color: var(--mases-color-text-danger);
+  color: var(--arna-color-text-danger);
 }
 
 .dropdown-menu__item[data-variant='danger']:hover:not(:disabled),
 .dropdown-menu__item[data-variant='danger']:focus-visible {
-  background-color: var(--mases-color-surface-danger);
+  background-color: var(--arna-color-surface-danger);
 }
 
 .dropdown-menu__item[data-variant='danger']:disabled {
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
 }
 
 /* ============================================================================
@@ -877,17 +877,17 @@ html[dir='rtl'] .dropdown-menu[data-align='end'] {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: var(--mases-icon-sm);
-  height: var(--mases-icon-sm);
-  color: var(--mases-color-icon-secondary);
+  width: var(--arna-icon-sm);
+  height: var(--arna-icon-sm);
+  color: var(--arna-color-icon-secondary);
 }
 
 .dropdown-menu__item[data-variant='danger'] .dropdown-menu__item-icon {
-  color: var(--mases-color-icon-danger);
+  color: var(--arna-color-icon-danger);
 }
 
 .dropdown-menu__item:disabled .dropdown-menu__item-icon {
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
 }
 
 /* ============================================================================

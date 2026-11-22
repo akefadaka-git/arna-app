@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ARNA DatePicker browser contract</title>
+  </head>
+  <body>
+    <main id="app"></main>
+    <script type="module">
+      import { createApp, h, ref } from 'vue';
+      import DatePicker from '../../src/components/composites/DatePicker/DatePicker.vue';
+      import '../../src/styles/tokens.css';
+
+      window.localStorage.setItem('arna.ui.calendar-system', 'gregory');
+
+      const value = ref('2026-11-21');
+      const labels = {
+        weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+        monthsLong: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        previousMonth: 'Previous month',
+        nextMonth: 'Next month',
+        openCalendar: 'Open calendar',
+        monthYearFormat: '{month} {year}',
+      };
+
+      createApp({
+        setup() {
+          return () => h('section', { class: 'date-picker-fixture' }, [
+            h(DatePicker, {
+              id: 'fixture-date',
+              modelValue: value.value,
+              min: '2026-11-20',
+              max: '2026-11-25',
+              labels,
+              'onUpdate:modelValue': (nextValue) => { value.value = nextValue ?? ''; },
+            }),
+            h('output', { 'data-testid': 'date-picker-value', 'aria-live': 'polite' }, value.value ?? ''),
+          ]);
+        },
+      }).mount('#app');
+    </script>
+  </body>
+</html>

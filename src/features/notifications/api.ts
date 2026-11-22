@@ -7,6 +7,7 @@
  */
 import { api } from '@/core/api/client';
 import type { MasesNotification, NotificationPriority } from '@/stores/notifications';
+import type { SupportedLocale } from '@/stores/locale';
 
 interface LocalizedText {
   readonly am?: string;
@@ -66,7 +67,7 @@ function localized(value: LocalizedText | null, locale: 'am' | 'en'): string | u
   return typeof selected === 'string' ? selected : undefined;
 }
 
-function present(item: ApiNotification): MasesNotification {
+function present(item: ApiNotification, locale: SupportedLocale): MasesNotification {
   if (
     typeof item.id !== 'string' ||
     typeof item.category !== 'string' ||
@@ -77,7 +78,6 @@ function present(item: ApiNotification): MasesNotification {
     throw new Error('The notification service returned an invalid notification record.');
   }
 
-  const locale = activeLocale();
   const title = localized(item.title, locale);
   if (!title) throw new Error('The notification service returned a notification without a title.');
 
@@ -98,7 +98,11 @@ function present(item: ApiNotification): MasesNotification {
   };
 }
 
-export async function fetchNotifications(page = 1, perPage = 20): Promise<NotificationPage> {
+export async function fetchNotifications(
+  page = 1,
+  perPage = 20,
+  locale: SupportedLocale = activeLocale(),
+): Promise<NotificationPage> {
   const result = await api.get<ApiNotificationPage>('/api/notifications', {
     params: { page: Math.max(1, Math.floor(page)), per_page: Math.min(50, Math.max(1, Math.floor(perPage))) },
   });
@@ -115,7 +119,7 @@ export async function fetchNotifications(page = 1, perPage = 20): Promise<Notifi
   }
 
   return {
-    items: result.items.map(present),
+    items: result.items.map((item) => present(item, locale)),
     page: result.pagination.page,
     perPage: result.pagination.per_page,
     total: result.pagination.total,
