@@ -61,6 +61,10 @@ onMounted(() => {
           የጉባኤ መገኘትና ውክልና / Meeting attendance
           <span aria-hidden="true">→</span>
         </RouterLink>
+        <RouterLink class="governance-overview__people-link" to="/governance/elections">
+          የቦርድ ምርጫ / Board elections
+          <span aria-hidden="true">→</span>
+        </RouterLink>
         <RouterLink class="governance-overview__people-link" to="/governance/people">
           የሰዎች ዝርዝር / People directory
           <span aria-hidden="true">→</span>

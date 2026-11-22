@@ -5,11 +5,15 @@ import type { RouteLocationRaw } from 'vue-router';
 import BaseButton from '@/components/primitives/BaseButton';
 import BaseIcon from '@/components/primitives/BaseIcon';
 import { useLocaleStore } from '@/stores/locale';
+import { useAuthStore } from '@/stores/auth';
 
 interface SearchNavItem {
   readonly id: string;
   readonly label: string;
   readonly to?: RouteLocationRaw;
+  readonly permission?: string | readonly string[];
+  readonly permissionMode?: 'any' | 'all';
+  readonly requiredRoles?: readonly string[];
   readonly visibleChildren?: ReadonlyArray<SearchNavItem>;
   readonly children?: ReadonlyArray<SearchNavItem>;
 }
@@ -21,9 +25,11 @@ const props = defineProps<Props>();
 const route = useRoute();
 const router = useRouter();
 const localeStore = useLocaleStore();
+const auth = useAuthStore();
 
 const ENGLISH_DESTINATION_LABELS: Readonly<Record<string, string>> = {
   dashboard: 'Dashboard',
+  'executive-overview': 'Executive Overview',
   'go-to-workspace': 'Go to workspace',
   launcher: 'Home',
   files: 'Documents',
@@ -74,9 +80,24 @@ const isSearchOpen = ref(false);
 const query = ref('');
 const activeResultIndex = ref(-1);
 
-const searchItems = computed(() => props.items.flatMap((item) =>
-  item.to ? [item] : [...(item.visibleChildren ?? item.children ?? [])],
-));
+function canSeeItem(item: SearchNavItem): boolean {
+  if (item.requiredRoles && !item.requiredRoles.some((role) => auth.hasRole(role))) {
+    return false;
+  }
+
+  if (item.permission === undefined) return true;
+  if (typeof item.permission === 'string') return auth.hasPermission(item.permission);
+
+  return item.permissionMode === 'all'
+    ? auth.hasAllPermissions(item.permission)
+    : auth.hasAnyPermission(item.permission);
+}
+
+const searchItems = computed(() => props.items.flatMap((item) => {
+  if (item.to) return canSeeItem(item) ? [item] : [];
+  if (!canSeeItem(item)) return [];
+  return [...(item.visibleChildren ?? item.children ?? [])].filter(canSeeItem);
+}));
 
 const results = computed(() => {
   const term = query.value.trim().toLocaleLowerCase();

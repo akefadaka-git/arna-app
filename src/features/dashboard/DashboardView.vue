@@ -261,7 +261,7 @@ const TILES: readonly TileDefinition[] = [
     key: 'loanProducts',
     to: '/loan-products',
     icon: 'package',
-    permissions: ['loan_product.view'],
+    permissions: ['loan.view'],
   },
   {
     key: 'shareholders',

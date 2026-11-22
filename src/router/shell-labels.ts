@@ -1543,6 +1543,18 @@ export const masesShellLabels: AppShellLabels = {
     disabledReason: 'ማሳወቂያዎች በቅርቡ ይመጣሉ',
   },
 
+  languageSelector: {
+    triggerAriaLabel: {
+      am: 'ቋንቋ ይምረጡ',
+      en: 'Select language',
+    },
+  },
+
+  languageSaveError: {
+    am: 'የቋንቋ ምርጫዎን ማስቀመጥ አልተቻለም። እንደገና ይሞክሩ።',
+    en: 'Your language preference could not be saved. Please try again.',
+  },
+
   tenantSwitcher: {
     triggerAriaLabel: 'ተቋም ይምረጡ',
   },
@@ -1671,6 +1683,14 @@ export const authenticatedNavItems: ReadonlyArray<NavItem> = [
     icon: 'layout-grid',
   },
   {
+    id: 'executive-overview',
+    label: 'የአስፈጻሚ አጠቃላይ እይታ',
+    to: '/executive-overview',
+    icon: 'line-chart',
+    permission: 'dashboard.executive.view',
+    requiredRoles: ['ceo', 'president', 'finance_manager'],
+  },
+  {
     id: 'launcher',
     label: 'መነሻ',
     to: '/launcher',
@@ -1724,6 +1744,13 @@ export const authenticatedNavItems: ReadonlyArray<NavItem> = [
     to: '/governance',
     icon: 'landmark',
     permission: 'governance.body.view',
+  },
+  {
+    id: 'governance-elections',
+    label: 'የቦርድ ምርጫ',
+    to: '/governance/elections',
+    icon: 'vote',
+    permission: 'governance.election.view',
   },
 ];
 

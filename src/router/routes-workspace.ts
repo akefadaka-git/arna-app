@@ -495,6 +495,7 @@ import {
 } from '@/features/governance/labels';
 
 import { dashboardViewLabels } from '@/features/dashboard/labels';
+import { executiveOverviewLabels } from '@/features/executive-overview/labels';
 
 /**
  * The workspace build's top-level route. A single parent
@@ -527,6 +528,18 @@ export const routesWorkspace: RouteRecordRaw[] = [
         name: 'dashboard',
         component: () => import('@/features/dashboard/DashboardView.vue'),
         props: { labels: dashboardViewLabels },
+      },
+
+      // Executive metrics: permission AND approved role audience; API re-enforces both.
+      {
+        path: 'executive-overview',
+        name: 'executive-overview',
+        component: () => import('@/features/executive-overview/ExecutiveOverviewView.vue'),
+        props: { labels: executiveOverviewLabels },
+        meta: {
+          permission: 'dashboard.executive.view',
+          requiredRoles: ['ceo', 'president', 'finance_manager'],
+        },
       },
 
       // -----------------------------------------------------------------------
@@ -712,7 +725,7 @@ export const routesWorkspace: RouteRecordRaw[] = [
         name: 'loan-products',
         component: () => import('@/features/loans/LoanProductListView.vue'),
         props: { labels: loanProductListViewLabels },
-        meta: { permission: 'loan_product.view' },
+        meta: { permission: 'loan.view' },
       },
 
       // -----------------------------------------------------------------------
@@ -742,6 +755,30 @@ export const routesWorkspace: RouteRecordRaw[] = [
         props: { labels: governanceOverviewLabels },
         meta: { permission: 'governance.body.view' },
       },
+      {
+        path: 'governance/elections',
+        name: 'governance-elections',
+        component: () => import('@/features/elections/GovernanceElectionListView.vue'),
+        meta: { permission: 'governance.election.view' },
+      },
+      {
+        path: 'governance/elections/:id',
+        name: 'governance-election-detail',
+        component: () => import('@/features/elections/GovernanceElectionDetailView.vue'),
+        meta: { permission: 'governance.election.view' },
+      },
+      {
+        path: 'governance/meetings/:id/agenda',
+        name: 'governance-meeting-agenda',
+        component: () => import('@/features/governance/GovernanceMeetingAgendaView.vue'),
+        meta: { permission: 'governance.agenda.view' },
+      },
+      {
+        path: 'governance/meetings/:id/electorate',
+        name: 'governance-meeting-electorate',
+        component: () => import('@/features/governance/GovernanceElectorateQuorumView.vue'),
+        meta: { permission: 'governance.attendance.view' },
+      },
 
       //
       // ORDER: list, then detail. No static-vs-dynamic conflict at the
@@ -767,7 +804,7 @@ export const routesWorkspace: RouteRecordRaw[] = [
         path: 'governance/attendance',
         name: 'governance-attendance',
         component: () => import('@/features/governance/GovernanceAttendanceView.vue'),
-        meta: { permission: 'governance.body.view' },
+        meta: { permission: 'governance.meeting.view' },
       },
       {
         path: 'governance/bodies',
