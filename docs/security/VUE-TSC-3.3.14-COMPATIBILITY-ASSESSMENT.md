@@ -35,3 +35,17 @@ This is a major-version upgrade and is intentionally isolated. It is not conside
 ## Scope boundaries
 
 No Vue runtime, Vue Router, Vite, TypeScript, entry point, route, application source, or production deployment configuration is changed by this dependency assessment. No package override is used to force an incompatible minimatch major into a dependency range that does not request it.
+
+## Lockfile and audit result
+
+The isolated Node 22 / npm lock-refresh run completed successfully:
+
+- Workflow run: 45028985661 (completed, success).
+- Exact input revision: 78a65ac98938720f6e1b9543044d2622d5c3ec01.
+- Lockfile commit on this branch: c64aa96768437d118a275fd1a83efc4bdc4f2457.
+- package-lock.json blob: 08fe49019146c18c48ae6f2dc87656589e2729fa.
+- Resolved vue-tsc and @vue/language-core: 3.3.14.
+- The regenerated dependency graph contains no minimatch package.
+- npm audit inventory: 0 info, 0 low, 0 moderate, 0 high, 0 critical; npm audit --audit-level=moderate passed.
+
+This closes the vulnerability inventory on the regenerated lockfile, but not the compatibility gate. A clean npm ci, Vue type-check, four production builds, contract suites, browser suites, and exact-head Frontend verification remain required before the three baseline findings can be marked VERIFIED-CLOSED.
