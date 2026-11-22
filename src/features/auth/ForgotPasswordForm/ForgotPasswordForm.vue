@@ -244,6 +244,21 @@ export interface ForgotPasswordFormLabels {
   readonly formAriaLabel: string;
 
   readonly emailLabel: string;
+  readonly authenticatorMethodsLabel: string;
+  readonly useOtpLabel: string;
+  readonly useGoogleAuthenticatorLabel: string;
+  readonly otpChannelLabel: string;
+  readonly emailChannelLabel: string;
+  readonly smsChannelLabel: string;
+  readonly otpInstructions: string;
+  readonly googleAuthenticatorInstructions: string;
+  readonly codeLabel: string;
+  readonly newPasswordLabel: string;
+  readonly confirmPasswordLabel: string;
+  readonly sendOtpLabel: string;
+  readonly continueLabel: string;
+  readonly verifyRecoveryLabel: string;
+  readonly cancelRecoveryLabel: string;
   readonly submitLabel: string;
   readonly submittingLabel: string;
 
