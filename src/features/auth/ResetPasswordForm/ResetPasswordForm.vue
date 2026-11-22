@@ -669,37 +669,6 @@ function togglePasswordConfirmVisibility(): void {
 // -----------------------------------------------------------------------------
 // Error classification
 // -----------------------------------------------------------------------------
-interface NormalizedApiErrorLike {
-  readonly category?: unknown;
-  readonly code?: unknown;
-  readonly message?: unknown;
-  readonly requestId?: unknown;
-  readonly fieldErrors?: unknown;
-}
-
-function isNormalizedApiErrorLike(err: unknown): err is NormalizedApiErrorLike {
-  return typeof err === 'object' && err !== null;
-}
-
-/**
- * Focus the first field with an error, in visual order.
- *
- * Visual order in this form: new password, then password
- * confirmation. The email field is read-only and is not a focus
- * target.
- */
-// -----------------------------------------------------------------------------
-// Submission
-// -----------------------------------------------------------------------------
-async function onSubmit(): Promise<void> {
-  // Deliberately fail closed: legacy email reset tokens are not accepted.
-  status.value = 'invalid';
-  banner.value = null;
-}
-
-// -----------------------------------------------------------------------------
-// Event forwarding
-// -----------------------------------------------------------------------------
 function onRequestNewLink(event: MouseEvent): void {
   event.preventDefault();
   emit('request-new-link');
