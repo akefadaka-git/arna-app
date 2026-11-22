@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - "src/features/auth/LoginForm/LoginForm.vue"
+      - "src/features/auth/ForgotPasswordForm/ForgotPasswordForm.vue"
+      - "src/features/auth/ResetPasswordForm/ResetPasswordForm.vue"
       - "src/features/auth/api.ts"
       - "src/features/auth/service.ts"
       - "src/router/auth-labels.ts"
@@ -15,6 +17,8 @@ on:
       - feat/auth-adaptive-policy-a3
     paths:
       - "src/features/auth/LoginForm/LoginForm.vue"
+      - "src/features/auth/ForgotPasswordForm/ForgotPasswordForm.vue"
+      - "src/features/auth/ResetPasswordForm/ResetPasswordForm.vue"
       - "src/features/auth/api.ts"
       - "src/features/auth/service.ts"
       - "src/router/auth-labels.ts"
