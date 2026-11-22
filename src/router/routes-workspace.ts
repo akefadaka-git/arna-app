@@ -761,6 +761,12 @@ export const routesWorkspace: RouteRecordRaw[] = [
         component: () => import('@/features/elections/GovernanceElectionListView.vue'),
         meta: { permission: 'governance.election.view' },
       },
+      {
+        path: 'governance/elections/:id',
+        name: 'governance-election-detail',
+        component: () => import('@/features/elections/GovernanceElectionDetailView.vue'),
+        meta: { permission: 'governance.election.view' },
+      },
 
       //
       // ORDER: list, then detail. No static-vs-dynamic conflict at the
