@@ -257,7 +257,7 @@ onMounted(() => { void load(); });
             <select v-model="countForm.candidate_id" required>
               <option value="" disabled>ይምረጡ | Select</option>
               <option v-for="candidate in candidates" :key="candidate.id" :value="String(candidate.id)">
-                {{ candidate.candidate_name_snapshot || ('Person #' + candidate.candidate_person_id) }}
+                {{ candidateName(candidate) }}
               </option>
             </select>
           </label>
