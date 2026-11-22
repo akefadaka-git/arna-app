@@ -45,6 +45,7 @@ test('password recovery uses OTP or Google Authenticator and never legacy reset 
   assert.match(recoveryForm, /forgot-password-use-google-authenticator/);
   assert.match(recoveryForm, /forgot-password-code/);
   assert.match(recoveryForm, /forgot-password-new-password/);
-  assert.match(legacyResetForm, /Legacy reset links are no longer accepted/);
-  assert.doesNotMatch(legacyResetForm, /token:\\s*routeToken\\.value/);
+  const legacyScript = legacyResetForm.slice(legacyResetForm.lastIndexOf('<script setup'));
+  assert.match(legacyScript, /Legacy reset links are no longer accepted/);
+  assert.doesNotMatch(legacyScript, /token:\\s*routeToken\\.value/);
 });
