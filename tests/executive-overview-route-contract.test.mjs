@@ -98,3 +98,19 @@ test('workforce widget is a distinct aggregate-only card with bilingual labels',
   assert.match(labels, /activeWorkforceLabel: 'Active employees'/);
   assert.doesNotMatch(view, /employee_number|person_id|user_id/);
 });
+
+
+test('workforce contract preserves provenance, locale, and responsive aggregate presentation', async () => {
+  const api = await read('../src/features/executive-overview/api.ts');
+  const view = await read('../src/features/executive-overview/ExecutiveOverviewView.vue');
+  const labels = await read('../src/features/executive-overview/labels.ts');
+  assert.match(api, /ExecutiveOverviewWidget[\\s\\S]*ExecutiveOverviewFinanceWidget[\\s\\S]*ExecutiveOverviewWorkforceWidget/);
+  assert.match(api, /metric_key: 'active_workforce'/);
+  assert.match(api, /calculation_version: string/);
+  assert.match(api, /observed_at: string/);
+  assert.match(view, /locale\\.locale === 'en' \\? executiveOverviewEnglishLabels : props\\.labels/);
+  assert.match(view, /formatCalendarDate\\(widget\\.observed_at/);
+  assert.match(view, /repeat\\(auto-fit, minmax\\(min\\(100%, 320px\\), 1fr\\)\\)/);
+  assert.match(labels, /workforceTitle: 'የሰው ኃይል'/);
+  assert.match(labels, /workforceTitle: 'Workforce'/);
+});
