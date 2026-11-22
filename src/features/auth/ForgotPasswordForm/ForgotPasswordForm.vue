@@ -307,30 +307,29 @@ import BaseInput from '@/components/primitives/BaseInput';
 import BaseLink from '@/components/primitives/BaseLink';
 import PrimaryButton from '@/components/primitives/PrimaryButton';
 
-import { requestPasswordReset } from '@/features/auth/service';
+import { requestPasswordReset, resetPassword } from '@/features/auth/service';
 
 interface Props {
-  /** Consumer-supplied, translated labels. Required. */
   labels: ForgotPasswordFormLabels;
 }
 
 const props = defineProps<Props>();
 
 const emit = defineEmits<{
-  /**
-   * Fires when the user activates the "back to login" link, in
-   * either state. The consumer decides the destination.
-   */
   (event: 'back-to-login'): void;
 }>();
 
-// -----------------------------------------------------------------------------
-// State
-// -----------------------------------------------------------------------------
-type Status = 'form' | 'success';
+type Status = 'form' | 'challenge' | 'success';
+type RecoveryAuthenticator = 'otp' | 'google_authenticator';
 
 const status = ref<Status>('form');
-const email = ref<string>('');
+const identifier = ref<string>('');
+const authenticatorMode = ref<RecoveryAuthenticator>('otp');
+const otpChannel = ref<'email' | 'sms'>('email');
+const challengeToken = ref<string | null>(null);
+const code = ref<string>('');
+const newPassword = ref<string>('');
+const confirmPassword = ref<string>('');
 const isSubmitting = ref<boolean>(false);
 
 interface BannerState {
@@ -340,35 +339,6 @@ interface BannerState {
   readonly requestId?: string;
 }
 
-const banner = ref<BannerState | null>(null);
-const emailError = ref<string | undefined>(undefined);
-
-// -----------------------------------------------------------------------------
-// Auto-focus (mount + after "try another email")
-// -----------------------------------------------------------------------------
-const emailInputRef = ref<InstanceType<typeof BaseInput> | null>(null);
-
-function focusEmailInput(): void {
-  const el = emailInputRef.value?.$el as HTMLElement | undefined;
-  if (el !== undefined && typeof el.focus === 'function') {
-    el.focus();
-  }
-}
-
-onMounted(async () => {
-  /*
-   * Wait for the child BaseInput to mount before focusing. The
-   * `$el` ref is populated after the first render pass, so a
-   * synchronous focus call from onMounted would find the ref still
-   * null.
-   */
-  await nextTick();
-  focusEmailInput();
-});
-
-// -----------------------------------------------------------------------------
-// Error classification
-// -----------------------------------------------------------------------------
 interface NormalizedApiErrorLike {
   readonly category?: unknown;
   readonly code?: unknown;
@@ -377,9 +347,30 @@ interface NormalizedApiErrorLike {
   readonly fieldErrors?: unknown;
 }
 
+const banner = ref<BannerState | null>(null);
+const emailError = ref<string | undefined>(undefined);
+const emailInputRef = ref<InstanceType<typeof BaseInput> | null>(null);
+const codeInputRef = ref<InstanceType<typeof BaseInput> | null>(null);
+
 function isNormalizedApiErrorLike(err: unknown): err is NormalizedApiErrorLike {
   return typeof err === 'object' && err !== null;
 }
+
+function focusEmailInput(): void {
+  const el = emailInputRef.value?.$el as HTMLElement | undefined;
+  if (el && typeof el.focus === 'function') el.focus();
+}
+
+async function focusCodeInput(): Promise<void> {
+  await nextTick();
+  const el = codeInputRef.value?.$el as HTMLElement | undefined;
+  if (el && typeof el.focus === 'function') el.focus();
+}
+
+onMounted(async () => {
+  await nextTick();
+  focusEmailInput();
+});
 
 function setBannerFromError(err: unknown): void {
   if (!isNormalizedApiErrorLike(err)) {
@@ -391,10 +382,9 @@ function setBannerFromError(err: unknown): void {
     return;
   }
 
-  const requestId =
-    typeof err.requestId === 'string' && err.requestId !== ''
-      ? err.requestId
-      : undefined;
+  const requestId = typeof err.requestId === 'string' && err.requestId !== ''
+    ? err.requestId
+    : undefined;
 
   if (err.category === 'network') {
     banner.value = {
@@ -406,12 +396,6 @@ function setBannerFromError(err: unknown): void {
   }
 
   if (err.category === 'rate-limit') {
-    /*
-     * The password-reset endpoint is throttled. A user who cannot
-     * find the reset email often resubmits the form repeatedly,
-     * which is exactly the pattern that triggers the rate limiter.
-     * The banner tells them to wait rather than to contact support.
-     */
     banner.value = {
       variant: 'danger',
       title: props.labels.rateLimitTitle,
@@ -428,124 +412,116 @@ function setBannerFromError(err: unknown): void {
   };
 }
 
-/**
- * Populate the field-level error from a 422 VALIDATION_ERROR.
- *
- * Returns true when an `email` field error was extracted. In that
- * case the caller does not render the banner — the message is
- * displayed under the field itself.
- */
 function setFieldErrorFromError(err: unknown): boolean {
-  if (!isNormalizedApiErrorLike(err)) return false;
-  if (err.category !== 'validation') return false;
-
+  if (!isNormalizedApiErrorLike(err) || err.category !== 'validation') return false;
   const payload = err.fieldErrors;
   if (typeof payload !== 'object' || payload === null) return false;
 
   const map = payload as Record<string, unknown>;
-  const emailErrors = map.email;
-  if (
-    Array.isArray(emailErrors) &&
-    emailErrors.length > 0 &&
-    typeof emailErrors[0] === 'string'
-  ) {
-    emailError.value = emailErrors[0] as string;
+  const errors = map.identifier ?? map.email;
+  if (Array.isArray(errors) && typeof errors[0] === 'string') {
+    emailError.value = errors[0];
     return true;
   }
+
   return false;
 }
 
-// -----------------------------------------------------------------------------
-// Submission
-// -----------------------------------------------------------------------------
+function selectAuthenticator(mode: RecoveryAuthenticator): void {
+  if (isSubmitting.value) return;
+  authenticatorMode.value = mode;
+  challengeToken.value = null;
+  code.value = '';
+  banner.value = null;
+}
+
 async function onSubmit(): Promise<void> {
   if (isSubmitting.value) return;
 
   banner.value = null;
   emailError.value = undefined;
-
   isSubmitting.value = true;
-  try {
-    /*
-     * The auth service call. On success the backend returns 200 with
-     * a neutral message — regardless of whether the email is
-     * registered, once the enhanced AuthController is deployed.
-     * Until then, an unregistered email produces a 422 with an
-     * `email` field error, which the catch block below presents as
-     * a field error.
-     */
-    await requestPasswordReset(email.value);
 
-    /*
-     * Success. Transition to the confirmation panel. The email the
-     * user typed is preserved in the ref so the {email} token in
-     * the success message can be interpolated.
-     */
+  try {
+    if (status.value === 'form') {
+      if (authenticatorMode.value === 'otp') {
+        const challenge = await requestPasswordReset(identifier.value, otpChannel.value);
+        challengeToken.value = challenge.challengeToken;
+      } else {
+        challengeToken.value = null;
+      }
+
+      status.value = 'challenge';
+      code.value = '';
+      await focusCodeInput();
+      return;
+    }
+
+    await resetPassword({
+      identifier: identifier.value,
+      authenticator: authenticatorMode.value,
+      code: code.value.trim(),
+      ...(challengeToken.value ? { challenge_token: challengeToken.value } : {}),
+      password: newPassword.value,
+      password_confirmation: confirmPassword.value,
+    });
+
     status.value = 'success';
+    challengeToken.value = null;
+    code.value = '';
+    newPassword.value = '';
+    confirmPassword.value = '';
     await nextTick();
-    /*
-     * No explicit focus target — the success panel carries
-     * role="status" and is announced by screen readers
-     * automatically when it appears.
-     */
   } catch (err) {
     const hasFieldError = setFieldErrorFromError(err);
-    if (!hasFieldError) {
-      setBannerFromError(err);
-    }
+    if (!hasFieldError) setBannerFromError(err);
   } finally {
     isSubmitting.value = false;
   }
 }
 
-// -----------------------------------------------------------------------------
-// "Try another email"
-// -----------------------------------------------------------------------------
+async function onCancelRecovery(event: MouseEvent): Promise<void> {
+  event.preventDefault();
+  status.value = 'form';
+  challengeToken.value = null;
+  code.value = '';
+  newPassword.value = '';
+  confirmPassword.value = '';
+  banner.value = null;
+  await focusEmailInput();
+}
+
 async function onTryAnotherEmail(event: MouseEvent): Promise<void> {
   event.preventDefault();
   status.value = 'form';
-  email.value = '';
+  identifier.value = '';
+  challengeToken.value = null;
+  code.value = '';
+  newPassword.value = '';
+  confirmPassword.value = '';
   banner.value = null;
   emailError.value = undefined;
-  /*
-   * Wait for the form to re-render, then focus the email field.
-   * The ref is populated again after the form returns to the DOM.
-   */
-  await nextTick();
-  focusEmailInput();
+  await focusEmailInput();
 }
 
-// -----------------------------------------------------------------------------
-// "Back to login"
-// -----------------------------------------------------------------------------
 function onBackToLogin(event: MouseEvent): void {
   event.preventDefault();
   emit('back-to-login');
 }
 
-// -----------------------------------------------------------------------------
-// Derived render decisions
-// -----------------------------------------------------------------------------
-const submitLabel = computed<string>(() =>
-  isSubmitting.value ? props.labels.submittingLabel : props.labels.submitLabel,
-);
+const submitLabel = computed<string>(() => {
+  if (isSubmitting.value) return props.labels.submittingLabel;
+  if (status.value === 'challenge') return props.labels.verifyRecoveryLabel;
+  return authenticatorMode.value === 'otp'
+    ? props.labels.sendOtpLabel
+    : props.labels.continueLabel;
+});
 
-/*
- * The success message with the email interpolated.
- *
- * The consumer supplies a template that may contain the literal
- * token `{email}`; the component replaces it. If the token is
- * absent, the message is rendered unchanged.
- *
- * Using split/join rather than String.replace avoids the need to
- * escape the token for regex, and replaces every occurrence if the
- * template includes the token more than once.
- */
 const successMessageComputed = computed<string>(() => {
   const template = props.labels.successMessage;
-  const placeholder = '{email}';
-  if (!template.includes(placeholder)) return template;
-  return template.split(placeholder).join(email.value);
+  return template.includes('{email}')
+    ? template.split('{email}').join(identifier.value)
+    : template;
 });
 </script>
 
