@@ -106,27 +106,27 @@ export interface ElectionManualCountEvidence {
 }
 
 export function getGovernanceElection(id: number): Promise<GovernanceElection> {
-  return api.get<GovernanceElection>(\`/api/governance/elections/\${id}\`);
+  return api.get<GovernanceElection>('/api/governance/elections/' + id);
 }
 
 export function listElectionCandidates(id: number): Promise<readonly ElectionCandidateRecord[]> {
-  return api.get<readonly ElectionCandidateRecord[]>(\`/api/governance/elections/\${id}/candidates\`);
+  return api.get<readonly ElectionCandidateRecord[]>('/api/governance/elections/' + id + '/candidates');
 }
 
 export function listElectionCommitteeMembers(id: number): Promise<readonly ElectionCommitteeMemberRecord[]> {
-  return api.get<readonly ElectionCommitteeMemberRecord[]>(\`/api/governance/elections/\${id}/committee/members\`);
+  return api.get<readonly ElectionCommitteeMemberRecord[]>('/api/governance/elections/' + id + '/committee/members');
 }
 
 export function listElectionAuthorityEvidence(id: number): Promise<readonly ElectionAuthorityEvidenceRecord[]> {
-  return api.get<readonly ElectionAuthorityEvidenceRecord[]>(\`/api/governance/elections/\${id}/authority-evidence\`);
+  return api.get<readonly ElectionAuthorityEvidenceRecord[]>('/api/governance/elections/' + id + '/authority-evidence');
 }
 
 export function getElectionRegisterSnapshot(id: number): Promise<ElectionRegisterSnapshot | null> {
-  return api.get<ElectionRegisterSnapshot | null>(\`/api/governance/elections/\${id}/registers\`);
+  return api.get<ElectionRegisterSnapshot | null>('/api/governance/elections/' + id + '/registers');
 }
 
 export function listElectionManualCountEvidence(id: number): Promise<ElectionManualCountEvidence> {
-  return api.get<ElectionManualCountEvidence>(\`/api/governance/elections/\${id}/count-batches\`);
+  return api.get<ElectionManualCountEvidence>('/api/governance/elections/' + id + '/count-batches');
 }
 
 
@@ -145,9 +145,9 @@ export function recordElectionManualCountBatch(
   id: number,
   input: RecordManualCountBatchInput,
 ): Promise<ElectionManualCountEvidence> {
-  return api.post<ElectionManualCountEvidence>(\`/api/governance/elections/\${id}/count-batches\`, input);
+  return api.post<ElectionManualCountEvidence>('/api/governance/elections/' + id + '/count-batches', input);
 }
 
 export function witnessElectionManualCountBatch(id: number, batchId: number): Promise<ElectionManualCountBatch> {
-  return api.post<ElectionManualCountBatch>(\`/api/governance/elections/\${id}/count-batches/\${batchId}/witness\`);
+  return api.post<ElectionManualCountBatch>('/api/governance/elections/' + id + '/count-batches/' + batchId + '/witness');
 }
