@@ -56,6 +56,8 @@ jobs:
             }
           '
       - name: Block high and critical dependency advisories
+        id: dependency_security_gate
+        continue-on-error: true
         run: npm audit --audit-level=high
       - name: Type-check and build all applications
         run: npm run build
@@ -153,3 +155,14 @@ jobs:
           if-no-files-found: error
           include-hidden-files: true
           retention-days: 14
+
+      - name: Enforce dependency security gate after functional verification
+        if: always()
+        env:
+          AUDIT_OUTCOME: ${{ steps.dependency_security_gate.outcome }}
+        shell: bash
+        run: |
+          if [ "$AUDIT_OUTCOME" != "success" ]; then
+            echo "::error::High or critical dependency advisories remain; see the audit report above."
+            exit 1
+          fi
