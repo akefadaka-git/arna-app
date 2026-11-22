@@ -80,7 +80,7 @@ test('forbidden and unavailable responses have distinct non-disclosing user stat
 test('partial-data notice is driven only by the explicit response status', async () => {
   const view = await read('../src/features/executive-overview/ExecutiveOverviewView.vue');
   const api = await read('../src/features/executive-overview/api.ts');
-  assert.match(api, /status\?: 'complete' \| 'partial'/);
+  assert.match(api, /status: 'complete' \| 'partial'/);
   assert.match(view, /overview\.status === 'partial'/);
   assert.match(view, /labels\.partialDataMessage/);
 });
