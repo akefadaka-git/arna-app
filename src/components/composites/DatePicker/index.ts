@@ -25,3 +25,5 @@ import DatePicker from './DatePicker.vue';
 export default DatePicker;
 
 export type { DatePickerLabels } from './DatePicker.vue';
+export { default as CalendarDateInput } from './CalendarDateInput.vue';
+export { default as CalendarDateTimeInput } from './CalendarDateTimeInput.vue';

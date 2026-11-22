@@ -471,15 +471,15 @@ function onClick(event: MouseEvent): void {
 .launcher-tile {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   position: relative;
   min-height: 140px;
-  padding-block: var(--mases-space-5);
-  padding-inline: var(--mases-space-5);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-lg);
-  background-color: var(--mases-color-surface-page);
-  color: var(--mases-color-text-primary);
+  padding-block: var(--arna-space-5);
+  padding-inline: var(--arna-space-5);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-lg);
+  background-color: var(--arna-color-surface-page);
+  color: var(--arna-color-text-primary);
   text-decoration: none;
   font-family: inherit;
   /*
@@ -487,10 +487,10 @@ function onClick(event: MouseEvent): void {
    * substrate collapses it under prefers-reduced-motion.
    */
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    border-color var(--mases-duration-fast) var(--mases-easing-standard),
-    box-shadow var(--mases-duration-fast) var(--mases-easing-standard),
-    transform var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    border-color var(--arna-duration-fast) var(--arna-easing-standard),
+    box-shadow var(--arna-duration-fast) var(--arna-easing-standard),
+    transform var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 /* ---------------------------------------------------------------------------
@@ -501,14 +501,14 @@ function onClick(event: MouseEvent): void {
 }
 
 .launcher-tile[data-available='true']:hover {
-  border-color: var(--mases-color-border-strong);
-  box-shadow: var(--mases-shadow-elevation-2);
+  border-color: var(--arna-color-border-strong);
+  box-shadow: var(--arna-shadow-elevation-2);
   transform: translateY(-1px);
 }
 
 .launcher-tile[data-available='true']:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ---------------------------------------------------------------------------
@@ -518,8 +518,8 @@ function onClick(event: MouseEvent): void {
    the reduced opacity reinforces it.
    --------------------------------------------------------------------------- */
 .launcher-tile[data-available='false'] {
-  background-color: var(--mases-color-surface-sunken);
-  color: var(--mases-color-text-tertiary);
+  background-color: var(--arna-color-surface-sunken);
+  color: var(--arna-color-text-tertiary);
   cursor: not-allowed;
   opacity: 0.7;
 }
@@ -531,11 +531,11 @@ function onClick(event: MouseEvent): void {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--mases-space-10);
-  height: var(--mases-space-10);
-  border-radius: var(--mases-radius-md);
-  background-color: var(--mases-color-surface-accent);
-  color: var(--mases-color-icon-accent);
+  width: var(--arna-space-10);
+  height: var(--arna-space-10);
+  border-radius: var(--arna-radius-md);
+  background-color: var(--arna-color-surface-accent);
+  color: var(--arna-color-icon-accent);
   flex-shrink: 0;
 }
 
@@ -549,14 +549,14 @@ function onClick(event: MouseEvent): void {
 .launcher-tile__content {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   min-width: 0;
 }
 
 .launcher-tile__name {
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-semibold);
   /*
    * Amharic-safe wrapping — application names can be long in Ethiopic.
    * Two-line clamp so a very long name does not make one tile much
@@ -572,10 +572,10 @@ function onClick(event: MouseEvent): void {
 }
 
 .launcher-tile__description {
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
-  color: var(--mases-color-text-secondary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
+  color: var(--arna-color-text-secondary);
   overflow-wrap: anywhere;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -586,7 +586,7 @@ function onClick(event: MouseEvent): void {
 /* In the non-launchable state, the description inherits the muted
    foreground from the root's color rule above. */
 .launcher-tile[data-available='false'] .launcher-tile__description {
-  color: var(--mases-color-text-tertiary);
+  color: var(--arna-color-text-tertiary);
 }
 
 /* ============================================================================
@@ -597,9 +597,9 @@ function onClick(event: MouseEvent): void {
    ============================================================================ */
 .launcher-tile__lock-icon {
   position: absolute;
-  inset-block-start: var(--mases-space-3);
-  inset-inline-end: var(--mases-space-3);
-  color: var(--mases-color-icon-secondary);
+  inset-block-start: var(--arna-space-3);
+  inset-inline-end: var(--arna-space-3);
+  color: var(--arna-color-icon-secondary);
 }
 
 /* ============================================================================
