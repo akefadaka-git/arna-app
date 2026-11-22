@@ -207,6 +207,7 @@ import { formatCalendarDate } from '@/core/dates/calendar';
  * by that migration.
  */
 const SUPPORT_EMAIL = 'support@maalearna.com.et';
+const CORPORATE_SITE_URL = 'https://www.maalearna.com.et/';
 
 // -----------------------------------------------------------------------------
 // Copyright year — Ethiopian calendar
@@ -281,6 +282,15 @@ const copyrightText = computed(() => masesFooterLabels.copyrightTemplate.replace
           class="mases-footer-content__link"
           data-testid="mases-footer-content-support-link"
         >{{ masesFooterLabels.supportLinkLabel }}</a>
+      </li>
+      <li>
+        <a
+          :href="CORPORATE_SITE_URL"
+          class="mases-footer-content__link"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-testid="mases-footer-content-corporate-site-link"
+        >{{ masesFooterLabels.corporateSiteLinkLabel }}</a>
       </li>
     </ul>
   </div>
