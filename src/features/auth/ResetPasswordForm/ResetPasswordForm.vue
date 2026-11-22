@@ -681,77 +681,6 @@ function isNormalizedApiErrorLike(err: unknown): err is NormalizedApiErrorLike {
   return typeof err === 'object' && err !== null;
 }
 
-function setBannerFromError(err: unknown): void {
-  if (!isNormalizedApiErrorLike(err)) {
-    banner.value = {
-      variant: 'danger',
-      title: props.labels.genericErrorTitle,
-      message: props.labels.genericErrorMessage,
-    };
-    return;
-  }
-
-  const requestId =
-    typeof err.requestId === 'string' && err.requestId !== ''
-      ? err.requestId
-      : undefined;
-
-  if (err.category === 'network') {
-    banner.value = {
-      variant: 'danger',
-      title: props.labels.networkErrorTitle,
-      message: props.labels.networkErrorMessage,
-    };
-    return;
-  }
-
-  if (err.category === 'rate-limit') {
-    banner.value = {
-      variant: 'danger',
-      title: props.labels.rateLimitTitle,
-      message: props.labels.rateLimitMessage,
-    };
-    return;
-  }
-
-  /*
-   * 'unauthorized' means the reset token was rejected by the
-   * backend — typically because it expired or was already used.
-   * The correct recovery is to request a new link, not to correct
-   * a field. The form switches to the invalid-link panel, which
-   * replaces the form and offers the two recovery links.
-   */
-  if (err.category === 'unauthorized') {
-    status.value = 'invalid';
-    banner.value = null;
-    return;
-  }
-
-  banner.value = {
-    variant: 'danger',
-    title: props.labels.genericErrorTitle,
-    message: props.labels.genericErrorMessage,
-    requestId,
-  };
-}
-
-function setFieldErrorsFromError(err: unknown): boolean {
-  if (!isNormalizedApiErrorLike(err)) return false;
-  if (err.category !== 'validation') return false;
-
-  const payload = err.fieldErrors;
-  if (typeof payload !== 'object' || payload === null) return false;
-
-  const next: Record<string, string[]> = {};
-  for (const [key, value] of Object.entries(payload)) {
-    if (Array.isArray(value) && value.every((v) => typeof v === 'string')) {
-      next[key] = value as string[];
-    }
-  }
-  serverFieldErrors.value = next;
-  return Object.keys(next).length > 0;
-}
-
 /**
  * Focus the first field with an error, in visual order.
  *
@@ -759,22 +688,6 @@ function setFieldErrorsFromError(err: unknown): boolean {
  * confirmation. The email field is read-only and is not a focus
  * target.
  */
-async function focusFirstErrorField(): Promise<void> {
-  await nextTick();
-
-  if (
-    passwordMatchError.value !== undefined ||
-    serverError('password') !== undefined
-  ) {
-    focusInput(passwordInputRef.value);
-    return;
-  }
-  if (serverError('password_confirmation') !== undefined) {
-    focusInput(passwordConfirmInputRef.value);
-    return;
-  }
-}
-
 // -----------------------------------------------------------------------------
 // Submission
 // -----------------------------------------------------------------------------
