@@ -1,7 +1,7 @@
 # ARNA Executive Overview — A4 Frontend Security Verification
 
 **Stage:** A4 — verification  
-**Current status:** Automated A4 App preflight PASS on exact code head `b9383df889ee6b37a4c015087b652756b37f95b0`; formal A4 closure not declared.  
+**Current status:** VERIFIED-CLOSED — A4 App exact-head verification and GPT-6 internal technical retest completed 2026-11-22. Closure is limited to the Executive Overview feature branch and does not authorize merge, production grants, or deployment.  
 **A3 App parent:** `fc5d87fd4ed97a2b5102ffefbad894c261f0d6f2`  
 **A4 App baseline:** `ea2c432ecf1d8d0f02ee7f58984bf8341f8a2bf7`  
 **R3 branch:** `remediate/executive-overview-a4-r3`
@@ -58,3 +58,37 @@ The current A3 App baseline is `76110efd51910240c15faf7c0387e8c1942acf85`, with 
 - [Executive Overview App A4 workflow #45021004275 — PASS](https://github.com/akefadaka-git/arna-app/actions/runs/45021004275).
 - Route contract, frontend build, and browser security checks passed.
 - Independent review is not an A4 prerequisite; it is reserved for A5 immediately before deployment.
+
+
+---
+
+## A4 formal closure record — 2026-11-22
+
+**Disposition: VERIFIED-CLOSED (App frontend scope).** This record supersedes the earlier R3/R4 pending statements above. It closes A4 for the canonical Executive Overview implementation branch only.
+
+### Exact target and automated evidence
+
+- Canonical branch: `feat/dashboard-executive-overview-a3`.
+- Code-bearing App SHA: `aa66d6d301fcfa8ca14d4e7d64cbb3995b084277`.
+- [Frontend CI #45023009891 — PASS](https://github.com/akefadaka-git/arna-app/actions/runs/45023009891), exact SHA above.
+- [Executive Overview A4 workflow #45023014716 — PASS](https://github.com/akefadaka-git/arna-app/actions/runs/45023014716), exact SHA above.
+- Production build/type-check and route/permission contracts: PASS.
+- Workspace dashboard route contract: PASS.
+- Public browser/WCAG contract suite: 10 passed.
+- Executive Overview authenticated browser security suite: 9 passed, 0 failed. Scenarios include authorized render, logout with non-cancellable late completion, session expiry, permission revocation, tenant A→B, tenant A→B→A, unmount cancellation, generic 403/503 states, and partial response handling.
+
+### Fresh GPT-6 internal technical retest
+
+- Inspected the exact branch implementation, route contract, browser harness and adversarial Playwright tests.
+- Confirmed production uses the real API client by default; the injectable request executor is a test seam.
+- Confirmed authorization-context changes clear rendered financial data synchronously; request-sequence identity prevents stale promises from restoring data after logout or tenant/session transitions; unmount aborts the active request.
+- No A4-scoped critical/high finding remains open.
+
+### Integration and residual boundaries
+
+- App `main` is two commits ahead of this feature head; the intervening changes are limited to the public-site deployment workflow and public entry HTML. They do not touch the Executive Overview implementation or A4 test files. Reconcile the branch with current `main` and rerun affected gates before any merge.
+- Synthetic test identities and financial values only. Production user assignments, live permissions, and production data were not inspected.
+- No merge, role grant, or deployment is authorized by this closure.
+- Independent review remains reserved for A5 immediately before deployment, not A4.
+
+**A4 App result: VERIFIED-CLOSED.**
