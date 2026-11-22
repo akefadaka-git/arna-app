@@ -359,9 +359,13 @@ function passesPermissionCheck(
     : auth.hasAnyPermission(permission);
 }
 
+function passesRoleCheck(requiredRoles: readonly string[] | undefined): boolean {
+  return requiredRoles === undefined || requiredRoles.some((role) => auth.hasRole(role));
+}
+
 function isLeafVisible(leaf: NavLeaf): boolean {
-  if (leaf.requiredRoles && !leaf.requiredRoles.some((role) => auth.hasRole(role))) return false;
-  return passesPermissionCheck(leaf.permission, leaf.permissionMode);
+  return passesRoleCheck(leaf.requiredRoles)
+    && passesPermissionCheck(leaf.permission, leaf.permissionMode);
 }
 
 /*
