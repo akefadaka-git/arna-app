@@ -597,6 +597,11 @@ function onToggleClick(): void {
     flex-basis: auto;
   }
 
+  .app-header__actions {
+    flex: 0 0 auto;
+    max-width: none;
+  }
+
   .app-header {
     flex-wrap: nowrap;
     gap: var(--mases-space-4);
@@ -713,7 +718,9 @@ function onToggleClick(): void {
   order: 3;
   align-items: center;
   gap: var(--mases-space-2);
-  flex-shrink: 0;
+  flex: 1 1 auto;
+  justify-content: flex-end;
+  max-width: 100%;
 }
 
 /* ============================================================================
