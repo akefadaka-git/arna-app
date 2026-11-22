@@ -55,13 +55,40 @@ export async function listGovernanceElections(perPage = 25): Promise<PaginatedGo
 }
 
 
+export interface ElectionCandidatePerson {
+  readonly id: number;
+  readonly public_id: string;
+  readonly first_name_am: string | null;
+  readonly father_name_am: string | null;
+  readonly grandfather_name_am: string | null;
+  readonly first_name_en: string | null;
+  readonly father_name_en: string | null;
+  readonly grandfather_name_en: string | null;
+}
+
 export interface ElectionCandidateRecord {
   readonly id: number;
-  readonly candidate_person_id: number | null;
-  readonly candidate_name_snapshot: string | null;
-  readonly nomination_statement: string | null;
-  readonly committee_status: string;
-  readonly status?: string;
+  readonly tenant_id: number;
+  readonly election_id: number;
+  readonly person_id: number;
+  readonly status: string;
+  readonly consent_status: string;
+  readonly consent_method: string | null;
+  readonly consented_at: string | null;
+  readonly declarations: readonly Record<string, unknown>[] | null;
+  readonly version: number;
+  readonly person?: ElectionCandidatePerson;
+  readonly nominations?: readonly {
+    readonly id: number;
+    readonly status: string;
+    readonly self_nomination: boolean;
+    readonly submission_channel: string;
+    readonly source_reference: string;
+    readonly statement: string | null;
+    readonly submitted_at: string;
+  }[];
+  readonly evidence?: readonly { readonly id: number; readonly evidence_type: string; readonly attached_at: string }[];
+  readonly decisions?: readonly { readonly id: number; readonly outcome: string; readonly rationale: string; readonly decided_at: string }[];
 }
 
 export interface ElectionCommitteeMemberRecord {
