@@ -6,7 +6,7 @@
  * File:      mase_app/src/router/shell-labels.ts  (AMEND)
  * Unit:      CR-FOOTER1 — footer content labels
  * Delivery type:  Amendment — one new exported const
- *                 (`masesFooterLabels`), a new consumer in the
+ *                 (`aranaFooterLabels`), a new consumer in the
  *                 §"Consumed by" list, a new export group, a new
  *                 paragraph in §"Terms handled deliberately" on the
  *                 copyright string and its computed year, revision
@@ -21,9 +21,9 @@
  *   number in the bottom-right corner.
  *
  * After (v1.10.0):
- *   A new exported const `masesFooterLabels` is added:
+ *   A new exported const `aranaFooterLabels` is added:
  *
- *       masesFooterLabels = {
+ *       aranaFooterLabels = {
  *         copyrightTemplate:
  *           '© 2016 - {year} ማሌ ዓርና አክሲዮን ማኅበር፥ መብቱ የተጠበቀ ነው።',
  *         legalLinkLabel:   'ሕጋዊ መረጃ',
@@ -129,7 +129,7 @@
  * File:      mase_app/src/router/shell-labels.ts  (AMEND)
  * Unit:      CR-BRAND1 — corporate brand identity labels
  * Delivery type:  Amendment — one new exported const
- *                 (`masesBrandLabels`), three header additions
+ *                 (`aranaBrandLabels`), three header additions
  *                 (purpose-sentence, exports list, a new note on the
  *                 corporate name in §"Terms handled deliberately"),
  *                 a new consumer in the §"Consumed by" list,
@@ -137,8 +137,8 @@
  * Net lines:      +~110 docblock; +1 export (~20 lines).
  *
  * Before (v1.8.0):
- *   The file exported five constants: masesShellLabels,
- *   masesUserMenuItems, portalUserMenuItems, authenticatedNavItems,
+ *   The file exported five constants: arnaShellLabels,
+ *   arnaUserMenuItems, portalUserMenuItems, authenticatedNavItems,
  *   portalNavItems. No export carried the corporate brand identity
  *   (ማሌ ዓርና / ማሴስ). The two shell layouts (AuthenticatedLayout,
  *   PortalLayout) bound AppShell's `#brand` slot to nothing, so the
@@ -155,12 +155,12 @@
  *   derived short form is used (see After).
  *
  * After (v1.9.0):
- *   A new exported const `masesBrandLabels` is added:
+ *   A new exported const `aranaBrandLabels` is added:
  *
- *       masesBrandLabels = {
+ *       aranaBrandLabels = {
  *         corporateName:         'ማሌ ዓርና',
  *         productName:           'ማሴስ',
- *         fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ማሴስ)',
+ *         fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ARNA)',
  *       } as const;
  *
  *   The header renders the two-line short form:
@@ -217,8 +217,8 @@
  * requires that all such strings come from a label file. Placing
  * them here — in the same file that already carries the shell chrome
  * labels and the nav trees — keeps the shell's user-facing text in
- * one place. MASESBrand.vue (the next file in this CR) imports
- * `masesBrandLabels` from here, the same way AppShell, both layouts,
+ * one place. AranaBrand.vue (the next file in this CR) imports
+ * `aranaBrandLabels` from here, the same way AppShell, both layouts,
  * and the launcher route import their respective labels.
  *
  * A separate brand-labels file (e.g. router/brand-labels.ts) was
@@ -372,7 +372,7 @@
  *     leaf points at.
  *   · The icon name `landmark` is verified against BaseIcon.vue
  *     v2.0.0.
- *   · No change to masesShellLabels, masesUserMenuItems,
+ *   · No change to arnaShellLabels, arnaUserMenuItems,
  *     portalUserMenuItems, or portalNavItems.
  *
  * Files modified:  this file only
@@ -503,15 +503,15 @@
  * Before (v1.6.1):
  *   The file exported five constants:
  *
- *     masesShellLabels        — shell chrome labels, shared
- *     masesUserMenuItems      — the user-menu items, shared
+ *     arnaShellLabels        — shell chrome labels, shared
+ *     arnaUserMenuItems      — the user-menu items, shared
  *                               (currently just `logout`)
  *     authenticatedNavItems   — the workspace nav tree
  *     portalNavItems          — the portal nav tree
  *     (plus the re-exported type aliases imported from
  *      @/layouts/AppShell)
  *
- *   `masesUserMenuItems` was consumed by BOTH layouts
+ *   `arnaUserMenuItems` was consumed by BOTH layouts
  *   (AuthenticatedLayout and PortalLayout) via AppShell's
  *   `:user-menu-items` binding. Any addition to that array would
  *   therefore render on both surfaces — a portal-only entry could not
@@ -522,10 +522,10 @@
  *
  *     portalUserMenuItems = [
  *       { id: 'go-to-workspace',
- *         label: 'ወደ ማሴስ ወርክስፔስ',
+ *         label: 'ወደ ARNA ወርክስፔስ',
  *         icon: 'layout-grid',
  *         permission: 'app.app.access' },
- *       ...masesUserMenuItems,       // the shared `logout`
+ *       ...arnaUserMenuItems,       // the shared `logout`
  *     ]
  *
  *   The new entry is a cross-domain navigation link to the workspace
@@ -536,7 +536,7 @@
  *   access). A caller who cannot reach the workspace does not see the
  *   item.
  *
- *   `masesUserMenuItems` itself is UNCHANGED. It continues to be the
+ *   `arnaUserMenuItems` itself is UNCHANGED. It continues to be the
  *   workspace's user menu (just `logout`) and the base for the
  *   portal's menu.
  *
@@ -735,7 +735,7 @@
  *     path with no registered component.
  *   · The icon name `package` is NOT yet verified against the
  *     registry — see §"The icon name — please verify".
- *   · No change to masesShellLabels, masesUserMenuItems, or
+ *   · No change to arnaShellLabels, arnaUserMenuItems, or
  *     portalNavItems. Only authenticatedNavItems is amended.
  *
  * =============================================================================
@@ -808,7 +808,7 @@
  *     '@/layouts/AppShell'.
  *   · The icon name `handshake` is verified against the registry — see
  *     the file header §"Icon registry".
- *   · No change to masesShellLabels, masesUserMenuItems, or
+ *   · No change to arnaShellLabels, arnaUserMenuItems, or
  *     portalNavItems. Only authenticatedNavItems is amended.
  *
  * =============================================================================
@@ -831,7 +831,7 @@
  * Revision history
  * -----------------------------------------------------------------------------
  * 1.10.0 — footer content labels (CR-FOOTER1). One new exported const
- *          `masesFooterLabels`, carrying the copyright template
+ *          `aranaFooterLabels`, carrying the copyright template
  *          ('© 2016 - {year} ማሌ ዓርና አክሲዮን ማኅበር፥ መብቱ የተጠበቀ ነው።'),
  *          the legal link label ('ሕጋዊ መረጃ'), and the support link
  *          label ('ድጋፍ'). Consumed by MASESFooterContent.vue (a
@@ -849,10 +849,10 @@
  *          items, or existing nav items.
  *
  * 1.9.0  — corporate brand identity (CR-BRAND1). One new exported
- *          const `masesBrandLabels`, carrying the corporate name
+ *          const `aranaBrandLabels`, carrying the corporate name
  *          'ማሌ ዓርና', the product code 'ማሴስ', and the full approved
  *          corporate identity 'ማሌ ዓርና ስማርት ሲስተም (ማሴስ)'. Consumed by
- *          MASESBrand.vue (a companion change in the same CR) via the
+ *          AranaBrand.vue (a companion change in the same CR) via the
  *          AppShell `#brand` slot. See the CR-BRAND1 block at the top
  *          of this file for the rationale and for why
  *          ማሌ ዓርና + ማሴስ is the header's short form.
@@ -907,8 +907,8 @@
  *
  * 1.7.0  — portal user-menu extension (back-to-workspace). One new
  *          exported const `portalUserMenuItems` = [go-to-workspace]
- *          ++ masesUserMenuItems. The new entry is gated on
- *          `app.app.access`. `masesUserMenuItems` and both nav trees
+ *          ++ arnaUserMenuItems. The new entry is gated on
+ *          `app.app.access`. `arnaUserMenuItems` and both nav trees
  *          are byte-for-byte unchanged.
  *
  * 1.6.1  — documentation restoration (CR-LW3). No field changes:
@@ -990,7 +990,7 @@
  *              - §"Future hooks — breadcrumbs aria label"
  *              - §"Language selector — label gap"
  *              - §"Flat nav tree — deliberate"
- *          · Added an inline comment inside `masesShellLabels` marking
+ *          · Added an inline comment inside `arnaShellLabels` marking
  *            where the future `breadcrumbsAriaLabel` field will go
  *            when the Breadcrumbs-to-AppHeader wiring CR ships.
  *          · No value was added, removed, or renamed. The exported
@@ -1038,7 +1038,7 @@
  * Consumed by:
  *   layouts/AuthenticatedLayout/AuthenticatedLayout.vue   (workspace)
  *   features/portal/PortalLayout.vue                      (portal)
- *   layouts/AppShell/MASESBrand/MASESBrand.vue            (brand labels)
+ *   layouts/AppShell/AranaBrand/AranaBrand.vue            (brand labels)
  *   layouts/AppShell/MASESFooterContent/MASESFooterContent.vue
  *                                                         (footer labels)
  *
@@ -1048,18 +1048,18 @@
  * Seven constants, in six groups:
  *
  *   1. Brand identity — shared by both builds.
- *          masesBrandLabels: { corporateName, productName,
+ *          aranaBrandLabels: { corporateName, productName,
  *                              fullCorporateIdentity }
  *
  *   2. Footer content — shared by both builds.
- *          masesFooterLabels: { copyrightTemplate, legalLinkLabel,
+ *          aranaFooterLabels: { copyrightTemplate, legalLinkLabel,
  *                               supportLinkLabel }
  *
  *   3. Shell chrome labels — shared by both builds.
- *          masesShellLabels: AppShellLabels
+ *          arnaShellLabels: AppShellLabels
  *
  *   4. The user menu items — shared by both builds.
- *          masesUserMenuItems:    ReadonlyArray<UserMenuItem>
+ *          arnaUserMenuItems:    ReadonlyArray<UserMenuItem>
  *
  *   5. The portal's user menu items — the shared items PLUS a
  *      cross-domain link back to the workspace. Declared separately so
@@ -1101,7 +1101,7 @@
  *     my-wallet         → 'wallet'        (Wallet)
  *     my-loans          → 'coins'         (Coins)
  *
- * User menu — workspace (masesUserMenuItems):
+ * User menu — workspace (arnaUserMenuItems):
  *     logout            → 'log-out'       (LogOut)
  *
  * User menu — portal (portalUserMenuItems):
@@ -1126,12 +1126,12 @@
  * workspace governance-bodies nav item. `landmark` is verified against
  * BaseIcon.vue v2.0.0 in this session.
  *
- * The 1.9.0 revision adds no icon: `masesBrandLabels` carries no icon
+ * The 1.9.0 revision adds no icon: `aranaBrandLabels` carries no icon
  * field. The brand mark is text-only — see the CR-BRAND1 block at the
  * top of this file for why the corporate emblem is not rendered in the
  * header.
  *
- * The 1.10.0 revision adds no icon either. `masesFooterLabels` carries
+ * The 1.10.0 revision adds no icon either. `aranaFooterLabels` carries
  * no icon field — the footer's legal and support links are text
  * labels. Social link labels, which would require icon support, are
  * deferred; see the CR-FOOTER1 block for why the BaseIcon registry
@@ -1270,7 +1270,7 @@
  * -----------------------------------------------------------------------------
  * The AppHeader's `nav` slot is currently unpopulated: no consumer
  * supplies a breadcrumb trail. When a future CR wires Breadcrumbs into
- * that slot, this file gains a new field on `masesShellLabels`:
+ * that slot, this file gains a new field on `arnaShellLabels`:
  *
  *     breadcrumbsAriaLabel: 'የገጽ ዱካ'
  *
@@ -1290,7 +1290,7 @@
  * -----------------------------------------------------------------------------
  * AppShell does not currently render a LanguageSelector. When the
  * POST /api/locale endpoint exists and the selector is added (Freeze
- * §9.3 / §20.3), its labels belong in `masesShellLabels` alongside the
+ * §9.3 / §20.3), its labels belong in `arnaShellLabels` alongside the
  * other per-component groups:
  *
  *     languageSelector: {
@@ -1299,7 +1299,7 @@
  *       optionEn: string;           // "English"
  *     }
  *
- * It is deliberately absent today.
+ * It is registered in `arnaShellLabels` and persisted by AppShell through the locale preference API.
  *
  * -----------------------------------------------------------------------------
  * Flat nav tree — deliberate
@@ -1420,7 +1420,7 @@ import type {
  * usual sense — there is no English counterpart that would be shown
  * in an English locale. But they ARE user-facing strings, so per the
  * project's "no hardcoded user-facing string" policy they live here
- * rather than inside MASESBrand.vue.
+ * rather than inside AranaBrand.vue.
  *
  * The full approved corporate identity, confirmed by the brand owner
  * for CR-BRAND1, is:
@@ -1445,11 +1445,11 @@ import type {
  * the change as a brand decision, not a translation decision, and
  * route it through the brand owner.
  */
-export const masesBrandLabels = {
+export const aranaBrandLabels = {
   corporateName: 'ማሌ ዓርና',
-  productName: 'ማሴስ',
+  productName: 'ARNA',
   tagline: 'Lead by example • Build lasting trust',
-  fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ማሴስ)',
+  fullCorporateIdentity: 'ማሌ ዓርና ስማርት ሲስተም (ARNA)',
 } as const;
 
 /**
@@ -1480,7 +1480,7 @@ export const masesBrandLabels = {
  * text-only social links wait for the official URLs and the Amharic
  * label forms.
  */
-export const masesFooterLabels = {
+export const aranaFooterLabels = {
   /**
    * The copyright line. `{year}` is replaced by the current Ethiopian
    * calendar year at render time.
@@ -1523,7 +1523,7 @@ export const masesFooterLabels = {
  * after `mobileMenu` — see the file header comment §"Future hooks —
  * breadcrumbs aria label".
  */
-export const masesShellLabels: AppShellLabels = {
+export const arnaShellLabels: AppShellLabels = {
   skipToContent: 'ወደ ዋና ይዘት ዝለል',
   mobileMenu: 'የማውጫ ዝርዝር ክፈት',
 
@@ -1541,6 +1541,18 @@ export const masesShellLabels: AppShellLabels = {
     triggerAriaLabelWithUnread: (count: number) =>
       `ማሳወቂያዎች፣ ${count} ያልተነበዩ`,
     disabledReason: 'ማሳወቂያዎች በቅርቡ ይመጣሉ',
+  },
+
+  languageSelector: {
+    triggerAriaLabel: {
+      am: 'ቋንቋ ይምረጡ',
+      en: 'Select language',
+    },
+  },
+
+  languageSaveError: {
+    am: 'የቋንቋ ምርጫዎን ማስቀመጥ አልተቻለም። እንደገና ይሞክሩ።',
+    en: 'Your language preference could not be saved. Please try again.',
   },
 
   tenantSwitcher: {
@@ -1570,7 +1582,7 @@ export const masesShellLabels: AppShellLabels = {
  * directly — a workspace user does not see a "back to workspace" entry
  * (they are already there).
  */
-export const masesUserMenuItems: ReadonlyArray<UserMenuItem> = [
+export const arnaUserMenuItems: ReadonlyArray<UserMenuItem> = [
   {
     id: 'logout',
     label: 'ውጣ',
@@ -1582,7 +1594,7 @@ export const masesUserMenuItems: ReadonlyArray<UserMenuItem> = [
 /**
  * The portal's user-menu items.
  *
- * Extends `masesUserMenuItems` with a cross-domain "back to workspace"
+ * Extends `arnaUserMenuItems` with a cross-domain "back to workspace"
  * entry, gated on `app.app.access` — the permission that identifies a
  * caller who can reach https://app.maalearna.com.et. A caller who does
  * not hold the permission (a shareholder, a board member whose role is
@@ -1628,7 +1640,7 @@ export const portalUserMenuItems: ReadonlyArray<UserMenuItem> = [
     icon: 'layout-grid',
     permission: 'app.app.access',
   },
-  ...masesUserMenuItems,
+  ...arnaUserMenuItems,
 ];
 
 /**

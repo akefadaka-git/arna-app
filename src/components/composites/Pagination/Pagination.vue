@@ -157,13 +157,13 @@ export interface TotalLabelContext {
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesPaginationWarned = new Set<string>();
+const __arnaPaginationWarned = new Set<string>();
 
-function __masesPaginationWarnOnce(key: string, message: string): void {
-  if (__masesPaginationWarned.has(key)) {
+function __arnaPaginationWarnOnce(key: string, message: string): void {
+  if (__arnaPaginationWarned.has(key)) {
     return;
   }
-  __masesPaginationWarned.add(key);
+  __arnaPaginationWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -312,7 +312,7 @@ const effectiveMaxButtons = computed<number>(() => {
     !Number.isInteger(raw)
   ) {
     if (import.meta.env.DEV) {
-      __masesPaginationWarnOnce(
+      __arnaPaginationWarnOnce(
         'pagination:max-buttons-not-integer',
         `[Pagination] maxButtons=${String(raw)} is not an integer. ` +
           `Clamping to ${MIN_MAX_BUTTONS}.`,
@@ -323,7 +323,7 @@ const effectiveMaxButtons = computed<number>(() => {
 
   if (raw < MIN_MAX_BUTTONS) {
     if (import.meta.env.DEV) {
-      __masesPaginationWarnOnce(
+      __arnaPaginationWarnOnce(
         'pagination:max-buttons-below-minimum',
         `[Pagination] maxButtons=${raw} is below the minimum of ` +
           `${MIN_MAX_BUTTONS}. Clamping to ${MIN_MAX_BUTTONS}.`,
@@ -339,7 +339,7 @@ const effectiveMaxButtons = computed<number>(() => {
  * Guard: showTotal=true without totalLabel.
  */
 if (import.meta.env.DEV && props.showTotal && !props.totalLabel) {
-  __masesPaginationWarnOnce(
+  __arnaPaginationWarnOnce(
     'pagination:missing-total-label',
     '[Pagination] showTotal=true without totalLabel. The "Showing X–Y ' +
       'of Z" text will not be rendered. Supply a formatter such as ' +
@@ -356,7 +356,7 @@ if (
   props.perPageOptions.length > 0 &&
   props.perPageLabel.trim() === ''
 ) {
-  __masesPaginationWarnOnce(
+  __arnaPaginationWarnOnce(
     'pagination:missing-per-page-label',
     '[Pagination] perPageOptions is non-empty but perPageLabel is ' +
       'empty. The per-page selector will render with no accessible ' +
@@ -639,13 +639,13 @@ function onNextClick(): void {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--mases-space-4);
+  gap: var(--arna-space-4);
   flex-wrap: wrap;
   width: 100%;
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
 }
 
 /* ============================================================================
@@ -654,12 +654,12 @@ function onNextClick(): void {
 .pagination__meta {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-4);
+  gap: var(--arna-space-4);
   flex-wrap: wrap;
 }
 
 .pagination__total {
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
 }
 
 .pagination__per-page {
@@ -674,7 +674,7 @@ function onNextClick(): void {
 .pagination__pages {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
 }
 
 /* ============================================================================
@@ -688,49 +688,49 @@ function onNextClick(): void {
   min-width: 2rem;
   height: 2rem;
   padding-block: 0;
-  padding-inline: var(--mases-space-2);
+  padding-inline: var(--arna-space-2);
   appearance: none;
   background-color: transparent;
   border: 1px solid transparent;
-  border-radius: var(--mases-radius-sm);
-  color: var(--mases-color-text-secondary);
+  border-radius: var(--arna-radius-sm);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
+  font-size: var(--arna-font-size-body-sm);
   line-height: 1;
-  font-weight: var(--mases-font-weight-medium);
+  font-weight: var(--arna-font-weight-medium);
   /* Tabular numerals so page numbers align in their squares. */
   font-variant-numeric: tabular-nums;
   cursor: pointer;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    color var(--mases-duration-fast) var(--mases-easing-standard),
-    border-color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    color var(--arna-duration-fast) var(--arna-easing-standard),
+    border-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .pagination__page:hover:not([data-current='true']),
 .pagination__nav:hover:not(:disabled) {
-  background-color: var(--mases-color-state-hover);
-  color: var(--mases-color-text-primary);
+  background-color: var(--arna-color-state-hover);
+  color: var(--arna-color-text-primary);
 }
 
 .pagination__page:focus-visible,
 .pagination__nav:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* Current page */
 .pagination__page[data-current='true'] {
-  background-color: var(--mases-color-action-primary);
-  color: var(--mases-color-text-inverse);
-  border-color: var(--mases-color-action-primary);
-  font-weight: var(--mases-font-weight-semibold);
+  background-color: var(--arna-color-action-primary);
+  color: var(--arna-color-text-inverse);
+  border-color: var(--arna-color-action-primary);
+  font-weight: var(--arna-font-weight-semibold);
   cursor: default;
 }
 
 /* Disabled prev/next */
 .pagination__nav:disabled {
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
   cursor: not-allowed;
 }
 
@@ -743,9 +743,9 @@ function onNextClick(): void {
   justify-content: center;
   min-width: 2rem;
   height: 2rem;
-  padding-inline: var(--mases-space-2);
-  color: var(--mases-color-text-tertiary);
-  font-weight: var(--mases-font-weight-regular);
+  padding-inline: var(--arna-space-2);
+  color: var(--arna-color-text-tertiary);
+  font-weight: var(--arna-font-weight-regular);
   user-select: none;
 }
 
@@ -757,7 +757,7 @@ function onNextClick(): void {
     /* Stack meta above pages on small screens. */
     flex-direction: column;
     align-items: stretch;
-    gap: var(--mases-space-3);
+    gap: var(--arna-space-3);
   }
 
   .pagination__meta {

@@ -24,18 +24,19 @@ test('mobile navigation remains delegated to the existing accessible drawer', ()
 });
 
 test('shell layout retains reduced-motion and forced-colors accommodations', () => {
-  assert.match(shell, /prefers-reduced-motion:\s*reduce/);
+  // AppShell defines no animation or transition; child controls own their motion policy.
+  assert.doesNotMatch(shell, /(?:animation|transition)\s*:/);
   assert.match(shell, /forced-colors:\s*active/);
   assert.match(shell, /outline-color:\s*Highlight/);
 });
 
 test('brand lockup uses the circular corporate emblem, bilingual identity and tagline', () => {
-  const brand = readFileSync('src/layouts/AppShell/MASESBrand/MASESBrand.vue', 'utf8');
+  const brand = readFileSync('src/layouts/AppShell/AranaBrand/AranaBrand.vue', 'utf8');
   const labels = readFileSync('src/router/shell-labels.ts', 'utf8');
   assert.match(brand, /src="\/logo\.png"/);
   assert.match(brand, /width="56"[\s\S]*height="56"/);
   assert.match(brand, /border-radius:\s*50%/);
-  assert.match(brand, /masesBrandLabels\.tagline/);
+  assert.match(brand, /aranaBrandLabels\.tagline/);
   assert.match(labels, /tagline:\s*'Lead by example • Build lasting trust'/);
 });
 
@@ -48,11 +49,11 @@ test('notification control is connected to the authenticated notification center
 });
 
 test('brand lockup uses the approved emblem, product name, and descriptive tagline', () => {
-  const brand = readFileSync('src/layouts/AppShell/MASESBrand/MASESBrand.vue', 'utf8');
+  const brand = readFileSync('src/layouts/AppShell/AranaBrand/AranaBrand.vue', 'utf8');
   assert.match(brand, /src="\/logo\.png"/);
   assert.match(brand, /border-radius:\s*50%/);
   assert.match(brand, /width:\s*56px/);
-  assert.match(brand, /masesBrandLabels\.productName/);
+  assert.match(brand, /aranaBrandLabels\.productName/);
   assert.match(brand, /Maale Arna Smart System/);
 });
 
@@ -101,7 +102,7 @@ test('E.C. is the default calendar and G.C. is a mutually exclusive preference',
 
 test('date-bearing views use the shared calendar formatter instead of dual calendar labels', () => {
   const center = readFileSync('src/features/notifications/NotificationsCenter.vue', 'utf8');
-  const footer = readFileSync('src/layouts/AppShell/MASESFooterContent/MASESFooterContent.vue', 'utf8');
+  const footer = readFileSync('src/layouts/AppShell/AranaFooterContent/AranaFooterContent.vue', 'utf8');
   assert.match(center, /formatCalendarDate\(value/);
   assert.match(footer, /formatCalendarDate\(new Date\(\)/);
 });
