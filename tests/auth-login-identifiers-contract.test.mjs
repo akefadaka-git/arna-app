@@ -17,8 +17,9 @@ test('login contract documents all six supported ARNA identifiers', () => {
 });
 
 test('login identifier input uses text input mode for numeric and alphanumeric identifiers', () => {
-  const inputStart = form.indexOf('<BaseInput\\n        id="login-identifier"');
-  const inputEnd = form.indexOf('/>', inputStart);
+  const identifierId = form.indexOf('id="login-identifier"');
+  const inputStart = identifierId >= 0 ? form.lastIndexOf('<BaseInput', identifierId) : -1;
+  const inputEnd = form.indexOf('/>', identifierId);
   const identifierField = inputStart >= 0 && inputEnd > inputStart
     ? form.slice(inputStart, inputEnd)
     : '';
