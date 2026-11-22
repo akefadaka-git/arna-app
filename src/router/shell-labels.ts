@@ -30,7 +30,7 @@
  *         supportLinkLabel: 'ድጋፍ',
 
   /** Link to the official public corporate website. */
-  corporateSiteLinkLabel: 'ይፋዊ ድረ ገጽ',
+
  *       } as const;
  *
  *   `copyrightTemplate` carries a `{year}` placeholder. The
@@ -1515,6 +1515,9 @@ export const masesFooterLabels = {
    * confirmed, only the const in that file changes.
    */
   supportLinkLabel: 'ድጋፍ',
+
+  /** Link to the official public corporate website. */
+  corporateSiteLinkLabel: 'ይፋዊ ድረ ገጽ',
 } as const;
 
 /**
