@@ -804,7 +804,7 @@ export const routesWorkspace: RouteRecordRaw[] = [
         path: 'governance/attendance',
         name: 'governance-attendance',
         component: () => import('@/features/governance/GovernanceAttendanceView.vue'),
-        meta: { permission: 'governance.body.view' },
+        meta: { permission: 'governance.meeting.view' },
       },
       {
         path: 'governance/bodies',
