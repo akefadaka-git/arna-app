@@ -7,6 +7,8 @@
 - Source repository: `akefadaka-git/arna-app`
 - Public application entry: `public-entry/`
 - Required build output: `dist-public/`
+- Public build environment: `.env.public` sets the non-secret `VITE_API_BASE_URL=https://api.maalearna.com.et` at build time
+- Apache/Plesk SPA rules: `public/.htaccess` is copied into the output; verify that the Plesk domain is served by Apache with the required rewrite/header modules enabled
 - Official public origin: https://www.maalearna.com.et/
 - Plesk destination mapping already documented by the repository: `www.maalearna.com.et/httpdocs/`
 - Required brand asset: `public/logo.png`, emitted as `dist-public/logo.png`
@@ -35,6 +37,7 @@ After the Plesk-side action, verify the public homepage, Amharic and English rou
 ## Backend and runtime dependencies
 
 - The public site consumes published-only corporate content from the ARNA API.
+- The frontend API origin is compiled from `.env.public`; it is public configuration, not a secret. Never place credentials or private keys in `VITE_*` variables.
 - Configure `CORPORATE_SITE_URL=https://www.maalearna.com.et` in the API environment.
 - The API's corporate-media scanner URL, bearer token, and Ed25519 public key must be supplied securely by the operator. Until a trusted scanner and key are configured, media publication remains fail-closed.
 - Do not run production migrations or expose storage as part of this frontend handoff; those require their own authorized API release procedure.
