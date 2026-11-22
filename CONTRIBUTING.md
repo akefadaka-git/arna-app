@@ -1,5 +1,7 @@
 # Contributing to ARNA App
 
+> **Mandatory repository instructions:** Read [AGENTS.md](AGENTS.md) before starting work. It defines Owner-governed stages and makes independent review a single final pre-deployment gate, not a routine implementation or PR gate.
+
 This repository is the frontend for the ARNA Smart System. Contributions must preserve the frontend/backend boundary, domain ownership, approved brand identity, and Owner-governed change process.
 
 ## Before changing code
