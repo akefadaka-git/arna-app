@@ -57,6 +57,8 @@ jobs:
           '
       - name: Block high and critical dependency advisories
         run: npm audit --audit-level=high
+      - name: Verify notification route, tenant and locale security contracts
+        run: npm run test:notifications-locale-contract
       - name: Type-check and build all applications
         run: npm run build
       - name: Verify root entry points, local assets, and deployment policy
