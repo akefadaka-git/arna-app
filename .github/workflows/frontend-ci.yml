@@ -57,6 +57,8 @@ jobs:
           '
       - name: Block high and critical dependency advisories
         run: npm audit --audit-level=high
+      - name: Verify Wallet reversal and Loan route permission contracts
+        run: node --test tests/p0-wallet-reversal-permission.test.mjs tests/p0-loan-route-permissions.test.mjs
       - name: Type-check and build all applications
         run: npm run build
       - name: Verify root entry points, local assets, and deployment policy
