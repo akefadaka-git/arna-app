@@ -8,6 +8,8 @@ import {
   recordGovernanceAttendance,
   requestGovernancePenaltySettlement,
   reviewGovernanceProxy,
+  revokeGovernanceProxy,
+  verifyGovernanceProxyHistory,
   submitGovernanceProxy,
   requestAttendanceCorrection,
   reviewAttendanceCorrection,
@@ -31,6 +33,8 @@ const createForm = ref({
   governance_body_id: '',
   meeting_code: '',
   meeting_kind: 'general_assembly' as 'general_assembly' | 'board',
+  meeting_category: '' as '' | 'ordinary' | 'extraordinary',
+  meeting_round: 0 as 0 | 1 | 2 | 3,
   title_am: '',
   title_en: '',
   starts_at: '',
@@ -39,6 +43,9 @@ const attendanceForm = ref({
   subject_type: 'shareholder' as 'shareholder' | 'director',
   subject_id: '',
   attendance_status: 'present' as AttendanceStatus,
+  proxy_id: '',
+  represented_by_user_id: '',
+  represented_by_name: '',
   arrived_at: '',
   notes: '',
 });
@@ -149,6 +156,8 @@ async function createMeeting(): Promise<void> {
       governance_body_id: Number(createForm.value.governance_body_id),
       meeting_code: createForm.value.meeting_code.trim(),
       meeting_kind: createForm.value.meeting_kind,
+      meeting_category: createForm.value.meeting_kind === 'general_assembly' ? (createForm.value.meeting_category || undefined) : undefined,
+      meeting_round: createForm.value.meeting_kind === 'general_assembly' ? (createForm.value.meeting_round || undefined) : undefined,
       title_am: createForm.value.title_am || undefined,
       title_en: createForm.value.title_en || undefined,
       starts_at: createForm.value.starts_at,
@@ -173,6 +182,9 @@ async function saveAttendance(): Promise<void> {
     await recordGovernanceAttendance(selected.value.id, {
       subject_type: attendanceForm.value.subject_type,
       subject_id: Number(attendanceForm.value.subject_id),
+      proxy_id: attendanceForm.value.proxy_id ? Number(attendanceForm.value.proxy_id) : undefined,
+      represented_by_user_id: attendanceForm.value.represented_by_user_id ? Number(attendanceForm.value.represented_by_user_id) : undefined,
+      represented_by_name: attendanceForm.value.represented_by_name || undefined,
       attendance_status: attendanceForm.value.attendance_status,
       arrived_at: attendanceForm.value.arrived_at || undefined,
       notes: attendanceForm.value.notes || undefined,
@@ -189,6 +201,10 @@ async function saveAttendance(): Promise<void> {
 
 async function saveProxy(): Promise<void> {
   if (!selected.value) return;
+  if (!proxyForm.value.instrument_reference.trim()) {
+    errorMessage.value = 'A proxy instrument evidence reference is required before submission.';
+    return;
+  }
   saving.value = true;
   errorMessage.value = '';
   notice.value = '';
@@ -220,11 +236,42 @@ async function reviewProxy(proxyId: number, decision: 'approved' | 'rejected'): 
   saving.value = true;
   errorMessage.value = '';
   try {
-    await reviewGovernanceProxy(proxyId, decision);
+    await reviewGovernanceProxy(
+      proxyId,
+      decision,
+      decision === 'approved' ? 'Proxy identity and authority evidence reviewed.' : 'Submitted evidence does not establish valid proxy authority.',
+    );
     notice.value = decision === 'approved' ? 'ውክልናው ጸድቋል / Proxy approved.' : 'ውክልናው ውድቅ ተደርጓል / Proxy rejected.';
     if (selected.value) await selectMeeting(selected.value.id);
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : 'ውሳኔውን ማስቀመጥ አልተቻለም / Could not save proxy decision.';
+  } finally {
+    saving.value = false;
+  }
+}
+
+async function revokeProxy(proxyId: number): Promise<void> {
+  saving.value = true;
+  errorMessage.value = '';
+  try {
+    await revokeGovernanceProxy(proxyId, 'Proxy submitter requested revocation before representation was used.');
+    notice.value = 'Proxy revocation recorded in the evidence history.';
+    if (selected.value) await selectMeeting(selected.value.id);
+  } catch (error) {
+    errorMessage.value = error instanceof Error ? error.message : 'Could not revoke proxy.';
+  } finally {
+    saving.value = false;
+  }
+}
+
+async function verifyProxyHistory(proxyId: number): Promise<void> {
+  saving.value = true;
+  errorMessage.value = '';
+  try {
+    const result = await verifyGovernanceProxyHistory(proxyId);
+    notice.value = result.status + ' · Proxy evidence history · ' + result.event_count + ' events · ' + result.note;
+  } catch (error) {
+    errorMessage.value = error instanceof Error ? error.message : 'Could not verify proxy evidence history.';
   } finally {
     saving.value = false;
   }
@@ -300,6 +347,21 @@ onMounted(() => { void loadMeetings(); });
             <option value="board">የዳይሬክተሮች ቦርድ / Board</option>
           </select>
         </label>
+        <label v-if="createForm.meeting_kind === 'general_assembly'">General Assembly category
+          <select v-model="createForm.meeting_category" required>
+            <option value="" disabled>Select ordinary or extraordinary</option>
+            <option value="ordinary">Ordinary General Assembly</option>
+            <option value="extraordinary">Extraordinary General Assembly</option>
+          </select>
+        </label>
+        <label v-if="createForm.meeting_kind === 'general_assembly'">Meeting round
+          <select v-model.number="createForm.meeting_round" required>
+            <option :value="0" disabled>Select first, second or third</option>
+            <option :value="1">First meeting</option>
+            <option :value="2">Second meeting</option>
+            <option v-if="createForm.meeting_category === 'extraordinary'" :value="3">Third meeting</option>
+          </select>
+        </label>
         <label>Meeting date and start time
           <input v-model="createForm.starts_at" type="datetime-local" required />
         </label>
@@ -329,12 +391,14 @@ onMounted(() => { void loadMeetings(); });
           @click="selectMeeting(meeting.id)"
         >
           <strong>{{ meeting.title_am || meeting.title_en || meeting.meeting_code }}</strong>
-          <span>{{ meeting.meeting_kind === 'board' ? 'Board' : 'General Assembly' }} · {{ new Date(meeting.starts_at).toLocaleString() }}</span>
+          <span>{{ meeting.meeting_kind === 'board' ? 'Board' : (meeting.meeting_category === 'extraordinary' ? 'Extraordinary GA' : 'Ordinary GA') + ' · Meeting ' + meeting.meeting_round }} · {{ new Date(meeting.starts_at).toLocaleString() }}</span>
         </button>
       </aside>
 
       <section v-if="selected" class="panel meeting-detail">
         <h2>{{ selectedLabel }}</h2>
+        <p><a :href="'/governance/meetings/' + selected.id + '/agenda'">Agenda</a> ·
+          <a :href="'/governance/meetings/' + selected.id + '/electorate'">Electorate &amp; quorum</a></p>
         <p class="muted">{{ selected.meeting_code }} · {{ selected.meeting_kind }} · {{ new Date(selected.starts_at).toLocaleString() }}</p>
 
         <div class="section-block">
@@ -358,9 +422,20 @@ onMounted(() => { void loadMeetings(); });
                 <option value="represented">Represented</option>
               </select>
             </label>
-            <label>Arrival time (required for present / late)
-              <input v-model="attendanceForm.arrived_at" type="datetime-local" />
+            <label>Arrival time (required for present / late / represented)
+              <input v-model="attendanceForm.arrived_at" type="datetime-local" :required="['present', 'late', 'represented'].includes(attendanceForm.attendance_status)" />
             </label>
+            <template v-if="attendanceForm.attendance_status === 'represented'">
+              <label>Approved proxy record ID
+                <input v-model="attendanceForm.proxy_id" type="number" min="1" required />
+              </label>
+              <label>Attending proxy user ID (when proxy has an ARNA account)
+                <input v-model="attendanceForm.represented_by_user_id" type="number" min="1" />
+              </label>
+              <label class="wide">Attending external proxy name (must match approved instrument)
+                <input v-model="attendanceForm.represented_by_name" maxlength="150" />
+              </label>
+            </template>
             <label class="wide">Notes / permission evidence reference (required for excused absence)
               <input v-model="attendanceForm.notes" maxlength="2000" :required="attendanceForm.attendance_status === 'excused'" />
             </label>
@@ -394,7 +469,7 @@ onMounted(() => { void loadMeetings(); });
               <input v-model="proxyForm.proxy_reference" maxlength="100" />
             </label>
             <label>Instrument / document reference
-              <input v-model="proxyForm.instrument_reference" maxlength="2000" />
+              <input v-model="proxyForm.instrument_reference" maxlength="2000" required />
             </label>
             <div class="form-actions"><button type="submit" :disabled="saving">Submit proxy</button></div>
           </form>
@@ -421,6 +496,8 @@ onMounted(() => { void loadMeetings(); });
             <span>Deadline {{ new Date(proxy.deadline_at).toLocaleString() }}</span>
             <button v-if="proxy.status === 'submitted'" class="text-button" :disabled="saving" @click="reviewProxy(proxy.id, 'approved')">Approve</button>
             <button v-if="proxy.status === 'submitted'" class="text-button danger-text" :disabled="saving" @click="reviewProxy(proxy.id, 'rejected')">Reject</button>
+            <button v-if="proxy.status === 'submitted' || proxy.status === 'approved'" class="text-button danger-text" :disabled="saving" @click="revokeProxy(proxy.id)">Revoke (submitter only)</button>
+            <button class="text-button" :disabled="saving" @click="verifyProxyHistory(proxy.id)">Verify evidence chain</button>
           </div>
         </div>
 
