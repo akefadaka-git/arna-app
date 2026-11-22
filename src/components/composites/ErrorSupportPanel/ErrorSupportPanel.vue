@@ -182,12 +182,12 @@ import {
 
 interface Props {
   /**
-   * The error code (SCREAMING_SNAKE_CASE). Required.
+   * The error code (SCREAMING_SNAKE_CASE). Optional.
    *
    * Consumer-supplied. Typically the value of `error.code` from the
-   * backend envelope.
+   * backend envelope. When absent, the code field is omitted.
    */
-  code: string;
+  code?: string;
 
   /**
    * The request identifier. Optional.
@@ -254,6 +254,11 @@ onBeforeUnmount(() => {
 // -----------------------------------------------------------------------------
 // Field presence
 // -----------------------------------------------------------------------------
+const hasCode = computed<boolean>(() => {
+  const value = props.code;
+  return value !== undefined && value !== '';
+});
+
 const hasRequestId = computed<boolean>(() => {
   const v = props.requestId;
   return v !== undefined && v !== '';
@@ -281,7 +286,9 @@ const hasOccurredAt = computed<boolean>(() => {
  */
 const formattedText = computed<string>(() => {
   const lines: string[] = [];
-  lines.push(`${props.labels.errorCode}: ${props.code}`);
+  if (hasCode.value) {
+    lines.push(`${props.labels.errorCode}: ${props.code}`);
+  }
   if (hasRequestId.value) {
     lines.push(`${props.labels.requestId}: ${props.requestId}`);
   }
@@ -383,6 +390,7 @@ function onToggle(event: Event): void {
         data-testid="error-support-panel-fields"
       >
         <div
+          v-if="hasCode"
           class="error-support-panel__field"
           data-field-key="errorCode"
           data-testid="error-support-panel-field"
