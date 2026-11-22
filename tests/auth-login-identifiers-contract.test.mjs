@@ -4,6 +4,8 @@ import { readFileSync } from 'node:fs';
 
 const labels = readFileSync(new URL('../src/router/auth-labels.ts', import.meta.url), 'utf8');
 const form = readFileSync(new URL('../src/features/auth/LoginForm/LoginForm.vue', import.meta.url), 'utf8');
+const recoveryForm = readFileSync(new URL('../src/features/auth/ForgotPasswordForm/ForgotPasswordForm.vue', import.meta.url), 'utf8');
+const legacyResetForm = readFileSync(new URL('../src/features/auth/ResetPasswordForm/ResetPasswordForm.vue', import.meta.url), 'utf8');
 
 test('login copy identifies the field as a neutral ARNA account identifier', () => {
   assert.match(labels, /emailLabel:\s*'የARNA መለያ'/);
@@ -35,4 +37,14 @@ test('returning-user login exposes OTP and Google Authenticator options', () => 
   assert.match(form, /login-otp-channel/);
   assert.match(labels, /useOtpLabel:/);
   assert.match(labels, /useGoogleAuthenticatorLabel:/);
+});
+
+
+test('password recovery uses OTP or Google Authenticator and never legacy reset tokens', () => {
+  assert.match(recoveryForm, /forgot-password-use-otp/);
+  assert.match(recoveryForm, /forgot-password-use-google-authenticator/);
+  assert.match(recoveryForm, /forgot-password-code/);
+  assert.match(recoveryForm, /forgot-password-new-password/);
+  assert.match(legacyResetForm, /Legacy reset links are no longer accepted/);
+  assert.doesNotMatch(legacyResetForm, /token:\\s*routeToken\\.value/);
 });
