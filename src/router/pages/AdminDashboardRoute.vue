@@ -1,6 +1,6 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — AdminDashboardRoute
+ ARNA Phase 2 UI — AdminDashboardRoute
 =============================================================================
 
  File:      mase_app/src/router/pages/AdminDashboardRoute.vue
@@ -140,10 +140,10 @@
 
      `${pageLabel} — ${appName}`
 
- The admin build's VITE_APP_NAME is "MASES አስተዳደር" (per the
+ The admin build's VITE_APP_NAME is "ARNA አስተዳደር" (per the
  approved G1 Q2 decision), so the browser tab reads:
 
-     ዳሽቦርድ — MASES አስተዳደር
+     ዳሽቦርድ — ARNA አስተዳደር
 
  If VITE_APP_NAME is absent — a build with a misconfigured
  environment — the title falls back to just pageLabel, matching the
@@ -217,18 +217,18 @@
  appears in this file.
 
  Colors used:
-   --mases-color-text-primary     (heading text)
-   --mases-color-text-secondary   (body text)
+   --arna-color-text-primary     (heading text)
+   --arna-color-text-secondary   (body text)
 
  Typography used:
-   --mases-font-size-heading-6    (card heading)
-   --mases-line-height-heading-6
-   --mases-font-weight-semibold
-   --mases-font-size-body         (body paragraph)
-   --mases-line-height-body
+   --arna-font-size-heading-6    (card heading)
+   --arna-line-height-heading-6
+   --arna-font-weight-semibold
+   --arna-font-size-body         (body paragraph)
+   --arna-line-height-body
 
  Spacing used:
-   --mases-space-6                (gap between page header and card)
+   --arna-space-6                (gap between page header and card)
 
  Container used:
    none — the page fills the layout's content region. PageHeader
@@ -285,7 +285,7 @@ const labels = {
    * The page header's description line. A single noun phrase that
    * names what the page is.
    */
-  pageDescription: 'የMASES አስተዳደር መተግበሪያ መነሻ ገጽ።',
+  pageDescription: 'የARNA አስተዳደር መተግበሪያ መነሻ ገጽ።',
 
   /**
    * The welcome card's heading. The Amharic greeting
@@ -299,7 +299,7 @@ const labels = {
    * see the file header §"Static content" for the G1 Q4 decision
    * that governs this.
    */
-  welcomeBody: 'ይህ የMASES መድረክ አስተዳደር መተግበሪያ ነው።',
+  welcomeBody: 'ይህ የARNA መድረክ አስተዳደር መተግበሪያ ነው።',
 } as const;
 
 /*
@@ -307,8 +307,8 @@ const labels = {
  * other route page in this codebase: `${pageLabel} — ${appName}`
  * when VITE_APP_NAME is present, else just `${pageLabel}`.
  *
- * VITE_APP_NAME for the admin build is "MASES አስተዳደር" (approved
- * G1 Q2 decision). The resulting title is "ዳሽቦርድ — MASES አስተዳደር".
+ * VITE_APP_NAME for the admin build is "ARNA አስተዳደር" (approved
+ * G1 Q2 decision). The resulting title is "ዳሽቦርድ — ARNA አስተዳደር".
  */
 onMounted(() => {
   const pageLabel = labels.pageTitle;
@@ -352,12 +352,12 @@ onMounted(() => {
    ---------------------------------------------------------------------------
    A vertical stack. The gap between the page header and the welcome
    card matches the gap used by MyWalletPage.vue, MyLoansPage.vue, and
-   the portal feature pages (--mases-space-6).
+   the portal feature pages (--arna-space-6).
    ============================================================================ */
 .admin-dashboard-route {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -370,10 +370,10 @@ onMounted(() => {
    ============================================================================ */
 .admin-dashboard-route__welcome-heading {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-6);
-  line-height: var(--mases-line-height-heading-6);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-6);
+  line-height: var(--arna-line-height-heading-6);
+  font-weight: var(--arna-font-weight-semibold);
   /*
    * Amharic-safe wrapping. A long translation of the heading, or a
    * language switch that lengthens it, breaks across lines rather
@@ -386,15 +386,15 @@ onMounted(() => {
    Welcome card — body
    ---------------------------------------------------------------------------
    A single paragraph of secondary-weight text. The primary
-   typography tokens (--mases-font-size-body / --mases-line-height-
+   typography tokens (--arna-font-size-body / --arna-line-height-
    body) are used for the size; the secondary colour is used to
    de-emphasize the body relative to the heading above it.
    ============================================================================ */
 .admin-dashboard-route__welcome-body {
   margin: 0;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
   overflow-wrap: anywhere;
 }
 

@@ -94,8 +94,8 @@
  backdrop styling, and overflow control).
 
  No hex value appears in this file. The backdrop colour is expressed
- via --mases-color-overlay-scrim (tokens.css v1.2.0), which resolves
- to the aubergine base (--mases-color-aubergine-900, #1F0A2F) at 50%
+ via --arna-color-overlay-scrim (tokens.css v1.2.0), which resolves
+ to the aubergine base (--arna-color-aubergine-900, #1F0A2F) at 50%
  alpha — the same value the previous revision hardcoded.
 
  -----------------------------------------------------------------------------
@@ -176,7 +176,7 @@ export type { NavItem, AppSidebarLabels };
 </script>
 
 <script setup lang="ts">
-import { onBeforeUnmount, ref, watch } from 'vue';
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import AppSidebar from '@/layouts/AppShell/AppSidebar';
 import BaseButton from '@/components/primitives/BaseButton';
@@ -254,20 +254,33 @@ const dialogRef = ref<HTMLDialogElement | null>(null);
  * focuses the first focusable element (the close button). No JS focus
  * management is required here.
  */
+function syncDialogState(isOpen: boolean): void {
+  const dialog = dialogRef.value;
+  if (dialog === null) return;
+
+  if (isOpen && !dialog.open) {
+    dialog.showModal();
+  } else if (!isOpen && dialog.open) {
+    dialog.close();
+  }
+}
+
 watch(
   () => props.open,
-  (isOpen) => {
-    const dialog = dialogRef.value;
-    if (dialog === null) return;
-
-    if (isOpen && !dialog.open) {
-      dialog.showModal();
-    } else if (!isOpen && dialog.open) {
-      dialog.close();
-    }
-  },
+  syncDialogState,
   { flush: 'post' },
 );
+
+/*
+ * The prop may already be true on the component's first render. A
+ * non-immediate watcher only observes later changes, so synchronize
+ * once the Teleport target and dialog element have mounted as well.
+ */
+onMounted(() => {
+  syncDialogState(props.open);
+  // Apply the initial body lock only after mount; setup can also run during SSR.
+  if (props.open) lockBodyScroll();
+});
 
 // -----------------------------------------------------------------------------
 // Unified close request
@@ -339,7 +352,7 @@ watch(
  * The manual `overflow: hidden` on <body> will not shift layout on
  * mobile browsers (overlay scrollbars). If this component is ever
  * reused above 640px, a `scrollbar-gutter: stable` or a
- * `padding-right: var(--mases-scrollbar-width)` compensation would be
+ * `padding-right: var(--arna-scrollbar-width)` compensation would be
  * required to avoid a horizontal layout shift when the scrollbar
  * disappears.
  */
@@ -366,7 +379,6 @@ watch(
       unlockBodyScroll();
     }
   },
-  { immediate: true },
 );
 
 onBeforeUnmount(() => {
@@ -449,7 +461,7 @@ onBeforeUnmount(() => {
    * under html[dir='rtl'] (slide in from the right). One keyframe
    * block serves both directions.
    */
-  --mases-drawer-offset: -100%;
+  --arna-drawer-offset: -100%;
 
   /*
    * Native <dialog> defaults to centered + auto-sized. We override
@@ -468,7 +480,7 @@ onBeforeUnmount(() => {
   max-width: 85vw;
   max-height: 100vh;
   max-height: 100dvh;
-  width: var(--mases-shell-sidebar-width);
+  width: var(--arna-shell-sidebar-width);
   height: 100vh;
   /*
    * On supported browsers, use dvh so the iOS Safari address bar does
@@ -476,22 +488,22 @@ onBeforeUnmount(() => {
    */
   height: 100dvh;
   border: 0;
-  border-block-start: 3px solid var(--mases-color-gold-500);
-  background-color: var(--mases-color-surface-raised);
-  color: var(--mases-color-text-primary);
+  border-block-start: 3px solid var(--arna-color-gold-500);
+  background-color: var(--arna-color-surface-raised);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
   /*
    * A shadow on the trailing edge visually separates the drawer from
    * the dimmed page behind it.
    */
-  box-shadow: var(--mases-shadow-elevation-4);
+  box-shadow: var(--arna-shadow-elevation-4);
   /*
    * Slide-in animation. Disabled under prefers-reduced-motion — see
    * the media query at the end of this file. The drawer closes
    * synchronously; see the file header comment §"Exit-animation
    * decision".
    */
-  animation: mases-drawer-slide-in var(--mases-duration-slow) var(--mases-easing-decelerate);
+  animation: arna-drawer-slide-in var(--arna-duration-slow) var(--arna-easing-decelerate);
 }
 
 /*
@@ -500,12 +512,12 @@ onBeforeUnmount(() => {
  * slide-in animation flips direction accordingly.
  */
 html[dir='rtl'] .app-mobile-drawer {
-  --mases-drawer-offset: 100%;
+  --arna-drawer-offset: 100%;
 }
 
-@keyframes mases-drawer-slide-in {
+@keyframes arna-drawer-slide-in {
   from {
-    transform: translateX(var(--mases-drawer-offset));
+    transform: translateX(var(--arna-drawer-offset));
   }
   to {
     transform: translateX(0);
@@ -517,12 +529,12 @@ html[dir='rtl'] .app-mobile-drawer {
    ---------------------------------------------------------------------------
    The ::backdrop pseudo-element only applies when the <dialog> is
    shown modally (showModal()). The colour is the shared overlay scrim
-   (--mases-color-overlay-scrim, tokens.css v1.2.0), which resolves to
-   the aubergine base (--mases-color-aubergine-900, #1F0A2F) at 50%
+   (--arna-color-overlay-scrim, tokens.css v1.2.0), which resolves to
+   the aubergine base (--arna-color-aubergine-900, #1F0A2F) at 50%
    alpha — the same value the previous revision hardcoded.
    ============================================================================ */
 .app-mobile-drawer::backdrop {
-  background-color: var(--mases-color-overlay-scrim);
+  background-color: var(--arna-color-overlay-scrim);
 }
 
 /* ============================================================================
@@ -542,9 +554,9 @@ html[dir='rtl'] .app-mobile-drawer {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  height: var(--mases-shell-header-height);
-  padding-inline: var(--mases-space-2);
-  border-block-end: 1px solid var(--mases-color-border-brand);
+  height: var(--arna-shell-header-height);
+  padding-inline: var(--arna-space-2);
+  border-block-end: 1px solid var(--arna-color-border-brand);
   flex-shrink: 0;
 }
 
@@ -570,9 +582,9 @@ html[dir='rtl'] .app-mobile-drawer {
    Extra slot region
    ============================================================================ */
 .app-mobile-drawer__extra {
-  padding-block: var(--mases-space-4);
-  padding-inline: var(--mases-space-3);
-  border-block-start: 1px solid var(--mases-color-border-subtle);
+  padding-block: var(--arna-space-4);
+  padding-inline: var(--arna-space-3);
+  border-block-start: 1px solid var(--arna-color-border-subtle);
   flex-shrink: 0;
 }
 

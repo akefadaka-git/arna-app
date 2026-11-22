@@ -106,13 +106,13 @@
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesSearchBarWarned = new Set<string>();
+const __arnaSearchBarWarned = new Set<string>();
 
-function __masesSearchBarWarnOnce(key: string, message: string): void {
-  if (__masesSearchBarWarned.has(key)) {
+function __arnaSearchBarWarnOnce(key: string, message: string): void {
+  if (__arnaSearchBarWarned.has(key)) {
     return;
   }
-  __masesSearchBarWarned.add(key);
+  __arnaSearchBarWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -187,9 +187,9 @@ interface Props {
   /**
    * Translated accessible name for the clear (✕) button.
    *
-   * Required when the clear button can appear (i.e., always). A missing
-   * value triggers a deduplicated dev warning; in production, the
-   * button renders with an empty aria-label (visible defect).
+   * Required. The clear button can appear whenever the input has text
+   * and the component is not loading, so every consumer must supply a
+   * translated accessible name.
    */
   clearLabel: string;
 
@@ -231,7 +231,7 @@ defineSlots<{
 // -----------------------------------------------------------------------------
 
 if (import.meta.env.DEV && !props.clearLabel) {
-  __masesSearchBarWarnOnce(
+  __arnaSearchBarWarnOnce(
     'search-bar:missing-clear-label',
     '[SearchBar] clearLabel is not supplied. The clear button will ' +
       'render with an empty aria-label, which is an accessibility ' +
@@ -433,22 +433,22 @@ onBeforeUnmount(() => {
   appearance: none;
   background-color: transparent;
   border: 0;
-  border-radius: var(--mases-radius-full);
-  color: var(--mases-color-icon-secondary);
+  border-radius: var(--arna-radius-full);
+  color: var(--arna-color-icon-secondary);
   cursor: pointer;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .search-bar__clear:hover {
-  background-color: var(--mases-color-state-hover);
-  color: var(--mases-color-icon-primary);
+  background-color: var(--arna-color-state-hover);
+  color: var(--arna-color-icon-primary);
 }
 
 .search-bar__clear:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================

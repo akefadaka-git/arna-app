@@ -323,11 +323,11 @@ const datetimeAttribute = computed<string>(() =>
    * A muted, slightly smaller presentation — ambient chrome that
    * accompanies the primary shell content without competing with it.
    */
-  color: var(--mases-color-text-tertiary);
+  color: var(--arna-color-text-tertiary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
   /*
    * tabular-nums makes ASCII digits advance by a fixed width, which
    * keeps a numeric date string from shifting width between renders.

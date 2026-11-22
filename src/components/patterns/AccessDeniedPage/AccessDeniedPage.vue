@@ -166,6 +166,7 @@ export const FILE_ACCESS_DENIED_CODE = 'FILE_ACCESS_DENIED';
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
 import ErrorPage from '../ErrorPage';
+import ErrorSupportHint from '../../primitives/ErrorSupportHint';
 import type { ErrorPageAction, ErrorPageLabels } from '../ErrorPage';
 
 interface Props {
@@ -288,7 +289,7 @@ onMounted(() => {
    * console log".
    */
   // eslint-disable-next-line no-console
-  console.warn('[MASES] Access denied', {
+  console.warn('[ARNA] Access denied', {
     path: props.from,
     code: props.code,
     requestId: props.requestId,
@@ -318,45 +319,11 @@ onMounted(() => {
       default slot, which was designed for exactly this kind of extra
       content (Unit 10.13).
     -->
-    <p
+    <ErrorSupportHint
       v-if="isFileAccessDenied"
-      class="access-denied__file-hint"
+      :text="labels.fileHint"
+      variant="warning"
       data-testid="access-denied-file-hint"
-    >{{ labels.fileHint }}</p>
+    />
   </ErrorPage>
 </template>
-
-<style scoped>
-/* ============================================================================
-   FILE_ACCESS_DENIED hint
-   ---------------------------------------------------------------------------
-   A soft warning surface with a left accent border. Uses Tier 2 warning
-   tokens to communicate "this is a caveat" rather than a second error.
-   Has no role of its own — the enclosing ErrorPage's role="alert" is
-   the live region for this page.
-   ============================================================================ */
-.access-denied__file-hint {
-  margin: 0;
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-4);
-  background-color: var(--mases-color-surface-warning);
-  /*
-   * Left accent bar — 4px, expressed as --mases-space-1 so it is a
-   * token rather than a bare pixel value. The inset inline-start
-   * direction ensures the accent sits on the reading-start edge for
-   * both LTR and any future RTL locale.
-   */
-  border-inline-start: var(--mases-space-1) solid var(--mases-color-border-warning);
-  border-radius: var(--mases-radius-sm);
-  color: var(--mases-color-text-warning);
-  font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
-  /*
-   * Amharic-safe wrapping — the hint text is consumer-translated and
-   * may be long in Ethiopic.
-   */
-  overflow-wrap: anywhere;
-}
-</style>

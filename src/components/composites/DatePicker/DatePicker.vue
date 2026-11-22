@@ -6,18 +6,17 @@
  File:      mase_app/src/components/composites/DatePicker/DatePicker.vue
  Layer:     2 (Composites)
  Version:   1.0.0
- Status:    FROZEN
+ Status:    CONTROLLED ENHANCEMENT
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §3.5
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
 
  -----------------------------------------------------------------------------
  Purpose
  -----------------------------------------------------------------------------
- Gregorian date selection. A text input plus a calendar popup.
-
- Gregorian only in Phase 2. No Ethiopian-calendar conversion is performed
- by this component. See the response preamble §"Design note — Gregorian
- only in Phase 2".
+ Calendar-aware date selection. The shared E.C./G.C. preference controls
+ the displayed and entered calendar; the public model remains Gregorian
+ ISO 8601 (YYYY-MM-DD). The existing dialog, grid, keyboard and focus
+ accessibility contract remains in force.
 
  -----------------------------------------------------------------------------
  Public contract
@@ -166,7 +165,7 @@ export interface DatePickerLabels {
 
 /**
  * Internal date-parts representation used by the calendar math.
- * Month is 1–12 (not 0–11).
+ * Gregorian ISO date parts. Month is 1–12 (not 0–11).
  */
 interface DateParts {
   year: number;
@@ -177,13 +176,13 @@ interface DateParts {
 /*
  * Module-level Set for deduplicated development warnings.
  */
-const __masesDatePickerWarned = new Set<string>();
+const __arnaDatePickerWarned = new Set<string>();
 
-function __masesDatePickerWarnOnce(key: string, message: string): void {
-  if (__masesDatePickerWarned.has(key)) {
+function __arnaDatePickerWarnOnce(key: string, message: string): void {
+  if (__arnaDatePickerWarned.has(key)) {
     return;
   }
-  __masesDatePickerWarned.add(key);
+  __arnaDatePickerWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -191,7 +190,7 @@ function __masesDatePickerWarnOnce(key: string, message: string): void {
 /*
  * Module-level counter for auto-generated ids.
  */
-let __masesDatePickerIdCounter = 0;
+let __arnaDatePickerIdCounter = 0;
 
 // -----------------------------------------------------------------------------
 // Date helpers — pure functions, no side effects
@@ -240,7 +239,7 @@ function parseIsoDate(s: string | null | undefined): DateParts | null {
  * Parse user input. Accepts `dd/mm/yyyy` and `yyyy-mm-dd`.
  * Returns null if the input is not a valid date in either format.
  */
-function parseUserInput(s: string): DateParts | null {
+function parseUserInput(s: string, system: 'ethiopic' | 'gregory'): DateParts | null {
   const trimmed = s.trim();
   if (trimmed === '') return null;
 
@@ -259,6 +258,10 @@ function parseUserInput(s: string): DateParts | null {
     const day = parseInt(m[1], 10);
     const month = parseInt(m[2], 10);
     const year = parseInt(m[3], 10);
+    if (system === 'ethiopic') {
+      const iso = ethiopicToIso({ year, month, day });
+      return iso ? parseIsoDate(iso) : null;
+    }
     if (isValidDate(year, month, day)) return { year, month, day };
   }
 
@@ -269,8 +272,15 @@ function parseUserInput(s: string): DateParts | null {
  * Format a DateParts for display in the input.
  * Always `dd/mm/yyyy`, per the design system's date-format convention.
  */
-function formatForDisplay(d: DateParts | null): string {
+function formatForDisplay(
+  d: DateParts | null,
+  system: 'ethiopic' | 'gregory',
+): string {
   if (d === null) return '';
+  if (system === 'ethiopic') {
+    const parts = getEthiopicDateParts(toIso(d));
+    return parts ? `${pad2(parts.day)}/${pad2(parts.month)}/${parts.year}` : '';
+  }
   return `${pad2(d.day)}/${pad2(d.month)}/${d.year}`;
 }
 
@@ -312,8 +322,18 @@ import {
   watch,
 } from 'vue';
 import BaseIcon from '../../primitives/BaseIcon';
+import { useCalendarPreference } from '@/core/dates/calendar';
+import {
+  ethiopicToIso,
+  getEthiopicDateParts,
+  getEthiopicMonthDays,
+  getEthiopicMonthLength,
+} from '@/core/dates/ethiopic';
 
 interface Props {
+  /** Optional stable input id supplied by a containing FormField. */
+  id?: string;
+
   /**
    * Bound value. ISO 8601 date string (YYYY-MM-DD) or null.
    */
@@ -328,6 +348,9 @@ interface Props {
    * Maximum allowed date, inclusive. ISO 8601.
    */
   max?: string;
+
+  /** Native required constraint for form submission. */
+  required?: boolean;
 
   /** Disabled state. */
   disabled?: boolean;
@@ -355,14 +378,18 @@ interface Props {
   ariaDescribedBy?: string;
 }
 
+const { calendarSystem } = useCalendarPreference();
+
 const props = withDefaults(defineProps<Props>(), {
   modelValue: null,
   min: undefined,
   max: undefined,
   disabled: false,
+  required: false,
   invalid: false,
   placeholder: undefined,
   ariaDescribedBy: undefined,
+  id: undefined,
 });
 
 const emit = defineEmits<{
@@ -372,7 +399,7 @@ const emit = defineEmits<{
 // -----------------------------------------------------------------------------
 // Generated ids
 // -----------------------------------------------------------------------------
-const componentId = `mases-date-picker-${++__masesDatePickerIdCounter}`;
+const componentId = `arna-date-picker-${++__arnaDatePickerIdCounter}`;
 const popupId = `${componentId}-popup`;
 
 // -----------------------------------------------------------------------------
@@ -382,7 +409,7 @@ if (import.meta.env.DEV) {
   const l = props.labels;
 
   if (!Array.isArray(l.weekdaysShort) || l.weekdaysShort.length !== 7) {
-    __masesDatePickerWarnOnce(
+    __arnaDatePickerWarnOnce(
       'date-picker:weekdays-length',
       '[DatePicker] labels.weekdaysShort must be an array of exactly ' +
         '7 items (index 0 = Sunday). Received: ' +
@@ -391,7 +418,7 @@ if (import.meta.env.DEV) {
   }
 
   if (!Array.isArray(l.monthsLong) || l.monthsLong.length !== 12) {
-    __masesDatePickerWarnOnce(
+    __arnaDatePickerWarnOnce(
       'date-picker:months-length',
       '[DatePicker] labels.monthsLong must be an array of exactly ' +
         '12 items (index 0 = January). Received: ' +
@@ -400,19 +427,19 @@ if (import.meta.env.DEV) {
   }
 
   if (l.previousMonth.trim() === '') {
-    __masesDatePickerWarnOnce(
+    __arnaDatePickerWarnOnce(
       'date-picker:empty-previous',
       '[DatePicker] labels.previousMonth is empty.',
     );
   }
   if (l.nextMonth.trim() === '') {
-    __masesDatePickerWarnOnce(
+    __arnaDatePickerWarnOnce(
       'date-picker:empty-next',
       '[DatePicker] labels.nextMonth is empty.',
     );
   }
   if (l.openCalendar.trim() === '') {
-    __masesDatePickerWarnOnce(
+    __arnaDatePickerWarnOnce(
       'date-picker:empty-open',
       '[DatePicker] labels.openCalendar is empty.',
     );
@@ -435,7 +462,7 @@ const isOpen = ref(false);
  * The current text value shown in the input. Kept in sync with
  * modelValue unless the user is actively editing.
  */
-const textValue = ref<string>(formatForDisplay(parseIsoDate(props.modelValue)));
+const textValue = ref<string>(formatForDisplay(parseIsoDate(props.modelValue), calendarSystem.value));
 
 /**
  * The cursor date — the day that has keyboard focus in the calendar.
@@ -449,8 +476,7 @@ const cursorDate = ref<DateParts>(todayParts());
  * component remount. This is fine for the UI: the picker's "today"
  * marker does not need to change mid-session.
  */
-const today = todayParts();
-const todayIso = toIso(today);
+const todayIso = toIso(todayParts());
 
 // -----------------------------------------------------------------------------
 // Computed — model value
@@ -458,9 +484,6 @@ const todayIso = toIso(today);
 const selectedDate = computed<DateParts | null>(() =>
   parseIsoDate(props.modelValue),
 );
-
-const minDate = computed<DateParts | null>(() => parseIsoDate(props.min));
-const maxDate = computed<DateParts | null>(() => parseIsoDate(props.max));
 
 // -----------------------------------------------------------------------------
 // Watches — keep textValue in sync with modelValue
@@ -477,16 +500,36 @@ watch(
       document.activeElement === inputRef.value;
 
     if (!inputHasFocus) {
-      textValue.value = formatForDisplay(parseIsoDate(next));
+      textValue.value = formatForDisplay(parseIsoDate(next), calendarSystem.value);
     }
   },
 );
 
+watch(calendarSystem, (system, previousSystem) => {
+  const inputHasFocus = typeof document !== 'undefined' && document.activeElement === inputRef.value;
+  if (inputHasFocus) {
+    const pending = textValue.value.trim();
+    if (pending !== '') {
+      const parsed = parseUserInput(pending, previousSystem);
+      textValue.value = formatForDisplay(parsed ?? selectedDate.value, system);
+    }
+  } else {
+    textValue.value = formatForDisplay(selectedDate.value, system);
+  }
+  if (isOpen.value) void focusCursorCell();
+});
+
 // -----------------------------------------------------------------------------
 // Computed — grid
 // -----------------------------------------------------------------------------
-const displayedYear = computed<number>(() => cursorDate.value.year);
-const displayedMonth = computed<number>(() => cursorDate.value.month);
+const displayedCalendarDate = computed(() => {
+  const iso = toIso(cursorDate.value);
+  return calendarSystem.value === 'ethiopic'
+    ? getEthiopicDateParts(iso)
+    : cursorDate.value;
+});
+const displayedYear = computed<number>(() => displayedCalendarDate.value?.year ?? cursorDate.value.year);
+const displayedMonth = computed<number>(() => displayedCalendarDate.value?.month ?? cursorDate.value.month);
 
 interface GridCell {
   day: number;
@@ -502,50 +545,44 @@ interface GridCell {
 const gridWeeks = computed<Array<Array<GridCell | null>>>(() => {
   const year = displayedYear.value;
   const month = displayedMonth.value;
-  const firstWeekday = weekdayOf(year, month, 1);
-  const dayCount = daysInMonth(year, month);
+  const selectedIso = props.modelValue ?? null;
+  const focusedIso = toIso(cursorDate.value);
+  const minIso = props.min ?? null;
+  const maxIso = props.max ?? null;
+  const calendarDays = calendarSystem.value === 'ethiopic'
+    ? getEthiopicMonthDays(year, month).map((day) => ({
+        day: day.day, year: day.year, month: day.month, iso: day.iso,
+        weekday: day.weekday,
+      }))
+    : Array.from({ length: daysInMonth(year, month) }, (_, index) => {
+        const day = index + 1;
+        const iso = `${year}-${pad2(month)}-${pad2(day)}`;
+        return { day, year, month, iso, weekday: weekdayOf(year, month, day) };
+      });
 
   const cells: Array<GridCell | null> = [];
+  const firstWeekday = calendarDays[0]?.weekday ?? 0;
+  for (let i = 0; i < firstWeekday; i++) cells.push(null);
 
-  // Leading blanks.
-  for (let i = 0; i < firstWeekday; i++) {
-    cells.push(null);
-  }
-
-  // Days of the month.
-  const selectedIso = selectedDate.value ? toIso(selectedDate.value) : null;
-  const focusedIso = toIso(cursorDate.value);
-  const minIso = minDate.value ? toIso(minDate.value) : null;
-  const maxIso = maxDate.value ? toIso(maxDate.value) : null;
-
-  for (let d = 1; d <= dayCount; d++) {
-    const iso = `${year}-${pad2(month)}-${pad2(d)}`;
+  for (const date of calendarDays) {
     const isDisabled =
-      (minIso !== null && iso < minIso) ||
-      (maxIso !== null && iso > maxIso);
-
+      (minIso !== null && date.iso < minIso) ||
+      (maxIso !== null && date.iso > maxIso);
     cells.push({
-      day: d,
-      year,
-      month,
-      iso,
-      isSelected: iso === selectedIso,
-      isToday: iso === todayIso,
+      day: date.day,
+      year: date.year,
+      month: date.month,
+      iso: date.iso,
+      isSelected: date.iso === selectedIso,
+      isToday: date.iso === todayIso,
       isDisabled,
-      isFocused: iso === focusedIso,
+      isFocused: date.iso === focusedIso,
     });
   }
 
-  // Trailing blanks — pad to a full week.
-  while (cells.length % 7 !== 0) {
-    cells.push(null);
-  }
-
-  // Chunk into weeks.
+  while (cells.length % 7 !== 0) cells.push(null);
   const weeks: Array<Array<GridCell | null>> = [];
-  for (let i = 0; i < cells.length; i += 7) {
-    weeks.push(cells.slice(i, i + 7));
-  }
+  for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
   return weeks;
 });
 
@@ -559,7 +596,16 @@ const gridRowCount = computed<number>(() => {
 // -----------------------------------------------------------------------------
 const headerLabel = computed<string>(() => {
   const tpl = props.labels.monthYearFormat ?? '{month} {year}';
-  const monthName = props.labels.monthsLong[displayedMonth.value - 1] ?? '';
+  const monthName = calendarSystem.value === 'ethiopic'
+    ? (() => {
+        const firstDay = getEthiopicMonthDays(displayedYear.value, displayedMonth.value)[0];
+        if (!firstDay) return '';
+        const language = typeof document !== 'undefined' && document.documentElement.lang.toLowerCase().startsWith('en') ? 'en' : 'am';
+        return new Intl.DateTimeFormat(`${language}-ET-u-ca-ethiopic`, {
+          calendar: 'ethiopic', month: 'long', timeZone: 'UTC',
+        }).format(new Date(`${firstDay.iso}T00:00:00Z`));
+      })()
+    : (props.labels.monthsLong[displayedMonth.value - 1] ?? '');
   return tpl
     .replace('{month}', monthName)
     .replace('{year}', String(displayedYear.value));
@@ -591,7 +637,7 @@ function onInputEnter(): void {
 
 function onInputEscape(): void {
   // Revert to the current modelValue.
-  textValue.value = formatForDisplay(selectedDate.value);
+  textValue.value = formatForDisplay(selectedDate.value, calendarSystem.value);
   inputRef.value?.blur();
 }
 
@@ -615,10 +661,10 @@ function commitInput(): DateParts | null {
     return null;
   }
 
-  const parsed = parseUserInput(text);
+  const parsed = parseUserInput(text, calendarSystem.value);
   if (parsed === null) {
     // Invalid input — revert the visible text to the last valid value.
-    textValue.value = formatForDisplay(selectedDate.value);
+    textValue.value = formatForDisplay(selectedDate.value, calendarSystem.value);
     return selectedDate.value;
   }
 
@@ -626,7 +672,7 @@ function commitInput(): DateParts | null {
   if (iso !== props.modelValue) {
     emit('update:modelValue', iso);
   }
-  textValue.value = formatForDisplay(parsed);
+  textValue.value = formatForDisplay(parsed, calendarSystem.value);
   return parsed;
 }
 
@@ -678,15 +724,25 @@ function onTriggerClick(): void {
 // -----------------------------------------------------------------------------
 // Header navigation
 // -----------------------------------------------------------------------------
-function goPrevMonth(): void {
-  cursorDate.value = addMonths(cursorDate.value, -1);
+function moveMonth(delta: number): void {
+  if (calendarSystem.value === 'ethiopic') {
+    const parts = getEthiopicDateParts(toIso(cursorDate.value));
+    if (!parts) return;
+    const zeroBased = parts.year * 13 + (parts.month - 1) + delta;
+    const year = Math.floor(zeroBased / 13);
+    const month = ((zeroBased % 13) + 13) % 13 + 1;
+    const day = Math.min(parts.day, getEthiopicMonthLength(year, month));
+    const iso = ethiopicToIso({ year, month, day });
+    const next = iso ? parseIsoDate(iso) : null;
+    if (next) cursorDate.value = next;
+  } else {
+    cursorDate.value = addMonths(cursorDate.value, delta);
+  }
   void focusCursorCell();
 }
 
-function goNextMonth(): void {
-  cursorDate.value = addMonths(cursorDate.value, 1);
-  void focusCursorCell();
-}
+function goPrevMonth(): void { moveMonth(-1); }
+function goNextMonth(): void { moveMonth(1); }
 
 // -----------------------------------------------------------------------------
 // Cell focus management
@@ -707,11 +763,7 @@ function selectDay(cell: GridCell): void {
     return;
   }
   emit('update:modelValue', cell.iso);
-  textValue.value = formatForDisplay({
-    year: cell.year,
-    month: cell.month,
-    day: cell.day,
-  });
+  textValue.value = formatForDisplay(parseIsoDate(cell.iso), calendarSystem.value);
   closeCalendar();
 }
 
@@ -770,14 +822,12 @@ function onGridKeydown(event: KeyboardEvent): void {
     }
     case 'PageUp': {
       event.preventDefault();
-      cursorDate.value = addMonths(cursorDate.value, -1);
-      void focusCursorCell();
+      moveMonth(-1);
       return;
     }
     case 'PageDown': {
       event.preventDefault();
-      cursorDate.value = addMonths(cursorDate.value, 1);
-      void focusCursorCell();
+      moveMonth(1);
       return;
     }
     case 'Enter': {
@@ -808,11 +858,7 @@ function findCell(parts: DateParts): GridCell | null {
   for (const week of gridWeeks.value) {
     for (const cell of week) {
       if (cell === null) continue;
-      if (
-        cell.year === parts.year &&
-        cell.month === parts.month &&
-        cell.day === parts.day
-      ) {
+      if (cell.iso === toIso(parts)) {
         return cell;
       }
     }
@@ -863,7 +909,8 @@ function onCellFocus(cell: GridCell): void {
     cell.month !== cursorDate.value.month ||
     cell.day !== cursorDate.value.day
   ) {
-    cursorDate.value = { year: cell.year, month: cell.month, day: cell.day };
+    const next = parseIsoDate(cell.iso);
+    if (next) cursorDate.value = next;
   }
 }
 
@@ -894,12 +941,13 @@ function onCellClick(cell: GridCell): void {
       <input
         ref="inputRef"
         type="text"
-        :id="`${componentId}-input`"
+        :id="id ?? `${componentId}-input`"
         :disabled="disabled"
+        :required="required"
         :readonly="false"
         :placeholder="placeholder"
         :aria-invalid="invalid ? 'true' : undefined"
-        :aria-describedby="ariaDescribedBy"
+        :aria-describedby="props.ariaDescribedBy"
         :value="textValue"
         class="date-picker__input"
         data-testid="date-picker-input"
@@ -1056,33 +1104,33 @@ function onCellClick(cell: GridCell): void {
   align-items: center;
   width: 100%;
   min-height: 40px;
-  padding-inline-end: var(--mases-space-1);
-  background-color: var(--mases-color-surface-page);
-  border: 1px solid var(--mases-color-border-default);
-  border-radius: var(--mases-radius-md);
-  color: var(--mases-color-text-primary);
+  padding-inline-end: var(--arna-space-1);
+  background-color: var(--arna-color-surface-page);
+  border: 1px solid var(--arna-color-border-default);
+  border-radius: var(--arna-radius-md);
+  color: var(--arna-color-text-primary);
   transition:
-    border-color var(--mases-duration-fast) var(--mases-easing-standard),
-    background-color var(--mases-duration-fast) var(--mases-easing-standard);
+    border-color var(--arna-duration-fast) var(--arna-easing-standard),
+    background-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .date-picker__control:focus-within {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 .date-picker:not(.date-picker--disabled):hover .date-picker__control {
-  border-color: var(--mases-color-border-strong);
+  border-color: var(--arna-color-border-strong);
 }
 
 .date-picker--invalid .date-picker__control {
-  border-color: var(--mases-color-border-danger);
+  border-color: var(--arna-color-border-danger);
 }
 
 .date-picker--disabled .date-picker__control {
-  background-color: var(--mases-color-state-disabled-bg);
-  border-color: var(--mases-color-border-subtle);
-  color: var(--mases-color-state-disabled-text);
+  background-color: var(--arna-color-state-disabled-bg);
+  border-color: var(--arna-color-border-subtle);
+  color: var(--arna-color-state-disabled-text);
   cursor: not-allowed;
 }
 
@@ -1092,21 +1140,21 @@ function onCellClick(cell: GridCell): void {
 .date-picker__input {
   flex: 1 1 auto;
   min-width: 0;
-  padding-block: var(--mases-space-2);
-  padding-inline: var(--mases-space-3);
+  padding-block: var(--arna-space-2);
+  padding-inline: var(--arna-space-3);
   appearance: none;
   background-color: transparent;
   border: none;
   outline: none;
   color: inherit;
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
 }
 
 .date-picker__input::placeholder {
-  color: var(--mases-color-text-tertiary);
+  color: var(--arna-color-text-tertiary);
   opacity: 1;
 }
 
@@ -1129,32 +1177,32 @@ function onCellClick(cell: GridCell): void {
   appearance: none;
   background-color: transparent;
   border: none;
-  border-radius: var(--mases-radius-sm);
-  color: var(--mases-color-icon-secondary);
+  border-radius: var(--arna-radius-sm);
+  color: var(--arna-color-icon-secondary);
   cursor: pointer;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .date-picker__trigger:hover:not(:disabled) {
-  background-color: var(--mases-color-state-hover);
-  color: var(--mases-color-icon-primary);
+  background-color: var(--arna-color-state-hover);
+  color: var(--arna-color-icon-primary);
 }
 
 .date-picker__trigger:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 .date-picker__trigger:disabled {
   cursor: not-allowed;
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
 }
 
 .date-picker--open .date-picker__trigger {
-  background-color: var(--mases-color-state-hover);
-  color: var(--mases-color-icon-primary);
+  background-color: var(--arna-color-state-hover);
+  color: var(--arna-color-icon-primary);
 }
 
 /* ============================================================================
@@ -1164,15 +1212,15 @@ function onCellClick(cell: GridCell): void {
   position: absolute;
   top: 100%;
   left: 0;
-  z-index: var(--mases-z-dropdown);
-  margin-block-start: var(--mases-space-1);
-  padding: var(--mases-space-3);
+  z-index: var(--arna-z-dropdown);
+  margin-block-start: var(--arna-space-1);
+  padding: var(--arna-space-3);
   min-width: 17.5rem;
-  background-color: var(--mases-color-surface-overlay);
-  border: 1px solid var(--mases-color-border-default);
-  border-radius: var(--mases-radius-md);
-  box-shadow: var(--mases-shadow-elevation-2);
-  transition: opacity var(--mases-duration-fast) var(--mases-easing-standard);
+  background-color: var(--arna-color-surface-overlay);
+  border: 1px solid var(--arna-color-border-default);
+  border-radius: var(--arna-radius-md);
+  box-shadow: var(--arna-shadow-elevation-2);
+  transition: opacity var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 /* ============================================================================
@@ -1182,18 +1230,18 @@ function onCellClick(cell: GridCell): void {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--mases-space-2);
-  margin-block-end: var(--mases-space-2);
+  gap: var(--arna-space-2);
+  margin-block-end: var(--arna-space-2);
 }
 
 .date-picker__header-label {
   flex: 1 1 auto;
   text-align: center;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 .date-picker__nav {
@@ -1207,22 +1255,22 @@ function onCellClick(cell: GridCell): void {
   appearance: none;
   background-color: transparent;
   border: none;
-  border-radius: var(--mases-radius-sm);
-  color: var(--mases-color-icon-secondary);
+  border-radius: var(--arna-radius-sm);
+  color: var(--arna-color-icon-secondary);
   cursor: pointer;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .date-picker__nav:hover {
-  background-color: var(--mases-color-state-hover);
-  color: var(--mases-color-icon-primary);
+  background-color: var(--arna-color-state-hover);
+  color: var(--arna-color-icon-primary);
 }
 
 .date-picker__nav:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
@@ -1236,13 +1284,13 @@ function onCellClick(cell: GridCell): void {
 }
 
 .date-picker__weekday-header {
-  padding-block: var(--mases-space-1);
+  padding-block: var(--arna-space-1);
   padding-inline: 0;
-  color: var(--mases-color-text-tertiary);
+  color: var(--arna-color-text-tertiary);
   font-family: inherit;
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
+  font-weight: var(--arna-font-weight-medium);
   text-align: center;
   text-transform: none;
 }
@@ -1253,24 +1301,24 @@ function onCellClick(cell: GridCell): void {
   padding: 0;
   text-align: center;
   vertical-align: middle;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
+  font-size: var(--arna-font-size-body-sm);
   line-height: 1;
-  font-weight: var(--mases-font-weight-regular);
+  font-weight: var(--arna-font-weight-regular);
   cursor: pointer;
-  border-radius: var(--mases-radius-sm);
+  border-radius: var(--arna-radius-sm);
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .date-picker__cell:hover:not(.date-picker__cell--blank):not(.date-picker__cell--disabled) {
-  background-color: var(--mases-color-state-hover);
+  background-color: var(--arna-color-state-hover);
 }
 
 .date-picker__cell:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
   outline-offset: -2px;
 }
 
@@ -1280,7 +1328,7 @@ function onCellClick(cell: GridCell): void {
 }
 
 .date-picker__cell--today {
-  font-weight: var(--mases-font-weight-semibold);
+  font-weight: var(--arna-font-weight-semibold);
   /*
    * A small dot under the number, rendered as a border-bottom on the
    * cell's inner span. Replaced by data attribute selectors so the
@@ -1296,27 +1344,27 @@ function onCellClick(cell: GridCell): void {
   transform: translateX(-50%);
   width: 4px;
   height: 4px;
-  border-radius: var(--mases-radius-full);
-  background-color: var(--mases-color-icon-brand);
+  border-radius: var(--arna-radius-full);
+  background-color: var(--arna-color-icon-brand);
   pointer-events: none;
 }
 
 .date-picker__cell--selected {
-  background-color: var(--mases-color-action-primary);
-  color: var(--mases-color-text-inverse);
-  font-weight: var(--mases-font-weight-semibold);
+  background-color: var(--arna-color-action-primary);
+  color: var(--arna-color-text-inverse);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 .date-picker__cell--selected.date-picker__cell--today::after {
-  background-color: var(--mases-color-text-inverse);
+  background-color: var(--arna-color-text-inverse);
 }
 
 .date-picker__cell--selected:hover {
-  background-color: var(--mases-color-action-primary-hover);
+  background-color: var(--arna-color-action-primary-hover);
 }
 
 .date-picker__cell--disabled {
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
   cursor: not-allowed;
   background-color: transparent;
 }
