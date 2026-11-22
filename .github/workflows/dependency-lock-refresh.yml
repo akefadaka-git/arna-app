@@ -1,0 +1,63 @@
+name: ARNA App dependency lock refresh (compatibility assessment)
+
+on:
+  push:
+    branches: [security/vue-tsc-3.3.14-compat]
+    paths:
+      - "package.json"
+      - ".github/workflows/dependency-lock-refresh.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "package.json"
+      - ".github/workflows/dependency-lock-refresh.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  refresh-lock:
+    name: Resolve exact dependency lock and audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out exact revision
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Resolve package lock without running install scripts
+        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+      - name: Record exact lockfile and vulnerability inventory
+        shell: bash
+        run: |
+          set +e
+          npm audit --json > "$RUNNER_TEMP/npm-audit.json"
+          audit_status=$?
+          set -e
+          node --input-type=commonjs -e '
+            const fs = require("node:fs");
+            const report = JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP + "/npm-audit.json", "utf8"));
+            console.log("Vulnerability counts:", JSON.stringify(report.metadata?.vulnerabilities ?? {}));
+            for (const [name, item] of Object.entries(report.vulnerabilities ?? {})) {
+              const via = (item.via ?? []).map(entry => typeof entry === "string" ? entry : entry.title).join("; ");
+              console.log(JSON.stringify({ name, severity: item.severity, range: item.range, via, fixAvailable: item.fixAvailable }));
+            }
+          '
+          echo "npm audit exit status: $audit_status"
+      - name: Require zero moderate, high, and critical advisories
+        run: npm audit --audit-level=moderate
+      - name: Upload regenerated lock and audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arna-app-vue-tsc-3.3.14-lock-${{ github.sha }}
+          path: |
+            package-lock.json
+            ${{ runner.temp }}/npm-audit.json
+          if-no-files-found: error
+          retention-days: 7
