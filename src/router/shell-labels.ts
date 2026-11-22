@@ -29,8 +29,6 @@
  *         legalLinkLabel:   'ሕጋዊ መረጃ',
  *         supportLinkLabel: 'ድጋፍ',
 
-  /** Link to the official public corporate website. */
-
  *       } as const;
  *
  *   `copyrightTemplate` carries a `{year}` placeholder. The
