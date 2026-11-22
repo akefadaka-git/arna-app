@@ -14,7 +14,6 @@ import {
 
 const route = useRoute();
 const meetingId = Number(route.params.id);
-const loading = ref(false);
 const saving = ref(false);
 const errorMessage = ref('');
 const notice = ref('');
@@ -41,7 +40,6 @@ const ruleApprovalHash = ref('');
 const legalVerificationReference = ref('');
 const legalVerificationHash = ref('');
 
-const blocked = computed(() => evaluation.value?.status === 'BLOCKED');
 const statusLabel = computed(() => {
   if (!evaluation.value) return 'Not evaluated';
   if (evaluation.value.status === 'PASS') return 'QUORUM MET';
