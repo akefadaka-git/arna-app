@@ -493,7 +493,6 @@ export interface ResetPasswordFormLabels {
 
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
 import { Eye, EyeOff } from 'lucide-vue-next';
 
 import FormField from '@/components/composites/FormField';
@@ -502,7 +501,6 @@ import BaseInput from '@/components/primitives/BaseInput';
 import BaseLink from '@/components/primitives/BaseLink';
 import PrimaryButton from '@/components/primitives/PrimaryButton';
 
-import { resetPassword } from '@/features/auth/service';
 
 interface Props {
   /** Consumer-supplied, translated labels. Required. */
@@ -530,27 +528,8 @@ const emit = defineEmits<{
 // -----------------------------------------------------------------------------
 // Router — read the token and email from the URL
 // -----------------------------------------------------------------------------
-const route = useRoute();
-
-/*
- * The token is a required path param. Vue Router guarantees a
- * string when the route matches; the typeof check handles the
- * pathological case where the route is defined without the param.
- */
-const routeToken = computed<string>(() => {
-  const raw = route.params.token;
-  return typeof raw === 'string' ? raw : '';
-});
-
-/*
- * The email is read from the query string. It is optional at the
- * URL level — the query parser does not enforce presence — but
- * the form treats its absence as a broken link.
- */
-const routeEmail = computed<string>(() => {
-  const raw = route.query.email;
-  return typeof raw === 'string' ? raw : '';
-});
+// Legacy reset links are no longer accepted. Password recovery now requires
+// an OTP or Google Authenticator proof through the /forgot-password flow.
 
 // -----------------------------------------------------------------------------
 // State
@@ -561,16 +540,14 @@ type Status = 'form' | 'invalid' | 'success';
  * The initial status is computed from the URL. See the file
  * docblock §"Invalid-link state".
  */
-const status = ref<Status>(
-  routeToken.value !== '' && routeEmail.value !== '' ? 'form' : 'invalid',
-);
+const status = ref<Status>('invalid');
 
 /*
  * The email field is bound to this ref. On mount it is set to the
  * value from the URL. The field is read-only, so the value never
  * changes after that.
  */
-const email = ref<string>(routeEmail.value);
+const email = ref<string>('');
 
 const password = ref<string>('');
 const passwordConfirm = ref<string>('');
@@ -802,67 +779,9 @@ async function focusFirstErrorField(): Promise<void> {
 // Submission
 // -----------------------------------------------------------------------------
 async function onSubmit(): Promise<void> {
-  if (isSubmitting.value) return;
-
+  // Deliberately fail closed: legacy email reset tokens are not accepted.
+  status.value = 'invalid';
   banner.value = null;
-  serverFieldErrors.value = {};
-  passwordMatchError.value = undefined;
-
-  /*
-   * Client-side password-match check. Runs before the service
-   * call, so a mismatch never hits the network.
-   *
-   * The check is only meaningful when both values are non-empty —
-   * the built-in required validation handles the empty-value case
-   * at the browser level (via the required attribute) and at the
-   * FormField level (via the aria-describedby wiring), so an
-   * empty pair is caught before this code runs.
-   *
-   * An empty password and an empty confirmation are considered
-   * equal by the check below — both being '' would pass. That is
-   * fine: the required check has already prevented submission in
-   * that case.
-   */
-  if (password.value !== passwordConfirm.value) {
-    passwordMatchError.value = props.labels.passwordsDoNotMatch;
-    await nextTick();
-    focusInput(passwordConfirmInputRef.value);
-    return;
-  }
-
-  isSubmitting.value = true;
-  try {
-    /*
-     * The service does not currently perform the CSRF handshake
-     * for this endpoint (the backend does not require it — the
-     * password-reset route is public). See the file docblock
-     * §"Why the CSRF handshake is not in this file".
-     */
-    await resetPassword({
-      token: routeToken.value,
-      email: email.value,
-      password: password.value,
-      password_confirmation: passwordConfirm.value,
-    });
-
-    /*
-     * Success. The backend invalidated the reset token. The user
-     * must log in with the new password, so the form presents a
-     * success panel with a link to login rather than navigating
-     * automatically.
-     */
-    status.value = 'success';
-    await nextTick();
-  } catch (err) {
-    const hasFieldErrors = setFieldErrorsFromError(err);
-    if (!hasFieldErrors) {
-      setBannerFromError(err);
-    } else {
-      await focusFirstErrorField();
-    }
-  } finally {
-    isSubmitting.value = false;
-  }
 }
 
 // -----------------------------------------------------------------------------
