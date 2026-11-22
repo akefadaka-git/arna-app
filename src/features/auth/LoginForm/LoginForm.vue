@@ -292,8 +292,9 @@
      input when the identifier was pre-filled from storage.
    - After a 422, focus moves to the first field with a validation
      error.
-   - The identifier input carries autocomplete="username"; the
-     password input carries autocomplete="current-password".
+   - The identifier input carries autocomplete="username" and inputmode="text"
+     because ARNA identifiers include numeric and alphanumeric values;
+     the password input carries autocomplete="current-password".
    - Reduced motion: the toggle's transition uses the motion
      tokens, which the substrate collapses automatically.
 =============================================================================
@@ -317,9 +318,10 @@ export interface LoginFormLabels {
   /**
    * The label for the identifier field.
    *
-   * Despite the key name (kept for backward compatibility with
-   * auth-labels.ts and LoginRoute.vue), the field accepts an email
-   * address OR a phone number. The label VALUE must reflect that.
+   * Despite the historical key name (kept for compatibility with
+   * auth-labels.ts and LoginRoute.vue), the field accepts any of the six
+   * ARNA identifiers: email, username, mobile number, employee ID,
+   * shareholder number or wallet number.
    */
   readonly emailLabel: string;
 
@@ -861,7 +863,7 @@ const passwordToggleLabel = computed<string>(() =>
     </Alert>
 
     <!-- ============================================================
-         Identifier (email or phone)
+         Identifier (any of the six ARNA identifiers)
          ============================================================ -->
     <FormField
       :label="labels.emailLabel"
@@ -875,7 +877,7 @@ const passwordToggleLabel = computed<string>(() =>
         ref="identifierInputRef"
         v-model="identifier"
         type="text"
-        inputmode="email"
+        inputmode="text"
         autocomplete="username"
         enterkeyhint="go"
         :disabled="isSubmitting || isMfaChallengeActive"
