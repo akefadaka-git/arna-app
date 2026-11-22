@@ -1,7 +1,7 @@
 # ARNA Executive Overview — A3 Policy-to-Implementation Reconciliation
 
 **Date:** 2026-11-09  
-**Status:** A3 implementation refreshed onto current-main-based canonical branches on 2026-11-22; A4 exact-head verification NOT RUN. Prior-branch PASS results are historical and are not current-head evidence.  
+**Status:** A3 implementation refreshed onto current-main-based canonical branches on 2026-11-22; automated exact-head preflight PASS on both repositories. Formal A4 closure is not declared under this A3 authorization.  
 **Authority:** Owner-frozen A3 audience and permission policy, 2026-11-09  
 **Release boundary:** No merge, production role grant, deployment, or production data access authorized.
 
@@ -136,3 +136,15 @@ Complete the final exact-HEAD API CI rerun at `473280a1d254e283cbf843eae30c97d9f
 - The earlier `feat/executive-overview-a3` PR branches contain broader historical changes and are not the integration source for this bounded implementation.
 - Exact-head A4 verification is NOT RUN until the refreshed implementation commits are available to CI.
 - Independent review is reserved for A5 immediately before deployment; it is not an A3/A4 prerequisite.
+
+
+## Exact-head automated preflight evidence (2026-11-22)
+
+- App code head: `b9383df889ee6b37a4c015087b652756b37f95b0`.
+  - [Frontend CI #45021004383 — PASS](https://github.com/akefadaka-git/arna-app/actions/runs/45021004383).
+  - [Executive Overview App A4 workflow #45021004275 — PASS](https://github.com/akefadaka-git/arna-app/actions/runs/45021004275).
+- API code head: `17bb0e1ff1530d0a1903e2516916b28d9a9ee426`.
+  - [Executive Overview API security workflow #45021797578 — PASS](https://github.com/akefadaka-git/arna-api/actions/runs/45021797578).
+  - [Clean-install MySQL workflow #45021797455 — PASS](https://github.com/akefadaka-git/arna-api/actions/runs/45021797455).
+  - MySQL feature tests: audience/role grant 9 passed (65 assertions); route/data contract 4 passed (25 assertions); fresh authorization/tenant isolation 14 passed (36 assertions). Full fresh migration and seed passed; 85 migration records; second migration run idempotent; no pending migrations.
+- These results are automated preflight evidence, not a formal A4 closure decision. No independent review was requested or performed; it remains reserved for A5 immediately before deployment.

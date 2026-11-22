@@ -1,7 +1,7 @@
 # ARNA Executive Overview — A4 Frontend Security Verification
 
 **Stage:** A4 — verification  
-**Current status:** A4 verification plan carried forward; exact-head tests on the refreshed canonical branch NOT RUN.  
+**Current status:** Automated A4 App preflight PASS on exact code head `b9383df889ee6b37a4c015087b652756b37f95b0`; formal A4 closure not declared.  
 **A3 App parent:** `fc5d87fd4ed97a2b5102ffefbad894c261f0d6f2`  
 **A4 App baseline:** `ea2c432ecf1d8d0f02ee7f58984bf8341f8a2bf7`  
 **R3 branch:** `remediate/executive-overview-a4-r3`
@@ -49,3 +49,12 @@ An external human reviewer is required only if applicable law, contract, third-p
 ## Refreshed A3 baseline and review timing (2026-11-22)
 
 The current A3 App baseline is `76110efd51910240c15faf7c0387e8c1942acf85`, with implementation on `feat/dashboard-executive-overview-a3`. Historical R3 results above do not establish PASS for the refreshed branch. A4 is internal exact-head verification only. Independent review is reserved for A5 immediately before deployment.
+
+
+## Exact-head evidence (2026-11-22)
+
+- Code head: `b9383df889ee6b37a4c015087b652756b37f95b0`.
+- [Frontend CI #45021004383 — PASS](https://github.com/akefadaka-git/arna-app/actions/runs/45021004383).
+- [Executive Overview App A4 workflow #45021004275 — PASS](https://github.com/akefadaka-git/arna-app/actions/runs/45021004275).
+- Route contract, frontend build, and browser security checks passed.
+- Independent review is not an A4 prerequisite; it is reserved for A5 immediately before deployment.
