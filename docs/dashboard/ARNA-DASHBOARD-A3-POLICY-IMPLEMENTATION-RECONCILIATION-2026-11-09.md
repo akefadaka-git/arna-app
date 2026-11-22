@@ -131,7 +131,7 @@ Complete the final exact-HEAD API CI rerun at `473280a1d254e283cbf843eae30c97d9f
 ## Current-main refresh and evidence boundary (2026-11-22)
 
 - App main baseline: `76110efd51910240c15faf7c0387e8c1942acf85`.
-- API main baseline: `7d601ba67d52873ff46fbe1f534b83abf5889c88`.
+- API main baseline: `5fd35bf31c1b6308e8373ff6121a0d4123f7e33b`.
 - Canonical branches: `feat/dashboard-executive-overview-a3` in each repository.
 - The earlier `feat/executive-overview-a3` PR branches contain broader historical changes and are not the integration source for this bounded implementation.
 - Exact-head A4 verification is NOT RUN until the refreshed implementation commits are available to CI.
