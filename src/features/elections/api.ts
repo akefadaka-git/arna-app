@@ -28,15 +28,28 @@ export interface PaginatedGovernanceElections {
   };
 }
 
-/** GET /api/governance/elections — tenant-scoped, permission-checked collection. */
+interface LaravelPaginator<T> {
+  readonly data: readonly T[];
+  readonly current_page: number;
+  readonly per_page: number;
+  readonly total: number;
+  readonly last_page: number;
+}
+
+/** GET /api/governance/elections — tenant-scoped Laravel paginator. */
 export async function listGovernanceElections(perPage = 25): Promise<PaginatedGovernanceElections> {
-  const response = await api.getWithMeta<readonly GovernanceElection[]>(
+  const response = await api.get<LaravelPaginator<GovernanceElection>>(
     '/api/governance/elections',
     { params: { per_page: perPage } },
   );
 
   return {
     items: response.data,
-    meta: response.meta as PaginatedGovernanceElections['meta'],
+    meta: {
+      current_page: response.current_page,
+      per_page: response.per_page,
+      total: response.total,
+      last_page: response.last_page,
+    },
   };
 }
