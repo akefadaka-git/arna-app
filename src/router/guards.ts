@@ -405,6 +405,9 @@ export interface AuthGuardRouteMeta {
    * Ignored when `permission` is a single string.
    */
   readonly permissionMode?: 'any' | 'all';
+
+  /** UX-only audience restriction; backend policy remains authoritative. */
+  readonly requiredRoles?: readonly string[];
 }
 
 /*
@@ -679,6 +682,14 @@ function authGuard(
   // Evaluate each matched route record so a child feature permission
   // cannot overwrite the Admin application's parent access boundary.
   for (const record of to.matched) {
+    const requiredRoles = record.meta.requiredRoles;
+    if (requiredRoles !== undefined && !requiredRoles.some((role) => auth.hasRole(role))) {
+      return {
+        path: ACCESS_DENIED_PATH,
+        query: { from: to.fullPath },
+      };
+    }
+
     const permission = record.meta.permission;
     if (permission === undefined) continue;
 
