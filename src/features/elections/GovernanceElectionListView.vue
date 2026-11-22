@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import { RouterLink } from 'vue-router';
 import PageHeader from '@/components/patterns/PageHeader';
 import LoadingState from '@/components/composites/LoadingState';
 import ErrorState from '@/components/composites/ErrorState';
@@ -56,7 +57,7 @@ onMounted(() => { void load(); });
       <ul v-else class="election-list__items">
         <li v-for="election in elections" :key="election.id" class="election-list__item">
           <div>
-            <h2>{{ electionTitle(election) }}</h2>
+            <h2><RouterLink :to="'/governance/elections/' + election.id">{{ electionTitle(election) }}</RouterLink></h2>
             <p>{{ election.code }} · {{ election.status }}</p>
           </div>
           <span :data-status="election.authority_verified_at ? 'verified' : 'pending'">
