@@ -276,6 +276,21 @@ export const loginFormLabels = {
   /** The label for the password field. */
   passwordLabel: 'የይለፍ ቃል',
 
+  /** Accessible label and actions for returning-user authentication methods. */
+  authenticatorMethodsLabel: 'የመግቢያ ዘዴ ይምረጡ',
+  usePasswordLabel: 'በይለፍ ቃል',
+  useOtpLabel: 'በOTP',
+  useGoogleAuthenticatorLabel: 'በGoogle Authenticator',
+  otpChannelLabel: 'ኮዱን የሚቀበሉበት መንገድ',
+  emailChannelLabel: 'ኢሜይል',
+  smsChannelLabel: 'SMS',
+  otpInstructions: 'በተመዘገበው እና በተረጋገጠው ኢሜይል ወይም ስልክ የተላከውን ኮድ ያስገቡ።',
+  authenticatorCodeLabel: 'የማረጋገጫ ኮድ',
+  sendOtpLabel: 'OTP ኮድ ላክ',
+  verifyAuthenticatorLabel: 'ኮዱን አረጋግጥ',
+  cancelAuthenticatorLabel: 'ወደ መግቢያ ተመለስ',
+
+
   /** Instructions displayed after the backend requires MFA. */
   mfaInstructions: 'በAuthenticator መተግበሪያዎ የሚታየውን ኮድ ወይም የመልሶ ማግኛ ኮድ ያስገቡ።',
   /** Label for the TOTP or one-time recovery-code input. */
