@@ -71,7 +71,7 @@ jobs:
           set -euo pipefail
           test -s public/logo.png
           test -s dist-public/logo.png
-          if grep -Eiq 'logo\\.(svg|webp)' public-entry/index.html src/layouts/PublicSiteLayout.vue src/public-site/CorporateDynamicHome.vue; then
+          if grep -Eiq 'logo\.(svg|webp)' public-entry/index.html src/layouts/PublicSiteLayout.vue src/public-site/CorporateDynamicHome.vue; then
             echo "Unexpected SVG/WebP logo reference in public site shell."
             exit 1
           fi
