@@ -93,7 +93,7 @@ test('workforce widget is a distinct aggregate-only card with bilingual labels',
   assert.match(api, /readonly active: number/);
   assert.match(view, /widget\.key === 'people\.workforce\.active'/);
   assert.match(view, /executive-overview-workforce-count/);
-  assert.match(view, /formatCalendarDate\\(widget\.observed_at/);
+  assert.match(view, /formatCalendarDate\(widget\.observed_at/);
   assert.match(labels, /activeWorkforceLabel: 'ንቁ ሠራተኞች'/);
   assert.match(labels, /activeWorkforceLabel: 'Active employees'/);
   assert.doesNotMatch(view, /employee_number|person_id|user_id/);
