@@ -1683,6 +1683,14 @@ export const authenticatedNavItems: ReadonlyArray<NavItem> = [
     icon: 'layout-grid',
   },
   {
+    id: 'executive-overview',
+    label: 'የአስፈጻሚ አጠቃላይ እይታ',
+    to: '/executive-overview',
+    icon: 'chart-no-axes-combined',
+    permission: 'dashboard.executive.view',
+    requiredRoles: ['ceo', 'president', 'finance_manager'],
+  },
+  {
     id: 'launcher',
     label: 'መነሻ',
     to: '/launcher',

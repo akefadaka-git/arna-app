@@ -223,6 +223,8 @@ export interface NavLeaf {
    * all of the listed permissions.
    */
   readonly permissionMode?: NavPermissionMode;
+  /** Optional UX-only role audience restriction. */
+  readonly requiredRoles?: readonly string[];
 }
 
 /**
@@ -358,6 +360,7 @@ function passesPermissionCheck(
 }
 
 function isLeafVisible(leaf: NavLeaf): boolean {
+  if (leaf.requiredRoles && !leaf.requiredRoles.some((role) => auth.hasRole(role))) return false;
   return passesPermissionCheck(leaf.permission, leaf.permissionMode);
 }
 
