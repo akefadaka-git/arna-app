@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — LanguageSelector
+ ARNA App Shell — LanguageSelector
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/LanguageSelector/LanguageSelector.vue
+ File:      src/layouts/AppShell/LanguageSelector/LanguageSelector.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.0.1
  Status:    FROZEN
@@ -34,24 +34,20 @@
  dropdown of the two frozen locales. Reads the active locale and the
  available-locales catalogue from @/stores/locale (Unit 11.6).
 
- Does NOT set the locale itself. Emits @select({ code }) so the
- consumer (the shell) can call localeStore.setLocale(code) and,
- once the endpoint exists, also call the localization service which
- POSTs to /api/locale.
+ Does NOT mutate the locale itself. Emits @select({ code }) so the
+shell can persist the account preference through POST /api/locale,
+then commit the new locale to the store.
 
- -----------------------------------------------------------------------------
- RENDERING IS DEFERRED (§9.3 / §20.3)
- -----------------------------------------------------------------------------
- The freeze's two relevant sections both require that this selector is
- NOT rendered until POST /api/locale exists. The component is delivered
- now, ready for that endpoint, but the shell must not compose it into
- AppHeader yet.
+-----------------------------------------------------------------------------
+SHELL INTEGRATION
+-----------------------------------------------------------------------------
+The authenticated shell renders this control because the matching
+authenticated POST /api/locale endpoint is implemented. The shell
+owns persistence and state commit; this component only emits a
+validated SupportedLocale selection.
 
- Consequence: there is NO disabled prop. See the response preamble
- §"Notice 2".
-
- -----------------------------------------------------------------------------
- The menu items come from the store, not from props
+-----------------------------------------------------------------------------
+The menu items come from the store, not from props
  -----------------------------------------------------------------------------
  LanguageSelector, unlike UserMenu (Unit 11.11), takes no `items` prop.
  The two locale entries are the frozen §9.1 catalogue, exposed by the
@@ -130,8 +126,8 @@
 /**
  * Consumer-supplied, translated labels for the component itself.
  *
- * The menu-item labels are NOT here — they come from the frozen
- * locale store catalogue. See the file header comment §"The menu items
+ * The menu-item labels are NOT here — they come from the locale
+ * store catalogue. See the file header comment §"The menu items
  * come from the store".
  */
 export interface LanguageSelectorLabels {
@@ -139,7 +135,7 @@ export interface LanguageSelectorLabels {
    * The trigger's aria-label. Typically a short phrase: "Select
    * language", "ቋንቋ ይምረጡ".
    */
-  readonly triggerAriaLabel: string;
+  readonly triggerAriaLabel: Readonly<Record<'am' | 'en', string>>;
 }
 </script>
 
@@ -152,20 +148,19 @@ import BaseIcon from '@/components/primitives/BaseIcon';
 import DropdownMenu from '@/components/composites/DropdownMenu';
 
 interface Props {
-  /**
-   * Consumer-supplied, translated labels. Required.
-   */
+  /** Consumer-supplied, localized labels. Required. */
   labels: LanguageSelectorLabels;
+  /** Temporarily prevents selection while the preference is being saved. */
+  disabled?: boolean;
 }
 
-defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), { disabled: false });
 
 const emit = defineEmits<{
   /**
    * Fires when the user picks a locale. The consumer (the shell)
-   * calls localeStore.setLocale(code) in response, and — once the
-   * localization service exists — also calls it to POST to
-   * /api/locale.
+   * persists the preference and updates the locale store only after
+   * the account-level API confirms the change.
    */
   (event: 'select', payload: { code: SupportedLocale }): void;
 }>();
@@ -214,7 +209,7 @@ function onSelect(key: string): void {
    * key (e.g. a future DropdownMenu feature adds a non-locale action),
    * this silently ignores it rather than emitting an invalid code.
    */
-  if (!isSupportedLocale(key)) return;
+  if (props.disabled || !isSupportedLocale(key)) return;
   emit('select', { code: key });
 }
 </script>
@@ -255,7 +250,9 @@ function onSelect(key: string): void {
         :aria-haspopup="ariaHaspopup"
         :aria-expanded="ariaExpanded"
         :aria-controls="ariaControls"
-        :aria-label="labels.triggerAriaLabel"
+        :aria-label="labels.triggerAriaLabel[locale.locale]"
+        :disabled="disabled"
+        :aria-busy="disabled ? 'true' : undefined"
         data-testid="language-selector-trigger"
         @click="toggle"
       >
