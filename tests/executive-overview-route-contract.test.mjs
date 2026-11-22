@@ -12,7 +12,9 @@ test('Executive Overview is a separate permission-gated workspace route', async 
 
 test('workspace navigation item is filtered by the same canonical permission', async () => {
   const shell = await read('../src/router/shell-labels.ts');
-  assert.match(shell, /id: 'executive-overview'[\s\S]*?to: '\/executive-overview'[\s\S]*?permission: 'dashboard\.executive\.view'[\s\S]*?requiredRoles: \['ceo', 'president', 'finance_manager'\]/);
+  assert.match(shell, /id: 'executive-overview'[\s\S]*?to: '\/executive-overview'[\s\S]*?icon: 'line-chart'[\s\S]*?permission: 'dashboard\.executive\.view'[\s\S]*?requiredRoles: \['ceo', 'president', 'finance_manager'\]/);
+  const header = await read('../src/layouts/AppShell/AppHeaderNavigation/AppHeaderNavigation.vue');
+  assert.match(header, /'executive-overview': 'Executive Overview'/);
 });
 
 test('route and sidebar UX gates require an approved audience role as well as permission', async () => {

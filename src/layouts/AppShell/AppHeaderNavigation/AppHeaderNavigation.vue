@@ -29,6 +29,7 @@ const auth = useAuthStore();
 
 const ENGLISH_DESTINATION_LABELS: Readonly<Record<string, string>> = {
   dashboard: 'Dashboard',
+  'executive-overview': 'Executive Overview',
   'go-to-workspace': 'Go to workspace',
   launcher: 'Home',
   files: 'Documents',

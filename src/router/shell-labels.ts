@@ -1686,7 +1686,7 @@ export const authenticatedNavItems: ReadonlyArray<NavItem> = [
     id: 'executive-overview',
     label: 'የአስፈጻሚ አጠቃላይ እይታ',
     to: '/executive-overview',
-    icon: 'chart-no-axes-combined',
+    icon: 'line-chart',
     permission: 'dashboard.executive.view',
     requiredRoles: ['ceo', 'president', 'finance_manager'],
   },
