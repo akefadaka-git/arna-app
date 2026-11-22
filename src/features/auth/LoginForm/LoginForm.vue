@@ -328,6 +328,26 @@ export interface LoginFormLabels {
   /** The label for the password field. */
   readonly passwordLabel: string;
 
+  /** Accessible label for the authenticator method selector. */
+  readonly authenticatorMethodsLabel: string;
+
+  /** Method selector labels. */
+  readonly usePasswordLabel: string;
+  readonly useOtpLabel: string;
+  readonly useGoogleAuthenticatorLabel: string;
+
+  /** OTP delivery-channel labels and instructions. */
+  readonly otpChannelLabel: string;
+  readonly emailChannelLabel: string;
+  readonly smsChannelLabel: string;
+  readonly otpInstructions: string;
+
+  /** Code entry and action labels for returning-user authenticators. */
+  readonly authenticatorCodeLabel: string;
+  readonly sendOtpLabel: string;
+  readonly verifyAuthenticatorLabel: string;
+  readonly cancelAuthenticatorLabel: string;
+
   /** Instructions shown when the backend requires multi-factor authentication. */
   readonly mfaInstructions: string;
 
@@ -423,7 +443,7 @@ import BaseInput from '@/components/primitives/BaseInput';
 import BaseLink from '@/components/primitives/BaseLink';
 import PrimaryButton from '@/components/primitives/PrimaryButton';
 
-import { completeMfaLogin, login } from '@/features/auth/service';
+import { completeAuthenticatorLogin, completeMfaLogin, login, requestLoginOtp } from '@/features/auth/service';
 import { resolveSafeRedirect } from '@/router/guards';
 
 interface Props {
@@ -463,6 +483,14 @@ const password = ref<string>('');
 const mfaCode = ref<string>('');
 const mfaChallengeToken = ref<string | null>(null);
 const isMfaChallengeActive = computed<boolean>(() => mfaChallengeToken.value !== null);
+type AuthenticatorMode = 'password' | 'otp' | 'google_authenticator';
+const authenticatorMode = ref<AuthenticatorMode>('password');
+const otpChannel = ref<'email' | 'sms'>('email');
+const otpChallengeToken = ref<string | null>(null);
+const authenticatorCode = ref<string>('');
+const isOtpChallengeActive = computed<boolean>(
+  () => authenticatorMode.value === 'otp' && otpChallengeToken.value !== null,
+);
 
 /*
  * Whether the password is visible. When false (default), the input
@@ -743,7 +771,7 @@ async function onSubmit(): Promise<void> {
         mfaCode.value,
         { remember: rememberMe.value },
       );
-    } else {
+    } else if (authenticatorMode.value === 'password') {
       const result = await login(
         identifier.value,
         password.value,
@@ -758,6 +786,21 @@ async function onSubmit(): Promise<void> {
         if (mfaInput instanceof HTMLElement) mfaInput.focus();
         return;
       }
+    } else if (authenticatorMode.value === 'otp' && otpChallengeToken.value === null) {
+      const challenge = await requestLoginOtp(identifier.value, otpChannel.value);
+      otpChallengeToken.value = challenge.challengeToken;
+      authenticatorCode.value = '';
+      await nextTick();
+      const codeInput = document.getElementById('login-authenticator-code');
+      if (codeInput instanceof HTMLElement) codeInput.focus();
+      return;
+    } else {
+      await completeAuthenticatorLogin(
+        identifier.value,
+        authenticatorMode.value,
+        authenticatorCode.value,
+        otpChallengeToken.value ?? undefined,
+      );
     }
 
     // Persist only the identifier. Never persist passwords, MFA codes,
@@ -791,6 +834,22 @@ function cancelMfaChallenge(): void {
   banner.value = null;
 }
 
+function selectAuthenticator(mode: AuthenticatorMode): void {
+  if (isSubmitting.value || isMfaChallengeActive.value) return;
+  authenticatorMode.value = mode;
+  otpChallengeToken.value = null;
+  authenticatorCode.value = '';
+  banner.value = null;
+  fieldErrors.value = {};
+}
+
+function cancelAuthenticatorChallenge(): void {
+  otpChallengeToken.value = null;
+  authenticatorCode.value = '';
+  authenticatorMode.value = 'password';
+  banner.value = null;
+}
+
 function onForgotPasswordClick(event: MouseEvent): void {
   event.preventDefault();
   emit('forgot-password');
@@ -804,13 +863,15 @@ function onRegisterClick(event: MouseEvent): void {
 // -----------------------------------------------------------------------------
 // Derived render decisions
 // -----------------------------------------------------------------------------
-const submitLabel = computed<string>(() =>
-  isSubmitting.value
-    ? props.labels.submittingLabel
-    : isMfaChallengeActive.value
-      ? props.labels.verifyMfaLabel
-      : props.labels.submitLabel,
-);
+const submitLabel = computed<string>(() => {
+  if (isSubmitting.value) return props.labels.submittingLabel;
+  if (isMfaChallengeActive.value) return props.labels.verifyMfaLabel;
+  if (authenticatorMode.value === 'otp') {
+    return isOtpChallengeActive.value ? props.labels.verifyAuthenticatorLabel : props.labels.sendOtpLabel;
+  }
+  if (authenticatorMode.value === 'google_authenticator') return props.labels.verifyAuthenticatorLabel;
+  return props.labels.submitLabel;
+});
 
 /*
  * The toggle's aria-label describes the action it performs, matching
