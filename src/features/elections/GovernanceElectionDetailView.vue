@@ -52,6 +52,14 @@ function electionTitle(record: GovernanceElection): string {
   return record.title_am || record.title_en || record.code;
 }
 
+function candidateName(candidate: ElectionCandidateRecord): string {
+  const person = candidate.person;
+  if (!person) return 'Person #' + candidate.person_id;
+  const amharic = [person.first_name_am, person.father_name_am, person.grandfather_name_am].filter(Boolean).join(' ');
+  const english = [person.first_name_en, person.father_name_en, person.grandfather_name_en].filter(Boolean).join(' ');
+  return amharic || english || 'Person #' + candidate.person_id;
+}
+
 async function load(): Promise<void> {
   const electionId = Number(route.params.id);
   if (!Number.isSafeInteger(electionId) || electionId < 1) {
@@ -185,8 +193,8 @@ onMounted(() => { void load(); });
         <p v-if="!candidates.length">ምንም እጩ አልተመዘገበም | No candidates recorded.</p>
         <ul v-else>
           <li v-for="candidate in candidates" :key="candidate.id">
-            <strong>{{ candidate.candidate_name_snapshot || ('Person #' + candidate.candidate_person_id) }}</strong>
-            <span>{{ candidate.committee_status || candidate.status || '—' }}</span>
+            <strong>{{ candidateName(candidate) }}</strong>
+            <span>{{ candidate.status }} · Consent: {{ candidate.consent_status }} · v{{ candidate.version }}</span>
           </li>
         </ul>
       </section>
