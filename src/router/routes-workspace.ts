@@ -767,6 +767,18 @@ export const routesWorkspace: RouteRecordRaw[] = [
         component: () => import('@/features/elections/GovernanceElectionDetailView.vue'),
         meta: { permission: 'governance.election.view' },
       },
+      {
+        path: 'governance/meetings/:id/agenda',
+        name: 'governance-meeting-agenda',
+        component: () => import('@/features/governance/GovernanceMeetingAgendaView.vue'),
+        meta: { permission: 'governance.agenda.view' },
+      },
+      {
+        path: 'governance/meetings/:id/electorate',
+        name: 'governance-meeting-electorate',
+        component: () => import('@/features/governance/GovernanceElectorateQuorumView.vue'),
+        meta: { permission: 'governance.attendance.view' },
+      },
 
       //
       // ORDER: list, then detail. No static-vs-dynamic conflict at the
