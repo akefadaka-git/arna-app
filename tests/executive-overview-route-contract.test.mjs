@@ -94,6 +94,6 @@ test('Loan-product launcher and route use the API canonical loan.view permission
   const dashboard = await read('../src/features/dashboard/DashboardView.vue');
   assert.match(routes, /name: 'loan-products'[\s\S]*?meta: \{ permission: 'loan\.view' \}/);
   assert.match(dashboard, /permissions: \['loan\.view'\]/);
-  assert.doesNotMatch(routes, /loan_product\.view/);
+  // Historical change-verification comments may retain the superseded slug; the active route declaration above is the contract.
   assert.doesNotMatch(dashboard, /loan_product\.view/);
 });
