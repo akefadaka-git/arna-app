@@ -947,6 +947,35 @@ const passwordToggleLabel = computed<string>(() =>
       />
     </FormField>
 
+    <div
+      class="login-form__auth-methods"
+      role="group"
+      :aria-label="labels.authenticatorMethodsLabel"
+      data-testid="login-form-authenticator-methods"
+    >
+      <button
+        type="button"
+        :aria-pressed="authenticatorMode === 'password'"
+        :disabled="isSubmitting || isMfaChallengeActive"
+        data-testid="login-form-use-password"
+        @click="selectAuthenticator('password')"
+      >{{ labels.usePasswordLabel }}</button>
+      <button
+        type="button"
+        :aria-pressed="authenticatorMode === 'otp'"
+        :disabled="isSubmitting || isMfaChallengeActive"
+        data-testid="login-form-use-otp"
+        @click="selectAuthenticator('otp')"
+      >{{ labels.useOtpLabel }}</button>
+      <button
+        type="button"
+        :aria-pressed="authenticatorMode === 'google_authenticator'"
+        :disabled="isSubmitting || isMfaChallengeActive"
+        data-testid="login-form-use-google-authenticator"
+        @click="selectAuthenticator('google_authenticator')"
+      >{{ labels.useGoogleAuthenticatorLabel }}</button>
+    </div>
+
     <!-- ============================================================
          Password (with show/hide toggle in the suffix slot)
          ------------------------------------------------------------
@@ -960,6 +989,7 @@ const passwordToggleLabel = computed<string>(() =>
          bubble from the input to that wrapper.
          ============================================================ -->
     <FormField
+      v-if="authenticatorMode === 'password'"
       :label="labels.passwordLabel"
       html-for="login-password"
       :error="passwordError"
@@ -999,6 +1029,59 @@ const passwordToggleLabel = computed<string>(() =>
         </template>
       </BaseInput>
     </FormField>
+
+    <div
+      v-if="authenticatorMode === 'otp' || authenticatorMode === 'google_authenticator'"
+      class="login-form__authenticator"
+      data-testid="login-form-authenticator"
+    >
+      <p class="login-form__mfa-instructions" role="status" aria-live="polite">
+        {{ authenticatorMode === 'otp' ? labels.otpInstructions : labels.mfaInstructions }}
+      </p>
+
+      <div v-if="authenticatorMode === 'otp' && !isOtpChallengeActive" class="login-form__otp-channel">
+        <label for="login-otp-channel">{{ labels.otpChannelLabel }}</label>
+        <select
+          id="login-otp-channel"
+          v-model="otpChannel"
+          :disabled="isSubmitting"
+          data-testid="login-form-otp-channel"
+        >
+          <option value="email">{{ labels.emailChannelLabel }}</option>
+          <option value="sms">{{ labels.smsChannelLabel }}</option>
+        </select>
+      </div>
+
+      <FormField
+        v-if="authenticatorMode === 'google_authenticator' || isOtpChallengeActive"
+        :label="labels.authenticatorCodeLabel"
+        html-for="login-authenticator-code"
+        :disabled="isSubmitting"
+        required
+      >
+        <BaseInput
+          id="login-authenticator-code"
+          v-model="authenticatorCode"
+          type="text"
+          inputmode="numeric"
+          autocomplete="one-time-code"
+          autocapitalize="off"
+          spellcheck="false"
+          :disabled="isSubmitting"
+          required
+          data-testid="login-form-authenticator-code"
+        />
+      </FormField>
+
+      <button
+        v-if="isOtpChallengeActive"
+        type="button"
+        class="login-form__mfa-cancel"
+        :disabled="isSubmitting"
+        data-testid="login-form-authenticator-cancel"
+        @click="cancelAuthenticatorChallenge"
+      >{{ labels.cancelAuthenticatorLabel }}</button>
+    </div>
 
     <!-- ============================================================
          MFA challenge (rendered only after the server requests MFA)
