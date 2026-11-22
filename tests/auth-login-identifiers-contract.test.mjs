@@ -17,7 +17,11 @@ test('login contract documents all six supported ARNA identifiers', () => {
 });
 
 test('login identifier input uses text input mode for numeric and alphanumeric identifiers', () => {
-  const identifierField = form.match(/<BaseInput\\s+id="login-identifier"[\\s\\S]*?\\/>/)?.[0];
+  const inputStart = form.indexOf('<BaseInput\\n        id="login-identifier"');
+  const inputEnd = form.indexOf('/>', inputStart);
+  const identifierField = inputStart >= 0 && inputEnd > inputStart
+    ? form.slice(inputStart, inputEnd)
+    : '';
   assert.ok(identifierField, 'login identifier BaseInput must exist');
   assert.match(identifierField, /inputmode="text"/);
   assert.match(identifierField, /autocomplete="username"/);
