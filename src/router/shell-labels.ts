@@ -28,6 +28,9 @@
  *           '© 2016 - {year} ማሌ ዓርና አክሲዮን ማኅበር፥ መብቱ የተጠበቀ ነው።',
  *         legalLinkLabel:   'ሕጋዊ መረጃ',
  *         supportLinkLabel: 'ድጋፍ',
+
+  /** Link to the official public corporate website. */
+  corporateSiteLinkLabel: 'ይፋዊ ድረ ገጽ',
  *       } as const;
  *
  *   `copyrightTemplate` carries a `{year}` placeholder. The
