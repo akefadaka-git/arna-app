@@ -128,3 +128,26 @@ export function getElectionRegisterSnapshot(id: number): Promise<ElectionRegiste
 export function listElectionManualCountEvidence(id: number): Promise<ElectionManualCountEvidence> {
   return api.get<ElectionManualCountEvidence>(\`/api/governance/elections/\${id}/count-batches\`);
 }
+
+
+export interface RecordManualCountBatchInput {
+  readonly batch_reference: string;
+  readonly polling_station?: string;
+  readonly ballots_received: number;
+  readonly ballots_valid: number;
+  readonly ballots_rejected: number;
+  readonly sealed_box_reference: string;
+  readonly count_sheet_reference: string;
+  readonly lines: readonly { readonly candidate_id: number; readonly ballot_count: number }[];
+}
+
+export function recordElectionManualCountBatch(
+  id: number,
+  input: RecordManualCountBatchInput,
+): Promise<ElectionManualCountEvidence> {
+  return api.post<ElectionManualCountEvidence>(\`/api/governance/elections/\${id}/count-batches\`, input);
+}
+
+export function witnessElectionManualCountBatch(id: number, batchId: number): Promise<ElectionManualCountBatch> {
+  return api.post<ElectionManualCountBatch>(\`/api/governance/elections/\${id}/count-batches/\${batchId}/witness\`);
+}
