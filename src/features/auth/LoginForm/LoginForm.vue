@@ -1229,6 +1229,68 @@ const passwordToggleLabel = computed<string>(() =>
 /* ============================================================================
    MFA challenge
    ============================================================================ */
+.login-form__auth-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mases-space-2);
+}
+
+.login-form__auth-methods button {
+  min-height: 36px;
+  padding: var(--mases-space-2) var(--mases-space-3);
+  border: 1px solid var(--mases-color-border-default);
+  border-radius: var(--mases-radius-md);
+  background: var(--mases-color-surface);
+  color: var(--mases-color-text-secondary);
+  font: inherit;
+  cursor: pointer;
+}
+
+.login-form__auth-methods button[aria-pressed="true"] {
+  border-color: var(--mases-color-border-focus);
+  background: var(--mases-color-surface-info);
+  color: var(--mases-color-text-primary);
+}
+
+.login-form__auth-methods button:focus-visible,
+.login-form__auth-methods button:disabled {
+  outline-offset: 3px;
+}
+
+.login-form__auth-methods button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.login-form__authenticator {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mases-space-3);
+  min-width: 0;
+}
+
+.login-form__otp-channel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mases-space-2);
+  min-width: 0;
+}
+
+.login-form__otp-channel select {
+  min-height: 40px;
+  padding-inline: var(--mases-space-3);
+  border: 1px solid var(--mases-color-border-default);
+  border-radius: var(--mases-radius-md);
+  background: var(--mases-color-surface);
+  color: var(--mases-color-text-primary);
+  font: inherit;
+}
+
+.login-form__otp-channel select:focus-visible {
+  outline: 2px solid var(--mases-color-border-focus);
+  outline-offset: 2px;
+}
+
 .login-form__mfa {
   display: flex;
   flex-direction: column;
