@@ -569,7 +569,7 @@ test.describe('A4 Combobox hit-area geometry investigation', () => {
           return {
             tag: el.tagName.toLowerCase(),
             role: el.getAttribute('role'),
-            name: el.getAttribute('aria-label') || el.textContent?.trim().replace(/\\s+/g, ' ').slice(0, 80) || '',
+            name: el.getAttribute('aria-label') || el.textContent?.trim().replace(/\s+/g, ' ').slice(0, 80) || '',
             testId: el.getAttribute('data-testid'),
             rect: { x: r.x, y: r.y, width: r.width, height: r.height, top: r.top, right: r.right, bottom: r.bottom, left: r.left },
             gap: Math.hypot(dx, dy),
