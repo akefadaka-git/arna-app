@@ -201,8 +201,8 @@
      without interrupting the user's current interaction.
    - The error region uses the danger text color and a leading icon
      color that both pass WCAG 2.1 AA against the page surface.
-   - The help region uses the tertiary text color (5.30:1 contrast,
-     AA for body text per Design System §2.5.1).
+   - The help region uses the secondary text color to maintain
+     WCAG AA contrast for small body text across supported themes.
    - No color-only state: errors are announced via aria-live and read
      as text; the visual treatment reinforces the textual signal.
    - The `required` and `disabled` states are conveyed by BaseLabel's
@@ -653,7 +653,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    ============================================================================ */
 .form-field__help {
   display: block;
-  color: var(--arna-color-text-tertiary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
   font-size: var(--arna-font-size-body-sm);
   line-height: var(--arna-line-height-body-sm);
