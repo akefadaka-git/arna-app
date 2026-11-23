@@ -6,7 +6,8 @@
 - Repository: `akefadaka-git/arna-app`.
 - Protected A2 source baseline: `cf4d746dfa498edb79707fef1dda6ddcce919f90`.
 - Implementation branch: `feat/arna-ui-v2-a3-foundations`.
-- Verified implementation head: `4b64a924e828b7442ca7367905acdf449d285d05`.
+- Earlier verified implementation checkpoint: `4b64a924e828b7442ca7367905acdf449d285d05`.
+- Latest pre-verification branch head for the residual CSS census: `58ad8176093d28a58fcbb424c2336a658434d958`.
 - Draft PR: [#128](https://github.com/akefadaka-git/arna-app/pull/128); remains open and unmerged.
 - No A3 commit was written to `main`; no merge or deployment was performed.
 - After the A3 branch cut, `main` advanced independently to `ffe0495c0eb7c8b5d2013419123aac5b68893d51` through `ee58649335c6de1c729fcce4ca4c048cba007d29` and `ffe0495c0eb7c8b5d2013419123aac5b68893d51`. Both concurrent commits modify only `.github/workflows/prepare-public-site-plesk-package.yml`; neither changes the A3 UI source. The A3 branch remains based on the exact A2-closed source baseline and was not rebased over these unrelated workflow-only commits.
@@ -179,3 +180,14 @@ No maps, business workspaces, calendar rebuild, domain workflow implementation, 
 - Census document commit: `8770282c986e0e65ea80b569c6211590c809e162`.
 - CI verification is pending for the exact branch head after this log update. Do not record PASS until the exact-head frontend workflow and focused test output are inspected.
 - A3.1 remains PARTIAL / NOT CLOSED. A3.2 remains VERIFIED-CLOSED. A4 remains separate. No main modification, merge, or deployment.
+
+
+## A3.1 — exact-head frontend verification of residual CSS census (2026-11-23)
+
+- Frontend workflow [#45219802057](https://github.com/akefadaka-git/arna-app/actions/runs/45219802057) completed with conclusion **FAILURE** on exact checked-out commit `58ad8176093d28a58fcbb424c2336a658434d958`. The workflow's expected and actual SHA assertion both reported this exact SHA; branch was `feat/arna-ui-v2-a3-foundations`.
+- Focused A3.1 command `npm run test:a3-design-system-hardening`: **14 tests, 14 passed, 0 failed**. This includes the new 44px semantic target-height token/12-consumer regression and visual spacing-token regression. The focused suite is PASS on the exact tested SHA.
+- Type-check and all four application production builds completed successfully. The dependency advisory inventory reported zero vulnerabilities; the high/critical audit gate passed. A3 token/component contracts, font delivery, root-entry/deployment policy, public build smoke checks, bilingual theme/component contracts, visual/media/motion contracts, and responsive shell contracts completed successfully.
+- The overall workflow failure is isolated to the separate A4 mounted component browser suite: 26 passed, 1 failed. The failed case is `tests/a4-components-browser.spec.mjs:230`, “provides accessible mobile-card field labels and excludes low-priority columns”. Its axe scan found the mounted Combobox input `#arna-combobox-1-input` at 294px by 18px and insufficient spacing to its closest neighbor (22.2px). This is an A4 component/accessibility acceptance issue, not a failure in the A3.1 focused regression suite. No A4 source/test repair was included in this bounded verification update.
+- The frontend workflow's final conclusion remains **FAILURE** despite the focused A3.1 suite passing. Do not represent the full frontend verification as PASS.
+- A3.1 remains **PARTIAL / NOT CLOSED**; the residual census implementation is tested, but full A3.1 closure and A4 acceptance are not established by this run. A3.2 remains VERIFIED-CLOSED. PR #128 remains draft/open/unmerged. No `main` modification, merge, or deployment occurred.
+- The run-tested code SHA is `58ad8176093d28a58fcbb424c2336a658434d958`. This log update is documentation-only and creates a new branch head; the new documentation commit itself is not covered by run #45219802057.
