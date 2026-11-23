@@ -1,4 +1,5 @@
 import { createApp, h } from 'vue';
+import '@/core/register-font-cache';
 import '@/styles/themes.css';
 import { initializeThemePreference } from '@/core/theme-preference';
 import { createRouter, createWebHistory, RouterView } from 'vue-router';

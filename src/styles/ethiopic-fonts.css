@@ -1,0 +1,14 @@
+/*
+ * ARNA UI v2 — locally hosted Ethiopic variable font.
+ * The binary and SIL OFL license are materialized by scripts/vendor-ethiopic-font.mjs
+ * from a pinned Google Fonts repository commit.
+ */
+@font-face {
+  font-family: "Noto Sans Ethiopic";
+  src: url("/fonts/NotoSansEthiopic%5Bwdth%2Cwght%5D.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 100 900;
+  font-stretch: 62.5% 100%;
+  font-display: swap;
+  unicode-range: U+1200-137F, U+1380-139F, U+2D80-2DDF, U+AB00-AB2F, U+1E7E0-1E7FF;
+}

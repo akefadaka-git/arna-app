@@ -26,7 +26,7 @@ withDefaults(defineProps<{
 <style scoped>
 .metric-widget {
   min-width: 0;
-  padding: var(--arna-spacing-4, 1rem);
+  padding: var(--arna-space-4, 1rem);
   border: 1px solid var(--arna-color-border-subtle);
   border-radius: var(--arna-radius-md);
   background: var(--arna-color-surface-raised);

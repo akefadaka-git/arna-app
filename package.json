@@ -28,11 +28,11 @@
     "dev:admin": "vite --mode admin",
     "dev:public": "vite --mode public",
     "type-check": "vue-tsc --noEmit",
-    "build:workspace": "npm run type-check && vite build --mode workspace && node scripts/prepare-static-build.mjs workspace",
-    "build:portal": "npm run type-check && vite build --mode portal && node scripts/prepare-static-build.mjs portal",
-    "build:admin": "npm run type-check && vite build --mode admin && node scripts/prepare-static-build.mjs admin",
-    "build:public": "npm run type-check && vite build --mode public && node scripts/prepare-static-build.mjs public",
-    "build:all": "npm run type-check && vite build --mode workspace && vite build --mode portal && vite build --mode admin && vite build --mode public && node scripts/prepare-static-build.mjs",
+    "build:workspace": "npm run fonts:vendor && npm run type-check && vite build --mode workspace && node scripts/prepare-static-build.mjs workspace",
+    "build:portal": "npm run fonts:vendor && npm run type-check && vite build --mode portal && node scripts/prepare-static-build.mjs portal",
+    "build:admin": "npm run fonts:vendor && npm run type-check && vite build --mode admin && node scripts/prepare-static-build.mjs admin",
+    "build:public": "npm run fonts:vendor && npm run type-check && vite build --mode public && node scripts/prepare-static-build.mjs public",
+    "build:all": "npm run fonts:vendor && npm run type-check && vite build --mode workspace && vite build --mode portal && vite build --mode admin && vite build --mode public && node scripts/prepare-static-build.mjs",
     "build": "npm run build:all",
     "verify:build": "node scripts/verify-static-build.mjs",
     "preview": "vite preview",
@@ -58,7 +58,9 @@
     "test:notifications-locale-contract": "node --test tests/notifications-locale-contract.test.mjs",
     "test:owner-governed-lifecycle-workflow-contract": "node --test tests/owner-governed-lifecycle-workflow-contract.test.mjs",
     "test:calendar-workspace-contract": "node --test tests/calendar-workspace-contract.test.mjs",
-    "test:calendar-browser": "playwright test tests/calendar-browser-contract.spec.mjs"
+    "test:calendar-browser": "playwright test tests/calendar-browser-contract.spec.mjs",
+    "fonts:vendor": "node scripts/vendor-ethiopic-font.mjs",
+    "test:a3-foundations": "node --test tests/a3-foundations-contract.test.mjs"
   },
   "dependencies": {
     "axios": "1.21.0",

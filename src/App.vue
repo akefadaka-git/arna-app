@@ -154,6 +154,7 @@
 -->
 
 <script setup lang="ts">
+import '@/core/register-font-cache';
 /*
  * The global CSS base layer. Both imports are hoisted to the top of the
  * module by Vite, so:

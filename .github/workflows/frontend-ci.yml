@@ -63,6 +63,8 @@ jobs:
         run: npm run test:owner-governed-lifecycle-workflow-contract
       - name: Type-check and build all applications
         run: npm run build
+      - name: Verify A3 design-system and Ethiopic font delivery contracts
+        run: npm run test:a3-foundations
       - name: Verify root entry points, local assets, and deployment policy
         run: npm run verify:build
       - name: Smoke-check the standalone public build artifacts
