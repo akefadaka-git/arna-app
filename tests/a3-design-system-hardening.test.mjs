@@ -11,6 +11,21 @@ const visualLibraryShowcase = read('src/components/visual/VisualLibraryShowcase.
 const button = read('src/components/primitives/BaseButton/BaseButton.vue');
 const input = read('src/components/primitives/BaseInput/BaseInput.vue');
 
+const interactiveTargetComponents = [
+  'src/components/composites/Accordion/Accordion.vue',
+  'src/components/composites/Combobox/Combobox.vue',
+  'src/components/composites/DatePicker/DatePicker.vue',
+  'src/components/composites/DropdownMenu/DropdownMenu.vue',
+  'src/components/composites/ErrorSupportPanel/ErrorSupportPanel.vue',
+  'src/components/composites/Tabs/Tabs.vue',
+  'src/components/primitives/BaseButton/BaseButton.vue',
+  'src/components/primitives/BaseCheckbox/BaseCheckbox.vue',
+  'src/components/primitives/BaseInput/BaseInput.vue',
+  'src/components/primitives/BaseRadio/BaseRadio.vue',
+  'src/components/primitives/BaseSelect/BaseSelect.vue',
+  'src/components/primitives/BaseTextarea/BaseTextarea.vue',
+].map(read);
+
 test('ARNA compatibility aliases resolve to declared frozen MASES tokens', () => {
   const declarations = new Map(
     [...tokens.matchAll(/(--[a-zA-Z0-9_-]+)\s*:\s*([^;]+);/g)]
@@ -179,6 +194,16 @@ test('shared reduced-motion duration token governs component transition and anim
   }
 });
 
+
+test('mobile interactive controls share the semantic minimum target dimension', () => {
+  assert.match(tokens, /--mases-size-interactive-target-min:\s*44px/);
+  assert.match(tokens, /--arna-size-interactive-target-min:\s*var\(--mases-size-interactive-target-min\)/);
+  for (const source of interactiveTargetComponents) {
+    assert.match(source, /min-height:\s*var\(--arna-size-interactive-target-min\)/);
+    assert.doesNotMatch(source, /min-height:\s*44px/);
+  }
+});
+
 test('visual components consume canonical spacing aliases without fallback literals', () => {
   assert.match(chartPanel, /padding: var\(--arna-space-4\)/);
   assert.doesNotMatch(chartPanel, /--arna-spacing-4|--arna-space-4\s*,/);
@@ -187,4 +212,11 @@ test('visual components consume canonical spacing aliases without fallback liter
   assert.doesNotMatch(visualPanel, /--arna-space-(?:3|4)\s*,/);
   assert.match(visualLibraryShowcase, /var\(--arna-space-6\)/);
   assert.doesNotMatch(visualLibraryShowcase, /--arna-space-6\s*,/);
+  assert.match(visualPanel, /gap: var\(--arna-space-3\)/);
+  assert.match(visualPanel, /border-radius: var\(--arna-radius-full\)/);
+  assert.match(visualLibraryShowcase, /padding: var\(--arna-space-4\) \.2rem var\(--arna-space-12\)/);
+  assert.match(visualLibraryShowcase, /row-gap: var\(--arna-space-12\)/);
+  assert.match(visualLibraryShowcase, /margin-block-end: var\(--arna-space-6\)/);
+  assert.match(visualLibraryShowcase, /margin: 0 0 var\(--arna-space-3\)/);
+  assert.match(visualLibraryShowcase, /gap: var\(--arna-space-4\); margin: 0/);
 });
