@@ -71,6 +71,7 @@ const select = read('src/components/primitives/BaseSelect/BaseSelect.vue');
 const textarea = read('src/components/primitives/BaseTextarea/BaseTextarea.vue');
 const link = read('src/components/primitives/BaseLink/BaseLink.vue');
 const progress = read('src/components/primitives/BaseProgressBar/BaseProgressBar.vue');
+const spinner = read('src/components/primitives/BaseSpinner/BaseSpinner.vue');
 const tooltip = read('src/components/primitives/BaseTooltip/BaseTooltip.vue');
 const accordion = read('src/components/composites/Accordion/Accordion.vue');
 const drawer = read('src/components/composites/Drawer/Drawer.vue');
@@ -151,6 +152,16 @@ test('ProgressBar consumes semantic loading-motion duration tokens', () => {
   assert.match(progress, /animation: arna-progress-indeterminate var\(--arna-duration-loading\)/);
   assert.match(progress, /animation-duration: var\(--arna-duration-loading-reduced\)/);
   assert.doesNotMatch(progress, /animation(?:-duration)?:\s*1\.8s|animation: arna-progress-indeterminate 0\.9s/);
+});
+
+test('Spinner consumes semantic loading-motion tokens while preserving reduced-motion exception', () => {
+  assert.match(tokens, /--mases-duration-loading:\\s*900ms/);
+  assert.match(tokens, /--mases-duration-loading-reduced:\\s*1800ms/);
+  assert.match(tokens, /--arna-duration-loading:\\s*var\\(--mases-duration-loading\\)/);
+  assert.match(tokens, /--arna-duration-loading-reduced:\\s*var\\(--mases-duration-loading-reduced\\)/);
+  assert.match(spinner, /animation: arna-spinner-rotate var\\(--arna-duration-loading\\) linear infinite/);
+  assert.match(spinner, /animation-duration: var\\(--arna-duration-loading-reduced\\)/);
+  assert.doesNotMatch(spinner, /animation(?:-duration)?:\\s*1\\.6s|animation: arna-spinner-rotate 0\\.8s/);
 });
 
 test('shared reduced-motion duration token governs component transition and animation overrides', () => {
