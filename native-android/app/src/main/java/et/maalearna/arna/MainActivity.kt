@@ -61,6 +61,14 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
     var identifier by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var tenantId by remember { mutableStateOf("") }
+    var pinLoginMode by remember { mutableStateOf(false) }
+    var pin by remember { mutableStateOf("") }
+    var currentSessionId by remember { mutableStateOf<String?>(null) }
+    var pinEnrollmentChannel by remember { mutableStateOf("sms") }
+    var pinEnrollmentChallenge by remember { mutableStateOf<String?>(null) }
+    var pinEnrollmentCode by remember { mutableStateOf("") }
+    var pinEnrollmentValue by remember { mutableStateOf("") }
+    var pinEnrollmentConfirmation by remember { mutableStateOf("") }
     var mfaCode by remember { mutableStateOf("") }
     var challenge by remember { mutableStateOf<String?>(null) }
     var status by remember { mutableStateOf(if (repository.hasSession()) "የተጠበቀ ክፍለ ጊዜ ተገኝቷል" else "ወደ ARNA ይግቡ") }
@@ -87,6 +95,7 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
                     workspaceApps = repository.launcherApps()
                 }
                 sessions = repository.listSessions()
+                currentSessionId = sessions.firstOrNull { it.is_current }?.session_id
             } catch (error: Exception) {
                 status = error.toArnaUserMessage()
             }
@@ -100,22 +109,38 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
         Text("ARNA", style = MaterialTheme.typography.headlineLarge)
         Text("እንኳን ወደ ARNA በደህና መጡ", style = MaterialTheme.typography.titleLarge)
         Text("One Intelligence. Infinite Possibilities.")
-        OutlinedTextField(identifier, { identifier = it }, label = { Text("Email / Phone / Username") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(password, { password = it }, label = { Text("Password") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(identifier, { identifier = it }, label = { Text("Email / Username / Mobile / Employee ID / Shareholder ID / Wallet ID") }, modifier = Modifier.fillMaxWidth())
+        if (!pinLoginMode) {
+            OutlinedTextField(password, { password = it }, label = { Text("Password") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth())
+        } else {
+            OutlinedTextField(pin, { pin = it.filter(Char::isDigit).take(6) }, label = { Text("6-digit recognized-device PIN") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth())
+        }
         OutlinedTextField(tenantId, { tenantId = it.filter(Char::isDigit) }, label = { Text("Initial organization ID (only if required)") }, modifier = Modifier.fillMaxWidth())
+        Button(enabled = !busy && !repository.hasSession(), onClick = {
+            pinLoginMode = !pinLoginMode
+            pin = ""
+            password = ""
+            challenge = null
+            mfaCode = ""
+        }) { Text(if (pinLoginMode) "Use password / OTP instead" else "Use recognized-device PIN") }
         if (challenge != null) {
             OutlinedTextField(mfaCode, { mfaCode = it }, label = { Text("MFA code") }, modifier = Modifier.fillMaxWidth())
         }
         Button(
-            enabled = !busy && identifier.isNotBlank() && password.isNotBlank(),
+            enabled = !busy && identifier.isNotBlank() &&
+                (if (pinLoginMode) pin.length == 6 else password.isNotBlank()),
             onClick = {
                 busy = true
                 scope.launch {
                     try {
-                        val result = repository.login(
-                            identifier, password, tenantId.toLongOrNull(),
-                            challenge, if (challenge != null) mfaCode else null
-                        )
+                        val result = if (pinLoginMode) {
+                            repository.loginWithPin(identifier, pin, tenantId.toLongOrNull())
+                        } else {
+                            repository.login(
+                                identifier, password, tenantId.toLongOrNull(),
+                                challenge, if (challenge != null) mfaCode else null
+                            )
+                        }
                         if (result.mfa_required) {
                             challenge = result.challenge_token
                             status = "MFA ያስፈልጋል፤ የማረጋገጫ ኮድ ያስገቡ"
@@ -129,6 +154,9 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
                             workspaceApps = if (selectedTenantId != null) repository.launcherApps() else emptyList()
                             status = "በተሳካ ሁኔታ ገብተዋል"
                             sessions = repository.listSessions()
+                            currentSessionId = sessions.firstOrNull { it.is_current }?.session_id
+                            pin = ""
+                            pinLoginMode = false
                         }
                     } catch (error: Exception) {
                         status = error.toArnaUserMessage()
@@ -137,7 +165,7 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
                     }
                 }
             }
-        ) { Text(if (busy) "..." else if (challenge != null) "Verify MFA" else "Sign in") }
+        ) { Text(if (busy) "..." else if (pinLoginMode) "Sign in with PIN" else if (challenge != null) "Verify MFA" else "Sign in") }
         Text(status, style = MaterialTheme.typography.bodyMedium)
         if (repository.hasSession()) {
             val selectedTenant = tenantOptions.firstOrNull { it.id == selectedTenantId }
@@ -183,6 +211,59 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
                 )
             }
         }
+        if (repository.hasSession()) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("Recognized-device PIN", style = MaterialTheme.typography.titleMedium)
+                Text("Enroll or replace a six-digit PIN for this recognized Android device. A verified one-time code is required.")
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Button(enabled = !busy, onClick = { pinEnrollmentChannel = "sms" }) { Text(if (pinEnrollmentChannel == "sms") "✓ SMS" else "SMS") }
+                    Button(enabled = !busy, onClick = { pinEnrollmentChannel = "email" }) { Text(if (pinEnrollmentChannel == "email") "✓ Email" else "Email") }
+                }
+                if (pinEnrollmentChallenge == null) {
+                    Button(enabled = !busy && currentSessionId != null, onClick = {
+                        busy = true
+                        scope.launch {
+                            try {
+                                val issued = repository.requestPinEnrollmentChallenge(pinEnrollmentChannel)
+                                pinEnrollmentChallenge = issued.challenge_token
+                                status = "Verification code sent to " + issued.destination
+                            } catch (error: Exception) {
+                                status = error.toArnaUserMessage()
+                            } finally { busy = false }
+                        }
+                    }) { Text("Request PIN enrollment code") }
+                } else {
+                    OutlinedTextField(pinEnrollmentCode, { pinEnrollmentCode = it.filter(Char::isLetterOrDigit).take(8) }, label = { Text("One-time verification code") }, modifier = Modifier.fillMaxWidth())
+                    OutlinedTextField(pinEnrollmentValue, { pinEnrollmentValue = it.filter(Char::isDigit).take(6) }, label = { Text("New six-digit PIN") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth())
+                    OutlinedTextField(pinEnrollmentConfirmation, { pinEnrollmentConfirmation = it.filter(Char::isDigit).take(6) }, label = { Text("Confirm new PIN") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth())
+                    Button(
+                        enabled = !busy && pinEnrollmentCode.length >= 6 && pinEnrollmentValue.length == 6 && pinEnrollmentConfirmation.length == 6 && pinEnrollmentValue == pinEnrollmentConfirmation && currentSessionId != null,
+                        onClick = {
+                            busy = true
+                            scope.launch {
+                                try {
+                                    val grant = repository.verifyPinEnrollmentOtp(pinEnrollmentChallenge!!, pinEnrollmentCode)
+                                    repository.enrollPin(currentSessionId!!, pinEnrollmentValue, pinEnrollmentConfirmation, grant)
+                                    pinEnrollmentChallenge = null
+                                    pinEnrollmentCode = ""
+                                    pinEnrollmentValue = ""
+                                    pinEnrollmentConfirmation = ""
+                                    status = "Recognized-device PIN enrolled successfully."
+                                } catch (error: Exception) {
+                                    status = error.toArnaUserMessage()
+                                } finally { busy = false }
+                            }
+                        }
+                    ) { Text("Verify and enroll PIN") }
+                    Button(enabled = !busy, onClick = {
+                        pinEnrollmentChallenge = null
+                        pinEnrollmentCode = ""
+                        pinEnrollmentValue = ""
+                        pinEnrollmentConfirmation = ""
+                    }) { Text("Cancel PIN enrollment") }
+                }
+            }
+        }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Button(enabled = !busy && repository.hasSession(), onClick = {
                 busy = true
@@ -216,8 +297,13 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
                     try {
                         repository.logout()
                         sessions = emptyList()
+                        currentSessionId = null
                         tenantOptions = emptyList()
                         selectedTenantId = null
+                        pinEnrollmentChallenge = null
+                        pinEnrollmentCode = ""
+                        pinEnrollmentValue = ""
+                        pinEnrollmentConfirmation = ""
                         workspaceApps = emptyList()
                         challenge = null
                         mfaCode = ""
@@ -256,6 +342,7 @@ private fun ArnaAuthScreen(repository: ArnaRepository) {
                             if (item.is_current) {
                                 repository.clearSession()
                                 sessions = emptyList()
+                                currentSessionId = null
                                 tenantOptions = emptyList()
                                 selectedTenantId = null
                                 workspaceApps = emptyList()
