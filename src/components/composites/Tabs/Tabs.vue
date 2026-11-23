@@ -661,7 +661,7 @@ watch(
     padding-block: var(--arna-space-3);
     padding-inline: var(--arna-space-3);
     /* Ensure tap target height meets 44px with padding + line-height. */
-    min-height: 44px;
+    min-height: var(--arna-size-interactive-target-min);
   }
 }
 
