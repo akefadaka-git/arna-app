@@ -1,6 +1,7 @@
 # ARNA Ethiopic font asset
 
-The Noto Sans Ethiopic variable font and its SIL Open Font License are materialized here by:
+The Noto Sans Ethiopic variable font is generated as
+`NotoSansEthiopic-variable.ttf` by:
 
 ```sh
 npm run fonts:vendor
