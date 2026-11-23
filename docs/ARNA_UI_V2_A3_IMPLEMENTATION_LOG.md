@@ -96,3 +96,17 @@
 ## Scope exclusions
 
 No maps, business workspaces, calendar rebuild, domain workflow implementation, backend/API changes, database migrations, secrets, paid services, merge, or deployment.
+
+
+## A3.1 — semantic-token and component-state hardening increment (2026-11-23)
+
+- Work remained isolated to `feat/arna-ui-v2-a3-foundations`; no merge, deployment, or main-branch modification was performed.
+- Updated `src/components/visual/MetricWidget.vue` to consume the existing semantic spacing, font-size, line-height, font-weight, border, surface, and status-color tokens. Removed the per-component `.35rem` / `.65rem` spacing values, raw responsive font-size clamp, and literal numeric font weights. Component props and trend behavior remain unchanged.
+- Added `tests/a3-design-system-hardening.test.mjs` to validate the ARNA-to-MASES compatibility alias graph, MetricWidget token usage, and source contracts for BaseButton loading/disabled/focus-visible/reduced-motion states and BaseInput disabled/read-only/invalid/accessible-name/description/focus-visible behavior.
+- Added package script `test:a3-design-system-hardening` and wired it into `.github/workflows/frontend-ci.yml`.
+- Updated the existing A3 foundation regression assertion to require the canonical `--arna-space-4` reference without a fallback literal; this matches the new component contract.
+- Implementation commits, in order: MetricWidget token migration `b5f529183c52ba7c574885c027ca39180e528b18`; new regression suite `ba5478e34e3aa01e4fcfed0539cc6b1aec2cc69a`; package script `7bd90509c729759448818b9ab088bf7485c71ce4`; CI workflow wiring `305cb4b33697539c3a8b182ad48a080d5b899da4`; matcher correction `dedb55972949aac48b3183ac12ad57067a2d8f13`; existing foundation assertion alignment `0b8b5184e68001ab43ffa73d53af50b2c2babebb`.
+- First CI attempt on the pre-correction head, run [`#45168642076`](https://github.com/akefadaka-git/arna-app/actions/runs/45168642076), completed the four-app type-check/build successfully but failed in the pre-existing A3 foundation contract because it still required the removed CSS fallback `var(--arna-space-4, 1rem)`. The contract was corrected to assert the canonical token reference.
+- Exact latest-head verification is running at [frontend run `#45168847498`](https://github.com/akefadaka-git/arna-app/actions/runs/45168847498), plus Executive Overview run [`#45168847369`](https://github.com/akefadaka-git/arna-app/actions/runs/45168847369) and public-site run [`#45168847120`](https://github.com/akefadaka-git/arna-app/actions/runs/45168847120). These are IN PROGRESS; no pass claim is made yet.
+- A3.1 remains PARTIAL / NOT CLOSED. This increment is a focused token migration and regression-contract foundation, not a full semantic-token census or comprehensive component-state acceptance across all 65 catalogue components.
+- A3.2 VERIFIED-CLOSED font foundation was not modified. Maps and business workspaces remain outside this bounded A3.1 increment; calendar was not rebuilt. A4 full component API/accessibility acceptance remains separate. Merge and A5 deployment remain separately authorized gates.
