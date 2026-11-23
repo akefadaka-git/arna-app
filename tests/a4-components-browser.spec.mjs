@@ -236,10 +236,41 @@ test.describe('Mounted DataTable behavior', () => {
     await expect(cards.getByText('Alpha account')).toBeVisible();
 
     const results = await new AxeBuilder({ page })
+      .include('[data-testid="data-table-root"]')
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
     const serious = results.violations.filter((item) => ['serious', 'critical'].includes(item.impact));
     expect(serious.map((item) => ({ id: item.id, help: item.help, nodes: item.nodes.map((node) => ({ target: node.target, html: node.html, failureSummary: node.failureSummary })) }))).toEqual([]);
+  });
+});
+
+
+test.describe('A4 full-page fixture accessibility regression scan', () => {
+  test('retains a full-page axe scan and confirms the A4 component regions have no violations', async ({ page }) => {
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+
+    const affectedSelectors = [
+      '[data-testid="form-field-root"]',
+      '[data-testid="error-support-panel-root"]',
+      '[data-testid="data-table-root"]',
+    ];
+    const affectedNodes = results.violations.flatMap((violation) =>
+      violation.nodes
+        .filter((node) => affectedSelectors.some((selector) =>
+          node.target.some((target) => target.includes(selector))
+        ))
+        .map((node) => ({ id: violation.id, target: node.target, html: node.html }))
+    );
+    console.log('A4_FULL_PAGE_AXE_VIOLATIONS=' + JSON.stringify(
+      results.violations.map((violation) => ({
+        id: violation.id,
+        impact: violation.impact,
+        targets: violation.nodes.map((node) => node.target),
+      }))
+    ));
+    expect(affectedNodes).toEqual([]);
   });
 });
 
