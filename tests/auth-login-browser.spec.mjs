@@ -188,4 +188,57 @@ test.describe('ARNA returning-user OTP login', () => {
     expect(await failureResponse.headerValue('set-cookie')).toBeNull();
     await expect(page.getByTestId('login-form-otp')).toBeVisible();
   });
+  const browserIdentifiers = [
+    { kind: 'email', value: 'browser-parity@example.test' },
+    { kind: 'username', value: 'browser-parity-user' },
+    { kind: 'mobile number', value: '+251911000041' },
+    { kind: 'employee ID', value: 'EMP-WEB-000041' },
+    { kind: 'shareholder number', value: 'SH-WEB-000041' },
+    { kind: 'wallet number', value: 'ACC-WEB-000041' },
+  ];
+
+  for (const { kind, value } of browserIdentifiers) {
+    test(`forwards the ${kind} unchanged through the website login API`, async ({ page }) => {
+      let loginPayload;
+      await page.route('**/api/user', (route) => route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(envelope(authenticatedUser)),
+      }));
+      await page.route('**/api/login', async (route) => {
+        loginPayload = route.request().postDataJSON();
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(envelope({
+            user: {
+              id: authenticatedUser.id,
+              name: authenticatedUser.name,
+              email: authenticatedUser.email,
+              locale: authenticatedUser.locale,
+              default_tenant_id: authenticatedUser.default_tenant_id,
+            },
+            token: 'browser-test-token',
+            token_type: 'Bearer',
+          })),
+        });
+      });
+
+      await page.locator('#login-identifier').fill(value);
+      await page.locator('#login-password').fill('Password123!');
+      const loginResponsePromise = page.waitForResponse((response) =>
+        response.url().endsWith('/api/login'),
+      );
+      await page.getByTestId('login-form-submit').click();
+      const loginResponse = await loginResponsePromise;
+
+      expect(loginResponse.status()).toBe(200);
+      await expect(page.getByTestId('auth-test-launcher')).toBeVisible();
+      expect(loginPayload).toMatchObject({
+        email: value,
+        password: 'Password123!',
+      });
+    });
+  }
+
 });
