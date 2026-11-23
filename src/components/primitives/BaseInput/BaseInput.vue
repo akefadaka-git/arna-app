@@ -692,7 +692,7 @@ defineExpose({ focus, blur, el });
    ============================================================================ */
 @media (max-width: 639px) {
   .input-wrapper {
-    min-height: 44px;
+    min-height: var(--arna-size-interactive-target-min);
   }
 }
 </style>
