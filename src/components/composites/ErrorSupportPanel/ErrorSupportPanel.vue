@@ -586,7 +586,7 @@ function onToggle(event: Event): void {
    ============================================================================ */
 .error-support-panel__field-label {
   margin: 0;
-  color: var(--arna-color-text-tertiary);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
   font-size: var(--arna-font-size-caption);
   line-height: var(--arna-line-height-caption);
