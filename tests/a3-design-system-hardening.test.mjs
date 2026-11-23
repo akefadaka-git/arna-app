@@ -5,6 +5,9 @@ import test from 'node:test';
 const read = (path) => readFileSync(path, 'utf8');
 const tokens = read('src/styles/tokens.css');
 const metric = read('src/components/visual/MetricWidget.vue');
+const chartPanel = read('src/components/visual/ChartPanel.vue');
+const visualPanel = read('src/components/visual/VisualPanel.vue');
+const visualLibraryShowcase = read('src/components/visual/VisualLibraryShowcase.vue');
 const button = read('src/components/primitives/BaseButton/BaseButton.vue');
 const input = read('src/components/primitives/BaseInput/BaseInput.vue');
 
@@ -174,4 +177,14 @@ test('shared reduced-motion duration token governs component transition and anim
     assert.match(reducedMotion, /(?:transition|animation)-duration: var\(--arna-duration-fast\);/);
     assert.doesNotMatch(reducedMotion, /(?:transition|animation)-duration: 1ms;/);
   }
+});
+
+test('visual components consume canonical spacing aliases without fallback literals', () => {
+  assert.match(chartPanel, /padding: var\\(--arna-space-4\\)/);
+  assert.doesNotMatch(chartPanel, /--arna-spacing-4|--arna-space-4\\s*,/);
+  assert.match(visualPanel, /padding: var\\(--arna-space-4\\)/);
+  assert.match(visualPanel, /margin-block-end: var\\(--arna-space-3\\)/);
+  assert.doesNotMatch(visualPanel, /--arna-space-(?:3|4)\\s*,/);
+  assert.match(visualLibraryShowcase, /var\\(--arna-space-6\\)/);
+  assert.doesNotMatch(visualLibraryShowcase, /--arna-space-6\\s*,/);
 });
