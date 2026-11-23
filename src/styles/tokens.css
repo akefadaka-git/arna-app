@@ -457,6 +457,9 @@
   --mases-duration-base:     200ms;
   --mases-duration-slow:     300ms;
   --mases-duration-slower:   500ms;
+  /* Loading indicators remain perceptible under reduced-motion settings. */
+  --mases-duration-loading:         900ms;
+  --mases-duration-loading-reduced: 1800ms;
 
   --mases-easing-standard:   cubic-bezier(0.4, 0, 0.2, 1);
   --mases-easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
@@ -843,6 +846,8 @@
   --arna-duration-base: var(--mases-duration-base);
   --arna-duration-slow: var(--mases-duration-slow);
   --arna-duration-slower: var(--mases-duration-slower);
+  --arna-duration-loading: var(--mases-duration-loading);
+  --arna-duration-loading-reduced: var(--mases-duration-loading-reduced);
   --arna-easing-standard: var(--mases-easing-standard);
   --arna-easing-decelerate: var(--mases-easing-decelerate);
   --arna-easing-accelerate: var(--mases-easing-accelerate);
