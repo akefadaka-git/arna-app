@@ -28,6 +28,10 @@
  *          the full classification and the adoption path for the
  *          spec-target group. No existing token renamed, removed, or
  *          reassigned. Strictly additive.
+
+ * A3.1 additive (2026-11-23) — one shared interactive target-height
+ * token (44px) and its ARNA compatibility alias. Existing primitive
+ * values, scales, and prior semantic assignments remain unchanged.
  *
  * -----------------------------------------------------------------------------
  * 1.3.0 additions — classification
@@ -632,7 +636,7 @@
   --mases-focus-ring-color:     var(--mases-color-state-focus-ring);
   --mases-focus-ring-color-inverse: var(--mases-color-state-focus-ring-inverse);
 
-  /* A3.1 additive semantic dimension: mobile interactive target minimum. */
+  /* A3.1 additive semantic dimension: 44px mobile interactive target-height floor. */
   --mases-size-interactive-target-min: 44px;
 
   /* ===========================================================================
