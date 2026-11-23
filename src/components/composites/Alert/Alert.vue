@@ -585,7 +585,7 @@ function onDismiss(): void {
    ============================================================================ */
 @media (prefers-reduced-motion: reduce) {
   .alert__dismiss {
-    transition-duration: 1ms;
+    transition-duration: var(--arna-duration-fast);
   }
 }
 </style>
