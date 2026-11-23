@@ -63,3 +63,77 @@ test('BaseInput exposes native disabled/read-only and accessible invalid state',
   assert.match(input, /\.input-wrapper--disabled/);
   assert.match(input, /\.input-wrapper--readonly/);
 });
+
+
+const checkbox = read('src/components/primitives/BaseCheckbox/BaseCheckbox.vue');
+const radio = read('src/components/primitives/BaseRadio/BaseRadio.vue');
+const select = read('src/components/primitives/BaseSelect/BaseSelect.vue');
+const textarea = read('src/components/primitives/BaseTextarea/BaseTextarea.vue');
+const link = read('src/components/primitives/BaseLink/BaseLink.vue');
+const progress = read('src/components/primitives/BaseProgressBar/BaseProgressBar.vue');
+const alert = read('src/components/composites/Alert/Alert.vue');
+const loadingState = read('src/components/composites/LoadingState/LoadingState.vue');
+const errorState = read('src/components/composites/ErrorState/ErrorState.vue');
+const formField = read('src/components/composites/FormField/FormField.vue');
+
+test('Checkbox and radio preserve native disabled, invalid, description and keyboard-focus contracts', () => {
+  for (const [name, source, selector] of [
+    ['BaseCheckbox', checkbox, ':disabled="disabled"'],
+    ['BaseRadio', radio, ':disabled="disabled"'],
+  ]) {
+    assert.ok(source.includes(selector), `${name} must use native disabled semantics`);
+    assert.match(source, /:aria-invalid="resolvedAriaInvalid"/, `${name} must expose invalid state`);
+    assert.match(source, /:aria-describedby="ariaDescribedBy"/, `${name} must expose its description`);
+    assert.match(source, /:focus-visible/, `${name} must provide keyboard-visible focus`);
+    assert.match(source, /state-disabled-bg|state-disabled-text/, `${name} must style disabled state semantically`);
+  }
+});
+
+test('Select and textarea preserve native validation, accessible naming and editable-state semantics', () => {
+  assert.match(select, /:disabled="disabled"/);
+  assert.match(select, /:required="required"/);
+  assert.match(select, /:aria-invalid="resolvedAriaInvalid"/);
+  assert.match(select, /:aria-describedby="ariaDescribedBy"/);
+  assert.match(select, /v-bind="$attrs"/);
+  assert.match(select, /:focus-visible/);
+  assert.match(textarea, /:disabled="disabled"/);
+  assert.match(textarea, /:readonly="readonly"/);
+  assert.match(textarea, /:aria-invalid="resolvedAriaInvalid"/);
+  assert.match(textarea, /:aria-describedby="ariaDescribedBy"/);
+  assert.match(textarea, /:aria-label="ariaLabel"/);
+  assert.match(textarea, /:focus-visible/);
+  assert.match(textarea, /textarea--readonly/);
+});
+
+test('Link and progress primitives retain keyboard and assistive-technology contracts', () => {
+  assert.match(link, /:focus-visible/);
+  assert.match(link, /aria-labelledby/);
+  assert.match(progress, /role="progressbar"/);
+  assert.match(progress, /aria-valuemin/);
+  assert.match(progress, /aria-valuemax/);
+  assert.match(progress, /aria-valuenow/);
+  assert.match(progress, /prefers-reduced-motion/);
+});
+
+test('Alert, loading, error and form composites expose state through semantic and accessible channels', () => {
+  assert.match(alert, /:focus-visible/);
+  assert.match(alert, /prefers-reduced-motion/);
+  assert.match(alert, /aria-label|aria-labelledby/);
+  assert.match(loadingState, /role="status"|aria-live="polite"/);
+  assert.match(errorState, /:focus-visible/);
+  assert.match(formField, /aria-describedby/);
+  assert.match(formField, /aria-live="polite"/);
+  assert.match(formField, /:disabled="disabled"/);
+});
+
+test('expanded shared-component style census contains no hard-coded hex colors', () => {
+  const sources = [
+    checkbox, radio, select, textarea, link, progress,
+    alert, loadingState, errorState, formField,
+  ];
+  for (const source of sources) {
+    const style = source.match(/<style[^>]*>([\\s\\S]*?)<\\/style>/)?.[1] ?? '';
+    assert.doesNotMatch(style, /#[0-9a-fA-F]{3,8}\\b/,
+      'shared component styles must consume declared color tokens, not hard-coded hex values');
+  }
+});
