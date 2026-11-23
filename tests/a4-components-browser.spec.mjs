@@ -544,3 +544,47 @@ test.describe('PR #87 regression repairs', () => {
     await expect(page.getByText('Older response')).toHaveCount(0);
   });
 });
+
+
+test.describe('A4 Combobox hit-area geometry investigation', () => {
+  test('records the mounted input rectangle and nearest interactive neighbors at 390px', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    const input = page.getByRole('combobox', { name: 'Choose an item' });
+    const geometry = await input.evaluate((node) => {
+      const rect = node.getBoundingClientRect();
+      const parent = node.closest('.combobox__control')?.getBoundingClientRect();
+      const candidates = Array.from(document.querySelectorAll(
+        'button, a[href], input, select, textarea, [role="button"], [role="link"], [role="checkbox"], [role="radio"], [role="combobox"], [role="option"], [tabindex]:not([tabindex="-1"])'
+      )).filter((el) => {
+        if (el === node || node.contains(el) || el.contains(node)) return false;
+        if (el instanceof HTMLElement && (el.hidden || el.getAttribute('aria-hidden') === 'true')) return false;
+        const style = getComputedStyle(el);
+        const box = el.getBoundingClientRect();
+        return style.display !== 'none' && style.visibility !== 'hidden' && box.width > 0 && box.height > 0;
+      }).map((el) => {
+        const r = el.getBoundingClientRect();
+        const dx = Math.max(0, r.left - rect.right, rect.left - r.right);
+        const dy = Math.max(0, r.top - rect.bottom, rect.top - r.bottom);
+        return {
+          tag: el.tagName.toLowerCase(),
+          role: el.getAttribute('role'),
+          name: el.getAttribute('aria-label') || el.textContent?.trim().replace(/\\s+/g, ' ').slice(0, 80) || '',
+          testId: el.getAttribute('data-testid'),
+          rect: { x: r.x, y: r.y, width: r.width, height: r.height, top: r.top, right: r.right, bottom: r.bottom, left: r.left },
+          gap: Math.hypot(dx, dy),
+        };
+      }).sort((a, b) => a.gap - b.gap).slice(0, 8);
+      return {
+        viewport: { width: innerWidth, height: innerHeight },
+        input: { x: rect.x, y: rect.y, width: rect.width, height: rect.height, top: rect.top, right: rect.right, bottom: rect.bottom, left: rect.left },
+        control: parent ? { x: parent.x, y: parent.y, width: parent.width, height: parent.height, top: parent.top, right: parent.right, bottom: parent.bottom, left: parent.left } : null,
+        nearestInteractiveNeighbors: candidates,
+      };
+    });
+    console.log('A4_COMBOBOX_HIT_AREA_BASELINE=' + JSON.stringify(geometry));
+    expect(geometry.input.width).toBeGreaterThan(0);
+    expect(geometry.input.height).toBeLessThan(24);
+    expect(geometry.control?.height).toBeGreaterThanOrEqual(44);
+    expect(geometry.nearestInteractiveNeighbors.length).toBeGreaterThan(0);
+  });
+});
