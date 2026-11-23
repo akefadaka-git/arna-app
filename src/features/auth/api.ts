@@ -55,6 +55,8 @@
  * Endpoint coverage (verified against routes/api.php)
  * -----------------------------------------------------------------------------
  *   POST   /api/login                    login()                public
+ *   POST   /api/login/otp/challenge       requestLoginOtp()      public
+ *   POST   /api/login/authenticator       loginWithAuthenticator() public
  *   POST   /api/register                 register()             public
  *   POST   /api/logout                   logout()               auth
  *   POST   /api/token/refresh            refreshToken()         auth

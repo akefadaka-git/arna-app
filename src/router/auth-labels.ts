@@ -20,8 +20,8 @@
  *          values differ.
  *
  * 2.0.0  — loginFormLabels extended for LoginForm.vue 2.0.0.
- *          Eight new keys; emailLabel value widened to include
- *          phone number. Other five exports unchanged.
+ *          Eight new keys; the historical emailLabel key was widened
+ *          for the then-supported email and phone identifiers.
  *
  * 3.0.0  — consolidated file, all six exports finalised for the
  *          six auth forms delivered in the current batch.
@@ -39,6 +39,10 @@
  *          · Minor version bump — the change was purely additive.
  *
  * 3.2.0  — login MFA challenge labels for TOTP and recovery-code entry.
+ *
+ * 3.3.0  — all-six-identifier guidance and returning-user OTP labels.
+ *          The identifier label is bilingual; helper text enumerates
+ *          email, username, mobile, employee, shareholder, and wallet IDs.
  *
  * 3.1.1  — documentation correction. PATCH bump. No code change.
  *
@@ -63,7 +67,7 @@
  *            confirm the miscount was isolated to
  *            registerFormLabels. Results:
  *
- *              loginFormLabels ............ docblock: 23  actual: 23  ✓
+ *              loginFormLabels ............ extended in 3.2.0–3.3.0 for MFA/OTP
  *              registerFormLabels ......... docblock: 30  actual: 30  ✓
  *              forgotPasswordFormLabels ... docblock: 15  actual: 15  ✓
  *              resetPasswordFormLabels .... docblock: 25  actual: 25  ✓
@@ -107,30 +111,19 @@
  *     script name, so the label is in English.
  *
  * -----------------------------------------------------------------------------
- * Why the key `emailLabel` is not renamed
+ * Why the key `emailLabel` is retained
  * -----------------------------------------------------------------------------
- * The identifier field on the login form accepts an email address
- * OR a phone number. Its label VALUE reads "ኢሜይል / ስልክ ቁጥር"
- * ("Email / phone number"). But the KEY remains `emailLabel`.
+ * The login form accepts six identifier types: email, username,
+ * mobile number, employee number, shareholder number, and wallet
+ * number. Its label is bilingual and its adjacent hint lists all six.
  *
- * Renaming the key to `identifierLabel` would require coordinated
- * changes across three files:
+ * The property name `emailLabel` is retained as a historical API
+ * contract consumed by LoginForm.vue. The value, not the key name,
+ * communicates the field's current meaning. The route wrapper passes
+ * the exported object unchanged.
  *
- *   · this file (the exported object);
- *   · src/features/auth/LoginForm/LoginForm.vue (the interface);
- *   · src/router/pages/LoginRoute.vue (which passes
- *     loginFormLabels to the form).
- *
- * That coordinated change is deferred to a future CR. In the
- * meantime, the docblock on the interface field in LoginForm.vue
- * states explicitly that the label may hold an email or a phone,
- * so a maintainer reading either file has the correct information.
- *
- * The key name is historical. The value is authoritative.
- *
- * Note that registerFormLabels.emailLabel is NOT widened — the
- * register endpoint requires a real email address (its validation
- * rule is `email`), so a phone number cannot be registered.
+ * Note that registerFormLabels.emailLabel remains email-only because
+ * registration requires a valid email address.
  *
  * -----------------------------------------------------------------------------
  * Label naming conventions
@@ -369,16 +362,10 @@ export const loginFormLabels = {
    * wrong password — the two are deliberately indistinguishable.
    * The label must not name which of the two was wrong.
    *
-   * The current value reads "Email or password is incorrect". When
-   * the identifier field gained phone-number support, the label
-   * became slightly imprecise — a user who typed a phone number
-   * sees "Email" and may briefly think the wrong field was flagged.
-   *
-   * The imprecision is acceptable: the message is only shown after
-   * the request has been rejected, so the user knows their input
-   * was not accepted regardless of what the label calls the field.
-   * A future CR that renames emailLabel to identifierLabel should
-   * update this title in the same change.
+   * The bilingual message names the generic sign-in identifier,
+   * not a specific lookup type. Unknown identifiers and incorrect
+   * passwords remain deliberately indistinguishable to prevent
+   * account enumeration.
    */
   invalidCredentialsTitle: 'የመግቢያ መለያ ወይም የይለፍ ቃል ትክክል አይደለም / Invalid sign-in details',
   invalidCredentialsMessage:
