@@ -936,7 +936,7 @@ const passwordToggleLabel = computed<string>(() =>
         autocomplete="username"
         aria-describedby="login-identifier-hint"
         enterkeyhint="go"
-        :disabled="isSubmitting || isMfaChallengeActive"
+        :disabled="isSubmitting || isMfaChallengeActive || isOtpChallengeActive"
         data-testid="login-form-identifier"
         @blur="onIdentifierBlur"
       />
