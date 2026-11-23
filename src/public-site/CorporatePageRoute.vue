@@ -18,6 +18,13 @@ function sectionText(section: CorporateSiteSection, field: string): string {
   return typeof value === 'string' ? value : '';
 }
 
+function safePublicHref(value: string): string {
+  const candidate = value.trim();
+  if (/^https:\/\//i.test(candidate)) return candidate;
+  if (candidate.startsWith('/') && !candidate.startsWith('//')) return candidate;
+  return '';
+}
+
 function isExternalUrl(value: string): boolean {
   return /^https:\/\//i.test(value);
 }
@@ -120,9 +127,9 @@ onMounted(() => void loadPage());
           <h2 v-if="sectionText(section, 'title')">{{ sectionText(section, 'title') }}</h2>
           <p v-if="sectionText(section, 'intro') || sectionText(section, 'body')">{{ sectionText(section, 'intro') || sectionText(section, 'body') }}</p>
           <img
-            v-if="sectionText(section, 'image_url')"
+            v-if="safePublicHref(sectionText(section, 'image_url'))"
             class="corporate-page-route__image"
-            :src="sectionText(section, 'image_url')"
+            :src="safePublicHref(sectionText(section, 'image_url'))"
             :alt="sectionText(section, 'image_alt') || sectionText(section, 'title')"
             loading="lazy"
           >
@@ -132,13 +139,13 @@ onMounted(() => void loadPage());
               <p v-if="typeof item.label === 'string' && item.label" class="eyebrow">{{ item.label }}</p>
               <h3 v-if="typeof item.title === 'string'">{{ item.title }}</h3>
               <p v-if="typeof item.body === 'string' || typeof item.description === 'string'">{{ item.body || item.description }}</p>
-              <a v-if="typeof item.url === 'string' && item.url" :href="item.url" :target="isExternalUrl(String(item.url)) ? '_blank' : undefined" :rel="isExternalUrl(String(item.url)) ? 'noopener noreferrer' : undefined">
+              <a v-if="typeof item.url === 'string' && safePublicHref(item.url)" :href="safePublicHref(String(item.url))" :target="isExternalUrl(safePublicHref(String(item.url))) ? '_blank' : undefined" :rel="isExternalUrl(safePublicHref(String(item.url))) ? 'noopener noreferrer' : undefined">
                 {{ locale === 'am' ? 'ተጨማሪ ይወቁ' : 'Learn more' }}
               </a>
             </article>
           </div>
           <p v-if="sectionText(section, 'note')" class="corporate-page-route__note">{{ sectionText(section, 'note') }}</p>
-          <a v-if="sectionText(section, 'cta_url') && sectionText(section, 'cta_label')" class="corporate-page-route__cta" :href="sectionText(section, 'cta_url')">
+          <a v-if="safePublicHref(sectionText(section, 'cta_url')) && sectionText(section, 'cta_label')" class="corporate-page-route__cta" :href="safePublicHref(sectionText(section, 'cta_url'))">
             {{ sectionText(section, 'cta_label') }}
           </a>
         </section>
