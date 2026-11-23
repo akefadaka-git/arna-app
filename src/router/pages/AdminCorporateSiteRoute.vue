@@ -29,6 +29,7 @@ const entries = ref<CorporateEntryRecord[]>([]);
 const inquiries = ref<CorporateInquiryRecord[]>([]);
 const loading = ref(false);
 const saving = ref(false);
+const showDeleted = ref(false);
 const error = ref('');
 const notice = ref('');
 const pageKey = ref('');
@@ -146,10 +147,10 @@ async function refresh(): Promise<void> {
   error.value = '';
   try {
     if (tab.value === 'pages') {
-      const result = await listCorporatePages();
+      const result = await listCorporatePages(showDeleted.value);
       pages.value = result.data;
     } else if (tab.value === 'editorial') {
-      entries.value = await listCorporateEntries();
+      entries.value = await listCorporateEntries(showDeleted.value);
     } else {
       inquiries.value = await listCorporateInquiries();
     }
@@ -451,6 +452,7 @@ onMounted(() => void refresh());
           <button v-if="selectedPage" type="button" :disabled="saving" @click="clearPageEditor">Cancel edit</button>
         </form>
         <h2>Page register</h2>
+        <label class="corporate-admin__visibility"><input v-model="showDeleted" type="checkbox" @change="refresh" /> Show archived and deleted records</label>
         <ul class="corporate-admin__list">
           <li v-for="page in pages" :key="page.id">
             <div><strong>{{ page.translations?.am?.title ?? page.page_key }}</strong><small>{{ page.slug_en }} · v{{ page.version }} · {{ page.status }}</small></div>
@@ -465,7 +467,7 @@ onMounted(() => void refresh());
               <button v-if="page.status !== 'archived' && !page.is_enabled" type="button" :disabled="saving" @click="pageLifecycle(page, 'enable')">Enable</button>
               <button v-if="page.status !== 'archived'" type="button" :disabled="saving" @click="pageLifecycle(page, 'archive')">Archive</button>
               <button v-if="page.status === 'archived'" type="button" :disabled="saving" @click="pageLifecycle(page, 'restore')">Restore</button>
-              <button v-if="page.status === 'archived'" type="button" :disabled="saving" @click="pageLifecycle(page, 'delete')">Delete</button>
+              <button v-if="page.status === 'archived' && !page.deleted_at" type="button" :disabled="saving" @click="pageLifecycle(page, 'delete')">Delete</button>
             </div>
           </li>
         </ul>
@@ -500,6 +502,7 @@ onMounted(() => void refresh());
           <button v-if="selectedEntry" type="button" :disabled="saving" @click="selectedEntry = null">Cancel edit</button>
         </form>
         <p>News, announcements, publications, media, careers, opportunities, business/service profiles, advertising and marketplace submissions share the moderation queue.</p>
+        <label class="corporate-admin__visibility"><input v-model="showDeleted" type="checkbox" @change="refresh" /> Show archived and deleted records</label>
         <ul class="corporate-admin__list">
           <li v-for="entry in entries" :key="entry.id">
             <div><strong>{{ entry.translations?.am?.title ?? entry.entry_type }}</strong><small>{{ entry.entry_type }} · {{ entry.status }} · v{{ entry.version }}</small></div>
@@ -514,7 +517,7 @@ onMounted(() => void refresh());
               <button v-if="entry.status !== 'archived' && !entry.is_enabled" type="button" :disabled="saving" @click="entryLifecycle(entry, 'enable')">Enable</button>
               <button v-if="entry.status !== 'archived'" type="button" :disabled="saving" @click="entryLifecycle(entry, 'archive')">Archive</button>
               <button v-if="entry.status === 'archived'" type="button" :disabled="saving" @click="entryLifecycle(entry, 'restore')">Restore</button>
-              <button v-if="entry.status === 'archived'" type="button" :disabled="saving" @click="entryLifecycle(entry, 'delete')">Delete</button>
+              <button v-if="entry.status === 'archived' && !entry.deleted_at" type="button" :disabled="saving" @click="entryLifecycle(entry, 'delete')">Delete</button>
             </div>
           </li>
         </ul>
