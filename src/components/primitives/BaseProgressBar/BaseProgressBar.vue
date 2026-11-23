@@ -458,7 +458,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   }
 
   .progress__fill {
-    transition-duration: 1ms;
+    transition-duration: var(--arna-duration-fast);
   }
 }
 </style>
