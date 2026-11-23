@@ -1,10 +1,17 @@
 name: Prepare ARNA public website package for Plesk
 
 on:
+  # Automatically validate the workflow revision when this workflow changes on main.
+  # This provides a no-payment, native GitHub Actions run without external browser automation.
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/prepare-public-site-plesk-package.yml
   workflow_dispatch:
     inputs:
       target_sha:
-        description: "Optional exact 40-character main commit SHA to package"
+        description: "Optional exact 40-character commit SHA to package (defaults to the dispatch commit)"
         required: false
         type: string
 
@@ -17,7 +24,7 @@ concurrency:
 
 jobs:
   build-and-package:
-    name: Build, verify and package public website for manual Plesk handling
+    name: Build, verify and package public website for manual handling
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -45,7 +52,9 @@ jobs:
           EXPECTED_SHA: ${{ steps.source.outputs.sha }}
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          actual="$(git rev-parse HEAD)"
+          test "$actual" = "$EXPECTED_SHA"
+          echo "Verified source revision: $actual" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Set up Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
@@ -71,13 +80,13 @@ jobs:
           set -euo pipefail
           test -s public/logo.png
           test -s dist-public/logo.png
-          if grep -Eiq 'logo\.(svg|webp)' public-entry/index.html src/layouts/PublicSiteLayout.vue src/public-site/CorporateDynamicHome.vue; then
+          if grep -Eiq 'logo\\.(svg|webp)' public-entry/index.html src/layouts/PublicSiteLayout.vue src/public-site/CorporateDynamicHome.vue; then
             echo "Unexpected SVG/WebP logo reference in public site shell."
             exit 1
           fi
           file dist-public/logo.png
 
-      - name: Upload immutable Plesk handoff artifact
+      - name: Upload immutable public-site handoff artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: arna-public-site-plesk-${{ steps.source.outputs.sha }}
@@ -86,9 +95,18 @@ jobs:
           include-hidden-files: true
           retention-days: 30
 
-      - name: Record manual Plesk handoff boundary
+      - name: Record manual handoff boundary
+        shell: bash
+        env:
+          SOURCE_SHA: ${{ steps.source.outputs.sha }}
         run: |
-          echo "Package prepared for manual handling through the Plesk server."
-          echo "This workflow does not connect to Plesk, upload files, change DNS, or deploy."
-          echo "Artifact source SHA: ${{ steps.source.outputs.sha }}"
-          echo "Public artifact: dist-public/"
+          {
+            echo "## ARNA public website package"
+            echo
+            echo "- Source SHA: `$SOURCE_SHA`"
+            echo "- Package directory: `dist-public/`"
+            echo "- Artifact: `arna-public-site-plesk-$SOURCE_SHA`"
+            echo "- Handling: manual, owner-controlled"
+            echo
+            echo "This workflow does not connect to hosting, upload files, change DNS/TLS, or deploy."
+          } >> "$GITHUB_STEP_SUMMARY"
