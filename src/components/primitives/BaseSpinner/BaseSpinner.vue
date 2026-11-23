@@ -214,7 +214,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   border-color: currentColor;
   border-top-color: transparent;
   border-radius: var(--arna-radius-full);
-  animation: arna-spinner-rotate 0.8s linear infinite;
+  animation: arna-spinner-rotate var(--arna-duration-loading) linear infinite;
 }
 
 @keyframes arna-spinner-rotate {
@@ -272,7 +272,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    ============================================================================ */
 @media (prefers-reduced-motion: reduce) {
   .spinner__visual {
-    animation-duration: 1.6s;
+    animation-duration: var(--arna-duration-loading-reduced);
   }
 }
 </style>
