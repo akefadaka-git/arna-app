@@ -1,5 +1,5 @@
 const CACHE_NAME = 'arna-ethiopic-font-v1';
-const FONT_URL = '/fonts/NotoSansEthiopic%5Bwdth%2Cwght%5D.ttf';
+const FONT_URL = '/fonts/NotoSansEthiopic-variable.ttf';
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
