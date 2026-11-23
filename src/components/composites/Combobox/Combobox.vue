@@ -1093,7 +1093,7 @@ void _toggle;
    ============================================================================ */
 @media (max-width: 639px) {
   .combobox__control {
-    min-height: 44px;
+    min-height: var(--arna-size-interactive-target-min);
   }
 }
 
