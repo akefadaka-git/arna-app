@@ -1749,6 +1749,13 @@ export const authenticatedNavItems: ReadonlyArray<NavItem> = [
     icon: 'landmark',
     permission: 'governance.body.view',
   },
+  {
+    id: 'calendar',
+    label: 'የቀን መቁጠሪያ',
+    to: '/calendar',
+    icon: 'calendar-days',
+    permission: 'calendar.view',
+  },
 ];
 
 /**
