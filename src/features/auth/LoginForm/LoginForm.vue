@@ -323,6 +323,9 @@ export interface LoginFormLabels {
    */
   readonly emailLabel: string;
 
+  /** Bilingual guidance listing all supported login identifiers. */
+  readonly identifierHelpText: string;
+
   /** The label for the password field. */
   readonly passwordLabel: string;
 
