@@ -15,6 +15,9 @@ import {
   scanCorporateMedia,
   uploadCorporateMedia,
   updateCorporateInquiry,
+  updateCorporatePageLifecycle,
+  updateCorporateEntryLifecycle,
+  type CorporateLifecycleAction,
   type CorporatePageRecord,
   type CorporateEntryRecord,
   type CorporateInquiryRecord,
@@ -37,7 +40,13 @@ const summaryAm = ref('');
 const summaryEn = ref('');
 const bodyAm = ref('');
 const bodyEn = ref('');
-const sectionsJson = ref('[]');
+type EditableLocaleContent = { title: string; body: string; [key: string]: unknown };
+type EditableSection = {
+  id: string;
+  type: string;
+  content: { am: EditableLocaleContent; en: EditableLocaleContent; visible?: boolean; [key: string]: unknown };
+};
+const sectionsDraft = ref<EditableSection[]>([]);
 const pageSeoAmJson = ref('{}');
 const pageSeoEnJson = ref('{}');
 const selectedPage = ref<CorporatePageRecord | null>(null);
@@ -49,7 +58,14 @@ const entryTitleAm = ref('');
 const entryTitleEn = ref('');
 const entryBodyAm = ref('');
 const entryBodyEn = ref('');
-const entryPayloadJson = ref('{}');
+const entrySummaryAm = ref('');
+const entrySummaryEn = ref('');
+const entryCategory = ref('');
+const entryLocation = ref('');
+const entryStartDate = ref('');
+const entryEndDate = ref('');
+const entryExternalUrl = ref('');
+const entryFeatured = ref(false);
 const entrySeoAmJson = ref('{}');
 const entrySeoEnJson = ref('{}');
 const selectedEntry = ref<CorporateEntryRecord | null>(null);
@@ -64,11 +80,65 @@ function parseJsonObject(value: string, label: string): Record<string, unknown> 
   return parsed as Record<string, unknown>;
 }
 
-function parseJsonArray(value: string, label: string): readonly Record<string, unknown>[] {
-  let parsed: unknown;
-  try { parsed = JSON.parse(value); } catch { throw new Error(`${label} must contain valid JSON.`); }
-  if (!Array.isArray(parsed) || parsed.some((item) => !item || typeof item !== 'object' || Array.isArray(item))) throw new Error(`${label} must be a JSON array of section objects.`);
-  return parsed as readonly Record<string, unknown>[];
+function isCommunitySection(section: Pick<EditableSection, 'type'>): boolean {
+  return ['community_responsibility', 'community-responsibility', 'responsibility'].includes(section.type.toLowerCase());
+}
+
+function normalizeSections(input: readonly Record<string, unknown>[] = []): EditableSection[] {
+  return input.map((raw, index) => {
+    const source = raw.content && typeof raw.content === 'object' && !Array.isArray(raw.content)
+      ? raw.content as Record<string, unknown>
+      : {};
+    const locale = (key: 'am' | 'en'): EditableLocaleContent => {
+      const value = source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])
+        ? source[key] as Record<string, unknown>
+        : {};
+      return { ...value, title: String(value.title ?? ''), body: String(value.body ?? '') };
+    };
+    return {
+      ...raw,
+      id: String(raw.id ?? `section-${index + 1}`),
+      type: String(raw.type ?? 'text'),
+      content: {
+        ...source,
+        am: locale('am'),
+        en: locale('en'),
+        visible: source.visible !== false,
+      },
+    } as EditableSection;
+  });
+}
+
+function addSection(): void {
+  sectionsDraft.value.push({
+    id: `section-${Date.now()}-${sectionsDraft.value.length + 1}`,
+    type: 'text',
+    content: {
+      visible: true,
+      am: { title: '', body: '' },
+      en: { title: '', body: '' },
+    },
+  });
+}
+
+function moveSection(index: number, direction: -1 | 1): void {
+  const target = index + direction;
+  if (target < 0 || target >= sectionsDraft.value.length) return;
+  const next = [...sectionsDraft.value];
+  [next[index], next[target]] = [next[target], next[index]];
+  sectionsDraft.value = next;
+}
+
+function removeSection(index: number): void {
+  if (isCommunitySection(sectionsDraft.value[index])) return;
+  sectionsDraft.value.splice(index, 1);
+}
+
+function serializedSections(): readonly Record<string, unknown>[] {
+  return sectionsDraft.value.map((section, index) => ({
+    ...section,
+    id: section.id || `section-${index + 1}`,
+  }));
 }
 
 async function refresh(): Promise<void> {
@@ -95,7 +165,7 @@ async function createPage(): Promise<void> {
   error.value = '';
   notice.value = '';
   try {
-    const sections = parseJsonArray(sectionsJson.value, 'Page sections');
+    const sections = serializedSections();
     if (pageKey.value.trim() === 'home' && !sections.some((section) =>
       ['community_responsibility', 'community-responsibility', 'responsibility'].includes(String(section.type ?? '').toLowerCase()) &&
       section.content && typeof section.content === 'object' &&
@@ -124,7 +194,7 @@ async function createPage(): Promise<void> {
     selectedPage.value = null;
     pageKey.value = ''; slugAm.value = ''; slugEn.value = '';
     titleAm.value = ''; titleEn.value = ''; summaryAm.value = ''; summaryEn.value = '';
-    bodyAm.value = ''; bodyEn.value = ''; sectionsJson.value = '[]'; pageSeoAmJson.value = '{}'; pageSeoEnJson.value = '{}';
+    bodyAm.value = ''; bodyEn.value = ''; sectionsDraft.value = []; pageSeoAmJson.value = '{}'; pageSeoEnJson.value = '{}';
     await refresh();
   } catch {
     error.value = 'Draft could not be saved. Check unique slugs, required fields and your permission.';
@@ -145,7 +215,7 @@ function editPage(page: CorporatePageRecord): void {
   summaryEn.value = page.translations.en?.summary ?? '';
   bodyAm.value = page.translations.am?.body ?? '';
   bodyEn.value = page.translations.en?.body ?? '';
-  sectionsJson.value = JSON.stringify(page.sections ?? [], null, 2);
+  sectionsDraft.value = normalizeSections(page.sections ?? []);
   pageSeoAmJson.value = JSON.stringify(page.seo?.am ?? {}, null, 2);
   pageSeoEnJson.value = JSON.stringify(page.seo?.en ?? {}, null, 2);
 }
@@ -155,7 +225,7 @@ function clearPageEditor(): void {
   pageKey.value = ''; slugAm.value = ''; slugEn.value = '';
   titleAm.value = ''; titleEn.value = ''; summaryAm.value = ''; summaryEn.value = '';
   bodyAm.value = ''; bodyEn.value = '';
-  sectionsJson.value = '[]'; pageSeoAmJson.value = '{}'; pageSeoEnJson.value = '{}';
+  sectionsDraft.value = '[]'; pageSeoAmJson.value = '{}'; pageSeoEnJson.value = '{}';
 }
 
 async function pageAction(page: CorporatePageRecord, decision: 'approve' | 'publish' | 'schedule' | 'unpublish'): Promise<void> {
@@ -181,10 +251,17 @@ async function createEntry(): Promise<void> {
       slug_am: entrySlugAm.value.trim(),
       slug_en: entrySlugEn.value.trim(),
       translations: {
-        am: { title: entryTitleAm.value.trim(), body: entryBodyAm.value.trim() },
-        en: { title: entryTitleEn.value.trim(), body: entryBodyEn.value.trim() },
+        am: { title: entryTitleAm.value.trim(), summary: entrySummaryAm.value.trim(), body: entryBodyAm.value.trim() },
+        en: { title: entryTitleEn.value.trim(), summary: entrySummaryEn.value.trim(), body: entryBodyEn.value.trim() },
       },
-      payload: parseJsonObject(entryPayloadJson.value, 'Entry content payload'),
+      payload: {
+        category: entryCategory.value.trim(),
+        location: entryLocation.value.trim(),
+        start_date: entryStartDate.value || null,
+        end_date: entryEndDate.value || null,
+        url: entryExternalUrl.value.trim(),
+        featured: entryFeatured.value,
+      },
       seo: {
         am: parseJsonObject(entrySeoAmJson.value, 'Amharic entry SEO') as Record<string, string>,
         en: parseJsonObject(entrySeoEnJson.value, 'English entry SEO') as Record<string, string>,
@@ -195,7 +272,7 @@ async function createEntry(): Promise<void> {
     selectedEntry.value = null;
     notice.value = 'Bilingual editorial draft saved. It requires independent approval.';
     entrySlugAm.value = ''; entrySlugEn.value = ''; entryTitleAm.value = ''; entryTitleEn.value = '';
-    entryBodyAm.value = ''; entryBodyEn.value = ''; entryPayloadJson.value = '{}'; entrySeoAmJson.value = '{}'; entrySeoEnJson.value = '{}';
+    entryBodyAm.value = ''; entryBodyEn.value = ''; entrySummaryAm.value = ''; entrySummaryEn.value = ''; entryCategory.value = ''; entryLocation.value = ''; entryStartDate.value = ''; entryEndDate.value = ''; entryExternalUrl.value = ''; entryFeatured.value = false; entrySeoAmJson.value = '{}'; entrySeoEnJson.value = '{}';
     await refresh();
   } catch { error.value = 'Could not create this draft. Check slugs, bilingual titles and your permissions.'; }
   finally { saving.value = false; }
@@ -218,7 +295,14 @@ function editEntry(entry: CorporateEntryRecord): void {
   entryTitleEn.value = entry.translations.en?.title ?? '';
   entryBodyAm.value = entry.translations.am?.body ?? '';
   entryBodyEn.value = entry.translations.en?.body ?? '';
-  entryPayloadJson.value = JSON.stringify(entry.payload ?? {}, null, 2);
+  entrySummaryAm.value = entry.translations.am?.summary ?? '';
+  entrySummaryEn.value = entry.translations.en?.summary ?? '';
+  entryCategory.value = String(entry.payload?.category ?? '');
+  entryLocation.value = String(entry.payload?.location ?? '');
+  entryStartDate.value = String(entry.payload?.start_date ?? '');
+  entryEndDate.value = String(entry.payload?.end_date ?? '');
+  entryExternalUrl.value = String(entry.payload?.url ?? '');
+  entryFeatured.value = entry.payload?.featured === true;
   entrySeoAmJson.value = JSON.stringify(entry.seo?.am ?? {}, null, 2);
   entrySeoEnJson.value = JSON.stringify(entry.seo?.en ?? {}, null, 2);
 }
