@@ -832,7 +832,7 @@ html[dir='rtl'] .dropdown-menu[data-align='end'] {
   font-weight: var(--arna-font-weight-regular);
   text-align: start;
   cursor: pointer;
-  min-height: 44px;
+  min-height: var(--arna-size-interactive-target-min);
   transition:
     background-color var(--arna-duration-fast) var(--arna-easing-standard),
     color var(--arna-duration-fast) var(--arna-easing-standard);
