@@ -140,6 +140,7 @@ export interface DashboardViewLabels {
   readonly shareClasses: DashboardTileLabels;
   readonly wallets: DashboardTileLabels;
   readonly files: DashboardTileLabels;
+  readonly finance: DashboardTileLabels;
 }
 
 // =============================================================================
@@ -199,5 +200,9 @@ export const dashboardViewLabels: DashboardViewLabels = {
   files: {
     title: 'ሰነዶች',
     description: 'ሰነዶችን ያስተዳድሩ።',
+  },
+  finance: {
+    title: 'ፋይናንስ',
+    description: 'የሂሳብ መዝገቦችንና ሪፖርቶችን ይመልከቱ።',
   },
 };
