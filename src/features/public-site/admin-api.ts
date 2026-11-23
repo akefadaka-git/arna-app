@@ -65,8 +65,8 @@ export interface CorporateInquiryRecord {
 
 const base = '/api/admin/corporate-site';
 
-export function listCorporatePages(): Promise<{ data: CorporatePageRecord[]; current_page: number; last_page: number; total: number }> {
-  return api.get('/api/admin/corporate-site/pages');
+export function listCorporatePages(includeDeleted = false): Promise<{ data: CorporatePageRecord[]; current_page: number; last_page: number; total: number }> {
+  return api.get('/api/admin/corporate-site/pages', { params: includeDeleted ? { include_deleted: 1 } : {} });
 }
 export function createCorporatePage(draft: CorporatePageDraft): Promise<CorporatePageRecord> {
   return api.post('/api/admin/corporate-site/pages', draft);
@@ -101,8 +101,8 @@ export async function createCorporateEntry(draft: CorporateEntryDraft & { entry_
 export function updateCorporateEntry(entry: CorporateEntryRecord, draft: CorporateEntryDraft): Promise<CorporateEntryRecord> {
   return api.put(`${base}/entries/${entry.id}`, { ...draft, expected_version: entry.version });
 }
-export async function listCorporateEntries(): Promise<CorporateEntryRecord[]> {
-  const result = await api.get<{ data: CorporateEntryRecord[] }>(`${base}/entries`);
+export async function listCorporateEntries(includeDeleted = false): Promise<CorporateEntryRecord[]> {
+  const result = await api.get<{ data: CorporateEntryRecord[] }>(`${base}/entries`, { params: includeDeleted ? { include_deleted: 1 } : {} });
   return result.data;
 }
 export function scanCorporateMedia(entry: CorporateEntryRecord): Promise<{ public_id: string; scan_status: string; version: number }> {
