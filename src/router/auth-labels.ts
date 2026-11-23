@@ -272,6 +272,16 @@ export const loginFormLabels = {
   /** Bilingual guidance for every supported sign-in identifier. */
   identifierHelpText:
     'ከሚከተሉት አንዱን ያስገቡ፦ ኢሜይል፣ የተጠቃሚ ስም፣ ሞባይል ቁጥር፣ የሰራተኛ ቁጥር፣ የባለአክሲዮን ቁጥር ወይም የWallet ቁጥር። / Enter one: email, username, mobile number, employee ID, shareholder number, or wallet number.',
+  /** Returning-user OTP option and channel labels. */
+  otpOptionLabel: 'አንድ ጊዜ የሚጠቀሙበት ኮድ / Use a one-time code',
+  otpChannelLabel: 'ኮዱን በየትኛው መንገድ እንላክ? / Send code by',
+  otpEmailOption: 'ኢሜይል / Email',
+  otpSmsOption: 'SMS',
+  requestOtpLabel: 'ኮድ ላክ / Send code',
+  otpInstructions: 'የተላከልዎትን አንድ ጊዜ የሚጠቀሙበት ኮድ ያስገቡ። / Enter the one-time code sent to your selected channel.',
+  otpCodeLabel: 'የአንድ ጊዜ ኮድ / One-time code',
+  verifyOtpLabel: 'ኮዱን አረጋግጥ / Verify code',
+  cancelOtpLabel: 'የOTP መግቢያ ሰርዝ / Cancel OTP login',
 
   // ---------------------------------------------------------------------------
   // Password
