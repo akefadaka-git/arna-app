@@ -140,6 +140,8 @@ export interface LoginSuccessResponse {
   readonly user: LoginResponseUser;
   readonly token: string;
   readonly token_type: 'Bearer';
+  readonly session_id?: string;
+  readonly expires_at?: string;
 }
 
 export interface MfaChallengeResponse {
@@ -150,6 +152,33 @@ export interface MfaChallengeResponse {
 
 /** Discriminated response from POST /api/login. */
 export type LoginResponse = LoginSuccessResponse | MfaChallengeResponse;
+
+export interface LoginOtpChallengeRequest {
+  readonly identifier: string;
+  readonly tenant_id?: number;
+  readonly channel: 'email' | 'sms';
+  readonly client_type?: 'android';
+  readonly device_installation_id?: string;
+}
+
+export interface LoginOtpChallengeResponse {
+  readonly challenge_required: true;
+  readonly challenge_token: string;
+  readonly methods: readonly ['otp'];
+}
+
+export interface AuthenticatorLoginRequest {
+  readonly identifier: string;
+  readonly tenant_id?: number;
+  readonly authenticator: 'otp' | 'google_authenticator';
+  readonly code: string;
+  readonly challenge_token?: string;
+  readonly client_type?: 'android';
+  readonly device_installation_id?: string;
+  readonly device_label?: string;
+  readonly app_version?: string;
+}
+
 
 /**
  * POST /api/token/refresh response body. Verified against
@@ -202,15 +231,24 @@ export interface RegisterRequest {
  * POST /api/password/email request body.
  */
 export interface RequestPasswordResetRequest {
-  readonly email: string;
+  readonly identifier: string;
+  readonly channel: 'email' | 'sms';
+}
+
+export interface PasswordRecoveryChallengeResponse {
+  readonly challenge_required: true;
+  readonly challenge_token: string;
+  readonly message: string;
 }
 
 /**
  * POST /api/password/reset request body.
  */
 export interface ResetPasswordRequest {
-  readonly token: string;
-  readonly email: string;
+  readonly identifier: string;
+  readonly authenticator: 'otp' | 'google_authenticator';
+  readonly code: string;
+  readonly challenge_token?: string;
   readonly password: string;
   readonly password_confirmation: string;
 }
@@ -227,6 +265,20 @@ export interface ResetPasswordRequest {
  */
 export function login(payload: LoginRequest): Promise<LoginResponse> {
   return api.post<LoginResponse>('/api/login', payload);
+}
+
+/** Request a returning-user OTP login challenge without revealing account state. */
+export function requestLoginOtp(
+  payload: LoginOtpChallengeRequest,
+): Promise<LoginOtpChallengeResponse> {
+  return api.post<LoginOtpChallengeResponse>('/api/login/otp/challenge', payload);
+}
+
+/** Authenticate a returning user with OTP or Google Authenticator. */
+export function loginWithAuthenticator(
+  payload: AuthenticatorLoginRequest,
+): Promise<LoginSuccessResponse> {
+  return api.post<LoginSuccessResponse>('/api/login/authenticator', payload);
 }
 
 /**
@@ -279,9 +331,9 @@ export function fetchCurrentUser(): Promise<AuthUser> {
  * The `message` is not modeled here.
  */
 export function requestPasswordReset(
-  email: string,
-): Promise<unknown> {
-  return api.post<unknown>('/api/password/email', { email });
+  payload: RequestPasswordResetRequest,
+): Promise<PasswordRecoveryChallengeResponse> {
+  return api.post<PasswordRecoveryChallengeResponse>('/api/password/email', payload);
 }
 
 /**
