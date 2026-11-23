@@ -100,13 +100,14 @@ jobs:
         env:
           SOURCE_SHA: ${{ steps.source.outputs.sha }}
         run: |
+          set -euo pipefail
           {
-            echo "## ARNA public website package"
-            echo
-            echo "- Source SHA: `$SOURCE_SHA`"
-            echo "- Package directory: `dist-public/`"
-            echo "- Artifact: `arna-public-site-plesk-$SOURCE_SHA`"
-            echo "- Handling: manual, owner-controlled"
-            echo
-            echo "This workflow does not connect to hosting, upload files, change DNS/TLS, or deploy."
+            printf '%s\n' '## ARNA public website package'
+            printf '\n'
+            printf '%s\n' "- Source SHA: \`$SOURCE_SHA\`"
+            printf '%s\n' '- Package directory: \`dist-public/\`'
+            printf '%s\n' "- Artifact: \`arna-public-site-plesk-$SOURCE_SHA\`"
+            printf '%s\n' '- Handling: manual, owner-controlled'
+            printf '\n'
+            printf '%s\n' 'This workflow does not connect to hosting, upload files, change DNS/TLS, or deploy.'
           } >> "$GITHUB_STEP_SUMMARY"
