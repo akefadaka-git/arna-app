@@ -503,6 +503,62 @@ export async function completeMfaLogin(
 }
 
 /**
+ * Request a neutral returning-user OTP challenge. The code and challenge
+ * token are transient and are never written to the auth store or storage.
+ */
+export async function requestLoginOtp(
+  identifier: string,
+  channel: 'email' | 'sms',
+  options: { readonly tenantId?: number } = {},
+): Promise<{ readonly challengeToken: string }> {
+  const normalizedIdentifier = identifier.trim();
+  if (!normalizedIdentifier) {
+    throw new TypeError('A sign-in identifier is required.');
+  }
+
+  await api.csrfCookie();
+  const response = await authApi.requestLoginOtp({
+    identifier: normalizedIdentifier,
+    channel,
+    ...(options.tenantId !== undefined ? { tenant_id: options.tenantId } : {}),
+  });
+
+  if (response.challenge_required !== true || !response.challenge_token) {
+    throw new Error('The server did not return a valid OTP challenge.');
+  }
+
+  return { challengeToken: response.challenge_token };
+}
+
+/**
+ * Complete a returning-user OTP login and establish the normal website
+ * session, including the API-issued first-party SSO cookie.
+ */
+export async function completeOtpLogin(
+  identifier: string,
+  challengeToken: string,
+  code: string,
+  options: { readonly tenantId?: number } = {},
+): Promise<void> {
+  const normalizedIdentifier = identifier.trim();
+  const normalizedCode = code.trim();
+  if (!normalizedIdentifier || !challengeToken || !normalizedCode) {
+    throw new TypeError('A sign-in identifier, OTP challenge, and code are required.');
+  }
+
+  await api.csrfCookie();
+  const response = await authApi.loginWithAuthenticator({
+    identifier: normalizedIdentifier,
+    authenticator: 'otp',
+    code: normalizedCode,
+    challenge_token: challengeToken,
+    ...(options.tenantId !== undefined ? { tenant_id: options.tenantId } : {}),
+  });
+
+  await establishSession(response);
+}
+
+/**
  * Register a new user and log them in.
  *
  * The register endpoint has the same response shape as login. The
