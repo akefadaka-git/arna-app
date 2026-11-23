@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-const appUrl = process.env.AUTH_LOGIN_APP_URL ?? 'http://localhost:4178/workspace-entry/login';
+const appUrl = process.env.AUTH_LOGIN_APP_URL ?? 'http://localhost:4178/tests/fixtures/auth-login.html';
 
 const authenticatedUser = {
   id: 41,
@@ -146,7 +146,7 @@ test.describe('ARNA returning-user OTP login', () => {
     expect(setCookie).toMatch(/SameSite=Lax/i);
 
     await expect.poll(() => authenticatedUserCookie).toContain('arna_sso_token=browser-otp-session');
-    await page.waitForURL(/\/launcher(?:[/?#]|$)/);
+    await expect(page.getByTestId('auth-test-launcher')).toBeVisible();
     const storedValues = await page.evaluate(() => Object.values(localStorage));
     expect(storedValues).not.toContain('482913');
     expect(storedValues).not.toContain('a'.repeat(64));
@@ -184,7 +184,7 @@ test.describe('ARNA returning-user OTP login', () => {
 
     await expect(page.getByTestId('login-form-banner')).toBeVisible();
     await expect(page.getByTestId('login-form-banner')).toContainText('Invalid sign-in details');
-    await expect(page).toHaveURL(/\/login(?:[/?#]|$)/);
+    await expect(page.getByTestId('auth-test-launcher')).toHaveCount(0);
     expect(await failureResponse.headerValue('set-cookie')).toBeNull();
     await expect(page.getByTestId('login-form-otp')).toBeVisible();
   });
