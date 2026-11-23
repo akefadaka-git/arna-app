@@ -313,6 +313,11 @@ export const routesPortal: RouteRecordRaw[] = [
         component: () => import('@/features/portal/MyLoanDetailPage.vue'),
         props: { labels: myLoanDetailPageLabels },
       },
+      {
+        path: 'my/elections/:id/candidates',
+        name: 'portal-election-candidates',
+        component: () => import('@/features/elections/ShareholderCandidateReview.vue'),
+      },
     ],
   },
 ];
