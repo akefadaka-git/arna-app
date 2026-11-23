@@ -571,7 +571,7 @@ function focusHeaderAt(index: number): void {
 @media (max-width: 639px) {
   .accordion__header {
     /* Ensure a 44px minimum tap target. */
-    min-height: 44px;
+    min-height: var(--arna-size-interactive-target-min);
     padding-inline: var(--arna-space-3);
   }
 
