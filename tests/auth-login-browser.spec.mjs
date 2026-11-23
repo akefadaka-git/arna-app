@@ -118,12 +118,12 @@ test.describe('ARNA returning-user OTP login', () => {
     await page.locator('#login-identifier').fill('EMP-000041');
     await page.locator('#login-otp-channel').selectOption('sms');
     await page.getByTestId('login-form-request-otp').click();
+    await expect(page.getByTestId('login-form-otp')).toBeVisible();
 
     expect(challengeRequest).toMatchObject({
       identifier: 'EMP-000041',
       channel: 'sms',
     });
-    await expect(page.getByTestId('login-form-otp')).toBeVisible();
 
     await page.locator('#login-otp-code').fill('482913');
     const loginResponsePromise = page.waitForResponse((response) =>
