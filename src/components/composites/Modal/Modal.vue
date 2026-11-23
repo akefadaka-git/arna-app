@@ -713,7 +713,7 @@ function onCloseButtonClick(): void {
    ============================================================================ */
 @media (prefers-reduced-motion: reduce) {
   .modal[open] {
-    transition-duration: 1ms;
+    transition-duration: var(--arna-duration-fast);
   }
 }
 </style>
