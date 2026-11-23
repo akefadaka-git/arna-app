@@ -20,6 +20,9 @@ test.describe('ARNA returning-user OTP login', () => {
     await page.addInitScript(() => {
       localStorage.clear();
       sessionStorage.clear();
+      if (window.location.pathname === '/workspace-entry/') {
+        window.history.replaceState({}, '', '/login');
+      }
     });
 
     await page.route('**/sanctum/csrf-cookie', (route) => route.fulfill({
@@ -51,10 +54,6 @@ test.describe('ARNA returning-user OTP login', () => {
     });
 
     await page.goto(appUrl);
-    await page.evaluate(() => {
-      window.history.replaceState({}, '', '/login');
-      window.dispatchEvent(new PopStateEvent('popstate'));
-    });
     await expect(page.getByTestId('login-form-root')).toBeVisible();
   });
 
