@@ -585,11 +585,11 @@ function focusHeaderAt(index: number): void {
    ============================================================================ */
 @media (prefers-reduced-motion: reduce) {
   .accordion__header {
-    transition-duration: 1ms;
+    transition-duration: var(--arna-duration-fast);
   }
 
   .accordion__indicator {
-    transition-duration: 1ms;
+    transition-duration: var(--arna-duration-fast);
   }
 }
 </style>
