@@ -88,16 +88,16 @@
  (delivered by Unit 12.6).
 
  -----------------------------------------------------------------------------
- Login identifier — email OR phone number
+ Login identifier — six supported identifier types
  -----------------------------------------------------------------------------
- The single identifier field accepts:
-   · an email address;
-   · a phone number matching a user's `phone` column.
+ The single identifier field accepts email, username, mobile number,
+ employee ID, shareholder number, or wallet number. Domain identifiers
+ are resolved within the requested tenant and fail closed when missing,
+ inactive, unlinked, non-member, or ambiguous.
 
- The backend resolves either form to the matching user. The field is
- named `email` on the wire for backward compatibility with the
- published API contract; the resolver in AuthController treats the
- value as an opaque identifier.
+ The field remains named `email` on the wire for backward compatibility
+ with the published API contract. Its value is an opaque login identifier;
+ it is not restricted to email syntax.
 
  No client-side normalization (lowercasing, IDNA folding, phone-to-
  E164 conversion) is performed. Those are backend concerns.
@@ -133,8 +133,8 @@
  -----------------------------------------------------------------------------
  In this release, "remember me" is a FRONTEND-ONLY convenience:
 
-   1. When checked and login succeeds, the identifier (email or
-      phone) is written to localStorage under
+   1. When checked and login succeeds, the entered identifier is
+      written to localStorage under
       `arna.auth.remembered_identifier` (with a legacy MASES fallback).
 
    2. On the next visit, the identifier is pre-filled, the checkbox
@@ -317,9 +317,9 @@ export interface LoginFormLabels {
   /**
    * The label for the identifier field.
    *
-   * Despite the key name (kept for backward compatibility with
-   * auth-labels.ts and LoginRoute.vue), the field accepts an email
-   * address OR a phone number. The label VALUE must reflect that.
+   * Despite the historical key name, the field accepts all six
+   * supported sign-in identifiers. The label and adjacent hint
+   * communicate the complete accepted set.
    */
   readonly emailLabel: string;
 
@@ -864,7 +864,7 @@ const passwordToggleLabel = computed<string>(() =>
     </Alert>
 
     <!-- ============================================================
-         Identifier (email or phone)
+         Identifier (all six supported types)
          ============================================================ -->
     <FormField
       :label="labels.emailLabel"
@@ -873,13 +873,17 @@ const passwordToggleLabel = computed<string>(() =>
       :disabled="isSubmitting"
       required
     >
+      <p id="login-identifier-hint" class="login-form__identifier-hint">
+        {{ labels.identifierHelpText }}
+      </p>
       <BaseInput
         id="login-identifier"
         ref="identifierInputRef"
         v-model="identifier"
         type="text"
-        inputmode="email"
+        inputmode="text"
         autocomplete="username"
+        aria-describedby="login-identifier-hint"
         enterkeyhint="go"
         :disabled="isSubmitting || isMfaChallengeActive"
         data-testid="login-form-identifier"
