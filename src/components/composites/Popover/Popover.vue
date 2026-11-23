@@ -557,7 +557,7 @@ function onKeydown(event: KeyboardEvent): void {
    ============================================================================ */
 @media (prefers-reduced-motion: reduce) {
   .popover__panel {
-    animation-duration: 1ms;
+    animation-duration: var(--arna-duration-fast);
   }
 }
 </style>
