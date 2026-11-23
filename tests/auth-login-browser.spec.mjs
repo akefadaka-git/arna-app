@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-const appUrl = process.env.AUTH_LOGIN_APP_URL ?? 'http://localhost:4178';
+const appUrl = process.env.AUTH_LOGIN_APP_URL ?? 'http://localhost:4178/workspace-entry/';
 
 const authenticatedUser = {
   id: 41,
@@ -50,7 +50,11 @@ test.describe('ARNA returning-user OTP login', () => {
       });
     });
 
-    await page.goto(`${appUrl}/login`);
+    await page.goto(appUrl);
+    await page.evaluate(() => {
+      window.history.replaceState({}, '', '/login');
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    });
     await expect(page.getByTestId('login-form-root')).toBeVisible();
   });
 
