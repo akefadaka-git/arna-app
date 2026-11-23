@@ -44,6 +44,7 @@
     "test:workspace-dashboard-route-contract": "node --test tests/workspace-dashboard-route-contract.test.mjs",
     "test:executive-overview-route-contract": "node --test tests/executive-overview-route-contract.test.mjs",
     "test:public-browser": "playwright test tests/public-browser-contract.spec.mjs",
+    "test:auth-login-browser": "playwright test tests/auth-login-browser.spec.mjs",
     "test:error-handling-contract": "node --test tests/error-handling-contract.test.mjs",
     "test:visual-library-contract": "node --test tests/visual-library-contract.test.mjs",
     "test:visual-panel-integration-contract": "node --test tests/visual-panel-integration-contract.test.mjs",
