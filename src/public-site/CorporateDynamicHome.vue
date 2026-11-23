@@ -67,6 +67,12 @@ const navSections = computed(() => visibleSections.value.filter((section) => {
 }));
 const sectionData = (section: CorporateSiteSection): SectionContent =>
   (section.content[locale.value] as SectionContent | undefined) ?? {};
+const safePublicHref = (url: string) => {
+  const candidate = url.trim();
+  if (/^https:\/\//i.test(candidate)) return candidate;
+  if (candidate.startsWith('/') && !candidate.startsWith('//')) return candidate;
+  return '';
+};
 const isExternal = (url: string) => /^https:\/\//i.test(url);
 const sectionId = (section: CorporateSiteSection, index: number) =>
   section.id || `section-${index + 1}`;
@@ -233,8 +239,8 @@ watch(() => route.query.locale, (value) => {
                 
               </article>
             </div>
-            <div v-if="sectionData(section).image_url" class="section-image">
-              <img :src="sectionData(section).image_url" :alt="sectionData(section).image_alt || sectionData(section).title || ''" loading="lazy">
+            <div v-if="safePublicHref(sectionData(section).image_url || '')" class="section-image">
+              <img :src="safePublicHref(sectionData(section).image_url || '')" :alt="sectionData(section).image_alt || sectionData(section).title || ''" loading="lazy">
             </div>
             <div v-if="communitySection(section) && !sectionData(section).items?.length" class="content-grid">
               <article class="content-card"><h3>{{ locale === 'am' ? 'ትምህርትና ክህሎት ልማት' : 'Education & skills development' }}</h3></article>
@@ -250,15 +256,15 @@ watch(() => route.query.locale, (value) => {
                 <h3>{{ item.title }}</h3>
                 <p>{{ item.body || item.description }}</p>
                 <span v-if="item.status" class="card-status">{{ item.status }}</span>
-                <a v-if="item.url" :href="item.url" :target="isExternal(item.url) ? '_blank' : undefined"
+                <a v-if="item.url && safePublicHref(item.url)" :href="safePublicHref(item.url)" :target="isExternal(item.url) ? '_blank' : undefined"
                   :rel="isExternal(item.url) ? 'noopener noreferrer' : undefined">
                   {{ locale === 'am' ? 'ተጨማሪ ይወቁ' : 'Learn more' }}
                 </a>
               </article>
             </div>
             <p v-if="sectionData(section).note" class="section-note">{{ sectionData(section).note }}</p>
-            <a v-if="sectionData(section).cta_url && sectionData(section).cta_label" class="section-cta"
-              :href="sectionData(section).cta_url">{{ sectionData(section).cta_label }}</a>
+            <a v-if="safePublicHref(sectionData(section).cta_url || '') && sectionData(section).cta_label" class="section-cta"
+              :href="safePublicHref(sectionData(section).cta_url || '')">{{ sectionData(section).cta_label }}</a>
           </div>
         </section>
         <p v-if="!visibleSections.length" class="state-panel">{{ locale === 'am' ? 'የታተሙ የይዘት ክፍሎች የሉም።' : 'No published page sections are available.' }}</p>

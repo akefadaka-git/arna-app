@@ -18,6 +18,26 @@ function sectionText(section: CorporateSiteSection, field: string): string {
   return typeof value === 'string' ? value : '';
 }
 
+function safePublicHref(value: string): string {
+  const candidate = value.trim();
+  if (/^https:\/\//i.test(candidate)) return candidate;
+  if (candidate.startsWith('/') && !candidate.startsWith('//')) return candidate;
+  return '';
+}
+
+function isExternalUrl(value: string): boolean {
+  return /^https:\/\//i.test(value);
+}
+
+function sectionItems(section: CorporateSiteSection): Record<string, unknown>[] {
+  const localized = section.content[locale.value];
+  if (typeof localized !== 'object' || localized === null) return [];
+  const value = (localized as Record<string, unknown>).items;
+  return Array.isArray(value)
+    ? value.filter((item): item is Record<string, unknown> => Boolean(item) && typeof item === 'object' && !Array.isArray(item))
+    : [];
+}
+
 async function loadPage(): Promise<void> {
   const routeLocale = route.params.locale;
   const slug = route.params.slug;
@@ -102,9 +122,32 @@ onMounted(() => void loadPage());
         <h1>{{ page.title }}</h1>
         <p v-if="page.summary">{{ page.summary }}</p>
         <p v-if="page.body" class="corporate-page-route__body">{{ page.body }}</p>
-        <section v-for="(section, index) in page.sections" :key="section.id ?? index">
+        <section v-for="(section, index) in page.sections" :key="section.id ?? index" class="corporate-page-route__section">
+          <p v-if="sectionText(section, 'eyebrow')" class="eyebrow">{{ sectionText(section, 'eyebrow') }}</p>
           <h2 v-if="sectionText(section, 'title')">{{ sectionText(section, 'title') }}</h2>
-          <p v-if="sectionText(section, 'body')">{{ sectionText(section, 'body') }}</p>
+          <p v-if="sectionText(section, 'intro') || sectionText(section, 'body')">{{ sectionText(section, 'intro') || sectionText(section, 'body') }}</p>
+          <img
+            v-if="safePublicHref(sectionText(section, 'image_url'))"
+            class="corporate-page-route__image"
+            :src="safePublicHref(sectionText(section, 'image_url'))"
+            :alt="sectionText(section, 'image_alt') || sectionText(section, 'title')"
+            loading="lazy"
+          >
+          <div v-if="sectionItems(section).length" class="corporate-page-route__items">
+            <article v-for="(item, itemIndex) in sectionItems(section)" :key="String(item.id ?? itemIndex)" class="corporate-page-route__item">
+              <img v-if="typeof item.image_url === 'string' && item.image_url" :src="item.image_url" :alt="String(item.image_alt ?? item.title ?? '')" loading="lazy">
+              <p v-if="typeof item.label === 'string' && item.label" class="eyebrow">{{ item.label }}</p>
+              <h3 v-if="typeof item.title === 'string'">{{ item.title }}</h3>
+              <p v-if="typeof item.body === 'string' || typeof item.description === 'string'">{{ item.body || item.description }}</p>
+              <a v-if="typeof item.url === 'string' && safePublicHref(item.url)" :href="safePublicHref(String(item.url))" :target="isExternalUrl(safePublicHref(String(item.url))) ? '_blank' : undefined" :rel="isExternalUrl(safePublicHref(String(item.url))) ? 'noopener noreferrer' : undefined">
+                {{ locale === 'am' ? 'ተጨማሪ ይወቁ' : 'Learn more' }}
+              </a>
+            </article>
+          </div>
+          <p v-if="sectionText(section, 'note')" class="corporate-page-route__note">{{ sectionText(section, 'note') }}</p>
+          <a v-if="safePublicHref(sectionText(section, 'cta_url')) && sectionText(section, 'cta_label')" class="corporate-page-route__cta" :href="safePublicHref(sectionText(section, 'cta_url'))">
+            {{ sectionText(section, 'cta_label') }}
+          </a>
         </section>
       </article>
     </main>
@@ -119,5 +162,15 @@ onMounted(() => void loadPage());
 .brand__wordmark { display: grid; gap: .2rem; }
 .brand__wordmark small { color: var(--arna-public-text-secondary); }
 .main-nav { display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; }
+.corporate-page-route__section { margin-block: 2rem; padding-block: 1.5rem; border-top: 1px solid var(--arna-public-border-subtle); }
+.corporate-page-route__section h2 { margin-block: 0 .75rem; }
+.corporate-page-route__image, .corporate-page-route__item img { display: block; max-width: 100%; height: auto; border-radius: .75rem; }
+.corporate-page-route__image { max-height: 32rem; object-fit: cover; }
+.corporate-page-route__items { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 1rem; margin-block: 1rem; }
+.corporate-page-route__item { min-width: 0; padding: 1rem; border: 1px solid var(--arna-public-border-subtle); border-radius: .75rem; }
+.corporate-page-route__item img { margin-bottom: .75rem; }
+.corporate-page-route__note { color: var(--arna-public-text-secondary); }
+.corporate-page-route__cta { display: inline-flex; min-height: 2.75rem; align-items: center; padding: .65rem 1rem; border-radius: .5rem; text-decoration: none; border: 1px solid var(--arna-public-border-strong); }
+
 @media (max-width: 36rem) { .site-header__inner { padding-block: .75rem; } .main-nav { width: 100%; } }
 </style>

@@ -15,6 +15,9 @@ import {
   scanCorporateMedia,
   uploadCorporateMedia,
   updateCorporateInquiry,
+  updateCorporatePageLifecycle,
+  updateCorporateEntryLifecycle,
+  type CorporateLifecycleAction,
   type CorporatePageRecord,
   type CorporateEntryRecord,
   type CorporateInquiryRecord,
@@ -26,6 +29,7 @@ const entries = ref<CorporateEntryRecord[]>([]);
 const inquiries = ref<CorporateInquiryRecord[]>([]);
 const loading = ref(false);
 const saving = ref(false);
+const showDeleted = ref(false);
 const error = ref('');
 const notice = ref('');
 const pageKey = ref('');
@@ -37,7 +41,14 @@ const summaryAm = ref('');
 const summaryEn = ref('');
 const bodyAm = ref('');
 const bodyEn = ref('');
-const sectionsJson = ref('[]');
+type EditableItem = { title: string; body: string; [key: string]: unknown };
+type EditableLocaleContent = { title: string; body: string; items: EditableItem[]; cta_label: string; cta_url: string; image_url: string; image_alt: string; [key: string]: unknown };
+type EditableSection = {
+  id: string;
+  type: string;
+  content: { am: EditableLocaleContent; en: EditableLocaleContent; visible?: boolean; [key: string]: unknown };
+};
+const sectionsDraft = ref<EditableSection[]>([]);
 const pageSeoAmJson = ref('{}');
 const pageSeoEnJson = ref('{}');
 const selectedPage = ref<CorporatePageRecord | null>(null);
@@ -49,7 +60,14 @@ const entryTitleAm = ref('');
 const entryTitleEn = ref('');
 const entryBodyAm = ref('');
 const entryBodyEn = ref('');
-const entryPayloadJson = ref('{}');
+const entrySummaryAm = ref('');
+const entrySummaryEn = ref('');
+const entryCategory = ref('');
+const entryLocation = ref('');
+const entryStartDate = ref('');
+const entryEndDate = ref('');
+const entryExternalUrl = ref('');
+const entryFeatured = ref(false);
 const entrySeoAmJson = ref('{}');
 const entrySeoEnJson = ref('{}');
 const selectedEntry = ref<CorporateEntryRecord | null>(null);
@@ -64,11 +82,83 @@ function parseJsonObject(value: string, label: string): Record<string, unknown> 
   return parsed as Record<string, unknown>;
 }
 
-function parseJsonArray(value: string, label: string): readonly Record<string, unknown>[] {
-  let parsed: unknown;
-  try { parsed = JSON.parse(value); } catch { throw new Error(`${label} must contain valid JSON.`); }
-  if (!Array.isArray(parsed) || parsed.some((item) => !item || typeof item !== 'object' || Array.isArray(item))) throw new Error(`${label} must be a JSON array of section objects.`);
-  return parsed as readonly Record<string, unknown>[];
+function isCommunitySection(section: Pick<EditableSection, 'type'>): boolean {
+  return ['community_responsibility', 'community-responsibility', 'responsibility'].includes(section.type.toLowerCase());
+}
+
+function normalizeSections(input: readonly Record<string, unknown>[] = []): EditableSection[] {
+  return input.map((raw, index) => {
+    const source = raw.content && typeof raw.content === 'object' && !Array.isArray(raw.content)
+      ? raw.content as Record<string, unknown>
+      : {};
+    const locale = (key: 'am' | 'en'): EditableLocaleContent => {
+      const value = source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])
+        ? source[key] as Record<string, unknown>
+        : {};
+      const items = Array.isArray(value.items) ? value.items.filter((item): item is Record<string, unknown> => Boolean(item) && typeof item === 'object' && !Array.isArray(item)) : [];
+      return {
+        ...value,
+        title: String(value.title ?? ''),
+        body: String(value.body ?? ''),
+        cta_label: String(value.cta_label ?? ''),
+        cta_url: String(value.cta_url ?? ''),
+        image_url: String(value.image_url ?? ''),
+        image_alt: String(value.image_alt ?? ''),
+        items: items.map((item) => ({ ...item, title: String(item.title ?? ''), body: String(item.body ?? item.description ?? '') })),
+      };
+    };
+    return {
+      ...raw,
+      id: String(raw.id ?? `section-${index + 1}`),
+      type: String(raw.type ?? 'text'),
+      content: {
+        ...source,
+        am: locale('am'),
+        en: locale('en'),
+        visible: source.visible !== false,
+      },
+    } as EditableSection;
+  });
+}
+
+function addSection(): void {
+  sectionsDraft.value.push({
+    id: `section-${Date.now()}-${sectionsDraft.value.length + 1}`,
+    type: 'text',
+    content: {
+      visible: true,
+      am: { title: '', body: '', items: [], cta_label: '', cta_url: '', image_url: '', image_alt: '' },
+      en: { title: '', body: '', items: [], cta_label: '', cta_url: '', image_url: '', image_alt: '' },
+    },
+  });
+}
+
+function addSectionItem(section: EditableSection, locale: 'am' | 'en'): void {
+  section.content[locale].items.push({ title: '', body: '' });
+}
+
+function removeSectionItem(section: EditableSection, locale: 'am' | 'en', index: number): void {
+  section.content[locale].items.splice(index, 1);
+}
+
+function moveSection(index: number, direction: -1 | 1): void {
+  const target = index + direction;
+  if (target < 0 || target >= sectionsDraft.value.length) return;
+  const next = [...sectionsDraft.value];
+  [next[index], next[target]] = [next[target], next[index]];
+  sectionsDraft.value = next;
+}
+
+function removeSection(index: number): void {
+  if (isCommunitySection(sectionsDraft.value[index])) return;
+  sectionsDraft.value.splice(index, 1);
+}
+
+function serializedSections(): readonly Record<string, unknown>[] {
+  return sectionsDraft.value.map((section, index) => ({
+    ...section,
+    id: section.id || `section-${index + 1}`,
+  }));
 }
 
 async function refresh(): Promise<void> {
@@ -76,10 +166,10 @@ async function refresh(): Promise<void> {
   error.value = '';
   try {
     if (tab.value === 'pages') {
-      const result = await listCorporatePages();
+      const result = await listCorporatePages(showDeleted.value);
       pages.value = result.data;
     } else if (tab.value === 'editorial') {
-      entries.value = await listCorporateEntries();
+      entries.value = await listCorporateEntries(showDeleted.value);
     } else {
       inquiries.value = await listCorporateInquiries();
     }
@@ -95,7 +185,7 @@ async function createPage(): Promise<void> {
   error.value = '';
   notice.value = '';
   try {
-    const sections = parseJsonArray(sectionsJson.value, 'Page sections');
+    const sections = serializedSections();
     if (pageKey.value.trim() === 'home' && !sections.some((section) =>
       ['community_responsibility', 'community-responsibility', 'responsibility'].includes(String(section.type ?? '').toLowerCase()) &&
       section.content && typeof section.content === 'object' &&
@@ -124,7 +214,7 @@ async function createPage(): Promise<void> {
     selectedPage.value = null;
     pageKey.value = ''; slugAm.value = ''; slugEn.value = '';
     titleAm.value = ''; titleEn.value = ''; summaryAm.value = ''; summaryEn.value = '';
-    bodyAm.value = ''; bodyEn.value = ''; sectionsJson.value = '[]'; pageSeoAmJson.value = '{}'; pageSeoEnJson.value = '{}';
+    bodyAm.value = ''; bodyEn.value = ''; sectionsDraft.value = []; pageSeoAmJson.value = '{}'; pageSeoEnJson.value = '{}';
     await refresh();
   } catch {
     error.value = 'Draft could not be saved. Check unique slugs, required fields and your permission.';
@@ -145,7 +235,7 @@ function editPage(page: CorporatePageRecord): void {
   summaryEn.value = page.translations.en?.summary ?? '';
   bodyAm.value = page.translations.am?.body ?? '';
   bodyEn.value = page.translations.en?.body ?? '';
-  sectionsJson.value = JSON.stringify(page.sections ?? [], null, 2);
+  sectionsDraft.value = normalizeSections(page.sections ?? []);
   pageSeoAmJson.value = JSON.stringify(page.seo?.am ?? {}, null, 2);
   pageSeoEnJson.value = JSON.stringify(page.seo?.en ?? {}, null, 2);
 }
@@ -155,7 +245,7 @@ function clearPageEditor(): void {
   pageKey.value = ''; slugAm.value = ''; slugEn.value = '';
   titleAm.value = ''; titleEn.value = ''; summaryAm.value = ''; summaryEn.value = '';
   bodyAm.value = ''; bodyEn.value = '';
-  sectionsJson.value = '[]'; pageSeoAmJson.value = '{}'; pageSeoEnJson.value = '{}';
+  sectionsDraft.value = []; pageSeoAmJson.value = '{}'; pageSeoEnJson.value = '{}';
 }
 
 async function pageAction(page: CorporatePageRecord, decision: 'approve' | 'publish' | 'schedule' | 'unpublish'): Promise<void> {
@@ -173,6 +263,32 @@ async function pageAction(page: CorporatePageRecord, decision: 'approve' | 'publ
 }
 
 
+async function pageLifecycle(page: CorporatePageRecord, action: CorporateLifecycleAction): Promise<void> {
+  if (action === 'delete' && !window.confirm('Delete this archived page? It will be soft-deleted and can be restored.')) return;
+  saving.value = true;
+  error.value = '';
+  try {
+    await updateCorporatePageLifecycle(page, action);
+    notice.value = `Page ${action} completed. Version advanced.`;
+    await refresh();
+  } catch {
+    error.value = 'Lifecycle action rejected. Refresh the register; the item may have changed or require archiving first.';
+  } finally { saving.value = false; }
+}
+
+async function entryLifecycle(entry: CorporateEntryRecord, action: CorporateLifecycleAction): Promise<void> {
+  if (action === 'delete' && !window.confirm('Delete this archived entry? It will be soft-deleted and can be restored.')) return;
+  saving.value = true;
+  error.value = '';
+  try {
+    await updateCorporateEntryLifecycle(entry, action);
+    notice.value = `Content ${action} completed. Version advanced.`;
+    await refresh();
+  } catch {
+    error.value = 'Lifecycle action rejected. Refresh the register; the item may have changed or require archiving first.';
+  } finally { saving.value = false; }
+}
+
 async function createEntry(): Promise<void> {
   saving.value = true; error.value = ''; notice.value = '';
   try {
@@ -181,10 +297,17 @@ async function createEntry(): Promise<void> {
       slug_am: entrySlugAm.value.trim(),
       slug_en: entrySlugEn.value.trim(),
       translations: {
-        am: { title: entryTitleAm.value.trim(), body: entryBodyAm.value.trim() },
-        en: { title: entryTitleEn.value.trim(), body: entryBodyEn.value.trim() },
+        am: { title: entryTitleAm.value.trim(), summary: entrySummaryAm.value.trim(), body: entryBodyAm.value.trim() },
+        en: { title: entryTitleEn.value.trim(), summary: entrySummaryEn.value.trim(), body: entryBodyEn.value.trim() },
       },
-      payload: parseJsonObject(entryPayloadJson.value, 'Entry content payload'),
+      payload: {
+        category: entryCategory.value.trim(),
+        location: entryLocation.value.trim(),
+        start_date: entryStartDate.value || null,
+        end_date: entryEndDate.value || null,
+        url: entryExternalUrl.value.trim(),
+        featured: entryFeatured.value,
+      },
       seo: {
         am: parseJsonObject(entrySeoAmJson.value, 'Amharic entry SEO') as Record<string, string>,
         en: parseJsonObject(entrySeoEnJson.value, 'English entry SEO') as Record<string, string>,
@@ -195,7 +318,7 @@ async function createEntry(): Promise<void> {
     selectedEntry.value = null;
     notice.value = 'Bilingual editorial draft saved. It requires independent approval.';
     entrySlugAm.value = ''; entrySlugEn.value = ''; entryTitleAm.value = ''; entryTitleEn.value = '';
-    entryBodyAm.value = ''; entryBodyEn.value = ''; entryPayloadJson.value = '{}'; entrySeoAmJson.value = '{}'; entrySeoEnJson.value = '{}';
+    entryBodyAm.value = ''; entryBodyEn.value = ''; entrySummaryAm.value = ''; entrySummaryEn.value = ''; entryCategory.value = ''; entryLocation.value = ''; entryStartDate.value = ''; entryEndDate.value = ''; entryExternalUrl.value = ''; entryFeatured.value = false; entrySeoAmJson.value = '{}'; entrySeoEnJson.value = '{}';
     await refresh();
   } catch { error.value = 'Could not create this draft. Check slugs, bilingual titles and your permissions.'; }
   finally { saving.value = false; }
@@ -218,7 +341,14 @@ function editEntry(entry: CorporateEntryRecord): void {
   entryTitleEn.value = entry.translations.en?.title ?? '';
   entryBodyAm.value = entry.translations.am?.body ?? '';
   entryBodyEn.value = entry.translations.en?.body ?? '';
-  entryPayloadJson.value = JSON.stringify(entry.payload ?? {}, null, 2);
+  entrySummaryAm.value = entry.translations.am?.summary ?? '';
+  entrySummaryEn.value = entry.translations.en?.summary ?? '';
+  entryCategory.value = String(entry.payload?.category ?? '');
+  entryLocation.value = String(entry.payload?.location ?? '');
+  entryStartDate.value = String(entry.payload?.start_date ?? '');
+  entryEndDate.value = String(entry.payload?.end_date ?? '');
+  entryExternalUrl.value = String(entry.payload?.url ?? '');
+  entryFeatured.value = entry.payload?.featured === true;
   entrySeoAmJson.value = JSON.stringify(entry.seo?.am ?? {}, null, 2);
   entrySeoEnJson.value = JSON.stringify(entry.seo?.en ?? {}, null, 2);
 }
@@ -303,15 +433,69 @@ onMounted(() => void refresh());
           <label>English summary <textarea v-model="summaryEn" rows="2" maxlength="500" /></label>
           <label>Amharic body <textarea v-model="bodyAm" rows="4" maxlength="12000" /></label>
           <label>English body <textarea v-model="bodyEn" rows="4" maxlength="12000" /></label>
-          <h3>Complete page composition and metadata</h3>
-          <p class="corporate-admin__help">Edit every section in order. Preserve valid JSON; the API stores the full structured section array.</p>
-          <label class="corporate-admin__wide">All page sections — JSON <textarea v-model="sectionsJson" rows="12" spellcheck="false" /></label>
+          <div class="corporate-admin__section-builder">
+            <div class="corporate-admin__builder-heading">
+              <div><h3>Page section composition</h3><p class="corporate-admin__help">Add bilingual sections, edit each language independently, reorder sections and control visibility. The permanent Community Responsibility section cannot be removed from the homepage.</p></div>
+              <button type="button" :disabled="saving" @click="addSection">Add section</button>
+            </div>
+            <fieldset v-for="(section, index) in sectionsDraft" :key="section.id" class="corporate-admin__section-card">
+              <legend>Section {{ index + 1 }} · {{ section.type }}</legend>
+              <div class="corporate-admin__section-toolbar">
+                <label>Section type
+                  <select v-model="section.type" :disabled="isCommunitySection(section)">
+                    <option value="hero">Hero</option><option value="text">Text</option><option value="feature_grid">Feature grid</option><option value="business_areas">Business areas</option><option value="news">News</option><option value="community_responsibility">Community Responsibility</option><option value="contact">Contact</option>
+                  </select>
+                </label>
+                <label class="corporate-admin__visibility"><input v-model="section.content.visible" type="checkbox" :disabled="isCommunitySection(section)" /> Visible on public site</label>
+                <div class="corporate-admin__actions">
+                  <button type="button" :disabled="saving || index === 0" @click="moveSection(index, -1)">Move up</button>
+                  <button type="button" :disabled="saving || index === sectionsDraft.length - 1" @click="moveSection(index, 1)">Move down</button>
+                  <button type="button" :disabled="saving || isCommunitySection(section)" @click="removeSection(index)">Remove</button>
+                </div>
+              </div>
+              <div class="corporate-admin__section-languages">
+                <fieldset><legend>አማርኛ</legend>
+                  <label>ርዕስ <input v-model="section.content.am.title" maxlength="180" /></label>
+                  <label>ይዘት <textarea v-model="section.content.am.body" rows="3" maxlength="12000" /></label>
+                  <label>የአዝራር ጽሑፍ <input v-model="section.content.am.cta_label" maxlength="100" /></label>
+                  <label>የአዝራር አገናኝ <input v-model="section.content.am.cta_url" maxlength="1000" /></label>
+                  <label>የምስል አገናኝ <input v-model="section.content.am.image_url" maxlength="1000" /></label>
+                  <label>የምስል መግለጫ <input v-model="section.content.am.image_alt" maxlength="300" /></label>
+                  <div class="corporate-admin__items"><h4>የይዘት ንጥሎች</h4>
+                    <div v-for="(item, itemIndex) in section.content.am.items" :key="itemIndex" class="corporate-admin__item-editor">
+                      <label>ርዕስ <input v-model="item.title" maxlength="180" /></label>
+                      <label>መግለጫ <textarea v-model="item.body" rows="2" maxlength="2000" /></label>
+                      <button type="button" :disabled="saving" @click="removeSectionItem(section, 'am', itemIndex)">አስወግድ</button>
+                    </div>
+                    <button type="button" :disabled="saving" @click="addSectionItem(section, 'am')">ንጥል ጨምር</button>
+                  </div>
+                </fieldset>
+                <fieldset><legend>English</legend>
+                  <label>Title <input v-model="section.content.en.title" maxlength="180" /></label>
+                  <label>Body <textarea v-model="section.content.en.body" rows="3" maxlength="12000" /></label>
+                  <label>Call-to-action label <input v-model="section.content.en.cta_label" maxlength="100" /></label>
+                  <label>Call-to-action URL <input v-model="section.content.en.cta_url" maxlength="1000" /></label>
+                  <label>Image URL <input v-model="section.content.en.image_url" maxlength="1000" /></label>
+                  <label>Image alternative text <input v-model="section.content.en.image_alt" maxlength="300" /></label>
+                  <div class="corporate-admin__items"><h4>Content items</h4>
+                    <div v-for="(item, itemIndex) in section.content.en.items" :key="itemIndex" class="corporate-admin__item-editor">
+                      <label>Title <input v-model="item.title" maxlength="180" /></label>
+                      <label>Description <textarea v-model="item.body" rows="2" maxlength="2000" /></label>
+                      <button type="button" :disabled="saving" @click="removeSectionItem(section, 'en', itemIndex)">Remove</button>
+                    </div>
+                    <button type="button" :disabled="saving" @click="addSectionItem(section, 'en')">Add item</button>
+                  </div>
+                </fieldset>
+              </div>
+            </fieldset>
+          </div>
           <label>Amharic SEO metadata — JSON <textarea v-model="pageSeoAmJson" rows="5" spellcheck="false" /></label>
           <label>English SEO metadata — JSON <textarea v-model="pageSeoEnJson" rows="5" spellcheck="false" /></label>
           <button type="submit" :disabled="saving">{{ selectedPage ? "Update draft" : "Save draft" }}</button>
           <button v-if="selectedPage" type="button" :disabled="saving" @click="clearPageEditor">Cancel edit</button>
         </form>
         <h2>Page register</h2>
+        <label class="corporate-admin__visibility"><input v-model="showDeleted" type="checkbox" @change="refresh" /> Show archived and deleted records</label>
         <ul class="corporate-admin__list">
           <li v-for="page in pages" :key="page.id">
             <div><strong>{{ page.translations?.am?.title ?? page.page_key }}</strong><small>{{ page.slug_en }} · v{{ page.version }} · {{ page.status }}</small></div>
@@ -322,6 +506,11 @@ onMounted(() => void refresh());
               <input v-if="page.status === 'approved'" v-model="scheduleAt" aria-label="Schedule date and time" type="datetime-local" />
               <button v-if="page.status === 'approved'" type="button" :disabled="saving || !scheduleAt" @click="pageAction(page, 'schedule')">Schedule</button>
               <button v-if="page.status === 'published' || page.status === 'scheduled'" type="button" :disabled="saving" @click="pageAction(page, 'unpublish')">Unpublish</button>
+              <button v-if="page.status !== 'archived' && page.is_enabled" type="button" :disabled="saving" @click="pageLifecycle(page, 'disable')">Disable</button>
+              <button v-if="page.status !== 'archived' && !page.is_enabled" type="button" :disabled="saving" @click="pageLifecycle(page, 'enable')">Enable</button>
+              <button v-if="page.status !== 'archived'" type="button" :disabled="saving" @click="pageLifecycle(page, 'archive')">Archive</button>
+              <button v-if="page.status === 'archived'" type="button" :disabled="saving" @click="pageLifecycle(page, 'restore')">Restore</button>
+              <button v-if="page.status === 'archived' && !page.deleted_at" type="button" :disabled="saving" @click="pageLifecycle(page, 'delete')">Delete</button>
             </div>
           </li>
         </ul>
@@ -340,16 +529,23 @@ onMounted(() => void refresh());
           <label>Content type <select v-model="entryType"><option value="news">News</option><option value="announcement">Announcement</option><option value="publication">Publication</option><option value="media">Media metadata</option><option value="career">Career</option><option value="opportunity">Opportunity</option><option value="business">Business / subsidiary</option><option value="service">Service</option><option value="advertisement">Advertisement</option><option value="marketplace">Marketplace</option></select></label>
           <label>Amharic slug <input v-model="entrySlugAm" required /></label><label>English slug <input v-model="entrySlugEn" required /></label>
           <label>Amharic title <input v-model="entryTitleAm" required /></label><label>English title <input v-model="entryTitleEn" required /></label>
-          <label>Amharic body <textarea v-model="entryBodyAm" rows="3" /></label><label>English body <textarea v-model="entryBodyEn" rows="3" /></label>
-          <h3>Complete content and metadata</h3>
-          <p class="corporate-admin__help">Use the payload for structured content fields such as links, dates, labels, media references and other entry-specific details. Changes remain drafts until independent approval.</p>
-          <label class="corporate-admin__wide">Structured entry payload — JSON <textarea v-model="entryPayloadJson" rows="10" spellcheck="false" /></label>
+          <label>Amharic summary <textarea v-model="entrySummaryAm" rows="2" maxlength="500" /></label><label>English summary <textarea v-model="entrySummaryEn" rows="2" maxlength="500" /></label>
+          <label>Amharic body <textarea v-model="entryBodyAm" rows="4" maxlength="12000" /></label><label>English body <textarea v-model="entryBodyEn" rows="4" maxlength="12000" /></label>
+          <h3>Structured content details</h3>
+          <p class="corporate-admin__help">Add common metadata for the public card or detail page. Amharic and English titles, summaries and body copy are edited independently above.</p>
+          <label>Category / tag <input v-model="entryCategory" maxlength="100" /></label>
+          <label>Location <input v-model="entryLocation" maxlength="180" /></label>
+          <label>Start date <input v-model="entryStartDate" type="date" /></label>
+          <label>End date <input v-model="entryEndDate" type="date" /></label>
+          <label class="corporate-admin__wide">Public URL <input v-model="entryExternalUrl" type="url" maxlength="1000" placeholder="https://" /></label>
+          <label class="corporate-admin__visibility"><input v-model="entryFeatured" type="checkbox" /> Feature this item</label>
           <label>Amharic SEO metadata — JSON <textarea v-model="entrySeoAmJson" rows="5" spellcheck="false" /></label>
           <label>English SEO metadata — JSON <textarea v-model="entrySeoEnJson" rows="5" spellcheck="false" /></label>
           <button type="submit" :disabled="saving">{{ selectedEntry ? "Update draft" : "Create draft" }}</button>
           <button v-if="selectedEntry" type="button" :disabled="saving" @click="selectedEntry = null">Cancel edit</button>
         </form>
         <p>News, announcements, publications, media, careers, opportunities, business/service profiles, advertising and marketplace submissions share the moderation queue.</p>
+        <label class="corporate-admin__visibility"><input v-model="showDeleted" type="checkbox" @change="refresh" /> Show archived and deleted records</label>
         <ul class="corporate-admin__list">
           <li v-for="entry in entries" :key="entry.id">
             <div><strong>{{ entry.translations?.am?.title ?? entry.entry_type }}</strong><small>{{ entry.entry_type }} · {{ entry.status }} · v{{ entry.version }}</small></div>
@@ -360,6 +556,11 @@ onMounted(() => void refresh());
               <button v-if="entry.status === 'approved'" type="button" :disabled="saving" @click="entryAction(entry, 'publish')">Publish</button>
               <button v-if="['draft', 'approved'].includes(entry.status)" type="button" :disabled="saving" @click="entryAction(entry, 'reject')">Reject</button>
               <button v-if="entry.status === 'published'" type="button" :disabled="saving" @click="entryAction(entry, 'unpublish')">Unpublish</button>
+              <button v-if="entry.status !== 'archived' && entry.is_enabled" type="button" :disabled="saving" @click="entryLifecycle(entry, 'disable')">Disable</button>
+              <button v-if="entry.status !== 'archived' && !entry.is_enabled" type="button" :disabled="saving" @click="entryLifecycle(entry, 'enable')">Enable</button>
+              <button v-if="entry.status !== 'archived'" type="button" :disabled="saving" @click="entryLifecycle(entry, 'archive')">Archive</button>
+              <button v-if="entry.status === 'archived'" type="button" :disabled="saving" @click="entryLifecycle(entry, 'restore')">Restore</button>
+              <button v-if="entry.status === 'archived' && !entry.deleted_at" type="button" :disabled="saving" @click="entryLifecycle(entry, 'delete')">Delete</button>
             </div>
           </li>
         </ul>
@@ -392,7 +593,17 @@ onMounted(() => void refresh());
 .corporate-admin button:disabled { opacity: .55; cursor: not-allowed; }
 .corporate-admin__form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
 .corporate-admin__form label, .corporate-admin__inquiry label { display: grid; gap: .3rem; font-weight: 600; }
-.corporate-admin__form h3, .corporate-admin__help, .corporate-admin__wide { grid-column: 1 / -1; }
+.corporate-admin__form h3, .corporate-admin__help, .corporate-admin__wide, .corporate-admin__section-builder { grid-column: 1 / -1; }
+.corporate-admin__builder-heading, .corporate-admin__section-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; }
+.corporate-admin__section-card { display: grid; gap: .75rem; min-width: 0; margin: .75rem 0; border: 1px solid var(--border-subtle); border-radius: .6rem; padding: .9rem; }
+.corporate-admin__section-card legend { padding: 0 .35rem; font-weight: 700; }
+.corporate-admin__section-languages { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+.corporate-admin__section-languages fieldset { display: grid; gap: .6rem; min-width: 0; border: 1px solid var(--border-subtle); border-radius: .5rem; padding: .7rem; }
+.corporate-admin__section-languages label { display: grid; gap: .3rem; }
+.corporate-admin__items { display: grid; gap: .5rem; padding-top: .5rem; border-top: 1px solid var(--border-subtle); }
+.corporate-admin__item-editor { display: grid; gap: .5rem; padding: .6rem; border: 1px dashed var(--border-subtle); border-radius: .4rem; }
+.corporate-admin__visibility { display: inline-flex !important; align-items: center; gap: .45rem !important; }
+.corporate-admin__visibility input { width: auto; }
 .corporate-admin__help { margin: -.35rem 0 0; color: var(--text-muted); font-size: .85rem; line-height: 1.6; }
 .corporate-admin textarea[spellcheck="false"] { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .82rem; line-height: 1.55; }
 .corporate-admin input, .corporate-admin textarea, .corporate-admin select { width: 100%; min-width: 0; border: 1px solid var(--border-default); border-radius: .4rem; padding: .55rem; background: var(--surface-base); color: var(--text-primary); }
@@ -402,5 +613,5 @@ onMounted(() => void refresh());
 .corporate-admin__inquiry p { max-width: 70ch; white-space: pre-wrap; }
 .corporate-admin__error { color: var(--status-danger-text); }
 .corporate-admin__notice { color: var(--status-success-text); }
-@media (max-width: 680px) { .corporate-admin__form { grid-template-columns: 1fr; } .corporate-admin__list li { align-items: stretch; } }
+@media (max-width: 680px) { .corporate-admin__form, .corporate-admin__section-languages { grid-template-columns: 1fr; } .corporate-admin__list li { align-items: stretch; } }
 </style>

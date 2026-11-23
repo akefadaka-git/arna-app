@@ -32,6 +32,13 @@ test('public build emits a standalone index with existing referenced local asset
   const assetFiles = collectFiles(join(outputDir, 'assets'));
   assert.ok(assetFiles.length > 0, 'public build must emit local assets');
 
+  assert.doesNotMatch(html, /የድረ ገጹን ሙሉ ይዘት እያዘጋጀን ነው|ARNA ይዘጋጃል|coming soon|under construction|website is being prepared/i,
+    'public entry must not ship placeholder or coming-soon copy');
+  assert.match(html, /ማሌ ዓርና አክሲዮን ማኅበር/,
+    'public entry must provide the verified corporate identity as a useful fallback');
+  assert.match(html, /ኮይቤ ቀበሌ/,
+    'public entry must include the source-backed registered headquarters');
+
   const references = [
     ...html.matchAll(/<script\b[^>]*\bsrc=["']([^"']+)["'][^>]*>/gi),
     ...html.matchAll(/<link\b(?=[^>]*\brel=["'][^"']*stylesheet[^"']*["'])[^>]*\bhref=["']([^"']+)["'][^>]*>/gi),
