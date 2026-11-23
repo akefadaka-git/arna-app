@@ -109,9 +109,10 @@
  * -----------------------------------------------------------------------------
  * Why the key `emailLabel` is not renamed
  * -----------------------------------------------------------------------------
- * The identifier field on the login form accepts an email address
- * OR a phone number. Its label VALUE reads "ኢሜይል / ስልክ ቁጥር"
- * ("Email / phone number"). But the KEY remains `emailLabel`.
+ * The identifier field on the login form accepts any of the six ARNA
+ * identifiers: email, username, mobile number, employee ID, shareholder
+ * number or wallet number. Its label VALUE is a neutral ARNA account label.
+ * The historical KEY remains `emailLabel` for compatibility.
  *
  * Renaming the key to `identifierLabel` would require coordinated
  * changes across three files:
@@ -264,18 +265,31 @@ export const loginFormLabels = {
    * The label for the identifier field. See the file header
    * §"Why the key `emailLabel` is not renamed".
    *
-   * The value names both accepted forms because the backend
-   * resolves either — an email via the users.email column, a
-   * phone via the users.phone column. See
-   * AuthController::resolveLoginEmail().
+   * The value is intentionally neutral because the backend resolves all six
+   * ARNA identifiers through the canonical LoginIdentifierResolver.
    */
-  emailLabel: 'ኢሜይል / ስልክ ቁጥር',
+  emailLabel: 'የARNA መለያ',
 
   // ---------------------------------------------------------------------------
   // Password
   // ---------------------------------------------------------------------------
   /** The label for the password field. */
   passwordLabel: 'የይለፍ ቃል',
+
+  /** Accessible label and actions for returning-user authentication methods. */
+  authenticatorMethodsLabel: 'የመግቢያ ዘዴ ይምረጡ',
+  usePasswordLabel: 'በይለፍ ቃል',
+  useOtpLabel: 'በOTP',
+  useGoogleAuthenticatorLabel: 'በGoogle Authenticator',
+  otpChannelLabel: 'ኮዱን የሚቀበሉበት መንገድ',
+  emailChannelLabel: 'ኢሜይል',
+  smsChannelLabel: 'SMS',
+  otpInstructions: 'በተመዘገበው እና በተረጋገጠው ኢሜይል ወይም ስልክ የተላከውን ኮድ ያስገቡ።',
+  authenticatorCodeLabel: 'የማረጋገጫ ኮድ',
+  sendOtpLabel: 'OTP ኮድ ላክ',
+  verifyAuthenticatorLabel: 'ኮዱን አረጋግጥ',
+  cancelAuthenticatorLabel: 'ወደ መግቢያ ተመለስ',
+
 
   /** Instructions displayed after the backend requires MFA. */
   mfaInstructions: 'በAuthenticator መተግበሪያዎ የሚታየውን ኮድ ወይም የመልሶ ማግኛ ኮድ ያስገቡ።',
@@ -368,9 +382,9 @@ export const loginFormLabels = {
    * A future CR that renames emailLabel to identifierLabel should
    * update this title in the same change.
    */
-  invalidCredentialsTitle: 'ኢሜይል ወይም የይለፍ ቃል ትክክል አይደለም',
+  invalidCredentialsTitle: 'የARNA መለያ ወይም የይለፍ ቃል ትክክል አይደለም',
   invalidCredentialsMessage:
-    'እባክዎ ኢሜይልዎን እና የይለፍ ቃልዎን ያረጋግጡ እንደገና ይሞክሩ።',
+    'እባክዎ የARNA መለያዎን እና የይለፍ ቃልዎን ያረጋግጡ እንደገና ይሞክሩ።',
 
   /*
    * Rate-limit (HTTP 429) banner. Distinct from the generic
@@ -549,21 +563,36 @@ export const registerFormLabels = {
  */
 export const forgotPasswordFormLabels = {
   formAriaLabel: 'የይለፍ ቃል ማስጀመሪያ ይጠይቁ',
-  emailLabel: 'ኢሜይል',
-  submitLabel: 'ማስፈንጠሪያ ላክ',
+  emailLabel: 'ኢሜይል ወይም ስልክ ቁጥር',
+  authenticatorMethodsLabel: 'የማረጋገጫ ዘዴ ይምረጡ',
+  useOtpLabel: 'በOTP ኮድ',
+  useGoogleAuthenticatorLabel: 'በGoogle Authenticator',
+  otpChannelLabel: 'ኮዱን የሚቀበሉበት መንገድ',
+  emailChannelLabel: 'ኢሜይል',
+  smsChannelLabel: 'SMS',
+  otpInstructions: 'በተረጋገጠው የኢሜይል አድራሻ ወይም ስልክ የተላከውን ኮድ ያስገቡ።',
+  googleAuthenticatorInstructions: 'በGoogle Authenticator የሚታየውን አንድ ጊዜ የሚጠቀም ኮድ ያስገቡ።',
+  codeLabel: 'የማረጋገጫ ኮድ',
+  newPasswordLabel: 'አዲስ የይለፍ ቃል',
+  confirmPasswordLabel: 'አዲሱን የይለፍ ቃል ያረጋግጡ',
+  sendOtpLabel: 'የOTP ኮድ ላክ',
+  continueLabel: 'ቀጥል',
+  verifyRecoveryLabel: 'ኮዱን አረጋግጥ እና የይለፍ ቃል ቀይር',
+  cancelRecoveryLabel: 'ተመለስ',
+  submitLabel: 'የOTP ኮድ ላክ',
   submittingLabel: 'በመላክ ላይ…',
 
   // ---------------------------------------------------------------------------
   // Success panel
   // ---------------------------------------------------------------------------
-  successTitle: 'ገቢ ሳጥንዎን ይመልከቱ',
+  successTitle: 'የይለፍ ቃልዎ ተቀይሯል',
   /*
    * May contain the token `{email}`. If present, the component
    * replaces it with the address the user typed.
    */
   successMessage:
-    'ለ {email} መለያ ካለ፣ የይለፍ ቃል ማስጀመሪያ አገናኝ ልከናል። ገቢ ሳጥንዎን እና የ spam አቃፊዎን ይመልከቱ።',
-  tryAnotherEmailLabel: 'ሌላ ኢሜይል ይሞክሩ',
+    'ለ {email} መለያ የይለፍ ቃልዎን አዘምነናል። እባክዎ እንደገና ይግቡ።',
+  tryAnotherEmailLabel: 'ሌላ መለያ ይሞክሩ',
   backToLoginLabel: 'ወደ መግቢያ ይመለሱ',
 
   // ---------------------------------------------------------------------------
