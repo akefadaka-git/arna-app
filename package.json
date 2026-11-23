@@ -60,7 +60,8 @@
     "test:calendar-workspace-contract": "node --test tests/calendar-workspace-contract.test.mjs",
     "test:calendar-browser": "playwright test tests/calendar-browser-contract.spec.mjs",
     "fonts:vendor": "node scripts/vendor-ethiopic-font.mjs",
-    "test:a3-foundations": "node --test tests/a3-foundations-contract.test.mjs"
+    "test:a3-foundations": "node --test tests/a3-foundations-contract.test.mjs",
+    "test:ethiopic-font-browser": "playwright test tests/ethiopic-font-browser.spec.mjs"
   },
   "dependencies": {
     "axios": "1.21.0",
