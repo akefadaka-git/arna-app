@@ -143,3 +143,15 @@ No maps, business workspaces, calendar rebuild, domain workflow implementation, 
 - Regression-test commits: initial assertion `a01919a9c77ef12e310d6ccf0e008ae81aa16f3d`; regex correction `47d4ccdddbcc1fc31ec35197abff9f981a2376b0`.
 - Exact latest head: `47d4ccdddbcc1fc31ec35197abff9f981a2376b0`. Frontend verification runs [`#45210801566`](https://github.com/akefadaka-git/arna-app/actions/runs/45210801566) and [`#45210784848`](https://github.com/akefadaka-git/arna-app/actions/runs/45210784848) were queued when this entry was prepared; no PASS claim is made until a complete exact-head run succeeds.
 - A3.1 remains PARTIAL / NOT CLOSED. This is a bounded reduced-motion token reconciliation, not completion of the full 65-component semantic-token census. A3.2 remains VERIFIED-CLOSED. A4 remains a separate open acceptance gate. No main-branch modification, merge or deployment occurred.
+
+
+## A3.1 — visual-layer canonical spacing token reconciliation (2026-11-23)
+
+- Continued from the verified baseline `da5c297cb5b5387a0d38c78ceadca080a4bc0a3a` on the isolated branch `feat/arna-ui-v2-a3-foundations`.
+- Read-only inspection identified a stale, undeclared alias in `ChartPanel.vue`: `--arna-spacing-4`. The canonical declared alias is `--arna-space-4`; the component now consumes that alias directly without a fallback literal.
+- Removed fallback literals from existing canonical spacing references in `VisualPanel.vue` (`--arna-space-4`, `--arna-space-3`) and `VisualLibraryShowcase.vue` (`--arna-space-6`). No token values or visual design values were changed.
+- Added regression assertions to `tests/a3-design-system-hardening.test.mjs` covering the canonical ChartPanel token, the VisualPanel and VisualLibraryShowcase aliases, and absence of the corresponding fallback declarations.
+- Implementation commits: ChartPanel `674c69eef9be67aaac53398459a9d836a843276a`; VisualPanel `14aa552fbfb76c5af49f44bda94fb9382da37fd2`; VisualLibraryShowcase `3da42b3a2fb13078a0d0c602b35bc8ed554ba567`. Regression test `f3229a75e3537ddda6c4b640ff73029610bd7435`; matcher correction `10be6a2a2d301e8e07fcd94e39d56c64fd431394`.
+- Scope intentionally excludes optical micro-spacing, SVG chart geometry, 3D transform/shadow geometry, and bespoke animation timing where no semantically equivalent token is defined. No shared token values were changed.
+- The change is not yet CI-verified. Exact-head workflow verification is required before PASS is recorded.
+- A3.1 remains PARTIAL / NOT CLOSED pending further catalogue-wide census and verification. A3.2 remains VERIFIED-CLOSED. A4 remains separate. No main modification, merge, or deployment.
