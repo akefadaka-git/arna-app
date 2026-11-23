@@ -94,7 +94,7 @@ test('Select and textarea preserve native validation, accessible naming and edit
   assert.match(select, /:required="required"/);
   assert.match(select, /:aria-invalid="resolvedAriaInvalid"/);
   assert.match(select, /:aria-describedby="ariaDescribedBy"/);
-  assert.match(select, /v-bind="$attrs"/);
+  assert.match(select, /v-bind="\$attrs"/);
   assert.match(select, /:focus-visible/);
   assert.match(textarea, /:disabled="disabled"/);
   assert.match(textarea, /:readonly="readonly"/);
