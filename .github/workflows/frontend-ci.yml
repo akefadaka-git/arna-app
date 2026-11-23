@@ -92,7 +92,7 @@ jobs:
       - name: Verify returning-user OTP login and browser SSO cookie lifecycle
         shell: bash
         run: |
-          VITE_API_BASE_URL=http://localhost:4178 npx vite --mode workspace --host localhost --port 4178 --strictPort > "$RUNNER_TEMP/auth-login-preview.log" 2>&1 &
+          VITE_API_BASE_URL=http://localhost:4178 npx vite --mode workspace --base /workspace-entry/ --host localhost --port 4178 --strictPort > "$RUNNER_TEMP/auth-login-preview.log" 2>&1 &
           VITE_PID=$!
           trap 'kill "$VITE_PID" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 40); do
@@ -100,7 +100,7 @@ jobs:
             sleep 1
           done
           curl --fail --silent http://localhost:4178/workspace-entry/ >/dev/null
-          AUTH_LOGIN_APP_URL=http://localhost:4178 npm run test:auth-login-browser
+          AUTH_LOGIN_APP_URL=http://localhost:4178/workspace-entry/login npm run test:auth-login-browser
       - name: Verify Calendar workspace E.C. behavior in Chromium
         shell: bash
         run: |
