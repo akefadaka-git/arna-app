@@ -777,6 +777,31 @@ export const routesWorkspace: RouteRecordRaw[] = [
       // backend.
       // -----------------------------------------------------------------------
       {
+        path: 'governance/meetings',
+        name: 'governance-meetings',
+        component: () => import('@/features/governance/GovernanceMeetingsView.vue'),
+        meta: { permission: 'governance.meeting.view' },
+      },
+      {
+        path: 'governance/meetings/:id',
+        name: 'governance-meeting-workspace',
+        component: () => import('@/features/governance/GovernanceMeetingWorkspace.vue'),
+        meta: { permission: 'governance.meeting.view' },
+        props: true,
+      },
+      {
+        path: 'governance/elections',
+        name: 'governance-elections',
+        component: () => import('@/features/elections/GovernanceElectionListView.vue'),
+        meta: { permission: 'governance.election.view' },
+      },
+      {
+        path: 'governance/elections/:id/committee',
+        name: 'governance-election-committee',
+        component: () => import('@/features/elections/ElectionCommitteeWorkspace.vue'),
+        meta: { permission: 'governance.election.manage' },
+      },
+      {
         path: 'governance/attendance',
         name: 'governance-attendance',
         component: () => import('@/features/governance/GovernanceAttendanceView.vue'),
