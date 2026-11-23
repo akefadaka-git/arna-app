@@ -225,7 +225,7 @@ function clearPageEditor(): void {
   pageKey.value = ''; slugAm.value = ''; slugEn.value = '';
   titleAm.value = ''; titleEn.value = ''; summaryAm.value = ''; summaryEn.value = '';
   bodyAm.value = ''; bodyEn.value = '';
-  sectionsDraft.value = '[]'; pageSeoAmJson.value = '{}'; pageSeoEnJson.value = '{}';
+  sectionsDraft.value = []; pageSeoAmJson.value = '{}'; pageSeoEnJson.value = '{}';
 }
 
 async function pageAction(page: CorporatePageRecord, decision: 'approve' | 'publish' | 'schedule' | 'unpublish'): Promise<void> {
