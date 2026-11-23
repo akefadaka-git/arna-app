@@ -241,4 +241,88 @@ test.describe('ARNA returning-user OTP login', () => {
     });
   }
 
+  const mfaProofs = [
+    { kind: 'Google Authenticator TOTP', code: '482913' },
+    { kind: 'one-time recovery code', code: 'ABCDEF123456' },
+  ];
+
+  for (const { kind, code } of mfaProofs) {
+    test(`completes the existing password MFA form with a ${kind}`, async ({ page }) => {
+      let attempt = 0;
+      let firstLoginPayload;
+      let secondLoginPayload;
+
+      await page.route('**/api/user', (route) => route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(envelope(authenticatedUser)),
+      }));
+      await page.route('**/api/login', async (route) => {
+        const payload = route.request().postDataJSON();
+        attempt += 1;
+        if (attempt === 1) {
+          firstLoginPayload = payload;
+          await route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(envelope({
+              mfa_required: true,
+              challenge_token: 'c'.repeat(64),
+              methods: ['totp', 'recovery_code'],
+            })),
+          });
+          return;
+        }
+
+        secondLoginPayload = payload;
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(envelope({
+            user: {
+              id: authenticatedUser.id,
+              name: authenticatedUser.name,
+              email: authenticatedUser.email,
+              locale: authenticatedUser.locale,
+              default_tenant_id: authenticatedUser.default_tenant_id,
+            },
+            token: 'browser-test-token',
+            token_type: 'Bearer',
+          })),
+        });
+      });
+
+      await page.locator('#login-identifier').fill('mfa-user@example.test');
+      await page.locator('#login-password').fill('Password123!');
+      const firstResponsePromise = page.waitForResponse((response) =>
+        response.url().endsWith('/api/login'),
+      );
+      await page.getByTestId('login-form-submit').click();
+      await firstResponsePromise;
+      await expect(page.getByTestId('login-form-mfa')).toBeVisible();
+
+      await page.locator('#login-mfa-code').fill(code);
+      const secondResponsePromise = page.waitForResponse((response) =>
+        response.url().endsWith('/api/login'),
+      );
+      await page.getByTestId('login-form-submit').click();
+      await secondResponsePromise;
+
+      await expect(page.getByTestId('auth-test-launcher')).toBeVisible();
+      expect(firstLoginPayload).toMatchObject({
+        email: 'mfa-user@example.test',
+        password: 'Password123!',
+      });
+      expect(secondLoginPayload).toMatchObject({
+        email: 'mfa-user@example.test',
+        password: 'Password123!',
+        mfa_challenge_token: 'c'.repeat(64),
+        mfa_code: code,
+      });
+      const storedValues = await page.evaluate(() => Object.values(localStorage));
+      expect(storedValues).not.toContain(code);
+      expect(storedValues).not.toContain('c'.repeat(64));
+    });
+  }
+
 });
