@@ -155,15 +155,14 @@ test('ProgressBar consumes semantic loading-motion duration tokens', () => {
 });
 
 test('Spinner consumes semantic loading-motion tokens while preserving reduced-motion exception', () => {
-  assert.match(tokens, /--mases-duration-loading:\\s*900ms/);
-  assert.match(tokens, /--mases-duration-loading-reduced:\\s*1800ms/);
-  assert.match(tokens, /--arna-duration-loading:\\s*var\\(--mases-duration-loading\\)/);
-  assert.match(tokens, /--arna-duration-loading-reduced:\\s*var\\(--mases-duration-loading-reduced\\)/);
-  assert.match(spinner, /animation: arna-spinner-rotate var\\(--arna-duration-loading\\) linear infinite/);
-  assert.match(spinner, /animation-duration: var\\(--arna-duration-loading-reduced\\)/);
-  assert.doesNotMatch(spinner, /animation(?:-duration)?:\\s*1\\.6s|animation: arna-spinner-rotate 0\\.8s/);
+  assert.match(tokens, /--mases-duration-loading:\s*900ms/);
+  assert.match(tokens, /--mases-duration-loading-reduced:\s*1800ms/);
+  assert.match(tokens, /--arna-duration-loading:\s*var\(--mases-duration-loading\)/);
+  assert.match(tokens, /--arna-duration-loading-reduced:\s*var\(--mases-duration-loading-reduced\)/);
+  assert.match(spinner, /animation: arna-spinner-rotate var\(--arna-duration-loading\) linear infinite/);
+  assert.match(spinner, /animation-duration: var\(--arna-duration-loading-reduced\)/);
+  assert.doesNotMatch(spinner, /animation(?:-duration)?:\s*1\.6s|animation: arna-spinner-rotate 0\.8s/);
 });
-
 test('shared reduced-motion duration token governs component transition and animation overrides', () => {
   assert.match(tokens, /--mases-duration-fast:\s*150ms/);
   assert.match(tokens, /--arna-duration-fast:\s*var\(--mases-duration-fast\)/);
