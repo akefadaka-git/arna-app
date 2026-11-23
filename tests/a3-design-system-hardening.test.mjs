@@ -137,3 +137,13 @@ test('expanded shared-component style census contains no hard-coded hex colors',
       'shared component styles must consume declared color tokens, not hard-coded hex values');
   }
 });
+
+test('ProgressBar consumes semantic loading-motion duration tokens', () => {
+  assert.match(tokens, /--mases-duration-loading:\\s*900ms/);
+  assert.match(tokens, /--mases-duration-loading-reduced:\\s*1800ms/);
+  assert.match(tokens, /--arna-duration-loading:\\s*var\\(--mases-duration-loading\\)/);
+  assert.match(tokens, /--arna-duration-loading-reduced:\\s*var\\(--mases-duration-loading-reduced\\)/);
+  assert.match(progress, /animation: arna-progress-indeterminate var\\(--arna-duration-loading\\)/);
+  assert.match(progress, /animation-duration: var\\(--arna-duration-loading-reduced\\)/);
+  assert.doesNotMatch(progress, /animation(?:-duration)?:\\s*1\\.8s|animation: arna-progress-indeterminate 0\\.9s/);
+});
