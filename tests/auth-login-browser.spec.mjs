@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-const appUrl = process.env.AUTH_LOGIN_APP_URL ?? 'http://localhost:4178/workspace-entry/';
+const appUrl = process.env.AUTH_LOGIN_APP_URL ?? 'http://localhost:4178/workspace-entry/login';
 
 const authenticatedUser = {
   id: 41,
@@ -20,9 +20,6 @@ test.describe('ARNA returning-user OTP login', () => {
     await page.addInitScript(() => {
       localStorage.clear();
       sessionStorage.clear();
-      if (window.location.pathname === '/workspace-entry/') {
-        window.history.replaceState({}, '', '/login');
-      }
     });
 
     await page.route('**/sanctum/csrf-cookie', (route) => route.fulfill({
