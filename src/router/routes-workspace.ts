@@ -496,6 +496,7 @@ import {
 
 import { dashboardViewLabels } from '@/features/dashboard/labels';
 import { executiveOverviewLabels } from '@/features/executive-overview/labels';
+import { financeWorkspaceLabels } from '@/features/finance/labels';
 
 /**
  * The workspace build's top-level route. A single parent
@@ -726,6 +727,14 @@ export const routesWorkspace: RouteRecordRaw[] = [
         component: () => import('@/features/loans/LoanProductListView.vue'),
         props: { labels: loanProductListViewLabels },
         meta: { permission: 'loan.view' },
+      },
+
+      {
+        path: 'finance',
+        name: 'finance-workspace',
+        component: () => import('@/features/finance/FinanceWorkspaceView.vue'),
+        props: { labels: financeWorkspaceLabels },
+        meta: { permission: 'finance.entity.view' },
       },
 
       // -----------------------------------------------------------------------
