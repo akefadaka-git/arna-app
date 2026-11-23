@@ -4,6 +4,7 @@ import test from 'node:test';
 
 const admin = readFileSync(new URL('../src/router/pages/AdminCorporateSiteRoute.vue', import.meta.url), 'utf8');
 const api = readFileSync(new URL('../src/features/public-site/admin-api.ts', import.meta.url), 'utf8');
+const pageRoute = readFileSync(new URL('../src/public-site/CorporatePageRoute.vue', import.meta.url), 'utf8');
 
 test('corporate CMS provides a structured bilingual section composer', () => {
   for (const contract of [
@@ -44,4 +45,10 @@ test('editorial authoring uses independent bilingual summary and structured meta
   }
   assert.doesNotMatch(admin, /entryPayloadJson|Structured entry payload — JSON/,
     'routine editorial authoring must not require JSON payload editing');
+});
+
+test('public corporate page routes render structured section items, images and calls to action', () => {
+  for (const contract of ['sectionItems(section)', 'image_url', 'image_alt', 'cta_url', 'cta_label', 'corporate-page-route__items']) {
+    assert.ok(pageRoute.includes(contract), `public page renderer is missing ${contract}`);
+  }
 });
