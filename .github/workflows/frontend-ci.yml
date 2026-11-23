@@ -96,10 +96,10 @@ jobs:
           VITE_PID=$!
           trap 'kill "$VITE_PID" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 40); do
-            if curl --fail --silent http://localhost:4178/login >/dev/null; then break; fi
+            if curl --fail --silent http://localhost:4178/ >/dev/null; then break; fi
             sleep 1
           done
-          curl --fail --silent http://localhost:4178/login >/dev/null
+          curl --fail --silent http://localhost:4178/ >/dev/null
           AUTH_LOGIN_APP_URL=http://localhost:4178 npm run test:auth-login-browser
       - name: Verify Calendar workspace E.C. behavior in Chromium
         shell: bash
