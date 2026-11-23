@@ -25,11 +25,29 @@ export interface ExecutiveOverviewFinanceWidget {
   readonly value: ExecutiveOverviewFinanceValue;
 }
 
+export interface ExecutiveOverviewWorkforceWidget {
+  readonly key: 'people.workforce.active';
+  readonly status: 'available';
+  readonly source: {
+    readonly domain: 'people';
+    readonly metric_key: 'active_workforce';
+    readonly calculation_version: string;
+  };
+  readonly observed_at: string;
+  readonly value: {
+    readonly active: number;
+  };
+}
+
+export type ExecutiveOverviewWidget =
+  | ExecutiveOverviewFinanceWidget
+  | ExecutiveOverviewWorkforceWidget;
+
 export interface ExecutiveOverviewResponse {
-  readonly status?: 'complete' | 'partial';
+  readonly status: 'complete' | 'partial';
   readonly contract_version: string;
   readonly generated_at: string;
-  readonly widgets: readonly ExecutiveOverviewFinanceWidget[];
+  readonly widgets: readonly ExecutiveOverviewWidget[];
 }
 
 export function getExecutiveOverview(options?: { signal?: AbortSignal }): Promise<ExecutiveOverviewResponse> {

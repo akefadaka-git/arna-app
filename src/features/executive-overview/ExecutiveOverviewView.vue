@@ -162,41 +162,61 @@ onBeforeUnmount(() => {
       </p>
       <Card
         v-for="(widget, index) in overview.widgets"
-        :key="widget.key + ':' + widget.entity.code + ':' + index"
+        :key="widget.key + ':' + index"
         class="executive-overview__card"
       >
-        <div class="executive-overview__card-heading">
-          <div>
-            <p class="executive-overview__eyebrow">{{ labels.financeTitle }}</p>
-            <h2>{{ locale.locale === 'en' ? (widget.entity.name_en || widget.entity.name_am) : (widget.entity.name_am || widget.entity.name_en) }}</h2>
-            <p class="executive-overview__entity-code">{{ widget.entity.code }}</p>
+        <template v-if="widget.key === 'finance.trial_balance'">
+          <div class="executive-overview__card-heading">
+            <div>
+              <p class="executive-overview__eyebrow">{{ labels.financeTitle }}</p>
+              <h2>{{ locale.locale === 'en' ? (widget.entity.name_en || widget.entity.name_am) : (widget.entity.name_am || widget.entity.name_en) }}</h2>
+              <p class="executive-overview__entity-code">{{ widget.entity.code }}</p>
+            </div>
+            <span
+              class="executive-overview__status"
+              :data-balanced="widget.value.is_balanced"
+            >
+              {{ widget.value.is_balanced ? labels.balancedLabel : labels.unbalancedLabel }}
+            </span>
           </div>
-          <span
-            class="executive-overview__status"
-            :data-balanced="widget.value.is_balanced"
-          >
-            {{ widget.value.is_balanced ? labels.balancedLabel : labels.unbalancedLabel }}
-          </span>
-        </div>
 
-        <dl class="executive-overview__metrics">
-          <div>
-            <dt>{{ labels.debitLabel }}</dt>
-            <dd>{{ widget.value.total_debits }} {{ widget.currency }}</dd>
-          </div>
-          <div>
-            <dt>{{ labels.creditLabel }}</dt>
-            <dd>{{ widget.value.total_credits }} {{ widget.currency }}</dd>
-          </div>
-          <div>
-            <dt>{{ labels.differenceLabel }}</dt>
-            <dd>{{ widget.value.difference }} {{ widget.currency }}</dd>
-          </div>
-        </dl>
+          <dl class="executive-overview__metrics">
+            <div>
+              <dt>{{ labels.debitLabel }}</dt>
+              <dd>{{ widget.value.total_debits }} {{ widget.currency }}</dd>
+            </div>
+            <div>
+              <dt>{{ labels.creditLabel }}</dt>
+              <dd>{{ widget.value.total_credits }} {{ widget.currency }}</dd>
+            </div>
+            <div>
+              <dt>{{ labels.differenceLabel }}</dt>
+              <dd>{{ widget.value.difference }} {{ widget.currency }}</dd>
+            </div>
+          </dl>
 
-        <p class="executive-overview__as-of">
-          {{ labels.asOfLabel }}: {{ formatCalendarDate(widget.as_of, { dateStyle: 'medium' }) }}
-        </p>
+          <p class="executive-overview__as-of">
+            {{ labels.asOfLabel }}: {{ formatCalendarDate(widget.as_of, { dateStyle: 'medium' }) }}
+          </p>
+        </template>
+
+        <template v-else-if="widget.key === 'people.workforce.active'">
+          <div class="executive-overview__card-heading">
+            <div>
+              <p class="executive-overview__eyebrow">{{ labels.workforceTitle }}</p>
+              <h2>{{ labels.activeWorkforceLabel }}</h2>
+            </div>
+          </div>
+          <dl class="executive-overview__metrics">
+            <div>
+              <dt>{{ labels.activeWorkforceLabel }}</dt>
+              <dd data-testid="executive-overview-workforce-count">{{ widget.value.active }}</dd>
+            </div>
+          </dl>
+          <p class="executive-overview__as-of">
+            {{ labels.observedAtLabel }}: {{ formatCalendarDate(widget.observed_at, { dateStyle: 'medium', timeStyle: 'short' }) }}
+          </p>
+        </template>
       </Card>
     </section>
 
