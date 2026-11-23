@@ -42,7 +42,7 @@ export interface CorporateEntryRecord {
   readonly is_enabled: boolean;
   readonly archived_at: string | null;
   readonly deleted_at?: string | null;
-  readonly translations: Partial<Record<CorporateLocale, { title?: string; body?: string }>>;
+  readonly translations: Partial<Record<CorporateLocale, { title?: string; summary?: string; body?: string }>>;
   readonly created_at: string;
   readonly moderation_note: string | null;
   readonly payload?: Record<string, unknown> & { readonly scan_status?: string };
@@ -90,7 +90,7 @@ export interface CorporateEntryDraft {
   readonly entry_type?: string;
   readonly slug_am?: string;
   readonly slug_en?: string;
-  readonly translations: Record<string, { title: string; body?: string }>;
+  readonly translations: Record<string, { title: string; summary?: string; body?: string }>;
   readonly payload?: Record<string, unknown>;
   readonly seo?: Record<string, Record<string, string>>;
 }
