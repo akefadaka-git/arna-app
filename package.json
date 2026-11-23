@@ -37,6 +37,7 @@
     "verify:build": "node scripts/verify-static-build.mjs",
     "preview": "vite preview",
     "test:public-build-smoke": "node --test tests/public-build-smoke.test.mjs",
+    "test:public-cms-admin-lifecycle": "node --test tests/public-cms-admin-lifecycle.test.mjs",
     "test:brand-palette-contract": "node --test tests/brand-palette-contract.test.mjs",
     "test:design-system-theme-contract": "node --test tests/design-system-theme-contract.test.mjs",
     "test:app-shell-responsive-contract": "node --test tests/app-shell-responsive-contract.test.mjs",
