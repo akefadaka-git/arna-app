@@ -10,6 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -23,6 +24,45 @@ data class AndroidLoginRequest(
     val app_version: String,
     val mfa_challenge_token: String? = null,
     val mfa_code: String? = null
+)
+
+data class PinLoginRequest(
+    val identifier: String,
+    val pin: String,
+    val device_installation_id: String,
+    val tenant_id: Long? = null
+)
+
+data class PinEnrollmentRequest(
+    val session_id: String,
+    val pin: String,
+    val pin_confirmation: String
+)
+data class PinEnrollmentData(val pin_enrolled: Boolean)
+data class StepUpChallengeRequest(
+    val action: String,
+    val channel: String,
+    val context: Map<String, String>
+)
+data class StepUpChallengeData(
+    val challenge_token: String,
+    val channel: String,
+    val destination: String,
+    val expires_at: String
+)
+data class StepUpVerifyRequest(
+    val action: String,
+    val context: Map<String, String>,
+    val authenticator: String,
+    val code: String,
+    val challenge_token: String? = null,
+    val knowledge_factor_type: String? = null,
+    val knowledge_proof: String? = null
+)
+data class StepUpGrantData(
+    val step_up_token: String,
+    val expires_in: Int,
+    val single_use: Boolean
 )
 
 data class LoginData(
@@ -148,6 +188,21 @@ private class SafeGetRetryInterceptor(private val retries: Int = 2) : Intercepto
 interface ArnaApi {
     @POST("login")
     suspend fun login(@Body body: AndroidLoginRequest): ApiEnvelope<LoginData>
+
+    @POST("login/pin")
+    suspend fun loginWithPin(@Body body: PinLoginRequest): ApiEnvelope<LoginData>
+
+    @POST("auth/step-up/challenges")
+    suspend fun requestStepUpChallenge(@Body body: StepUpChallengeRequest): ApiEnvelope<StepUpChallengeData>
+
+    @POST("auth/step-up/verify")
+    suspend fun verifyStepUpChallenge(@Body body: StepUpVerifyRequest): ApiEnvelope<StepUpGrantData>
+
+    @POST("auth/device-pin/enroll")
+    suspend fun enrollDevicePin(
+        @Body body: PinEnrollmentRequest,
+        @Header("X-ARNA-Step-Up-Token") stepUpToken: String
+    ): ApiEnvelope<PinEnrollmentData>
 
     @GET("launcher")
     suspend fun launcher(): ApiEnvelope<List<LauncherApplicationDto>>
