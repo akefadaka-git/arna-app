@@ -151,6 +151,29 @@ export interface MfaChallengeResponse {
 /** Discriminated response from POST /api/login. */
 export type LoginResponse = LoginSuccessResponse | MfaChallengeResponse;
 
+/** Returning-user OTP challenge request. */
+export interface LoginOtpChallengeRequest {
+  readonly identifier: string;
+  readonly tenant_id?: number;
+  readonly channel: 'email' | 'sms';
+}
+
+/** Neutral challenge response; the server does not disclose delivery/account state. */
+export interface LoginOtpChallengeResponse {
+  readonly challenge_required: true;
+  readonly challenge_token: string;
+  readonly methods: readonly ['otp'];
+}
+
+/** Returning-user authenticator login request. */
+export interface LoginAuthenticatorRequest {
+  readonly identifier: string;
+  readonly tenant_id?: number;
+  readonly authenticator: 'otp' | 'google_authenticator';
+  readonly code: string;
+  readonly challenge_token?: string;
+}
+
 /**
  * POST /api/token/refresh response body. Verified against
  * AuthController::refreshToken() — no user is emitted.
@@ -227,6 +250,27 @@ export interface ResetPasswordRequest {
  */
 export function login(payload: LoginRequest): Promise<LoginResponse> {
   return api.post<LoginResponse>('/api/login', payload);
+}
+
+/**
+ * POST /api/login/otp/challenge — public returning-user OTP request.
+ * The response is intentionally neutral for unknown, first-login, inactive,
+ * and undeliverable accounts.
+ */
+export function requestLoginOtp(
+  payload: LoginOtpChallengeRequest,
+): Promise<LoginOtpChallengeResponse> {
+  return api.post<LoginOtpChallengeResponse>('/api/login/otp/challenge', payload);
+}
+
+/**
+ * POST /api/login/authenticator — public returning-user OTP or TOTP login.
+ * Successful browser responses include the first-party SSO cookie.
+ */
+export function loginWithAuthenticator(
+  payload: LoginAuthenticatorRequest,
+): Promise<LoginSuccessResponse> {
+  return api.post<LoginSuccessResponse>('/api/login/authenticator', payload);
 }
 
 /**
