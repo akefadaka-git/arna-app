@@ -162,6 +162,12 @@ test.describe('ARNA returning-user OTP login', () => {
     }));
 
     let ssoCookieIssued = false;
+    page.on('response', async (response) => {
+      if (response.url().endsWith('/api/login/authenticator')) {
+        const setCookie = await response.headerValue('set-cookie');
+        ssoCookieIssued = Boolean(setCookie?.includes('arna_sso_token='));
+      }
+    });
     await page.route('**/api/login/authenticator', (route) => route.fulfill({
       status: 401,
       contentType: 'application/json',
