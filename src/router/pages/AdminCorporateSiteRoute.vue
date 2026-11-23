@@ -243,6 +243,32 @@ async function pageAction(page: CorporatePageRecord, decision: 'approve' | 'publ
 }
 
 
+async function pageLifecycle(page: CorporatePageRecord, action: CorporateLifecycleAction): Promise<void> {
+  if (action === 'delete' && !window.confirm('Delete this archived page? It will be soft-deleted and can be restored.')) return;
+  saving.value = true;
+  error.value = '';
+  try {
+    await updateCorporatePageLifecycle(page, action);
+    notice.value = `Page ${action} completed. Version advanced.`;
+    await refresh();
+  } catch {
+    error.value = 'Lifecycle action rejected. Refresh the register; the item may have changed or require archiving first.';
+  } finally { saving.value = false; }
+}
+
+async function entryLifecycle(entry: CorporateEntryRecord, action: CorporateLifecycleAction): Promise<void> {
+  if (action === 'delete' && !window.confirm('Delete this archived entry? It will be soft-deleted and can be restored.')) return;
+  saving.value = true;
+  error.value = '';
+  try {
+    await updateCorporateEntryLifecycle(entry, action);
+    notice.value = `Content ${action} completed. Version advanced.`;
+    await refresh();
+  } catch {
+    error.value = 'Lifecycle action rejected. Refresh the register; the item may have changed or require archiving first.';
+  } finally { saving.value = false; }
+}
+
 async function createEntry(): Promise<void> {
   saving.value = true; error.value = ''; notice.value = '';
   try {
@@ -387,9 +413,38 @@ onMounted(() => void refresh());
           <label>English summary <textarea v-model="summaryEn" rows="2" maxlength="500" /></label>
           <label>Amharic body <textarea v-model="bodyAm" rows="4" maxlength="12000" /></label>
           <label>English body <textarea v-model="bodyEn" rows="4" maxlength="12000" /></label>
-          <h3>Complete page composition and metadata</h3>
-          <p class="corporate-admin__help">Edit every section in order. Preserve valid JSON; the API stores the full structured section array.</p>
-          <label class="corporate-admin__wide">All page sections — JSON <textarea v-model="sectionsJson" rows="12" spellcheck="false" /></label>
+          <div class="corporate-admin__section-builder">
+            <div class="corporate-admin__builder-heading">
+              <div><h3>Page section composition</h3><p class="corporate-admin__help">Add bilingual sections, edit each language independently, reorder sections and control visibility. The permanent Community Responsibility section cannot be removed from the homepage.</p></div>
+              <button type="button" :disabled="saving" @click="addSection">Add section</button>
+            </div>
+            <fieldset v-for="(section, index) in sectionsDraft" :key="section.id" class="corporate-admin__section-card">
+              <legend>Section {{ index + 1 }} · {{ section.type }}</legend>
+              <div class="corporate-admin__section-toolbar">
+                <label>Section type
+                  <select v-model="section.type" :disabled="isCommunitySection(section)">
+                    <option value="hero">Hero</option><option value="text">Text</option><option value="feature_grid">Feature grid</option><option value="business_areas">Business areas</option><option value="news">News</option><option value="community_responsibility">Community Responsibility</option><option value="contact">Contact</option>
+                  </select>
+                </label>
+                <label class="corporate-admin__visibility"><input v-model="section.content.visible" type="checkbox" :disabled="isCommunitySection(section)" /> Visible on public site</label>
+                <div class="corporate-admin__actions">
+                  <button type="button" :disabled="saving || index === 0" @click="moveSection(index, -1)">Move up</button>
+                  <button type="button" :disabled="saving || index === sectionsDraft.length - 1" @click="moveSection(index, 1)">Move down</button>
+                  <button type="button" :disabled="saving || isCommunitySection(section)" @click="removeSection(index)">Remove</button>
+                </div>
+              </div>
+              <div class="corporate-admin__section-languages">
+                <fieldset><legend>አማርኛ</legend>
+                  <label>ርዕስ <input v-model="section.content.am.title" maxlength="180" /></label>
+                  <label>ይዘት <textarea v-model="section.content.am.body" rows="3" maxlength="12000" /></label>
+                </fieldset>
+                <fieldset><legend>English</legend>
+                  <label>Title <input v-model="section.content.en.title" maxlength="180" /></label>
+                  <label>Body <textarea v-model="section.content.en.body" rows="3" maxlength="12000" /></label>
+                </fieldset>
+              </div>
+            </fieldset>
+          </div>
           <label>Amharic SEO metadata — JSON <textarea v-model="pageSeoAmJson" rows="5" spellcheck="false" /></label>
           <label>English SEO metadata — JSON <textarea v-model="pageSeoEnJson" rows="5" spellcheck="false" /></label>
           <button type="submit" :disabled="saving">{{ selectedPage ? "Update draft" : "Save draft" }}</button>
@@ -406,6 +461,11 @@ onMounted(() => void refresh());
               <input v-if="page.status === 'approved'" v-model="scheduleAt" aria-label="Schedule date and time" type="datetime-local" />
               <button v-if="page.status === 'approved'" type="button" :disabled="saving || !scheduleAt" @click="pageAction(page, 'schedule')">Schedule</button>
               <button v-if="page.status === 'published' || page.status === 'scheduled'" type="button" :disabled="saving" @click="pageAction(page, 'unpublish')">Unpublish</button>
+              <button v-if="page.status !== 'archived' && page.is_enabled" type="button" :disabled="saving" @click="pageLifecycle(page, 'disable')">Disable</button>
+              <button v-if="page.status !== 'archived' && !page.is_enabled" type="button" :disabled="saving" @click="pageLifecycle(page, 'enable')">Enable</button>
+              <button v-if="page.status !== 'archived'" type="button" :disabled="saving" @click="pageLifecycle(page, 'archive')">Archive</button>
+              <button v-if="page.status === 'archived'" type="button" :disabled="saving" @click="pageLifecycle(page, 'restore')">Restore</button>
+              <button v-if="page.status === 'archived'" type="button" :disabled="saving" @click="pageLifecycle(page, 'delete')">Delete</button>
             </div>
           </li>
         </ul>
@@ -424,10 +484,16 @@ onMounted(() => void refresh());
           <label>Content type <select v-model="entryType"><option value="news">News</option><option value="announcement">Announcement</option><option value="publication">Publication</option><option value="media">Media metadata</option><option value="career">Career</option><option value="opportunity">Opportunity</option><option value="business">Business / subsidiary</option><option value="service">Service</option><option value="advertisement">Advertisement</option><option value="marketplace">Marketplace</option></select></label>
           <label>Amharic slug <input v-model="entrySlugAm" required /></label><label>English slug <input v-model="entrySlugEn" required /></label>
           <label>Amharic title <input v-model="entryTitleAm" required /></label><label>English title <input v-model="entryTitleEn" required /></label>
-          <label>Amharic body <textarea v-model="entryBodyAm" rows="3" /></label><label>English body <textarea v-model="entryBodyEn" rows="3" /></label>
-          <h3>Complete content and metadata</h3>
-          <p class="corporate-admin__help">Use the payload for structured content fields such as links, dates, labels, media references and other entry-specific details. Changes remain drafts until independent approval.</p>
-          <label class="corporate-admin__wide">Structured entry payload — JSON <textarea v-model="entryPayloadJson" rows="10" spellcheck="false" /></label>
+          <label>Amharic summary <textarea v-model="entrySummaryAm" rows="2" maxlength="500" /></label><label>English summary <textarea v-model="entrySummaryEn" rows="2" maxlength="500" /></label>
+          <label>Amharic body <textarea v-model="entryBodyAm" rows="4" maxlength="12000" /></label><label>English body <textarea v-model="entryBodyEn" rows="4" maxlength="12000" /></label>
+          <h3>Structured content details</h3>
+          <p class="corporate-admin__help">Add common metadata for the public card or detail page. Amharic and English titles, summaries and body copy are edited independently above.</p>
+          <label>Category / tag <input v-model="entryCategory" maxlength="100" /></label>
+          <label>Location <input v-model="entryLocation" maxlength="180" /></label>
+          <label>Start date <input v-model="entryStartDate" type="date" /></label>
+          <label>End date <input v-model="entryEndDate" type="date" /></label>
+          <label class="corporate-admin__wide">Public URL <input v-model="entryExternalUrl" type="url" maxlength="1000" placeholder="https://" /></label>
+          <label class="corporate-admin__visibility"><input v-model="entryFeatured" type="checkbox" /> Feature this item</label>
           <label>Amharic SEO metadata — JSON <textarea v-model="entrySeoAmJson" rows="5" spellcheck="false" /></label>
           <label>English SEO metadata — JSON <textarea v-model="entrySeoEnJson" rows="5" spellcheck="false" /></label>
           <button type="submit" :disabled="saving">{{ selectedEntry ? "Update draft" : "Create draft" }}</button>
@@ -444,6 +510,11 @@ onMounted(() => void refresh());
               <button v-if="entry.status === 'approved'" type="button" :disabled="saving" @click="entryAction(entry, 'publish')">Publish</button>
               <button v-if="['draft', 'approved'].includes(entry.status)" type="button" :disabled="saving" @click="entryAction(entry, 'reject')">Reject</button>
               <button v-if="entry.status === 'published'" type="button" :disabled="saving" @click="entryAction(entry, 'unpublish')">Unpublish</button>
+              <button v-if="entry.status !== 'archived' && entry.is_enabled" type="button" :disabled="saving" @click="entryLifecycle(entry, 'disable')">Disable</button>
+              <button v-if="entry.status !== 'archived' && !entry.is_enabled" type="button" :disabled="saving" @click="entryLifecycle(entry, 'enable')">Enable</button>
+              <button v-if="entry.status !== 'archived'" type="button" :disabled="saving" @click="entryLifecycle(entry, 'archive')">Archive</button>
+              <button v-if="entry.status === 'archived'" type="button" :disabled="saving" @click="entryLifecycle(entry, 'restore')">Restore</button>
+              <button v-if="entry.status === 'archived'" type="button" :disabled="saving" @click="entryLifecycle(entry, 'delete')">Delete</button>
             </div>
           </li>
         </ul>
@@ -476,7 +547,15 @@ onMounted(() => void refresh());
 .corporate-admin button:disabled { opacity: .55; cursor: not-allowed; }
 .corporate-admin__form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
 .corporate-admin__form label, .corporate-admin__inquiry label { display: grid; gap: .3rem; font-weight: 600; }
-.corporate-admin__form h3, .corporate-admin__help, .corporate-admin__wide { grid-column: 1 / -1; }
+.corporate-admin__form h3, .corporate-admin__help, .corporate-admin__wide, .corporate-admin__section-builder { grid-column: 1 / -1; }
+.corporate-admin__builder-heading, .corporate-admin__section-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; }
+.corporate-admin__section-card { display: grid; gap: .75rem; min-width: 0; margin: .75rem 0; border: 1px solid var(--border-subtle); border-radius: .6rem; padding: .9rem; }
+.corporate-admin__section-card legend { padding: 0 .35rem; font-weight: 700; }
+.corporate-admin__section-languages { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+.corporate-admin__section-languages fieldset { display: grid; gap: .6rem; min-width: 0; border: 1px solid var(--border-subtle); border-radius: .5rem; padding: .7rem; }
+.corporate-admin__section-languages label { display: grid; gap: .3rem; }
+.corporate-admin__visibility { display: inline-flex !important; align-items: center; gap: .45rem !important; }
+.corporate-admin__visibility input { width: auto; }
 .corporate-admin__help { margin: -.35rem 0 0; color: var(--text-muted); font-size: .85rem; line-height: 1.6; }
 .corporate-admin textarea[spellcheck="false"] { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .82rem; line-height: 1.55; }
 .corporate-admin input, .corporate-admin textarea, .corporate-admin select { width: 100%; min-width: 0; border: 1px solid var(--border-default); border-radius: .4rem; padding: .55rem; background: var(--surface-base); color: var(--text-primary); }
@@ -486,5 +565,5 @@ onMounted(() => void refresh());
 .corporate-admin__inquiry p { max-width: 70ch; white-space: pre-wrap; }
 .corporate-admin__error { color: var(--status-danger-text); }
 .corporate-admin__notice { color: var(--status-success-text); }
-@media (max-width: 680px) { .corporate-admin__form { grid-template-columns: 1fr; } .corporate-admin__list li { align-items: stretch; } }
+@media (max-width: 680px) { .corporate-admin__form, .corporate-admin__section-languages { grid-template-columns: 1fr; } .corporate-admin__list li { align-items: stretch; } }
 </style>
