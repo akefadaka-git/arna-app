@@ -4,10 +4,11 @@ import { dirname, resolve } from 'node:path';
 
 const UPSTREAM_COMMIT = '06bfe0d62a98375cb09c942fa18e68bd32cff057';
 const FONT_PATH = 'ofl/notosansethiopic/NotoSansEthiopic[wdth,wght].ttf';
+const OUTPUT_FONT = 'public/fonts/NotoSansEthiopic-variable.ttf';
 const ASSETS = [
   {
     sourcePath: FONT_PATH,
-    outputPath: 'public/fonts/NotoSansEthiopic[wdth,wght].ttf',
+    outputPath: OUTPUT_FONT,
     expectedGitBlobSha: '0910ed80aac7398582c515225304623a60d6f35a',
   },
   {
