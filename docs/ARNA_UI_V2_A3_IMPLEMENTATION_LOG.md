@@ -155,3 +155,12 @@ No maps, business workspaces, calendar rebuild, domain workflow implementation, 
 - Scope intentionally excludes optical micro-spacing, SVG chart geometry, 3D transform/shadow geometry, and bespoke animation timing where no semantically equivalent token is defined. No shared token values were changed.
 - The change is not yet CI-verified. Exact-head workflow verification is required before PASS is recorded.
 - A3.1 remains PARTIAL / NOT CLOSED pending further catalogue-wide census and verification. A3.2 remains VERIFIED-CLOSED. A4 remains separate. No main modification, merge, or deployment.
+
+
+### Verification update — visual-layer spacing token increment
+
+- Exact code/test head `b68dc6081117b9a38d9415c14841a67ff16c0138` passed the full Frontend verification workflow [#45217567129](https://github.com/akefadaka-git/arna-app/actions/runs/45217567129): SUCCESS, 38/38 steps completed, 0 failed. The workflow's exact-checkout SHA assertion passed.
+- The focused command `npm run test:a3-design-system-hardening` reported 13 tests, 13 passed, 0 failed. New test #13, “visual components consume canonical spacing aliases without fallback literals,” passed.
+- The full job also passed type-check and all four production builds, A3 design-system/font contracts, static build verification, public-build smoke tests, shared theme/component contracts, visual library contracts, mounted high-risk component tests, Amharic font/offline checks, and browser accessibility checks.
+- ARNA Executive Overview verification [#45217582331](https://github.com/akefadaka-git/arna-app/actions/runs/45217582331) completed SUCCESS on the same exact head. Public corporate website verification [#45217581630](https://github.com/akefadaka-git/arna-app/actions/runs/45217581630) was still in progress at the time of this log update.
+- The full frontend verification is PASS for this bounded source increment; the overall A3.1 census remains PARTIAL / NOT CLOSED. The passing workflow is evidence for the visual spacing correction and the existing regression contracts, not for completion of the full component/API/accessibility acceptance.
