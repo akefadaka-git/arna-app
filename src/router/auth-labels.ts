@@ -258,18 +258,20 @@ export const loginFormLabels = {
   formAriaLabel: 'ግባ',
 
   // ---------------------------------------------------------------------------
-  // Identifier (email or phone number)
+  // Identifier (all six supported sign-in identifiers)
   // ---------------------------------------------------------------------------
   /*
    * The label for the identifier field. See the file header
    * §"Why the key `emailLabel` is not renamed".
    *
-   * The value names both accepted forms because the backend
-   * resolves either — an email via the users.email column, a
-   * phone via the users.phone column. See
-   * AuthController::resolveLoginEmail().
+   * Historical key retained for compatibility. The value now
+   * describes the complete identifier field; the resolver accepts
+   * email, username, mobile, employee, shareholder, and wallet IDs.
    */
-  emailLabel: 'ኢሜይል / ስልክ ቁጥር',
+  emailLabel: 'የመግቢያ መለያ / Sign-in identifier',
+  /** Bilingual guidance for every supported sign-in identifier. */
+  identifierHelpText:
+    'ከሚከተሉት አንዱን ያስገቡ፦ ኢሜይል፣ የተጠቃሚ ስም፣ ሞባይል ቁጥር፣ የሰራተኛ ቁጥር፣ የባለአክሲዮን ቁጥር ወይም የWallet ቁጥር። / Enter one: email, username, mobile number, employee ID, shareholder number, or wallet number.',
 
   // ---------------------------------------------------------------------------
   // Password
@@ -368,9 +370,9 @@ export const loginFormLabels = {
    * A future CR that renames emailLabel to identifierLabel should
    * update this title in the same change.
    */
-  invalidCredentialsTitle: 'ኢሜይል ወይም የይለፍ ቃል ትክክል አይደለም',
+  invalidCredentialsTitle: 'የመግቢያ መለያ ወይም የይለፍ ቃል ትክክል አይደለም / Invalid sign-in details',
   invalidCredentialsMessage:
-    'እባክዎ ኢሜይልዎን እና የይለፍ ቃልዎን ያረጋግጡ እንደገና ይሞክሩ።',
+    'እባክዎ ያስገቡትን መለያ እና የይለፍ ቃል ያረጋግጡ። / Check your identifier and password, then try again.',
 
   /*
    * Rate-limit (HTTP 429) banner. Distinct from the generic
