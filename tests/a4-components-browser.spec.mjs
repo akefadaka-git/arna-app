@@ -251,15 +251,15 @@ test.describe('A4 full-page fixture accessibility regression scan', () => {
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
 
-    const affectedSelectors = [
-      '[data-testid="form-field-root"]',
-      '[data-testid="error-support-panel-root"]',
-      '[data-testid="data-table-root"]',
+    const affectedMarkers = [
+      'form-field__help',
+      'error-support-panel__field-label',
+      'data-table__card-label',
     ];
     const affectedNodes = results.violations.flatMap((violation) =>
       violation.nodes
-        .filter((node) => affectedSelectors.some((selector) =>
-          node.target.some((target) => target.includes(selector))
+        .filter((node) => affectedMarkers.some((marker) =>
+          node.target.join(' ').includes(marker) || node.html.includes(marker)
         ))
         .map((node) => ({ id: violation.id, target: node.target, html: node.html }))
     );
