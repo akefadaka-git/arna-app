@@ -67,6 +67,8 @@ jobs:
         run: npm run verify:build
       - name: Smoke-check the standalone public build artifacts
         run: npm run test:public-build-smoke
+      - name: Verify structured bilingual corporate CMS and lifecycle controls
+        run: npm run test:public-cms-admin-lifecycle
       - name: Verify approved ARNA palette and contrast contract
         run: npm run test:brand-palette-contract
       - name: Verify bilingual themes and shared accessible component contracts
@@ -96,11 +98,11 @@ jobs:
           VITE_PID=$!
           trap 'kill "$VITE_PID" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 40); do
-            if curl --fail --silent http://localhost:4178/tests/fixtures/auth-login.html >/dev/null; then break; fi
+            if curl --fail --silent http://localhost:4178/login >/dev/null; then break; fi
             sleep 1
           done
-          curl --fail --silent http://localhost:4178/workspace-entry/ >/dev/null
-          AUTH_LOGIN_APP_URL=http://localhost:4178/tests/fixtures/auth-login.html npm run test:auth-login-browser
+          curl --fail --silent http://localhost:4178/login >/dev/null
+          AUTH_LOGIN_APP_URL=http://localhost:4178 npm run test:auth-login-browser
       - name: Verify Calendar workspace E.C. behavior in Chromium
         shell: bash
         run: |

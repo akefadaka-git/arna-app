@@ -1,7 +1,8 @@
 import { api } from '@/core/api/client';
 import type { CorporateLocale } from './api';
 
-export type CorporatePageStatus = 'draft' | 'approved' | 'scheduled' | 'published' | 'unpublished';
+export type CorporatePageStatus = 'draft' | 'approved' | 'scheduled' | 'published' | 'unpublished' | 'archived';
+export type CorporateLifecycleAction = 'enable' | 'disable' | 'archive' | 'restore' | 'delete';
 
 export interface CorporatePageTranslation {
   readonly title: string;
@@ -25,6 +26,9 @@ export interface CorporatePageRecord extends CorporatePageDraft {
   readonly version: number;
   readonly published_at: string | null;
   readonly scheduled_at: string | null;
+  readonly is_enabled: boolean;
+  readonly archived_at: string | null;
+  readonly deleted_at?: string | null;
 }
 
 export interface CorporateEntryRecord {
@@ -35,7 +39,10 @@ export interface CorporateEntryRecord {
   readonly slug_en: string | null;
   readonly status: string;
   readonly version: number;
-  readonly translations: Partial<Record<CorporateLocale, { title?: string; body?: string }>>;
+  readonly is_enabled: boolean;
+  readonly archived_at: string | null;
+  readonly deleted_at?: string | null;
+  readonly translations: Partial<Record<CorporateLocale, { title?: string; summary?: string; body?: string }>>;
   readonly created_at: string;
   readonly moderation_note: string | null;
   readonly payload?: Record<string, unknown> & { readonly scan_status?: string };
@@ -58,14 +65,20 @@ export interface CorporateInquiryRecord {
 
 const base = '/api/admin/corporate-site';
 
-export function listCorporatePages(): Promise<{ data: CorporatePageRecord[]; current_page: number; last_page: number; total: number }> {
-  return api.get('/api/admin/corporate-site/pages');
+export function listCorporatePages(includeDeleted = false): Promise<{ data: CorporatePageRecord[]; current_page: number; last_page: number; total: number }> {
+  return api.get('/api/admin/corporate-site/pages', { params: includeDeleted ? { include_deleted: 1 } : {} });
 }
 export function createCorporatePage(draft: CorporatePageDraft): Promise<CorporatePageRecord> {
   return api.post('/api/admin/corporate-site/pages', draft);
 }
 export function updateCorporatePage(page: CorporatePageRecord, draft: Partial<CorporatePageDraft>): Promise<CorporatePageRecord> {
   return api.put(`/api/admin/corporate-site/pages/${page.id}`, { ...draft, expected_version: page.version });
+}
+export function updateCorporatePageLifecycle(page: CorporatePageRecord, action: CorporateLifecycleAction): Promise<Pick<CorporatePageRecord, 'id' | 'public_id' | 'status' | 'version' | 'is_enabled' | 'archived_at'>> {
+  return api.post(`/api/admin/corporate-site/pages/${page.id}/lifecycle`, {
+    expected_version: page.version,
+    action,
+  });
 }
 export function reviewCorporatePage(page: CorporatePageRecord, decision: 'approve' | 'publish' | 'schedule' | 'unpublish', scheduledAt?: string): Promise<CorporatePageRecord> {
   return api.post(`/api/admin/corporate-site/pages/${page.id}/${decision}`, {
@@ -77,7 +90,7 @@ export interface CorporateEntryDraft {
   readonly entry_type?: string;
   readonly slug_am?: string;
   readonly slug_en?: string;
-  readonly translations: Record<string, { title: string; body?: string }>;
+  readonly translations: Record<string, { title: string; summary?: string; body?: string }>;
   readonly payload?: Record<string, unknown>;
   readonly seo?: Record<string, Record<string, string>>;
 }
@@ -88,12 +101,18 @@ export async function createCorporateEntry(draft: CorporateEntryDraft & { entry_
 export function updateCorporateEntry(entry: CorporateEntryRecord, draft: CorporateEntryDraft): Promise<CorporateEntryRecord> {
   return api.put(`${base}/entries/${entry.id}`, { ...draft, expected_version: entry.version });
 }
-export async function listCorporateEntries(): Promise<CorporateEntryRecord[]> {
-  const result = await api.get<{ data: CorporateEntryRecord[] }>(`${base}/entries`);
+export async function listCorporateEntries(includeDeleted = false): Promise<CorporateEntryRecord[]> {
+  const result = await api.get<{ data: CorporateEntryRecord[] }>(`${base}/entries`, { params: includeDeleted ? { include_deleted: 1 } : {} });
   return result.data;
 }
 export function scanCorporateMedia(entry: CorporateEntryRecord): Promise<{ public_id: string; scan_status: string; version: number }> {
   return api.post(`${base}/entries/${entry.id}/scan`, { expected_version: entry.version });
+}
+export function updateCorporateEntryLifecycle(entry: CorporateEntryRecord, action: CorporateLifecycleAction): Promise<{ id: number; public_id: string; status: string; version: number; is_enabled: boolean; archived_at: string | null; deleted_at: string | null }> {
+  return api.post(`${base}/entries/${entry.id}/lifecycle`, {
+    expected_version: entry.version,
+    action,
+  });
 }
 export function reviewCorporateEntry(entry: CorporateEntryRecord, decision: 'approve' | 'publish' | 'reject' | 'unpublish', note?: string): Promise<CorporateEntryRecord> {
   return api.post(`${base}/entries/${entry.id}/${decision}`, {
