@@ -13,6 +13,9 @@ export interface ExecutiveOverviewLabels {
   readonly emptyTitle: string;
   readonly emptyDescription: string;
   readonly financeTitle: string;
+  readonly workforceTitle: string;
+  readonly activeWorkforceLabel: string;
+  readonly observedAtLabel: string;
   readonly debitLabel: string;
   readonly creditLabel: string;
   readonly differenceLabel: string;
@@ -37,6 +40,9 @@ export const executiveOverviewLabels: ExecutiveOverviewLabels = {
   emptyTitle: 'አሁን የሚታዩ የተረጋገጡ መለኪያዎች የሉም',
   emptyDescription: 'ለእርስዎ የተፈቀደ እና የተረጋገጠ መረጃ ሲኖር እዚህ ይታያል።',
   financeTitle: 'የፋይናንስ ሚዛን',
+  workforceTitle: 'የሰው ኃይል',
+  activeWorkforceLabel: 'ንቁ ሠራተኞች',
+  observedAtLabel: 'የመለኪያ ጊዜ',
   debitLabel: 'ጠቅላላ ዴቢት',
   creditLabel: 'ጠቅላላ ክሬዲት',
   differenceLabel: 'ልዩነት',
@@ -61,6 +67,9 @@ export const executiveOverviewEnglishLabels: ExecutiveOverviewLabels = {
   emptyTitle: 'No verified metrics are currently available',
   emptyDescription: 'Authorized, verified metrics will appear here when their source contracts are available.',
   financeTitle: 'Trial Balance',
+  workforceTitle: 'Workforce',
+  activeWorkforceLabel: 'Active employees',
+  observedAtLabel: 'Observed at',
   debitLabel: 'Total debits',
   creditLabel: 'Total credits',
   differenceLabel: 'Difference',
