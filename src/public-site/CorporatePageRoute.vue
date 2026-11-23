@@ -18,13 +18,6 @@ function sectionText(section: CorporateSiteSection, field: string): string {
   return typeof value === 'string' ? value : '';
 }
 
-function sectionValue(section: CorporateSiteSection, field: string): string {
-  const localized = section.content[locale.value];
-  if (typeof localized !== 'object' || localized === null) return '';
-  const value = (localized as Record<string, unknown>)[field];
-  return typeof value === 'string' ? value : '';
-}
-
 function isExternalUrl(value: string): boolean {
   return /^https:\/\//i.test(value);
 }
