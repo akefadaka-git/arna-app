@@ -1378,7 +1378,7 @@ function onCellClick(cell: GridCell): void {
    ============================================================================ */
 @media (max-width: 639px) {
   .date-picker__control {
-    min-height: 44px;
+    min-height: var(--arna-size-interactive-target-min);
   }
 
   .date-picker__cell {
