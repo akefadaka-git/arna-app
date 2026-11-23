@@ -26,19 +26,45 @@ withDefaults(defineProps<{
 <style scoped>
 .metric-widget {
   min-width: 0;
-  padding: var(--arna-space-4, 1rem);
+  padding: var(--arna-space-4);
   border: 1px solid var(--arna-color-border-subtle);
   border-radius: var(--arna-radius-md);
   background: var(--arna-color-surface-raised);
   color: var(--arna-color-text-primary);
 }
 .metric-widget__label,
-.metric-widget__description { margin: 0; color: var(--arna-color-text-secondary); }
-.metric-widget__label { font-size: var(--arna-font-size-body-sm); }
-.metric-widget__value { margin: .35rem 0; font-size: clamp(1.35rem, 4vw, 2rem); font-weight: 700; overflow-wrap: anywhere; }
-.metric-widget__footer { display: flex; flex-wrap: wrap; gap: .35rem .65rem; font-size: var(--arna-font-size-caption); }
-.metric-widget__change { font-weight: 600; }
-.metric-widget__change[data-trend="up"] { color: var(--arna-color-text-success); }
-.metric-widget__change[data-trend="down"] { color: var(--arna-color-text-danger); }
-.metric-widget__change[data-trend="neutral"] { color: var(--arna-color-text-secondary); }
+.metric-widget__description {
+  margin: 0;
+  color: var(--arna-color-text-secondary);
+}
+.metric-widget__label {
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+}
+.metric-widget__value {
+  margin-block: var(--arna-space-1);
+  font-size: var(--arna-font-size-heading-2);
+  line-height: var(--arna-line-height-heading-2);
+  font-weight: var(--arna-font-weight-bold);
+  overflow-wrap: anywhere;
+}
+.metric-widget__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--arna-space-1) var(--arna-space-3);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
+}
+.metric-widget__change {
+  font-weight: var(--arna-font-weight-semibold);
+}
+.metric-widget__change[data-trend="up"] {
+  color: var(--arna-color-text-success);
+}
+.metric-widget__change[data-trend="down"] {
+  color: var(--arna-color-text-danger);
+}
+.metric-widget__change[data-trend="neutral"] {
+  color: var(--arna-color-text-secondary);
+}
 </style>
