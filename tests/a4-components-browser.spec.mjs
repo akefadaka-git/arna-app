@@ -589,17 +589,21 @@ test.describe('A4 Combobox hit-area geometry investigation', () => {
       return geometry;
     };
 
+    const assertTargetSize = async (viewport) => {
+      const axe = await new AxeBuilder({ page })
+        .include('[data-testid="combobox-root"]')
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+        .analyze();
+      const targetSize = axe.violations.filter((item) => item.id === 'target-size');
+      expect(targetSize, JSON.stringify({ viewport, targetSize }, null, 2)).toEqual([]);
+    };
+
     const mobile = await measure(390, 844);
     expect(mobile.control?.height).toBeGreaterThanOrEqual(44);
+    await assertTargetSize('mobile-390');
 
     const desktop = await measure(1280, 900);
     expect(desktop.control?.height).toBeGreaterThanOrEqual(40);
-
-    const axe = await new AxeBuilder({ page })
-      .include('[data-testid="combobox-root"]')
-      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-      .analyze();
-    const targetSize = axe.violations.filter((item) => item.id === 'target-size');
-    expect(targetSize, JSON.stringify(targetSize, null, 2)).toEqual([]);
+    await assertTargetSize('desktop-1280');
   });
 });
