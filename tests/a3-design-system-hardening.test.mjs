@@ -180,11 +180,11 @@ test('shared reduced-motion duration token governs component transition and anim
 });
 
 test('visual components consume canonical spacing aliases without fallback literals', () => {
-  assert.match(chartPanel, /padding: var\\(--arna-space-4\\)/);
-  assert.doesNotMatch(chartPanel, /--arna-spacing-4|--arna-space-4\\s*,/);
-  assert.match(visualPanel, /padding: var\\(--arna-space-4\\)/);
-  assert.match(visualPanel, /margin-block-end: var\\(--arna-space-3\\)/);
-  assert.doesNotMatch(visualPanel, /--arna-space-(?:3|4)\\s*,/);
-  assert.match(visualLibraryShowcase, /var\\(--arna-space-6\\)/);
-  assert.doesNotMatch(visualLibraryShowcase, /--arna-space-6\\s*,/);
+  assert.match(chartPanel, /padding: var\(--arna-space-4\)/);
+  assert.doesNotMatch(chartPanel, /--arna-spacing-4|--arna-space-4\s*,/);
+  assert.match(visualPanel, /padding: var\(--arna-space-4\)/);
+  assert.match(visualPanel, /margin-block-end: var\(--arna-space-3\)/);
+  assert.doesNotMatch(visualPanel, /--arna-space-(?:3|4)\s*,/);
+  assert.match(visualLibraryShowcase, /var\(--arna-space-6\)/);
+  assert.doesNotMatch(visualLibraryShowcase, /--arna-space-6\s*,/);
 });
