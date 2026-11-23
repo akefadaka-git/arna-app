@@ -139,13 +139,13 @@ test.describe('ARNA returning-user OTP login', () => {
       challenge_token: 'a'.repeat(64),
     });
 
-    const setCookie = await loginResponse.headerValue('set-cookie');
-    expect(setCookie).toContain('arna_sso_token=browser-otp-session');
-    expect(setCookie).toMatch(/HttpOnly/i);
-    expect(setCookie).toMatch(/Secure/i);
-    expect(setCookie).toMatch(/SameSite=Lax/i);
-
     await expect.poll(() => authenticatedUserCookie).toContain('arna_sso_token=browser-otp-session');
+    const ssoCookie = (await page.context().cookies()).find((cookie) => cookie.name === 'arna_sso_token');
+    expect(ssoCookie).toMatchObject({
+      httpOnly: true,
+      secure: true,
+      sameSite: 'Lax',
+    });
     await expect(page.getByTestId('auth-test-launcher')).toBeVisible();
     const storedValues = await page.evaluate(() => Object.values(localStorage));
     expect(storedValues).not.toContain('482913');
