@@ -293,7 +293,7 @@ export type FileUploaderRejectReason = 'size' | 'type' | 'count';
  * session. Combined with a Date.now() suffix so that ids are not
  * predictable across component instances.
  */
-let __masesFileUploaderIdCounter = 0;
+let __arnaFileUploaderIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -460,8 +460,8 @@ const dropZoneLabels = computed<FileInputLabels>(() => ({
 // Local id generation
 // -----------------------------------------------------------------------------
 function nextLocalId(): string {
-  __masesFileUploaderIdCounter += 1;
-  return `mases-file-uploader-${__masesFileUploaderIdCounter}-${Date.now()}`;
+  __arnaFileUploaderIdCounter += 1;
+  return `arna-file-uploader-${__arnaFileUploaderIdCounter}-${Date.now()}`;
 }
 
 // -----------------------------------------------------------------------------
@@ -567,7 +567,10 @@ function maybeEmitCompleted(): void {
 // File selection
 // -----------------------------------------------------------------------------
 function onInputReject(payload: { file: File; reason: FileInputRejectReason }): void {
-  emit('rejected', { file: payload.file, reason: payload.reason === 'too-large' ? 'size' : 'type' });
+  emit('rejected', {
+    file: payload.file,
+    reason: payload.reason === 'too-large' ? 'size' : 'type',
+  });
 }
 
 function onSelect(files: File[]): void {
@@ -602,6 +605,9 @@ function onSelect(files: File[]): void {
     };
 
     items.value.push(item);
+    // Use the reactive array proxy for lifecycle updates. Mutating the
+    // original raw object would bypass Vue's proxy and leave progress
+    // changes invisible until an unrelated render occurs.
     const queuedItem = items.value.find((queued) => queued.localId === item.localId);
     if (queuedItem !== undefined) startUpload(queuedItem);
   }
@@ -625,6 +631,8 @@ function cancel(item: FileUploaderQueueItem): void {
   // The rejection handler will not re-mark the item — we do it here
   // so the state is correct synchronously, before the microtask queue.
   item.status = 'cancelled';
+  // Cancellation is a terminal transition too. If other files in this
+  // batch already succeeded, publish the aggregate completion now.
   maybeEmitCompleted();
 }
 
@@ -794,7 +802,7 @@ onBeforeUnmount(() => {
 .file-uploader {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-4);
+  gap: var(--arna-space-4);
   width: 100%;
 }
 
@@ -807,36 +815,36 @@ onBeforeUnmount(() => {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
 }
 
 .file-uploader__item {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-3);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-md);
-  background-color: var(--mases-color-surface-page);
+  gap: var(--arna-space-2);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-3);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-md);
+  background-color: var(--arna-color-surface-page);
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard),
-    border-color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard),
+    border-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .file-uploader__item[data-status='success'] {
-  border-color: var(--mases-color-border-success);
-  background-color: var(--mases-color-surface-success);
+  border-color: var(--arna-color-border-success);
+  background-color: var(--arna-color-surface-success);
 }
 
 .file-uploader__item[data-status='error'] {
-  border-color: var(--mases-color-border-danger);
-  background-color: var(--mases-color-surface-danger);
+  border-color: var(--arna-color-border-danger);
+  background-color: var(--arna-color-surface-danger);
 }
 
 .file-uploader__item[data-status='cancelled'] {
-  border-color: var(--mases-color-border-default);
-  background-color: var(--mases-color-surface-sunken);
+  border-color: var(--arna-color-border-default);
+  background-color: var(--arna-color-surface-sunken);
 }
 
 /* ============================================================================
@@ -845,18 +853,18 @@ onBeforeUnmount(() => {
 .file-uploader__row {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   min-width: 0;
 }
 
 .file-uploader__filename {
   flex: 1 1 auto;
   min-width: 0;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
   /*
    * Amharic-safe wrapping. Filenames are the most likely place for a
    * long, unbroken Ethiopic string; overflow-wrap: anywhere ensures
@@ -868,7 +876,7 @@ onBeforeUnmount(() => {
 .file-uploader__actions {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   flex-shrink: 0;
 }
 

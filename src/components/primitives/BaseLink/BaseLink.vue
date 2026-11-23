@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/BaseLink/BaseLink.vue
  Layer:     1 (Primitives)
- Version:   1.0.0
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.17
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -126,13 +126,13 @@
  * The Sets are module-scoped (evaluated once when the module is first
  * imported) and are not exposed to consumers.
  */
-const __masesBaseLinkWarned = new Set<string>();
+const __arnaBaseLinkWarned = new Set<string>();
 
-function __masesBaseLinkWarnOnce(key: string, message: string): void {
-  if (__masesBaseLinkWarned.has(key)) {
+function __arnaBaseLinkWarnOnce(key: string, message: string): void {
+  if (__arnaBaseLinkWarned.has(key)) {
     return;
   }
-  __masesBaseLinkWarned.add(key);
+  __arnaBaseLinkWarned.add(key);
   // eslint-disable-next-line no-console
   console.warn(message);
 }
@@ -175,6 +175,16 @@ interface Props {
   external?: boolean;
 
   /**
+   * Explicit accessible name for links whose visible content is not descriptive.
+   */
+  ariaLabel?: string;
+
+  /**
+   * ID reference for an external accessible name. Takes precedence over ariaLabel.
+   */
+  ariaLabelledBy?: string;
+
+  /**
    * Visual variant. Defaults to 'default'.
    *
    *   default — branded link color (action-link token).
@@ -189,6 +199,8 @@ const props = withDefaults(defineProps<Props>(), {
   to: undefined,
   href: undefined,
   external: false,
+  ariaLabel: undefined,
+  ariaLabelledBy: undefined,
   variant: 'default',
 });
 
@@ -205,7 +217,7 @@ const props = withDefaults(defineProps<Props>(), {
  */
 if (import.meta.env.DEV) {
   if (!props.to && !props.href) {
-    __masesBaseLinkWarnOnce(
+    __arnaBaseLinkWarnOnce(
       'base-link:no-target',
       '[BaseLink] neither `to` nor `href` was supplied. Rendering an ' +
         'anchor with href="#", which is a placeholder. Supply `to` for ' +
@@ -214,7 +226,7 @@ if (import.meta.env.DEV) {
   }
 
   if (props.to && props.href) {
-    __masesBaseLinkWarnOnce(
+    __arnaBaseLinkWarnOnce(
       'base-link:both-targets',
       '[BaseLink] both `to` and `href` were supplied. The `to` prop takes ' +
         'precedence; the `href` prop is ignored. Supply only one.',
@@ -268,6 +280,8 @@ const resolvedHref = computed<string>(() => props.href ?? '#');
     data-testid="base-link-root"
     data-link-kind="router"
     :data-variant="variant"
+    :aria-label="ariaLabelledBy ? undefined : ariaLabel"
+    :aria-labelledby="ariaLabelledBy"
   >
     <slot />
   </RouterLink>
@@ -286,6 +300,8 @@ const resolvedHref = computed<string>(() => props.href ?? '#');
     data-testid="base-link-root"
     data-link-kind="external"
     :data-variant="variant"
+    :aria-label="ariaLabelledBy ? undefined : ariaLabel"
+    :aria-labelledby="ariaLabelledBy"
   >
     <slot />
   </a>
@@ -303,6 +319,8 @@ const resolvedHref = computed<string>(() => props.href ?? '#');
     data-testid="base-link-root"
     data-link-kind="internal"
     :data-variant="variant"
+    :aria-label="ariaLabelledBy ? undefined : ariaLabel"
+    :aria-labelledby="ariaLabelledBy"
   >
     <slot />
   </a>
@@ -316,7 +334,7 @@ const resolvedHref = computed<string>(() => props.href ?? '#');
   display: inline;
   cursor: pointer;
   text-decoration: none;
-  transition: color var(--mases-duration-fast) var(--mases-easing-standard);
+  transition: color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 /* Underline on hover and focus.
@@ -332,32 +350,32 @@ const resolvedHref = computed<string>(() => props.href ?? '#');
    ring. Using outline (not box-shadow) preserves the design system's
    consistent ring shape across all interactive elements. */
 .link:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
-  border-radius: var(--mases-radius-sm);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
+  border-radius: var(--arna-radius-sm);
 }
 
 /* ============================================================================
    Variant — default
    ============================================================================ */
 .link--default {
-  color: var(--mases-color-action-link);
+  color: var(--arna-color-action-link);
 }
 
 .link--default:hover,
 .link--default:focus-visible {
-  color: var(--mases-color-action-link-hover);
+  color: var(--arna-color-action-link-hover);
 }
 
 /* ============================================================================
    Variant — subtle
    ============================================================================ */
 .link--subtle {
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
 }
 
 .link--subtle:hover,
 .link--subtle:focus-visible {
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
 }
 </style>

@@ -83,10 +83,13 @@ test.beforeEach(async ({ page }) => {
 test.describe('ARNA public site browser contract', () => {
   test('renders the Amharic CMS homepage at desktop and mobile widths without horizontal page overflow', async ({ page }) => {
     for (const viewport of [
-      { width: 1280, height: 900 },
-      { width: 768, height: 1024 },
-      { width: 390, height: 844 },
       { width: 320, height: 740 },
+      { width: 360, height: 800 },
+      { width: 390, height: 844 },
+      { width: 768, height: 1024 },
+      { width: 1024, height: 900 },
+      { width: 1280, height: 900 },
+      { width: 1440, height: 960 },
     ]) {
       await page.setViewportSize(viewport);
       await page.goto(baseUrl);
@@ -160,6 +163,14 @@ test.describe('ARNA public site browser contract', () => {
   test('switches the CMS homepage between Amharic and English', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(baseUrl);
+    const themeControl = page.getByTestId('theme-preference-control');
+    await expect(themeControl).toBeVisible();
+    await themeControl.selectOption('dark');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+    await themeControl.selectOption('light');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+    await themeControl.selectOption('system');
+    await expect(page.locator('html')).not.toHaveAttribute('data-theme');
 
     await page.getByRole('button', { name: 'English' }).click();
     await expect(page).toHaveURL(/locale=en/);
@@ -168,7 +179,7 @@ test.describe('ARNA public site browser contract', () => {
     await expect(page.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
     await expect(page.locator('#about-title')).toContainText('About Maale Arna');
     await expect(page.locator('#community-responsibility-title')).toContainText('Community Responsibility');
-    await expect(page).toHaveTitle('Maale Arna | Official Website');
+    await expect(page).toHaveTitle('Maale Arna | Official Website | ARNA');
     await expectNoSeriousAccessibilityViolations(page, 'English CMS homepage');
 
     await page.getByRole('button', { name: 'አማርኛ' }).click();
@@ -202,6 +213,99 @@ test.describe('ARNA public site browser contract', () => {
     await expect(opportunity.getByRole('status')).toContainText('SUB-TEST-001');
   });
 
+  test('provides locale, theme, keyboard and seven-viewport acceptance for corporate pages, content entries and contribution', async ({ page }) => {
+    await page.route('**/api/public/site/pages/en/about', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: {
+        public_id: '00000000-0000-4000-8000-000000000002', page_key: 'about', locale: 'en', slug: 'about', alternate_slug: 'about-am',
+        title: 'About the Company', summary: 'Corporate profile', body: 'Company information.', sections: [],
+        seo: { title: 'About the Company', description: 'Corporate profile.' }, published_at: null
+      } }) });
+    });
+    await page.route('**/api/public/site/pages/am/about-am', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: {
+        public_id: '00000000-0000-4000-8000-000000000002', page_key: 'about', locale: 'am', slug: 'about-am', alternate_slug: 'about',
+        title: 'ስለ ድርጅቱ', summary: 'የድርጅቱ መግለጫ', body: 'የድርጅቱ መረጃ።', sections: [],
+        seo: { title: 'ስለ ድርጅቱ', description: 'የድርጅቱ መግለጫ።' }, published_at: null
+      } }) });
+    });
+    await page.route('**/api/public/site/content/news/story*', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: {
+        id: 'news-1', type: 'news', locale: 'en', slug: 'story', alternate_slug: 'story-am',
+        title: 'ARNA News Story', summary: 'A published update', body: 'Published update body.',
+        seo: { title: 'ARNA News Story', description: 'A published update.' }, published_at: null, asset_url: null
+      } }) });
+    });
+    await page.route('**/api/public/site/content/news/story-am*', async (route) => {
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, data: {
+        id: 'news-1', type: 'news', locale: 'am', slug: 'story-am', alternate_slug: 'story',
+        title: 'የARNA ዜና', summary: 'የታተመ ዜና', body: 'የታተመ ዜና ይዘት።',
+        seo: { title: 'የARNA ዜና', description: 'የታተመ ዜና።' }, published_at: null, asset_url: null
+      } }) });
+    });
+
+    const viewports = [
+      { width: 320, height: 740 }, { width: 360, height: 800 }, { width: 390, height: 844 },
+      { width: 768, height: 1024 }, { width: 1024, height: 900 }, { width: 1280, height: 900 },
+      { width: 1440, height: 960 },
+    ];
+    for (const routePath of ['/en/about', '/en/content/news/story', '/contribute']) {
+      await page.goto(new URL(routePath, baseUrl).toString());
+      const themeControl = page.getByTestId('theme-preference-control');
+      await expect(themeControl).toBeVisible();
+      await themeControl.selectOption('dark');
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+      await themeControl.selectOption('light');
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+      await themeControl.selectOption('system');
+      await expect(page.locator('html')).not.toHaveAttribute('data-theme');
+
+      for (const viewport of viewports) {
+        await page.setViewportSize(viewport);
+        const dimensions = await page.evaluate(() => ({
+          viewport: document.documentElement.clientWidth,
+          document: document.documentElement.scrollWidth,
+        }));
+        expect(dimensions.document, routePath + ' overflow at ' + viewport.width + 'px')
+          .toBeLessThanOrEqual(dimensions.viewport + 1);
+      }
+
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.keyboard.press('Tab');
+      const skip = page.locator(routePath === '/contribute' ? '.contribute-skip-link' : '.skip-link');
+      await expect(skip).toBeFocused();
+      await page.keyboard.press('Enter');
+      const targetId = routePath === '/en/about' ? '#page-content' : routePath === '/en/content/news/story' ? '#entry-content' : '#contribute-main';
+      await expect(page).toHaveURL(new RegExp(targetId.replace('#', '#')));
+      await expect(page.locator(targetId)).toHaveAttribute('tabindex', '-1');
+      await expect(page.locator(targetId)).toBeFocused();
+      await expect(page).toHaveTitle(/ARNA/);
+
+      if (routePath === '/en/about') {
+        await expect(page.locator('h1')).toContainText('About the Company');
+        await page.getByRole('link', { name: 'አማርኛ' }).click();
+        await expect(page).toHaveURL(/\/am\/about-am$/);
+        await expect(page.locator('html')).toHaveAttribute('lang', 'am');
+        await expect(page.locator('h1')).toContainText('ስለ ድርጅቱ');
+      } else if (routePath === '/en/content/news/story') {
+        await expect(page.locator('h1')).toContainText('ARNA News Story');
+        await page.getByRole('link', { name: 'አማርኛ' }).click();
+        await expect(page).toHaveURL(/\/am\/content\/news\/story-am$/);
+        await expect(page.locator('html')).toHaveAttribute('lang', 'am');
+        await expect(page.locator('h1')).toContainText('የARNA ዜና');
+      } else {
+        await page.getByRole('link', { name: 'English' }).click();
+        await expect(page).toHaveURL(/\/contribute\?locale=en$/);
+        await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+        await expect(page.locator('h1')).toContainText('Submit content');
+        await page.getByRole('link', { name: 'አማርኛ' }).click();
+        await expect(page).toHaveURL(/\/contribute$/);
+        await expect(page.locator('html')).toHaveAttribute('lang', 'am');
+        await expect(page.locator('h1')).toContainText('ይዘት ያቅርቡ');
+      }
+      await expectNoSeriousAccessibilityViolations(page, routePath + ' final locale');
+    }
+  });
+
   test('has no serious or critical axe accessibility violations on the homepage', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(baseUrl);
@@ -214,7 +318,58 @@ test.describe('ARNA public site browser contract', () => {
     for (const route of ['/verify', '/legal', '/legal/terms']) {
       await page.goto(new URL(route, baseUrl).toString());
       await expect(page.locator('h1')).toBeVisible();
+      await expect(page.getByTestId('theme-preference-control')).toBeVisible();
       await expectNoSeriousAccessibilityViolations(page, route);
     }
   });
+
+  test('keeps verification and legal shell locale-aware, keyboard-accessible and responsive', async ({ page }) => {
+    const viewports = [
+      { width: 320, height: 740 }, { width: 360, height: 800 }, { width: 390, height: 844 },
+      { width: 768, height: 1024 }, { width: 1024, height: 900 }, { width: 1280, height: 900 },
+      { width: 1440, height: 960 },
+    ];
+    for (const routePath of ['/verify?locale=en', '/legal?locale=en', '/legal/terms?locale=en']) {
+      await page.goto(new URL(routePath, baseUrl).toString());
+      const shell = page.getByTestId('public-site-layout');
+      await expect(shell).toHaveAttribute('lang', 'en');
+      await expect(shell.getByRole('navigation', { name: 'Main navigation' })).toBeVisible();
+      const primaryNavigation = shell.getByRole('navigation', { name: 'Main navigation' });
+      await expect(primaryNavigation.getByRole('link', { name: 'Document verification' })).toBeVisible();
+      await expect(primaryNavigation.getByRole('link', { name: 'Legal information' })).toBeVisible();
+      await expect(shell.locator('.public-site-layout__skip-link')).toContainText('Skip to main content');
+      await expect(shell.getByTestId('theme-preference-control')).toBeVisible();
+      const theme = shell.getByTestId('theme-preference-control');
+      await theme.selectOption('dark');
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+      await theme.selectOption('light');
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+      await theme.selectOption('system');
+      await expect(page.locator('html')).not.toHaveAttribute('data-theme');
+      for (const viewport of viewports) {
+        await page.setViewportSize(viewport);
+        const dimensions = await page.evaluate(() => ({
+          viewport: document.documentElement.clientWidth,
+          document: document.documentElement.scrollWidth,
+        }));
+        expect(dimensions.document, routePath + ' overflow at ' + viewport.width + 'px')
+          .toBeLessThanOrEqual(dimensions.viewport + 1);
+      }
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.keyboard.press('Tab');
+      const skip = shell.locator('.public-site-layout__skip-link');
+      await expect(skip).toBeFocused();
+      await page.keyboard.press('Enter');
+      await expect(page).toHaveURL(/#public-site-main$/);
+      await expect(page.locator('#public-site-main')).toBeFocused();
+      await expectNoSeriousAccessibilityViolations(page, routePath);
+    }
+    await page.goto(new URL('/verify', baseUrl).toString());
+    const amharicShell = page.getByTestId('public-site-layout');
+    await expect(amharicShell).toHaveAttribute('lang', 'am');
+    const amharicNavigation = amharicShell.getByRole('navigation', { name: 'ዋና አሰሳ' });
+    await expect(amharicNavigation).toBeVisible();
+    await expect(amharicNavigation.getByRole('link', { name: 'ሰነድ ማረጋገጫ' })).toBeVisible();
+  });
+
 });

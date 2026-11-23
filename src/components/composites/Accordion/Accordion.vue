@@ -165,7 +165,7 @@ export interface AccordionItem {
 /*
  * Module-level counter for auto-generated accordion ids.
  */
-let __masesAccordionIdCounter = 0;
+let __arnaAccordionIdCounter = 0;
 </script>
 
 <script setup lang="ts">
@@ -215,7 +215,7 @@ defineSlots<{
 // -----------------------------------------------------------------------------
 // Generated base id (per instance)
 // -----------------------------------------------------------------------------
-const baseId = `mases-accordion-${++__masesAccordionIdCounter}`;
+const baseId = `arna-accordion-${++__arnaAccordionIdCounter}`;
 
 function headerIdFor(itemId: string): string {
   return `${baseId}-header-${itemId}`;
@@ -440,7 +440,7 @@ function focusHeaderAt(index: number): void {
    * border. Together these produce one rule above the first item,
    * one between every pair of items, and one below the last item.
    */
-  border-block-start: 1px solid var(--mases-color-border-subtle);
+  border-block-start: 1px solid var(--arna-color-border-subtle);
 }
 
 /* ============================================================================
@@ -448,7 +448,7 @@ function focusHeaderAt(index: number): void {
    ============================================================================ */
 .accordion__item {
   display: block;
-  border-block-end: 1px solid var(--mases-color-border-subtle);
+  border-block-end: 1px solid var(--arna-color-border-subtle);
 }
 
 /* ============================================================================
@@ -474,37 +474,37 @@ function focusHeaderAt(index: number): void {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   width: 100%;
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-4);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-4);
   appearance: none;
   background-color: transparent;
   border: 0;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-heading-6);
-  line-height: var(--mases-line-height-heading-6);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-heading-6);
+  line-height: var(--arna-line-height-heading-6);
+  font-weight: var(--arna-font-weight-semibold);
   text-align: start;
   cursor: pointer;
   transition:
-    background-color var(--mases-duration-fast) var(--mases-easing-standard);
+    background-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .accordion__header:hover:not(:disabled) {
-  background-color: var(--mases-color-state-hover);
+  background-color: var(--arna-color-state-hover);
 }
 
 .accordion__header:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: calc(var(--mases-focus-ring-offset) * -1);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: calc(var(--arna-focus-ring-offset) * -1);
   /* The focus ring is drawn inside the button so it does not overlap
      the item's separating borders. */
 }
 
 .accordion__header:disabled {
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
   cursor: not-allowed;
 }
 
@@ -529,13 +529,13 @@ function focusHeaderAt(index: number): void {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: var(--mases-color-icon-secondary);
+  color: var(--arna-color-icon-secondary);
   /*
    * Smooth rotation between collapsed (0deg) and expanded (180deg).
    * The state is driven by the parent button's aria-expanded attribute
    * so the visual state and the announced state cannot diverge.
    */
-  transition: transform var(--mases-duration-base) var(--mases-easing-standard);
+  transition: transform var(--arna-duration-base) var(--arna-easing-standard);
 }
 
 .accordion__header[aria-expanded='true'] .accordion__indicator {
@@ -543,7 +543,7 @@ function focusHeaderAt(index: number): void {
 }
 
 .accordion__header:disabled .accordion__indicator {
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
 }
 
 /* ============================================================================
@@ -556,13 +556,13 @@ function focusHeaderAt(index: number): void {
    * align its content with the header label) and the bottom padding.
    */
   padding-block-start: 0;
-  padding-block-end: var(--mases-space-4);
-  padding-inline: var(--mases-space-4);
-  color: var(--mases-color-text-secondary);
+  padding-block-end: var(--arna-space-4);
+  padding-inline: var(--arna-space-4);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-regular);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-regular);
 }
 
 /* ============================================================================
@@ -572,11 +572,11 @@ function focusHeaderAt(index: number): void {
   .accordion__header {
     /* Ensure a 44px minimum tap target. */
     min-height: 44px;
-    padding-inline: var(--mases-space-3);
+    padding-inline: var(--arna-space-3);
   }
 
   .accordion__panel {
-    padding-inline: var(--mases-space-3);
+    padding-inline: var(--arna-space-3);
   }
 }
 

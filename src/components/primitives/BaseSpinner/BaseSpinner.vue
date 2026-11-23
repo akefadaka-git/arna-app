@@ -5,7 +5,7 @@
 
  File:      mase_app/src/components/primitives/BaseSpinner/BaseSpinner.vue
  Layer:     1 (Primitives)
- Version:   1.0.0
+ Version:   1.1.0
  Status:    FROZEN
  Authority: MASES_PHASE_2_UI_COMPONENT_CATALOG.md §2.15
             MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -47,9 +47,9 @@
  -----------------------------------------------------------------------------
  Sizes
  -----------------------------------------------------------------------------
- sm  →  --mases-icon-sm   (16px)
- md  →  --mases-icon-lg   (24px)  — default
- lg  →  --mases-icon-2xl  (48px)
+ sm  →  --arna-icon-sm   (16px)
+ md  →  --arna-icon-lg   (24px)  — default
+ lg  →  --arna-icon-2xl  (48px)
 
  Border width scales with the visual size so that the ring remains
  legible at all three sizes:
@@ -60,7 +60,7 @@
  -----------------------------------------------------------------------------
  Color
  -----------------------------------------------------------------------------
- The wrapper sets `color: var(--mases-color-icon-primary)` as the
+ The wrapper sets `color: var(--arna-color-icon-primary)` as the
  default. The visual uses `currentColor`, so the spinner inherits any
  color the surrounding context applies to the wrapper — including the
  inverse text color on a primary button.
@@ -121,9 +121,9 @@ interface Props {
   /**
    * Size. Defaults to 'md'.
    *
-   *   sm  →  16px  (--mases-icon-sm)
-   *   md  →  24px  (--mases-icon-lg)
-   *   lg  →  48px  (--mases-icon-2xl)
+   *   sm  →  16px  (--arna-icon-sm)
+   *   md  →  24px  (--arna-icon-lg)
+   *   lg  →  48px  (--arna-icon-2xl)
    */
   size?: SpinnerSize;
 
@@ -139,11 +139,17 @@ interface Props {
    * See the response preamble §"Design note".
    */
   ariaLabel?: string;
+
+  /**
+   * ID reference for an external accessible name. Takes precedence over ariaLabel.
+   */
+  ariaLabelledBy?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   size: 'md',
   ariaLabel: undefined,
+  ariaLabelledBy: undefined,
 });
 
 const classes = computed<Array<string | Record<string, boolean>>>(() => [
@@ -156,6 +162,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   <span
     role="status"
     aria-live="polite"
+    :aria-labelledby="ariaLabelledBy"
     :class="classes"
     data-testid="base-spinner-root"
   >
@@ -166,7 +173,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
       as part of the status change.
     -->
     <span
-      v-if="ariaLabel !== undefined"
+      v-if="ariaLabel !== undefined && !ariaLabelledBy"
       class="spinner__sr-only"
       data-testid="base-spinner-label"
     >
@@ -194,7 +201,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--mases-color-icon-primary);
+  color: var(--arna-color-icon-primary);
 }
 
 /* ============================================================================
@@ -206,11 +213,11 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   border-style: solid;
   border-color: currentColor;
   border-top-color: transparent;
-  border-radius: var(--mases-radius-full);
-  animation: mases-spinner-rotate 0.8s linear infinite;
+  border-radius: var(--arna-radius-full);
+  animation: arna-spinner-rotate 0.8s linear infinite;
 }
 
-@keyframes mases-spinner-rotate {
+@keyframes arna-spinner-rotate {
   to {
     transform: rotate(360deg);
   }
@@ -220,20 +227,20 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    Sizes
    ============================================================================ */
 .spinner--sm .spinner__visual {
-  width: var(--mases-icon-sm);
-  height: var(--mases-icon-sm);
+  width: var(--arna-icon-sm);
+  height: var(--arna-icon-sm);
   border-width: 2px;
 }
 
 .spinner--md .spinner__visual {
-  width: var(--mases-icon-lg);
-  height: var(--mases-icon-lg);
+  width: var(--arna-icon-lg);
+  height: var(--arna-icon-lg);
   border-width: 2px;
 }
 
 .spinner--lg .spinner__visual {
-  width: var(--mases-icon-2xl);
-  height: var(--mases-icon-2xl);
+  width: var(--arna-icon-2xl);
+  height: var(--arna-icon-2xl);
   border-width: 3px;
 }
 
