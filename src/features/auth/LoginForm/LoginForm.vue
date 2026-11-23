@@ -326,6 +326,17 @@ export interface LoginFormLabels {
   /** The label for the password field. */
   readonly passwordLabel: string;
 
+  /** Returning-user OTP option, delivery channel and challenge labels. */
+  readonly otpOptionLabel: string;
+  readonly otpChannelLabel: string;
+  readonly otpEmailOption: string;
+  readonly otpSmsOption: string;
+  readonly requestOtpLabel: string;
+  readonly otpInstructions: string;
+  readonly otpCodeLabel: string;
+  readonly verifyOtpLabel: string;
+  readonly cancelOtpLabel: string;
+
   /** Instructions shown when the backend requires multi-factor authentication. */
   readonly mfaInstructions: string;
 
@@ -421,7 +432,7 @@ import BaseInput from '@/components/primitives/BaseInput';
 import BaseLink from '@/components/primitives/BaseLink';
 import PrimaryButton from '@/components/primitives/PrimaryButton';
 
-import { completeMfaLogin, login } from '@/features/auth/service';
+import { completeMfaLogin, completeOtpLogin, login, requestLoginOtp } from '@/features/auth/service';
 import { resolveSafeRedirect } from '@/router/guards';
 
 interface Props {
@@ -461,6 +472,10 @@ const password = ref<string>('');
 const mfaCode = ref<string>('');
 const mfaChallengeToken = ref<string | null>(null);
 const isMfaChallengeActive = computed<boolean>(() => mfaChallengeToken.value !== null);
+const otpCode = ref<string>('');
+const otpChallengeToken = ref<string | null>(null);
+const otpChannel = ref<'email' | 'sms'>('email');
+const isOtpChallengeActive = computed<boolean>(() => otpChallengeToken.value !== null);
 
 /*
  * Whether the password is visible. When false (default), the input
@@ -736,7 +751,13 @@ async function onSubmit(): Promise<void> {
 
   isSubmitting.value = true;
   try {
-    if (isMfaChallengeActive.value) {
+    if (isOtpChallengeActive.value) {
+      await completeOtpLogin(
+        identifier.value,
+        otpChallengeToken.value as string,
+        otpCode.value,
+      );
+    } else if (isMfaChallengeActive.value) {
       await completeMfaLogin(
         identifier.value,
         password.value,
@@ -792,6 +813,31 @@ function cancelMfaChallenge(): void {
   banner.value = null;
 }
 
+async function requestOtpChallenge(): Promise<void> {
+  if (isSubmitting.value || isMfaChallengeActive.value || isOtpChallengeActive.value) return;
+  banner.value = null;
+  fieldErrors.value = {};
+  isSubmitting.value = true;
+  try {
+    const challenge = await requestLoginOtp(identifier.value, otpChannel.value);
+    otpChallengeToken.value = challenge.challengeToken;
+    otpCode.value = '';
+    await nextTick();
+    const input = document.getElementById('login-otp-code');
+    if (input instanceof HTMLElement) input.focus();
+  } catch (err) {
+    setBannerFromError(err);
+  } finally {
+    isSubmitting.value = false;
+  }
+}
+
+function cancelOtpChallenge(): void {
+  otpChallengeToken.value = null;
+  otpCode.value = '';
+  banner.value = null;
+}
+
 function onForgotPasswordClick(event: MouseEvent): void {
   event.preventDefault();
   emit('forgot-password');
@@ -808,9 +854,11 @@ function onRegisterClick(event: MouseEvent): void {
 const submitLabel = computed<string>(() =>
   isSubmitting.value
     ? props.labels.submittingLabel
-    : isMfaChallengeActive.value
-      ? props.labels.verifyMfaLabel
-      : props.labels.submitLabel,
+    : isOtpChallengeActive.value
+      ? props.labels.verifyOtpLabel
+      : isMfaChallengeActive.value
+        ? props.labels.verifyMfaLabel
+        : props.labels.submitLabel,
 );
 
 /*
@@ -904,6 +952,7 @@ const passwordToggleLabel = computed<string>(() =>
          bubble from the input to that wrapper.
          ============================================================ -->
     <FormField
+      v-if="!isOtpChallengeActive"
       :label="labels.passwordLabel"
       html-for="login-password"
       :error="passwordError"
@@ -945,6 +994,36 @@ const passwordToggleLabel = computed<string>(() =>
     </FormField>
 
     <!-- ============================================================
+         Returning-user OTP challenge
+         ============================================================ -->
+    <div v-if="isOtpChallengeActive" class="login-form__mfa" data-testid="login-form-otp">
+      <p class="login-form__mfa-instructions" role="status" aria-live="polite">
+        {{ labels.otpInstructions }}
+      </p>
+      <FormField :label="labels.otpCodeLabel" html-for="login-otp-code" :disabled="isSubmitting" required>
+        <BaseInput
+          id="login-otp-code"
+          v-model="otpCode"
+          type="text"
+          inputmode="numeric"
+          autocomplete="one-time-code"
+          autocapitalize="off"
+          spellcheck="false"
+          :disabled="isSubmitting"
+          required
+          data-testid="login-form-otp-code"
+        />
+      </FormField>
+      <button
+        type="button"
+        class="login-form__mfa-cancel"
+        :disabled="isSubmitting"
+        data-testid="login-form-otp-cancel"
+        @click="cancelOtpChallenge"
+      >{{ labels.cancelOtpLabel }}</button>
+    </div>
+
+    <!-- ============================================================
          MFA challenge (rendered only after the server requests MFA)
          ============================================================ -->
     <div
@@ -981,6 +1060,31 @@ const passwordToggleLabel = computed<string>(() =>
         data-testid="login-form-mfa-cancel"
         @click="cancelMfaChallenge"
       >{{ labels.cancelMfaLabel }}</button>
+    </div>
+
+    <!-- ============================================================
+         Passwordless returning-user OTP option
+         ============================================================ -->
+    <div v-if="!isMfaChallengeActive && !isOtpChallengeActive" class="login-form__otp-option">
+      <label class="login-form__otp-channel" for="login-otp-channel">
+        {{ labels.otpChannelLabel }}
+        <select
+          id="login-otp-channel"
+          v-model="otpChannel"
+          :disabled="isSubmitting"
+          data-testid="login-form-otp-channel"
+        >
+          <option value="email">{{ labels.otpEmailOption }}</option>
+          <option value="sms">{{ labels.otpSmsOption }}</option>
+        </select>
+      </label>
+      <button
+        type="button"
+        class="login-form__mfa-cancel"
+        :disabled="isSubmitting"
+        data-testid="login-form-request-otp"
+        @click="requestOtpChallenge"
+      >{{ labels.otpOptionLabel }} — {{ labels.requestOtpLabel }}</button>
     </div>
 
     <!-- ============================================================
