@@ -632,6 +632,9 @@
   --mases-focus-ring-color:     var(--mases-color-state-focus-ring);
   --mases-focus-ring-color-inverse: var(--mases-color-state-focus-ring-inverse);
 
+  /* A3.1 additive semantic dimension: mobile interactive target minimum. */
+  --mases-size-interactive-target-min: 44px;
+
   /* ===========================================================================
    * AUTH SURFACE — ADDITIONS (1.1.0)
    * ===========================================================================
@@ -931,6 +934,7 @@
   --arna-container-auth-card-wide: var(--mases-container-auth-card-wide);
   --arna-size-auth-logo-max-width: var(--mases-size-auth-logo-max-width);
   --arna-size-auth-logo-max-height: var(--mases-size-auth-logo-max-height);
+  --arna-size-interactive-target-min: var(--mases-size-interactive-target-min);
   --arna-color-surface-auth-backdrop: var(--mases-color-surface-auth-backdrop);
   --arna-color-text-auth-attribution: var(--mases-color-text-auth-attribution);
   --arna-shell-header-height-desktop: var(--mases-shell-header-height-desktop);
