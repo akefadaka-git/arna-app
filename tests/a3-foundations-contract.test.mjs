@@ -13,7 +13,7 @@ const registration = read('src/core/register-font-cache.ts');
 
 test('ARNA spacing aliases resolve to the canonical token scale', () => {
   assert.match(tokens, /--arna-space-4:\s*var\(--mases-space-4\)/);
-  assert.match(metric, /var\(--arna-space-4,\s*1rem\)/);
+  assert.match(metric, /var\(--arna-space-4\)/);
   assert.doesNotMatch(metric, /--arna-spacing-4/);
 });
 
