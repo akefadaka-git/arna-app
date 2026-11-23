@@ -65,6 +65,8 @@ jobs:
         run: npm run build
       - name: Verify A3 design-system and Ethiopic font delivery contracts
         run: npm run test:a3-foundations
+      - name: Verify A3 semantic tokens and component-state contracts
+        run: npm run test:a3-design-system-hardening
       - name: Verify root entry points, local assets, and deployment policy
         run: npm run verify:build
       - name: Smoke-check the standalone public build artifacts
