@@ -154,14 +154,14 @@ test('ProgressBar consumes semantic loading-motion duration tokens', () => {
 });
 
 test('shared reduced-motion duration token governs component transition and animation overrides', () => {
-  assert.match(tokens, /--mases-duration-fast:\\s*150ms/);
-  assert.match(tokens, /--arna-duration-fast:\\s*var\\(--mases-duration-fast\\)/);
-  assert.match(tokens, /@media \\(prefers-reduced-motion: reduce\\)[\\s\\S]*?--mases-duration-fast:\\s*1ms/);
+  assert.match(tokens, /--mases-duration-fast:\s*150ms/);
+  assert.match(tokens, /--arna-duration-fast:\s*var\(--mases-duration-fast\)/);
+  assert.match(tokens, /@media \(prefers-reduced-motion: reduce\)[\s\S]*?--mases-duration-fast:\s*1ms/);
   const sources = [alert, tooltip, accordion, drawer, modal, popover, progress];
   for (const source of sources) {
-    const reducedMotion = source.match(/@media \\(prefers-reduced-motion: reduce\\) \\{([\\s\\S]*?)\\n\\}/)?.[1] ?? '';
+    const reducedMotion = source.match(/@media \(prefers-reduced-motion: reduce\) \{([\s\S]*?)\n\}/)?.[1] ?? '';
     assert.ok(reducedMotion.length > 0, 'component must retain its reduced-motion policy');
-    assert.match(reducedMotion, /(?:transition|animation)-duration: var\\(--arna-duration-fast\\);/);
+    assert.match(reducedMotion, /(?:transition|animation)-duration: var\(--arna-duration-fast\);/);
     assert.doesNotMatch(reducedMotion, /(?:transition|animation)-duration: 1ms;/);
   }
 });
