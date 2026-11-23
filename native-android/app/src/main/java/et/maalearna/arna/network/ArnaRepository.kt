@@ -61,6 +61,65 @@ class ArnaRepository(context: Context, baseUrl: String, appVersion: String) {
         data
     }
 
+    suspend fun loginWithPin(identifier: String, pin: String, tenantId: Long?): LoginData = execute {
+        tenantSelection.clear()
+        val response = api.loginWithPin(
+            PinLoginRequest(
+                identifier = identifier.trim(),
+                pin = pin,
+                device_installation_id = identity.getOrCreate(),
+                tenant_id = tenantId
+            )
+        )
+        if (!response.success) error("The PIN login request was rejected.")
+        val data = response.data ?: error("The PIN login response was empty.")
+        sessions.save(data.token ?: error("The API did not return an access token."))
+        val profile = discoverTenants()
+        val selected = tenantId ?: profile.default_tenant_id ?: profile.tenants.singleOrNull()?.id
+        if (selected != null) selectTenant(selected)
+        data
+    }
+
+    suspend fun requestPinEnrollmentChallenge(channel: String): StepUpChallengeData = execute {
+        val response = api.requestStepUpChallenge(
+            StepUpChallengeRequest(
+                action = "identity_change",
+                channel = channel,
+                context = mapOf("purpose" to "device_pin_enrollment")
+            )
+        )
+        if (!response.success) error("The PIN enrollment verification request was rejected.")
+        response.data ?: error("The PIN enrollment challenge response was empty.")
+    }
+
+    suspend fun verifyPinEnrollmentOtp(challengeToken: String, code: String): String = execute {
+        val response = api.verifyStepUpChallenge(
+            StepUpVerifyRequest(
+                action = "identity_change",
+                context = mapOf("purpose" to "device_pin_enrollment"),
+                authenticator = "otp",
+                code = code.trim(),
+                challenge_token = challengeToken
+            )
+        )
+        if (!response.success) error("The PIN enrollment verification was rejected.")
+        response.data?.step_up_token ?: error("The API did not issue a PIN enrollment authorization.")
+    }
+
+    suspend fun enrollPin(sessionId: String, pin: String, confirmation: String, stepUpToken: String) = execute {
+        val response = api.enrollDevicePin(
+            PinEnrollmentRequest(
+                session_id = sessionId,
+                pin = pin,
+                pin_confirmation = confirmation
+            ),
+            stepUpToken
+        )
+        if (!response.success || response.data?.pin_enrolled != true) {
+            error("The API did not confirm PIN enrollment.")
+        }
+    }
+
     suspend fun discoverTenants(): UserProfileData = execute {
         val response = api.profile()
         if (!response.success) error("The profile request was rejected.")
