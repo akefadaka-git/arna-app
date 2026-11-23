@@ -147,7 +147,9 @@ test.describe('ARNA returning-user OTP login', () => {
 
     await expect.poll(() => authenticatedUserCookie).toContain('arna_sso_token=browser-otp-session');
     await page.waitForURL(/\/launcher(?:[/?#]|$)/);
-    expect(await page.evaluate(() => Object.keys(localStorage))).not.toContain('arna.auth.otp_challenge');
+    const storedValues = await page.evaluate(() => Object.values(localStorage));
+    expect(storedValues).not.toContain('482913');
+    expect(storedValues).not.toContain('a'.repeat(64));
   });
 
   test('keeps the user unauthenticated and shows a generic error when OTP verification fails', async ({ page }) => {
@@ -161,13 +163,6 @@ test.describe('ARNA returning-user OTP login', () => {
       })),
     }));
 
-    let ssoCookieIssued = false;
-    page.on('response', async (response) => {
-      if (response.url().endsWith('/api/login/authenticator')) {
-        const setCookie = await response.headerValue('set-cookie');
-        ssoCookieIssued = Boolean(setCookie?.includes('arna_sso_token='));
-      }
-    });
     await page.route('**/api/login/authenticator', (route) => route.fulfill({
       status: 401,
       contentType: 'application/json',
@@ -181,12 +176,16 @@ test.describe('ARNA returning-user OTP login', () => {
     await page.getByTestId('login-form-request-otp').click();
     await expect(page.getByTestId('login-form-otp')).toBeVisible();
     await page.locator('#login-otp-code').fill('000000');
+    const failureResponsePromise = page.waitForResponse((response) =>
+      response.url().endsWith('/api/login/authenticator'),
+    );
     await page.getByTestId('login-form-submit').click();
+    const failureResponse = await failureResponsePromise;
 
     await expect(page.getByTestId('login-form-banner')).toBeVisible();
     await expect(page.getByTestId('login-form-banner')).toContainText('Invalid sign-in details');
     await expect(page).toHaveURL(/\/login(?:[/?#]|$)/);
-    expect(ssoCookieIssued).toBe(false);
+    expect(await failureResponse.headerValue('set-cookie')).toBeNull();
     await expect(page.getByTestId('login-form-otp')).toBeVisible();
   });
 });
