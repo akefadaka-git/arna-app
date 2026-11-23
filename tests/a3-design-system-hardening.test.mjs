@@ -132,8 +132,8 @@ test('expanded shared-component style census contains no hard-coded hex colors',
     alert, loadingState, errorState, formField,
   ];
   for (const source of sources) {
-    const style = source.match(/<style[^>]*>([\\s\\S]*?)<\\/style>/)?.[1] ?? '';
-    assert.doesNotMatch(style, /#[0-9a-fA-F]{3,8}\\b/,
+    const style = source.match(/<style[^>]*>([\s\S]*?)<\/style>/)?.[1] ?? '';
+    assert.doesNotMatch(style, /#[0-9a-fA-F]{3,8}\b/,
       'shared component styles must consume declared color tokens, not hard-coded hex values');
   }
 });
