@@ -41,7 +41,8 @@ const summaryAm = ref('');
 const summaryEn = ref('');
 const bodyAm = ref('');
 const bodyEn = ref('');
-type EditableLocaleContent = { title: string; body: string; [key: string]: unknown };
+type EditableItem = { title: string; body: string; [key: string]: unknown };
+type EditableLocaleContent = { title: string; body: string; items: EditableItem[]; cta_label: string; cta_url: string; image_url: string; image_alt: string; [key: string]: unknown };
 type EditableSection = {
   id: string;
   type: string;
@@ -94,7 +95,17 @@ function normalizeSections(input: readonly Record<string, unknown>[] = []): Edit
       const value = source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])
         ? source[key] as Record<string, unknown>
         : {};
-      return { ...value, title: String(value.title ?? ''), body: String(value.body ?? '') };
+      const items = Array.isArray(value.items) ? value.items.filter((item): item is Record<string, unknown> => Boolean(item) && typeof item === 'object' && !Array.isArray(item)) : [];
+      return {
+        ...value,
+        title: String(value.title ?? ''),
+        body: String(value.body ?? ''),
+        cta_label: String(value.cta_label ?? ''),
+        cta_url: String(value.cta_url ?? ''),
+        image_url: String(value.image_url ?? ''),
+        image_alt: String(value.image_alt ?? ''),
+        items: items.map((item) => ({ ...item, title: String(item.title ?? ''), body: String(item.body ?? item.description ?? '') })),
+      };
     };
     return {
       ...raw,
@@ -116,10 +127,18 @@ function addSection(): void {
     type: 'text',
     content: {
       visible: true,
-      am: { title: '', body: '' },
-      en: { title: '', body: '' },
+      am: { title: '', body: '', items: [], cta_label: '', cta_url: '', image_url: '', image_alt: '' },
+      en: { title: '', body: '', items: [], cta_label: '', cta_url: '', image_url: '', image_alt: '' },
     },
   });
+}
+
+function addSectionItem(section: EditableSection, locale: 'am' | 'en'): void {
+  section.content[locale].items.push({ title: '', body: '' });
+}
+
+function removeSectionItem(section: EditableSection, locale: 'am' | 'en', index: number): void {
+  section.content[locale].items.splice(index, 1);
 }
 
 function moveSection(index: number, direction: -1 | 1): void {
@@ -438,10 +457,34 @@ onMounted(() => void refresh());
                 <fieldset><legend>አማርኛ</legend>
                   <label>ርዕስ <input v-model="section.content.am.title" maxlength="180" /></label>
                   <label>ይዘት <textarea v-model="section.content.am.body" rows="3" maxlength="12000" /></label>
+                  <label>የአዝራር ጽሑፍ <input v-model="section.content.am.cta_label" maxlength="100" /></label>
+                  <label>የአዝራር አገናኝ <input v-model="section.content.am.cta_url" maxlength="1000" /></label>
+                  <label>የምስል አገናኝ <input v-model="section.content.am.image_url" maxlength="1000" /></label>
+                  <label>የምስል መግለጫ <input v-model="section.content.am.image_alt" maxlength="300" /></label>
+                  <div class="corporate-admin__items"><h4>የይዘት ንጥሎች</h4>
+                    <div v-for="(item, itemIndex) in section.content.am.items" :key="itemIndex" class="corporate-admin__item-editor">
+                      <label>ርዕስ <input v-model="item.title" maxlength="180" /></label>
+                      <label>መግለጫ <textarea v-model="item.body" rows="2" maxlength="2000" /></label>
+                      <button type="button" :disabled="saving" @click="removeSectionItem(section, 'am', itemIndex)">አስወግድ</button>
+                    </div>
+                    <button type="button" :disabled="saving" @click="addSectionItem(section, 'am')">ንጥል ጨምር</button>
+                  </div>
                 </fieldset>
                 <fieldset><legend>English</legend>
                   <label>Title <input v-model="section.content.en.title" maxlength="180" /></label>
                   <label>Body <textarea v-model="section.content.en.body" rows="3" maxlength="12000" /></label>
+                  <label>Call-to-action label <input v-model="section.content.en.cta_label" maxlength="100" /></label>
+                  <label>Call-to-action URL <input v-model="section.content.en.cta_url" maxlength="1000" /></label>
+                  <label>Image URL <input v-model="section.content.en.image_url" maxlength="1000" /></label>
+                  <label>Image alternative text <input v-model="section.content.en.image_alt" maxlength="300" /></label>
+                  <div class="corporate-admin__items"><h4>Content items</h4>
+                    <div v-for="(item, itemIndex) in section.content.en.items" :key="itemIndex" class="corporate-admin__item-editor">
+                      <label>Title <input v-model="item.title" maxlength="180" /></label>
+                      <label>Description <textarea v-model="item.body" rows="2" maxlength="2000" /></label>
+                      <button type="button" :disabled="saving" @click="removeSectionItem(section, 'en', itemIndex)">Remove</button>
+                    </div>
+                    <button type="button" :disabled="saving" @click="addSectionItem(section, 'en')">Add item</button>
+                  </div>
                 </fieldset>
               </div>
             </fieldset>
@@ -557,6 +600,8 @@ onMounted(() => void refresh());
 .corporate-admin__section-languages { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
 .corporate-admin__section-languages fieldset { display: grid; gap: .6rem; min-width: 0; border: 1px solid var(--border-subtle); border-radius: .5rem; padding: .7rem; }
 .corporate-admin__section-languages label { display: grid; gap: .3rem; }
+.corporate-admin__items { display: grid; gap: .5rem; padding-top: .5rem; border-top: 1px solid var(--border-subtle); }
+.corporate-admin__item-editor { display: grid; gap: .5rem; padding: .6rem; border: 1px dashed var(--border-subtle); border-radius: .4rem; }
 .corporate-admin__visibility { display: inline-flex !important; align-items: center; gap: .45rem !important; }
 .corporate-admin__visibility input { width: auto; }
 .corporate-admin__help { margin: -.35rem 0 0; color: var(--text-muted); font-size: .85rem; line-height: 1.6; }
