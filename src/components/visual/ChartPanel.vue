@@ -76,7 +76,7 @@ const donutSegments = computed(() => {
 </template>
 
 <style scoped>
-.chart-panel { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; min-width: 0; padding: var(--arna-spacing-4, 1rem); border: 1px solid var(--arna-color-border-subtle); border-radius: var(--arna-radius-md); background: var(--arna-color-surface-raised); color: var(--arna-color-text-primary); }
+.chart-panel { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; min-width: 0; padding: var(--arna-space-4); border: 1px solid var(--arna-color-border-subtle); border-radius: var(--arna-radius-md); background: var(--arna-color-surface-raised); color: var(--arna-color-text-primary); }
 .chart-panel__plot { min-height: 150px; display: grid; place-items: center; }
 .chart-panel svg { width: 100%; max-width: 420px; max-height: 220px; overflow: visible; }
 .chart-panel__axis { stroke: var(--arna-color-border-default); stroke-width: .8; }
