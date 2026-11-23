@@ -961,6 +961,12 @@ void _toggle;
   /* A minimal width prevents the input from collapsing to zero when the
      control is narrower than the chip row. */
   min-width: 4rem;
+  /*
+   * The native input is the actual role=combobox target. Keep its own
+   * hit area at least 24px high; the parent control separately provides
+   * the 44px mobile target convention.
+   */
+  min-height: 24px;
   padding: 0;
   margin: 0;
   appearance: none;
