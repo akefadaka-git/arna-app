@@ -71,6 +71,11 @@ const select = read('src/components/primitives/BaseSelect/BaseSelect.vue');
 const textarea = read('src/components/primitives/BaseTextarea/BaseTextarea.vue');
 const link = read('src/components/primitives/BaseLink/BaseLink.vue');
 const progress = read('src/components/primitives/BaseProgressBar/BaseProgressBar.vue');
+const tooltip = read('src/components/primitives/BaseTooltip/BaseTooltip.vue');
+const accordion = read('src/components/composites/Accordion/Accordion.vue');
+const drawer = read('src/components/composites/Drawer/Drawer.vue');
+const modal = read('src/components/composites/Modal/Modal.vue');
+const popover = read('src/components/composites/Popover/Popover.vue');
 const alert = read('src/components/composites/Alert/Alert.vue');
 const loadingState = read('src/components/composites/LoadingState/LoadingState.vue');
 const errorState = read('src/components/composites/ErrorState/ErrorState.vue');
@@ -146,4 +151,17 @@ test('ProgressBar consumes semantic loading-motion duration tokens', () => {
   assert.match(progress, /animation: arna-progress-indeterminate var\(--arna-duration-loading\)/);
   assert.match(progress, /animation-duration: var\(--arna-duration-loading-reduced\)/);
   assert.doesNotMatch(progress, /animation(?:-duration)?:\s*1\.8s|animation: arna-progress-indeterminate 0\.9s/);
+});
+
+test('shared reduced-motion duration token governs component transition and animation overrides', () => {
+  assert.match(tokens, /--mases-duration-fast:\\s*150ms/);
+  assert.match(tokens, /--arna-duration-fast:\\s*var\\(--mases-duration-fast\\)/);
+  assert.match(tokens, /@media \\(prefers-reduced-motion: reduce\\)[\\s\\S]*?--mases-duration-fast:\\s*1ms/);
+  const sources = [alert, tooltip, accordion, drawer, modal, popover, progress];
+  for (const source of sources) {
+    const reducedMotion = source.match(/@media \\(prefers-reduced-motion: reduce\\) \\{([\\s\\S]*?)\\n\\}/)?.[1] ?? '';
+    assert.ok(reducedMotion.length > 0, 'component must retain its reduced-motion policy');
+    assert.match(reducedMotion, /(?:transition|animation)-duration: var\\(--arna-duration-fast\\);/);
+    assert.doesNotMatch(reducedMotion, /(?:transition|animation)-duration: 1ms;/);
+  }
 });
