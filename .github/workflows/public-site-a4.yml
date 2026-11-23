@@ -1,9 +1,11 @@
 name: Public corporate website A4 verification
 
 on:
+  workflow_dispatch:
   pull_request:
     branches: [main]
     paths:
+      - "docs/public-site/**"
       - "public-entry/**"
       - "src/public-site/**"
       - "src/features/public-site/**"
