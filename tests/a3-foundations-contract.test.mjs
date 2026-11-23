@@ -22,7 +22,7 @@ test('shared theme loads a self-hosted Ethiopic variable font', () => {
   assert.match(fontCss, /font-family:\s*"Noto Sans Ethiopic"/);
   assert.match(fontCss, /font-weight:\s*100 900/);
   assert.match(fontCss, /font-display:\s*swap/);
-  assert.match(fontCss, /url\(["']\/fonts\/NotoSansEthiopic%5Bwdth%2Cwght%5D\.ttf["']\)/);
+  assert.match(fontCss, /url\(["']\/fonts\/NotoSansEthiopic-variable\.ttf["']\)/);
   assert.match(tokens, /--mases-font-family-am:\s*"Noto Sans Ethiopic"/);
 });
 
@@ -53,7 +53,7 @@ test('font-only service worker is registered on authenticated and public apps', 
 });
 
 test('font binary and OFL license exist after the build vendor step', () => {
-  const fontPath = 'public/fonts/NotoSansEthiopic[wdth,wght].ttf';
+  const fontPath = 'public/fonts/NotoSansEthiopic-variable.ttf';
   assert.ok(existsSync(fontPath), 'run npm run fonts:vendor before this contract');
   const font = readFileSync(fontPath);
   assert.ok(font.length > 500_000);
