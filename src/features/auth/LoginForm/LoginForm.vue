@@ -292,8 +292,9 @@
      input when the identifier was pre-filled from storage.
    - After a 422, focus moves to the first field with a validation
      error.
-   - The identifier input carries autocomplete="username"; the
-     password input carries autocomplete="current-password".
+   - The identifier input carries autocomplete="username" and inputmode="text"
+     because ARNA identifiers include numeric and alphanumeric values;
+     the password input carries autocomplete="current-password".
    - Reduced motion: the toggle's transition uses the motion
      tokens, which the substrate collapses automatically.
 =============================================================================
@@ -317,14 +318,35 @@ export interface LoginFormLabels {
   /**
    * The label for the identifier field.
    *
-   * Despite the key name (kept for backward compatibility with
-   * auth-labels.ts and LoginRoute.vue), the field accepts an email
-   * address OR a phone number. The label VALUE must reflect that.
+   * Despite the historical key name (kept for compatibility with
+   * auth-labels.ts and LoginRoute.vue), the field accepts any of the six
+   * ARNA identifiers: email, username, mobile number, employee ID,
+   * shareholder number or wallet number.
    */
   readonly emailLabel: string;
 
   /** The label for the password field. */
   readonly passwordLabel: string;
+
+  /** Accessible label for the authenticator method selector. */
+  readonly authenticatorMethodsLabel: string;
+
+  /** Method selector labels. */
+  readonly usePasswordLabel: string;
+  readonly useOtpLabel: string;
+  readonly useGoogleAuthenticatorLabel: string;
+
+  /** OTP delivery-channel labels and instructions. */
+  readonly otpChannelLabel: string;
+  readonly emailChannelLabel: string;
+  readonly smsChannelLabel: string;
+  readonly otpInstructions: string;
+
+  /** Code entry and action labels for returning-user authenticators. */
+  readonly authenticatorCodeLabel: string;
+  readonly sendOtpLabel: string;
+  readonly verifyAuthenticatorLabel: string;
+  readonly cancelAuthenticatorLabel: string;
 
   /** Instructions shown when the backend requires multi-factor authentication. */
   readonly mfaInstructions: string;
@@ -421,7 +443,7 @@ import BaseInput from '@/components/primitives/BaseInput';
 import BaseLink from '@/components/primitives/BaseLink';
 import PrimaryButton from '@/components/primitives/PrimaryButton';
 
-import { completeMfaLogin, login } from '@/features/auth/service';
+import { completeAuthenticatorLogin, completeMfaLogin, login, requestLoginOtp } from '@/features/auth/service';
 import { resolveSafeRedirect } from '@/router/guards';
 
 interface Props {
@@ -461,6 +483,14 @@ const password = ref<string>('');
 const mfaCode = ref<string>('');
 const mfaChallengeToken = ref<string | null>(null);
 const isMfaChallengeActive = computed<boolean>(() => mfaChallengeToken.value !== null);
+type AuthenticatorMode = 'password' | 'otp' | 'google_authenticator';
+const authenticatorMode = ref<AuthenticatorMode>('password');
+const otpChannel = ref<'email' | 'sms'>('email');
+const otpChallengeToken = ref<string | null>(null);
+const authenticatorCode = ref<string>('');
+const isOtpChallengeActive = computed<boolean>(
+  () => authenticatorMode.value === 'otp' && otpChallengeToken.value !== null,
+);
 
 /*
  * Whether the password is visible. When false (default), the input
@@ -744,7 +774,7 @@ async function onSubmit(): Promise<void> {
         mfaCode.value,
         { remember: rememberMe.value },
       );
-    } else {
+    } else if (authenticatorMode.value === 'password') {
       const result = await login(
         identifier.value,
         password.value,
@@ -759,6 +789,21 @@ async function onSubmit(): Promise<void> {
         if (mfaInput instanceof HTMLElement) mfaInput.focus();
         return;
       }
+    } else if (authenticatorMode.value === 'otp' && otpChallengeToken.value === null) {
+      const challenge = await requestLoginOtp(identifier.value, otpChannel.value);
+      otpChallengeToken.value = challenge.challengeToken;
+      authenticatorCode.value = '';
+      await nextTick();
+      const codeInput = document.getElementById('login-authenticator-code');
+      if (codeInput instanceof HTMLElement) codeInput.focus();
+      return;
+    } else {
+      await completeAuthenticatorLogin(
+        identifier.value,
+        authenticatorMode.value,
+        authenticatorCode.value,
+        otpChallengeToken.value ?? undefined,
+      );
     }
 
     // Persist only the identifier. Never persist passwords, MFA codes,
@@ -792,6 +837,22 @@ function cancelMfaChallenge(): void {
   banner.value = null;
 }
 
+function selectAuthenticator(mode: AuthenticatorMode): void {
+  if (isSubmitting.value || isMfaChallengeActive.value) return;
+  authenticatorMode.value = mode;
+  otpChallengeToken.value = null;
+  authenticatorCode.value = '';
+  banner.value = null;
+  fieldErrors.value = {};
+}
+
+function cancelAuthenticatorChallenge(): void {
+  otpChallengeToken.value = null;
+  authenticatorCode.value = '';
+  authenticatorMode.value = 'password';
+  banner.value = null;
+}
+
 function onForgotPasswordClick(event: MouseEvent): void {
   event.preventDefault();
   emit('forgot-password');
@@ -805,13 +866,15 @@ function onRegisterClick(event: MouseEvent): void {
 // -----------------------------------------------------------------------------
 // Derived render decisions
 // -----------------------------------------------------------------------------
-const submitLabel = computed<string>(() =>
-  isSubmitting.value
-    ? props.labels.submittingLabel
-    : isMfaChallengeActive.value
-      ? props.labels.verifyMfaLabel
-      : props.labels.submitLabel,
-);
+const submitLabel = computed<string>(() => {
+  if (isSubmitting.value) return props.labels.submittingLabel;
+  if (isMfaChallengeActive.value) return props.labels.verifyMfaLabel;
+  if (authenticatorMode.value === 'otp') {
+    return isOtpChallengeActive.value ? props.labels.verifyAuthenticatorLabel : props.labels.sendOtpLabel;
+  }
+  if (authenticatorMode.value === 'google_authenticator') return props.labels.verifyAuthenticatorLabel;
+  return props.labels.submitLabel;
+});
 
 /*
  * The toggle's aria-label describes the action it performs, matching
@@ -864,7 +927,7 @@ const passwordToggleLabel = computed<string>(() =>
     </Alert>
 
     <!-- ============================================================
-         Identifier (email or phone)
+         Identifier (any of the six ARNA identifiers)
          ============================================================ -->
     <FormField
       :label="labels.emailLabel"
@@ -878,7 +941,7 @@ const passwordToggleLabel = computed<string>(() =>
         ref="identifierInputRef"
         v-model="identifier"
         type="text"
-        inputmode="email"
+        inputmode="text"
         autocomplete="username"
         enterkeyhint="go"
         :disabled="isSubmitting || isMfaChallengeActive"
@@ -886,6 +949,35 @@ const passwordToggleLabel = computed<string>(() =>
         @blur="onIdentifierBlur"
       />
     </FormField>
+
+    <div
+      class="login-form__auth-methods"
+      role="group"
+      :aria-label="labels.authenticatorMethodsLabel"
+      data-testid="login-form-authenticator-methods"
+    >
+      <button
+        type="button"
+        :aria-pressed="authenticatorMode === 'password'"
+        :disabled="isSubmitting || isMfaChallengeActive"
+        data-testid="login-form-use-password"
+        @click="selectAuthenticator('password')"
+      >{{ labels.usePasswordLabel }}</button>
+      <button
+        type="button"
+        :aria-pressed="authenticatorMode === 'otp'"
+        :disabled="isSubmitting || isMfaChallengeActive"
+        data-testid="login-form-use-otp"
+        @click="selectAuthenticator('otp')"
+      >{{ labels.useOtpLabel }}</button>
+      <button
+        type="button"
+        :aria-pressed="authenticatorMode === 'google_authenticator'"
+        :disabled="isSubmitting || isMfaChallengeActive"
+        data-testid="login-form-use-google-authenticator"
+        @click="selectAuthenticator('google_authenticator')"
+      >{{ labels.useGoogleAuthenticatorLabel }}</button>
+    </div>
 
     <!-- ============================================================
          Password (with show/hide toggle in the suffix slot)
@@ -900,6 +992,7 @@ const passwordToggleLabel = computed<string>(() =>
          bubble from the input to that wrapper.
          ============================================================ -->
     <FormField
+      v-if="authenticatorMode === 'password'"
       :label="labels.passwordLabel"
       html-for="login-password"
       :error="passwordError"
@@ -939,6 +1032,59 @@ const passwordToggleLabel = computed<string>(() =>
         </template>
       </BaseInput>
     </FormField>
+
+    <div
+      v-if="authenticatorMode === 'otp' || authenticatorMode === 'google_authenticator'"
+      class="login-form__authenticator"
+      data-testid="login-form-authenticator"
+    >
+      <p class="login-form__mfa-instructions" role="status" aria-live="polite">
+        {{ authenticatorMode === 'otp' ? labels.otpInstructions : labels.mfaInstructions }}
+      </p>
+
+      <div v-if="authenticatorMode === 'otp' && !isOtpChallengeActive" class="login-form__otp-channel">
+        <label for="login-otp-channel">{{ labels.otpChannelLabel }}</label>
+        <select
+          id="login-otp-channel"
+          v-model="otpChannel"
+          :disabled="isSubmitting"
+          data-testid="login-form-otp-channel"
+        >
+          <option value="email">{{ labels.emailChannelLabel }}</option>
+          <option value="sms">{{ labels.smsChannelLabel }}</option>
+        </select>
+      </div>
+
+      <FormField
+        v-if="authenticatorMode === 'google_authenticator' || isOtpChallengeActive"
+        :label="labels.authenticatorCodeLabel"
+        html-for="login-authenticator-code"
+        :disabled="isSubmitting"
+        required
+      >
+        <BaseInput
+          id="login-authenticator-code"
+          v-model="authenticatorCode"
+          type="text"
+          inputmode="numeric"
+          autocomplete="one-time-code"
+          autocapitalize="off"
+          spellcheck="false"
+          :disabled="isSubmitting"
+          required
+          data-testid="login-form-authenticator-code"
+        />
+      </FormField>
+
+      <button
+        v-if="isOtpChallengeActive"
+        type="button"
+        class="login-form__mfa-cancel"
+        :disabled="isSubmitting"
+        data-testid="login-form-authenticator-cancel"
+        @click="cancelAuthenticatorChallenge"
+      >{{ labels.cancelAuthenticatorLabel }}</button>
+    </div>
 
     <!-- ============================================================
          MFA challenge (rendered only after the server requests MFA)
@@ -1086,6 +1232,68 @@ const passwordToggleLabel = computed<string>(() =>
 /* ============================================================================
    MFA challenge
    ============================================================================ */
+.login-form__auth-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mases-space-2);
+}
+
+.login-form__auth-methods button {
+  min-height: 36px;
+  padding: var(--mases-space-2) var(--mases-space-3);
+  border: 1px solid var(--mases-color-border-default);
+  border-radius: var(--mases-radius-md);
+  background: var(--mases-color-surface);
+  color: var(--mases-color-text-secondary);
+  font: inherit;
+  cursor: pointer;
+}
+
+.login-form__auth-methods button[aria-pressed="true"] {
+  border-color: var(--mases-color-border-focus);
+  background: var(--mases-color-surface-info);
+  color: var(--mases-color-text-primary);
+}
+
+.login-form__auth-methods button:focus-visible,
+.login-form__auth-methods button:disabled {
+  outline-offset: 3px;
+}
+
+.login-form__auth-methods button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.login-form__authenticator {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mases-space-3);
+  min-width: 0;
+}
+
+.login-form__otp-channel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mases-space-2);
+  min-width: 0;
+}
+
+.login-form__otp-channel select {
+  min-height: 40px;
+  padding-inline: var(--mases-space-3);
+  border: 1px solid var(--mases-color-border-default);
+  border-radius: var(--mases-radius-md);
+  background: var(--mases-color-surface);
+  color: var(--mases-color-text-primary);
+  font: inherit;
+}
+
+.login-form__otp-channel select:focus-visible {
+  outline: 2px solid var(--mases-color-border-focus);
+  outline-offset: 2px;
+}
+
 .login-form__mfa {
   display: flex;
   flex-direction: column;
