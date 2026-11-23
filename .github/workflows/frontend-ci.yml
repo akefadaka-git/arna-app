@@ -67,6 +67,8 @@ jobs:
         run: npm run verify:build
       - name: Smoke-check the standalone public build artifacts
         run: npm run test:public-build-smoke
+      - name: Verify structured bilingual corporate CMS and lifecycle controls
+        run: npm run test:public-cms-admin-lifecycle
       - name: Verify approved ARNA palette and contrast contract
         run: npm run test:brand-palette-contract
       - name: Verify bilingual themes and shared accessible component contracts
