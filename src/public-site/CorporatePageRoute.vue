@@ -25,6 +25,10 @@ function sectionValue(section: CorporateSiteSection, field: string): string {
   return typeof value === 'string' ? value : '';
 }
 
+function isExternalUrl(value: string): boolean {
+  return /^https:\/\//i.test(value);
+}
+
 function sectionItems(section: CorporateSiteSection): Record<string, unknown>[] {
   const localized = section.content[locale.value];
   if (typeof localized !== 'object' || localized === null) return [];
@@ -135,7 +139,7 @@ onMounted(() => void loadPage());
               <p v-if="typeof item.label === 'string' && item.label" class="eyebrow">{{ item.label }}</p>
               <h3 v-if="typeof item.title === 'string'">{{ item.title }}</h3>
               <p v-if="typeof item.body === 'string' || typeof item.description === 'string'">{{ item.body || item.description }}</p>
-              <a v-if="typeof item.url === 'string' && item.url" :href="item.url" :target="/^https:\\/\\//i.test(item.url) ? '_blank' : undefined" :rel="/^https:\\/\\//i.test(item.url) ? 'noopener noreferrer' : undefined">
+              <a v-if="typeof item.url === 'string' && item.url" :href="item.url" :target="isExternalUrl(String(item.url)) ? '_blank' : undefined" :rel="isExternalUrl(String(item.url)) ? 'noopener noreferrer' : undefined">
                 {{ locale === 'am' ? 'ተጨማሪ ይወቁ' : 'Learn more' }}
               </a>
             </article>
