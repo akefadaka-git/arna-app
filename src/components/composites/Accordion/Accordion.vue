@@ -571,7 +571,7 @@ function focusHeaderAt(index: number): void {
 @media (max-width: 639px) {
   .accordion__header {
     /* Ensure a 44px minimum tap target. */
-    min-height: 44px;
+    min-height: var(--arna-size-interactive-target-min);
     padding-inline: var(--arna-space-3);
   }
 
@@ -585,11 +585,11 @@ function focusHeaderAt(index: number): void {
    ============================================================================ */
 @media (prefers-reduced-motion: reduce) {
   .accordion__header {
-    transition-duration: 1ms;
+    transition-duration: var(--arna-duration-fast);
   }
 
   .accordion__indicator {
-    transition-duration: 1ms;
+    transition-duration: var(--arna-duration-fast);
   }
 }
 </style>

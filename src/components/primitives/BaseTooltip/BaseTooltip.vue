@@ -408,7 +408,7 @@ function onFocusOut(event: FocusEvent): void {
    ============================================================================ */
 @media (prefers-reduced-motion: reduce) {
   .tooltip {
-    transition-duration: 1ms;
+    transition-duration: var(--arna-duration-fast);
   }
 }
 

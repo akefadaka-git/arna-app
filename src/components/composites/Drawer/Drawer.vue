@@ -771,7 +771,7 @@ function onCloseButtonClick(): void {
 @media (prefers-reduced-motion: reduce) {
   .drawer--right[open] .drawer__container,
   .drawer--left[open] .drawer__container {
-    animation-duration: 1ms;
+    animation-duration: var(--arna-duration-fast);
   }
 }
 </style>

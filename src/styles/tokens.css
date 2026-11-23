@@ -28,6 +28,10 @@
  *          the full classification and the adoption path for the
  *          spec-target group. No existing token renamed, removed, or
  *          reassigned. Strictly additive.
+
+ * A3.1 additive (2026-11-23) — one shared interactive target-height
+ * token (44px) and its ARNA compatibility alias. Existing primitive
+ * values, scales, and prior semantic assignments remain unchanged.
  *
  * -----------------------------------------------------------------------------
  * 1.3.0 additions — classification
@@ -457,6 +461,9 @@
   --mases-duration-base:     200ms;
   --mases-duration-slow:     300ms;
   --mases-duration-slower:   500ms;
+  /* Loading indicators remain perceptible under reduced-motion settings. */
+  --mases-duration-loading:         900ms;
+  --mases-duration-loading-reduced: 1800ms;
 
   --mases-easing-standard:   cubic-bezier(0.4, 0, 0.2, 1);
   --mases-easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
@@ -628,6 +635,9 @@
   --mases-focus-ring-offset:    2px;
   --mases-focus-ring-color:     var(--mases-color-state-focus-ring);
   --mases-focus-ring-color-inverse: var(--mases-color-state-focus-ring-inverse);
+
+  /* A3.1 additive semantic dimension: 44px mobile interactive target-height floor. */
+  --mases-size-interactive-target-min: 44px;
 
   /* ===========================================================================
    * AUTH SURFACE — ADDITIONS (1.1.0)
@@ -843,6 +853,8 @@
   --arna-duration-base: var(--mases-duration-base);
   --arna-duration-slow: var(--mases-duration-slow);
   --arna-duration-slower: var(--mases-duration-slower);
+  --arna-duration-loading: var(--mases-duration-loading);
+  --arna-duration-loading-reduced: var(--mases-duration-loading-reduced);
   --arna-easing-standard: var(--mases-easing-standard);
   --arna-easing-decelerate: var(--mases-easing-decelerate);
   --arna-easing-accelerate: var(--mases-easing-accelerate);
@@ -926,6 +938,7 @@
   --arna-container-auth-card-wide: var(--mases-container-auth-card-wide);
   --arna-size-auth-logo-max-width: var(--mases-size-auth-logo-max-width);
   --arna-size-auth-logo-max-height: var(--mases-size-auth-logo-max-height);
+  --arna-size-interactive-target-min: var(--mases-size-interactive-target-min);
   --arna-color-surface-auth-backdrop: var(--mases-color-surface-auth-backdrop);
   --arna-color-text-auth-attribution: var(--mases-color-text-auth-attribution);
   --arna-shell-header-height-desktop: var(--mases-shell-header-height-desktop);

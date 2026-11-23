@@ -415,7 +415,7 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
   width: 30%;
   border-radius: var(--arna-radius-full);
   will-change: transform;
-  animation: arna-progress-indeterminate 0.9s var(--arna-easing-standard)
+  animation: arna-progress-indeterminate var(--arna-duration-loading) var(--arna-easing-standard)
     infinite;
 }
 
@@ -454,11 +454,11 @@ const classes = computed<Array<string | Record<string, boolean>>>(() => [
    ============================================================================ */
 @media (prefers-reduced-motion: reduce) {
   .progress__indeterminate-strip {
-    animation-duration: 1.8s;
+    animation-duration: var(--arna-duration-loading-reduced);
   }
 
   .progress__fill {
-    transition-duration: 1ms;
+    transition-duration: var(--arna-duration-fast);
   }
 }
 </style>

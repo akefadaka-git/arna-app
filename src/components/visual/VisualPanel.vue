@@ -41,7 +41,7 @@ withDefaults(defineProps<{
   flex: 1;
   min-width: 0;
   overflow: hidden;
-  padding: var(--arna-space-4, 1rem);
+  padding: var(--arna-space-4);
   border: 1px solid var(--arna-color-border-subtle);
   border-radius: var(--arna-radius-lg);
   background: var(--arna-color-surface-raised);
@@ -54,8 +54,8 @@ withDefaults(defineProps<{
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: .75rem;
-  margin-block-end: var(--arna-space-3, .75rem);
+  gap: var(--arna-space-3);
+  margin-block-end: var(--arna-space-3);
 }
 .visual-panel__header h3 {
   min-width: 0;
@@ -68,7 +68,7 @@ withDefaults(defineProps<{
   flex: 0 0 auto;
   padding: .2rem .45rem;
   border: 1px solid var(--arna-color-border-subtle);
-  border-radius: 999px;
+  border-radius: var(--arna-radius-full);
   color: var(--arna-color-text-secondary);
   font-size: var(--arna-font-size-caption);
   letter-spacing: .04em;

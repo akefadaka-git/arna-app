@@ -5,6 +5,7 @@
  * explicitly overrides the system preference.
  */
 @import './tokens.css';
+@import './ethiopic-fonts.css';
 
 :root {
   color-scheme: light;

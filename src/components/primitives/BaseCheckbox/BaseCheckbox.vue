@@ -616,7 +616,7 @@ defineExpose({ focus, blur, el });
    ============================================================================ */
 @media (max-width: 639px) {
   .checkbox {
-    min-height: 44px;
+    min-height: var(--arna-size-interactive-target-min);
     align-items: center;
   }
 
