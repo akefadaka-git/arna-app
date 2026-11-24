@@ -623,10 +623,6 @@ import { aranaBrandLabels } from '@/router/shell-labels';
   font-weight: var(--arna-font-weight-semibold);
 }
 
-/* Dark-surface brand text must retain normal-text WCAG AA contrast. */
-:global(html[data-theme="dark"]) .arna-brand__corporate {
-  color: var(--arna-color-text-primary);
-}
 
 /* ============================================================================
    Product code — ማሴስ
@@ -661,5 +657,15 @@ import { aranaBrandLabels } from '@/router/shell-labels';
   .arna-brand {
     /* no-op placeholder — see comment above */
   }
+}
+</style>
+
+<!-- Theme override intentionally lives in an unscoped component-owned style block.
+     Vue's scoped-style transform omitted the :global() selectors from the
+     emitted CSS; keeping this narrow selector unscoped preserves the component
+     class boundary while allowing the html theme attribute to match. -->
+<style>
+html[data-theme="dark"] .arna-brand__corporate {
+  color: var(--arna-color-text-primary);
 }
 </style>
