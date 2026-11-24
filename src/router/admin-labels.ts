@@ -342,6 +342,20 @@ export const adminNavItems: ReadonlyArray<NavItem> = [
     permission: 'platform.domains.read',
   },
   {
+    id: 'integration-registry',
+    label: 'የአቅራቢ ግንኙነቶች',
+    to: '/admin/integrations',
+    icon: 'network',
+    permission: 'platform.integrations.read',
+  },
+  {
+    id: 'operations-health',
+    label: 'የኦፕሬሽን ጤና',
+    to: '/admin/operations',
+    icon: 'activity',
+    permission: 'platform.operations.read',
+  },
+  {
     id: 'audit-security-center',
     label: 'ኦዲት እና ደህንነት',
     to: '/admin/audit-security',
