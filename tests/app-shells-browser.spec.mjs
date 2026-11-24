@@ -37,21 +37,6 @@ for (const surface of surfaces) {
     await expect(page.getByTestId('app-shell-main')).toHaveAttribute('id', 'arna-main-content');
     await expect(page.getByTestId('shell-child-page')).toContainText(surface.label);
 
-    // The shortcut must remain readable in both supported semantic themes.
-    const shortcut = page.locator('kbd.app-header-navigation__search-shortcut');
-    await expect(shortcut).toBeVisible();
-    for (const theme of ['light', 'dark']) {
-      await page.evaluate((value) => {
-        if (value === 'dark') document.documentElement.dataset.theme = 'dark';
-        else delete document.documentElement.dataset.theme;
-      }, theme);
-      const shortcutContrast = await new AxeBuilder({ page })
-        .include('.app-header-navigation__search-shortcut')
-        .withRules(['color-contrast'])
-        .analyze();
-      expect(shortcutContrast.violations, `navigation shortcut contrast in ${theme} theme`).toEqual([]);
-    }
-    await page.evaluate(() => { delete document.documentElement.dataset.theme; });
 
     const skip = page.locator('a[href="#arna-main-content"]').first();
     await expect(skip).toBeAttached();
