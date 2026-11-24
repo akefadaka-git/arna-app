@@ -289,7 +289,7 @@ function navigate(item: SearchNavItem): void {
   padding: 1px var(--mases-space-1);
   border: 1px solid var(--mases-color-border-subtle);
   border-radius: var(--mases-radius-sm);
-  color: var(--mases-color-text-muted);
+  color: var(--mases-color-text-secondary);
   font-size: var(--mases-font-size-caption);
 }
 .app-header-navigation__dialog {
