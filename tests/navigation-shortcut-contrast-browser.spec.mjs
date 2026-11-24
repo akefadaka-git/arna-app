@@ -37,7 +37,7 @@ test('navigation shortcut passes targeted contrast checks in light and dark them
     expect(computed.backgroundColor, `effective header surface in ${theme} theme`).toBe(expected.backgroundColor);
 
     const luminance = (rgb) => {
-      const channels = rgb.match(/[\\d.]+/g).slice(0, 3).map(Number).map((channel) => {
+      const channels = rgb.match(/[\d.]+/g).slice(0, 3).map(Number).map((channel) => {
         const value = channel / 255;
         return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
       });
