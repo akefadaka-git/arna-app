@@ -292,6 +292,12 @@ export const routesAdmin: RouteRecordRaw[] = [
       // directly.
       // -----------------------------------------------------------------------
       {
+        path: 'admin/platforms',
+        name: 'admin-platforms',
+        component: () => import('./pages/AdminApplicationsRoute.vue'),
+        meta: { permission: 'platform.applications.read' },
+      },
+      {
         path: 'admin/domains',
         name: 'admin-domains',
         component: () => import('./pages/AdminDomainRegistryRoute.vue'),
