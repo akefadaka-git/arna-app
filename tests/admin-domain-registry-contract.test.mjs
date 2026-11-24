@@ -72,3 +72,13 @@ test('Platform identity, tenant and RBAC directories use canonical platform API 
   assert.match(directory, /\/api\/admin\/platform\/tenants/);
   assert.doesNotMatch(directory, /\/api\/admin\/authorization\//);
 });
+
+test('Tenant membership detail is routed through the platform tenancy read contract', async () => {
+  const memberships = await readFile(new URL('../src/router/pages/AdminTenantMembershipsRoute.vue', import.meta.url), 'utf8');
+  assert.match(routes, /name: 'admin-tenant-memberships'/);
+  assert.match(routes, /platform\.tenancy\.read/);
+  assert.match(directory, /admin-tenant-memberships/);
+  assert.match(memberships, /\/api\/admin\/platform\/tenants\//);
+  assert.match(memberships, /memberships/);
+  assert.match(memberships, /role="alert"/);
+});
