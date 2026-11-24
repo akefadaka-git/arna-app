@@ -292,6 +292,30 @@ export const routesAdmin: RouteRecordRaw[] = [
       // directly.
       // -----------------------------------------------------------------------
       {
+        path: 'admin/users',
+        name: 'admin-users',
+        component: () => import('./pages/AdminDirectoryRoute.vue'),
+        meta: { permission: 'platform.identity.read' },
+      },
+      {
+        path: 'admin/roles',
+        name: 'admin-roles',
+        component: () => import('./pages/AdminDirectoryRoute.vue'),
+        meta: { permission: 'platform.rbac.read' },
+      },
+      {
+        path: 'admin/permissions',
+        name: 'admin-permissions',
+        component: () => import('./pages/AdminDirectoryRoute.vue'),
+        meta: { permission: 'platform.rbac.read' },
+      },
+      {
+        path: 'admin/tenants',
+        name: 'admin-tenants',
+        component: () => import('./pages/AdminDirectoryRoute.vue'),
+        meta: { permission: 'platform.tenancy.read' },
+      },
+      {
         path: 'admin/platforms',
         name: 'admin-platforms',
         component: () => import('./pages/AdminApplicationsRoute.vue'),
