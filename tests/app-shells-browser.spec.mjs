@@ -37,7 +37,6 @@ for (const surface of surfaces) {
     await expect(page.getByTestId('app-shell-main')).toHaveAttribute('id', 'arna-main-content');
     await expect(page.getByTestId('shell-child-page')).toContainText(surface.label);
 
-
     const skip = page.locator('a[href="#arna-main-content"]').first();
     await expect(skip).toBeAttached();
     await skip.focus();
