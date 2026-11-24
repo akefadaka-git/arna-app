@@ -300,6 +300,13 @@ export const adminNavItems: ReadonlyArray<NavItem> = [
     icon: 'layout-grid',
   },
   {
+    id: 'platform-applications',
+    label: 'የመድረክ መተግበሪያዎች',
+    to: '/admin/platforms',
+    icon: 'layers',
+    permission: 'platform.applications.read',
+  },
+  {
     id: 'domain-management',
     label: 'የዶሜይን አስተዳደር',
     to: '/admin/domains',
