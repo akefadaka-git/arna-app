@@ -623,6 +623,11 @@ import { aranaBrandLabels } from '@/router/shell-labels';
   font-weight: var(--arna-font-weight-semibold);
 }
 
+/* Dark-surface brand text must retain normal-text WCAG AA contrast. */
+:global(html[data-theme="dark"]) .arna-brand__corporate {
+  color: var(--arna-color-text-primary);
+}
+
 /* ============================================================================
    Product code — ማሴስ
    ---------------------------------------------------------------------------
@@ -636,7 +641,7 @@ import { aranaBrandLabels } from '@/router/shell-labels';
 }
 
 .arna-brand__tagline {
-  color: var(--arna-color-text-tertiary);
+  color: var(--arna-color-text-secondary);
   font-size: var(--arna-font-size-caption);
   line-height: 1.15;
   font-weight: var(--arna-font-weight-regular);
