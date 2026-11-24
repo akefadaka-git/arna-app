@@ -303,7 +303,7 @@ export const adminNavItems: ReadonlyArray<NavItem> = [
     id: 'platform-applications',
     label: 'የመድረክ መተግበሪያዎች',
     to: '/admin/platforms',
-    icon: 'layers',
+    icon: 'layout-grid',
     permission: 'platform.applications.read',
   },
   {
