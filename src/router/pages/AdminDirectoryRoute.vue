@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { RouterLink, useRoute } from 'vue-router';
 import { api } from '@/core/api/client';
 import PageHeader from '@/components/patterns/PageHeader';
 import Card from '@/components/patterns/Card';
@@ -177,12 +177,14 @@ onMounted(() => { void load(); });
             <tr>
               <th scope="col">ስም / መለያ</th>
               <th v-for="column in columns" :key="column.key" scope="col">{{ column.label }}</th>
+              <th v-if="resource === 'tenants'" scope="col">አባላት</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="row in rows" :key="row.id">
               <td><strong>{{ primaryName(row) }}</strong><small>#{{ row.id }} · {{ row.slug ?? '' }}</small></td>
               <td v-for="column in columns" :key="column.key">{{ displayValue(row[column.key]) }}</td>
+              <td v-if="resource === 'tenants'"><RouterLink :to="{ name: 'admin-tenant-memberships', params: { tenantId: row.id } }">አባላት ይመልከቱ</RouterLink></td>
             </tr>
           </tbody>
         </table>
