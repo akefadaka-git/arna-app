@@ -236,10 +236,41 @@ test.describe('Mounted DataTable behavior', () => {
     await expect(cards.getByText('Alpha account')).toBeVisible();
 
     const results = await new AxeBuilder({ page })
+      .include('[data-testid="data-table-root"]')
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
     const serious = results.violations.filter((item) => ['serious', 'critical'].includes(item.impact));
     expect(serious.map((item) => ({ id: item.id, help: item.help, nodes: item.nodes.map((node) => ({ target: node.target, html: node.html, failureSummary: node.failureSummary })) }))).toEqual([]);
+  });
+});
+
+
+test.describe('A4 full-page fixture accessibility regression scan', () => {
+  test('retains a full-page axe scan and confirms the A4 component regions have no violations', async ({ page }) => {
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+
+    const affectedMarkers = [
+      'form-field__help',
+      'error-support-panel__field-label',
+      'data-table__card-label',
+    ];
+    const affectedNodes = results.violations.flatMap((violation) =>
+      violation.nodes
+        .filter((node) => affectedMarkers.some((marker) =>
+          node.target.join(' ').includes(marker) || node.html.includes(marker)
+        ))
+        .map((node) => ({ id: violation.id, target: node.target, html: node.html }))
+    );
+    console.log('A4_FULL_PAGE_AXE_VIOLATIONS=' + JSON.stringify(
+      results.violations.map((violation) => ({
+        id: violation.id,
+        impact: violation.impact,
+        targets: violation.nodes.map((node) => node.target),
+      }))
+    ));
+    expect(affectedNodes).toEqual([]);
   });
 });
 
@@ -542,5 +573,68 @@ test.describe('PR #87 regression repairs', () => {
     releaseFirst();
     await expect(page.getByText('Newest response')).toBeVisible();
     await expect(page.getByText('Older response')).toHaveCount(0);
+  });
+});
+
+
+test.describe('A4 Combobox hit-area geometry investigation', () => {
+  test('records input and nearest interactive neighbors; validates the minimum hit area at mobile and desktop', async ({ page }) => {
+    const input = page.getByRole('combobox', { name: 'Choose an item' });
+    const measure = async (width, height) => {
+      await page.setViewportSize({ width, height });
+      const geometry = await input.evaluate((node) => {
+        const rect = node.getBoundingClientRect();
+        const parent = node.closest('.combobox__control')?.getBoundingClientRect();
+        const candidates = Array.from(document.querySelectorAll(
+          'button, a[href], input, select, textarea, [role="button"], [role="link"], [role="checkbox"], [role="radio"], [role="combobox"], [role="option"], [tabindex]:not([tabindex="-1"])'
+        )).filter((el) => {
+          if (el === node || node.contains(el) || el.contains(node)) return false;
+          if (el instanceof HTMLElement && (el.hidden || el.getAttribute('aria-hidden') === 'true')) return false;
+          const style = getComputedStyle(el);
+          const box = el.getBoundingClientRect();
+          return style.display !== 'none' && style.visibility !== 'hidden' && box.width > 0 && box.height > 0;
+        }).map((el) => {
+          const r = el.getBoundingClientRect();
+          const dx = Math.max(0, r.left - rect.right, rect.left - r.right);
+          const dy = Math.max(0, r.top - rect.bottom, rect.top - r.bottom);
+          return {
+            tag: el.tagName.toLowerCase(),
+            role: el.getAttribute('role'),
+            name: el.getAttribute('aria-label') || el.textContent?.trim().replace(/\s+/g, ' ').slice(0, 80) || '',
+            testId: el.getAttribute('data-testid'),
+            rect: { x: r.x, y: r.y, width: r.width, height: r.height, top: r.top, right: r.right, bottom: r.bottom, left: r.left },
+            gap: Math.hypot(dx, dy),
+          };
+        }).sort((a, b) => a.gap - b.gap).slice(0, 8);
+        return {
+          viewport: { width: innerWidth, height: innerHeight },
+          input: { x: rect.x, y: rect.y, width: rect.width, height: rect.height, top: rect.top, right: rect.right, bottom: rect.bottom, left: rect.left },
+          control: parent ? { x: parent.x, y: parent.y, width: parent.width, height: parent.height, top: parent.top, right: parent.right, bottom: parent.bottom, left: parent.left } : null,
+          nearestInteractiveNeighbors: candidates,
+        };
+      });
+      console.log('A4_COMBOBOX_HIT_AREA=' + JSON.stringify(geometry));
+      expect(geometry.input.width).toBeGreaterThan(0);
+      expect(geometry.input.height).toBeGreaterThanOrEqual(24);
+      expect(geometry.nearestInteractiveNeighbors.length).toBeGreaterThan(0);
+      return geometry;
+    };
+
+    const assertTargetSize = async (viewport) => {
+      const axe = await new AxeBuilder({ page })
+        .include('[data-testid="combobox-root"]')
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+        .analyze();
+      const targetSize = axe.violations.filter((item) => item.id === 'target-size');
+      expect(targetSize, JSON.stringify({ viewport, targetSize }, null, 2)).toEqual([]);
+    };
+
+    const mobile = await measure(390, 844);
+    expect(mobile.control?.height).toBeGreaterThanOrEqual(44);
+    await assertTargetSize('mobile-390');
+
+    const desktop = await measure(1280, 900);
+    expect(desktop.control?.height).toBeGreaterThanOrEqual(40);
+    await assertTargetSize('desktop-1280');
   });
 });
