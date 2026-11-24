@@ -63,6 +63,10 @@ jobs:
         run: npm run test:owner-governed-lifecycle-workflow-contract
       - name: Verify Admin Domain Management route and registry safety contracts
         run: npm run test:admin-domain-registry-contract
+      - name: Verify Admin settings, integrations and operations contracts
+        run: node --test tests/admin-settings-contract.test.mjs tests/admin-operations-contract.test.mjs
+      - name: Verify Admin tenant membership and Owner-approved RBAC lifecycle contracts
+        run: node --test tests/admin-tenant-lifecycle-contract.test.mjs
       - name: Type-check and build all applications
         run: npm run build
       - name: Verify root entry points, local assets, and deployment policy
