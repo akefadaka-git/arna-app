@@ -271,7 +271,7 @@ export const routesAdmin: RouteRecordRaw[] = [
       {
         path: 'admin',
         name: 'admin-home',
-        component: () => import('./pages/AdminDashboardRoute.vue'),
+        component: () => import('./pages/AdminOverviewRoute.vue'),
       },
 
       // -----------------------------------------------------------------------
