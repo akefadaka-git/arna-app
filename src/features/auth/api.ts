@@ -140,8 +140,8 @@ export interface LoginRequest {
 export interface LoginSuccessResponse {
   readonly mfa_required?: false;
   readonly user: LoginResponseUser;
-  readonly token: string;
-  readonly token_type: 'Bearer';
+  readonly token?: string;
+  readonly token_type?: 'Bearer';
 }
 
 export interface MfaChallengeResponse {
@@ -254,6 +254,11 @@ export function login(payload: LoginRequest): Promise<LoginResponse> {
   return api.post<LoginResponse>('/api/login', payload);
 }
 
+/** First-party SPA login; the API establishes a shared Laravel session and emits no PAT. */
+export function spaLogin(payload: LoginRequest): Promise<LoginResponse> {
+  return api.post<LoginResponse>('/api/spa/login', payload);
+}
+
 /**
  * POST /api/login/otp/challenge — public returning-user OTP request.
  * The response is intentionally neutral for unknown, first-login, inactive,
@@ -287,6 +292,13 @@ export function register(
   return api.post<LoginSuccessResponse>('/api/register', payload);
 }
 
+/** First-party SPA registration; the API establishes a shared Laravel session and emits no PAT. */
+export function spaRegister(
+  payload: RegisterRequest,
+): Promise<LoginSuccessResponse> {
+  return api.post<LoginSuccessResponse>('/api/spa/register', payload);
+}
+
 /**
  * POST /api/logout — authenticated. Revokes the current token and all
  * of the user's other tokens. Response has no `data` key; the caller
@@ -294,6 +306,11 @@ export function register(
  */
 export function logout(): Promise<unknown> {
   return api.post<unknown>('/api/logout', {});
+}
+
+/** Invalidate the shared browser session without revoking API client tokens. */
+export function spaLogout(): Promise<unknown> {
+  return api.post<unknown>('/api/spa/logout', {});
 }
 
 /**
@@ -314,6 +331,11 @@ export function refreshToken(): Promise<TokenRefreshResponse> {
  */
 export function fetchCurrentUser(): Promise<AuthUser> {
   return api.get<AuthUser>('/api/user');
+}
+
+/** Session-only current-user endpoint for Workspace and Shareholder Portal. */
+export function spaFetchCurrentUser(): Promise<AuthUser> {
+  return api.get<AuthUser>('/api/spa/user');
 }
 
 /**
