@@ -67,27 +67,51 @@ test('reproduce six historical AppShell contrast findings in light and dark them
         }
         ancestor = ancestor.parentElement;
       }
+      const relevantRules = [];
       const matchedRules = [];
-      const collectRules = (rules, source) => {
+      const stylesheetInventory = [];
+      const collectRules = (rules, source, context = []) => {
         for (const rule of rules) {
-          if (rule.cssRules) {
-            collectRules(rule.cssRules, source);
-            continue;
-          }
-          if (rule.selectorText && rule.style) {
-            let matches = false;
-            try { matches = element.matches(rule.selectorText); } catch { /* unsupported selector syntax */ }
-            if (matches) matchedRules.push({
+          const nextContext = [...context, rule.conditionText ?? rule.name ?? rule.constructor?.name ?? 'group'];
+          if (rule.type === 1 && rule.selectorText && rule.style) {
+            const selector = rule.selectorText;
+            const mentionsTarget = selector.includes('arna-brand__') || selector.includes('arana-footer-content__') || selector.includes('calendar-context');
+            let matchingElements = [];
+            try { matchingElements = Array.from(document.querySelectorAll(selector)); } catch { /* retain unqueryable selectors in the inventory */ }
+            const record = {
               source,
-              selector: rule.selectorText,
+              context: nextContext,
+              selector,
+              matchesTarget: matchingElements.includes(element),
               colorDeclaration: rule.style.getPropertyValue('color').trim() || null,
-              important: rule.style.getPropertyPriority('color') === 'important',
-            });
+              colorPriority: rule.style.getPropertyPriority('color') || null,
+              declarations: rule.style.cssText,
+            };
+            if (mentionsTarget) relevantRules.push(record);
+            if (record.matchesTarget) matchedRules.push(record);
           }
+          if (rule.cssRules) collectRules(rule.cssRules, source, nextContext);
         }
       };
       for (const sheet of document.styleSheets) {
-        try { collectRules(sheet.cssRules, sheet.href ?? 'inline'); } catch { /* cross-origin stylesheet */ }
+        const source = sheet.href ?? 'inline';
+        try {
+          const rules = sheet.cssRules;
+          stylesheetInventory.push({ source, disabled: sheet.disabled, ruleCount: rules.length });
+          collectRules(rules, source);
+        } catch (error) {
+          stylesheetInventory.push({ source, inaccessible: String(error) });
+        }
+      }
+      const scopeAttributes = [];
+      let scopeNode = element;
+      while (scopeNode && scopeAttributes.length < 5) {
+        scopeAttributes.push({
+          tag: scopeNode.tagName.toLowerCase(),
+          className: String(scopeNode.className?.baseVal ?? scopeNode.className ?? ''),
+          attributes: Array.from(scopeNode.attributes ?? []).map(({ name, value }) => [name, value]),
+        });
+        scopeNode = scopeNode.parentElement;
       }
       return {
         id: metadata.id,
@@ -98,6 +122,9 @@ test('reproduce six historical AppShell contrast findings in light and dark them
         resolvedArnaTextPrimary: style.getPropertyValue('--arna-color-text-primary').trim(),
         resolvedMasesTextPrimary: style.getPropertyValue('--mases-color-text-primary').trim(),
         matchedRules,
+        relevantRules,
+        stylesheetInventory,
+        scopeAttributes,
         effectiveBackground: effectiveBackground ? `rgb(${effectiveBackground.r}, ${effectiveBackground.g}, ${effectiveBackground.b})` : null,
         backgroundChain,
         fontSize: style.fontSize,
@@ -121,14 +148,41 @@ test('reproduce six historical AppShell contrast findings in light and dark them
   });
   console.log('APP_SHELL_CONTRAST_MEASUREMENTS=' + JSON.stringify(measurements));
 
-  expect(measurements.filter((item) => item.result !== 'PASS'), JSON.stringify(measurements, null, 2)).toEqual([]);
-
+  // Run both theme scans before asserting measurements so a contrast failure
+  // cannot short-circuit the axe evidence for the other theme.
+  const axeScans = [];
   for (const theme of ['light', 'dark']) {
     await page.evaluate((value) => { document.documentElement.dataset.theme = value; document.documentElement.style.colorScheme = value; }, theme);
     const axe = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
     const contrast = axe.violations.filter((violation) => violation.id === 'color-contrast');
-    expect(contrast, theme + ' full-page color contrast violations').toEqual([]);
+    const inScope = await page.evaluate(({ nodes, selectors }) => nodes.filter((node) =>
+      (node.target ?? []).some((target) => {
+        try {
+          return Array.from(document.querySelectorAll(target)).some((candidate) =>
+            selectors.some((selector) => candidate.matches(selector)),
+          );
+        } catch { return false; }
+      }),
+    ).map((node) => ({ target: node.target, summary: node.failureSummary })), {
+      nodes: contrast.flatMap((violation) => violation.nodes),
+      selectors: findings.filter((finding) => finding.theme === theme).map((finding) => finding.selector),
+    });
+    axeScans.push({
+      theme,
+      totalColorContrastViolations: contrast.length,
+      inScopeColorContrastViolations: inScope.length,
+      inScope,
+    });
   }
+  await testInfo.attach('app-shell-axe-scans.json', {
+    body: JSON.stringify(axeScans, null, 2),
+    contentType: 'application/json',
+  });
+  console.log('APP_SHELL_AXE_SCANS=' + JSON.stringify(axeScans));
+
+  expect(axeScans.map(({ theme, inScopeColorContrastViolations }) => ({ theme, inScopeColorContrastViolations })))
+    .toEqual([{ theme: 'light', inScopeColorContrastViolations: 0 }, { theme: 'dark', inScopeColorContrastViolations: 0 }]);
+  expect(measurements.filter((item) => item.result !== 'PASS'), JSON.stringify(measurements, null, 2)).toEqual([]);
 });
