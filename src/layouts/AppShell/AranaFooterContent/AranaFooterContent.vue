@@ -387,7 +387,7 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
   text-decoration: none;
 }
 
-:global(html[data-theme="dark"]) .arana-footer-content__link:not(:hover):not(:focus-visible) {
+:global(html[data-theme="dark"] .arana-footer-content__link:not(:hover):not(:focus-visible)) {
   color: var(--arna-color-text-primary);
 }
 
