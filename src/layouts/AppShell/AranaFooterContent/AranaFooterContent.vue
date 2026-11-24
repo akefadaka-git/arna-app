@@ -337,7 +337,7 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
    ============================================================================ */
 .arana-footer-content__copyright {
   min-width: 0;
-  color: var(--arna-color-text-tertiary);
+  color: var(--arna-color-text-secondary);
   font-size: var(--arna-font-size-caption);
   line-height: var(--arna-line-height-caption);
   overflow-wrap: break-word;
@@ -385,6 +385,10 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
   font-size: var(--arna-font-size-caption);
   line-height: var(--arna-line-height-caption);
   text-decoration: none;
+}
+
+:global(html[data-theme="dark"]) .arana-footer-content__link:not(:hover):not(:focus-visible) {
+  color: var(--arna-color-text-primary);
 }
 
 .arana-footer-content__link:hover,
