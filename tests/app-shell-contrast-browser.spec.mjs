@@ -67,12 +67,37 @@ test('reproduce six historical AppShell contrast findings in light and dark them
         }
         ancestor = ancestor.parentElement;
       }
+      const matchedRules = [];
+      const collectRules = (rules, source) => {
+        for (const rule of rules) {
+          if (rule.cssRules) {
+            collectRules(rule.cssRules, source);
+            continue;
+          }
+          if (rule.selectorText && rule.style) {
+            let matches = false;
+            try { matches = element.matches(rule.selectorText); } catch { /* unsupported selector syntax */ }
+            if (matches) matchedRules.push({
+              source,
+              selector: rule.selectorText,
+              colorDeclaration: rule.style.getPropertyValue('color').trim() || null,
+              important: rule.style.getPropertyPriority('color') === 'important',
+            });
+          }
+        }
+      };
+      for (const sheet of document.styleSheets) {
+        try { collectRules(sheet.cssRules, sheet.href ?? 'inline'); } catch { /* cross-origin stylesheet */ }
+      }
       return {
         id: metadata.id,
         theme: metadata.theme,
         selector: metadata.selector,
         text: element.textContent?.trim(),
         foreground: style.color,
+        resolvedArnaTextPrimary: style.getPropertyValue('--arna-color-text-primary').trim(),
+        resolvedMasesTextPrimary: style.getPropertyValue('--mases-color-text-primary').trim(),
+        matchedRules,
         effectiveBackground: effectiveBackground ? `rgb(${effectiveBackground.r}, ${effectiveBackground.g}, ${effectiveBackground.b})` : null,
         backgroundChain,
         fontSize: style.fontSize,
