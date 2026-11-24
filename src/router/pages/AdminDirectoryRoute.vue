@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 import { api } from '@/core/api/client';
+import { formatCalendarDate } from '@/core/dates/calendar';
 import PageHeader from '@/components/patterns/PageHeader';
 import Card from '@/components/patterns/Card';
 
@@ -117,7 +118,10 @@ function primaryName(row: DirectoryRow): string {
   return row.name || row.email || row.slug || '#' + row.id;
 }
 
-function displayValue(value: unknown): string {
+function displayValue(value: unknown, key?: string): string {
+  if (key === 'last_login_at' && typeof value === 'string') {
+    return formatCalendarDate(value, { dateStyle: 'medium', timeStyle: 'short' });
+  }
   if (value === null || value === undefined || value === '') return '—';
   if (typeof value === 'boolean') return value ? 'ንቁ / Yes' : 'የቦዘነ / No';
   if (Array.isArray(value)) {
@@ -183,7 +187,7 @@ onMounted(() => { void load(); });
           <tbody>
             <tr v-for="row in rows" :key="row.id">
               <td><strong>{{ primaryName(row) }}</strong><small>#{{ row.id }} · {{ row.slug ?? '' }}</small></td>
-              <td v-for="column in columns" :key="column.key">{{ displayValue(row[column.key]) }}</td>
+              <td v-for="column in columns" :key="column.key">{{ displayValue(row[column.key], column.key) }}</td>
               <td v-if="resource === 'tenants'"><RouterLink :to="{ name: 'admin-tenant-memberships', params: { tenantId: row.id } }">አባላት ይመልከቱ</RouterLink></td>
             </tr>
           </tbody>
