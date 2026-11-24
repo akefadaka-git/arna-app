@@ -18,9 +18,12 @@ test('Domain Management route and sidebar use the same confirmed permission slug
 test('Domain Registry consumes the platform API and exposes truthful unverified states', () => {
   assert.match(page, /\/api\/admin\/platform\/domains/);
   assert.match(page, /not_verified/);
-  assert.match(page, /not_observed/);
-  assert.match(page, /live_mutations_enabled/);
-  assert.match(page, /ownership_verification/);
+  assert.match(page, /dns_state/);
+  assert.match(page, /live_provider_mutations_enabled/);
+  assert.match(page, /registerDomain/);
+  assert.match(page, /verifyDomain/);
+  assert.match(page, /saveEdit/);
+  assert.match(page, /showHistory/);
   assert.match(page, /dns_provider_connected/);
 });
 
