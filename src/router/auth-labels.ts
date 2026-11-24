@@ -548,7 +548,7 @@ export const registerFormLabels = {
  */
 export const forgotPasswordFormLabels = {
   formAriaLabel: 'የይለፍ ቃል ማስጀመሪያ ይጠይቁ',
-  emailLabel: 'ኢሜይል ወይም ስልክ ቁጥር',
+  emailLabel: 'የመግቢያ መለያ / Sign-in identifier',
   authenticatorMethodsLabel: 'የማረጋገጫ ዘዴ ይምረጡ',
   useOtpLabel: 'በOTP ኮድ',
   useGoogleAuthenticatorLabel: 'በGoogle Authenticator',
