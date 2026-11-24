@@ -33,7 +33,7 @@ test('login identifier input uses text input mode for numeric and alphanumeric i
   assert.match(identifierField, /autocomplete="username"/);
 });
 
-test('returning-user login exposes OTP and Google Authenticator options', () => {
+test('returning-user login exposes OTP and MFA challenge paths', () => {
   assert.match(form, /login-otp-channel/);
   assert.match(form, /login-otp-code/);
   assert.match(form, /login-form-mfa/);
@@ -48,5 +48,5 @@ test('password recovery uses OTP or Google Authenticator and never legacy reset 
   assert.match(recoveryForm, /forgot-password-new-password/);
   const legacyScript = legacyResetForm.slice(legacyResetForm.lastIndexOf('<script setup'));
   assert.match(legacyScript, /Legacy reset links are no longer accepted/);
-  assert.doesNotMatch(legacyScript, /token:\\s*routeToken\\.value/);
+  assert.doesNotMatch(legacyScript, /token:\s*routeToken\.value/);
 });
