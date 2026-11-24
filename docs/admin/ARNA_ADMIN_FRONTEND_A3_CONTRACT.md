@@ -54,7 +54,7 @@ Navigation entries must map to implemented routes and verified permission slugs.
 
 ## 4. Domain Management UX and safety
 
-The first read-only registry page is implemented at `/admin/domains`. It calls `GET /api/admin/platform/domains`, is gated by `platform.domains.read`, and renders explicit unverified/unobserved provider states. The sidebar item and route use the same permission slug. Contract tests cover route/permission alignment and the truthful state presentation.
+The first read-only Admin feature slices are implemented: `/admin` now uses an API-backed overview page; `/admin/platforms` lists the platform application registry; `/admin/domains` lists domain references from application and tenant records. Each route and sidebar item uses its corresponding global permission slug. Domain provider states remain explicitly unverified/unobserved and live mutations are disabled. Contract tests cover route/permission alignment and truthful state presentation.
 
 Domain Management is a first-class feature area. Its first release is a truthful registry and observation surface. Distinguish clearly between:
 - configured in ARNA registry;
