@@ -64,6 +64,7 @@ onMounted(() => { void load(); });
     <section class="tiles">
       <button class="tile active" type="button" @click="load"><span class="tile-icon">▤</span><strong>የገቢ ሳጥን · Inbox</strong><small>Central platform notifications</small></button>
       <button class="tile" type="button" @click="router.push({ name: 'announcements' })"><span class="tile-icon">◈</span><strong>ማስታወቂያዎች · Announcements</strong><small>Official notices and approval workflow</small></button>
+      <button class="tile" type="button" @click="router.push({ name: 'communication-conversations' })"><span class="tile-icon">✉</span><strong>ውይይቶች · Conversations</strong><small>Direct and group messaging</small></button>
     </section>
     <section class="inbox">
       <div class="section-head"><div><h2>የቅርብ ጊዜ ማሳወቂያዎች</h2><p>Latest notifications · {{ unreadCount }} unread</p></div><div><button type="button" @click="load" :disabled="loading">↻</button><button type="button" @click="markAllRead" :disabled="loading || unreadCount === 0">Mark all read</button></div></div>
