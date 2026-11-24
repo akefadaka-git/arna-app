@@ -29,3 +29,14 @@ test('Domain Registry has explicit loading, error, and empty states', () => {
   assert.match(page, /role="alert"/);
   assert.match(page, /registry-empty/);
 });
+
+test('Admin landing dashboard reads real platform overview metrics', async () => {
+  const overview = await readFile(new URL('../src/router/pages/AdminOverviewRoute.vue', import.meta.url), 'utf8');
+  assert.match(routes, /AdminOverviewRoute\.vue/);
+  assert.match(overview, /\/api\/admin\/platform\/overview/);
+  assert.match(overview, /users/);
+  assert.match(overview, /active_memberships/);
+  assert.match(overview, /generated_at/);
+  assert.match(overview, /role="status"/);
+  assert.match(overview, /role="alert"/);
+});
