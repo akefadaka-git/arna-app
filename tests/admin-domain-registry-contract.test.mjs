@@ -40,3 +40,15 @@ test('Admin landing dashboard reads real platform overview metrics', async () =>
   assert.match(overview, /role="status"/);
   assert.match(overview, /role="alert"/);
 });
+
+test('Platform application registry uses a matching permission-gated route and API', async () => {
+  const applications = await readFile(new URL('../src/router/pages/AdminApplicationsRoute.vue', import.meta.url), 'utf8');
+  assert.match(routes, /path: 'admin\/platforms'/);
+  assert.match(routes, /AdminApplicationsRoute\.vue/);
+  assert.match(routes, /meta: \{ permission: 'platform\.applications\.read' \}/);
+  assert.match(nav, /to: '\/admin\/platforms'/);
+  assert.match(nav, /permission: 'platform\.applications\.read'/);
+  assert.match(applications, /\/api\/admin\/platform\/applications/);
+  assert.match(applications, /frontend_ready/);
+  assert.match(applications, /role="alert"/);
+});
