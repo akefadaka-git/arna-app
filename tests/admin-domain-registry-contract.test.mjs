@@ -52,3 +52,23 @@ test('Platform application registry uses a matching permission-gated route and A
   assert.match(applications, /frontend_ready/);
   assert.match(applications, /role="alert"/);
 });
+
+test('Platform identity, tenant and RBAC directories use canonical platform API namespaces', async () => {
+  const directory = await readFile(new URL('../src/router/pages/AdminDirectoryRoute.vue', import.meta.url), 'utf8');
+  assert.match(routes, /name: 'admin-users'/);
+  assert.match(routes, /name: 'admin-tenants'/);
+  assert.match(routes, /name: 'admin-roles'/);
+  assert.match(routes, /name: 'admin-permissions'/);
+  assert.match(routes, /platform\.identity\.read/);
+  assert.match(routes, /platform\.tenancy\.read/);
+  assert.match(routes, /platform\.rbac\.read/);
+  assert.match(nav, /to: '\/admin\/users'/);
+  assert.match(nav, /to: '\/admin\/tenants'/);
+  assert.match(nav, /to: '\/admin\/roles'/);
+  assert.match(nav, /to: '\/admin\/permissions'/);
+  assert.match(directory, /\/api\/admin\/platform\/identity\/users/);
+  assert.match(directory, /\/api\/admin\/platform\/rbac\/roles/);
+  assert.match(directory, /\/api\/admin\/platform\/rbac\/permissions/);
+  assert.match(directory, /\/api\/admin\/platform\/tenants/);
+  assert.doesNotMatch(directory, /\/api\/admin\/authorization\//);
+});
