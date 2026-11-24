@@ -624,7 +624,7 @@ import { aranaBrandLabels } from '@/router/shell-labels';
 }
 
 /* Dark-surface brand text must retain normal-text WCAG AA contrast. */
-:global(html[data-theme="dark"]) .arna-brand__corporate {
+:global(html[data-theme="dark"] .arna-brand__corporate) {
   color: var(--arna-color-text-primary);
 }
 
