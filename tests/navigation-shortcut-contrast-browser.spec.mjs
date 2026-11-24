@@ -20,6 +20,8 @@ test('navigation shortcut passes targeted contrast checks in light and dark them
       backgroundColor: getComputedStyle(element.parentElement).backgroundColor,
       fontSize: getComputedStyle(element).fontSize,
     }));
+    const expectedTextColor = theme === 'light' ? 'rgb(63, 56, 43)' : 'rgb(239, 234, 219)';
+    expect(computed.color, `semantic secondary text color in ${theme} theme`).toBe(expectedTextColor);
 
     const targeted = await new AxeBuilder({ page })
       .include('.app-header-navigation__search-shortcut')
