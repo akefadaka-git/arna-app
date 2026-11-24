@@ -104,6 +104,8 @@ const labels = {
   verified: 'ተረጋግጧል',
   notObserved: 'አልተመረመረም',
   noRows: 'በመዝገቡ ውስጥ ዶሜይን አልተገኘም።',
+  providers: 'የአቅራቢ ግንኙነቶች',
+  noProvider: 'አልተገናኘም',
   warning: 'የownership verification በDNS TXT ፈተና ብቻ ነው። DNS፣ TLS ወይም hosting ሁኔታ ከprovider ጋር እስኪገናኝ ድረስ አይታወቅም።',
   loadError: 'የዶሜይን መዝገቡን ማምጣት አልተቻለም። የፈቃድና የAPI ግንኙነት ያረጋግጡ።',
 } as const;
@@ -270,7 +272,7 @@ onMounted(() => { void load(); });
         </form>
       </div>
       <p class="registry-warning">{{ labels.warning }}</p>
-      <p v-else-if="loading" role="status">{{ labels.refresh }}…</p>
+      <p v-if="loading" role="status">{{ labels.refresh }}…</p>
       <p v-if="!loading && rows.length === 0" class="registry-empty">{{ labels.noRows }}</p>
       <div v-else-if="rows.length > 0" class="registry-table-wrap">
         <table>
@@ -284,7 +286,7 @@ onMounted(() => { void load(); });
               <td>{{ row.dns_state }}</td><td>{{ row.tls_state }}</td><td>{{ row.hosting_state }}</td><td>{{ dateLabel(row.last_observed_at) }}</td>
               <td v-if="row.registry_id">
                 <button v-if="auth.hasPermission('platform.domains.manage')" type="button" @click="beginEdit(row)">Edit</button>
-                <button type="button" @click="showHistory(row.registry_id!)">History</button>
+                <button type="button" @click="showHistory(Number(row.registry_id))">History</button>
               </td>
               <td v-else>—</td>
             </tr>
