@@ -54,7 +54,7 @@ Navigation entries must map to implemented routes and verified permission slugs.
 
 ## 4. Domain Management UX and safety
 
-The first read-only Admin feature slices are implemented: `/admin` uses an API-backed overview; `/admin/platforms` lists registered applications; `/admin/users` and `/admin/tenants` show platform identity and tenant directories; `/admin/roles` and `/admin/permissions` show the RBAC catalogues; `/admin/domains` lists domain references from application and tenant records. Routes and sidebar entries use their matching global permission slugs. Domain provider states remain explicitly unverified/unobserved and live mutations are disabled. Contract tests cover route/permission alignment and canonical API namespaces.
+The first read-only Admin feature slices are implemented: `/admin` uses an API-backed overview; `/admin/platforms` lists registered applications; `/admin/users` and `/admin/tenants` show platform identity and tenant directories; tenant rows link to `/admin/tenants/:tenantId/memberships`; `/admin/roles` and `/admin/permissions` show the RBAC catalogues; `/admin/domains` lists domain references from application and tenant records. Routes and sidebar entries use their matching global permission slugs. Domain provider states remain explicitly unverified/unobserved and live mutations are disabled. Contract tests cover route/permission alignment and canonical API namespaces.
 
 Domain Management is a first-class feature area. Its first release is a truthful registry and observation surface. Distinguish clearly between:
 - configured in ARNA registry;
