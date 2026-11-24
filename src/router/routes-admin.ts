@@ -346,6 +346,18 @@ export const routesAdmin: RouteRecordRaw[] = [
         meta: { permission: 'platform.operations.read' },
       },
       {
+        path: 'admin/settings',
+        name: 'admin-settings',
+        component: () => import('./pages/AdminSettingsRoute.vue'),
+        meta: { permission: 'platform.settings.read' },
+      },
+      {
+        path: 'admin/configuration',
+        name: 'admin-configuration',
+        component: () => import('./pages/AdminSettingsRoute.vue'),
+        meta: { permission: 'platform.configuration.read' },
+      },
+      {
         path: 'admin/public-content',
         name: 'admin-public-content',
         component: () => import('./pages/AdminPublicContentRoute.vue'),
