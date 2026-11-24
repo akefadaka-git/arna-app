@@ -2,6 +2,7 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { api } from '@/core/api/client';
+import { formatCalendarDate } from '@/core/dates/calendar';
 import PageHeader from '@/components/patterns/PageHeader';
 import Card from '@/components/patterns/Card';
 
@@ -36,6 +37,10 @@ const tenantId = computed(() => {
   const parsed = Number(value);
   return Number.isInteger(parsed) && parsed > 0 ? parsed : null;
 });
+
+function joinedLabel(value: string | null): string {
+  return value ? formatCalendarDate(value, { dateStyle: 'medium' }) : '—';
+}
 
 async function load(): Promise<void> {
   if (tenantId.value === null) {
@@ -90,7 +95,7 @@ onMounted(() => { void load(); });
               <td><strong>{{ membership.name || membership.email || '—' }}</strong><small>{{ membership.email }}</small></td>
               <td>{{ membership.user_id }}</td>
               <td>{{ membership.status }}</td>
-              <td>{{ membership.joined_at ?? '—' }}</td>
+              <td>{{ joinedLabel(membership.joined_at) }}</td>
             </tr>
           </tbody>
         </table>
