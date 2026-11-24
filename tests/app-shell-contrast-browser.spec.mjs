@@ -88,7 +88,7 @@ test('reproduce six historical AppShell contrast findings in light and dark them
               declarations: rule.style.cssText,
             };
             if (mentionsTarget) relevantRules.push(record);
-            if (record.matchesTarget) matchedRules.push(record);
+            if (mentionsTarget && record.matchesTarget) matchedRules.push(record);
           }
           if (rule.cssRules) collectRules(rule.cssRules, source, nextContext);
         }
