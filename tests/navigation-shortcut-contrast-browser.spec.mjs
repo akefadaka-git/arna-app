@@ -54,6 +54,7 @@ test('navigation shortcut passes targeted contrast checks in light and dark them
 
     console.log(`NAV_SHORTCUT_TARGETED_AXE ${theme}: ${JSON.stringify({
       computed,
+      contrastRatio: Number(contrastRatio.toFixed(2)),
       violations: targeted.violations.map((violation) => ({
         id: violation.id,
         impact: violation.impact,
