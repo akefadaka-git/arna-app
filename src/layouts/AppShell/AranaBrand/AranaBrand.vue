@@ -623,6 +623,7 @@ import { aranaBrandLabels } from '@/router/shell-labels';
   font-weight: var(--arna-font-weight-semibold);
 }
 
+
 /* ============================================================================
    Product code — ማሴስ
    ---------------------------------------------------------------------------
@@ -636,7 +637,7 @@ import { aranaBrandLabels } from '@/router/shell-labels';
 }
 
 .arna-brand__tagline {
-  color: var(--arna-color-text-tertiary);
+  color: var(--arna-color-text-secondary);
   font-size: var(--arna-font-size-caption);
   line-height: 1.15;
   font-weight: var(--arna-font-weight-regular);
@@ -656,5 +657,15 @@ import { aranaBrandLabels } from '@/router/shell-labels';
   .arna-brand {
     /* no-op placeholder — see comment above */
   }
+}
+</style>
+
+<!-- Theme override intentionally lives in an unscoped component-owned style block.
+     Vue's scoped-style transform omitted the :global() selectors from the
+     emitted CSS; keeping this narrow selector unscoped preserves the component
+     class boundary while allowing the html theme attribute to match. -->
+<style>
+html[data-theme="dark"] .arna-brand__corporate {
+  color: var(--arna-color-text-primary);
 }
 </style>

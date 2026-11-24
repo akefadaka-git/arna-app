@@ -129,6 +129,26 @@ jobs:
           done
           curl --fail --silent http://127.0.0.1:4173/ >/dev/null
           PUBLIC_SITE_URL=http://127.0.0.1:4173/ npm run test:public-browser
+      - name: Reproduce six historical AppShell contrast findings in Chromium
+        shell: bash
+        run: |
+          npx vite --mode workspace --host 127.0.0.1 --port 4175 --strictPort > "$RUNNER_TEMP/app-shell-contrast-preview.log" 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4175/tests/fixtures/app-shells.html >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4175/tests/fixtures/app-shells.html >/dev/null
+          APP_SHELLS_URL=http://127.0.0.1:4175/tests/fixtures/app-shells.html npx playwright test tests/app-shell-contrast-browser.spec.mjs
+      - name: Upload AppShell contrast measurement evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arna-app-shell-contrast-${{ github.sha }}
+          path: test-results/
+          if-no-files-found: warn
+          retention-days: 14
       - name: Render visual library across mobile, tablet, desktop, locales and themes
         shell: bash
         run: |

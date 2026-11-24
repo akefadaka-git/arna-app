@@ -337,7 +337,7 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
    ============================================================================ */
 .arana-footer-content__copyright {
   min-width: 0;
-  color: var(--arna-color-text-tertiary);
+  color: var(--arna-color-text-secondary);
   font-size: var(--arna-font-size-caption);
   line-height: var(--arna-line-height-caption);
   overflow-wrap: break-word;
@@ -387,6 +387,7 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
   text-decoration: none;
 }
 
+
 .arana-footer-content__link:hover,
 .arana-footer-content__link:focus-visible {
   color: var(--arna-color-action-link-hover);
@@ -433,4 +434,14 @@ const copyrightText = computed(() => aranaFooterLabels.copyrightTemplate.replace
   }
 }
 
+</style>
+
+<!-- Theme override intentionally lives in an unscoped component-owned style block.
+     Vue's scoped-style transform omitted the :global() selectors from the
+     emitted CSS; keeping this narrow selector unscoped preserves the component
+     class boundary while allowing the html theme attribute to match. -->
+<style>
+html[data-theme="dark"] .arana-footer-content__link:not(:hover):not(:focus-visible) {
+  color: var(--arna-color-text-primary);
+}
 </style>
