@@ -310,6 +310,12 @@ export const routesAdmin: RouteRecordRaw[] = [
         meta: { permission: 'platform.rbac.read' },
       },
       {
+        path: 'admin/tenants/:tenantId/memberships',
+        name: 'admin-tenant-memberships',
+        component: () => import('./pages/AdminTenantMembershipsRoute.vue'),
+        meta: { permission: 'platform.tenancy.read' },
+      },
+      {
         path: 'admin/tenants',
         name: 'admin-tenants',
         component: () => import('./pages/AdminDirectoryRoute.vue'),
