@@ -57,6 +57,7 @@
     "test:app-shells-browser": "playwright test tests/app-shells-browser.spec.mjs",
     "test:notifications-locale-contract": "node --test tests/notifications-locale-contract.test.mjs",
     "test:owner-governed-lifecycle-workflow-contract": "node --test tests/owner-governed-lifecycle-workflow-contract.test.mjs",
+    "test:admin-domain-registry-contract": "node --test tests/admin-domain-registry-contract.test.mjs",
     "test:calendar-workspace-contract": "node --test tests/calendar-workspace-contract.test.mjs",
     "test:calendar-browser": "playwright test tests/calendar-browser-contract.spec.mjs"
   },
