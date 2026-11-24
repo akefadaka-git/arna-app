@@ -356,6 +356,20 @@ export const adminNavItems: ReadonlyArray<NavItem> = [
     permission: 'platform.operations.read',
   },
   {
+    id: 'platform-settings',
+    label: 'የመድረክ ቅንብሮች',
+    to: '/admin/settings',
+    icon: 'settings',
+    permission: 'platform.settings.read',
+  },
+  {
+    id: 'platform-configuration',
+    label: 'የመድረክ ውቅር',
+    to: '/admin/configuration',
+    icon: 'sliders-horizontal',
+    permission: 'platform.configuration.read',
+  },
+  {
     id: 'audit-security-center',
     label: 'ኦዲት እና ደህንነት',
     to: '/admin/audit-security',
