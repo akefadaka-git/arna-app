@@ -227,15 +227,24 @@ export interface RegisterRequest {
  * POST /api/password/email request body.
  */
 export interface RequestPasswordResetRequest {
-  readonly email: string;
+  readonly identifier: string;
+  readonly channel: 'email' | 'sms';
+}
+
+export interface PasswordRecoveryChallengeResponse {
+  readonly challenge_required: true;
+  readonly challenge_token: string;
+  readonly message: string;
 }
 
 /**
  * POST /api/password/reset request body.
  */
 export interface ResetPasswordRequest {
-  readonly token: string;
-  readonly email: string;
+  readonly identifier: string;
+  readonly authenticator: 'otp' | 'google_authenticator';
+  readonly code: string;
+  readonly challenge_token?: string;
   readonly password: string;
   readonly password_confirmation: string;
 }
@@ -325,9 +334,9 @@ export function fetchCurrentUser(): Promise<AuthUser> {
  * The `message` is not modeled here.
  */
 export function requestPasswordReset(
-  email: string,
-): Promise<unknown> {
-  return api.post<unknown>('/api/password/email', { email });
+  payload: RequestPasswordResetRequest,
+): Promise<PasswordRecoveryChallengeResponse> {
+  return api.post<PasswordRecoveryChallengeResponse>('/api/password/email', payload);
 }
 
 /**
