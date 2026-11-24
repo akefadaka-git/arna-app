@@ -19,7 +19,7 @@ interface DomainInventoryItem {
   readonly display_name: string | null;
   readonly environment?: string;
   readonly is_active: boolean;
-  readonly frontend_ready: boolean | null;
+  readonly frontend_ready?: boolean | null;
   readonly registry_state: string;
   readonly ownership_state: 'verified' | 'not_verified';
   readonly dns_state: string;
