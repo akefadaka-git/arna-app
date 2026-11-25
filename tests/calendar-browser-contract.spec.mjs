@@ -32,7 +32,30 @@ const occurrence = {
 };
 
 async function installCalendarApi(page, events = [allDayEvent, timedEvent]) {
-  const captured = { create: null, move: null, cancel: null, eventFilters: [], occurrenceFilters: [] };
+  const captured = { create: null, move: null, cancel: null, eventFilters: [], occurrenceFilters: [], deadlineFilters: [] };
+  await page.route('**/api/tasks/deadlines', async (route) => {
+    const url = new URL(route.request().url());
+    captured.deadlineFilters.push(Object.fromEntries(url.searchParams.entries()));
+    return route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        success: true,
+        data: [{
+          id: 'task-deadline-qa',
+          title: 'Quarterly close report',
+          description: 'D08-owned task deadline',
+          task_scope: 'personal',
+          status: 'todo',
+          priority: 'high',
+          due_on: '2026-11-25',
+          due_on_ec: ecDate(2019, 3, 16, 'ጥር 16 2019', 'Tir 16, 2019'),
+          progress_percent: 0,
+          version: 1,
+        }],
+      }),
+    });
+  });
   await page.route('**/api/calendar/**', async (route) => {
     const request = route.request();
     const url = new URL(request.url());
@@ -150,6 +173,20 @@ test.describe('ARNA Calendar E.C. browser verification', () => {
     });
     expect(captured.create).not.toHaveProperty('starts_on');
     expect(captured.create).not.toHaveProperty('ends_on');
+  });
+
+  test('renders D08 task deadlines as read-only Calendar items and requests E.C. date ranges', async ({ page }) => {
+    const captured = await installCalendarApi(page);
+    await mountCalendar(page);
+
+    await expect(page.getByRole('heading', { name: 'Quarterly close report' })).toBeVisible();
+    await expect(page.getByText(/የተግባር ቀነ ገደብ/)).toBeVisible();
+    expect(captured.deadlineFilters[0]['from_ec[year]']).toBeDefined();
+    expect(captured.deadlineFilters[0]['to_ec[year]']).toBeDefined();
+    expect(captured.deadlineFilters[0]).not.toHaveProperty('from');
+
+    await page.getByRole('button', { name: 'ወር', exact: true }).click();
+    await expect(page.locator('.calendar-workspace__month-task')).toContainText('Quarterly close report');
   });
 
   test('renders E.C. dates in English when the document locale is English', async ({ page }) => {
