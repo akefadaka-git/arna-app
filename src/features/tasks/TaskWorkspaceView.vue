@@ -114,6 +114,7 @@ function dueDatePayload(): CreateTaskPayload['due_on_ec'] | undefined {
 }
 
 async function submitTask(): Promise<void> {
+  if (saving.value) return;
   error.value = '';
   notice.value = '';
   if (!title.value.trim()) {
@@ -258,7 +259,7 @@ onMounted(() => {
           <small>{{ labels.dueDateHint }}</small>
         </fieldset>
         <div class="task-workspace__form-actions">
-          <button data-testid="task-submit" class="task-workspace__primary" type="submit" :disabled="saving">{{ saving ? labels.loading : labels.save }}</button>
+          <button data-testid="task-submit" class="task-workspace__primary" type="submit" :disabled="saving" @click="submitTask">{{ saving ? labels.loading : labels.save }}</button>
           <button class="task-workspace__secondary" type="button" @click="showComposer = false">{{ labels.cancel }}</button>
         </div>
       </form>
