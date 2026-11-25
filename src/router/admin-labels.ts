@@ -374,7 +374,7 @@ export const adminNavItems: ReadonlyArray<NavItem> = [
     label: 'ኦዲት እና ደህንነት',
     to: '/admin/audit-security',
     icon: 'shield-check',
-    permission: ['audit.view', 'security-event.view'],
+    permission: ['platform.audit.read', 'platform.security.read'],
     permissionMode: 'any',
   },
   {
