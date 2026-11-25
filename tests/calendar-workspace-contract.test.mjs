@@ -64,6 +64,17 @@ test('E.C. API contract uses native civil-date input, output and range filters',
   assert.match(view, /calendarSystem\.value === 'ethiopic'/);
 });
 
+test('Timed Calendar events are converted in the selected calendar timezone, not the browser timezone', () => {
+  assert.match(dates, /export function localDateTimeToIso/);
+  assert.match(dates, /This local time does not exist/);
+  assert.match(dates, /This local time occurs twice/);
+  assert.match(view, /localDateTimeToIso\(startDate, startTime\.value, timezone\)/);
+  assert.match(view, /localDateTimeToIso\(endDate, endTime\.value, timezone\)/);
+  assert.match(view, /selectedCalendarRecord = computed/);
+  assert.match(view, /const timezone = selectedCalendarRecord\.value\?\.timezone/);
+  assert.doesNotMatch(view, /Intl\.DateTimeFormat\(\)\.resolvedOptions\(\)\.timeZone/);
+});
+
 test('E.C. recurrence exceptions use the authenticated Calendar API', () => {
   assert.match(api, /listCalendarOccurrences/);
   assert.match(api, /occurrences\/cancel/);
