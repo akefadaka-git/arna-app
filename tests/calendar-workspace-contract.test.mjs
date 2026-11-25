@@ -75,6 +75,19 @@ test('Timed Calendar events are converted in the selected calendar timezone, not
   assert.doesNotMatch(view, /Intl\.DateTimeFormat\(\)\.resolvedOptions\(\)\.timeZone/);
 });
 
+test('Calendar displays D08-owned task deadlines through the tenant-scoped task API', () => {
+  assert.match(api, /interface TaskDeadlineRecord/);
+  assert.match(api, /listTaskDeadlines/);
+  assert.match(api, /\/api\/tasks\/deadlines/);
+  assert.match(view, /canViewTaskDeadlines = computed\(\(\) => auth\.permissions\.includes\('task\.view'\)\)/);
+  assert.match(view, /listTaskDeadlines\(taskDeadlineRange\(\)\)/);
+  assert.match(view, /function taskDeadlineRange\(\)/);
+  assert.match(view, /return \{ from: dateKey\(start\), to: dateKey\(end\) \}/);
+  assert.match(view, /tasksForDate\(day\)/);
+  assert.match(view, /calendar-workspace__task-deadline/);
+  assert.match(view, /የተግባር ቀነ ገደብ/);
+});
+
 test('E.C. recurrence exceptions use the authenticated Calendar API', () => {
   assert.match(api, /listCalendarOccurrences/);
   assert.match(api, /occurrences\/cancel/);
