@@ -31,6 +31,7 @@ const ENGLISH_DESTINATION_LABELS: Readonly<Record<string, string>> = {
   'share-classes': 'Share classes',
   wallets: 'Wallets',
   loans: 'Loans',
+  tasks: 'Tasks & To-Do',
   'loan-products': 'Loan products',
   governance: 'Governance',
   'portal-home': 'Home',
