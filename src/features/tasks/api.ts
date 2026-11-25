@@ -63,7 +63,11 @@ export interface UpdateTaskPayload {
 }
 
 export async function listTasks(filters: TaskListFilters = {}): Promise<TaskPage> {
-  const response = await api.getWithMeta<TaskPage>('/api/tasks', { params: filters });
+  const params: Record<string, string | number | boolean | undefined> = {};
+  if (filters.status) params.status = filters.status;
+  if (filters.task_scope) params.task_scope = filters.task_scope;
+  if (filters.page) params.page = filters.page;
+  const response = await api.getWithMeta<TaskPage>('/api/tasks', { params });
   return response.data;
 }
 
