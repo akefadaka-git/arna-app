@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="am">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARNA D08 Task workspace browser verification</title>
+</head>
+<body>
+  <div id="task-test-root"></div>
+  <script type="module">
+    import { createApp } from 'vue';
+    import { createPinia } from 'pinia';
+    import TaskWorkspaceView from '/src/features/tasks/TaskWorkspaceView.vue';
+    import { taskWorkspaceLabels } from '/src/features/tasks/labels.ts';
+    import { useAuthStore } from '/src/stores/auth.ts';
+
+    const pinia = createPinia();
+    const app = createApp(TaskWorkspaceView, { labels: taskWorkspaceLabels });
+    app.use(pinia);
+    const auth = useAuthStore(pinia);
+    auth.setUser({
+      id: 9001,
+      name: 'Task Workspace Browser QA',
+      email: 'task-workspace-qa@example.invalid',
+      locale: 'am',
+      default_tenant_id: 9001,
+      roles: [],
+      permissions: ['task.view', 'task.create', 'task.update'],
+      tenants: [],
+    });
+    app.mount('#task-test-root');
+    window.__taskWorkspaceBrowserHarness = app;
+  </script>
+</body>
+</html>
