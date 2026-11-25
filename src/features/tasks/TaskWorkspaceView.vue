@@ -252,9 +252,9 @@ onMounted(() => {
         <p v-if="taskScope === 'corporate'" class="task-workspace__hint">{{ labels.corporateAssignmentHint }}</p>
         <fieldset class="task-workspace__date">
           <legend>{{ labels.dueDate }}</legend>
-          <label><span>{{ labels.dueYear }}</span><input v-model="dueYear" inputmode="numeric" type="number" min="1" max="9999" /></label>
-          <label><span>{{ labels.dueMonth }}</span><input v-model="dueMonth" inputmode="numeric" type="number" min="1" max="13" /></label>
-          <label><span>{{ labels.dueDay }}</span><input v-model="dueDay" inputmode="numeric" type="number" min="1" max="30" /></label>
+          <label><span>{{ labels.dueYear }}</span><input v-model="dueYear" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" /></label>
+          <label><span>{{ labels.dueMonth }}</span><input v-model="dueMonth" inputmode="numeric" type="text" pattern="[0-9]*" maxlength="2" /></label>
+          <label><span>{{ labels.dueDay }}</span><input v-model="dueDay" inputmode="numeric" type="text" pattern="[0-9]*" maxlength="2" /></label>
           <small>{{ labels.dueDateHint }}</small>
         </fieldset>
         <div class="task-workspace__form-actions">
