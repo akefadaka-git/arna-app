@@ -2,8 +2,8 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { ethiopicDateToGregorian, formatCalendarDate, formatCalendarDateOnly, getEthiopicDateParts, localDateTimeToIso, useCalendarPreference } from '@/core/dates/calendar';
 import { useAuthStore } from '@/stores/auth';
-import { cancelCalendarOccurrence, createCalendarEvent, listCalendarEvents, listCalendarOccurrences, listCalendars, listCalendarResources, moveCalendarOccurrence, reserveCalendarResource, respondToCalendarEvent, updateCalendarEvent } from './api';
-import type { CalendarEventFilters, CalendarEventRecord, CalendarOccurrenceRecord, CalendarRecord, CalendarResourceRecord } from './api';
+import { cancelCalendarOccurrence, createCalendarEvent, listCalendarEvents, listCalendarOccurrences, listCalendars, listCalendarResources, listTaskDeadlines, moveCalendarOccurrence, reserveCalendarResource, respondToCalendarEvent, updateCalendarEvent } from './api';
+import type { CalendarEventFilters, CalendarEventRecord, CalendarOccurrenceRecord, CalendarRecord, CalendarResourceRecord, TaskDeadlineRecord } from './api';
 
 type CalendarView = 'agenda' | 'day' | 'week' | 'month' | 'timeline';
 
@@ -15,6 +15,7 @@ const selectedEventId = ref('');
 const selectedResourceId = ref('');
 const savingLifecycle = ref(false);
 const events = ref<readonly CalendarEventRecord[]>([]);
+const taskDeadlines = ref<readonly TaskDeadlineRecord[]>([]);
 const selectedCalendar = ref('');
 const selectedDate = ref(new Date());
 const viewMode = ref<CalendarView>('agenda');
@@ -76,6 +77,7 @@ const selectedEvent = computed(() => events.value.find((event) => event.id === s
 const selectedCalendarRecord = computed(() => calendars.value.find((calendar) => calendar.id === selectedCalendar.value) ?? null);
 const canUpdateEvents = computed(() => auth.permissions.includes('calendar.update'));
 const canReserveResources = computed(() => auth.permissions.includes('calendar.reserve'));
+const canViewTaskDeadlines = computed(() => auth.permissions.includes('task.view'));
 const monthDays = computed(() => {
   let first: Date;
   if (calendarSystem.value === 'ethiopic') {
@@ -134,6 +136,30 @@ function eventsForDate(day: Date): readonly CalendarEventRecord[] {
   return events.value.filter((event) => eventDateKey(event) === key);
 }
 
+function tasksForDate(day: Date): readonly TaskDeadlineRecord[] {
+  const key = dateKey(day);
+  return taskDeadlines.value.filter((task) => task.due_on === key);
+}
+
+function taskStatusLabel(status: TaskDeadlineRecord['status']): string {
+  return ({
+    todo: 'ያልተጀመረ',
+    in_progress: 'በሂደት ላይ',
+    blocked: 'ታግዷል',
+    completed: 'ተጠናቋል',
+    cancelled: 'ተሰርዟል',
+  })[status];
+}
+
+function taskPriorityLabel(priority: TaskDeadlineRecord['priority']): string {
+  return ({
+    low: 'ዝቅተኛ',
+    normal: 'መደበኛ',
+    high: 'ከፍተኛ',
+    urgent: 'አስቸኳይ',
+  })[priority];
+}
+
 function range(): CalendarEventFilters {
   const start = new Date(selectedDate.value);
   start.setHours(0, 0, 0, 0);
@@ -171,14 +197,17 @@ async function refresh(): Promise<void> {
   loading.value = true;
   error.value = '';
   try {
-    const [calendarPage, eventPage, resourcePage] = await Promise.all([
+    const filters = range();
+    const [calendarPage, eventPage, resourcePage, deadlinePage] = await Promise.all([
       listCalendars(),
-      listCalendarEvents(range()),
+      listCalendarEvents(filters),
       listCalendarResources(),
+      canViewTaskDeadlines.value ? listTaskDeadlines(filters) : Promise.resolve([]),
     ]);
     calendars.value = calendarPage.data ?? [];
     events.value = eventPage.data ?? [];
     resources.value = resourcePage.data ?? [];
+    taskDeadlines.value = deadlinePage ?? [];
     if (selectedEventId.value && !events.value.some((event) => event.id === selectedEventId.value)) selectedEventId.value = '';
     if (!selectedCalendar.value && calendars.value.length) selectedCalendar.value = calendars.value[0].id;
   } catch (cause) {
@@ -544,7 +573,7 @@ onMounted(refresh);
 
     <div class="calendar-workspace__summary">
       <div><strong>{{ calendars.length }}</strong><span>የቀን መቁጠሪያዎች</span></div>
-      <div><strong>{{ events.length }}</strong><span>በተመረጠው ጊዜ ያሉ ክስተቶች</span></div>
+      <div><strong>{{ events.length + taskDeadlines.length }}</strong><span>ቀጠሮዎችና የተግባር ቀነ ገደቦች</span></div>
       <button type="button" class="calendar-workspace__refresh" :disabled="loading" @click="refresh">{{ loading ? 'በመጫን ላይ…' : 'አድስ' }}</button>
     </div>
 
@@ -557,13 +586,14 @@ onMounted(refresh);
           @click="selectMonthDay(day)">
           <span class="calendar-workspace__day-number">{{ formatCalendarDate(day, { day: 'numeric' }) }}</span>
           <span v-for="event in eventsForDate(day).slice(0, 2)" :key="event.id" class="calendar-workspace__month-event">{{ event.title }}</span>
-          <span v-if="eventsForDate(day).length > 2" class="calendar-workspace__more-events">+{{ eventsForDate(day).length - 2 }}</span>
+          <span v-for="task in tasksForDate(day).slice(0, 1)" :key="task.id" class="calendar-workspace__month-task">◆ {{ task.title }}</span>
+          <span v-if="eventsForDate(day).length > 2 || tasksForDate(day).length > 1" class="calendar-workspace__more-events">+{{ Math.max(0, eventsForDate(day).length - 2) + Math.max(0, tasksForDate(day).length - 1) }}</span>
         </button>
       </div>
     </div>
 
     <div v-else class="calendar-workspace__list" :class="{ 'is-timeline': viewMode === 'timeline' }" aria-live="polite">
-      <div v-if="loading && events.length === 0" class="calendar-workspace__empty">መረጃ በመጫን ላይ…</div>
+      <div v-if="loading && events.length === 0 && taskDeadlines.length === 0" class="calendar-workspace__empty">መረጃ በመጫን ላይ…</div>
       <article v-for="event in events" :key="event.id" class="calendar-workspace__event">
         <div class="calendar-workspace__date">{{ eventDate(event) }}</div>
         <div class="calendar-workspace__event-main">
@@ -573,7 +603,16 @@ onMounted(refresh);
           <button class="calendar-workspace__detail-link" type="button" @click="openEventDetail(event)">ዝርዝር እይታ</button>
         </div>
       </article>
-      <div v-if="!loading && events.length === 0" class="calendar-workspace__empty">
+      <article v-for="task in taskDeadlines" :key="`task-deadline-${task.id}`" class="calendar-workspace__event calendar-workspace__task-deadline">
+        <div class="calendar-workspace__date">{{ formatCalendarDateOnly(task.due_on, { dateStyle: 'full' }) }}</div>
+        <div class="calendar-workspace__event-main">
+          <h2>{{ task.title }}</h2>
+          <p v-if="task.description">{{ task.description }}</p>
+          <span class="calendar-workspace__status">የተግባር ቀነ ገደብ · {{ taskStatusLabel(task.status) }} · {{ taskPriorityLabel(task.priority) }}</span>
+          <p>{{ task.progress_percent }}% · {{ task.task_scope === 'corporate' ? 'የተቋም ተግባር' : 'የግል ተግባር' }}</p>
+        </div>
+      </article>
+      <div v-if="!loading && events.length === 0 && taskDeadlines.length === 0" class="calendar-workspace__empty">
         በተመረጠው ጊዜ ውስጥ የተመዘገበ ቀጠሮ የለም።
       </div>
     </div>
@@ -690,6 +729,8 @@ onMounted(refresh);
 .calendar-workspace__month-day { min-height: 6.5rem; display: flex; flex-direction: column; align-items: stretch; gap: .25rem; padding: .45rem; text-align: left; color: inherit; background: transparent; border: 0; border-right: 1px solid var(--color-border-default, #d0d5dd); border-bottom: 1px solid var(--color-border-default, #d0d5dd); cursor: pointer; }
 .calendar-workspace__month-day.is-outside { color: var(--color-text-muted, #98a2b3); background: var(--color-surface-subtle, #f9fafb); }
 .calendar-workspace__month-day.is-today .calendar-workspace__day-number { outline: 2px solid var(--color-action-primary, #244b78); outline-offset: 2px; border-radius: 50%; }
+.calendar-workspace__month-task { overflow: hidden; padding: .1rem .2rem; border-radius: .25rem; background: var(--color-surface-subtle, #f2f4f7); color: var(--color-text-secondary, #475467); font-size: .72rem; text-overflow: ellipsis; white-space: nowrap; }
+.calendar-workspace__task-deadline { border-style: dashed; }
 .calendar-workspace__day-number { align-self: flex-start; min-width: 1.5rem; text-align: center; font-weight: 700; }
 .calendar-workspace__month-event { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: .15rem .3rem; border-radius: .25rem; background: var(--color-surface-subtle, #f2f4f7); font-size: .72rem; }
 .calendar-workspace__more-events { color: var(--color-text-muted, #667085); font-size: .7rem; }
