@@ -93,6 +93,7 @@ async function installAppointmentApi(page) {
 async function mountWorkspace(page) {
   await page.goto(new URL('/tests/fixtures/appointment-workspace-browser.html', baseUrl).toString());
   await expect(page.getByRole('heading', { name: 'የቀጠሮ ማስያዣ' })).toBeVisible();
+  await expect(page.getByLabel('የቀን መቁጠሪያ')).toHaveValue(calendar.id);
 }
 
 test.describe('ARNA shared appointment booking workspace', () => {
