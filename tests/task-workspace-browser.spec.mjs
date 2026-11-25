@@ -104,11 +104,26 @@ test.describe('ARNA D08 Task workspace', () => {
     await form.getByLabel('ዓመት').fill('2019');
     await form.getByLabel('ወር').fill('3');
     await form.getByLabel('ቀን').fill('20');
-    await form.getByTestId('task-submit').click();
-
-    await expect.poll(async () => captured.create ?? await page.locator('[role="alert"]').textContent()).not.toBeNull();
+    const submitButton = form.getByTestId('task-submit');
+    const submitDiagnostics = await form.evaluate((element) => {
+      const button = element.querySelector('[data-testid="task-submit"]');
+      const invalidFields = [...element.querySelectorAll(':invalid')].map((field) => ({
+        tag: field.tagName,
+        type: field.getAttribute('type'),
+        value: field.value,
+        pattern: field.getAttribute('pattern'),
+        required: field.required,
+      }));
+      window.__taskWorkspaceSubmitEvents = { click: false, submit: false };
+      button?.addEventListener('click', () => { window.__taskWorkspaceSubmitEvents.click = true; }, { once: true });
+      element.addEventListener('submit', () => { window.__taskWorkspaceSubmitEvents.submit = true; }, { once: true });
+      return { valid: element.checkValidity(), disabled: button?.disabled ?? null, invalidFields };
+    });
+    await submitButton.click();
+    await page.waitForTimeout(250);
     if (!captured.create) {
-      throw new Error(`Task creation was rejected: ${await page.locator('[role="alert"]').textContent()} | ${consoleErrors.join(' | ')}`);
+      const events = await page.evaluate(() => window.__taskWorkspaceSubmitEvents);
+      throw new Error(`Task creation was not observed: ${await page.locator('[role="alert"]').textContent()} | diagnostics=${JSON.stringify({ ...submitDiagnostics, events })} | ${consoleErrors.join(' | ')}`);
     }
     expect(captured.create).toMatchObject({
       task_scope: 'personal',
