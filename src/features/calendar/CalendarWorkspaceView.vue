@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
-import { ethiopicDateToGregorian, formatCalendarDate, formatCalendarDateOnly, getEthiopicDateParts, useCalendarPreference } from '@/core/dates/calendar';
+import { ethiopicDateToGregorian, formatCalendarDate, formatCalendarDateOnly, getEthiopicDateParts, localDateTimeToIso, useCalendarPreference } from '@/core/dates/calendar';
 import { useAuthStore } from '@/stores/auth';
 import { cancelCalendarOccurrence, createCalendarEvent, listCalendarEvents, listCalendarOccurrences, listCalendars, listCalendarResources, moveCalendarOccurrence, reserveCalendarResource, respondToCalendarEvent, updateCalendarEvent } from './api';
 import type { CalendarEventFilters, CalendarEventRecord, CalendarOccurrenceRecord, CalendarRecord, CalendarResourceRecord } from './api';
@@ -73,6 +73,7 @@ const canCreate = computed(() => {
 });
 const periodLabel = computed(() => formatCalendarDate(selectedDate.value, { dateStyle: 'full' }));
 const selectedEvent = computed(() => events.value.find((event) => event.id === selectedEventId.value) ?? null);
+const selectedCalendarRecord = computed(() => calendars.value.find((calendar) => calendar.id === selectedCalendar.value) ?? null);
 const canUpdateEvents = computed(() => auth.permissions.includes('calendar.update'));
 const canReserveResources = computed(() => auth.permissions.includes('calendar.reserve'));
 const monthDays = computed(() => {
@@ -108,12 +109,6 @@ function isOutsideMonth(day: Date): boolean {
 
 function dateValue(gregorian: string, ethiopic: { year: number; month: number; day: number }): string | null {
   return calendarSystem.value === 'ethiopic' ? ethiopicDateToGregorian(ethiopic) : (gregorian || null);
-}
-
-function localDateTime(date: string, time: string): Date {
-  const [year, month, day] = date.split('-').map(Number);
-  const [hour, minute] = time.split(':').map(Number);
-  return new Date(year, month - 1, day, hour, minute, 0, 0);
 }
 
 function dateKey(date: Date): string {
@@ -228,7 +223,8 @@ async function saveEvent(): Promise<void> {
     const startDate = dateValue(startGregorianDate.value, startEthiopicDate.value);
     const endDate = dateValue(endGregorianDate.value, endEthiopicDate.value);
     if (!startDate || !endDate || endDate < startDate) throw new Error('የመጀመሪያና የመጨረሻ ቀኖች ትክክለኛ አይደሉም።');
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Africa/Addis_Ababa';
+    const timezone = selectedCalendarRecord.value?.timezone;
+    if (!timezone) throw new Error('የቀን መቁጠሪያው የጊዜ ዞን አልተገኘም።');
     const recurrence = recurrenceFrequency.value === 'none' ? undefined : {
       frequency: recurrenceFrequency.value,
       interval: recurrenceInterval.value,
@@ -250,16 +246,16 @@ async function saveEvent(): Promise<void> {
         ...(recurrence ? { recurrence_rule: recurrence } : {}),
       });
     } else {
-      const start = localDateTime(startDate, startTime.value);
-      const end = localDateTime(endDate, endTime.value);
-      if (end <= start) throw new Error('የመጨረሻ ሰዓት ከመጀመሪያ ሰዓት በኋላ መሆን አለበት።');
+      const start = localDateTimeToIso(startDate, startTime.value, timezone);
+      const end = localDateTimeToIso(endDate, endTime.value, timezone);
+      if (Date.parse(end) <= Date.parse(start)) throw new Error('የመጨረሻ ሰዓት ከመጀመሪያ ሰዓት በኋላ መሆን አለበት።');
       await createCalendarEvent({
         calendar_id: selectedCalendar.value,
         title: title.value.trim(),
         description: description.value.trim() || undefined,
         all_day: false,
-        starts_at: start.toISOString(),
-        ends_at: end.toISOString(),
+        starts_at: start,
+        ends_at: end,
         timezone,
       });
     }
