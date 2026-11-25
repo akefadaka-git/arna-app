@@ -58,7 +58,9 @@
     "test:notifications-locale-contract": "node --test tests/notifications-locale-contract.test.mjs",
     "test:owner-governed-lifecycle-workflow-contract": "node --test tests/owner-governed-lifecycle-workflow-contract.test.mjs",
     "test:calendar-workspace-contract": "node --test tests/calendar-workspace-contract.test.mjs",
-    "test:calendar-browser": "playwright test tests/calendar-browser-contract.spec.mjs"
+    "test:task-workspace-contract": "node --test tests/task-workspace-contract.test.mjs",
+    "test:calendar-browser": "playwright test tests/calendar-browser-contract.spec.mjs",
+    "test:task-workspace-browser": "playwright test tests/task-workspace-browser.spec.mjs"
   },
   "dependencies": {
     "axios": "1.21.0",
