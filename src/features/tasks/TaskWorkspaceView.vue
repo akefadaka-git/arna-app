@@ -2,7 +2,6 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useLocaleStore } from '@/stores/locale';
-import { api } from '@/core/api/client';
 import type { TaskPriority, TaskRecord, TaskScope, TaskStatus } from './api';
 import { createTask, listTasks, updateTask } from './api';
 import type { CreateTaskPayload } from './api';
