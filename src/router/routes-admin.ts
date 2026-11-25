@@ -373,7 +373,7 @@ export const routesAdmin: RouteRecordRaw[] = [
         path: 'admin/audit-security',
         name: 'admin-audit-security',
         component: () => import('./pages/AdminAuditSecurityRoute.vue'),
-        meta: { permission: ['audit.view', 'security-event.view'], permissionMode: 'any' },
+        meta: { permission: ['platform.audit.read', 'platform.security.read'], permissionMode: 'any' },
       },
       {
         path: 'launcher',
