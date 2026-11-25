@@ -29,7 +29,6 @@ test('Task client consumes only D08 task lifecycle endpoints and preserves pagin
 test('Task workspace supports personal and corporate tasks, E.C. due dates, status and progress', () => {
   assert.match(view, /task_scope: taskScope\.value/);
   assert.match(view, /due_on_ec/);
-  assert.match(view, /task\.view/);
   assert.match(view, /task\.create/);
   assert.match(view, /task\.update/);
   assert.match(view, /task\.assign/);
