@@ -15,7 +15,6 @@ export interface TaskEthiopianDate {
 
 export interface TaskRecord {
   readonly id: string;
-  readonly tenant_id: number;
   readonly task_scope: TaskScope;
   readonly title: string;
   readonly description: string | null;
