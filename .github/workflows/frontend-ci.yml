@@ -89,6 +89,8 @@ jobs:
         run: npm run test:calendar-workspace-contract
       - name: Verify D08 Task workspace route, API ownership and RBAC contracts
         run: npm run test:task-workspace-contract
+      - name: Verify shared appointment booking route, E.C. and Governance boundary contracts
+        run: npm run test:appointment-workspace-contract
       - name: Verify Executive Overview route and audience contract
         run: npm run test:executive-overview-route-contract
       - name: Install Chromium for public browser contracts
