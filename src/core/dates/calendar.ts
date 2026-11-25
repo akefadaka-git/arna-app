@@ -61,8 +61,8 @@ export interface EthiopicDateParts {
  * corporate appointment to a different local time.
  */
 export function localDateTimeToIso(date: string, time: string, timeZone: string): string {
-  const dateMatch = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(date);
-  const timeMatch = /^(\\d{2}):(\\d{2})$/.exec(time);
+  const dateMatch = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
+  const timeMatch = /^(\d{2}):(\d{2})$/.exec(time);
   if (!dateMatch || !timeMatch) throw new Error('Enter a valid date and 24-hour time.');
 
   const [year, month, day] = dateMatch.slice(1).map(Number);
