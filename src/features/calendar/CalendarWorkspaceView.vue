@@ -210,10 +210,9 @@ async function refresh(): Promise<void> {
   loading.value = true;
   error.value = '';
   try {
-    const filters = range();
     const [calendarPage, eventPage, resourcePage, deadlinePage] = await Promise.all([
       listCalendars(),
-      listCalendarEvents(filters),
+      listCalendarEvents(range()),
       listCalendarResources(),
       canViewTaskDeadlines.value ? listTaskDeadlines(taskDeadlineRange()) : Promise.resolve([]),
     ]);
