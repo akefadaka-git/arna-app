@@ -1750,6 +1750,13 @@ export const authenticatedNavItems: ReadonlyArray<NavItem> = [
     permission: 'governance.body.view',
   },
   {
+    id: 'appointments',
+    label: 'የቀጠሮ ማስያዣ',
+    to: '/appointments',
+    icon: 'calendar-days',
+    permission: 'calendar.view',
+  },
+  {
     id: 'tasks',
     label: 'ተግባሮች',
     to: '/tasks',
