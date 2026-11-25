@@ -43,6 +43,20 @@ export interface CalendarRecord {
   readonly timezone: string;
 }
 
+export interface TaskDeadlineRecord {
+  readonly id: string;
+  readonly title: string;
+  readonly description: string | null;
+  readonly task_scope: 'personal' | 'corporate';
+  readonly status: 'todo' | 'in_progress' | 'blocked' | 'completed' | 'cancelled';
+  readonly priority: 'low' | 'normal' | 'high' | 'urgent';
+  readonly due_on: string;
+  readonly due_on_ec: EthiopianDatePayload;
+  readonly progress_percent: number;
+  readonly version: number;
+}
+
+
 export interface CalendarEventRecord {
   readonly id: string;
   readonly calendar_id: string;
@@ -110,6 +124,14 @@ function calendarFilterParams(filters: CalendarEventFilters): Record<string, str
 export function listCalendarEvents(filters: CalendarEventFilters): Promise<CalendarPage<CalendarEventRecord>> {
   return api.get<CalendarPage<CalendarEventRecord>>('/api/calendar/events', { params: calendarFilterParams(filters) });
 }
+
+export function listTaskDeadlines(filters: CalendarEventFilters): Promise<readonly TaskDeadlineRecord[]> {
+  const params = calendarFilterParams(filters);
+  if (filters.from) params.from = filters.from.slice(0, 10);
+  if (filters.to) params.to = filters.to.slice(0, 10);
+  return api.get<readonly TaskDeadlineRecord[]>('/api/tasks/deadlines', { params });
+}
+
 
 export type CreateCalendarEventInput = {
   calendar_id: string;
