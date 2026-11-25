@@ -221,7 +221,7 @@ onMounted(() => {
 
     <section v-if="canCreate" class="appointment-workspace__booking">
       <h2>{{ labels.requestAppointment }}</h2>
-      <form class="appointment-workspace__form" @submit.prevent="checkAvailability">
+      <form data-testid="appointment-form" class="appointment-workspace__form" @submit.prevent="checkAvailability">
         <label class="appointment-workspace__field appointment-workspace__field--wide">
           <span>{{ labels.calendar }}</span>
           <select v-model="selectedCalendarId" required @change="availability = null">
@@ -241,7 +241,7 @@ onMounted(() => {
         </label>
         <label class="appointment-workspace__field">
           <span>{{ labels.hostUserId }}</span>
-          <input v-model="hostUserId" inputmode="numeric" pattern="[0-9]+" required @input="availability = null" />
+          <input data-testid="appointment-host" v-model="hostUserId" inputmode="numeric" pattern="[0-9]+" required @input="availability = null" />
         </label>
         <label class="appointment-workspace__field appointment-workspace__field--wide">
           <span>{{ labels.attendees }}</span>
@@ -250,7 +250,7 @@ onMounted(() => {
         </label>
         <label class="appointment-workspace__field appointment-workspace__field--wide">
           <span>{{ labels.title }}</span>
-          <input v-model="title" maxlength="240" required @input="availability = null" />
+          <input data-testid="appointment-title" v-model="title" maxlength="240" required @input="availability = null" />
         </label>
         <label class="appointment-workspace__field appointment-workspace__field--wide">
           <span>{{ labels.description }}</span>
@@ -272,8 +272,8 @@ onMounted(() => {
         </label>
         <p v-if="selectedCalendar" class="appointment-workspace__timezone">{{ labels.timezone }}: {{ selectedCalendar.timezone }}</p>
         <div class="appointment-workspace__actions appointment-workspace__field--wide">
-          <button class="appointment-workspace__secondary" type="submit" :disabled="checking || !selectedCalendarId">{{ checking ? labels.loading : labels.checkAvailability }}</button>
-          <button v-if="availability?.available" class="appointment-workspace__primary" type="button" :disabled="saving" @click="submitBooking">{{ saving ? labels.loading : labels.book }}</button>
+          <button data-testid="appointment-check" class="appointment-workspace__secondary" type="submit" :disabled="checking || !selectedCalendarId">{{ checking ? labels.loading : labels.checkAvailability }}</button>
+          <button v-if="availability?.available" data-testid="appointment-book" class="appointment-workspace__primary" type="button" :disabled="saving" @click="submitBooking">{{ saving ? labels.loading : labels.book }}</button>
         </div>
         <p v-if="availability" class="appointment-workspace__availability" :class="availability.available ? 'is-available' : 'is-unavailable'" role="status">
           {{ availability.available ? labels.available : labels.unavailable }}
@@ -291,7 +291,7 @@ onMounted(() => {
         <h3>{{ labels.emptyTitle }}</h3>
         <p>{{ labels.emptyDescription }}</p>
       </div>
-      <article v-for="appointment in appointments" v-else :key="appointment.id" class="appointment-workspace__card">
+      <article v-for="appointment in appointments" v-else :key="appointment.id" data-testid="appointment-card" class="appointment-workspace__card">
         <div class="appointment-workspace__card-heading">
           <div>
             <span class="appointment-workspace__scope">{{ appointment.appointment_scope === 'corporate' ? labels.corporate : labels.personal }}</span>
@@ -310,7 +310,7 @@ onMounted(() => {
           <button class="appointment-workspace__secondary" type="button" :disabled="saving" @click="runAction(appointment, 'decline')">{{ labels.decline }}</button>
         </div>
         <div v-if="canCancel(appointment)" class="appointment-workspace__actions">
-          <button class="appointment-workspace__secondary" type="button" :disabled="saving" @click="runAction(appointment, 'cancel')">{{ labels.cancel }}</button>
+          <button data-testid="appointment-cancel" class="appointment-workspace__secondary" type="button" :disabled="saving" @click="runAction(appointment, 'cancel')">{{ labels.cancel }}</button>
         </div>
       </article>
     </section>
