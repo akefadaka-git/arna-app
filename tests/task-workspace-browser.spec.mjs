@@ -125,7 +125,10 @@ test.describe('ARNA D08 Task workspace', () => {
     expect(captured.updates[0]).toEqual({ version: 1, status: 'in_progress' });
 
     const progress = card.getByTestId('task-progress');
-    await progress.fill('35');
+    await progress.evaluate((element) => {
+      element.value = '35';
+      element.dispatchEvent(new Event('input', { bubbles: true }));
+    });
     await card.getByTestId('task-progress-save').click();
     await expect.poll(() => captured.updates.length).toBe(2);
     expect(captured.updates[1]).toEqual({ version: 2, progress_percent: 35 });
