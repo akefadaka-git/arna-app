@@ -55,6 +55,82 @@ export interface EthiopicDateParts {
   readonly day: number;
 }
 
+/**
+ * Convert a wall-clock date and time in an explicit IANA timezone to a UTC
+ * instant. Reject DST gaps and overlaps instead of silently shifting a
+ * corporate appointment to a different local time.
+ */
+export function localDateTimeToIso(date: string, time: string, timeZone: string): string {
+  const dateMatch = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(date);
+  const timeMatch = /^(\\d{2}):(\\d{2})$/.exec(time);
+  if (!dateMatch || !timeMatch) throw new Error('Enter a valid date and 24-hour time.');
+
+  const [year, month, day] = dateMatch.slice(1).map(Number);
+  const [hour, minute] = timeMatch.slice(1).map(Number);
+  if (month < 1 || month > 12 || day < 1 || hour > 23 || minute > 59) {
+    throw new Error('Enter a valid date and 24-hour time.');
+  }
+
+  const targetDate = new Date(0);
+  targetDate.setUTCFullYear(year, month - 1, day);
+  targetDate.setUTCHours(hour, minute, 0, 0);
+  if (targetDate.getUTCFullYear() !== year || targetDate.getUTCMonth() !== month - 1
+    || targetDate.getUTCDate() !== day) {
+    throw new Error('The selected Gregorian date does not exist.');
+  }
+  const target = targetDate.getTime();
+  const formatter = new Intl.DateTimeFormat('en-CA-u-ca-gregory-nu-latn', {
+    timeZone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hourCycle: 'h23',
+  });
+
+  const partsAt = (instant: number) => {
+    const parts = formatter.formatToParts(new Date(instant));
+    const value = (type: Intl.DateTimeFormatPartTypes) => Number(parts.find((part) => part.type === type)?.value);
+    return { year: value('year'), month: value('month'), day: value('day'), hour: value('hour'), minute: value('minute'), second: value('second') };
+  };
+  const offsetAt = (instant: number): number => {
+    const parts = partsAt(instant);
+    const representedAsUtc = new Date(0);
+    representedAsUtc.setUTCFullYear(parts.year, parts.month - 1, parts.day);
+    representedAsUtc.setUTCHours(parts.hour, parts.minute, parts.second, 0);
+    return representedAsUtc.getTime() - instant;
+  };
+  const matches = (instant: number): boolean => {
+    const parts = partsAt(instant);
+    return parts.year === year && parts.month === month && parts.day === day
+      && parts.hour === hour && parts.minute === minute && parts.second === 0;
+  };
+
+  let guess = target;
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    const next = target - offsetAt(guess);
+    if (next === guess) break;
+    guess = next;
+  }
+
+  const offsets = new Set([
+    offsetAt(guess),
+    offsetAt(guess - 6 * 60 * 60 * 1000),
+    offsetAt(guess + 6 * 60 * 60 * 1000),
+  ]);
+  const candidates = [...offsets].map((offset) => target - offset).filter(matches);
+  const uniqueCandidates = [...new Set(candidates)];
+  if (uniqueCandidates.length === 0) {
+    throw new Error('This local time does not exist in the selected timezone because of a clock change.');
+  }
+  if (uniqueCandidates.length > 1) {
+    throw new Error('This local time occurs twice in the selected timezone because of a clock change. Choose another time.');
+  }
+  return new Date(uniqueCandidates[0]).toISOString();
+}
+
 function numericPart(parts: Intl.DateTimeFormatPart[], type: 'year' | 'month' | 'day'): number {
   return Number(parts.find((part) => part.type === type)?.value ?? NaN);
 }
