@@ -83,3 +83,7 @@ Amharic is the default language. English is supported. Calendar display defaults
 ## 7. Verification and release
 
 A4 must verify exact branch HEAD: type-check, Admin build, route/permission contracts, service API paths, Amharic/English label coverage, accessibility and responsive behavior. A5 deployment remains a separate authorization. No deployment behavior, Plesk document root, DNS, TLS or production environment is changed by this branch.
+
+## Platform Audit and Security read-only slice
+
+The `/admin/audit-security` page consumes only the platform-scoped audit and security read endpoints. Its route and navigation use `platform.audit.read` / `platform.security.read`. The UI clearly identifies that only tenantless platform records are shown; it does not resolve security events or write audit data. Tenant-specific investigation and resolution remain outside this platform-wide read-only surface.
