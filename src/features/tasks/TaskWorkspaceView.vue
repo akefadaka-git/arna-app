@@ -258,7 +258,7 @@ onMounted(() => {
           <small>{{ labels.dueDateHint }}</small>
         </fieldset>
         <div class="task-workspace__form-actions">
-          <button data-testid="task-submit" class="task-workspace__primary" type="submit" :disabled="saving">{{ saving ? labels.loading : labels.save }}</button>
+          <button data-testid="task-submit" class="task-workspace__primary" type="submit" :disabled="saving" @click.prevent="submitTask">{{ saving ? labels.loading : labels.save }}</button>
           <button class="task-workspace__secondary" type="button" @click="showComposer = false">{{ labels.cancel }}</button>
         </div>
       </form>
