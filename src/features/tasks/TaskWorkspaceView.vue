@@ -215,16 +215,16 @@ onMounted(() => {
         <h1 id="task-workspace-title">{{ labels.pageTitle }}</h1>
         <p class="task-workspace__description">{{ labels.pageDescription }}</p>
       </div>
-      <button v-if="canCreate" class="task-workspace__primary" type="button" @click="showComposer = !showComposer">
+      <button v-if="canCreate" data-testid="task-create-toggle" class="task-workspace__primary" type="button" @click="showComposer = !showComposer">
         {{ showComposer ? labels.cancel : labels.createTask }}
       </button>
     </header>
 
     <section v-if="showComposer && canCreate" class="task-workspace__composer" aria-label="New task">
-      <form class="task-workspace__form" @submit.prevent="submitTask">
+      <form data-testid="task-create-form" class="task-workspace__form" @submit.prevent="submitTask">
         <label class="task-workspace__field task-workspace__field--wide">
           <span>{{ labels.title }}</span>
-          <input v-model="title" maxlength="240" required autocomplete="off" />
+          <input v-model="title" data-testid="task-title-input" maxlength="240" required autocomplete="off" />
         </label>
         <label class="task-workspace__field task-workspace__field--wide">
           <span>{{ labels.description }}</span>
@@ -259,7 +259,7 @@ onMounted(() => {
           <small>{{ labels.dueDateHint }}</small>
         </fieldset>
         <div class="task-workspace__form-actions">
-          <button class="task-workspace__primary" type="submit" :disabled="saving">{{ saving ? labels.loading : labels.save }}</button>
+          <button data-testid="task-submit" class="task-workspace__primary" type="submit" :disabled="saving">{{ saving ? labels.loading : labels.save }}</button>
           <button class="task-workspace__secondary" type="button" @click="showComposer = false">{{ labels.cancel }}</button>
         </div>
       </form>
@@ -293,8 +293,8 @@ onMounted(() => {
       <p>{{ labels.emptyDescription }}</p>
     </section>
 
-    <section v-else class="task-workspace__list" aria-label="Tasks">
-      <article v-for="task in tasks" :key="task.id" class="task-workspace__card">
+    <section v-else data-testid="task-list" class="task-workspace__list" aria-label="Tasks">
+      <article v-for="task in tasks" :key="task.id" data-testid="task-card" class="task-workspace__card">
         <div class="task-workspace__card-top">
           <div>
             <div class="task-workspace__meta">
@@ -309,15 +309,15 @@ onMounted(() => {
         <div class="task-workspace__card-bottom">
           <label class="task-workspace__field task-workspace__status">
             <span>{{ labels.status }}</span>
-            <select :value="task.status" :disabled="!canChangeProgress(task) || saving" @change="changeStatus(task, $event)">
+            <select data-testid="task-status" :value="task.status" :disabled="!canChangeProgress(task) || saving" @change="changeStatus(task, $event)">
               <option v-for="option in statusOptions" :key="option.value" :value="option.value">{{ option.label }}</option>
             </select>
           </label>
           <div v-if="canChangeProgress(task)" class="task-workspace__progress">
             <label :for="`task-progress-${task.id}`">{{ labels.progress }}</label>
-            <input :id="`task-progress-${task.id}`" type="range" min="0" max="99" step="1" :value="progressDrafts[task.id] ?? task.progress_percent" @input="changeProgress(task.id, $event)" />
+            <input :id="`task-progress-${task.id}`" data-testid="task-progress" type="range" min="0" max="99" step="1" :value="progressDrafts[task.id] ?? task.progress_percent" @input="changeProgress(task.id, $event)" />
             <output>{{ progressDrafts[task.id] ?? task.progress_percent }}%</output>
-            <button class="task-workspace__secondary task-workspace__save-progress" type="button" :disabled="saving || (progressDrafts[task.id] ?? task.progress_percent) === task.progress_percent" @click="saveProgress(task)">{{ labels.save }}</button>
+            <button data-testid="task-progress-save" class="task-workspace__secondary task-workspace__save-progress" type="button" :disabled="saving || (progressDrafts[task.id] ?? task.progress_percent) === task.progress_percent" @click="saveProgress(task)">{{ labels.save }}</button>
           </div>
           <p v-else class="task-workspace__read-only">{{ task.progress_percent }}% · {{ statusLabel(task.status) }}</p>
         </div>
@@ -363,13 +363,13 @@ onMounted(() => {
 .task-workspace__eyebrow {
   margin: 0 0 var(--arna-space-1);
   color: var(--arna-color-text-secondary);
-  font-size: var(--arna-font-size-xs);
+  font-size: var(--arna-font-size-caption);
   font-weight: var(--arna-font-weight-semibold);
   letter-spacing: .04em;
 }
 .task-workspace h1 {
   margin: 0;
-  font-size: var(--arna-font-size-2xl);
+  font-size: var(--arna-font-size-heading-2);
 }
 .task-workspace__description,
 .task-workspace__task-description {
@@ -418,7 +418,7 @@ onMounted(() => {
   flex-direction: column;
   gap: var(--arna-space-1);
   min-width: 0;
-  font-size: var(--arna-font-size-sm);
+  font-size: var(--arna-font-size-body-sm);
   font-weight: var(--arna-font-weight-medium);
 }
 .task-workspace__field input,
@@ -429,7 +429,7 @@ onMounted(() => {
   min-height: 2.5rem;
   padding: var(--arna-space-2) var(--arna-space-3);
   color: var(--arna-color-text-primary);
-  background: var(--arna-color-surface-base);
+  background: var(--arna-color-surface-page);
   border: 1px solid var(--arna-color-border-default);
   border-radius: var(--arna-radius-md);
   font: inherit;
@@ -490,7 +490,7 @@ onMounted(() => {
 }
 .task-workspace__card h2 {
   margin: var(--arna-space-2) 0 0;
-  font-size: var(--arna-font-size-lg);
+  font-size: var(--arna-font-size-heading-5);
 }
 .task-workspace__meta {
   display: flex;
