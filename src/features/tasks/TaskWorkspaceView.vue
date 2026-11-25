@@ -101,9 +101,9 @@ watch([statusFilter, scopeFilter], () => {
 });
 
 function dueDatePayload(): CreateTaskPayload['due_on_ec'] | undefined {
-  const parts = [dueYear.value, dueMonth.value, dueDay.value];
-  if (parts.every((part) => part.trim() === '')) return undefined;
-  if (parts.some((part) => part.trim() === '')) {
+  const parts = [dueYear.value, dueMonth.value, dueDay.value].map((part) => String(part ?? '').trim());
+  if (parts.every((part) => part === '')) return undefined;
+  if (parts.some((part) => part === '')) {
     throw new Error(labels.value.dueDateHint);
   }
   const [year, month, day] = parts.map(Number);
