@@ -33,7 +33,7 @@ const occurrence = {
 
 async function installCalendarApi(page, events = [allDayEvent, timedEvent]) {
   const captured = { create: null, move: null, cancel: null, eventFilters: [], occurrenceFilters: [], deadlineFilters: [] };
-  await page.route('**/api/tasks/deadlines', async (route) => {
+  await page.route('**/api/tasks/deadlines**', async (route) => {
     const url = new URL(route.request().url());
     captured.deadlineFilters.push(Object.fromEntries(url.searchParams.entries()));
     return route.fulfill({
