@@ -67,7 +67,7 @@ export function localDateTimeToIso(date: string, time: string, timeZone: string)
 
   const [year, month, day] = dateMatch.slice(1).map(Number);
   const [hour, minute] = timeMatch.slice(1).map(Number);
-  if (month < 1 || month > 12 || day < 1 || hour > 23 || minute > 59) {
+  if (year < 1 || month < 1 || month > 12 || day < 1 || hour > 23 || minute > 59) {
     throw new Error('Enter a valid date and 24-hour time.');
   }
 
