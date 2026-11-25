@@ -61,7 +61,8 @@
     "test:task-workspace-contract": "node --test tests/task-workspace-contract.test.mjs",
     "test:calendar-browser": "playwright test tests/calendar-browser-contract.spec.mjs",
     "test:task-workspace-browser": "playwright test tests/task-workspace-browser.spec.mjs",
-    "test:appointment-workspace-contract": "node --test tests/appointment-workspace-contract.test.mjs"
+    "test:appointment-workspace-contract": "node --test tests/appointment-workspace-contract.test.mjs",
+    "test:appointment-workspace-browser": "playwright test tests/appointment-workspace-browser.spec.mjs"
   },
   "dependencies": {
     "axios": "1.21.0",
