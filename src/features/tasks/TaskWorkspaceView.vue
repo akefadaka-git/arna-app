@@ -220,7 +220,7 @@ onMounted(() => {
     </header>
 
     <section v-if="showComposer && canCreate" class="task-workspace__composer" aria-label="New task">
-      <form data-testid="task-create-form" class="task-workspace__form" @submit.prevent="submitTask">
+      <form data-testid="task-create-form" class="task-workspace__form" novalidate @submit.prevent="submitTask">
         <label class="task-workspace__field task-workspace__field--wide">
           <span>{{ labels.title }}</span>
           <input v-model="title" data-testid="task-title-input" maxlength="240" required autocomplete="off" />
@@ -258,7 +258,7 @@ onMounted(() => {
           <small>{{ labels.dueDateHint }}</small>
         </fieldset>
         <div class="task-workspace__form-actions">
-          <button data-testid="task-submit" class="task-workspace__primary" type="submit" :disabled="saving" @click.prevent="submitTask">{{ saving ? labels.loading : labels.save }}</button>
+          <button data-testid="task-submit" class="task-workspace__primary" type="submit" :disabled="saving">{{ saving ? labels.loading : labels.save }}</button>
           <button class="task-workspace__secondary" type="button" @click="showComposer = false">{{ labels.cancel }}</button>
         </div>
       </form>
