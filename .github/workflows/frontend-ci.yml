@@ -67,6 +67,8 @@ jobs:
         run: node --test tests/admin-settings-contract.test.mjs tests/admin-operations-contract.test.mjs
       - name: Verify Admin tenant membership and Owner-approved RBAC lifecycle contracts
         run: node --test tests/admin-tenant-lifecycle-contract.test.mjs
+      - name: Verify platform Audit and Security read-only isolation contract
+        run: node --test tests/admin-platform-audit-security-contract.test.mjs
       - name: Type-check and build all applications
         run: npm run build
       - name: Verify root entry points, local assets, and deployment policy
