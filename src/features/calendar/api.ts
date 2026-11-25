@@ -125,11 +125,12 @@ export function listCalendarEvents(filters: CalendarEventFilters): Promise<Calen
   return api.get<CalendarPage<CalendarEventRecord>>('/api/calendar/events', { params: calendarFilterParams(filters) });
 }
 
-export function listTaskDeadlines(filters: CalendarEventFilters): Promise<readonly TaskDeadlineRecord[]> {
+export async function listTaskDeadlines(filters: CalendarEventFilters): Promise<readonly TaskDeadlineRecord[]> {
   const params = calendarFilterParams(filters);
   if (filters.from) params.from = filters.from.slice(0, 10);
   if (filters.to) params.to = filters.to.slice(0, 10);
-  return api.get<readonly TaskDeadlineRecord[]>('/api/tasks/deadlines', { params });
+  const response = await api.get<{ success: boolean; data: readonly TaskDeadlineRecord[] }>('/api/tasks/deadlines', { params });
+  return response.data ?? [];
 }
 
 
