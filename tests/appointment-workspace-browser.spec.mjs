@@ -104,8 +104,29 @@ test.describe('ARNA shared appointment booking workspace', () => {
     const form = page.getByTestId('appointment-form');
     await form.getByTestId('appointment-host').fill('9002');
     await form.getByTestId('appointment-title').fill('የአማካሪ ቀጠሮ');
-    await form.getByTestId('appointment-check').click();
-
+    const checkButton = form.getByTestId('appointment-check');
+    const formDiagnostics = await form.evaluate((element) => {
+      const button = element.querySelector('[data-testid="appointment-check"]');
+      const invalidFields = [...element.querySelectorAll(':invalid')].map((field) => ({
+        tag: field.tagName,
+        type: field.getAttribute('type'),
+        value: field.value,
+        min: field.getAttribute('min'),
+        max: field.getAttribute('max'),
+        pattern: field.getAttribute('pattern'),
+        required: field.required,
+      }));
+      window.__appointmentSubmitEvents = { click: false, submit: false };
+      button?.addEventListener('click', () => { window.__appointmentSubmitEvents.click = true; }, { once: true });
+      element.addEventListener('submit', () => { window.__appointmentSubmitEvents.submit = true; }, { once: true });
+      return { valid: element.checkValidity(), disabled: button?.disabled ?? null, invalidFields };
+    });
+    await checkButton.click();
+    await page.waitForTimeout(250);
+    if (!captured.availability) {
+      const events = await page.evaluate(() => window.__appointmentSubmitEvents);
+      throw new Error(`Appointment availability request was not observed: ${await page.locator('[role="alert"]').textContent()} | diagnostics=${JSON.stringify({ ...formDiagnostics, events })}`);
+    }
     await expect(page.getByText('ይህ ጊዜ ይገኛል።')).toBeVisible();
     expect(captured.availability).toMatchObject({
       calendar_id: calendar.id,
