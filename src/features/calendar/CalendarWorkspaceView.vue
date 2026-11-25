@@ -160,7 +160,7 @@ function taskPriorityLabel(priority: TaskDeadlineRecord['priority']): string {
   })[priority];
 }
 
-function range(): CalendarEventFilters {
+function rangeBounds(): { start: Date; end: Date } {
   const start = new Date(selectedDate.value);
   start.setHours(0, 0, 0, 0);
   const end = new Date(start);
@@ -184,6 +184,11 @@ function range(): CalendarEventFilters {
   }
 
   end.setHours(23, 59, 59, 0);
+  return { start, end };
+}
+
+function range(): CalendarEventFilters {
+  const { start, end } = rangeBounds();
   if (calendarSystem.value === 'ethiopic') {
     return { from_ec: getEthiopicDateParts(start), to_ec: getEthiopicDateParts(end) };
   }
@@ -191,6 +196,14 @@ function range(): CalendarEventFilters {
     from: start.toISOString().slice(0, 19).replace('T', ' '),
     to: end.toISOString().slice(0, 19).replace('T', ' '),
   };
+}
+
+function taskDeadlineRange(): CalendarEventFilters {
+  const { start, end } = rangeBounds();
+  if (calendarSystem.value === 'ethiopic') {
+    return { from_ec: getEthiopicDateParts(start), to_ec: getEthiopicDateParts(end) };
+  }
+  return { from: dateKey(start), to: dateKey(end) };
 }
 
 async function refresh(): Promise<void> {
@@ -202,7 +215,7 @@ async function refresh(): Promise<void> {
       listCalendars(),
       listCalendarEvents(filters),
       listCalendarResources(),
-      canViewTaskDeadlines.value ? listTaskDeadlines(filters) : Promise.resolve([]),
+      canViewTaskDeadlines.value ? listTaskDeadlines(taskDeadlineRange()) : Promise.resolve([]),
     ]);
     calendars.value = calendarPage.data ?? [];
     events.value = eventPage.data ?? [];
@@ -564,7 +577,7 @@ onMounted(refresh);
         </template>
         <label v-else-if="hasRecurrenceUntil">የመጨረሻ ቀን<input v-model="recurrenceUntilGregorian" type="date" required /></label>
       </div>
-      <p class="calendar-workspace__hint">የቀን ግቤት በተመረጠው አቆጣጠር ይታያል፤ ሰዓቱ በአሁኑ መሣሪያ የጊዜ ዞን ይቀመጣል። የኢትዮጵያ ተደጋጋሚ ሕግ ለሙሉ ቀን ቀጠሮዎች ይተገበራል።</p>
+      <p class="calendar-workspace__hint">የቀን ግቤት በተመረጠው አቆጣጠር ይታያል፤ ሰዓቱ በተመረጠው ቀን መቁጠሪያ የጊዜ ዞን ይቀመጣል። የኢትዮጵያ ተደጋጋሚ ሕግ ለሙሉ ቀን ቀጠሮዎች ይተገበራል።</p>
       <div class="calendar-workspace__actions">
         <button class="calendar-workspace__secondary" type="button" @click="showComposer = false">ሰርዝ</button>
         <button class="calendar-workspace__primary" type="submit" :disabled="!canCreate || saving">{{ saving ? 'በማስቀመጥ ላይ…' : 'አስቀምጥ' }}</button>
