@@ -816,6 +816,13 @@ export const routesWorkspace: RouteRecordRaw[] = [
         meta: { permission: 'finance.account.view' },
       },
       {
+        path: 'tasks',
+        name: 'tasks',
+        component: () => import('@/features/tasks/TaskWorkspaceView.vue'),
+        props: { labels: taskWorkspaceLabels },
+        meta: { permission: 'task.view' },
+      },
+      {
         path: 'calendar',
         name: 'calendar',
         component: () => import('@/features/calendar/CalendarWorkspaceView.vue'),
