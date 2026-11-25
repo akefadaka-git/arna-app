@@ -79,7 +79,7 @@ test('Calendar displays D08-owned task deadlines through the tenant-scoped task 
   assert.match(api, /interface TaskDeadlineRecord/);
   assert.match(api, /listTaskDeadlines/);
   assert.match(api, /\/api\/tasks\/deadlines/);
-  assert.match(api, /return response\.data \?\? \[\]/);
+  assert.match(api, /return api\.get<readonly TaskDeadlineRecord\[]>\('\/api\/tasks\/deadlines'/);
   assert.match(view, /canViewTaskDeadlines = computed\(\(\) => auth\.permissions\.includes\('task\.view'\)\)/);
   assert.match(view, /listTaskDeadlines\(taskDeadlineRange\(\)\)/);
   assert.match(view, /function taskDeadlineRange\(\)/);
