@@ -89,6 +89,9 @@ async function mountWorkspace(page) {
 test.describe('ARNA D08 Task workspace', () => {
   test('creates a personal task with an Ethiopian Calendar due date through the D08 API', async ({ page }) => {
     const captured = await installTaskApi(page);
+    const consoleErrors = [];
+    page.on('console', (message) => { if (message.type() === 'error') consoleErrors.push(message.text()); });
+    page.on('requestfailed', (request) => consoleErrors.push(`request failed: ${request.method()} ${request.url()} ${request.failure()?.errorText ?? ''}`));
     await mountWorkspace(page);
 
     await expect(page.getByRole('heading', { name: 'የሳምንቱ ሪፖርት' })).toBeVisible();
@@ -103,7 +106,10 @@ test.describe('ARNA D08 Task workspace', () => {
     await form.getByLabel('ቀን').fill('20');
     await form.getByTestId('task-submit').click();
 
-    await expect.poll(() => captured.create).not.toBeNull();
+    await expect.poll(async () => captured.create ?? await page.locator('[role="alert"]').textContent()).not.toBeNull();
+    if (!captured.create) {
+      throw new Error(`Task creation was rejected: ${await page.locator('[role="alert"]').textContent()} | ${consoleErrors.join(' | ')}`);
+    }
     expect(captured.create).toMatchObject({
       task_scope: 'personal',
       title: 'የወር መጨረሻ ሂሳብ',
