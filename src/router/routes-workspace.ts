@@ -496,6 +496,7 @@ import {
 
 import { dashboardViewLabels } from '@/features/dashboard/labels';
 import { executiveOverviewLabels } from '@/features/executive-overview/labels';
+import { taskWorkspaceLabels } from '@/features/tasks/labels';
 
 /**
  * The workspace build's top-level route. A single parent
