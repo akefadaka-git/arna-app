@@ -317,7 +317,7 @@ function onClick(): void {
     :aria-label="triggerAriaLabel"
     aria-haspopup="dialog"
     :aria-expanded="expanded"
-    :aria-controls="controls"
+     :aria-controls="expanded ? controls : undefined"
     id="notifications-bell-trigger"
     data-testid="notifications-bell-trigger"
     @click="onClick"
