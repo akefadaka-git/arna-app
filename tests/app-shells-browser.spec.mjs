@@ -21,7 +21,6 @@ for (const surface of surfaces) {
   test(`mounted ${surface.label} shell renders ARNA chrome and remains responsive`, async ({ page }) => {
     const runtimeErrors = [];
     page.on('pageerror', (error) => runtimeErrors.push(error.stack || error.message));
-    page.on('console', (message) => { if (message.type() === 'error') runtimeErrors.push(message.text()); });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(`${baseUrl}?surface=${surface.key}`);
 
@@ -75,12 +74,14 @@ for (const surface of surfaces) {
         document: document.documentElement.scrollWidth,
       }));
       expect(dimensions.document, `${surface.label} horizontal overflow at ${viewport.width}px`).toBeLessThanOrEqual(dimensions.viewport + 1);
+
+      const results = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+        .analyze();
+      const serious = results.violations.filter((item) => ['serious', 'critical'].includes(item.impact));
+      expect(serious.map((item) => item.id + ': ' + item.help), `${surface.label} at ${viewport.width}px: ` + JSON.stringify(serious, null, 2)).toEqual([]);
     }
 
-    const results = await new AxeBuilder({ page })
-      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-      .analyze();
-    const serious = results.violations.filter((item) => ['serious', 'critical'].includes(item.impact));
-    expect(serious.map((item) => item.id + ': ' + item.help), JSON.stringify(serious, null, 2)).toEqual([]);
+    expect(runtimeErrors, `${surface.label} shell runtime errors`).toEqual([]);
   });
 }
