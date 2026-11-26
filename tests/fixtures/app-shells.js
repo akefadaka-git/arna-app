@@ -8,6 +8,7 @@ import PortalLayout from '../../src/features/portal/PortalLayout.vue';
 import AdminLayout from '../../src/layouts/AdminLayout/AdminLayout.vue';
 import { useLocaleStore } from '../../src/stores/locale';
 import { setThemePreference } from '../../src/core/theme-preference';
+import { setCalendarSystem } from '../../src/core/dates/calendar';
 
 const child = (surface) => ({
   render: () => h('section', { 'data-testid': 'shell-child-page' }, [
@@ -43,6 +44,7 @@ useLocaleStore(pinia).setLocale(requestedLocale);
 // so mirror the root's locale-to-document-language contract explicitly.
 document.documentElement.lang = requestedLocale;
 setThemePreference(requestedTheme);
+setCalendarSystem('ethiopic');
 const surface = ['workspace', 'portal', 'admin'].includes(requested) ? requested : 'workspace';
 await router.replace(`/${surface}`);
 await router.isReady();
