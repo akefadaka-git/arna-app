@@ -73,6 +73,18 @@ for (const surface of surfaces) {
     await expect(searchTrigger).toHaveAttribute('aria-expanded', 'false');
     await expect(searchTrigger).toBeFocused();
 
+    const calendarControl = page.getByRole('combobox', {
+      name: locale.key === 'en' ? 'Calendar' : 'የቀን አቆጣጠር',
+    });
+    const shellDate = page.locator('time.calendar-context');
+    await expect(calendarControl).toHaveValue('ethiopic');
+    await expect(shellDate).toHaveAttribute('datetime', /^\\d{4}-\\d{2}-\\d{2}$/);
+    const ethiopianDate = (await shellDate.textContent())?.trim();
+    await calendarControl.selectOption('gregory');
+    await expect(shellDate).not.toHaveText(ethiopianDate ?? '');
+    await calendarControl.selectOption('ethiopic');
+    await expect(shellDate).toHaveText(ethiopianDate ?? '');
+
     const skip = page.locator('a[href="#arna-main-content"]').first();
     await expect(skip).toBeAttached();
     await skip.focus();
