@@ -41,6 +41,7 @@
     "test:brand-palette-contract": "node --test tests/brand-palette-contract.test.mjs",
     "test:design-system-theme-contract": "node --test tests/design-system-theme-contract.test.mjs",
     "test:app-shell-responsive-contract": "node --test tests/app-shell-responsive-contract.test.mjs",
+    "test:app-shell-navigation-accessibility-contract": "node --test tests/app-shell-navigation-accessibility-contract.test.mjs",
     "test:wallet-open-form-contract": "node --test tests/wallet-open-form-contract.test.mjs",
     "test:workspace-dashboard-route-contract": "node --test tests/workspace-dashboard-route-contract.test.mjs",
     "test:executive-overview-route-contract": "node --test tests/executive-overview-route-contract.test.mjs",
