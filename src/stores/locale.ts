@@ -41,14 +41,15 @@
  * Locale resolution (Architecture Freeze §9.2, §13.4, §20.3)
  * -----------------------------------------------------------------------------
  * §9.2 lists the backend's resolution order with user.locale first.
- * §13.4 places the store's own persistence in localStorage under
- * `mases.locale`. §20.3 states that in the interim (no POST
- * /api/locale endpoint), "the active locale is honored client-side".
+ * The store persists the active client preference under `arna.locale`
+ * (and migrates the legacy `mases.locale` key). The locale service adapter
+ * persists the account-level preference through POST /api/locale.
  *
  * The store resolves these three rules as follows:
  *
  *   1. On cold start (before login):
- *        - localStorage 'mases.locale' if it holds a supported code
+ *        - localStorage 'arna.locale' if it holds a supported code
+ *        - else the legacy 'mases.locale' value if supported
  *        - else 'am' (the §9.1 default)
  *
  *   2. On login (auth service calls hydrateFromUser(user.locale)):
