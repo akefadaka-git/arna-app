@@ -187,8 +187,11 @@ function navigate(item: SearchNavItem): void {
         variant="ghost"
         size="sm"
         class="app-header-navigation__search-trigger"
+        id="app-header-search-trigger"
         aria-labelledby="app-header-search-trigger-label"
         aria-haspopup="dialog"
+        :aria-expanded="isSearchOpen"
+        aria-controls="app-header-search-dialog"
         data-testid="app-header-search-trigger"
         @click="openSearch"
       >
@@ -198,7 +201,7 @@ function navigate(item: SearchNavItem): void {
       <kbd class="app-header-navigation__search-shortcut">Ctrl / ⌘ K</kbd>
     </div>
 
-    <dialog ref="dialog" class="app-header-navigation__dialog" aria-labelledby="app-header-search-title" @close="onSearchDialogClose">
+    <dialog id="app-header-search-dialog" ref="dialog" class="app-header-navigation__dialog" aria-labelledby="app-header-search-title" @close="onSearchDialogClose">
       <form method="dialog" class="app-header-navigation__dialog-head">
         <div>
           <h2 id="app-header-search-title">{{ labels.title }}</h2>
