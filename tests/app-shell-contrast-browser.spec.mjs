@@ -137,14 +137,26 @@ test('reproduce six historical AppShell contrast findings with composited backgr
     const axe = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
       .analyze();
+    const contrastNodes = axe.violations
+      .filter((violation) => violation.id === 'color-contrast')
+      .flatMap((violation) => violation.nodes);
+    const inScope = await page.evaluate(({ nodes, selectors }) => nodes.filter((node) =>
+      (node.target ?? []).some((target) => {
+        try {
+          return Array.from(document.querySelectorAll(target)).some((candidate) =>
+            selectors.some((selector) => candidate.matches(selector)),
+          );
+        } catch { return false; }
+      }),
+    ).map((node) => ({ target: node.target, summary: node.failureSummary })), {
+      nodes: contrastNodes,
+      selectors: findings.filter((finding) => finding.theme === theme).map((finding) => finding.selector),
+    });
     axeScans.push({
       theme,
-      violations: axe.violations
-        .filter((violation) => violation.id === 'color-contrast')
-        .map((violation) => ({
-          impact: violation.impact,
-          nodes: violation.nodes.map((node) => ({ target: node.target, summary: node.failureSummary })),
-        })),
+      totalColorContrastViolations: contrastNodes.length,
+      inScopeColorContrastViolations: inScope.length,
+      inScope,
     });
   }
   await testInfo.attach('app-shell-axe-contrast-scans.json', {
@@ -153,5 +165,7 @@ test('reproduce six historical AppShell contrast findings with composited backgr
   });
   console.log('APP_SHELL_AXE_CONTRAST_SCANS=' + JSON.stringify(axeScans));
 
+  expect(axeScans.map(({ theme, inScopeColorContrastViolations }) => ({ theme, inScopeColorContrastViolations })))
+    .toEqual([{ theme: 'light', inScopeColorContrastViolations: 0 }, { theme: 'dark', inScopeColorContrastViolations: 0 }]);
   expect(measurements.filter((item) => item.result !== 'PASS'), JSON.stringify(measurements, null, 2)).toEqual([]);
 });
