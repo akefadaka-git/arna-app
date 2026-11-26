@@ -82,11 +82,39 @@ for (const surface of surfaces) {
 
     for (const viewport of viewports) {
       await page.setViewportSize(viewport);
-      const dimensions = await page.evaluate(() => ({
-        viewport: document.documentElement.clientWidth,
-        document: document.documentElement.scrollWidth,
-      }));
-      expect(dimensions.document, `${surface.label} horizontal overflow at ${viewport.width}px`).toBeLessThanOrEqual(dimensions.viewport + 1);
+      const dimensions = await page.evaluate(() => {
+        const viewportWidth = document.documentElement.clientWidth;
+        const offenders = Array.from(document.querySelectorAll('body *'))
+          .map((element) => {
+            const rect = element.getBoundingClientRect();
+            const style = getComputedStyle(element);
+            return {
+              tag: element.tagName.toLowerCase(),
+              id: element.id,
+              className: String(element.className?.baseVal ?? element.className ?? ''),
+              left: Math.round(rect.left),
+              right: Math.round(rect.right),
+              width: Math.round(rect.width),
+              scrollWidth: element.scrollWidth,
+              clientWidth: element.clientWidth,
+              whiteSpace: style.whiteSpace,
+              position: style.position,
+              flexShrink: style.flexShrink,
+            };
+          })
+          .filter((item) => item.right > viewportWidth + 1 || item.left < -1)
+          .sort((a, b) => b.right - a.right)
+          .slice(0, 15);
+        return {
+          viewport: viewportWidth,
+          document: document.documentElement.scrollWidth,
+          offenders,
+        };
+      });
+      expect(
+        dimensions.document,
+        `${surface.label} horizontal overflow at ${viewport.width}px: ` + JSON.stringify(dimensions.offenders, null, 2),
+      ).toBeLessThanOrEqual(dimensions.viewport + 1);
 
       const results = await new AxeBuilder({ page })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
