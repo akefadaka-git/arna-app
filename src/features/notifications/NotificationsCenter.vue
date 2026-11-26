@@ -231,6 +231,7 @@ onUnmounted(() => {
 <template>
   <section
     v-if="open"
+    id="notification-center"
     class="notification-center"
     role="dialog"
     aria-modal="false"
