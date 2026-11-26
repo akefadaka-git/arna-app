@@ -1,3 +1,4 @@
+import '../../src/styles/reset.css';
 import '../../src/styles/themes.css';
 import { createApp, h } from 'vue';
 import { createPinia } from 'pinia';
