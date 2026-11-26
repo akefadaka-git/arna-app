@@ -655,6 +655,8 @@ function onMaintenanceDismiss(): void {
          ============================================================ -->
     <AppHeader
       :mobile-menu-label="labels.mobileMenu"
+      :mobile-menu-expanded="isMobileDrawerOpen"
+      mobile-menu-controls="app-mobile-drawer"
       @open-mobile-menu="openMobileDrawer"
     >
       <template #brand>
