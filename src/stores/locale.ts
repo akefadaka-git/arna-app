@@ -30,10 +30,10 @@
  * -----------------------------------------------------------------------------
  *   - It does not perform translation. Translations live in the i18n
  *     layer; this store only says which locale is active.
- *   - It does not call the API. POST /api/locale does not exist
- *     (Architecture Freeze §9.3); when it does, the localization
- *     service (not this store) will call it. This store remains pure
- *     state, mirroring the pattern set by Units 11.4 and 11.5.
+ *   - It does not call the API itself. The locale service adapter
+ *     (src/features/locale/api.ts) persists the signed-in user's
+ *     preference through POST /api/locale; the shell awaits that
+ *     operation before committing the new value to this store.
  *   - It does not touch the DOM. Setting <html lang="am"> is the
  *     shell's responsibility via a watcher on this store.
  *
@@ -57,16 +57,16 @@
  *        - else keep the local value (the user's most recent explicit
  *          choice — see the response preamble §"Design note")
  *
- *   3. On explicit setLocale(newLocale):
- *        - update the active locale and persist to localStorage
- *        - do NOT call the backend (no endpoint exists)
+ *   3. On explicit locale selection:
+ *        - the shell first awaits saveLocalePreference(newLocale)
+ *          through the locale API adapter;
+ *        - after successful persistence, it calls setLocale(newLocale)
+ *          to update active state and local persistence.
  *
- * Acknowledged interim behavior: an in-session change survives reloads
- * within the same login, but is overwritten on next login by user.locale
- * until POST /api/locale exists. Once the endpoint exists, the
- * localization service will call it after setLocale, the backend value
- * will match, and the divergence will vanish without any change to this
- * file.
+ * The store remains responsible for client state and local persistence;
+ * the service adapter owns the account-level API request. A failed API
+ * request must not be represented as a successfully persisted account
+ * preference.
  *
  * -----------------------------------------------------------------------------
  * Multi-user safety (shared machines)
