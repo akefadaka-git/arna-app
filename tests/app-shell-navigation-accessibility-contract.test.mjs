@@ -54,8 +54,9 @@ test('notification trigger exposes the controlled notification dialog state', ()
   assert.match(shell, /:expanded="isNotificationsOpen"/);
   assert.match(shell, /controls="notification-center"/);
   assert.match(bell, /:aria-expanded="expanded"/);
-  assert.match(bell, /:aria-controls="controls"/);
+  assert.match(bell, /:aria-controls="expanded \? controls : undefined"/);
   assert.match(notifications, /id="notification-center"/);
+  assert.match(notifications, /z-index:\s*var\(--arna-z-popover\)/);
   assert.match(shell, /querySelector<HTMLButtonElement>\('#notifications-bell-trigger'\)/);
 });
 
