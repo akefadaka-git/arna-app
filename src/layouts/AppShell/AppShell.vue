@@ -585,7 +585,7 @@ function onUserMenuSelect(payload: { id: string }): void {
 function closeNotifications(): void {
   isNotificationsOpen.value = false;
   void nextTick(() => {
-    document.querySelector<HTMLButtonElement>('[data-testid="notifications-bell-trigger"]')?.focus();
+    document.querySelector<HTMLButtonElement>('#notifications-bell-trigger')?.focus();
   });
 }
 
@@ -678,6 +678,8 @@ function onMaintenanceDismiss(): void {
         <NotificationsBell
           :disabled="false"
           :labels="labels.notificationsBell"
+          :expanded="isNotificationsOpen"
+          controls="notification-center"
           @open="onNotificationsOpen"
         />
 
