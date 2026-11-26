@@ -105,7 +105,7 @@ test('reproduce six historical AppShell contrast findings with composited backgr
         background = composite(layer.backgroundColor, background);
       }
     }
-    const foreground = measurement.foregroundColor;
+    const foreground = measurement.foregroundColor ? composite(measurement.foregroundColor, background) : null;
     const measurable = foreground && !measurement.unsupportedBackground
       && Math.abs(measurement.cumulativeOpacity - 1) < 0.0001;
     const ratio = measurable ? contrastRatio(foreground, background) : null;
