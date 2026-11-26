@@ -347,7 +347,7 @@ onUnmounted(() => {
 <style scoped>
 .notification-center {
   position: fixed;
-  z-index: 1200;
+  z-index: var(--arna-z-popover);
   inset-block-start: calc(var(--mases-shell-header-height, 4rem) + 0.5rem);
   inset-inline-end: clamp(0.75rem, 2vw, 2rem);
   display: flex;
