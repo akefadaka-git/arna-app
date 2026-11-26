@@ -157,6 +157,12 @@ test('reproduce six historical AppShell contrast findings with composited backgr
       totalColorContrastViolations: contrastNodes.length,
       inScopeColorContrastViolations: inScope.length,
       inScope,
+      allColorContrastViolations: contrastNodes.map((node) => ({
+        impact: node.impact,
+        target: node.target,
+        summary: node.failureSummary,
+        data: node.any?.find((check) => check.id === 'color-contrast')?.data,
+      })),
     });
   }
   await testInfo.attach('app-shell-axe-contrast-scans.json', {
@@ -165,7 +171,7 @@ test('reproduce six historical AppShell contrast findings with composited backgr
   });
   console.log('APP_SHELL_AXE_CONTRAST_SCANS=' + JSON.stringify(axeScans));
 
-  expect(axeScans.map(({ theme, inScopeColorContrastViolations }) => ({ theme, inScopeColorContrastViolations })))
-    .toEqual([{ theme: 'light', inScopeColorContrastViolations: 0 }, { theme: 'dark', inScopeColorContrastViolations: 0 }]);
+  expect(axeScans.map(({ theme, totalColorContrastViolations }) => ({ theme, totalColorContrastViolations })))
+    .toEqual([{ theme: 'light', totalColorContrastViolations: 0 }, { theme: 'dark', totalColorContrastViolations: 0 }]);
   expect(measurements.filter((item) => item.result !== 'PASS'), JSON.stringify(measurements, null, 2)).toEqual([]);
 });
