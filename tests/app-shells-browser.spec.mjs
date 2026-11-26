@@ -37,6 +37,30 @@ for (const surface of surfaces) {
     await expect(page.getByTestId('app-shell-main')).toHaveAttribute('id', 'arna-main-content');
     await expect(page.getByTestId('shell-child-page')).toContainText(surface.label);
 
+    const mobileToggle = page.getByTestId('app-header-mobile-toggle');
+    await expect(mobileToggle).toHaveAttribute('aria-expanded', 'false');
+    await expect(mobileToggle).toHaveAttribute('aria-controls', 'app-mobile-drawer');
+    await mobileToggle.click();
+    const mobileDrawer = page.getByTestId('app-mobile-drawer-root');
+    await expect(mobileDrawer).toBeVisible();
+    await expect(mobileToggle).toHaveAttribute('aria-expanded', 'true');
+    await page.keyboard.press('Escape');
+    await expect(mobileDrawer).toBeHidden();
+    await expect(mobileToggle).toHaveAttribute('aria-expanded', 'false');
+    await expect(mobileToggle).toBeFocused();
+
+    const searchTrigger = page.locator('#app-header-search-trigger');
+    await expect(searchTrigger).toHaveAttribute('aria-expanded', 'false');
+    await expect(searchTrigger).toHaveAttribute('aria-controls', 'app-header-search-dialog');
+    await searchTrigger.click();
+    const searchDialog = page.locator('#app-header-search-dialog');
+    await expect(searchDialog).toBeVisible();
+    await expect(searchTrigger).toHaveAttribute('aria-expanded', 'true');
+    await page.keyboard.press('Escape');
+    await expect(searchDialog).toBeHidden();
+    await expect(searchTrigger).toHaveAttribute('aria-expanded', 'false');
+    await expect(searchTrigger).toBeFocused();
+
     const skip = page.locator('a[href="#arna-main-content"]').first();
     await expect(skip).toBeAttached();
     await skip.focus();
