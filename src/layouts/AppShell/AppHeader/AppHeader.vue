@@ -337,11 +337,19 @@ interface Props {
    * precise predicate.
    */
   mobileMenuLabel?: string;
+
+  /** Whether the controlled mobile navigation dialog is open. */
+  mobileMenuExpanded?: boolean;
+
+  /** ID of the controlled mobile navigation dialog. */
+  mobileMenuControls?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   sticky: true,
   mobileMenuLabel: undefined,
+  mobileMenuExpanded: false,
+  mobileMenuControls: undefined,
 });
 
 const emit = defineEmits<{
@@ -479,6 +487,8 @@ function onToggleClick(): void {
           size="sm"
           :aria-label="mobileMenuLabel"
           aria-haspopup="dialog"
+          :aria-expanded="mobileMenuExpanded"
+          :aria-controls="mobileMenuControls"
           data-testid="app-header-mobile-toggle"
           @click="onToggleClick"
         >
