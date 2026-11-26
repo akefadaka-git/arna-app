@@ -32,6 +32,7 @@ const trackedContrastTargets = [
   '.arna-brand__corporate',
   'a[href$="legal"]',
   '.arana-footer-content__links > li:nth-child(2) .arana-footer-content__link',
+  '.arana-footer-content__link',
 ];
 
 for (const surface of surfaces) {
