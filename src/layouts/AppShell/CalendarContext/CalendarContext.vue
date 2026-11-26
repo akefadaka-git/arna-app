@@ -14,26 +14,17 @@
  -----------------------------------------------------------------------------
  Purpose
  -----------------------------------------------------------------------------
- Renders the current date as a semantic <time> element. Ambient chrome
- for the shell, showing the Gregorian date.
-
- -----------------------------------------------------------------------------
- NO locale read, and NO Ethiopian date (Freeze §10.3)
- -----------------------------------------------------------------------------
- §10.3: "the shell's calendar context displays the Gregorian ISO date…
-        No Ethiopian date is displayed."
- The Gregorian ISO date is language-neutral ("2026-09-13" in every
- locale), so the component does not read the locale store. When the
- calendar endpoints of §10.2 exist, a CR will extend this component to
- read the locale store and render the Ethiopian representation (or
- both, per §10.2's formatted_am / formatted_en). See the response
- preamble §"Notice 1".
+ Renders the current date as a semantic <time> element. Visible text follows
+ the shared E.C.-first/G.C.-selectable calendar preference and active locale.
+ The machine-readable datetime remains an ISO Gregorian date in the
+ corporate Africa/Addis_Ababa timezone. Shared calendar utilities own
+ conversion; this component does not duplicate Ethiopian date arithmetic.
 
  -----------------------------------------------------------------------------
  Self-ticking vs. externally-driven
  -----------------------------------------------------------------------------
  When `date` is omitted, the component self-updates to the current
- date via a timeout scheduled for the next local midnight, plus a
+ date via a timeout scheduled for the next Africa/Addis_Ababa midnight, plus a
  `visibilitychange` recheck. When `date` is supplied, the tick is
  stopped and the prop drives the display.
 
@@ -43,32 +34,23 @@
  `visibilitychange` listener covers the case of a tab that was
  suspended through midnight (a laptop that slept, a background tab on
  a mobile browser) — the tab wakes, the listener re-reads the current
- date and recomputes the next-midnight schedule, and no stale date is
+ date and recomputes the next Addis Ababa midnight schedule, and no stale date is
  shown.
 
  -----------------------------------------------------------------------------
  Formatter override
  -----------------------------------------------------------------------------
- The default formatter produces "YYYY-MM-DD" in the BROWSER'S LOCAL
- TIMEZONE. A consumer with a different formatting need supplies a
- `formatter` prop. See the response preamble §"Design note — why the
- formatter is a prop".
+ The default formatter uses the shared calendar preference, active
+ Amharic/English locale and Africa/Addis_Ababa timezone. A consumer with
+ a specialized formatting need can still supply a `formatter` prop.
 
  -----------------------------------------------------------------------------
  Timezone robustness
  -----------------------------------------------------------------------------
  The displayed date is re-computed from `new Date()` on every tick, so
- a change in the browser's timezone (e.g. a user who travels between
- Addis and a European office) is reflected on the next tick. The
- `datetime` attribute is likewise re-derived. No manual timezone
- handling is required; the browser's local timezone governs both the
- display and the machine-readable attribute, which is consistent with
- the component's "current local date" contract.
-
- If a future revision needs to display a specific timezone regardless
- of the browser (e.g. always Africa/Addis_Ababa), that is a data
- change — a formatter that reads the target timezone — not a layout
- change.
+ the browser's timezone does not change the corporate date context.
+ Both visible text and the machine-readable Gregorian date use the
+ shared Africa/Addis_Ababa calendar policy.
 
  -----------------------------------------------------------------------------
  Frame ownership
@@ -99,8 +81,7 @@
  data-testid="calendar-context-root"  on the <time>
 
  The <time> carries:
-   datetime="YYYY-MM-DD"  (always the ISO local date, regardless of the
-                           formatter used for display)
+   datetime="YYYY-MM-DD"  (ISO Gregorian date in Africa/Addis_Ababa)
 
  -----------------------------------------------------------------------------
  Accessibility
@@ -126,8 +107,8 @@
 /**
  * Format a Date as an ISO 8601 LOCAL date (YYYY-MM-DD).
  *
- * Uses the browser's local timezone, NOT UTC. See the response
- * preamble §"Design note — the default format".
+ * Legacy browser-local helper retained for compatibility. The shell's
+ * default display now uses the shared calendar preference formatter.
  *
  * Exported so consumers that need the same format elsewhere (e.g. a
  * page heading that displays "today's date") do not duplicate the
@@ -161,24 +142,27 @@ export const CALENDAR_CONTEXT_TICK_MS = 60 * 1000;
 export type CalendarDateFormatter = (date: Date) => string;
 
 /**
- * Compute the milliseconds from `from` until the start of the next
- * local day (i.e. the next local midnight, tonight). Returns a
- * non-negative integer.
+ * Compute the milliseconds from `from` until the next midnight in
+ * Africa/Addis_Ababa. Returns a non-negative integer.
  *
  * @internal
  */
 function msUntilNextLocalMidnight(from: Date): number {
-  const next = new Date(from);
-  // setHours(24, 0, 0, 0) advances to the start of the next local day,
-  // handling month/year boundaries and DST transitions automatically.
-  next.setHours(24, 0, 0, 0);
-  return Math.max(0, next.getTime() - from.getTime());
+  const formatter = new Intl.DateTimeFormat('en-CA-u-ca-gregory-nu-latn', {
+    timeZone: 'Africa/Addis_Ababa', year: 'numeric', month: '2-digit', day: '2-digit',
+  });
+  const parts = formatter.formatToParts(from);
+  const part = (type: 'year' | 'month' | 'day') => Number(parts.find((item) => item.type === type)?.value);
+  const nextDate = new Date(Date.UTC(part('year'), part('month') - 1, part('day') + 1, 12));
+  const dateKey = `${nextDate.getUTCFullYear()}-${String(nextDate.getUTCMonth() + 1).padStart(2, '0')}-${String(nextDate.getUTCDate()).padStart(2, '0')}`;
+  const nextMidnight = new Date(localDateTimeToIso(dateKey, '00:00', 'Africa/Addis_Ababa'));
+  return Math.max(0, nextMidnight.getTime() - from.getTime());
 }
 </script>
 
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
-import { formatCalendarDate } from '@/core/dates/calendar';
+import { formatCalendarDate, localDateTimeToIso } from '@/core/dates/calendar';
 import { useLocaleStore } from '@/stores/locale';
 
 interface Props {
