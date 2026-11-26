@@ -16,13 +16,23 @@ const viewports = [
   { width: 1280, height: 900 },
   { width: 1440, height: 960 },
 ];
+const locales = [
+  { key: 'am', label: 'Amharic' },
+  { key: 'en', label: 'English' },
+];
+const themes = [
+  { key: 'light', label: 'Light' },
+  { key: 'dark', label: 'Dark' },
+];
 
 for (const surface of surfaces) {
-  test(`mounted ${surface.label} shell renders ARNA chrome and remains responsive`, async ({ page }) => {
+  for (const locale of locales) {
+    for (const theme of themes) {
+      test(`mounted ${surface.label} shell in ${locale.label} / ${theme.label}`, async ({ page }) => {
     const runtimeErrors = [];
     page.on('pageerror', (error) => runtimeErrors.push(error.stack || error.message));
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.goto(`${baseUrl}?surface=${surface.key}`);
+    await page.goto(`${baseUrl}?surface=${surface.key}&locale=${locale.key}&theme=${theme.key}`);
 
     const fixtureError = await page.evaluate(() => window.__ARNA_SHELL_FIXTURE_ERROR__ || '');
     const root = page.getByTestId('app-shell-root');
@@ -31,6 +41,8 @@ for (const surface of surfaces) {
       throw new Error(`Mounted shell missing. Runtime errors: ${runtimeErrors.join(' | ')}. Fixture error: ${fixtureError}. App markup: ${markup.slice(0, 1200)}`);
     }
     await expect(root).toBeVisible();
+    await expect(page.locator('html')).toHaveAttribute('lang', locale.key);
+    await expect(page.locator('html')).toHaveAttribute('data-theme', theme.key);
     await expect(page.getByTestId('arna-brand-root')).toBeVisible();
     await expect(page.getByTestId('arna-brand-product')).toContainText('ARNA');
     await expect(page.getByTestId('app-shell-main')).toHaveAttribute('id', 'arna-main-content');
@@ -49,6 +61,7 @@ for (const surface of surfaces) {
     await expect(mobileToggle).toBeFocused();
 
     const searchTrigger = page.locator('#app-header-search-trigger');
+    await expect(searchTrigger).toHaveAccessibleName(locale.key === 'en' ? 'Search ARNA' : 'ARNA ይፈልጉ');
     await expect(searchTrigger).toHaveAttribute('aria-expanded', 'false');
     await expect(searchTrigger).toHaveAttribute('aria-controls', 'app-header-search-dialog');
     await searchTrigger.click();
@@ -82,6 +95,8 @@ for (const surface of surfaces) {
       expect(serious.map((item) => item.id + ': ' + item.help), `${surface.label} at ${viewport.width}px: ` + JSON.stringify(serious, null, 2)).toEqual([]);
     }
 
-    expect(runtimeErrors, `${surface.label} shell runtime errors`).toEqual([]);
-  });
+    expect(runtimeErrors, `${surface.label} / ${locale.label} / ${theme.label} shell runtime errors`).toEqual([]);
+      });
+    }
+  }
 }
