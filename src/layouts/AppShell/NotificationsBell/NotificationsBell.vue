@@ -192,10 +192,18 @@ interface Props {
    * Consumer-supplied, translated labels. Required.
    */
   labels: NotificationsBellLabels;
+
+  /** Whether the notification dialog is currently open. */
+  expanded?: boolean;
+
+  /** ID of the controlled notification dialog. */
+  controls?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   disabled: false,
+  expanded: false,
+  controls: undefined,
 });
 
 const emit = defineEmits<{
@@ -288,6 +296,7 @@ function onClick(): void {
       :aria-label="triggerAriaLabel"
       aria-disabled="true"
       data-disabled="true"
+      id="notifications-bell-trigger"
       data-testid="notifications-bell-trigger"
       @click="onClick"
     >
@@ -306,6 +315,10 @@ function onClick(): void {
     variant="ghost"
     size="md"
     :aria-label="triggerAriaLabel"
+    aria-haspopup="dialog"
+    :aria-expanded="expanded"
+    :aria-controls="controls"
+    id="notifications-bell-trigger"
     data-testid="notifications-bell-trigger"
     @click="onClick"
   >
