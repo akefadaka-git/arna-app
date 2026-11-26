@@ -27,6 +27,7 @@ const themes = [
 const trackedContrastTargets = [
   '.arna-brand__tagline',
   '.calendar-context',
+  'time',
   '.arana-footer-content__copyright',
   '.arna-brand__corporate',
   'a[href$="legal"]',
