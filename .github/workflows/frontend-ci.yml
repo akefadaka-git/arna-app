@@ -109,6 +109,18 @@ jobs:
           done
           curl --fail --silent http://127.0.0.1:4180/tests/fixtures/app-shells.html >/dev/null
           APP_SHELLS_URL=http://127.0.0.1:4180/tests/fixtures/app-shells.html npm run test:app-shells-browser
+      - name: Verify six AppShell contrast findings with composited rendered colors
+        shell: bash
+        run: |
+          npx vite --mode workspace --host 127.0.0.1 --port 4181 --strictPort > "$RUNNER_TEMP/app-shell-contrast-vite.log" 2>&1 &
+          VITE_PID=$!
+          trap 'kill "$VITE_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4181/tests/fixtures/app-shells.html >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4181/tests/fixtures/app-shells.html >/dev/null
+          APP_SHELLS_URL=http://127.0.0.1:4181/tests/fixtures/app-shells.html npm run test:app-shell-contrast-browser
       - name: Verify returning-user OTP login and browser SSO cookie lifecycle
         shell: bash
         run: |
