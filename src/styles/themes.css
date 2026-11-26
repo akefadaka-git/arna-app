@@ -92,7 +92,7 @@ textarea {
   --mases-color-text-muted: var(--mases-color-neutral-400);
   --mases-color-text-inverse: var(--mases-color-neutral-50);
   --mases-color-text-inverse-secondary: var(--mases-color-neutral-200);
-  --mases-color-text-brand: var(--mases-color-crimson-300);
+  --mases-color-text-brand: var(--mases-color-crimson-200);
   --mases-color-text-accent: var(--mases-color-gold-300);
   --mases-color-text-success: var(--mases-color-success-100);
   --mases-color-text-warning: var(--mases-color-warning-100);
@@ -120,8 +120,8 @@ textarea {
   --mases-color-action-ghost-hover: var(--mases-color-neutral-700);
   --mases-color-action-danger: var(--mases-color-crimson-500);
   --mases-color-action-danger-hover: var(--mases-color-crimson-600);
-  --mases-color-action-link: var(--mases-color-crimson-300);
-  --mases-color-action-link-hover: var(--mases-color-crimson-200);
+  --mases-color-action-link: var(--mases-color-crimson-200);
+  --mases-color-action-link-hover: var(--mases-color-crimson-100);
   --mases-color-icon-primary: var(--mases-color-neutral-200);
   --mases-color-icon-secondary: var(--mases-color-neutral-400);
   --mases-color-icon-inverse: var(--mases-color-neutral-50);
@@ -183,7 +183,7 @@ textarea {
     --mases-color-text-muted: var(--mases-color-neutral-400);
     --mases-color-text-inverse: var(--mases-color-neutral-50);
     --mases-color-text-inverse-secondary: var(--mases-color-neutral-200);
-    --mases-color-text-brand: var(--mases-color-crimson-300);
+    --mases-color-text-brand: var(--mases-color-crimson-200);
     --mases-color-text-accent: var(--mases-color-gold-300);
     --mases-color-text-success: var(--mases-color-success-100);
     --mases-color-text-warning: var(--mases-color-warning-100);
@@ -211,8 +211,8 @@ textarea {
     --mases-color-action-ghost-hover: var(--mases-color-neutral-700);
     --mases-color-action-danger: var(--mases-color-crimson-500);
     --mases-color-action-danger-hover: var(--mases-color-crimson-600);
-    --mases-color-action-link: var(--mases-color-crimson-300);
-    --mases-color-action-link-hover: var(--mases-color-crimson-200);
+    --mases-color-action-link: var(--mases-color-crimson-200);
+    --mases-color-action-link-hover: var(--mases-color-crimson-100);
     --mases-color-icon-primary: var(--mases-color-neutral-200);
     --mases-color-icon-secondary: var(--mases-color-neutral-400);
     --mases-color-icon-inverse: var(--mases-color-neutral-50);
