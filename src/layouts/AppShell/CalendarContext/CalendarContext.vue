@@ -97,6 +97,7 @@
 -->
 
 <script lang="ts">
+import { localDateTimeToIso } from '@/core/dates/calendar';
 /*
  * Exported helpers and types.
  *
@@ -147,7 +148,7 @@ export type CalendarDateFormatter = (date: Date) => string;
  *
  * @internal
  */
-function msUntilNextLocalMidnight(from: Date): number {
+function msUntilNextAddisMidnight(from: Date): number {
   const formatter = new Intl.DateTimeFormat('en-CA-u-ca-gregory-nu-latn', {
     timeZone: 'Africa/Addis_Ababa', year: 'numeric', month: '2-digit', day: '2-digit',
   });
@@ -162,7 +163,7 @@ function msUntilNextLocalMidnight(from: Date): number {
 
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
-import { formatCalendarDate, localDateTimeToIso } from '@/core/dates/calendar';
+import { formatCalendarDate } from '@/core/dates/calendar';
 import { useLocaleStore } from '@/stores/locale';
 
 interface Props {
@@ -229,7 +230,7 @@ let midnightTimeoutId: ReturnType<typeof setTimeout> | null = null;
  */
 function scheduleMidnightTick(): void {
   if (midnightTimeoutId !== null) return;
-  const delay = msUntilNextLocalMidnight(new Date());
+  const delay = msUntilNextAddisMidnight(new Date());
   midnightTimeoutId = setTimeout(() => {
     midnightTimeoutId = null;
     now.value = new Date();
