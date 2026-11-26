@@ -389,6 +389,7 @@ onBeforeUnmount(() => {
 <template>
   <Teleport to="body">
     <dialog
+      id="app-mobile-drawer"
       ref="dialogRef"
       class="app-mobile-drawer"
       :aria-label="labels.dialogAriaLabel"
