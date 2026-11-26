@@ -78,7 +78,7 @@ for (const surface of surfaces) {
     });
     const shellDate = page.locator('time.calendar-context');
     await expect(calendarControl).toHaveValue('ethiopic');
-    await expect(shellDate).toHaveAttribute('datetime', /^\\d{4}-\\d{2}-\\d{2}$/);
+    await expect(shellDate).toHaveAttribute('datetime', /^\d{4}-\d{2}-\d{2}$/);
     const ethiopianDate = (await shellDate.textContent())?.trim();
     await calendarControl.selectOption('gregory');
     await expect(shellDate).not.toHaveText(ethiopianDate ?? '');
