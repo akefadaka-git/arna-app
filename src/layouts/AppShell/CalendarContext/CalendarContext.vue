@@ -178,6 +178,8 @@ function msUntilNextLocalMidnight(from: Date): number {
 
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from 'vue';
+import { formatCalendarDate } from '@/core/dates/calendar';
+import { useLocaleStore } from '@/stores/locale';
 
 interface Props {
   /**
@@ -206,6 +208,23 @@ interface Props {
    * re-evaluation is intended.
    */
   formatter?: CalendarDateFormatter;
+}
+
+const localeStore = useLocaleStore();
+
+function formatShellCalendarDate(date: Date): string {
+  return formatCalendarDate(date, { dateStyle: 'medium' }, localeStore.locale);
+}
+
+function formatShellIsoDate(date: Date): string {
+  const parts = new Intl.DateTimeFormat('en-CA-u-ca-gregory-nu-latn', {
+    timeZone: 'Africa/Addis_Ababa',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(date);
+  const part = (type: 'year' | 'month' | 'day') => parts.find((item) => item.type === type)?.value ?? '';
+  return `${part('year')}-${part('month')}-${part('day')}`;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -289,7 +308,7 @@ onBeforeUnmount(() => {
 const effectiveDate = computed<Date>(() => props.date ?? now.value);
 
 const resolvedFormatter = computed<CalendarDateFormatter>(
-  () => props.formatter ?? formatIsoLocalDate,
+  () => props.formatter ?? formatShellCalendarDate,
 );
 
 const displayText = computed<string>(() =>
@@ -297,11 +316,11 @@ const displayText = computed<string>(() =>
 );
 
 /*
- * The datetime attribute is ALWAYS the ISO local date, regardless of
- * the formatter. See the file header comment.
+ * The datetime attribute is ALWAYS the ISO Gregorian date in the
+ * corporate Africa/Addis_Ababa timezone, regardless of display calendar.
  */
 const datetimeAttribute = computed<string>(() =>
-  formatIsoLocalDate(effectiveDate.value),
+  formatShellIsoDate(effectiveDate.value),
 );
 </script>
 
