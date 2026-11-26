@@ -38,6 +38,9 @@ const requested = params.get('surface') || 'workspace';
 const requestedLocale = params.get('locale') === 'en' ? 'en' : 'am';
 const requestedTheme = ['light', 'dark', 'system'].includes(params.get('theme')) ? params.get('theme') : 'system';
 useLocaleStore(pinia).setLocale(requestedLocale);
+// The fixture mounts layouts directly rather than the application root (App.vue),
+// so mirror the root's locale-to-document-language contract explicitly.
+document.documentElement.lang = requestedLocale;
 setThemePreference(requestedTheme);
 const surface = ['workspace', 'portal', 'admin'].includes(requested) ? requested : 'workspace';
 await router.replace(`/${surface}`);
