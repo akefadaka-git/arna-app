@@ -533,11 +533,9 @@ function onToggleClick(): void {
          Actions region
 
          Right-anchored, does not shrink. AppShell composes the
-         notifications bell (disabled until §20.2 endpoints exist),
-         the tenant switcher, and the user menu here. A future
-         language selector would be added between the tenant switcher
-         and the user menu — see AppShell.vue §"Composition" for the
-         current set and its ordering.
+         notification entry point, calendar preference, language selector,
+         tenant switcher and user menu here. See AppShell.vue
+         §"Composition" for the current set and its ordering.
          ============================================================ -->
     <div
       class="app-header__actions"
