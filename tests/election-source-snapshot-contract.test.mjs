@@ -38,6 +38,7 @@ test('Shareholder source API adapter calls only the declared tenant election end
 
 test('source-register UI is evidence-only and does not calculate electorate decisions', async () => {
   const view = await read('../src/features/elections/ElectionSourceSnapshotView.vue');
+  const api = await read('../src/features/elections/source-snapshot-api.ts');
 
   assert.ok(view.includes('governance.election.register.prepare'));
   assert.ok(view.includes('governance.election.register.reconcile'));
