@@ -2,6 +2,7 @@ import { api } from '@/core/api/client';
 
 export type AppointmentScope = 'personal' | 'corporate';
 export type AppointmentStatus = 'requested' | 'confirmed' | 'declined' | 'cancelled';
+export type AppointmentRescheduleProposalStatus = 'pending' | 'accepted' | 'declined' | 'withdrawn';
 
 export interface AppointmentDateTime {
   readonly year: number;
@@ -23,6 +24,7 @@ export interface AppointmentAttendee {
 
 export interface AppointmentEvent {
   readonly id: string;
+  readonly version: number;
   readonly title: string;
   readonly description: string | null;
   readonly event_type: string;
@@ -33,6 +35,33 @@ export interface AppointmentEvent {
   readonly ends_at_ec: AppointmentDateTime | null;
   readonly timezone: string;
   readonly attendees: readonly AppointmentAttendee[];
+}
+
+export interface AppointmentRescheduleProposal {
+  readonly id: string;
+  readonly tenant_id: number;
+  readonly appointment_id: string;
+  readonly proposer_user_id: number;
+  readonly counterparty_user_id: number;
+  readonly proposed_starts_at: string;
+  readonly proposed_ends_at: string;
+  readonly timezone: string;
+  readonly reason: string | null;
+  readonly base_appointment_version: number;
+  readonly base_event_version: number;
+  readonly status: AppointmentRescheduleProposalStatus;
+  readonly responded_by_user_id: number | null;
+  readonly responded_at: string | null;
+  readonly created_at: string;
+}
+
+export interface AppointmentRescheduleProposalPayload {
+  readonly starts_at: string;
+  readonly ends_at: string;
+  readonly timezone: string;
+  readonly expected_appointment_version: number;
+  readonly expected_event_version: number;
+  readonly reason?: string | null;
 }
 
 export interface CalendarAppointment {
@@ -103,4 +132,38 @@ export function declineAppointment(id: string): Promise<CalendarAppointment> {
 
 export function cancelAppointment(id: string): Promise<CalendarAppointment> {
   return api.post<CalendarAppointment>(`/api/calendar/appointments/${encodeURIComponent(id)}/cancel`);
+}
+
+export function listAppointmentRescheduleProposals(id: string): Promise<readonly AppointmentRescheduleProposal[]> {
+  return api.get<readonly AppointmentRescheduleProposal[]>(
+    `/api/calendar/appointments/${encodeURIComponent(id)}/reschedule-proposals`,
+  );
+}
+
+export function createAppointmentRescheduleProposal(
+  id: string,
+  payload: AppointmentRescheduleProposalPayload,
+): Promise<AppointmentRescheduleProposal> {
+  return api.post<AppointmentRescheduleProposal>(
+    `/api/calendar/appointments/${encodeURIComponent(id)}/reschedule-proposals`,
+    payload,
+  );
+}
+
+export function acceptAppointmentRescheduleProposal(id: string, proposalId: string): Promise<CalendarAppointment> {
+  return api.post<CalendarAppointment>(
+    `/api/calendar/appointments/${encodeURIComponent(id)}/reschedule-proposals/${encodeURIComponent(proposalId)}/accept`,
+  );
+}
+
+export function declineAppointmentRescheduleProposal(id: string, proposalId: string): Promise<AppointmentRescheduleProposal> {
+  return api.post<AppointmentRescheduleProposal>(
+    `/api/calendar/appointments/${encodeURIComponent(id)}/reschedule-proposals/${encodeURIComponent(proposalId)}/decline`,
+  );
+}
+
+export function withdrawAppointmentRescheduleProposal(id: string, proposalId: string): Promise<AppointmentRescheduleProposal> {
+  return api.post<AppointmentRescheduleProposal>(
+    `/api/calendar/appointments/${encodeURIComponent(id)}/reschedule-proposals/${encodeURIComponent(proposalId)}/withdraw`,
+  );
 }
