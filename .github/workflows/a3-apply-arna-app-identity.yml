@@ -1,4 +1,5 @@
 name: A3 apply ARNA App identity migration
+# Updated for final A3 residual-scan allowlist
 
 on:
   push:
