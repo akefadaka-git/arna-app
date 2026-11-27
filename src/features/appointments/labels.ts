@@ -41,6 +41,17 @@ export interface AppointmentWorkspaceLabels {
   readonly timezone: string;
   readonly successBooked: string;
   readonly successUpdated: string;
+  readonly reschedule: string;
+  readonly proposeTime: string;
+  readonly proposalReason: string;
+  readonly acceptProposal: string;
+  readonly declineProposal: string;
+  readonly withdrawProposal: string;
+  readonly proposalStatus: string;
+  readonly proposed: string;
+  readonly accepted: string;
+  readonly withdrawn: string;
+  readonly rescheduleProposed: string;
 }
 
 export const appointmentWorkspaceLabels: AppointmentWorkspaceLabels = {
@@ -86,6 +97,17 @@ export const appointmentWorkspaceLabels: AppointmentWorkspaceLabels = {
   timezone: 'የሰዓት ክልል',
   successBooked: 'የቀጠሮ ጥያቄ ተልኳል።',
   successUpdated: 'የቀጠሮ ሁኔታ ተዘምኗል።',
+  reschedule: 'ቀጠሮውን ያስተካክሉ',
+  proposeTime: 'አዲስ ሰዓት ያቅርቡ',
+  proposalReason: 'የለውጡ ምክንያት (አማራጭ)',
+  acceptProposal: 'አዲሱን ሰዓት ተቀበል',
+  declineProposal: 'ውድቅ አድርግ',
+  withdrawProposal: 'ጥያቄውን መልስ',
+  proposalStatus: 'የለውጥ ጥያቄ',
+  proposed: 'ቀርቧል',
+  accepted: 'ተቀብሏል',
+  withdrawn: 'ተመልሷል',
+  rescheduleProposed: 'የቀጠሮ አዲስ ሰዓት ቀርቧል።',
 };
 
 export const appointmentWorkspaceEnglishLabels: AppointmentWorkspaceLabels = {
@@ -131,4 +153,15 @@ export const appointmentWorkspaceEnglishLabels: AppointmentWorkspaceLabels = {
   timezone: 'Time zone',
   successBooked: 'Appointment request sent.',
   successUpdated: 'Appointment status updated.',
+  reschedule: 'Reschedule',
+  proposeTime: 'Propose new time',
+  proposalReason: 'Reason for change (optional)',
+  acceptProposal: 'Accept new time',
+  declineProposal: 'Decline',
+  withdrawProposal: 'Withdraw proposal',
+  proposalStatus: 'Reschedule proposal',
+  proposed: 'Pending',
+  accepted: 'Accepted',
+  withdrawn: 'Withdrawn',
+  rescheduleProposed: 'New appointment time proposed.',
 };
