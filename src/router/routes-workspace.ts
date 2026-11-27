@@ -831,6 +831,12 @@ export const routesWorkspace: RouteRecordRaw[] = [
         meta: { permission: 'task.view' },
       },
       {
+        path: 'ai',
+        name: 'ai-workspace',
+        component: () => import('@/features/ai/AIWorkspaceView.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
         path: 'calendar',
         name: 'calendar',
         component: () => import('@/features/calendar/CalendarWorkspaceView.vue'),
