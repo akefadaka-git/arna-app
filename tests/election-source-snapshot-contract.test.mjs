@@ -23,6 +23,8 @@ test('Shareholder source API adapter calls only the declared tenant election end
 
   for (const endpoint of [
     '/api/governance/elections',
+    '/authority-evidence',
+    '/committee/members',
     '/shareholder-source-snapshots',
     '/reconcile',
   ]) {
@@ -38,6 +40,10 @@ test('source-register UI is evidence-only and does not calculate electorate deci
 
   assert.ok(view.includes('governance.election.register.prepare'));
   assert.ok(view.includes('governance.election.register.reconcile'));
+  assert.ok(view.includes('canViewAuthority'));
+  assert.ok(view.includes('canViewCommittee'));
+  assert.ok(view.includes('does not record, review or verify legal authority'));
+  assert.ok(view.includes('No appointment, revocation, administrator grant or conflict action'));
   assert.ok(view.includes('preparer cannot reconcile their own snapshot'));
   assert.ok(view.includes('does not verify statutory ownership, voter eligibility, voting weight'));
   assert.ok(view.includes('blocked_unverified'));
@@ -47,4 +53,6 @@ test('source-register UI is evidence-only and does not calculate electorate deci
   assert.ok(!view.includes('voting_weight'));
   assert.ok(!view.includes('voter_eligible'));
   assert.ok(!view.includes('ballot'));
+  assert.ok(!api.includes('verifyElectionAuthority'));
+  assert.ok(!api.includes('appointElectionCommittee'));
 });
