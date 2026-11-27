@@ -123,3 +123,58 @@ All declarations use `font-style: normal` and `font-display: swap`. The existing
 **Priority 3 disposition:** IMPLEMENTED — source-level verification PASS; runtime/build verification pending.
 
 **Next priority:** Priority 4 — verify all three assets load in browser builds and test Amharic/English/monospaced rendering, weight behavior, fallback behavior, and regression/accessibility checks against this exact head.
+
+## Priority 4 update — production browser loading, rendering, fallback and accessibility verification
+
+Date: 2026-11-27
+
+**Exact tested source SHA:** `6ccb16ee570cd9713bf459bb69fcfac6c449ca5c`
+
+**Exact-head CI:** [Frontend verification run 45931812866 — SUCCESS](https://github.com/akefadaka-git/arna-app/actions/runs/45931812866)
+
+The workflow asserted that the checked-out SHA exactly matched the expected pull-request head SHA before installing dependencies or building. The exact-SHA assertion passed.
+
+### Production Workspace and Portal font checks
+
+The new `tests/font-assets-browser.spec.mjs` ran against separately previewed production outputs:
+
+- Workspace production output: `dist/`
+- Shareholder Portal production output: `dist-portal/`
+
+**Result: 4/4 Playwright tests PASS.**
+
+For each production build, the tests verified:
+
+- The Amharic, English and monospaced font-family tokens are present.
+- The Noto Sans Ethiopic, Inter and JetBrains Mono font files are served from the build with HTTP 200 responses.
+- Browser font loading succeeds for nine variable-weight combinations: Noto Sans Ethiopic 100/400/900, Inter 100/400/900, and JetBrains Mono 100/400/800.
+- Amharic, Latin, monospaced-code and mixed Amharic/Latin specimens produce non-zero rendered geometry.
+- When the local font requests are deliberately blocked, the system fallback stack remains available and the specimen remains visible; the declarations retain `font-display: swap`.
+
+### Mounted AppShell and accessibility regression
+
+The mounted-shell fixture now imports the actual `src/styles/tokens.css`, rather than testing the shell without the typography token layer.
+
+**Result: 12/12 mounted AppShell browser tests PASS (46.5 seconds).**
+
+The 12 cases cover Workspace, Shareholder Portal and Administration across Amharic/English and light/dark themes. Each case exercises seven viewport widths (320, 360, 390, 768, 1024, 1280 and 1440 pixels), checks for horizontal overflow, and runs the serious/critical axe accessibility gate. The font-loading assertions run within these mounted browser cases.
+
+**Contrast regression: PASS.** The dedicated six-finding contrast browser test passed. Its axe scan reported zero color-contrast violations in both light and dark themes. The public browser/WCAG 2.2 verification step also passed.
+
+### Full workflow disposition
+
+The exact-head Frontend verification workflow completed with **SUCCESS**. Type-checking, all four application builds, the dependency audit gate, build verification, production font tests, mounted AppShell tests, contrast checks, public WCAG checks, and the remaining registered browser/contract tests all completed successfully.
+
+**Priority 4 disposition: VERIFIED — PASS.** The test evidence establishes browser delivery and loading of the three self-hosted assets in both production build outputs, successful variable-weight font loading for the tested weights, rendered text specimens, readable fallback behavior, and passing mounted-shell/accessibility regressions.
+
+**Scope limitation:** This is automated Chromium verification. It does not constitute a human visual typography review across every glyph, device, operating system or physical display. Do not claim exhaustive Unicode coverage or cross-platform visual equivalence from these tests alone.
+
+**Implementation files added or changed for Priority 4:**
+- `tests/font-assets-browser.spec.mjs` — new production-output font loading and fallback tests.
+- `tests/fixtures/app-shells.js` — imports the actual global typography token stylesheet.
+- `tests/app-shells-browser.spec.mjs` — verifies font loading, variable weights and rendered text specimens within the mounted shell matrix.
+- `.github/workflows/frontend-ci.yml` — runs the production Workspace and Portal font checks before the mounted AppShell and contrast browser gates.
+
+**Governance:** PR #140 remains open and draft. No merge, deployment, A5 action, or change to `main` was performed. The base branch SHA remains `f694eb13ba822440c6842cb135a66f89218bc454`.
+
+**Next priority:** Priority 5 remains pending and separate. Do not begin it without the Owner's next explicit instruction.
