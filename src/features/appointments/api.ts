@@ -78,6 +78,7 @@ export interface CalendarAppointment {
   readonly version: number;
   readonly created_at: string;
   readonly event: AppointmentEvent;
+  readonly reschedule_proposals?: readonly AppointmentRescheduleProposal[];
 }
 
 export interface AppointmentPage {
