@@ -52,7 +52,7 @@ onMounted(() => {
     <PageHeader :title="labels.pageTitle" :description="labels.pageDescription" />
 
     <section class="election-list__content" aria-live="polite">
-      <LoadingState v-if="state === 'loading'" :message="labels.loading" />
+      <LoadingState v-if="state === 'loading'" :label="labels.loading" />
 
       <ErrorState
         v-else-if="state === 'error'"
