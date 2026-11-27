@@ -59,8 +59,12 @@ jobs:
         run: npm audit --audit-level=high
       - name: Verify notification route, tenant and locale security contracts
         run: npm run test:notifications-locale-contract
+      - name: Verify Board Election shareholder source snapshot contract
+        run: node --test tests/governance-election-source-snapshot-contract.test.mjs
       - name: Verify Owner-governed branch lifecycle workflow contract
         run: npm run test:owner-governed-lifecycle-workflow-contract
+      - name: Compile Workspace bundle independently of repository-wide type-check
+        run: npx vite build --mode workspace
       - name: Type-check and build all applications
         run: npm run build
       - name: Verify root entry points, local assets, and deployment policy

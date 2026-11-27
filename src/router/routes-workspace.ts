@@ -758,6 +758,19 @@ export const routesWorkspace: RouteRecordRaw[] = [
         meta: { permission: 'governance.body.view' },
       },
 
+      {
+        path: 'governance/elections',
+        name: 'governance-elections',
+        component: () => import('@/features/governance/GovernanceElectionListView.vue'),
+        meta: { permission: 'governance.election.view' },
+      },
+      {
+        path: 'governance/elections/:electionId/shareholder-source-snapshots',
+        name: 'governance-election-shareholder-source-snapshots',
+        component: () => import('@/features/governance/ElectionSourceSnapshotView.vue'),
+        meta: { permission: 'governance.election.register.view' },
+      },
+
       //
       // ORDER: list, then detail. No static-vs-dynamic conflict at the
       // :id level — the governance tree has no static sub-path
