@@ -99,3 +99,27 @@ The three font files were fetched from the exact committed feature-branch head `
 **Scope note:** These checksums establish the identity of the currently committed files. The independent upstream identity comparison previously recorded is via Git blob SHA-1. No upstream-published SHA-256 checksum was available in the recorded release metadata, so do not claim an upstream SHA-256 match.
 
 **Next priority:** Priority 3 — implement `@font-face` declarations and connect the three self-hosted assets to the existing font tokens. Do not mark A3.2.2 complete until subsequent rendering, build, and accessibility verification is complete.
+
+## Priority 3 update — self-hosted font-face integration
+
+Date: 2026-11-27
+
+**Implementation commit:** `3d2b4cdc6a0a3abbc420adfad427d3fe991ccd3a`
+
+**Changed file:** `src/styles/tokens.css`
+
+Three `@font-face` declarations were added to the global token stylesheet, which is imported by `src/App.vue` in both workspace and portal builds:
+
+- `Noto Sans Ethiopic` → `/fonts/noto-sans-ethiopic-variable.ttf`, variable weight range 100–900.
+- `Inter` → `/fonts/inter-variable.woff2`, variable weight range 100–900.
+- `JetBrains Mono` → `/fonts/jetbrains-mono-variable.ttf`, variable weight range 100–800.
+
+All declarations use `font-style: normal` and `font-display: swap`. The existing `--mases-font-family-am`, `--mases-font-family-en`, and `--mases-font-family-mono` token values were preserved; they now resolve to the self-hosted families when the corresponding font is available, with the pre-existing system fallback stacks retained.
+
+**Source-level verification:** PASS — the committed stylesheet was fetched again at the implementation commit; all three family declarations, all three root-relative public asset URLs, all three `font-display: swap` declarations, and all three existing family tokens were present.
+
+**Not yet verified:** Browser network loading, actual variable-axis metadata, computed font selection, Ethiopic glyph coverage, mixed-script fallback, visual metrics, production build output, and accessibility regression. The exact-head combined commit status currently reports no status entries (`statuses: []`); this is not a CI pass.
+
+**Priority 3 disposition:** IMPLEMENTED — source-level verification PASS; runtime/build verification pending.
+
+**Next priority:** Priority 4 — verify all three assets load in browser builds and test Amharic/English/monospaced rendering, weight behavior, fallback behavior, and regression/accessibility checks against this exact head.
