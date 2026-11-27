@@ -50,6 +50,8 @@ test('Appointment workspace uses E.C. civil dates and the selected calendar time
   assert.match(view, /host_user_id/);
   assert.match(dates, /This local time does not exist/);
   assert.match(dates, /This local time occurs twice/);
+  assert.match(dates, /ethiopicDateToGregorianInTimezone/);
+  assert.match(view, /ethiopicDateToGregorianInTimezone/);
 });
 
 test('Appointment workspace keeps formal Governance appointment records separate', () => {
