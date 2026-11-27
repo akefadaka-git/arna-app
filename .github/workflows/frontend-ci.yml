@@ -97,6 +97,21 @@ jobs:
         run: npm run test:executive-overview-route-contract
       - name: Install Chromium for public browser contracts
         run: npx playwright install --with-deps chromium
+      - name: Verify self-hosted fonts in production Workspace and Portal builds
+        shell: bash
+        run: |
+          npx vite preview --outDir dist --host 127.0.0.1 --port 4182 --strictPort > "$RUNNER_TEMP/font-workspace-preview.log" 2>&1 &
+          WORKSPACE_PID=$!
+          npx vite preview --outDir dist-portal --host 127.0.0.1 --port 4183 --strictPort > "$RUNNER_TEMP/font-portal-preview.log" 2>&1 &
+          PORTAL_PID=$!
+          trap 'kill "$WORKSPACE_PID" "$PORTAL_PID" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4182/ >/dev/null && curl --fail --silent http://127.0.0.1:4183/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4182/ >/dev/null
+          curl --fail --silent http://127.0.0.1:4183/ >/dev/null
+          ARNA_WORKSPACE_URL=http://127.0.0.1:4182/ ARNA_PORTAL_URL=http://127.0.0.1:4183/ npx playwright test tests/font-assets-browser.spec.mjs
       - name: Verify mounted Workspace, Portal and Admin AppShells in Chromium
         shell: bash
         run: |
