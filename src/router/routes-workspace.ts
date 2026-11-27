@@ -794,7 +794,10 @@ export const routesWorkspace: RouteRecordRaw[] = [
         path: 'governance/elections/:id/shareholder-source',
         name: 'governance-election-source-register',
         component: () => import('@/features/elections/ElectionSourceSnapshotView.vue'),
-        meta: { permission: 'governance.election.register.view' },
+        meta: {
+          permission: ['governance.election.view', 'governance.election.register.view'],
+          permissionMode: 'all',
+        },
       },
       {
         path: 'governance/bodies',
