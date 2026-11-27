@@ -22,9 +22,36 @@ const eventDateTime = {
   timezone: 'Africa/Addis_Ababa',
 };
 
-async function installAppointmentApi(page) {
+async function installAppointmentApi(page, { seedConfirmed = false } = {}) {
   const captured = { availability: null, booking: null, cancellation: null };
-  let appointments = [];
+  let appointments = seedConfirmed ? [{
+    id: '8f5c2d0e-3a7b-4b9c-8d2e-4f6a8b0c3d55',
+    tenant_id: 9001,
+    event_id: '7e4b1c9d-2f6a-4a8b-9c1d-3e5f7a9b2c44',
+    requested_by_user_id: 9001,
+    host_user_id: 9002,
+    appointment_scope: 'personal',
+    status: 'confirmed',
+    confirmed_at: '2026-11-26T07:00:00Z',
+    cancelled_at: null,
+    declined_at: null,
+    version: 2,
+    created_at: '2026-11-25T06:00:00Z',
+    event: {
+      id: '7e4b1c9d-2f6a-4a8b-9c1d-3e5f7a9b2c44',
+      version: 1,
+      title: 'የአማካሪ ቀጠሮ',
+      description: null,
+      event_type: 'appointment',
+      status: 'scheduled',
+      starts_at: '2026-11-28T07:00:00Z',
+      ends_at: '2026-11-28T07:30:00Z',
+      starts_at_ec: { ...eventDateTime, year: 2019, month: 3, day: 18, iso: '2019-03-18', local_time: '10:00:00' },
+      ends_at_ec: { ...eventDateTime, year: 2019, month: 3, day: 18, iso: '2019-03-18', local_time: '10:30:00' },
+      timezone: calendar.timezone,
+      attendees: [{ user_id: 9002, response: 'accepted', responded_at: '2026-11-26T07:00:00Z' }],
+    },
+  }] : [];
   await page.route('**/api/calendar/calendars', async (route) => route.fulfill({
     status: 200,
     contentType: 'application/json',
@@ -40,6 +67,17 @@ async function installAppointmentApi(page) {
       body: JSON.stringify({ success: true, data }),
     });
 
+    if (path.endsWith('/reschedule-proposals') && method === 'GET') {
+      return respond([]);
+    }
+    if (path.endsWith('/reschedule-proposals') && method === 'POST') {
+      captured.rescheduleProposal = request.postDataJSON();
+      return respond({
+        id: 'a1b2c3d4-1111-4222-8333-123456789abc',
+        status: 'pending',
+        ...captured.rescheduleProposal,
+      }, 201);
+    }
     if (path.endsWith('/availability') && method === 'POST') {
       captured.availability = request.postDataJSON();
       return respond({ available: true, participant_conflict_count: 0, resource_conflict_count: 0, timezone: calendar.timezone });
@@ -156,6 +194,20 @@ test.describe('ARNA shared appointment booking workspace', () => {
     await card.getByTestId('appointment-cancel').click();
     await expect.poll(() => captured.cancellation).toBe(true);
     await expect(card.getByText('ተሰርዟል')).toBeVisible();
+  });
+
+
+  test('confirmed appointment exposes the APT-02 reschedule proposal editor', async ({ page }) => {
+    await installAppointmentApi(page, { seedConfirmed: true });
+    await mountWorkspace(page);
+
+    const card = page.getByTestId('appointment-card').first();
+    const reschedule = card.getByRole('button', { name: 'ቀጠሮውን ያስተካክሉ' });
+    await expect(reschedule).toBeVisible();
+    await reschedule.click();
+    await expect(card.getByText('አዲስ ሰዓት ያቅርቡ')).toBeVisible();
+    await expect(card.locator('textarea')).toBeVisible();
+    await expect(card.locator('input[type="time"]')).toHaveCount(2);
   });
 
   test('appointment booking form meets automated accessibility checks', async ({ page }) => {
