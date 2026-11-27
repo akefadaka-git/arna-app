@@ -9,10 +9,14 @@ import ErrorState from '@/components/composites/ErrorState';
 import EmptyState from '@/components/composites/EmptyState';
 import {
   createElectionSourceSnapshot,
+  getElectionSourceSnapshot,
   listElectionSourceSnapshots,
   reconcileElectionSourceSnapshot,
 } from '@/features/governance/electionSourceSnapshotsApi';
-import type { GovernanceElectionSourceSnapshot } from '@/features/governance/electionSourceSnapshotsApi';
+import type {
+  GovernanceElectionSourceSnapshot,
+  GovernanceElectionSourceSnapshotDetail,
+} from '@/features/governance/electionSourceSnapshotsApi';
 import { electionSourceSnapshotLabels as labels } from '@/features/governance/electionLabels';
 
 type ViewState = 'loading' | 'error' | 'empty' | 'ready';
@@ -28,6 +32,8 @@ const actionMessage = ref<string | null>(null);
 const actionError = ref<string | null>(null);
 const recordDateTime = ref('');
 const reasons = reactive<Record<number, string>>({});
+const snapshotDetails = reactive<Record<number, GovernanceElectionSourceSnapshotDetail | null>>({});
+const detailBusy = ref<number | null>(null);
 const busyAction = ref<string | null>(null);
 const canPrepare = computed(() => auth.hasPermission('governance.election.register.prepare'));
 const canReconcile = computed(() => auth.hasPermission('governance.election.register.reconcile'));
@@ -71,6 +77,28 @@ async function capture(): Promise<void> {
     actionError.value = error instanceof Error ? error.message : labels.loadError;
   } finally {
     busyAction.value = null;
+  }
+}
+
+function holderNumberFor(snapshotId: number, shareholderId: number): string {
+  const holder = snapshotDetails[snapshotId]?.holders.find((item) => item.shareholder_id === shareholderId);
+  return holder?.shareholder_number ?? String(shareholderId);
+}
+
+async function toggleDetail(snapshotId: number): Promise<void> {
+  if (snapshotDetails[snapshotId]) {
+    snapshotDetails[snapshotId] = null;
+    return;
+  }
+
+  detailBusy.value = snapshotId;
+  actionError.value = null;
+  try {
+    snapshotDetails[snapshotId] = await getElectionSourceSnapshot(electionId.value, snapshotId);
+  } catch (error) {
+    actionError.value = error instanceof Error ? error.message : labels.loadError;
+  } finally {
+    detailBusy.value = null;
   }
 }
 
@@ -172,6 +200,7 @@ onMounted(() => {
 
           <dl class="election-source__facts">
             <div><dt>{{ labels.preparedAt }}</dt><dd>{{ snapshot.prepared_at_utc }}</dd></div>
+            <div><dt>{{ labels.recordDateCaptured }}</dt><dd>{{ snapshot.record_date_time_utc }} ({{ snapshot.record_date_timezone }})</dd></div>
             <div><dt>{{ labels.shareholders }}</dt><dd>{{ snapshot.shareholder_count }}</dd></div>
             <div><dt>{{ labels.holdings }}</dt><dd>{{ snapshot.holding_count }}</dd></div>
             <div><dt>{{ labels.entries }}</dt><dd>{{ snapshot.ledger_entry_count }}</dd></div>
@@ -182,6 +211,52 @@ onMounted(() => {
             {{ labels.digest }}:
             <code :title="snapshot.source_digest">{{ shortDigest(snapshot.source_digest) }}</code>
           </p>
+
+          <button
+            type="button"
+            class="election-source__refresh"
+            :disabled="detailBusy !== null"
+            @click="toggleDetail(snapshot.id)"
+          >
+            {{ detailBusy === snapshot.id ? labels.loading : (snapshotDetails[snapshot.id] ? labels.hideDetail : labels.viewDetail) }}
+          </button>
+
+          <div v-if="snapshotDetails[snapshot.id]" class="election-source__detail" :data-testid="`snapshot-detail-${snapshot.id}`">
+            <p>{{ labels.shareholders }}: {{ snapshotDetails[snapshot.id]?.holders.length }} · {{ labels.entries }}: {{ snapshotDetails[snapshot.id]?.source_entries.length }}</p>
+            <h4>{{ labels.holder }} / Holder records</h4>
+            <ul>
+              <li v-for="holder in snapshotDetails[snapshot.id]?.holders ?? []" :key="holder.shareholder_id">
+                {{ holder.shareholder_number ?? holder.shareholder_id }} — {{ holder.current_status }} — {{ holder.identity_temporal_state }}
+              </li>
+            </ul>
+            <h4>{{ labels.shareClass }} / Holding records</h4>
+            <div class="election-source__table-wrap">
+              <table class="election-source__table">
+                <thead>
+                  <tr>
+                    <th scope="col">{{ labels.holder }}</th>
+                    <th scope="col">{{ labels.shareClass }}</th>
+                    <th scope="col">{{ labels.quantityAtCutoff }}</th>
+                    <th scope="col">{{ labels.currentProjection }}</th>
+                    <th scope="col">{{ labels.ledgerRows }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="holding in snapshotDetails[snapshot.id]?.holdings ?? []" :key="holding.source_holding_id">
+                    <td>{{ holderNumberFor(snapshot.id, holding.shareholder_id) }}</td>
+                    <td>{{ holding.share_class_code }}</td>
+                    <td>{{ holding.quantity_at_cutoff }}</td>
+                    <td>{{ holding.current_projection }}</td>
+                    <td>
+                      {{ holding.ledger_entry_count }}
+                      <code :title="holding.ledger_digest">{{ shortDigest(holding.ledger_digest) }}</code>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="election-source__detail-note">{{ labels.englishWarning }}</p>
+          </div>
 
           <div v-if="snapshot.reconciliations?.length" class="election-source__history">
             <h4>የማስታረቂያ ታሪክ / Reconciliation history</h4>
@@ -353,6 +428,48 @@ onMounted(() => {
 }
 .election-source__digest {
   margin: 0;
+  overflow-wrap: anywhere;
+}
+.election-source__detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mases-space-2);
+  padding-top: var(--mases-space-3);
+  border-top: 1px solid var(--mases-color-border-subtle);
+}
+.election-source__detail h4 {
+  margin: var(--mases-space-2) 0 0;
+}
+.election-source__detail ul {
+  margin: 0;
+  padding-inline-start: 1.25rem;
+}
+.election-source__detail-note {
+  margin: 0;
+  color: var(--mases-color-text-secondary);
+  font-size: var(--mases-font-size-body-sm);
+}
+.election-source__table-wrap {
+  overflow-x: auto;
+}
+.election-source__table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: start;
+}
+.election-source__table th,
+.election-source__table td {
+  padding: var(--mases-space-2);
+  border-bottom: 1px solid var(--mases-color-border-subtle);
+  vertical-align: top;
+}
+.election-source__table th {
+  color: var(--mases-color-text-secondary);
+  font-size: var(--mases-font-size-body-sm);
+  font-weight: var(--mases-font-weight-semibold);
+}
+.election-source__table td code {
+  display: block;
   overflow-wrap: anywhere;
 }
 .election-source__history h4 {
