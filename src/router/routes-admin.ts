@@ -271,7 +271,7 @@ export const routesAdmin: RouteRecordRaw[] = [
       {
         path: 'admin',
         name: 'admin-home',
-        component: () => import('./pages/AdminDashboardRoute.vue'),
+        component: () => import('./pages/AdminOverviewRoute.vue'),
       },
 
       // -----------------------------------------------------------------------
@@ -292,6 +292,72 @@ export const routesAdmin: RouteRecordRaw[] = [
       // directly.
       // -----------------------------------------------------------------------
       {
+        path: 'admin/users',
+        name: 'admin-users',
+        component: () => import('./pages/AdminDirectoryRoute.vue'),
+        meta: { permission: 'platform.identity.read' },
+      },
+      {
+        path: 'admin/roles',
+        name: 'admin-roles',
+        component: () => import('./pages/AdminDirectoryRoute.vue'),
+        meta: { permission: 'platform.rbac.read' },
+      },
+      {
+        path: 'admin/permissions',
+        name: 'admin-permissions',
+        component: () => import('./pages/AdminDirectoryRoute.vue'),
+        meta: { permission: 'platform.rbac.read' },
+      },
+      {
+        path: 'admin/tenants/:tenantId/memberships',
+        name: 'admin-tenant-memberships',
+        component: () => import('./pages/AdminTenantMembershipsRoute.vue'),
+        meta: { permission: 'platform.tenancy.read' },
+      },
+      {
+        path: 'admin/tenants',
+        name: 'admin-tenants',
+        component: () => import('./pages/AdminDirectoryRoute.vue'),
+        meta: { permission: 'platform.tenancy.read' },
+      },
+      {
+        path: 'admin/platforms',
+        name: 'admin-platforms',
+        component: () => import('./pages/AdminApplicationsRoute.vue'),
+        meta: { permission: 'platform.applications.read' },
+      },
+      {
+        path: 'admin/domains',
+        name: 'admin-domains',
+        component: () => import('./pages/AdminDomainRegistryRoute.vue'),
+        meta: { permission: 'platform.domains.read' },
+      },
+      {
+        path: 'admin/integrations',
+        name: 'admin-integrations',
+        component: () => import('./pages/AdminIntegrationsRoute.vue'),
+        meta: { permission: 'platform.integrations.read' },
+      },
+      {
+        path: 'admin/operations',
+        name: 'admin-operations',
+        component: () => import('./pages/AdminOperationsRoute.vue'),
+        meta: { permission: 'platform.operations.read' },
+      },
+      {
+        path: 'admin/settings',
+        name: 'admin-settings',
+        component: () => import('./pages/AdminSettingsRoute.vue'),
+        meta: { permission: 'platform.settings.read' },
+      },
+      {
+        path: 'admin/configuration',
+        name: 'admin-configuration',
+        component: () => import('./pages/AdminSettingsRoute.vue'),
+        meta: { permission: 'platform.configuration.read' },
+      },
+      {
         path: 'admin/public-content',
         name: 'admin-public-content',
         component: () => import('./pages/AdminPublicContentRoute.vue'),
@@ -307,7 +373,7 @@ export const routesAdmin: RouteRecordRaw[] = [
         path: 'admin/audit-security',
         name: 'admin-audit-security',
         component: () => import('./pages/AdminAuditSecurityRoute.vue'),
-        meta: { permission: ['audit.view', 'security-event.view'], permissionMode: 'any' },
+        meta: { permission: ['platform.audit.read', 'platform.security.read'], permissionMode: 'any' },
       },
       {
         path: 'launcher',
