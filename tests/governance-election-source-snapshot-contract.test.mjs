@@ -6,6 +6,7 @@ const read = (path) => readFileSync(new URL(path, import.meta.url), 'utf8');
 const routes = read('../src/router/routes-workspace.ts');
 const api = read('../src/features/governance/electionSourceSnapshotsApi.ts');
 const snapshotView = read('../src/features/governance/ElectionSourceSnapshotView.vue');
+const labels = read('../src/features/governance/electionLabels.ts');
 const overview = read('../src/features/governance/GovernanceOverviewView.vue');
 
 test('Board Election workspace routes require the corresponding backend permissions', () => {
@@ -20,8 +21,8 @@ test('source snapshot client uses the versioned Governance API contract and expl
 });
 
 test('source snapshot workspace keeps electorate and voting decisions fail-closed', () => {
-  assert.match(snapshotView, /blocked_unverified/);
-  assert.match(snapshotView, /No voter eligibility or voting weight is calculated/);
+  assert.match(api, /blocked_unverified/);
+  assert.match(labels, /No voter eligibility or voting weight is calculated/);
   assert.doesNotMatch(snapshotView, /voter_eligible|voting_weight|submitBallot|castVote/i);
   assert.match(snapshotView, /governance\.election\.register\.prepare/);
   assert.match(snapshotView, /governance\.election\.register\.reconcile/);
