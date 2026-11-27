@@ -86,15 +86,15 @@ For Noto Sans Ethiopic, the retrieved distribution is the slim variable TTF (wei
 
 Date: 2026-11-27
 
-The three font files were fetched from the exact committed feature-branch head `2bd380a0eb65fcfeeeac8e0cddd086cf65f00465` using GitHub's base64 content representation. The base64 was decoded to raw bytes and SHA-256 was calculated independently, rather than treating Git blob SHA-1 as a file checksum.
+The three committed font files were retrieved again from the current feature branch using GitHub's base64 content representation. Whitespace was removed from the encoded payload before decoding to raw bytes. SHA-256 was then recalculated over the exact decoded bytes using a standalone SHA-256 implementation; its output was checked against the standard `abc` test vector. The earlier byte counts and SHA-256 values in this section were incorrect and are superseded by the corrected values below. Git blob SHA-1 remains a separate repository object identifier.
 
 | Font file | Raw bytes | SHA-256 | Git blob SHA-1 (separate identifier) |
 |---|---:|---|---|
-| `public/fonts/noto-sans-ethiopic-variable.ttf` | 587,088 | `dbd6d1fb408bc3a88b1d139f54aa4d984d24ea16772f88b5ccb8d80a66a1b540` | `2dfcbe0abed525c6900eb7323ac0edee7d84a703` |
-| `public/fonts/inter-variable.woff2` | 358,113 | `fbf78a0ee105e94e1ef3efe99c20bc43eb2cc27d90b86652eb7e245cd8047387` | `5a8d3e72ad7ffb62af3b146e1b1f54ab5813a212` |
-| `public/fonts/jetbrains-mono-variable.ttf` | 308,196 | `b08e4ff2d65170fb34b5ce29e8fa9711d0b4b4e2ab99c65cc6e93299ca0b200d` | `b60e77f5dbf5505436c1904cb7a9ac4111ee76d0` |
+| `public/fonts/noto-sans-ethiopic-variable.ttf` | 577,464 | `e8ca9997dce667c842130375bb66f952392f7a51decd5dd7c9e8b649bcc2215e` | `2dfcbe0abed525c6900eb7323ac0edee7d84a703` |
+| `public/fonts/inter-variable.woff2` | 352,240 | `693b77d4f32ee9b8bfc995589b5fad5e99adf2832738661f5402f9978429a8e3` | `5a8d3e72ad7ffb62af3b146e1b1f54ab5813a212` |
+| `public/fonts/jetbrains-mono-variable.ttf` | 303,144 | `662a196d58f1183bf2d77428b6d5283fe3f45161ab021bea4036bc98e5cac016` | `b60e77f5dbf5505436c1904cb7a9ac4111ee76d0` |
 
-**Verification result:** PASS — SHA-256 was computed over the decoded raw bytes retrieved from the committed repository files. The reported byte lengths are the decoded file lengths. Git blob SHA-1 values are retained only as distinct repository object identifiers.
+**Verification result:** PASS — the corrected SHA-256 values were computed over the exact decoded bytes from the committed feature-branch blobs. The decoded byte lengths now agree with the original Priority 1 acquisition table. Git blob SHA-1 values are retained only as distinct repository object identifiers. The prior Priority 2 values must not be used.
 
 **Scope note:** These checksums establish the identity of the currently committed files. The independent upstream identity comparison previously recorded is via Git blob SHA-1. No upstream-published SHA-256 checksum was available in the recorded release metadata, so do not claim an upstream SHA-256 match.
 
@@ -178,3 +178,49 @@ The exact-head Frontend verification workflow completed with **SUCCESS**. Type-c
 **Governance:** PR #140 remains open and draft. No merge, deployment, A5 action, or change to `main` was performed. The base branch SHA remains `f694eb13ba822440c6842cb135a66f89218bc454`.
 
 **Next priority:** Priority 5 remains pending and separate. Do not begin it without the Owner's next explicit instruction.
+
+
+## Priority 5 update — final A3.2.2 audit and closure recommendation
+
+Date: 2026-11-27
+
+**Audit ref before this record:** PR #140 head `900d863b40851b11210097cd71cc84e377372cb9`; base `main` SHA `f694eb13ba822440c6842cb135a66f89218bc454`.
+
+### Reconciled evidence
+
+- **PASS** — all three assets are present at the recorded paths; their current Git blob SHA-1 values match the upstream blob identities recorded during acquisition.
+- **PASS** — the corrected raw byte lengths and SHA-256 values above were recalculated from the exact committed bytes. The earlier Priority 2 byte counts and SHA-256 values were erroneous and are explicitly superseded.
+- **PASS** — the three family-specific OFL 1.1 notice files are present and include the upstream copyright headers and OFL 1.1 terms.
+- **PASS** — the current `src/styles/tokens.css` contains the three self-hosted `@font-face` declarations, the recorded root-relative asset URLs, variable weight ranges (Noto Sans Ethiopic 100–900, Inter 100–900, JetBrains Mono 100–800), and `font-display: swap`.
+- **PASS** — the existing Amharic, English and monospaced family token values and system fallback stacks remain present; no external font CDN or paid font runtime dependency was introduced.
+- **PASS** — Priority 4 exact tested source SHA `6ccb16ee570cd9713bf459bb69fcfac6c449ca5c` completed Frontend workflow run [45931812866 — SUCCESS](https://github.com/akefadaka-git/arna-app/actions/runs/45931812866). Its production font suite passed 4/4 tests for Workspace and Shareholder Portal, covering HTTP 200 delivery of all three font assets, nine requested weight combinations, Amharic/English/mixed-script/code specimens, and visible system fallback when font requests were blocked. Mounted AppShell browser tests passed 12/12.
+
+### Current-head CI discrepancy
+
+The later documentation-only head `900d863b40851b11210097cd71cc84e377372cb9` was checked by [Frontend workflow run 45932230737](https://github.com/akefadaka-git/arna-app/actions/runs/45932230737). The workflow asserted the exact checked-out SHA and passed dependency installation/audit, type-check/build, production font tests, and mounted AppShell browser tests. It then **FAILED** at the separate six-finding AppShell contrast browser gate.
+
+The dark-theme axe scan reported three serious color-contrast violations outside the six historical selectors:
+- `#app-header-search-trigger-label`: 3.73:1 against the 4.5:1 threshold.
+- Dashboard sidebar label: 4.46:1 against the 4.5:1 threshold.
+- Launcher sidebar label: 4.46:1 against the 4.5:1 threshold.
+
+The light-theme scan reported zero color-contrast violations. The contrast step failed because it expected zero violations in both themes. The production font checks and mounted-shell test steps completed successfully in this run. The cause of the contrast discrepancy is not established by this audit; it must not be attributed to the font assets without evidence.
+
+### Remaining verification limits
+
+- Browser evidence is automated Chromium evidence, not human visual review across operating systems, devices or physical displays.
+- The text specimens are representative samples, not an exhaustive Unicode/Ethiopic glyph-coverage inventory.
+- The browser suite requests and loads the declared variable-weight values; this record does not claim an independent low-level font-table/axis metadata audit or cross-platform visual equivalence.
+
+### Priority 5 disposition
+
+**AUDIT COMPLETE — A3.2.2 CLOSURE RECOMMENDATION: PARTIAL / NOT VERIFIED-CLOSED.**
+
+The font assets, licence notices, corrected integrity checksums, CSS wiring, production delivery, tested weight requests, script specimens and fallback behavior have positive evidence. However, the latest exact-current-head Frontend workflow is not green because its AppShell accessibility/contrast gate fails. Under the AppShell acceptance requirement to retain accessibility regression coverage, this audit does not authorize a VERIFIED-CLOSED label while that gate is failing.
+
+Required before A3.2.2 closure:
+1. Triage the three dark-theme contrast violations in the AppShell contrast gate (or establish and document a valid, separately approved scope disposition).
+2. Re-run the Frontend workflow against the then-current exact PR head and confirm all required gates pass.
+3. Update this record with the exact verified SHA and run link.
+
+No contrast-token/source changes were made as part of this font audit. No merge, deployment, A5 action, or change to `main` was performed. PR #140 remains open and draft.
