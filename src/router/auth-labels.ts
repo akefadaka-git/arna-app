@@ -548,21 +548,36 @@ export const registerFormLabels = {
  */
 export const forgotPasswordFormLabels = {
   formAriaLabel: 'የይለፍ ቃል ማስጀመሪያ ይጠይቁ',
-  emailLabel: 'ኢሜይል',
-  submitLabel: 'ማስፈንጠሪያ ላክ',
+  emailLabel: 'የመግቢያ መለያ / Sign-in identifier',
+  authenticatorMethodsLabel: 'የማረጋገጫ ዘዴ ይምረጡ',
+  useOtpLabel: 'በOTP ኮድ',
+  useGoogleAuthenticatorLabel: 'በGoogle Authenticator',
+  otpChannelLabel: 'ኮዱን የሚቀበሉበት መንገድ',
+  emailChannelLabel: 'ኢሜይል',
+  smsChannelLabel: 'SMS',
+  otpInstructions: 'በተረጋገጠው የኢሜይል አድራሻ ወይም ስልክ የተላከውን ኮድ ያስገቡ።',
+  googleAuthenticatorInstructions: 'በGoogle Authenticator የሚታየውን አንድ ጊዜ የሚጠቀም ኮድ ያስገቡ።',
+  codeLabel: 'የማረጋገጫ ኮድ',
+  newPasswordLabel: 'አዲስ የይለፍ ቃል',
+  confirmPasswordLabel: 'አዲሱን የይለፍ ቃል ያረጋግጡ',
+  sendOtpLabel: 'የOTP ኮድ ላክ',
+  continueLabel: 'ቀጥል',
+  verifyRecoveryLabel: 'ኮዱን አረጋግጥ እና የይለፍ ቃል ቀይር',
+  cancelRecoveryLabel: 'ተመለስ',
+  submitLabel: 'የOTP ኮድ ላክ',
   submittingLabel: 'በመላክ ላይ…',
 
   // ---------------------------------------------------------------------------
   // Success panel
   // ---------------------------------------------------------------------------
-  successTitle: 'ገቢ ሳጥንዎን ይመልከቱ',
+  successTitle: 'የይለፍ ቃልዎ ተቀይሯል',
   /*
    * May contain the token `{email}`. If present, the component
    * replaces it with the address the user typed.
    */
   successMessage:
-    'ለ {email} መለያ ካለ፣ የይለፍ ቃል ማስጀመሪያ አገናኝ ልከናል። ገቢ ሳጥንዎን እና የ spam አቃፊዎን ይመልከቱ።',
-  tryAnotherEmailLabel: 'ሌላ ኢሜይል ይሞክሩ',
+    'ለ {email} መለያ የይለፍ ቃልዎን አዘምነናል። እባክዎ እንደገና ይግቡ።',
+  tryAnotherEmailLabel: 'ሌላ መለያ ይሞክሩ',
   backToLoginLabel: 'ወደ መግቢያ ይመለሱ',
 
   // ---------------------------------------------------------------------------

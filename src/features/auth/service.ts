@@ -714,23 +714,22 @@ export async function bootstrapSession(): Promise<BootstrapResult> {
  * Throws NormalizedApiError on failure (422, 429, network).
  */
 export async function requestPasswordReset(
-  email: string,
-): Promise<void> {
-  await authApi.requestPasswordReset(email);
+  identifier: string,
+  channel: 'email' | 'sms',
+): Promise<{ readonly challengeToken: string }> {
+  await api.csrfCookie();
+  const response = await authApi.requestPasswordReset({ identifier, channel });
+  return { challengeToken: response.challenge_token };
 }
 
 /**
- * Complete a password reset using the token from the reset email.
- * Public endpoint.
- *
- * No CSRF handshake is performed — same reasoning as
- * requestPasswordReset() above.
- *
- * Throws NormalizedApiError on failure.
+ * Complete password recovery using verified OTP or Google Authenticator.
+ * The backend invalidates existing bearer and device sessions on success.
  */
 export async function resetPassword(
   payload: ResetPasswordRequest,
 ): Promise<void> {
+  await api.csrfCookie();
   await authApi.resetPassword(payload);
 }
 

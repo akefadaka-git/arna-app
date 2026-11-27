@@ -493,7 +493,6 @@ export interface ResetPasswordFormLabels {
 
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
 import { Eye, EyeOff } from 'lucide-vue-next';
 
 import FormField from '@/components/composites/FormField';
@@ -502,7 +501,6 @@ import BaseInput from '@/components/primitives/BaseInput';
 import BaseLink from '@/components/primitives/BaseLink';
 import PrimaryButton from '@/components/primitives/PrimaryButton';
 
-import { resetPassword } from '@/features/auth/service';
 
 interface Props {
   /** Consumer-supplied, translated labels. Required. */
@@ -530,27 +528,8 @@ const emit = defineEmits<{
 // -----------------------------------------------------------------------------
 // Router — read the token and email from the URL
 // -----------------------------------------------------------------------------
-const route = useRoute();
-
-/*
- * The token is a required path param. Vue Router guarantees a
- * string when the route matches; the typeof check handles the
- * pathological case where the route is defined without the param.
- */
-const routeToken = computed<string>(() => {
-  const raw = route.params.token;
-  return typeof raw === 'string' ? raw : '';
-});
-
-/*
- * The email is read from the query string. It is optional at the
- * URL level — the query parser does not enforce presence — but
- * the form treats its absence as a broken link.
- */
-const routeEmail = computed<string>(() => {
-  const raw = route.query.email;
-  return typeof raw === 'string' ? raw : '';
-});
+// Legacy reset links are no longer accepted. Password recovery now requires
+// an OTP or Google Authenticator proof through the /forgot-password flow.
 
 // -----------------------------------------------------------------------------
 // State
@@ -561,16 +540,14 @@ type Status = 'form' | 'invalid' | 'success';
  * The initial status is computed from the URL. See the file
  * docblock §"Invalid-link state".
  */
-const status = ref<Status>(
-  routeToken.value !== '' && routeEmail.value !== '' ? 'form' : 'invalid',
-);
+const status = ref<Status>('invalid');
 
 /*
  * The email field is bound to this ref. On mount it is set to the
  * value from the URL. The field is read-only, so the value never
  * changes after that.
  */
-const email = ref<string>(routeEmail.value);
+const email = ref<string>('');
 
 const password = ref<string>('');
 const passwordConfirm = ref<string>('');
@@ -637,7 +614,6 @@ const passwordConfirmFieldType = computed<'password' | 'text'>(() =>
 // Input refs (for programmatic focus)
 // -----------------------------------------------------------------------------
 const passwordInputRef = ref<InstanceType<typeof BaseInput> | null>(null);
-const passwordConfirmInputRef = ref<InstanceType<typeof BaseInput> | null>(null);
 
 function focusInput(
   refValue: InstanceType<typeof BaseInput> | null | undefined,
@@ -692,182 +668,6 @@ function togglePasswordConfirmVisibility(): void {
 // -----------------------------------------------------------------------------
 // Error classification
 // -----------------------------------------------------------------------------
-interface NormalizedApiErrorLike {
-  readonly category?: unknown;
-  readonly code?: unknown;
-  readonly message?: unknown;
-  readonly requestId?: unknown;
-  readonly fieldErrors?: unknown;
-}
-
-function isNormalizedApiErrorLike(err: unknown): err is NormalizedApiErrorLike {
-  return typeof err === 'object' && err !== null;
-}
-
-function setBannerFromError(err: unknown): void {
-  if (!isNormalizedApiErrorLike(err)) {
-    banner.value = {
-      variant: 'danger',
-      title: props.labels.genericErrorTitle,
-      message: props.labels.genericErrorMessage,
-    };
-    return;
-  }
-
-  const requestId =
-    typeof err.requestId === 'string' && err.requestId !== ''
-      ? err.requestId
-      : undefined;
-
-  if (err.category === 'network') {
-    banner.value = {
-      variant: 'danger',
-      title: props.labels.networkErrorTitle,
-      message: props.labels.networkErrorMessage,
-    };
-    return;
-  }
-
-  if (err.category === 'rate-limit') {
-    banner.value = {
-      variant: 'danger',
-      title: props.labels.rateLimitTitle,
-      message: props.labels.rateLimitMessage,
-    };
-    return;
-  }
-
-  /*
-   * 'unauthorized' means the reset token was rejected by the
-   * backend — typically because it expired or was already used.
-   * The correct recovery is to request a new link, not to correct
-   * a field. The form switches to the invalid-link panel, which
-   * replaces the form and offers the two recovery links.
-   */
-  if (err.category === 'unauthorized') {
-    status.value = 'invalid';
-    banner.value = null;
-    return;
-  }
-
-  banner.value = {
-    variant: 'danger',
-    title: props.labels.genericErrorTitle,
-    message: props.labels.genericErrorMessage,
-    requestId,
-  };
-}
-
-function setFieldErrorsFromError(err: unknown): boolean {
-  if (!isNormalizedApiErrorLike(err)) return false;
-  if (err.category !== 'validation') return false;
-
-  const payload = err.fieldErrors;
-  if (typeof payload !== 'object' || payload === null) return false;
-
-  const next: Record<string, string[]> = {};
-  for (const [key, value] of Object.entries(payload)) {
-    if (Array.isArray(value) && value.every((v) => typeof v === 'string')) {
-      next[key] = value as string[];
-    }
-  }
-  serverFieldErrors.value = next;
-  return Object.keys(next).length > 0;
-}
-
-/**
- * Focus the first field with an error, in visual order.
- *
- * Visual order in this form: new password, then password
- * confirmation. The email field is read-only and is not a focus
- * target.
- */
-async function focusFirstErrorField(): Promise<void> {
-  await nextTick();
-
-  if (
-    passwordMatchError.value !== undefined ||
-    serverError('password') !== undefined
-  ) {
-    focusInput(passwordInputRef.value);
-    return;
-  }
-  if (serverError('password_confirmation') !== undefined) {
-    focusInput(passwordConfirmInputRef.value);
-    return;
-  }
-}
-
-// -----------------------------------------------------------------------------
-// Submission
-// -----------------------------------------------------------------------------
-async function onSubmit(): Promise<void> {
-  if (isSubmitting.value) return;
-
-  banner.value = null;
-  serverFieldErrors.value = {};
-  passwordMatchError.value = undefined;
-
-  /*
-   * Client-side password-match check. Runs before the service
-   * call, so a mismatch never hits the network.
-   *
-   * The check is only meaningful when both values are non-empty —
-   * the built-in required validation handles the empty-value case
-   * at the browser level (via the required attribute) and at the
-   * FormField level (via the aria-describedby wiring), so an
-   * empty pair is caught before this code runs.
-   *
-   * An empty password and an empty confirmation are considered
-   * equal by the check below — both being '' would pass. That is
-   * fine: the required check has already prevented submission in
-   * that case.
-   */
-  if (password.value !== passwordConfirm.value) {
-    passwordMatchError.value = props.labels.passwordsDoNotMatch;
-    await nextTick();
-    focusInput(passwordConfirmInputRef.value);
-    return;
-  }
-
-  isSubmitting.value = true;
-  try {
-    /*
-     * The service does not currently perform the CSRF handshake
-     * for this endpoint (the backend does not require it — the
-     * password-reset route is public). See the file docblock
-     * §"Why the CSRF handshake is not in this file".
-     */
-    await resetPassword({
-      token: routeToken.value,
-      email: email.value,
-      password: password.value,
-      password_confirmation: passwordConfirm.value,
-    });
-
-    /*
-     * Success. The backend invalidated the reset token. The user
-     * must log in with the new password, so the form presents a
-     * success panel with a link to login rather than navigating
-     * automatically.
-     */
-    status.value = 'success';
-    await nextTick();
-  } catch (err) {
-    const hasFieldErrors = setFieldErrorsFromError(err);
-    if (!hasFieldErrors) {
-      setBannerFromError(err);
-    } else {
-      await focusFirstErrorField();
-    }
-  } finally {
-    isSubmitting.value = false;
-  }
-}
-
-// -----------------------------------------------------------------------------
-// Event forwarding
-// -----------------------------------------------------------------------------
 function onRequestNewLink(event: MouseEvent): void {
   event.preventDefault();
   emit('request-new-link');
@@ -913,8 +713,7 @@ const passwordConfirmToggleLabel = computed<string>(() =>
       :aria-label="labels.formAriaLabel"
       :aria-busy="isSubmitting ? 'true' : undefined"
       data-testid="reset-password-form"
-      @submit.prevent="onSubmit"
-    >
+          >
       <!-- Banner (non-field errors) -->
       <Alert
         v-if="banner"
@@ -1000,8 +799,7 @@ const passwordConfirmToggleLabel = computed<string>(() =>
       >
         <BaseInput
           id="reset-password-password-confirm"
-          ref="passwordConfirmInputRef"
-          v-model.trim="passwordConfirm"
+                    v-model.trim="passwordConfirm"
           :type="passwordConfirmFieldType"
           autocomplete="new-password"
           :disabled="isSubmitting"

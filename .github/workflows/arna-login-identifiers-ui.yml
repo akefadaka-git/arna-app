@@ -1,0 +1,58 @@
+name: ARNA login identifier UI contract
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/features/auth/LoginForm/LoginForm.vue"
+      - "src/features/auth/ForgotPasswordForm/ForgotPasswordForm.vue"
+      - "src/features/auth/ResetPasswordForm/ResetPasswordForm.vue"
+      - "src/features/auth/api.ts"
+      - "src/features/auth/service.ts"
+      - "src/router/auth-labels.ts"
+      - "tests/auth-login-identifiers-contract.test.mjs"
+      - ".github/workflows/arna-login-identifiers-ui.yml"
+  push:
+    branches:
+      - feat/auth-adaptive-policy-a3
+    paths:
+      - "src/features/auth/LoginForm/LoginForm.vue"
+      - "src/features/auth/ForgotPasswordForm/ForgotPasswordForm.vue"
+      - "src/features/auth/ResetPasswordForm/ResetPasswordForm.vue"
+      - "src/features/auth/api.ts"
+      - "src/features/auth/service.ts"
+      - "src/router/auth-labels.ts"
+      - "tests/auth-login-identifiers-contract.test.mjs"
+      - ".github/workflows/arna-login-identifiers-ui.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: arna-login-identifiers-ui-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  login-ui:
+    name: Login identifier UI and type-check
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Verify exact revision
+        env:
+          EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: test "$(git rev-parse HEAD)" = "${EXPECTED_SHA}"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Type-check
+        run: npm run type-check
+      - name: Verify six-identifier login UI contract
+        run: node --test tests/auth-login-identifiers-contract.test.mjs
