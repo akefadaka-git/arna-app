@@ -23,6 +23,7 @@ test('Shareholder source API adapter calls only the declared tenant election end
 
   for (const endpoint of [
     '/api/governance/elections',
+    '/candidates',
     '/authority-evidence',
     '/committee/members',
     '/shareholder-source-snapshots',
@@ -39,6 +40,9 @@ test('source-register UI is evidence-only and does not calculate electorate deci
   const view = await read('../src/features/elections/ElectionSourceSnapshotView.vue');
   const api = await read('../src/features/elections/source-snapshot-api.ts');
 
+  assert.ok(view.includes('Candidate intake'));
+  assert.ok(view.includes('No nomination, consent, declaration, evidence attachment or eligibility-decision action'));
+  assert.ok(view.includes('latestDecision'));
   assert.ok(view.includes('canViewSource'));
   assert.ok(view.includes('governance.election.register.prepare'));
   assert.ok(view.includes('governance.election.register.reconcile'));
@@ -57,4 +61,6 @@ test('source-register UI is evidence-only and does not calculate electorate deci
   assert.ok(!view.includes('ballot'));
   assert.ok(!api.includes('verifyElectionAuthority'));
   assert.ok(!api.includes('appointElectionCommittee'));
+  assert.ok(!api.includes('eligibility-decision'));
+  assert.ok(!api.includes('/consent'));
 });
