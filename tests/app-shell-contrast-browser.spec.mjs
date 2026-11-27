@@ -47,12 +47,22 @@ test('reproduce six historical AppShell contrast findings with composited backgr
   await page.goto(baseUrl + '?surface=workspace');
   await expect(page.getByTestId('app-shell-root')).toBeVisible();
 
+  // Contrast assertions must inspect settled theme colors, not transient
+  // interpolation frames from component color/background transitions.
+  await page.addStyleTag({
+    content: '*, *::before, *::after { transition: none !important; animation: none !important; }',
+  });
+
+  const setThemeAndWait = async (theme) => {
+    await setThemeAndWait(theme);
+    await page.evaluate(() => new Promise((resolve) => {
+      requestAnimationFrame(() => requestAnimationFrame(resolve));
+    }));
+  };
+
   const measurements = [];
   for (const finding of findings) {
-    await page.evaluate((theme) => {
-      document.documentElement.dataset.theme = theme;
-      document.documentElement.style.colorScheme = theme;
-    }, finding.theme);
+    await setThemeAndWait(finding.theme);
 
     const locator = page.locator(finding.selector);
     await expect(locator, finding.id + ' must exist in the mounted shell').toHaveCount(1);
