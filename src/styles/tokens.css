@@ -151,6 +151,39 @@
  * =============================================================================
  */
 
+/* =============================================================================
+ * SELF-HOSTED FONT FACES — ARNA AppShell
+ * =============================================================================
+ * Files are pinned and SHA-256 recorded in:
+ * docs/ARNA_APPSHELL_A3_2_2_FONT_ASSET_INTEGRATION_STATUS_2026-11-27.md
+ * Keep the OFL notices in public/fonts/licenses/ with these assets.
+ * font-display: swap preserves readable system fallbacks during load.
+ * ============================================================================= */
+
+@font-face {
+  font-family: "Noto Sans Ethiopic";
+  src: url("/fonts/noto-sans-ethiopic-variable.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/inter-variable.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/jetbrains-mono-variable.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+}
+
 :root {
   /* ===========================================================================
    * TIER 1 — PRIMITIVE PALETTE

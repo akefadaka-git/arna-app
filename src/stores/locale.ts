@@ -30,10 +30,10 @@
  * -----------------------------------------------------------------------------
  *   - It does not perform translation. Translations live in the i18n
  *     layer; this store only says which locale is active.
- *   - It does not call the API. POST /api/locale does not exist
- *     (Architecture Freeze §9.3); when it does, the localization
- *     service (not this store) will call it. This store remains pure
- *     state, mirroring the pattern set by Units 11.4 and 11.5.
+ *   - It does not call the API itself. The locale service adapter
+ *     (src/features/locale/api.ts) persists the signed-in user's
+ *     preference through POST /api/locale; the shell awaits that
+ *     operation before committing the new value to this store.
  *   - It does not touch the DOM. Setting <html lang="am"> is the
  *     shell's responsibility via a watcher on this store.
  *
@@ -41,14 +41,15 @@
  * Locale resolution (Architecture Freeze §9.2, §13.4, §20.3)
  * -----------------------------------------------------------------------------
  * §9.2 lists the backend's resolution order with user.locale first.
- * §13.4 places the store's own persistence in localStorage under
- * `mases.locale`. §20.3 states that in the interim (no POST
- * /api/locale endpoint), "the active locale is honored client-side".
+ * The store persists the active client preference under `arna.locale`
+ * (and migrates the legacy `mases.locale` key). The locale service adapter
+ * persists the account-level preference through POST /api/locale.
  *
  * The store resolves these three rules as follows:
  *
  *   1. On cold start (before login):
- *        - localStorage 'mases.locale' if it holds a supported code
+ *        - localStorage 'arna.locale' if it holds a supported code
+ *        - else the legacy 'mases.locale' value if supported
  *        - else 'am' (the §9.1 default)
  *
  *   2. On login (auth service calls hydrateFromUser(user.locale)):
@@ -57,16 +58,16 @@
  *        - else keep the local value (the user's most recent explicit
  *          choice — see the response preamble §"Design note")
  *
- *   3. On explicit setLocale(newLocale):
- *        - update the active locale and persist to localStorage
- *        - do NOT call the backend (no endpoint exists)
+ *   3. On explicit locale selection:
+ *        - the shell first awaits saveLocalePreference(newLocale)
+ *          through the locale API adapter;
+ *        - after successful persistence, it calls setLocale(newLocale)
+ *          to update active state and local persistence.
  *
- * Acknowledged interim behavior: an in-session change survives reloads
- * within the same login, but is overwritten on next login by user.locale
- * until POST /api/locale exists. Once the endpoint exists, the
- * localization service will call it after setLocale, the backend value
- * will match, and the divergence will vanish without any change to this
- * file.
+ * The store remains responsible for client state and local persistence;
+ * the service adapter owns the account-level API request. A failed API
+ * request must not be represented as a successfully persisted account
+ * preference.
  *
  * -----------------------------------------------------------------------------
  * Multi-user safety (shared machines)
@@ -262,10 +263,9 @@ export const useLocaleStore = defineStore('locale', () => {
   // ---------------------------------------------------------------------------
 
   /**
-   * Set the active locale. Updates the store and persists to the storage
-   * backend. Does NOT call the backend — POST /api/locale does not exist
-   * (§9.3). The localization service (Stage 12+) will call the endpoint
-   * after this action succeeds.
+   * Set the active locale and persist to the configured client storage.
+   * This action does not make network requests; AppShell calls the locale
+   * service adapter first and commits this state only after API success.
    *
    * The caller must pass a SupportedLocale. Values arriving from
    * untyped sources (route params, storage, API payloads) should be

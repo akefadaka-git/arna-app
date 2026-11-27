@@ -1,9 +1,15 @@
+import '../../src/styles/reset.css';
+import '../../src/styles/tokens.css';
+import '../../src/styles/themes.css';
 import { createApp, h } from 'vue';
 import { createPinia } from 'pinia';
 import { createMemoryHistory, createRouter, RouterView } from 'vue-router';
 import AuthenticatedLayout from '../../src/layouts/AuthenticatedLayout/AuthenticatedLayout.vue';
 import PortalLayout from '../../src/features/portal/PortalLayout.vue';
 import AdminLayout from '../../src/layouts/AdminLayout/AdminLayout.vue';
+import { useLocaleStore } from '../../src/stores/locale';
+import { setThemePreference } from '../../src/core/theme-preference';
+import { setCalendarSystem } from '../../src/core/dates/calendar';
 
 const child = (surface) => ({
   render: () => h('section', { 'data-testid': 'shell-child-page' }, [
@@ -26,10 +32,20 @@ const app = createApp({ render: () => h(RouterView) });
 app.config.errorHandler = (error) => { window.__ARNA_SHELL_FIXTURE_ERROR__ = error instanceof Error ? error.stack : String(error); };
 window.addEventListener('error', (event) => { window.__ARNA_SHELL_FIXTURE_ERROR__ = event.error?.stack || event.message; });
 window.addEventListener('unhandledrejection', (event) => { window.__ARNA_SHELL_FIXTURE_ERROR__ = String(event.reason); });
-app.use(createPinia());
+const pinia = createPinia();
+app.use(pinia);
 app.use(router);
 
-const requested = new URLSearchParams(window.location.search).get('surface') || 'workspace';
+const params = new URLSearchParams(window.location.search);
+const requested = params.get('surface') || 'workspace';
+const requestedLocale = params.get('locale') === 'en' ? 'en' : 'am';
+const requestedTheme = ['light', 'dark', 'system'].includes(params.get('theme')) ? params.get('theme') : 'system';
+useLocaleStore(pinia).setLocale(requestedLocale);
+// The fixture mounts layouts directly rather than the application root (App.vue),
+// so mirror the root's locale-to-document-language contract explicitly.
+document.documentElement.lang = requestedLocale;
+setThemePreference(requestedTheme);
+setCalendarSystem('ethiopic');
 const surface = ['workspace', 'portal', 'admin'].includes(requested) ? requested : 'workspace';
 await router.replace(`/${surface}`);
 await router.isReady();

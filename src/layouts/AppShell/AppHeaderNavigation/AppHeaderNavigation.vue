@@ -24,6 +24,7 @@ const localeStore = useLocaleStore();
 
 const ENGLISH_DESTINATION_LABELS: Readonly<Record<string, string>> = {
   dashboard: 'Dashboard',
+  'executive-overview': 'Executive overview',
   'go-to-workspace': 'Go to workspace',
   launcher: 'Home',
   files: 'Documents',
@@ -33,6 +34,7 @@ const ENGLISH_DESTINATION_LABELS: Readonly<Record<string, string>> = {
   loans: 'Loans',
   tasks: 'Tasks & To-Do',
   appointments: 'Appointments',
+  calendar: 'Calendar',
   'loan-products': 'Loan products',
   governance: 'Governance',
   'portal-home': 'Home',
@@ -128,7 +130,14 @@ function openSearch(): void {
 }
 
 function onGlobalKeydown(event: KeyboardEvent): void {
-  if ((event.metaKey || event.ctrlKey) && !event.altKey && event.key.toLowerCase() === 'k') {
+  const target = event.target;
+  const isEditableTarget = target instanceof HTMLElement && (
+    target.isContentEditable
+    || target.closest('[contenteditable="true"], input, textarea, select') !== null
+  );
+  if (event.isComposing || isEditableTarget) return;
+
+  if ((event.metaKey || event.ctrlKey) && !event.altKey && !event.shiftKey && event.key.toLowerCase() === 'k') {
     event.preventDefault();
     openSearch();
   }
@@ -138,7 +147,7 @@ onMounted(() => window.addEventListener('keydown', onGlobalKeydown));
 onBeforeUnmount(() => window.removeEventListener('keydown', onGlobalKeydown));
 
 function restoreSearchFocus(): void {
-  navigationRoot.value?.querySelector<HTMLButtonElement>('[data-testid="app-header-search-trigger"]')?.focus();
+  navigationRoot.value?.querySelector<HTMLButtonElement>('#app-header-search-trigger')?.focus();
 }
 
 function closeSearch(): void {
@@ -178,8 +187,11 @@ function navigate(item: SearchNavItem): void {
         variant="ghost"
         size="sm"
         class="app-header-navigation__search-trigger"
+        id="app-header-search-trigger"
         aria-labelledby="app-header-search-trigger-label"
         aria-haspopup="dialog"
+        :aria-expanded="isSearchOpen"
+        aria-controls="app-header-search-dialog"
         data-testid="app-header-search-trigger"
         @click="openSearch"
       >
@@ -189,7 +201,7 @@ function navigate(item: SearchNavItem): void {
       <kbd class="app-header-navigation__search-shortcut">Ctrl / ⌘ K</kbd>
     </div>
 
-    <dialog ref="dialog" class="app-header-navigation__dialog" aria-labelledby="app-header-search-title" @close="onSearchDialogClose">
+    <dialog id="app-header-search-dialog" ref="dialog" class="app-header-navigation__dialog" aria-labelledby="app-header-search-title" @close="onSearchDialogClose">
       <form method="dialog" class="app-header-navigation__dialog-head">
         <div>
           <h2 id="app-header-search-title">{{ labels.title }}</h2>
@@ -291,7 +303,7 @@ function navigate(item: SearchNavItem): void {
   padding: 1px var(--mases-space-1);
   border: 1px solid var(--mases-color-border-subtle);
   border-radius: var(--mases-radius-sm);
-  color: var(--mases-color-text-muted);
+  color: var(--mases-color-text-secondary);
   font-size: var(--mases-font-size-caption);
 }
 .app-header-navigation__dialog {

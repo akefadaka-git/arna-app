@@ -337,11 +337,19 @@ interface Props {
    * precise predicate.
    */
   mobileMenuLabel?: string;
+
+  /** Whether the controlled mobile navigation dialog is open. */
+  mobileMenuExpanded?: boolean;
+
+  /** ID of the controlled mobile navigation dialog. */
+  mobileMenuControls?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   sticky: true,
   mobileMenuLabel: undefined,
+  mobileMenuExpanded: false,
+  mobileMenuControls: undefined,
 });
 
 const emit = defineEmits<{
@@ -479,6 +487,8 @@ function onToggleClick(): void {
           size="sm"
           :aria-label="mobileMenuLabel"
           aria-haspopup="dialog"
+          :aria-expanded="mobileMenuExpanded"
+          :aria-controls="mobileMenuControls"
           data-testid="app-header-mobile-toggle"
           @click="onToggleClick"
         >
@@ -523,11 +533,9 @@ function onToggleClick(): void {
          Actions region
 
          Right-anchored, does not shrink. AppShell composes the
-         notifications bell (disabled until §20.2 endpoints exist),
-         the tenant switcher, and the user menu here. A future
-         language selector would be added between the tenant switcher
-         and the user menu — see AppShell.vue §"Composition" for the
-         current set and its ordering.
+         notification entry point, calendar preference, language selector,
+         tenant switcher and user menu here. See AppShell.vue
+         §"Composition" for the current set and its ordering.
          ============================================================ -->
     <div
       class="app-header__actions"

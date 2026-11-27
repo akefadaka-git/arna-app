@@ -585,7 +585,7 @@ function onUserMenuSelect(payload: { id: string }): void {
 function closeNotifications(): void {
   isNotificationsOpen.value = false;
   void nextTick(() => {
-    document.querySelector<HTMLButtonElement>('[data-testid="notifications-bell-trigger"]')?.focus();
+    document.querySelector<HTMLButtonElement>('#notifications-bell-trigger')?.focus();
   });
 }
 
@@ -655,6 +655,8 @@ function onMaintenanceDismiss(): void {
          ============================================================ -->
     <AppHeader
       :mobile-menu-label="labels.mobileMenu"
+      :mobile-menu-expanded="isMobileDrawerOpen"
+      mobile-menu-controls="app-mobile-drawer"
       @open-mobile-menu="openMobileDrawer"
     >
       <template #brand>
@@ -676,6 +678,8 @@ function onMaintenanceDismiss(): void {
         <NotificationsBell
           :disabled="false"
           :labels="labels.notificationsBell"
+          :expanded="isNotificationsOpen"
+          controls="notification-center"
           @open="onNotificationsOpen"
         />
 

@@ -1287,12 +1287,11 @@
  *                       to `AppShellLabels`.
  *
  * -----------------------------------------------------------------------------
- * Language selector — label gap
+ * Language selector — active shell control
  * -----------------------------------------------------------------------------
- * AppShell does not currently render a LanguageSelector. When the
- * POST /api/locale endpoint exists and the selector is added (Freeze
- * §9.3 / §20.3), its labels belong in `arnaShellLabels` alongside the
- * other per-component groups:
+ * AppShell renders LanguageSelector in the header actions region. Its
+ * labels are part of `arnaShellLabels`; account-level persistence is
+ * performed by the locale API adapter before the store is updated:
  *
  *     languageSelector: {
  *       triggerAriaLabel: string;   // "Change language" / "ቋንቋ ቀይር"
