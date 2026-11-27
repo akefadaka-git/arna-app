@@ -302,7 +302,7 @@ jobs:
               rel = path.as_posix()
               if rel.startswith(".github/workflows/"):
                   continue
-              if rel in historical_docs or rel in {
+              if rel in historical_docs or rel in current_docs or rel in {"tests/brand-identity-contract.test.mjs", "tests/brand-palette-contract.test.mjs"} or rel in {
                   "docs/ARNA_GUI_DESIGN_SPEC_v1.1.md",
                   "docs/BRAND_PALETTE_TOKEN_RECONCILIATION_CANDIDATE.md",
                   "docs/BRAND_IDENTITY_MASTER_SPEC_V1.0.md",
