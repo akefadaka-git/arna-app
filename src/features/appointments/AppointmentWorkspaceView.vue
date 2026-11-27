@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { formatCalendarDate, getEthiopicDateParts, ethiopicDateToGregorianInTimezone, localDateTimeToIso } from '@/core/dates/calendar';
+import { formatCalendarDate, getEthiopicDateParts, ethiopicDateToGregorian, ethiopicDateToGregorianInTimezone, localDateTimeToIso } from '@/core/dates/calendar';
 import { useAuthStore } from '@/stores/auth';
 import { useLocaleStore } from '@/stores/locale';
 import { listCalendars } from '@/features/calendar/api';
