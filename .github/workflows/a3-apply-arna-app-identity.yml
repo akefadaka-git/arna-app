@@ -1,0 +1,369 @@
+name: A3 apply ARNA App identity migration
+
+on:
+  push:
+    branches:
+      - a3/arna-app-identity-migration
+    paths:
+      - .github/workflows/a3-apply-arna-app-identity.yml
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out isolated A3 branch
+        uses: actions/checkout@v4
+        with:
+          ref: a3/arna-app-identity-migration
+          fetch-depth: 0
+
+      - name: Apply deterministic App identity migration
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os, re, subprocess
+          from pathlib import Path
+
+          root = Path(".")
+          historical_docs = {
+              "docs/audit/REPOSITORY_AUDIT_A1_BASELINE_2026-11-04.md",
+              "docs/public-site/CORPORATE_CONTENT_DESIGN_A1.md",
+              "docs/BRAND_IDENTITY_MASTER_SPEC_V1.0.md",
+              "docs/dashboard/ARNA-DASHBOARD-A3-POLICY-IMPLEMENTATION-RECONCILIATION-2026-11-09.md",
+              "docs/ARNA_GUI_DESIGN_SPEC_v1.1.md",
+              "docs/BRAND_PALETTE_TOKEN_RECONCILIATION_CANDIDATE.md",
+          }
+          current_docs = {
+              "README.md",
+              "docs/ARNA_BRAND_IDENTITY_CONTRACT_A3.md",
+              "docs/ARNA_UI_UX_Enhancement_Master_Strategy_v1.2.md",
+          }
+
+          workflow_path = Path(".github/workflows/a3-apply-arna-app-identity.yml")
+          if workflow_path.exists():
+              workflow_path.unlink()
+
+          changed_files = []
+          removed_aliases = 0
+          storage_fallbacks_removed = 0
+
+          # Remove the 242 old ARNA -> MASES alias declarations before renaming
+          # the original token definitions to ARNA. This preserves one canonical
+          # definition per semantic token and removes the compatibility substrate.
+          tokens_path = Path("src/styles/tokens.css")
+          tokens = tokens_path.read_text(encoding="utf-8")
+          token_lines = []
+          alias_re = re.compile(r"^\s*--arna-[\w-]+\s*:\s*var\(--mases-[\w-]+\)\s*;\s*$")
+          for line in tokens.splitlines(keepends=True):
+              if alias_re.match(line.rstrip("\r\n")):
+                  removed_aliases += 1
+                  continue
+              token_lines.append(line.replace("--mases-", "--arna-"))
+          if removed_aliases != 242:
+              raise RuntimeError(f"Expected 242 legacy alias declarations, removed {removed_aliases}")
+          tokens = "".join(token_lines)
+          tokens = tokens.replace(
+              "ARNA compatibility aliases for the existing semantic token API.",
+              "Canonical ARNA semantic token API; legacy alias declarations removed."
+          )
+          tokens_path.write_text(tokens, encoding="utf-8", newline="")
+          changed_files.append(tokens_path.as_posix())
+
+          # Remove the four browser-storage migration fallbacks. Only canonical
+          # ARNA keys remain readable, writable and clearable.
+          storage_edits = {
+              "src/stores/locale.ts": [
+                  ("const LEGACY_STORAGE_KEY = 'mases.locale';\n", ""),
+                  ("return localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY);",
+                   "return localStorage.getItem(STORAGE_KEY);"),
+                  ("      localStorage.removeItem(LEGACY_STORAGE_KEY);\n", ""),
+                  ("the legacy `mases.locale` key, and writes only the ARNA key.",
+                   "the canonical `arna.locale` key only."),
+                  ("localStorage 'mases.locale' if it holds a supported code",
+                   "localStorage 'arna.locale' if it holds a supported code"),
+              ],
+              "src/stores/tenant.ts": [
+                  ("  const LEGACY_KEY = 'mases.tenant_id';\n", ""),
+                  ("const raw = localStorage.getItem(KEY) ?? localStorage.getItem(LEGACY_KEY);",
+                   "const raw = localStorage.getItem(KEY);"),
+                  ("      localStorage.removeItem(LEGACY_KEY);\n", ""),
+                  ("`mases.tenant_id` is read as a migration fallback. New writes use",
+                   "No legacy tenant key is read. New writes use"),
+                  ("`mases.tenant_id`, and writes only the ARNA key.",
+                   "the canonical ARNA key only."),
+              ],
+              "src/core/bootstrap.ts": [
+                  ("  const LEGACY_KEY = 'mases.auth_token';\n", ""),
+                  ("return sessionStorage.getItem(KEY) ?? sessionStorage.getItem(LEGACY_KEY);",
+                   "return sessionStorage.getItem(KEY);"),
+                  ("      sessionStorage.removeItem(LEGACY_KEY);\n", ""),
+                  ("A legacy MASES key\n * is read as fallback; new writes use the ARNA key and remove the legacy\n * key, preventing collisions with a host page's sessionStorage.",
+                   "Only the canonical ARNA key is read, written and cleared; no legacy\n * storage key is consulted."),
+              ],
+              "src/features/auth/LoginForm/LoginForm.vue": [
+                  ("const LEGACY_REMEMBERED_IDENTIFIER_KEY = 'mases.auth.remembered_identifier';\n", ""),
+                  ("window.localStorage.getItem(REMEMBERED_IDENTIFIER_KEY) ?? window.localStorage.getItem(LEGACY_REMEMBERED_IDENTIFIER_KEY)",
+                   "window.localStorage.getItem(REMEMBERED_IDENTIFIER_KEY)"),
+                  ("      window.localStorage.removeItem(LEGACY_REMEMBERED_IDENTIFIER_KEY);\n", ""),
+                  ("with a legacy MASES fallback", "using the canonical ARNA key only"),
+              ],
+          }
+          for rel, pairs in storage_edits.items():
+              path = Path(rel)
+              text = path.read_text(encoding="utf-8")
+              original = text
+              for old, new in pairs:
+                  if old not in text and old:
+                      # The removal is deterministic; missing patterns are reported below
+                      # through the final residual check rather than silently ignored.
+                      continue
+                  text = text.replace(old, new)
+              if text != original:
+                  path.write_text(text, encoding="utf-8", newline="")
+                  changed_files.append(rel)
+                  storage_fallbacks_removed += 1
+
+          # Rewrite the App identity contract and tests to require no fallback.
+          test_path = Path("tests/brand-identity-contract.test.mjs")
+          test = test_path.read_text(encoding="utf-8")
+          test = test.replace(
+              "test('locale storage migrates old preference and writes only the ARNA key'",
+              "test('locale storage uses only the canonical ARNA key'"
+          )
+          test = "\n".join(line for line in test.split("\n")
+              if "const LEGACY_STORAGE_KEY" not in line
+              and "getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY)" not in line
+              and "removeItem(LEGACY_STORAGE_KEY)" not in line)
+          test = test.replace(
+              "  assert.match(source, /const STORAGE_KEY = 'arna\\.locale'/);",
+              "  assert.match(source, /const STORAGE_KEY = 'arna\\.locale'/);\n  assert.match(source, /return localStorage\\.getItem\\(STORAGE_KEY\\);/);\n  assert.doesNotMatch(source, /mases\\.locale|LEGACY_STORAGE_KEY/);"
+          )
+          test = test.replace(
+              "test('persisted browser state uses ARNA keys with legacy migration fallbacks'",
+              "test('persisted browser state uses only canonical ARNA keys'"
+          )
+          test = "\n".join(line for line in test.split("\n")
+              if "const LEGACY_KEY = 'mases.tenant_id'" not in line
+              and "const LEGACY_KEY = 'mases.auth_token'" not in line
+              and "const LEGACY_REMEMBERED_IDENTIFIER_KEY = 'mases.auth.remembered_identifier'" not in line
+              and "localStorage.getItem(KEY) ?? localStorage.getItem(LEGACY_KEY)" not in line
+              and "sessionStorage.getItem(KEY) ?? sessionStorage.getItem(LEGACY_KEY)" not in line
+              and "localStorage.removeItem(LEGACY_KEY)" not in line)
+          test = test.replace(
+              "  assert.ok(tenant.includes(\"const KEY = 'arna.tenant_id'\"));",
+              "  assert.ok(tenant.includes(\"const KEY = 'arna.tenant_id'\"));\n  assert.ok(tenant.includes('localStorage.getItem(KEY)'));\n  assert.doesNotMatch(tenant, /mases\\.tenant_id|LEGACY_KEY|localStorage\\.getItem\\(KEY\\)\\s*\\?\\?/);"
+          )
+          test = test.replace(
+              "  assert.ok(bootstrap.includes(\"const KEY = 'arna.auth_token'\"));",
+              "  assert.ok(bootstrap.includes(\"const KEY = 'arna.auth_token'\"));\n  assert.ok(bootstrap.includes('sessionStorage.getItem(KEY)'));\n  assert.doesNotMatch(bootstrap, /mases\\.auth_token|LEGACY_KEY|sessionStorage\\.getItem\\(KEY\\)\\s*\\?\\?/);"
+          )
+          test = test.replace(
+              "  assert.ok(login.includes(\"const REMEMBERED_IDENTIFIER_KEY = 'arna.auth.remembered_identifier'\"));",
+              "  assert.ok(login.includes(\"const REMEMBERED_IDENTIFIER_KEY = 'arna.auth.remembered_identifier'\"));\n  assert.doesNotMatch(login, /mases\\.auth\\.remembered_identifier|LEGACY_REMEMBERED_IDENTIFIER_KEY/);"
+          )
+          test = test.replace(
+              "test('ARNA semantic tokens preserve the legacy token substrate through aliases'",
+              "test('ARNA semantic tokens are canonical and do not depend on legacy aliases'"
+          )
+          test = test.replace(
+              "  assert.ok(source.includes('--arna-space-1: var(--mases-space-1);'));\n  assert.ok(source.includes('--arna-color-text-primary: var(--mases-color-text-primary);'));\n  assert.ok(source.includes('--arna-focus-ring-width: var(--mases-focus-ring-width);'));",
+              "  assert.match(source, /--arna-space-1:\\s*[^;]+;/);\n  assert.match(source, /--arna-color-text-primary:\\s*[^;]+;/);\n  assert.match(source, /--arna-focus-ring-width:\\s*[^;]+;/);\n  assert.doesNotMatch(source, /--mases-/);"
+          )
+          test_path.write_text(test, encoding="utf-8", newline="")
+          changed_files.append(test_path.as_posix())
+
+          theme_test = Path("tests/design-system-theme-contract.test.mjs")
+          theme_text = theme_test.read_text(encoding="utf-8").replace("--mases-", "--arna-")
+          theme_test.write_text(theme_text, encoding="utf-8", newline="")
+          changed_files.append(theme_test.as_posix())
+
+          # Current documents: no active compatibility fallback. Historical and
+          # superseded documents remain intact and are clearly labelled.
+          readme = Path("README.md")
+          readme_text = readme.read_text(encoding="utf-8")
+          readme_text = readme_text.replace(
+              "ARNA is the canonical product name for the Maale Arna Smart System. MASES is retained only as the historical/original system name and for explicitly documented migration compatibility.",
+              "ARNA is the canonical product/platform name for the Maale Arna Smart System. MASES is retained only as the historical/original system name; it is not an active product identity or compatibility namespace."
+          )
+          readme.write_text(readme_text, encoding="utf-8", newline="")
+          changed_files.append(readme.as_posix())
+
+          contract = Path("docs/ARNA_BRAND_IDENTITY_CONTRACT_A3.md")
+          contract_text = contract.read_text(encoding="utf-8")
+          contract_text = contract_text.replace(
+              "Historical MASES references may remain only in explicitly historical provenance or migration compatibility. They must not be presented as current product identity.",
+              "Historical MASES references may remain only in explicitly historical provenance. They must not be presented as current product identity or implemented as compatibility behavior."
+          )
+          contract_text = contract_text.replace(
+              "The old locale storage key `mases.locale` is read-only migration compatibility. New writes use `arna.locale`; clearing locale state clears both keys.",
+              "The old locale storage key is not read or written. The application reads, writes and clears only the canonical `arna.locale` key."
+          )
+          contract.write_text(contract_text, encoding="utf-8", newline="")
+          changed_files.append(contract.as_posix())
+
+          strategy = Path("docs/ARNA_UI_UX_Enhancement_Master_Strategy_v1.2.md")
+          strategy_text = strategy.read_text(encoding="utf-8").replace(
+              "Preserve the approved ARNA/MASES Brand Identity Master Specification v1.0, emblem and approved semantic brand meaning.",
+              "Preserve the approved ARNA brand identity and emblem. The earlier MASES/ARNA Brand Identity Master Specification v1.0 remains historical evidence only."
+          )
+          strategy.write_text(strategy_text, encoding="utf-8", newline="")
+          changed_files.append(strategy.as_posix())
+
+          superseded_notes = {
+              "docs/ARNA_GUI_DESIGN_SPEC_v1.1.md":
+                  "> **SUPERSEDED (2026-11-27):** The Owner-approved A1 ARNA identity decision supersedes this document's MASES token-substrate freeze and compatibility direction. This file is retained as historical design evidence; its MASES token and fallback requirements are not current implementation guidance.\n\n",
+              "docs/BRAND_PALETTE_TOKEN_RECONCILIATION_CANDIDATE.md":
+                  "> **SUPERSEDED / NOT CURRENT (2026-11-27):** The Owner-approved A1 ARNA identity decision supersedes this candidate's MASES-token-preservation approach. This file is retained as historical decision evidence only.\n\n",
+          }
+          for rel, note in superseded_notes.items():
+              p = Path(rel)
+              text = p.read_text(encoding="utf-8")
+              if not text.startswith("> **SUPERSEDED"):
+                  p.write_text(note + text, encoding="utf-8", newline="")
+              changed_files.append(rel)
+
+          # Apply current identity/path/token replacements to all remaining active
+          # source and current docs. Do not rewrite dated/superseded history or tests
+          # whose explicit MASES negative assertions are part of the contract.
+          replacements = [
+              ("MasesNotification", "ArnaNotification"),
+              ("MASESBrand", "ArnaBrand"),
+              ("MASESFooterContent", "ArnaFooterContent"),
+              ("masesBrandLabels", "arnaBrandLabels"),
+              ("masesFooterContent", "arnaFooterContent"),
+              ("masesShellLabels", "arnaShellLabels"),
+              ("masesUserMenuItems", "arnaUserMenuItems"),
+              ("mase_app/", ""),
+              ("mases_locale", "arna_locale"),
+              ("mases_core", "arna_core"),
+              ("--mases-", "--arna-"),
+              ("mases.", "arna."),
+              ("mases_", "arna_"),
+          ]
+          for path in sorted(root.rglob("*")):
+              if not path.is_file() or ".git" in path.parts:
+                  continue
+              rel = path.as_posix()
+              if rel in historical_docs or rel in current_docs or rel in {
+                  "tests/brand-identity-contract.test.mjs",
+                  "tests/brand-palette-contract.test.mjs",
+                  "tests/design-system-theme-contract.test.mjs",
+              }:
+                  continue
+              try:
+                  raw = path.read_bytes()
+                  if b"\0" in raw:
+                      continue
+                  text = raw.decode("utf-8")
+              except UnicodeDecodeError:
+                  continue
+              original = text
+              for old, new in replacements:
+                  text = text.replace(old, new)
+              text = re.sub(r"\bMASES\b", "ARNA", text)
+              text = re.sub(r"\bMases\b", "Arna", text)
+              if text != original:
+                  path.write_text(text, encoding="utf-8", newline="")
+                  changed_files.append(rel)
+
+          # Validate exact A1 invariants and ensure no active fallback/token/path
+          # remains. Historical authority document filenames are allowed in comments.
+          tokens = tokens_path.read_text(encoding="utf-8")
+          assert "--mases-" not in tokens
+          assert removed_aliases == 242
+          assert "var(--mases-" not in tokens
+          for rel, forbidden in [
+              ("src/stores/locale.ts", ["mases.locale", "LEGACY_STORAGE_KEY"]),
+              ("src/stores/tenant.ts", ["mases.tenant_id", "LEGACY_KEY"]),
+              ("src/core/bootstrap.ts", ["mases.auth_token", "LEGACY_KEY"]),
+              ("src/features/auth/LoginForm/LoginForm.vue", ["mases.auth.remembered_identifier", "LEGACY_REMEMBERED_IDENTIFIER_KEY"]),
+          ]:
+              text = Path(rel).read_text(encoding="utf-8")
+              for marker in forbidden:
+                  if marker in text:
+                      raise RuntimeError(f"Legacy storage fallback remains in {rel}: {marker}")
+
+          forbidden_patterns = [
+              re.compile(r"--mases-", re.I),
+              re.compile(r"mase_app/", re.I),
+              re.compile(r"mases\.(?:locale|tenant_id|auth)", re.I),
+              re.compile(r"mases_locale", re.I),
+              re.compile(r"MasesNotification|MASESBrand|MASESFooterContent|mases(?:BrandLabels|FooterContent|ShellLabels|UserMenuItems)", re.I),
+          ]
+          residuals = []
+          for path in sorted(root.rglob("*")):
+              if not path.is_file() or ".git" in path.parts:
+                  continue
+              rel = path.as_posix()
+              if rel in historical_docs or rel in {
+                  "docs/ARNA_GUI_DESIGN_SPEC_v1.1.md",
+                  "docs/BRAND_PALETTE_TOKEN_RECONCILIATION_CANDIDATE.md",
+                  "docs/BRAND_IDENTITY_MASTER_SPEC_V1.0.md",
+                  "docs/audit/REPOSITORY_AUDIT_A1_BASELINE_2026-11-04.md",
+                  "docs/public-site/CORPORATE_CONTENT_DESIGN_A1.md",
+                  "docs/dashboard/ARNA-DASHBOARD-A3-POLICY-IMPLEMENTATION-RECONCILIATION-2026-11-09.md",
+              }:
+                  continue
+              try:
+                  raw = path.read_bytes()
+                  if b"\0" in raw:
+                      continue
+                  text = raw.decode("utf-8")
+              except UnicodeDecodeError:
+                  continue
+              for line_no, line in enumerate(text.splitlines(), 1):
+                  if any(p.search(line) for p in forbidden_patterns):
+                      residuals.append((rel, line_no, line[:200]))
+          if residuals:
+              print("UNRESOLVED_ACTIVE_IDENTIFIERS")
+              for item in residuals[:100]:
+                  print(f"{item[0]}:{item[1]}: {item[2]}")
+              raise RuntimeError(f"{len(residuals)} forbidden active identity lines remain")
+
+          summary = [
+              "# App A3 identity migration",
+              "",
+              "- Frozen base: `71bed2158894e3ce9cf507e8bf70492ac1f9dfd4`",
+              f"- Text files changed: {len(set(changed_files))}",
+              f"- Legacy ARNA-token alias declarations removed: {removed_aliases}",
+              "- Four browser-storage fallbacks removed; canonical ARNA keys only.",
+              "- Active CSS tokens and consumers use `--arna-*`.",
+              "- Stale `mase_app/` source-path comments removed.",
+              "- Historical/superseded documents preserved and status-labelled.",
+              "- Active identity/storage/token residual scan: PASS (zero forbidden lines).",
+              "- Tests/builds not run here; A4 verification remains separate.",
+          ]
+          Path("a3-app-migration-summary.md").write_text("\n".join(summary) + "\n", encoding="utf-8")
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as f:
+              f.write("\n".join(summary) + "\n")
+          print("\n".join(summary))
+          print("Changed paths:")
+          for name in sorted(set(changed_files)):
+              print(name)
+          PY
+
+          git diff --check
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No staged changes; refusing empty A3 commit."
+            exit 1
+          fi
+          git diff --cached --stat
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "refactor: migrate App identity and tokens to ARNA"
+          git push origin HEAD:a3/arna-app-identity-migration
+
+      - name: Upload A3 implementation summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arna-app-a3-identity-migration-summary
+          path: a3-app-migration-summary.md
+          if-no-files-found: warn
+          retention-days: 30
