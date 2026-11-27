@@ -197,14 +197,19 @@ Date: 2026-11-27
 
 ### Current-head CI discrepancy
 
-The later documentation-only head `900d863b40851b11210097cd71cc84e377372cb9` was checked by [Frontend workflow run 45932230737](https://github.com/akefadaka-git/arna-app/actions/runs/45932230737). The workflow asserted the exact checked-out SHA and passed dependency installation/audit, type-check/build, production font tests, and mounted AppShell browser tests. It then **FAILED** at the separate six-finding AppShell contrast browser gate.
+Two workflow events have produced different outcomes for the same source SHA, so the failure must be treated as a CI reliability discrepancy rather than as a confirmed source regression.
 
-The dark-theme axe scan reported three serious color-contrast violations outside the six historical selectors:
-- `#app-header-search-trigger-label`: 3.73:1 against the 4.5:1 threshold.
-- Dashboard sidebar label: 4.46:1 against the 4.5:1 threshold.
-- Launcher sidebar label: 4.46:1 against the 4.5:1 threshold.
+For head `900d863b40851b11210097cd71cc84e377372cb9`:
+- Push-triggered Frontend run [45932230737](https://github.com/akefadaka-git/arna-app/actions/runs/45932230737) **FAILED** at the AppShell contrast browser gate. Its dark-theme axe scan reported three serious violations: search-trigger label 3.73:1, dashboard sidebar label 4.46:1, and launcher sidebar label 4.46:1 (each against 4.5:1).
+- Pull-request-triggered Frontend run [45932236737](https://github.com/akefadaka-git/arna-app/actions/runs/45932236737), on the **same exact SHA**, completed **SUCCESS**. Its contrast scan reported zero color-contrast violations in both light and dark themes, and all workflow steps completed successfully.
 
-The light-theme scan reported zero color-contrast violations. The contrast step failed because it expected zero violations in both themes. The production font checks and mounted-shell test steps completed successfully in this run. The cause of the contrast discrepancy is not established by this audit; it must not be attributed to the font assets without evidence.
+For the corrected audit-record head `96cb2c1c3029045744597ddcf96fc8d381954267`:
+- Push-triggered Frontend run [45933617964](https://github.com/akefadaka-git/arna-app/actions/runs/45933617964) **FAILED** at the same contrast browser gate with the same three dark-theme violations.
+- Pull-request-triggered Frontend run [45933621667](https://github.com/akefadaka-git/arna-app/actions/runs/45933621667) was still **IN PROGRESS** at the time of this record update.
+- The companion Executive Overview A4 and Public corporate website A4 pull-request workflows [45933621697](https://github.com/akefadaka-git/arna-app/actions/runs/45933621697) and [45933621698](https://github.com/akefadaka-git/arna-app/actions/runs/45933621698) completed **SUCCESS**.
+
+The contrast failure is outside the font-specific production loading step, which passed in the push-triggered runs. The same-SHA pull-request run at `900d863` passed the contrast gate, while the push-triggered run failed twice. This establishes inconsistent outcomes across workflow events; the root cause is not established by this audit and must not be attributed to the font assets without evidence.
+
 
 ### Remaining verification limits
 
@@ -219,8 +224,8 @@ The light-theme scan reported zero color-contrast violations. The contrast step 
 The font assets, licence notices, corrected integrity checksums, CSS wiring, production delivery, tested weight requests, script specimens and fallback behavior have positive evidence. However, the latest exact-current-head Frontend workflow is not green because its AppShell accessibility/contrast gate fails. Under the AppShell acceptance requirement to retain accessibility regression coverage, this audit does not authorize a VERIFIED-CLOSED label while that gate is failing.
 
 Required before A3.2.2 closure:
-1. Triage the three dark-theme contrast violations in the AppShell contrast gate (or establish and document a valid, separately approved scope disposition).
-2. Re-run the Frontend workflow against the then-current exact PR head and confirm all required gates pass.
-3. Update this record with the exact verified SHA and run link.
+1. Resolve the push-versus-pull-request workflow discrepancy for the AppShell contrast browser gate; obtain deterministic passing evidence for the required trigger path(s), or document an explicitly approved and technically justified trigger/scope disposition.
+2. Confirm the latest exact PR-head Frontend workflow and companion workflows complete successfully.
+3. Update this record with the exact verified SHA and run links.
 
 No contrast-token/source changes were made as part of this font audit. No merge, deployment, A5 action, or change to `main` was performed. PR #140 remains open and draft.
