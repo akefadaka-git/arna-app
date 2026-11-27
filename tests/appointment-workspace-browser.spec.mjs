@@ -89,6 +89,7 @@ async function installAppointmentApi(page, { seedConfirmed = false } = {}) {
       captured.booking = request.postDataJSON();
       const event = {
         id: '7e4b1c9d-2f6a-4a8b-9c1d-3e5f7a9b2c44',
+        version: 1,
         title: captured.booking.title,
         description: captured.booking.description,
         event_type: 'appointment',
