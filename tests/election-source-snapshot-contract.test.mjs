@@ -41,6 +41,9 @@ test('source-register UI is evidence-only and does not calculate electorate deci
   assert.ok(view.includes('preparer cannot reconcile their own snapshot'));
   assert.ok(view.includes('does not verify statutory ownership, voter eligibility, voting weight'));
   assert.ok(view.includes('blocked_unverified'));
+  assert.ok(view.includes('selected.source_entries'));
+  assert.ok(view.includes('record_date_timezone'));
+  assert.ok(view.includes('database_timezone'));
   assert.ok(!view.includes('voting_weight'));
   assert.ok(!view.includes('voter_eligible'));
   assert.ok(!view.includes('ballot'));
