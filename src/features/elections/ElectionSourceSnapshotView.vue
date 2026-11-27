@@ -11,10 +11,12 @@ import {
   getElectionSourceSnapshot,
   getGovernanceElection,
   listElectionSourceSnapshots,
+  listElectionCandidates,
   listElectionAuthorityEvidence,
   listElectionCommitteeMembers,
   reconcileElectionSourceSnapshot,
   type ElectionAuthorityEvidenceSummary,
+  type ElectionCandidateSummary,
   type ElectionCommitteeMemberSummary,
   type ElectionSourceSnapshot,
   type ElectionSourceSnapshotDetail,
@@ -28,6 +30,7 @@ const auth = useAuthStore();
 
 const election = ref<GovernanceElectionSummary | null>(null);
 const snapshots = ref<readonly ElectionSourceSnapshot[]>([]);
+const candidates = ref<readonly ElectionCandidateSummary[]>([]);
 const authorityEvidence = ref<readonly ElectionAuthorityEvidenceSummary[]>([]);
 const committeeMembers = ref<readonly ElectionCommitteeMemberSummary[]>([]);
 const selected = ref<ElectionSourceSnapshotDetail | null>(null);
@@ -53,6 +56,18 @@ function formatTimestamp(value: string): string {
   return value.replace('T', ' ').replace(/Z$/, ' UTC');
 }
 
+function candidateName(candidate: ElectionCandidateSummary): string {
+  const person = candidate.person;
+  if (!person) return `Person #${candidate.person_id}`;
+  const amharic = [person.first_name_am, person.father_name_am, person.grandfather_name_am].filter(Boolean).join(' ');
+  const english = [person.first_name_en, person.father_name_en, person.grandfather_name_en].filter(Boolean).join(' ');
+  return amharic || english || person.public_id;
+}
+
+function latestDecision(candidate: ElectionCandidateSummary) {
+  return [...candidate.decisions].sort((left, right) => right.id - left.id)[0] ?? null;
+}
+
 async function selectSnapshot(snapshotId: number): Promise<void> {
   errorMessage.value = '';
   try {
@@ -66,13 +81,15 @@ async function load(): Promise<void> {
   loading.value = true;
   errorMessage.value = '';
   try {
-    const [electionRecord, snapshotRows, authorityRows, committeeRows] = await Promise.all([
+    const [electionRecord, candidateRows, snapshotRows, authorityRows, committeeRows] = await Promise.all([
       getGovernanceElection(electionId),
+      listElectionCandidates(electionId),
       canViewSource.value ? listElectionSourceSnapshots(electionId) : Promise.resolve([]),
       canViewAuthority.value ? listElectionAuthorityEvidence(electionId) : Promise.resolve([]),
       canViewCommittee.value ? listElectionCommitteeMembers(electionId) : Promise.resolve([]),
     ]);
     election.value = electionRecord;
+    candidates.value = candidateRows;
     snapshots.value = snapshotRows;
     authorityEvidence.value = authorityRows;
     committeeMembers.value = committeeRows;
@@ -174,6 +191,34 @@ onMounted(() => {
       </section>
 
       <p v-if="notice" class="source-workspace__notice" role="status">{{ notice }}</p>
+
+      <section class="source-workspace__panel">
+        <h2>የእጩዎች ማስገቢያ | Candidate intake ({{ candidates.length }})</h2>
+        <p class="source-workspace__hint">Candidate records are read-only here. No nomination, consent, declaration, evidence attachment or eligibility-decision action is available on this screen.</p>
+        <p v-if="candidates.length === 0" class="source-workspace__hint">No candidate records are registered for this election.</p>
+        <div v-else class="source-workspace__table-wrap">
+          <table>
+            <thead><tr><th>Candidate</th><th>Status</th><th>Consent</th><th>Nominations</th><th>Evidence</th><th>Recorded decision</th><th>Version</th></tr></thead>
+            <tbody>
+              <tr v-for="candidate in candidates" :key="candidate.id">
+                <td>{{ candidateName(candidate) }}<br /><code>{{ candidate.person?.public_id || candidate.person_id }}</code></td>
+                <td>{{ candidate.status }}</td>
+                <td>{{ candidate.consent_status }}</td>
+                <td>{{ candidate.nominations.length }}</td>
+                <td>{{ candidate.evidence.length }}</td>
+                <td>
+                  <template v-if="latestDecision(candidate)">
+                    {{ latestDecision(candidate)?.outcome }}<br />
+                    <small>{{ latestDecision(candidate)?.rule_set_version }} · {{ formatTimestamp(latestDecision(candidate)?.decided_at || '') }}</small>
+                  </template>
+                  <span v-else>—</span>
+                </td>
+                <td>{{ candidate.version }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
 
       <section v-if="canViewAuthority" class="source-workspace__panel">
         <h2>የምርጫ ሥልጣን ማስረጃ | Election authority evidence ({{ authorityEvidence.length }})</h2>
