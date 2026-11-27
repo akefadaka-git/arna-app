@@ -41,6 +41,105 @@ for (const surface of surfaces) {
       throw new Error(`Mounted shell missing. Runtime errors: ${runtimeErrors.join(' | ')}. Fixture error: ${fixtureError}. App markup: ${markup.slice(0, 1200)}`);
     }
     await expect(root).toBeVisible();
+
+    // Load the actual self-hosted faces with Amharic, Latin and code samples.
+    // Exercise the declared variable-font weight ranges and mixed-script stack.
+    const fontEvidence = await page.evaluate(async () => {
+      const probes = [
+        { family: 'Noto Sans Ethiopic', sample: 'ማሌ ዓርና አክሲዮን ማኅበር', weights: [100, 400, 900], range: '100 900' },
+        { family: 'Inter', sample: 'ARNA Smart System 2019', weights: [100, 400, 900], range: '100 900' },
+        { family: 'JetBrains Mono', sample: 'const arna = 2019;', weights: [100, 400, 800], range: '100 800' },
+      ];
+      const rules = [];
+      for (const sheet of Array.from(document.styleSheets)) {
+        try {
+          for (const rule of Array.from(sheet.cssRules)) {
+            if (rule.type === CSSRule.FONT_FACE_RULE) {
+              rules.push({
+                family: rule.style.getPropertyValue('font-family').replace(/["']/g, ''),
+                weight: rule.style.getPropertyValue('font-weight'),
+                display: rule.style.getPropertyValue('font-display'),
+              });
+            }
+          }
+        } catch {
+          // Cross-origin stylesheets are not inspected; the app's own CSS is same-origin.
+        }
+      }
+      const loaded = [];
+      for (const probe of probes) {
+        for (const weight of probe.weights) {
+          const descriptor = weight + ' 16px "' + probe.family + '"';
+          const faces = await document.fonts.load(descriptor, probe.sample);
+          loaded.push({
+            family: probe.family,
+            weight,
+            faceCount: faces.length,
+            statuses: faces.map((face) => face.status),
+            check: document.fonts.check(descriptor, probe.sample),
+          });
+        }
+      }
+      const specimens = [];
+      for (const [name, family, sample] of [
+        ['am', 'var(--mases-font-family-am)', 'ማሌ ዓርና ARNA 2019'],
+        ['en', 'var(--mases-font-family-en)', 'ARNA Smart System'],
+        ['mono', 'var(--mases-font-family-mono)', 'const arna = 2019;'],
+      ]) {
+        const element = document.createElement('span');
+        element.textContent = sample;
+        element.style.fontFamily = family;
+        element.style.fontSize = '16px';
+        element.style.fontWeight = '400';
+        document.body.append(element);
+        const style = getComputedStyle(element);
+        const rect = element.getBoundingClientRect();
+        specimens.push({
+          name,
+          family: style.fontFamily,
+          width: rect.width,
+          height: rect.height,
+          text: element.textContent,
+        });
+        element.remove();
+      }
+      const root = getComputedStyle(document.documentElement);
+      return {
+        tokens: {
+          am: root.getPropertyValue('--mases-font-family-am').trim(),
+          en: root.getPropertyValue('--mases-font-family-en').trim(),
+          mono: root.getPropertyValue('--mases-font-family-mono').trim(),
+        },
+        rules,
+        loaded,
+        specimens,
+      };
+    });
+    expect(fontEvidence.tokens.am).toContain('Noto Sans Ethiopic');
+    expect(fontEvidence.tokens.en).toContain('Inter');
+    expect(fontEvidence.tokens.mono).toContain('JetBrains Mono');
+    for (const expected of [
+      { family: 'Noto Sans Ethiopic', weight: '100 900' },
+      { family: 'Inter', weight: '100 900' },
+      { family: 'JetBrains Mono', weight: '100 800' },
+    ]) {
+      expect(fontEvidence.rules).toContainEqual(expect.objectContaining({
+        family: expected.family,
+        weight: expected.weight,
+        display: 'swap',
+      }));
+    }
+    expect(fontEvidence.loaded).toHaveLength(9);
+    for (const face of fontEvidence.loaded) {
+      expect(face.faceCount, face.family + ' weight ' + face.weight + ' must resolve to a loaded face').toBeGreaterThan(0);
+      expect(face.statuses.every((status) => status === 'loaded')).toBe(true);
+      expect(face.check).toBe(true);
+    }
+    expect(fontEvidence.specimens).toHaveLength(3);
+    for (const specimen of fontEvidence.specimens) {
+      expect(specimen.width, specimen.name + ' specimen must render non-zero width').toBeGreaterThan(0);
+      expect(specimen.height, specimen.name + ' specimen must render non-zero height').toBeGreaterThan(0);
+    }
     await expect(page.locator('html')).toHaveAttribute('lang', locale.key);
     await expect(page.locator('html')).toHaveAttribute('data-theme', theme.key);
     await expect(page.getByTestId('arna-brand-root')).toBeVisible();
