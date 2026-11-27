@@ -18,6 +18,9 @@ test('source snapshot client uses the versioned Governance API contract and expl
   assert.match(api, /\/api\/governance\/elections\/\$\{electionId\}\/shareholder-source-snapshots/);
   assert.match(api, /record_date_time: recordDateTime/);
   assert.match(api, /\/reconcile/);
+  assert.match(api, /getElectionSourceSnapshot/);
+  assert.match(snapshotView, /snapshotDetails/);
+  assert.match(snapshotView, /quantity_at_cutoff/);
 });
 
 test('source snapshot workspace keeps electorate and voting decisions fail-closed', () => {
