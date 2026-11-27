@@ -11,7 +11,11 @@ import {
   getElectionSourceSnapshot,
   getGovernanceElection,
   listElectionSourceSnapshots,
+  listElectionAuthorityEvidence,
+  listElectionCommitteeMembers,
   reconcileElectionSourceSnapshot,
+  type ElectionAuthorityEvidenceSummary,
+  type ElectionCommitteeMemberSummary,
   type ElectionSourceSnapshot,
   type ElectionSourceSnapshotDetail,
   type GovernanceElectionSummary,
@@ -24,6 +28,8 @@ const auth = useAuthStore();
 
 const election = ref<GovernanceElectionSummary | null>(null);
 const snapshots = ref<readonly ElectionSourceSnapshot[]>([]);
+const authorityEvidence = ref<readonly ElectionAuthorityEvidenceSummary[]>([]);
+const committeeMembers = ref<readonly ElectionCommitteeMemberSummary[]>([]);
 const selected = ref<ElectionSourceSnapshotDetail | null>(null);
 const loading = ref(false);
 const saving = ref(false);
@@ -34,6 +40,8 @@ const reconciliationReason = ref('');
 
 const canPrepare = computed(() => auth.permissions.includes('governance.election.register.prepare'));
 const canReconcile = computed(() => auth.permissions.includes('governance.election.register.reconcile'));
+const canViewAuthority = computed(() => auth.permissions.includes('governance.election.view'));
+const canViewCommittee = computed(() => auth.permissions.includes('governance.election.committee.view'));
 const electionTitle = computed(() => election.value?.title_am || election.value?.title_en || election.value?.code || '');
 
 function isOffsetDateTime(value: string): boolean {
@@ -57,12 +65,16 @@ async function load(): Promise<void> {
   loading.value = true;
   errorMessage.value = '';
   try {
-    const [electionRecord, snapshotRows] = await Promise.all([
+    const [electionRecord, snapshotRows, authorityRows, committeeRows] = await Promise.all([
       getGovernanceElection(electionId),
       listElectionSourceSnapshots(electionId),
+      canViewAuthority.value ? listElectionAuthorityEvidence(electionId) : Promise.resolve([]),
+      canViewCommittee.value ? listElectionCommitteeMembers(electionId) : Promise.resolve([]),
     ]);
     election.value = electionRecord;
     snapshots.value = snapshotRows;
+    authorityEvidence.value = authorityRows;
+    committeeMembers.value = committeeRows;
     if (selected.value && snapshotRows.some((row) => row.id === selected.value?.snapshot.id)) {
       await selectSnapshot(selected.value.snapshot.id);
     } else if (snapshotRows.length > 0) {
@@ -159,6 +171,51 @@ onMounted(() => {
       </section>
 
       <p v-if="notice" class="source-workspace__notice" role="status">{{ notice }}</p>
+
+      <section v-if="canViewAuthority" class="source-workspace__panel">
+        <h2>የምርጫ ሥልጣን ማስረጃ | Election authority evidence ({{ authorityEvidence.length }})</h2>
+        <p class="source-workspace__hint">Evidence is shown read-only here. This screen does not record, review or verify legal authority.</p>
+        <p v-if="authorityEvidence.length === 0" class="source-workspace__hint">No authority evidence is recorded for this election.</p>
+        <div v-else class="source-workspace__table-wrap">
+          <table>
+            <thead><tr><th>Instrument</th><th>Reference / date</th><th>Document</th><th>Status</th><th>Recorder</th><th>Reviewer</th><th>Verifier</th></tr></thead>
+            <tbody>
+              <tr v-for="item in authorityEvidence" :key="item.id">
+                <td>{{ item.instrument_type }}</td>
+                <td>{{ item.instrument_reference }}<br />{{ item.instrument_date || '—' }}</td>
+                <td>{{ item.document_id }}<br /><code>{{ item.content_sha256 }}</code></td>
+                <td>{{ item.status }}</td>
+                <td>{{ item.recorded_by }}</td>
+                <td>{{ item.reviewed_by ?? '—' }}<br />{{ item.review_reason || '' }}</td>
+                <td>{{ item.verified_by ?? '—' }}<br />{{ item.verification_reason || '' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section v-if="canViewCommittee" class="source-workspace__panel">
+        <h2>የምርጫ ኮሚቴ አባላት | Election committee ({{ committeeMembers.length }})</h2>
+        <p class="source-workspace__hint">Committee appointments are displayed read-only. No appointment, revocation, administrator grant or conflict action is available on this screen.</p>
+        <p v-if="committeeMembers.length === 0" class="source-workspace__hint">No committee appointments are recorded for this election.</p>
+        <div v-else class="source-workspace__table-wrap">
+          <table>
+            <thead><tr><th>Person ID</th><th>User ID</th><th>Role</th><th>Status</th><th>Appointment reference</th><th>Evidence ID</th><th>Appointed at</th><th>Recusal</th></tr></thead>
+            <tbody>
+              <tr v-for="member in committeeMembers" :key="member.id">
+                <td>{{ member.person_id }}</td>
+                <td>{{ member.user_id }}</td>
+                <td>{{ member.member_role }}{{ member.ex_officio ? ' · Ex officio' : '' }}</td>
+                <td>{{ member.status }}</td>
+                <td>{{ member.appointment_reference }}</td>
+                <td>{{ member.appointment_evidence_id }}</td>
+                <td>{{ formatTimestamp(member.appointed_at) }}</td>
+                <td>{{ member.recused_at ? formatTimestamp(member.recused_at) : '—' }}<br />{{ member.recusal_scope || '' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
 
       <section v-if="canPrepare" class="source-workspace__panel">
         <h2>የምንጭ ማህደር አዘጋጅ | Capture source snapshot</h2>
