@@ -68,7 +68,6 @@ test('locale storage uses only the canonical ARNA key', async () => {
   assert.match(source, /const STORAGE_KEY = 'arna\.locale'/);
   assert.match(source, /return localStorage\.getItem\(STORAGE_KEY\);/);
   assert.doesNotMatch(source, /mases\.locale|LEGACY_STORAGE_KEY/);
-  assert.match(source, /getItem\(STORAGE_KEY\) \?\? localStorage\.getItem\(LEGACY_STORAGE_KEY\)/);
   assert.match(source, /setItem\(STORAGE_KEY, value\)/);
 });
 
