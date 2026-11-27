@@ -80,3 +80,22 @@ For Noto Sans Ethiopic, the retrieved distribution is the slim variable TTF (wei
 **Integrity check:** Each target Git blob SHA-1 exactly matches its upstream Git blob SHA-1. This verifies byte-for-byte identity with the selected upstream repository blobs. These Git blob SHA-1 values are not SHA-256 checksums.
 
 **Current status:** Priority 1 — PASS. Priority 2 (independent SHA-256 calculation and recording) remains open. CSS `@font-face` integration and exact-head CI verification have not been performed. Existing OFL notices remain under `public/fonts/licenses/`.
+
+
+## Priority 2 update — independent SHA-256 checksums
+
+Date: 2026-11-27
+
+The three font files were fetched from the exact committed feature-branch head `2bd380a0eb65fcfeeeac8e0cddd086cf65f00465` using GitHub's base64 content representation. The base64 was decoded to raw bytes and SHA-256 was calculated independently, rather than treating Git blob SHA-1 as a file checksum.
+
+| Font file | Raw bytes | SHA-256 | Git blob SHA-1 (separate identifier) |
+|---|---:|---|---|
+| `public/fonts/noto-sans-ethiopic-variable.ttf` | 587,088 | `dbd6d1fb408bc3a88b1d139f54aa4d984d24ea16772f88b5ccb8d80a66a1b540` | `2dfcbe0abed525c6900eb7323ac0edee7d84a703` |
+| `public/fonts/inter-variable.woff2` | 358,113 | `fbf78a0ee105e94e1ef3efe99c20bc43eb2cc27d90b86652eb7e245cd8047387` | `5a8d3e72ad7ffb62af3b146e1b1f54ab5813a212` |
+| `public/fonts/jetbrains-mono-variable.ttf` | 308,196 | `b08e4ff2d65170fb34b5ce29e8fa9711d0b4b4e2ab99c65cc6e93299ca0b200d` | `b60e77f5dbf5505436c1904cb7a9ac4111ee76d0` |
+
+**Verification result:** PASS — SHA-256 was computed over the decoded raw bytes retrieved from the committed repository files. The reported byte lengths are the decoded file lengths. Git blob SHA-1 values are retained only as distinct repository object identifiers.
+
+**Scope note:** These checksums establish the identity of the currently committed files. The independent upstream identity comparison previously recorded is via Git blob SHA-1. No upstream-published SHA-256 checksum was available in the recorded release metadata, so do not claim an upstream SHA-256 match.
+
+**Next priority:** Priority 3 — implement `@font-face` declarations and connect the three self-hosted assets to the existing font tokens. Do not mark A3.2.2 complete until subsequent rendering, build, and accessibility verification is complete.
