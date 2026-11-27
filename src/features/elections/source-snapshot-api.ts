@@ -96,6 +96,50 @@ export interface ElectionSourceSnapshotReconciliationResult {
   readonly message: string;
 }
 
+export interface ElectionCandidatePerson {
+  readonly public_id: string;
+  readonly first_name_am: string | null;
+  readonly father_name_am: string | null;
+  readonly grandfather_name_am: string | null;
+  readonly first_name_en: string | null;
+  readonly father_name_en: string | null;
+  readonly grandfather_name_en: string | null;
+}
+
+export interface ElectionCandidateNomination {
+  readonly id: number;
+  readonly status: string;
+  readonly self_nomination: boolean;
+  readonly submission_channel: string;
+  readonly source_reference: string;
+  readonly submitted_at: string;
+}
+
+export interface ElectionCandidateEvidence {
+  readonly id: number;
+  readonly evidence_type: string;
+  readonly attached_at: string;
+}
+
+export interface ElectionCandidateDecision {
+  readonly id: number;
+  readonly outcome: string;
+  readonly rule_set_version: string;
+  readonly decided_at: string;
+}
+
+export interface ElectionCandidateSummary {
+  readonly id: number;
+  readonly person_id: number;
+  readonly status: string;
+  readonly consent_status: string;
+  readonly version: number;
+  readonly person: ElectionCandidatePerson | null;
+  readonly nominations: readonly ElectionCandidateNomination[];
+  readonly evidence: readonly ElectionCandidateEvidence[];
+  readonly decisions: readonly ElectionCandidateDecision[];
+}
+
 export interface ElectionAuthorityEvidenceSummary {
   readonly id: number;
   readonly instrument_type: string;
@@ -140,6 +184,14 @@ export function listGovernanceElections(): Promise<PaginatedGovernanceElections>
 
 export function getGovernanceElection(electionId: number): Promise<GovernanceElectionSummary> {
   return api.get<GovernanceElectionSummary>(`/api/governance/elections/${electionId}`);
+}
+
+export function listElectionCandidates(
+  electionId: number,
+): Promise<readonly ElectionCandidateSummary[]> {
+  return api.get<readonly ElectionCandidateSummary[]>(
+    `/api/governance/elections/${electionId}/candidates`,
+  );
 }
 
 export function listElectionAuthorityEvidence(
