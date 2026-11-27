@@ -218,9 +218,11 @@ export function ethiopicDateToGregorianInTimezone(value: EthiopicDateParts, time
   }
   for (let offset = -2; offset <= 2; offset += 1) {
     const candidate = new Date(target.getTime() + offset * 86_400_000);
-    const utcDate = new Intl.DateTimeFormat('en-CA-u-ca-gregory-nu-latn', {
+    const utcParts = new Intl.DateTimeFormat('en-CA-u-ca-gregory-nu-latn', {
       timeZone: 'UTC', year: 'numeric', month: '2-digit', day: '2-digit',
-    }).format(candidate);
+    }).formatToParts(candidate);
+    const utcPart = (type: 'year' | 'month' | 'day') => utcParts.find((item) => item.type === type)?.value ?? '';
+    const utcDate = utcPart('year') + '-' + utcPart('month') + '-' + utcPart('day');
     const instant = localDateTimeToIso(utcDate, '12:00', timeZone);
     const parts = formatter.formatToParts(new Date(instant));
     const part = (type: 'year' | 'month' | 'day') => Number(parts.find((item) => item.type === type)?.value);
