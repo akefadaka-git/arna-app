@@ -24,6 +24,11 @@ test('Appointment client uses only the shared Calendar appointment API', () => {
   assert.match(api, /confirmAppointment/);
   assert.match(api, /declineAppointment/);
   assert.match(api, /cancelAppointment/);
+  assert.match(api, /listAppointmentRescheduleProposals/);
+  assert.match(api, /createAppointmentRescheduleProposal/);
+  assert.match(api, /acceptAppointmentRescheduleProposal/);
+  assert.match(api, /declineAppointmentRescheduleProposal/);
+  assert.match(api, /withdrawAppointmentRescheduleProposal/);
   assert.doesNotMatch(api, /\/api\/governance/);
   assert.match(calendarApi, /listCalendars/);
 });
@@ -36,6 +41,11 @@ test('Appointment workspace uses E.C. civil dates and the selected calendar time
   assert.match(view, /checkAppointmentAvailability/);
   assert.match(view, /bookAppointment/);
   assert.match(view, /appointmentScope/);
+  assert.match(view, /canProposeReschedule/);
+  assert.match(view, /expected_appointment_version/);
+  assert.match(view, /expected_event_version/);
+  assert.match(view, /proposal.counterparty_user_id/);
+  assert.match(view, /proposal.proposer_user_id/);
   assert.match(view, /requested_by_user_id/);
   assert.match(view, /host_user_id/);
   assert.match(dates, /This local time does not exist/);
@@ -54,4 +64,6 @@ test('Appointment workspace has Amharic-first and English label sets', () => {
   assert.match(labels, /export const appointmentWorkspaceEnglishLabels/);
   assert.match(labels, /የቀጠሮ ማስያዣ/);
   assert.match(labels, /Appointments/);
+  assert.match(labels, /proposeTime/);
+  assert.match(labels, /acceptProposal/);
 });
