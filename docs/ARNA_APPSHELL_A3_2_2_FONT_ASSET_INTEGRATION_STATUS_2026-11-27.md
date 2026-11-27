@@ -60,3 +60,23 @@ The theme layer applies the English and Amharic stacks by document language. The
 Do not mark A3.2.2 complete. Do not add `@font-face` declarations until the exact binary files are present and their SHA-256 hashes and licence pairing are recorded. Keep the current system fallback stacks intact.
 
 The next execution requirement is a binary-capable transfer path into this repository (for example, a supported GitHub binary upload mechanism). Once available, acquire only the pinned upstream assets, verify each file's SHA-256, retain these licence files, add the appropriate `@font-face` rules, and run the browser/build verification. No merge, deployment, or change to `main` is included.
+
+## Priority 1 update — binary acquisition completed
+
+Date: 2026-11-27
+
+The binary acquisition blocker is resolved using the GitHub repository file API. No paid browser automation, local execution, CDN dependency, or main-branch write was used.
+
+The following upstream font assets were retrieved and added to this feature branch:
+
+| Family / pinned release | Upstream source | Target path | Bytes | Git blob SHA-1 |
+|---|---|---|---:|---|
+| Noto Sans Ethiopic v2.102 | `notofonts/notofonts.github.io`, distribution commit `03585c386242e056578b975b4ecef45699008de1`; upstream source commit `1cc6933c58b7c42bbade15d6c7173897c24759e3` | `public/fonts/noto-sans-ethiopic-variable.ttf` | 577,464 | `2dfcbe0abed525c6900eb7323ac0edee7d84a703` |
+| Inter v4.1 | `rsms/inter`, commit `e3a3d4c57d5ecc01453a575621882a384c1995a3` | `public/fonts/inter-variable.woff2` | 352,240 | `5a8d3e72ad7ffb62af3b146e1b1f54ab5813a212` |
+| JetBrains Mono v2.304 | `JetBrains/JetBrainsMono`, commit `cd5227bd1f61dff3bbd6c814ceaf7ffd95e947d9` | `public/fonts/jetbrains-mono-variable.ttf` | 303,144 | `b60e77f5dbf5505436c1904cb7a9ac4111ee76d0` |
+
+For Noto Sans Ethiopic, the retrieved distribution is the slim variable TTF (weight axis); the official Noto distribution repository records the font update on 2022-11-05, immediately after the v2.102 upstream release. The upstream v2.102 source commit is recorded above.
+
+**Integrity check:** Each target Git blob SHA-1 exactly matches its upstream Git blob SHA-1. This verifies byte-for-byte identity with the selected upstream repository blobs. These Git blob SHA-1 values are not SHA-256 checksums.
+
+**Current status:** Priority 1 — PASS. Priority 2 (independent SHA-256 calculation and recording) remains open. CSS `@font-face` integration and exact-head CI verification have not been performed. Existing OFL notices remain under `public/fonts/licenses/`.
