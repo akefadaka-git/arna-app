@@ -62,9 +62,9 @@ onMounted(() => { void load(); });
           </div>
           <RouterLink
             class="elections-page__link"
-            :to="{ name: 'governance-election-source-register', params: { id: election.id } }"
+            :to="{ name: 'governance-election-workspace', params: { id: election.id } }"
           >
-            የባለአክሲዮን ምንጭ ማህደር | Shareholder source records
+            የምርጫ ዝርዝር | Open election workspace
           </RouterLink>
         </li>
       </ul>
