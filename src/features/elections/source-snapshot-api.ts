@@ -96,6 +96,42 @@ export interface ElectionSourceSnapshotReconciliationResult {
   readonly message: string;
 }
 
+export interface ElectionAuthorityEvidenceSummary {
+  readonly id: number;
+  readonly instrument_type: string;
+  readonly instrument_reference: string;
+  readonly instrument_date: string | null;
+  readonly document_id: number;
+  readonly storage_reference: string;
+  readonly content_sha256: string;
+  readonly status: 'pending_review' | 'reviewed' | 'rejected' | 'verified' | string;
+  readonly recorded_by: number;
+  readonly reviewed_by: number | null;
+  readonly reviewed_at: string | null;
+  readonly review_reason: string | null;
+  readonly verified_by: number | null;
+  readonly verified_at: string | null;
+  readonly verification_reason: string | null;
+}
+
+export interface ElectionCommitteeMemberSummary {
+  readonly id: number;
+  readonly person_id: number;
+  readonly user_id: number;
+  readonly member_role: string;
+  readonly ex_officio: boolean;
+  readonly status: string;
+  readonly appointed_at: string;
+  readonly recused_at: string | null;
+  readonly recusal_scope: string | null;
+  readonly appointment_reference: string;
+  readonly appointment_evidence_id: number;
+  readonly appointed_by: number;
+  readonly revoked_by: number | null;
+  readonly revoked_at: string | null;
+  readonly revocation_reason: string | null;
+}
+
 export function listGovernanceElections(): Promise<PaginatedGovernanceElections> {
   return api.get<PaginatedGovernanceElections>('/api/governance/elections', {
     params: { per_page: 100 },
@@ -104,6 +140,22 @@ export function listGovernanceElections(): Promise<PaginatedGovernanceElections>
 
 export function getGovernanceElection(electionId: number): Promise<GovernanceElectionSummary> {
   return api.get<GovernanceElectionSummary>(`/api/governance/elections/${electionId}`);
+}
+
+export function listElectionAuthorityEvidence(
+  electionId: number,
+): Promise<readonly ElectionAuthorityEvidenceSummary[]> {
+  return api.get<readonly ElectionAuthorityEvidenceSummary[]>(
+    `/api/governance/elections/${electionId}/authority-evidence`,
+  );
+}
+
+export function listElectionCommitteeMembers(
+  electionId: number,
+): Promise<readonly ElectionCommitteeMemberSummary[]> {
+  return api.get<readonly ElectionCommitteeMemberSummary[]>(
+    `/api/governance/elections/${electionId}/committee/members`,
+  );
 }
 
 export function listElectionSourceSnapshots(electionId: number): Promise<readonly ElectionSourceSnapshot[]> {
