@@ -150,7 +150,7 @@ onMounted(() => {
         </button>
       </div>
 
-      <LoadingState v-if="state === 'loading'" :message="labels.loading" />
+      <LoadingState v-if="state === 'loading'" :label="labels.loading" />
       <ErrorState
         v-else-if="state === 'error'"
         :title="loadError ?? labels.loadError"
