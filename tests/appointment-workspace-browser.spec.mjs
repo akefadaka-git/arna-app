@@ -208,6 +208,8 @@ test.describe('ARNA shared appointment booking workspace', () => {
     await expect(card.getByText('አዲስ ሰዓት ያቅርቡ')).toBeVisible();
     await expect(card.locator('textarea')).toBeVisible();
     await expect(card.locator('input[type="time"]')).toHaveCount(2);
+    const results = await new AxeBuilder({ page }).include('.appointment-workspace').analyze();
+    expect(results.violations).toEqual([]);
   });
 
   test('appointment booking form meets automated accessibility checks', async ({ page }) => {
