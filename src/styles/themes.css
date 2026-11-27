@@ -1,6 +1,6 @@
 /*
  * ARNA Design System 2.0 — semantic theme and bilingual base layer.
- * Primitive palette and the frozen token substrate are not modified.
+ * Primitive palette values are preserved; token identifiers use canonical ARNA names.
  * Theme modes: system preference by default; data-theme="light|dark"
  * explicitly overrides the system preference.
  */
