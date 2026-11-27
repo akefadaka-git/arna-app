@@ -4,17 +4,16 @@ import { readFile } from 'node:fs/promises';
 
 const read = (path) => readFile(new URL(path, import.meta.url), 'utf8');
 
-test('Board Election list and source-register routes are permission-gated and navigable', async () => {
+test('Board Election list and workspace routes are permission-gated and navigable', async () => {
   const routes = await read('../src/router/routes-workspace.ts');
   const navigation = await read('../src/router/shell-labels.ts');
 
   assert.ok(routes.includes("path: 'governance/elections'"));
   assert.ok(routes.includes("name: 'governance-elections'"));
   assert.ok(routes.includes("meta: { permission: 'governance.election.view' }"));
-  assert.ok(routes.includes("path: 'governance/elections/:id/shareholder-source'"));
-  assert.ok(routes.includes("name: 'governance-election-source-register'"));
-  assert.ok(routes.includes("permission: ['governance.election.view', 'governance.election.register.view']"));
-  assert.ok(routes.includes("permissionMode: 'all'"));
+  assert.ok(routes.includes("path: 'governance/elections/:id'"));
+  assert.ok(routes.includes("name: 'governance-election-workspace'"));
+  assert.ok(routes.includes("meta: { permission: 'governance.election.view' }"));
   assert.ok(navigation.includes("to: '/governance/elections'"));
   assert.ok(navigation.includes("permission: 'governance.election.view'"));
 });
@@ -40,6 +39,7 @@ test('source-register UI is evidence-only and does not calculate electorate deci
   const view = await read('../src/features/elections/ElectionSourceSnapshotView.vue');
   const api = await read('../src/features/elections/source-snapshot-api.ts');
 
+  assert.ok(view.includes('canViewSource'));
   assert.ok(view.includes('governance.election.register.prepare'));
   assert.ok(view.includes('governance.election.register.reconcile'));
   assert.ok(view.includes('canViewAuthority'));
