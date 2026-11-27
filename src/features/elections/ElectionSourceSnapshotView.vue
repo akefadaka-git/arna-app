@@ -38,8 +38,9 @@ const notice = ref('');
 const recordDateTime = ref('');
 const reconciliationReason = ref('');
 
-const canPrepare = computed(() => auth.permissions.includes('governance.election.register.prepare'));
-const canReconcile = computed(() => auth.permissions.includes('governance.election.register.reconcile'));
+const canViewSource = computed(() => auth.permissions.includes('governance.election.register.view'));
+const canPrepare = computed(() => canViewSource.value && auth.permissions.includes('governance.election.register.prepare'));
+const canReconcile = computed(() => canViewSource.value && auth.permissions.includes('governance.election.register.reconcile'));
 const canViewAuthority = computed(() => auth.permissions.includes('governance.election.view'));
 const canViewCommittee = computed(() => auth.permissions.includes('governance.election.committee.view'));
 const electionTitle = computed(() => election.value?.title_am || election.value?.title_en || election.value?.code || '');
@@ -67,7 +68,7 @@ async function load(): Promise<void> {
   try {
     const [electionRecord, snapshotRows, authorityRows, committeeRows] = await Promise.all([
       getGovernanceElection(electionId),
-      listElectionSourceSnapshots(electionId),
+      canViewSource.value ? listElectionSourceSnapshots(electionId) : Promise.resolve([]),
       canViewAuthority.value ? listElectionAuthorityEvidence(electionId) : Promise.resolve([]),
       canViewCommittee.value ? listElectionCommitteeMembers(electionId) : Promise.resolve([]),
     ]);
@@ -75,7 +76,9 @@ async function load(): Promise<void> {
     snapshots.value = snapshotRows;
     authorityEvidence.value = authorityRows;
     committeeMembers.value = committeeRows;
-    if (selected.value && snapshotRows.some((row) => row.id === selected.value?.snapshot.id)) {
+    if (!canViewSource.value) {
+      selected.value = null;
+    } else if (selected.value && snapshotRows.some((row) => row.id === selected.value?.snapshot.id)) {
       await selectSnapshot(selected.value.snapshot.id);
     } else if (snapshotRows.length > 0) {
       await selectSnapshot(snapshotRows[0].id);
@@ -145,10 +148,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <PageTitle title="የባለአክሲዮን ምንጭ ማህደር | Shareholder source records" :suffix="appName" />
-  <main class="source-workspace" data-testid="election-shareholder-source">
+  <PageTitle title="የቦርድ ምርጫ የሥራ ቦታ | Board Election workspace" :suffix="appName" />
+  <main class="source-workspace" data-testid="election-governance-workspace">
     <PageHeader
-      title="የባለአክሲዮን ምንጭ ማህደር | Shareholder source records"
+      title="የቦርድ ምርጫ የሥራ ቦታ | Board Election workspace"
       :description="electionTitle ? `${electionTitle} · ${election?.code}` : 'የምርጫ መረጃ | Election record'"
     />
     <p><RouterLink to="/governance/elections">← ወደ ምርጫዎች ተመለስ | Back to elections</RouterLink></p>
@@ -161,7 +164,7 @@ onMounted(() => {
       @action="load"
     />
     <template v-else-if="election">
-      <section class="source-workspace__warning" role="note" aria-live="polite">
+      <section v-if="canViewSource" class="source-workspace__warning" role="note" aria-live="polite">
         <strong>የሕጋዊ ማረጋገጫ ገደብ | Legal verification boundary</strong>
         <p>
           ይህ ማያ ገጽ የባለአክሲዮን ቴክኒካዊ ምንጭ ቅጽን ብቻ ያሳያል። የባለቤትነት ሕጋዊነትን፣ የመራጭ ብቁነትን፣ የድምፅ ክብደትን ወይም የምርጫ ፈቃድን አያረጋግጥም።
@@ -217,6 +220,7 @@ onMounted(() => {
         </div>
       </section>
 
+      <template v-if="canViewSource">
       <section v-if="canPrepare" class="source-workspace__panel">
         <h2>የምንጭ ማህደር አዘጋጅ | Capture source snapshot</h2>
         <label for="record-date-time">Record-date timestamp with explicit UTC offset</label>
@@ -331,6 +335,7 @@ onMounted(() => {
           </button>
         </section>
       </section>
+      </template>
     </template>
   </main>
 </template>
