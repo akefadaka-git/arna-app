@@ -44,7 +44,6 @@ jobs:
               "docs/ARNA_UI_UX_Enhancement_Master_Strategy_v1.2.md",
           }
 
-              workflow_path.unlink()
 
           changed_files = []
           removed_aliases = 0
@@ -247,6 +246,8 @@ jobs:
               if not path.is_file() or ".git" in path.parts:
                   continue
               rel = path.as_posix()
+              if rel.startswith(".github/workflows/"):
+                  continue
               if rel in historical_docs or rel in current_docs or rel in {
                   "tests/brand-identity-contract.test.mjs",
                   "tests/brand-palette-contract.test.mjs",
@@ -298,6 +299,8 @@ jobs:
               if not path.is_file() or ".git" in path.parts:
                   continue
               rel = path.as_posix()
+              if rel.startswith(".github/workflows/"):
+                  continue
               if rel in historical_docs or rel in {
                   "docs/ARNA_GUI_DESIGN_SPEC_v1.1.md",
                   "docs/BRAND_PALETTE_TOKEN_RECONCILIATION_CANDIDATE.md",
