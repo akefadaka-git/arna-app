@@ -196,6 +196,45 @@ export function ethiopicDateToGregorian(value: EthiopicDateParts): string | null
   return null;
 }
 
+/**
+ * Convert an Ethiopian calendar date to a Gregorian civil date in the
+ * appointment's own IANA timezone. The legacy helper remains Addis-Ababa
+ * based for existing callers; this variant avoids shifting a reschedule
+ * date when an appointment uses another timezone.
+ */
+export function ethiopicDateToGregorianInTimezone(value: EthiopicDateParts, timeZone: string): string | null {
+  const addisAnchor = ethiopicDateToGregorian(value);
+  if (!addisAnchor) return null;
+  const [year, month, day] = addisAnchor.split('-').map(Number);
+  const target = new Date(Date.UTC(year, month - 1, day, 12));
+  const formatter = new Intl.DateTimeFormat('en-ET-u-ca-ethiopic-nu-latn', {
+    timeZone,
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  });
+  if (formatter.resolvedOptions().calendar !== 'ethiopic') {
+    throw new Error('The Ethiopian calendar is not supported by this browser.');
+  }
+  for (let offset = -2; offset <= 2; offset += 1) {
+    const candidate = new Date(target.getTime() + offset * 86_400_000);
+    const utcDate = new Intl.DateTimeFormat('en-CA-u-ca-gregory-nu-latn', {
+      timeZone: 'UTC', year: 'numeric', month: '2-digit', day: '2-digit',
+    }).format(candidate);
+    const instant = localDateTimeToIso(utcDate, '12:00', timeZone);
+    const parts = formatter.formatToParts(new Date(instant));
+    const part = (type: 'year' | 'month' | 'day') => Number(parts.find((item) => item.type === type)?.value);
+    if (part('year') === value.year && part('month') === value.month && part('day') === value.day) {
+      const localGregorian = new Intl.DateTimeFormat('en-CA-u-ca-gregory-nu-latn', {
+        timeZone, year: 'numeric', month: '2-digit', day: '2-digit',
+      }).formatToParts(new Date(instant));
+      const get = (type: 'year' | 'month' | 'day') => localGregorian.find((item) => item.type === type)?.value ?? '';
+      return get('year') + '-' + get('month') + '-' + get('day');
+    }
+  }
+  return null;
+}
+
 export function formatCalendarDateOnly(
   value: string | null | undefined,
   options: Intl.DateTimeFormatOptions = { dateStyle: 'medium' },
