@@ -9,7 +9,6 @@ on:
 
 permissions:
   contents: write
-  workflows: write
 
 jobs:
   migrate:
@@ -45,8 +44,6 @@ jobs:
               "docs/ARNA_UI_UX_Enhancement_Master_Strategy_v1.2.md",
           }
 
-          workflow_path = Path(".github/workflows/a3-apply-arna-app-identity.yml")
-          if workflow_path.exists():
               workflow_path.unlink()
 
           changed_files = []
