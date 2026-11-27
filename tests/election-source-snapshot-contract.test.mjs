@@ -13,7 +13,8 @@ test('Board Election list and source-register routes are permission-gated and na
   assert.ok(routes.includes("meta: { permission: 'governance.election.view' }"));
   assert.ok(routes.includes("path: 'governance/elections/:id/shareholder-source'"));
   assert.ok(routes.includes("name: 'governance-election-source-register'"));
-  assert.ok(routes.includes("meta: { permission: 'governance.election.register.view' }"));
+  assert.ok(routes.includes("permission: ['governance.election.view', 'governance.election.register.view']"));
+  assert.ok(routes.includes("permissionMode: 'all'"));
   assert.ok(navigation.includes("to: '/governance/elections'"));
   assert.ok(navigation.includes("permission: 'governance.election.view'"));
 });
