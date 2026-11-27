@@ -1,0 +1,284 @@
+<script setup lang="ts">
+import { computed, onMounted, ref } from 'vue';
+import { RouterLink, useRoute } from 'vue-router';
+import PageHeader from '@/components/patterns/PageHeader';
+import LoadingState from '@/components/composites/LoadingState';
+import ErrorState from '@/components/composites/ErrorState';
+import PageTitle from '@/layouts/AppShell/PageTitle';
+import { useAuthStore } from '@/stores/auth';
+import {
+  captureElectionSourceSnapshot,
+  getElectionSourceSnapshot,
+  getGovernanceElection,
+  listElectionSourceSnapshots,
+  reconcileElectionSourceSnapshot,
+  type ElectionSourceSnapshot,
+  type ElectionSourceSnapshotDetail,
+  type GovernanceElectionSummary,
+} from './source-snapshot-api';
+
+const appName = import.meta.env.VITE_APP_NAME;
+const route = useRoute();
+const electionId = Number(route.params.id);
+const auth = useAuthStore();
+
+const election = ref<GovernanceElectionSummary | null>(null);
+const snapshots = ref<readonly ElectionSourceSnapshot[]>([]);
+const selected = ref<ElectionSourceSnapshotDetail | null>(null);
+const loading = ref(false);
+const saving = ref(false);
+const errorMessage = ref('');
+const notice = ref('');
+const recordDateTime = ref('');
+const reconciliationReason = ref('');
+
+const canPrepare = computed(() => auth.permissions.includes('governance.election.register.prepare'));
+const canReconcile = computed(() => auth.permissions.includes('governance.election.register.reconcile'));
+const electionTitle = computed(() => election.value?.title_am || election.value?.title_en || election.value?.code || '');
+
+function isOffsetDateTime(value: string): boolean {
+  return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|[+-]\d{2}:\d{2})$/.test(value);
+}
+
+function formatTimestamp(value: string): string {
+  return value.replace('T', ' ').replace(/Z$/, ' UTC');
+}
+
+async function selectSnapshot(snapshotId: number): Promise<void> {
+  errorMessage.value = '';
+  try {
+    selected.value = await getElectionSourceSnapshot(electionId, snapshotId);
+  } catch (error) {
+    errorMessage.value = error instanceof Error ? error.message : 'የምንጭ ማህደሩን ማንበብ አልተቻለም | Unable to load source snapshot.';
+  }
+}
+
+async function load(): Promise<void> {
+  loading.value = true;
+  errorMessage.value = '';
+  try {
+    const [electionRecord, snapshotRows] = await Promise.all([
+      getGovernanceElection(electionId),
+      listElectionSourceSnapshots(electionId),
+    ]);
+    election.value = electionRecord;
+    snapshots.value = snapshotRows;
+    if (selected.value && snapshotRows.some((row) => row.id === selected.value?.snapshot.id)) {
+      await selectSnapshot(selected.value.snapshot.id);
+    } else if (snapshotRows.length > 0) {
+      await selectSnapshot(snapshotRows[0].id);
+    } else {
+      selected.value = null;
+    }
+  } catch (error) {
+    errorMessage.value = error instanceof Error ? error.message : 'የምርጫ መረጃ ማምጣት አልተቻለም | Unable to load election source records.';
+  } finally {
+    loading.value = false;
+  }
+}
+
+async function capture(): Promise<void> {
+  if (!canPrepare.value || !isOffsetDateTime(recordDateTime.value.trim())) {
+    errorMessage.value = 'የመዝገብ ቀንና ሰዓትን ከግልጽ UTC ልዩነት ጋር ያስገቡ። Example: 2026-11-27T09:00:00+03:00';
+    return;
+  }
+  saving.value = true;
+  errorMessage.value = '';
+  notice.value = '';
+  try {
+    const created = await captureElectionSourceSnapshot(electionId, recordDateTime.value.trim());
+    recordDateTime.value = '';
+    await load();
+    await selectSnapshot(created.id);
+    notice.value = 'የቴክኒክ ምንጭ ማህደር ተዘጋጅቷል። ይህ የተፈቀደ የመራጮች መዝገብ አይደለም። | Technical source snapshot captured; this is not an approved voter register.';
+  } catch (error) {
+    errorMessage.value = error instanceof Error ? error.message : 'ማህደሩን ማዘጋጀት አልተቻለም | Snapshot capture failed.';
+  } finally {
+    saving.value = false;
+  }
+}
+
+async function reconcile(): Promise<void> {
+  if (!canReconcile.value || !selected.value || reconciliationReason.value.trim().length < 10) {
+    errorMessage.value = 'ለግል ማስታረቅ ቢያንስ 10 ፊደላት ያሉት ምክንያት ያስገቡ። | Enter a reconciliation reason of at least 10 characters.';
+    return;
+  }
+  saving.value = true;
+  errorMessage.value = '';
+  notice.value = '';
+  try {
+    const result = await reconcileElectionSourceSnapshot(
+      electionId,
+      selected.value.snapshot.id,
+      reconciliationReason.value.trim(),
+    );
+    reconciliationReason.value = '';
+    notice.value = result.message;
+    await load();
+    await selectSnapshot(result.snapshot_id);
+  } catch (error) {
+    errorMessage.value = error instanceof Error ? error.message : 'ማስታረቁ አልተሳካም | Reconciliation failed.';
+  } finally {
+    saving.value = false;
+  }
+}
+
+onMounted(() => {
+  if (!Number.isSafeInteger(electionId) || electionId < 1) {
+    errorMessage.value = 'የምርጫ መለያ ትክክል አይደለም | Invalid election identifier.';
+    return;
+  }
+  void load();
+});
+</script>
+
+<template>
+  <PageTitle title="የባለአክሲዮን ምንጭ ማህደር | Shareholder source records" :suffix="appName" />
+  <main class="source-workspace" data-testid="election-shareholder-source">
+    <PageHeader
+      title="የባለአክሲዮን ምንጭ ማህደር | Shareholder source records"
+      :description="electionTitle ? `${electionTitle} · ${election?.code}` : 'የምርጫ መረጃ | Election record'"
+    />
+    <p><RouterLink to="/governance/elections">← ወደ ምርጫዎች ተመለስ | Back to elections</RouterLink></p>
+    <LoadingState v-if="loading" />
+    <ErrorState
+      v-else-if="errorMessage"
+      title="ሂደቱ አልተሳካም | Operation failed"
+      :description="errorMessage"
+      action-label="እንደገና ይሞክሩ | Retry"
+      @action="load"
+    />
+    <template v-else-if="election">
+      <section class="source-workspace__warning" role="note" aria-live="polite">
+        <strong>የሕጋዊ ማረጋገጫ ገደብ | Legal verification boundary</strong>
+        <p>
+          ይህ ማያ ገጽ የባለአክሲዮን ቴክኒካዊ ምንጭ ቅጽን ብቻ ያሳያል። የባለቤትነት ሕጋዊነትን፣ የመራጭ ብቁነትን፣ የድምፅ ክብደትን ወይም የምርጫ ፈቃድን አያረጋግጥም።
+          This is a technical source snapshot only. It does not verify statutory ownership, voter eligibility, voting weight or election authorization.
+        </p>
+        <p>Electorate state: <strong>{{ selected?.snapshot.electorate_state || 'blocked_unverified' }}</strong></p>
+      </section>
+
+      <p v-if="notice" class="source-workspace__notice" role="status">{{ notice }}</p>
+
+      <section v-if="canPrepare" class="source-workspace__panel">
+        <h2>የምንጭ ማህደር አዘጋጅ | Capture source snapshot</h2>
+        <label for="record-date-time">Record-date timestamp with explicit UTC offset</label>
+        <input
+          id="record-date-time"
+          v-model="recordDateTime"
+          type="text"
+          autocomplete="off"
+          placeholder="2026-11-27T09:00:00+03:00"
+          :disabled="saving"
+        />
+        <p class="source-workspace__hint">Use ISO-8601 with an explicit offset. The timestamp is converted to UTC and preserved at microsecond precision.</p>
+        <button type="button" :disabled="saving || !isOffsetDateTime(recordDateTime.trim())" @click="capture">
+          {{ saving ? 'በመዘጋጀት ላይ…' : 'ማህደር አዘጋጅ | Capture snapshot' }}
+        </button>
+      </section>
+
+      <section class="source-workspace__panel">
+        <h2>የተዘጋጁ ማህደሮች | Captured snapshots</h2>
+        <p v-if="snapshots.length === 0" class="source-workspace__hint">ምንም ማህደር የለም። No source snapshots have been captured.</p>
+        <ul v-else class="source-workspace__list">
+          <li v-for="snapshot in snapshots" :key="snapshot.id">
+            <button
+              type="button"
+              class="source-workspace__snapshot"
+              :aria-pressed="selected?.snapshot.id === snapshot.id"
+              @click="selectSnapshot(snapshot.id)"
+            >
+              <span><strong>v{{ snapshot.version }}</strong> · {{ formatTimestamp(snapshot.record_date_time_utc) }}</span>
+              <span>{{ snapshot.shareholder_count }} holders · {{ snapshot.holding_count }} holdings · {{ snapshot.ledger_entry_count }} ledger entries</span>
+              <span>{{ snapshot.electorate_state }}</span>
+            </button>
+          </li>
+        </ul>
+      </section>
+
+      <section v-if="selected" class="source-workspace__panel" aria-live="polite">
+        <h2>የማህደር ዝርዝር | Snapshot detail</h2>
+        <dl class="source-workspace__metadata">
+          <dt>Source digest</dt><dd><code>{{ selected.snapshot.source_digest }}</code></dd>
+          <dt>Manifest digest</dt><dd><code>{{ selected.snapshot.manifest_digest }}</code></dd>
+          <dt>Captured at</dt><dd>{{ formatTimestamp(selected.snapshot.captured_at_utc) }}</dd>
+          <dt>Prepared by user ID</dt><dd>{{ selected.snapshot.prepared_by }}</dd>
+          <dt>Identity temporal state</dt><dd>Unresolved — no effective-dated shareholder history</dd>
+        </dl>
+
+        <h3>Shareholder source rows ({{ selected.holders.length }})</h3>
+        <div class="source-workspace__table-wrap">
+          <table>
+            <thead><tr><th>Shareholder ID</th><th>Register number</th><th>Type</th><th>Current status</th><th>Temporal identity</th><th>Holding rows</th></tr></thead>
+            <tbody>
+              <tr v-for="holder in selected.holders" :key="holder.shareholder_id">
+                <td>{{ holder.shareholder_id }}</td>
+                <td>{{ holder.shareholder_number || '—' }}</td>
+                <td>{{ holder.shareholder_type }}</td>
+                <td>{{ holder.current_status }}</td>
+                <td>{{ holder.identity_temporal_state }}</td>
+                <td>{{ holder.holding_count }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Shareholdings at record date ({{ selected.holdings.length }})</h3>
+        <div class="source-workspace__table-wrap">
+          <table>
+            <thead><tr><th>Shareholder ID</th><th>Class</th><th>Quantity at cutoff</th><th>Current projection</th><th>Ledger entries</th><th>Source state</th></tr></thead>
+            <tbody>
+              <tr v-for="holding in selected.holdings" :key="holding.source_holding_id">
+                <td>{{ holding.shareholder_id }}</td>
+                <td>{{ holding.share_class_code }}</td>
+                <td>{{ holding.quantity_at_cutoff }}</td>
+                <td>{{ holding.current_projection }}</td>
+                <td>{{ holding.ledger_entry_count }}</td>
+                <td>{{ holding.source_state }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Independent reconciliations ({{ selected.reconciliations.length }})</h3>
+        <ul class="source-workspace__list">
+          <li v-for="item in selected.reconciliations" :key="item.id">
+            <strong>{{ item.result }}</strong> · {{ item.reason }} · user {{ item.reconciled_by }} · {{ formatTimestamp(item.reconciled_at_utc) }}
+          </li>
+        </ul>
+
+        <section v-if="canReconcile" class="source-workspace__reconcile">
+          <h3>የምንጭ ማስታረቅ | Reconcile against current source</h3>
+          <p>ያዘጋጀው ሰው የራሱን ማህደር ማስታረቅ አይችልም። The preparer cannot reconcile their own snapshot.</p>
+          <label for="reconciliation-reason">Reason for independent reconciliation</label>
+          <textarea id="reconciliation-reason" v-model="reconciliationReason" rows="3" maxlength="2000" :disabled="saving" />
+          <button type="button" :disabled="saving || reconciliationReason.trim().length < 10" @click="reconcile">
+            {{ saving ? 'በማስታረቅ ላይ…' : 'ምንጩን አስታርቅ | Reconcile source' }}
+          </button>
+        </section>
+      </section>
+    </template>
+  </main>
+</template>
+
+<style scoped>
+.source-workspace { display: grid; gap: var(--mases-space-4); }
+.source-workspace__warning, .source-workspace__panel { display: grid; gap: var(--mases-space-3); padding: var(--mases-space-4); border: 1px solid var(--mases-color-border-subtle); border-radius: var(--mases-radius-md); }
+.source-workspace__warning { border-inline-start: 4px solid var(--mases-color-border-warning); background: var(--mases-color-surface-subtle); }
+.source-workspace__warning p, .source-workspace__panel p { margin: 0; }
+.source-workspace__notice { padding: var(--mases-space-3); border-inline-start: 3px solid var(--mases-color-border-success); background: var(--mases-color-surface-subtle); }
+.source-workspace__hint { color: var(--mases-color-text-secondary); }
+.source-workspace__panel input, .source-workspace__panel textarea { width: 100%; max-width: 42rem; padding: var(--mases-space-2); border: 1px solid var(--mases-color-border-subtle); border-radius: var(--mases-radius-sm); background: var(--mases-color-surface); color: var(--mases-color-text-primary); }
+.source-workspace__panel button { justify-self: start; padding: var(--mases-space-2) var(--mases-space-3); border: 1px solid var(--mases-color-border-subtle); border-radius: var(--mases-radius-sm); background: var(--mases-color-surface-raised); color: var(--mases-color-text-primary); cursor: pointer; }
+.source-workspace__panel button:disabled { cursor: not-allowed; opacity: .6; }
+.source-workspace__list { display: grid; gap: var(--mases-space-2); padding: 0; list-style: none; }
+.source-workspace__snapshot { display: grid !important; gap: var(--mases-space-1); width: 100%; text-align: start; }
+.source-workspace__metadata { display: grid; grid-template-columns: minmax(10rem, max-content) minmax(0, 1fr); gap: var(--mases-space-2); margin: 0; }
+.source-workspace__metadata dt { color: var(--mases-color-text-secondary); }
+.source-workspace__metadata dd { min-width: 0; margin: 0; overflow-wrap: anywhere; }
+.source-workspace__table-wrap { overflow-x: auto; }
+.source-workspace__table-wrap table { width: 100%; border-collapse: collapse; }
+.source-workspace__table-wrap th, .source-workspace__table-wrap td { padding: var(--mases-space-2); border-bottom: 1px solid var(--mases-color-border-subtle); text-align: start; vertical-align: top; }
+.source-workspace__reconcile { display: grid; gap: var(--mases-space-2); padding-top: var(--mases-space-3); border-top: 1px solid var(--mases-color-border-subtle); }
+@media (max-width: 639px) { .source-workspace__metadata { grid-template-columns: 1fr; } }
+</style>
