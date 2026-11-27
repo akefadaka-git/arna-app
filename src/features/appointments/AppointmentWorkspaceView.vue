@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { formatCalendarDate, getEthiopicDateParts, ethiopicDateToGregorian, localDateTimeToIso } from '@/core/dates/calendar';
+import { formatCalendarDate, getEthiopicDateParts, ethiopicDateToGregorianInTimezone, localDateTimeToIso } from '@/core/dates/calendar';
 import { useAuthStore } from '@/stores/auth';
 import { useLocaleStore } from '@/stores/locale';
 import { listCalendars } from '@/features/calendar/api';
@@ -258,8 +258,8 @@ function canWithdrawProposal(proposal: AppointmentRescheduleProposal): boolean {
 async function submitReschedule(appointment: CalendarAppointment): Promise<void> {
   error.value = '';
   notice.value = '';
-  const startDate = ethiopicDateToGregorian(rescheduleStartDate.value);
-  const endDate = ethiopicDateToGregorian(rescheduleEndDate.value);
+  const startDate = ethiopicDateToGregorianInTimezone(rescheduleStartDate.value, appointment.event.timezone);
+  const endDate = ethiopicDateToGregorianInTimezone(rescheduleEndDate.value, appointment.event.timezone);
   if (!startDate || !endDate) {
     error.value = labels.value.date;
     return;
