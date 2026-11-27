@@ -210,6 +210,7 @@ import {
   myWalletPageLabels,
   myLoansPageLabels,
   myLoanDetailPageLabels,
+  myDividendsPageLabels,
 } from '@/features/portal/labels';
 
 /**
@@ -268,6 +269,16 @@ export const routesPortal: RouteRecordRaw[] = [
         name: 'portal-my-wallet',
         component: () => import('@/features/portal/MyWalletPage.vue'),
         props: { labels: myWalletPageLabels },
+      },
+
+      // -----------------------------------------------------------------------
+      // My annual dividends
+      // -----------------------------------------------------------------------
+      {
+        path: 'my/dividends',
+        name: 'portal-my-dividends',
+        component: () => import('@/features/portal/MyDividendsPage.vue'),
+        props: { labels: myDividendsPageLabels },
       },
 
       // -----------------------------------------------------------------------
