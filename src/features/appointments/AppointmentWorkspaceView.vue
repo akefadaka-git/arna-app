@@ -1,21 +1,27 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { getEthiopicDateParts, ethiopicDateToGregorian, localDateTimeToIso } from '@/core/dates/calendar';
+import { formatCalendarDate, getEthiopicDateParts, ethiopicDateToGregorian, localDateTimeToIso } from '@/core/dates/calendar';
 import { useAuthStore } from '@/stores/auth';
 import { useLocaleStore } from '@/stores/locale';
 import { listCalendars } from '@/features/calendar/api';
 import type { CalendarRecord } from '@/features/calendar/api';
 import {
+  acceptAppointmentRescheduleProposal,
   bookAppointment,
   cancelAppointment,
+  createAppointmentRescheduleProposal,
+  declineAppointmentRescheduleProposal,
   checkAppointmentAvailability,
   confirmAppointment,
   declineAppointment,
+  listAppointmentRescheduleProposals,
   listAppointments,
+  withdrawAppointmentRescheduleProposal,
 } from './api';
 import type {
   AppointmentAvailability,
   AppointmentBookingPayload,
+  AppointmentRescheduleProposal,
   AppointmentScope,
   AppointmentStatus,
   CalendarAppointment,
@@ -40,6 +46,12 @@ const attendeeIds = ref('');
 const title = ref('');
 const description = ref('');
 const todayEthiopianDate = getEthiopicDateParts(new Date());
+const rescheduleAppointmentId = ref('');
+const rescheduleStartDate = ref({ year: todayEthiopianDate.year, month: todayEthiopianDate.month, day: todayEthiopianDate.day });
+const rescheduleEndDate = ref({ year: todayEthiopianDate.year, month: todayEthiopianDate.month, day: todayEthiopianDate.day });
+const rescheduleStartTime = ref('09:00');
+const rescheduleEndTime = ref('09:30');
+const rescheduleReason = ref('');
 const date = ref({ year: todayEthiopianDate.year, month: todayEthiopianDate.month, day: todayEthiopianDate.day });
 const startTime = ref('09:00');
 const endTime = ref('09:30');
@@ -107,7 +119,15 @@ async function load(): Promise<void> {
   try {
     const [calendarPage, appointmentPage] = await Promise.all([listCalendars(), listAppointments()]);
     calendars.value = calendarPage.data;
-    appointments.value = appointmentPage.data;
+    appointments.value = await Promise.all(appointmentPage.data.map(async (appointment) => {
+      const isParty = appointment.requested_by_user_id === auth.userId || appointment.host_user_id === auth.userId;
+      if (appointment.status !== 'confirmed' || !isParty) return { ...appointment, reschedule_proposals: [] };
+      try {
+        return { ...appointment, reschedule_proposals: await listAppointmentRescheduleProposals(appointment.id) };
+      } catch {
+        return { ...appointment, reschedule_proposals: [] };
+      }
+    }));
     if (!selectedCalendarId.value && calendarPage.data.length > 0) {
       selectedCalendarId.value = calendarPage.data.find((item) => item.visibility === 'tenant')?.id ?? calendarPage.data[0].id;
     }
@@ -194,6 +214,100 @@ function canCancel(appointment: CalendarAppointment): boolean {
   return canManage.value
     && (isHost(appointment) || appointment.requested_by_user_id === auth.userId)
     && ['requested', 'confirmed'].includes(appointment.status);
+}
+
+
+function canProposeReschedule(appointment: CalendarAppointment): boolean {
+  return canManage.value && appointment.status === 'confirmed'
+    && (appointment.requested_by_user_id === auth.userId || isHost(appointment));
+}
+
+function beginReschedule(appointment: CalendarAppointment): void {
+  const start = appointment.event.starts_at_ec;
+  const end = appointment.event.ends_at_ec;
+  if (!start || !end) return;
+  rescheduleAppointmentId.value = appointment.id;
+  rescheduleStartDate.value = { year: start.year, month: start.month, day: start.day };
+  rescheduleEndDate.value = { year: end.year, month: end.month, day: end.day };
+  rescheduleStartTime.value = start.local_time.slice(0, 5);
+  rescheduleEndTime.value = end.local_time.slice(0, 5);
+  rescheduleReason.value = '';
+  error.value = '';
+  notice.value = '';
+}
+
+function proposalStatusLabel(proposal: AppointmentRescheduleProposal): string {
+  if (proposal.status === 'pending') return labels.value.proposed;
+  if (proposal.status === 'accepted') return labels.value.accepted;
+  if (proposal.status === 'withdrawn') return labels.value.withdrawn;
+  return labels.value.declined;
+}
+
+function proposalTimeLabel(value: string, timezone: string): string {
+  return formatCalendarDate(value, { dateStyle: 'medium', timeStyle: 'short', timeZone: timezone }, locale.locale === 'en' ? 'en' : 'am');
+}
+
+function canRespondToProposal(proposal: AppointmentRescheduleProposal): boolean {
+  return proposal.status === 'pending' && proposal.counterparty_user_id === auth.userId && canManage.value;
+}
+
+function canWithdrawProposal(proposal: AppointmentRescheduleProposal): boolean {
+  return proposal.status === 'pending' && proposal.proposer_user_id === auth.userId && canManage.value;
+}
+
+async function submitReschedule(appointment: CalendarAppointment): Promise<void> {
+  error.value = '';
+  notice.value = '';
+  const startDate = ethiopicDateToGregorian(rescheduleStartDate.value);
+  const endDate = ethiopicDateToGregorian(rescheduleEndDate.value);
+  if (!startDate || !endDate) {
+    error.value = labels.value.date;
+    return;
+  }
+  saving.value = true;
+  try {
+    const startsAt = localDateTimeToIso(startDate, rescheduleStartTime.value, appointment.event.timezone);
+    const endsAt = localDateTimeToIso(endDate, rescheduleEndTime.value, appointment.event.timezone);
+    if (new Date(endsAt).getTime() <= new Date(startsAt).getTime()) {
+      throw new Error(labels.value.endsAt);
+    }
+    await createAppointmentRescheduleProposal(appointment.id, {
+      starts_at: startsAt,
+      ends_at: endsAt,
+      timezone: appointment.event.timezone,
+      expected_appointment_version: appointment.version,
+      expected_event_version: appointment.event.version,
+      reason: rescheduleReason.value.trim() || null,
+    });
+    rescheduleAppointmentId.value = '';
+    notice.value = labels.value.rescheduleProposed;
+    await load();
+  } catch (cause) {
+    error.value = cause instanceof Error ? cause.message : String(cause);
+  } finally {
+    saving.value = false;
+  }
+}
+
+async function runProposalAction(
+  appointment: CalendarAppointment,
+  proposal: AppointmentRescheduleProposal,
+  action: 'accept' | 'decline' | 'withdraw',
+): Promise<void> {
+  error.value = '';
+  notice.value = '';
+  saving.value = true;
+  try {
+    if (action === 'accept') await acceptAppointmentRescheduleProposal(appointment.id, proposal.id);
+    if (action === 'decline') await declineAppointmentRescheduleProposal(appointment.id, proposal.id);
+    if (action === 'withdraw') await withdrawAppointmentRescheduleProposal(appointment.id, proposal.id);
+    notice.value = labels.value.successUpdated;
+    await load();
+  } catch (cause) {
+    error.value = cause instanceof Error ? cause.message : String(cause);
+  } finally {
+    saving.value = false;
+  }
 }
 
 function dateLabel(appointment: CalendarAppointment): string {
@@ -313,6 +427,51 @@ onMounted(() => {
         <div v-if="canCancel(appointment)" class="appointment-workspace__actions">
           <button data-testid="appointment-cancel" class="appointment-workspace__secondary" type="button" :disabled="saving" @click="runAction(appointment, 'cancel')">{{ labels.cancel }}</button>
         </div>
+        <div v-if="canProposeReschedule(appointment)" class="appointment-workspace__actions">
+          <button class="appointment-workspace__secondary" type="button" :disabled="saving" @click="beginReschedule(appointment)">{{ labels.reschedule }}</button>
+        </div>
+        <section v-if="rescheduleAppointmentId === appointment.id" class="appointment-workspace__booking" :aria-label="labels.reschedule">
+          <h4>{{ labels.proposeTime }}</h4>
+          <div class="appointment-workspace__form">
+            <fieldset class="appointment-workspace__date">
+              <legend>{{ labels.date }} · {{ labels.startsAt }}</legend>
+              <label><span>{{ labels.year }}</span><input v-model.number="rescheduleStartDate.year" type="number" min="1" max="9999" /></label>
+              <label><span>{{ labels.month }}</span><input v-model.number="rescheduleStartDate.month" type="number" min="1" max="13" /></label>
+              <label><span>{{ labels.day }}</span><input v-model.number="rescheduleStartDate.day" type="number" min="1" max="30" /></label>
+            </fieldset>
+            <label class="appointment-workspace__field"><span>{{ labels.startsAt }}</span><input v-model="rescheduleStartTime" type="time" required /></label>
+            <fieldset class="appointment-workspace__date">
+              <legend>{{ labels.date }} · {{ labels.endsAt }}</legend>
+              <label><span>{{ labels.year }}</span><input v-model.number="rescheduleEndDate.year" type="number" min="1" max="9999" /></label>
+              <label><span>{{ labels.month }}</span><input v-model.number="rescheduleEndDate.month" type="number" min="1" max="13" /></label>
+              <label><span>{{ labels.day }}</span><input v-model.number="rescheduleEndDate.day" type="number" min="1" max="30" /></label>
+            </fieldset>
+            <label class="appointment-workspace__field"><span>{{ labels.endsAt }}</span><input v-model="rescheduleEndTime" type="time" required /></label>
+            <label class="appointment-workspace__field appointment-workspace__field--wide">
+              <span>{{ labels.proposalReason }}</span>
+              <textarea v-model="rescheduleReason" rows="2" maxlength="1000" />
+            </label>
+            <div class="appointment-workspace__actions appointment-workspace__field--wide">
+              <button class="appointment-workspace__primary" type="button" :disabled="saving" @click="submitReschedule(appointment)">{{ labels.proposeTime }}</button>
+              <button class="appointment-workspace__secondary" type="button" :disabled="saving" @click="rescheduleAppointmentId = ''">{{ labels.cancel }}</button>
+            </div>
+          </div>
+        </section>
+        <section v-if="appointment.reschedule_proposals?.length" class="appointment-workspace__proposal-list">
+          <h4>{{ labels.proposalStatus }}</h4>
+          <article v-for="proposal in appointment.reschedule_proposals" :key="proposal.id" class="appointment-workspace__proposal">
+            <p><strong>{{ proposalStatusLabel(proposal) }}</strong></p>
+            <p>{{ proposalTimeLabel(proposal.proposed_starts_at, proposal.timezone) }} – {{ proposalTimeLabel(proposal.proposed_ends_at, proposal.timezone) }}</p>
+            <p v-if="proposal.reason">{{ proposal.reason }}</p>
+            <div v-if="canRespondToProposal(proposal)" class="appointment-workspace__actions">
+              <button class="appointment-workspace__primary" type="button" :disabled="saving" @click="runProposalAction(appointment, proposal, 'accept')">{{ labels.acceptProposal }}</button>
+              <button class="appointment-workspace__secondary" type="button" :disabled="saving" @click="runProposalAction(appointment, proposal, 'decline')">{{ labels.declineProposal }}</button>
+            </div>
+            <div v-else-if="canWithdrawProposal(proposal)" class="appointment-workspace__actions">
+              <button class="appointment-workspace__secondary" type="button" :disabled="saving" @click="runProposalAction(appointment, proposal, 'withdraw')">{{ labels.withdrawProposal }}</button>
+            </div>
+          </article>
+        </section>
       </article>
     </section>
   </main>
@@ -330,7 +489,8 @@ onMounted(() => {
 .appointment-workspace__list-heading,
 .appointment-workspace__card-heading,
 .appointment-workspace__actions,
-.appointment-workspace__card-meta {
+.appointment-workspace__card-meta,
+.appointment-workspace__proposal {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -462,6 +622,12 @@ onMounted(() => {
 .appointment-workspace__list-heading h2 {
   margin: 0;
 }
+.appointment-workspace__proposal-list {
+  display: grid;
+  gap: var(--arna-space-2);
+}
+.appointment-workspace__proposal-list h4 { margin: 0; }
+.appointment-workspace__proposal { border-top: 1px solid var(--arna-color-border-subtle); padding-top: var(--arna-space-2); }
 .appointment-workspace__card {
   display: grid;
   gap: var(--arna-space-3);
