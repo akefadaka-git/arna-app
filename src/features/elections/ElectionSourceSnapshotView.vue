@@ -199,6 +199,8 @@ onMounted(() => {
       <section v-if="selected" class="source-workspace__panel" aria-live="polite">
         <h2>የማህደር ዝርዝር | Snapshot detail</h2>
         <dl class="source-workspace__metadata">
+          <dt>Record-date UTC offset</dt><dd>{{ selected.snapshot.record_date_timezone }}</dd>
+          <dt>Database timezone</dt><dd>{{ selected.snapshot.database_timezone }}</dd>
           <dt>Source digest</dt><dd><code>{{ selected.snapshot.source_digest }}</code></dd>
           <dt>Manifest digest</dt><dd><code>{{ selected.snapshot.manifest_digest }}</code></dd>
           <dt>Captured at</dt><dd>{{ formatTimestamp(selected.snapshot.captured_at_utc) }}</dd>
@@ -235,6 +237,21 @@ onMounted(() => {
                 <td>{{ holding.current_projection }}</td>
                 <td>{{ holding.ledger_entry_count }}</td>
                 <td>{{ holding.source_state }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Source ledger manifest ({{ selected.source_entries.length }})</h3>
+        <div class="source-workspace__table-wrap">
+          <table>
+            <thead><tr><th>Holding ID</th><th>Ledger entry ID</th><th>Entry digest</th><th>Business-time inclusion</th></tr></thead>
+            <tbody>
+              <tr v-for="entry in selected.source_entries" :key="entry.source_entry_id">
+                <td>{{ entry.source_holding_id }}</td>
+                <td>{{ entry.source_entry_id }}</td>
+                <td><code>{{ entry.entry_digest }}</code></td>
+                <td>{{ entry.included_by_business_time ? 'Included' : 'After record date' }}</td>
               </tr>
             </tbody>
           </table>
