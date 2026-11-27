@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — ForgotPasswordForm
+ ARNA Phase 2 UI — ForgotPasswordForm
 =============================================================================
 
- File:      mase_app/src/features/auth/ForgotPasswordForm/ForgotPasswordForm.vue
+ File:      src/features/auth/ForgotPasswordForm/ForgotPasswordForm.vue
  Layer:     Features (Stage 12 — Authentication UI)
  Version:   1.2.0
  Status:    FROZEN
@@ -165,10 +165,10 @@
  no `color-mix()`, no `calc()` on colors, no rgba literals.
 
  Colors used:
-   --mases-color-text-secondary   (back-to-login prompt)
-   --mases-color-text-tertiary    (request-id reference line)
-   --mases-color-text-primary     (success title)
-   --mases-color-text-secondary   (success body)
+   --arna-color-text-secondary   (back-to-login prompt)
+   --arna-color-text-tertiary    (request-id reference line)
+   --arna-color-text-primary     (success title)
+   --arna-color-text-secondary   (success body)
 
  -----------------------------------------------------------------------------
  Production readiness
@@ -641,7 +641,7 @@ const successMessageComputed = computed<string>(() => {
 .forgot-password {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-5);
+  gap: var(--arna-space-5);
   width: 100%;
 }
 
@@ -651,7 +651,7 @@ const successMessageComputed = computed<string>(() => {
 .forgot-password__form {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-5);
+  gap: var(--arna-space-5);
   width: 100%;
 }
 
@@ -662,10 +662,10 @@ const successMessageComputed = computed<string>(() => {
 
 .forgot-password__banner-reference {
   margin: 0;
-  margin-block-start: var(--mases-space-1);
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  margin-block-start: var(--arna-space-1);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   overflow-wrap: anywhere;
 }
 
@@ -675,8 +675,8 @@ const successMessageComputed = computed<string>(() => {
 .forgot-password__actions {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
-  margin-block-start: var(--mases-space-1);
+  gap: var(--arna-space-2);
+  margin-block-start: var(--arna-space-1);
 }
 
 /* ============================================================================
@@ -685,34 +685,34 @@ const successMessageComputed = computed<string>(() => {
 .forgot-password__success {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   width: 100%;
 }
 
 .forgot-password__success-title {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-5);
-  line-height: var(--mases-line-height-heading-5);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-5);
+  line-height: var(--arna-line-height-heading-5);
+  font-weight: var(--arna-font-weight-semibold);
   overflow-wrap: anywhere;
 }
 
 .forgot-password__success-message {
   margin: 0;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   overflow-wrap: anywhere;
 }
 
 .forgot-password__success-actions {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
-  margin-block-start: var(--mases-space-2);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  gap: var(--arna-space-2);
+  margin-block-start: var(--arna-space-2);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
 }
 
 /* ============================================================================
@@ -721,10 +721,10 @@ const successMessageComputed = computed<string>(() => {
 .forgot-password__footer {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
-  margin-block-start: var(--mases-space-3);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  gap: var(--arna-space-2);
+  margin-block-start: var(--arna-space-3);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
 }
 
 /* ============================================================================

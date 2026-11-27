@@ -3,7 +3,7 @@
  * CHANGE VERIFICATION — CR-LW3
  * =============================================================================
  *
- * File:      mase_app/src/features/loans/labels.ts  (AMEND)
+ * File:      src/features/loans/labels.ts  (AMEND)
  * Unit:      CR-LW3 — Workspace loan sub-resources (labels)
  * Delivery type:  Amendment — eight new interfaces, eight new consts,
  *                 five new fields on LoanDetailViewLabels, file-level
@@ -139,7 +139,7 @@
  * CHANGE VERIFICATION — CR-LW2
  * =============================================================================
  *
- * File:      mase_app/src/features/loans/labels.ts  (AMEND)
+ * File:      src/features/loans/labels.ts  (AMEND)
  * Unit:      CR-LW2 — Workspace loan dialogs (labels)
  * Delivery type:  Amendment — six new dialog-label interfaces, six new
  *                 consts, file-level change-verification block.
@@ -175,7 +175,7 @@
  * CHANGE VERIFICATION — CR-LW1
  * =============================================================================
  *
- * File:      mase_app/src/features/loans/labels.ts  (NEW)
+ * File:      src/features/loans/labels.ts  (NEW)
  * Unit:      CR-LW1 — Workspace loan views (labels)
  * Delivery type:  New file.
  *

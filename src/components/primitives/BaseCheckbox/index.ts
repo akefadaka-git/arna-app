@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — BaseCheckbox — Barrel Export
+ * ARNA Phase 2 UI — BaseCheckbox — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/components/primitives/BaseCheckbox/index.ts
+ * File:      src/components/primitives/BaseCheckbox/index.ts
  * Layer:     1 (Primitives)
  * Version:   1.0.0
  * Status:    FROZEN

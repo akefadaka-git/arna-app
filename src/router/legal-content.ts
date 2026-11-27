@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Legal Center Content
+ * ARNA Phase 2 UI — Legal Center Content
  * =============================================================================
  *
- * File:      mase_app/src/router/legal-content.ts
+ * File:      src/router/legal-content.ts
  * Layer:     Core (router configuration)
  * Version:   1.0.0
  * Status:    FROZEN

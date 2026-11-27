@@ -3,7 +3,7 @@
  * CHANGE VERIFICATION — G3
  * =============================================================================
  *
- * File:      mase_app/src/router/routes-workspace.ts  (AMEND)
+ * File:      src/router/routes-workspace.ts  (AMEND)
  * Unit:      G3 — GovernanceBody frontend routes
  * Delivery type:  Amendment — one added label import, two added child
  *                 routes (list + detail), file header Authority
@@ -86,7 +86,7 @@
  * CHANGE VERIFICATION — CR-LW3
  * =============================================================================
  *
- * File:      mase_app/src/router/routes-workspace.ts  (AMEND)
+ * File:      src/router/routes-workspace.ts  (AMEND)
  * Unit:      CR-LW3 — Workspace loan sub-resources (routes)
  * Delivery type:  Amendment — three added label imports, three added
  *                 child routes (two sub-resources under /loans/:id,
@@ -204,7 +204,7 @@
  * CHANGE VERIFICATION — CR-LW1
  * =============================================================================
  *
- * File:      mase_app/src/router/routes-workspace.ts  (AMEND)
+ * File:      src/router/routes-workspace.ts  (AMEND)
  * Unit:      CR-LW1 — Workspace loan views (routes)
  * Delivery type:  Amendment — one added label import, two added child
  *                 routes, revision history, version bump.
@@ -277,10 +277,10 @@
 
 /*
  * =============================================================================
- * MASES Phase 2 UI — Workspace Route Tree
+ * ARNA Phase 2 UI — Workspace Route Tree
  * =============================================================================
  *
- * File:      mase_app/src/router/routes-workspace.ts
+ * File:      src/router/routes-workspace.ts
  * Layer:     Core (router configuration)
  * Version:   1.4.0
  * Status:    FROZEN

@@ -3,7 +3,7 @@
  * CHANGE VERIFICATION — CR-FOOTER1 (footer content)
  * =============================================================================
  *
- * File:      mase_app/src/router/shell-labels.ts  (AMEND)
+ * File:      src/router/shell-labels.ts  (AMEND)
  * Unit:      CR-FOOTER1 — footer content labels
  * Delivery type:  Amendment — one new exported const
  *                 (`aranaFooterLabels`), a new consumer in the
@@ -32,7 +32,7 @@
  *       } as const;
  *
  *   `copyrightTemplate` carries a `{year}` placeholder. The
- *   component that consumes it (MASESFooterContent.vue, the next
+ *   component that consumes it (ArnaFooterContent.vue, the next
  *   file in this CR) computes the current Ethiopian calendar year
  *   at render time and substitutes it. This keeps the labels file a
  *   pure data module — no `Intl`, no `Date`, no runtime computation
@@ -60,7 +60,7 @@
  *   is not carried here — URLs are topology, not labels, and the
  *   convention established by PortalLayout.vue (see its
  *   `WORKSPACE_URL` comment) is that topology lives in the consuming
- *   component. MASESFooterContent.vue carries the address today
+ *   component. ArnaFooterContent.vue carries the address today
  *   (`mailto:support@maalearna.com.et`) and a bounded CR will replace
  *   it once the official support channel is confirmed.
  *
@@ -127,7 +127,7 @@
  * CHANGE VERIFICATION — CR-BRAND1 (corporate brand identity)
  * =============================================================================
  *
- * File:      mase_app/src/router/shell-labels.ts  (AMEND)
+ * File:      src/router/shell-labels.ts  (AMEND)
  * Unit:      CR-BRAND1 — corporate brand identity labels
  * Delivery type:  Amendment — one new exported const
  *                 (`aranaBrandLabels`), three header additions
@@ -149,7 +149,7 @@
  *   for this CR, is:
  *
  *       ማሌ ዓርና ስማርት ሲስተም (ማሴስ)
- *       ("Maale Arna Smart System (MASES)")
+ *       ("Maale Arna Smart System (ARNA)")
  *
  *   The header's brand region cannot render this in full at any
  *   realistic width — the full string exceeds the mobile budget. A
@@ -249,7 +249,7 @@
  * CHANGE VERIFICATION — G3 (folded into v1.8.0)
  * =============================================================================
  *
- * File:      mase_app/src/router/shell-labels.ts  (AMEND)
+ * File:      src/router/shell-labels.ts  (AMEND)
  * Unit:      G3 — Workspace governance nav entry
  * Delivery type:  Amendment — one added NavLeaf in
  *                 `authenticatedNavItems`, one added row in the file
@@ -388,7 +388,7 @@
  * CHANGE VERIFICATION — CR-DASH1 (feature dashboard)
  * =============================================================================
  *
- * File:      mase_app/src/router/shell-labels.ts  (AMEND)
+ * File:      src/router/shell-labels.ts  (AMEND)
  * Unit:      CR-DASH1 — Workspace feature dashboard (nav entry)
  * Delivery type:  Amendment — one added NavLeaf at the top of
  *                 `authenticatedNavItems`, one added row in the file
@@ -493,7 +493,7 @@
  * CHANGE VERIFICATION — portal back-to-workspace
  * =============================================================================
  *
- * File:      mase_app/src/router/shell-labels.ts  (AMEND)
+ * File:      src/router/shell-labels.ts  (AMEND)
  * Unit:      Portal user-menu — back-to-workspace entry
  * Delivery type:  Amendment — one new exported const
  *                 (`portalUserMenuItems`), three header additions (icon
@@ -603,7 +603,7 @@
  * CHANGE VERIFICATION — CR-LW3 (documentation restoration)
  * =============================================================================
  *
- * File:      mase_app/src/router/shell-labels.ts  (AMEND)
+ * File:      src/router/shell-labels.ts  (AMEND)
  * Unit:      CR-LW3 — documentation restoration
  * Delivery type:  Correction — restores the CR-LW1 change-verification
  *                 block and the full revision-history text that were
@@ -635,7 +635,7 @@
  * CHANGE VERIFICATION — CR-LW3
  * =============================================================================
  *
- * File:      mase_app/src/router/shell-labels.ts  (AMEND)
+ * File:      src/router/shell-labels.ts  (AMEND)
  * Unit:      CR-LW3 — Workspace loan sub-resources (nav entry)
  * Delivery type:  Amendment — one added NavLeaf in
  *                 authenticatedNavItems, one added row in the file
@@ -747,7 +747,7 @@
  * CHANGE VERIFICATION — CR-LW1
  * =============================================================================
  *
- * File:      mase_app/src/router/shell-labels.ts  (AMEND)
+ * File:      src/router/shell-labels.ts  (AMEND)
  * Unit:      CR-LW1 — Workspace loan views (nav entry)
  * Delivery type:  Amendment — one added NavLeaf in
  *                 authenticatedNavItems, one added row in the file
@@ -817,10 +817,10 @@
 
 /*
  * =============================================================================
- * MASES Phase 2 UI — Shell Labels and Nav (Amharic)
+ * ARNA Phase 2 UI — Shell Labels and Nav (Amharic)
  * =============================================================================
  *
- * File:      mase_app/src/router/shell-labels.ts
+ * File:      src/router/shell-labels.ts
  * Layer:     Core (router configuration)
  * Version:   1.10.0
  * Status:    FROZEN
@@ -835,7 +835,7 @@
  *          `aranaFooterLabels`, carrying the copyright template
  *          ('© 2016 - {year} ማሌ ዓርና አክሲዮን ማኅበር፥ መብቱ የተጠበቀ ነው።'),
  *          the legal link label ('ሕጋዊ መረጃ'), and the support link
- *          label ('ድጋፍ'). Consumed by MASESFooterContent.vue (a
+ *          label ('ድጋፍ'). Consumed by ArnaFooterContent.vue (a
  *          companion change in the same CR). See the CR-FOOTER1 block
  *          at the top of this file for the rationale, for why the
  *          copyright is a template rather than a plain string, and for
@@ -1040,7 +1040,7 @@
  *   layouts/AuthenticatedLayout/AuthenticatedLayout.vue   (workspace)
  *   features/portal/PortalLayout.vue                      (portal)
  *   layouts/AppShell/AranaBrand/AranaBrand.vue            (brand labels)
- *   layouts/AppShell/MASESFooterContent/MASESFooterContent.vue
+ *   layouts/AppShell/ArnaFooterContent/ArnaFooterContent.vue
  *                                                         (footer labels)
  *
  * -----------------------------------------------------------------------------
@@ -1198,7 +1198,7 @@
  * administration); the permission's Amharic name in the SQL dump
  * ('የአስተዳደር አካላትን ማየት') uses the same root.
  *
- * "ወደ ማሴስ ወርክስፔስ" (To MASES Workspace) is used for the portal's
+ * "ወደ ማሴስ ወርክስፔስ" (To ARNA Workspace) is used for the portal's
  * back-to-workspace user-menu item (1.7.0). The string names the
  * destination by its own application name — 'ማሴስ ወርክስፔስ' is the same
  * label the platform stores on the workspace's `platform_applications`
@@ -1427,7 +1427,7 @@ import type {
  * for CR-BRAND1, is:
  *
  *     ማሌ ዓርና ስማርት ሲስተም (ማሴስ)
- *     ("Maale Arna Smart System (MASES)")
+ *     ("Maale Arna Smart System (ARNA)")
  *
  * `corporateName` and `productName` are the header's short form — the
  * organization name on line 1, the parenthetical abbreviation on
@@ -1459,7 +1459,7 @@ export const aranaBrandLabels = {
  * Three strings, in two groups:
  *
  *   · The copyright line. A template with a `{year}` placeholder —
- *     the consuming component (MASESFooterContent.vue) computes the
+ *     the consuming component (ArnaFooterContent.vue) computes the
  *     current Ethiopian calendar year at render time and substitutes
  *     it. See the CR-FOOTER1 block at the top of this file for why
  *     the copyright is a template rather than a plain string.
@@ -1472,7 +1472,7 @@ export const aranaBrandLabels = {
  * URLs are deliberately NOT here. The legal link's destination
  * (`/legal`) and the support link's destination
  * (`mailto:support@maalearna.com.et` today) are topology, not
- * user-facing labels. They live in MASESFooterContent.vue, matching
+ * user-facing labels. They live in ArnaFooterContent.vue, matching
  * the convention PortalLayout.vue establishes for `WORKSPACE_URL`.
  *
  * Social link labels are deliberately absent. See the CR-FOOTER1
@@ -1502,14 +1502,14 @@ export const aranaFooterLabels = {
   /**
    * The footer's legal entry point. The label matches the Legal
    * Center hub's <h1> (see router/legal-labels.ts). The destination
-   * (`/legal`) is declared in MASESFooterContent.vue.
+   * (`/legal`) is declared in ArnaFooterContent.vue.
    */
   legalLinkLabel: 'ሕጋዊ መረጃ',
 
   /**
    * The footer's support entry. The destination
    * (`mailto:support@maalearna.com.et`) is declared in
-   * MASESFooterContent.vue; when the official support channel is
+   * ArnaFooterContent.vue; when the official support channel is
    * confirmed, only the const in that file changes.
    */
   supportLinkLabel: 'ድጋፍ',

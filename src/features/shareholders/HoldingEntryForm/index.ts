@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — HoldingEntryForm — Barrel Export
+ * ARNA Phase 2 UI — HoldingEntryForm — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/features/shareholders/HoldingEntryForm/index.ts
+ * File:      src/features/shareholders/HoldingEntryForm/index.ts
  * Layer:     Features (Stage 15 — Shareholder Portal)
  * Version:   1.0.0
  * Status:    FROZEN

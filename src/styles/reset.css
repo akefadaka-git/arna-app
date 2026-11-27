@@ -1,8 +1,8 @@
 /* =============================================================================
- * MASES PHASE 2 UI — CSS RESET
+ * ARNA PHASE 2 UI — CSS RESET
  * =============================================================================
  *
- * File:      mase_app/src/styles/reset.css
+ * File:      src/styles/reset.css
  * Version:   1.0.0
  * Status:    FROZEN
  * Authority: MASES_PHASE_2_UI_DESIGN_SYSTEM.md v1.0.0
@@ -146,7 +146,7 @@
  *     a specific component requires it.
  *
  *   · `ul, ol { list-style: none; padding: 0 }` — the components that
- *     render lists (AppSidebar, DropdownMenu, MASESFooterContent)
+ *     render lists (AppSidebar, DropdownMenu, ArnaFooterContent)
  *     already handle their own list styling in scoped CSS. A global
  *     list reset would silently change other lists a future component
  *     might want to render with markers.

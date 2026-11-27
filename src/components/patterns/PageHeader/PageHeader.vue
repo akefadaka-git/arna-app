@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — professional enhancement
 =============================================================================
 
- File:      mase_app/src/components/patterns/PageHeader/PageHeader.vue  (AMEND)
+ File:      src/components/patterns/PageHeader/PageHeader.vue  (AMEND)
  Unit:      Enhance — eyebrow, variant, dividers, leading/title-trailing/
                  meta slots, aria-labelledby linkage, typography polish.
  Delivery type:  Enhancement — every addition is opt-in; existing props,
@@ -91,10 +91,10 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — PageHeader
+ ARNA Phase 2 UI — PageHeader
 =============================================================================
 
- File:      mase_app/src/components/patterns/PageHeader/PageHeader.vue
+ File:      src/components/patterns/PageHeader/PageHeader.vue
  Layer:     3 (Patterns)
  Version:   1.0.2
  Status:    FROZEN

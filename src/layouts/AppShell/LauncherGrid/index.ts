@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — LauncherGrid — Barrel Export
+ * ARNA Phase 2 UI — LauncherGrid — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/layouts/AppShell/LauncherGrid/index.ts
+ * File:      src/layouts/AppShell/LauncherGrid/index.ts
  * Layer:     4 (Shell — AppShell family)
  * Version:   1.0.0
  * Status:    FROZEN

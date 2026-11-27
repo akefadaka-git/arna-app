@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — BaseSelect
+ ARNA Phase 2 UI — BaseSelect
 =============================================================================
 
- File:      mase_app/src/components/primitives/BaseSelect/BaseSelect.vue
+ File:      src/components/primitives/BaseSelect/BaseSelect.vue
  Layer:     1 (Primitives)
  Version:   1.1.0
  Status:    FROZEN

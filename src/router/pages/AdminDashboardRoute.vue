@@ -3,7 +3,7 @@
  ARNA Phase 2 UI — AdminDashboardRoute
 =============================================================================
 
- File:      mase_app/src/router/pages/AdminDashboardRoute.vue
+ File:      src/router/pages/AdminDashboardRoute.vue
  Layer:     Core (router page)
  Version:   1.0.0
  Status:    FROZEN

@@ -3,7 +3,7 @@
  * CHANGE VERIFICATION — CR-L3
  * =============================================================================
  *
- * File:      mase_app/src/router/routes-portal.ts  (AMEND)
+ * File:      src/router/routes-portal.ts  (AMEND)
  * Unit:      CR-L3 — Portal self-service loans pages (routes)
  * Delivery type:  Amendment — two added label imports, two added child
  *                 routes, revision history, version bump.
@@ -66,10 +66,10 @@
 
 /*
  * =============================================================================
- * MASES Phase 2 UI — Portal Route Tree
+ * ARNA Phase 2 UI — Portal Route Tree
  * =============================================================================
  *
- * File:      mase_app/src/router/routes-portal.ts
+ * File:      src/router/routes-portal.ts
  * Layer:     Core (router configuration)
  * Version:   1.0.3
  * Status:    FROZEN

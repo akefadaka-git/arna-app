@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — FormField — Barrel Export
+ * ARNA Phase 2 UI — FormField — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/components/composites/FormField/index.ts
+ * File:      src/components/composites/FormField/index.ts
  * Layer:     2 (Composites)
  * Version:   1.0.0
  * Status:    FROZEN

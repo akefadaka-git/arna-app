@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — FormActions
+ ARNA Phase 2 UI — FormActions
 =============================================================================
 
- File:      mase_app/src/components/composites/FormActions/FormActions.vue
+ File:      src/components/composites/FormActions/FormActions.vue
  Layer:     2 (Composites)
  Version:   1.0.0
  Status:    FROZEN

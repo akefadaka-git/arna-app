@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — CR-WORKSPACE-TITLE · Phase 1 · File 3
 =============================================================================
 
- File:      mase_app/src/features/shareholders/ShareClassListView/ShareClassListView.vue  (AMEND)
+ File:      src/features/shareholders/ShareClassListView/ShareClassListView.vue  (AMEND)
  Unit:      CR-WORKSPACE-TITLE — Phase 1, File 3
  Delivery type:  Enhancement — document.title via <PageTitle>.
                  One import added, one const added, one template
@@ -14,14 +14,14 @@
  Before (v1.0.0):
    The view set no document.title. The browser tab showed whatever
    the previously-visited route had left, or the entry HTML's
-   pre-JS default ("MASES") on a cold load directly at
+   pre-JS default ("ARNA") on a cold load directly at
    /shareholders/classes.
 
  After (v1.0.1):
    The view sets document.title via <PageTitle>, bound to the
    existing labels.pageTitle and to import.meta.env.VITE_APP_NAME.
 
-     Workspace build    →  "የአክሲዮን ክፍሎች — MASES"
+     Workspace build    →  "የአክሲዮን ክፍሎች — ARNA"
      Empty VITE_APP_NAME →  "የአክሲዮን ክፍሎች"
 
    The portal build does not mount this view (the shareholders
@@ -44,10 +44,10 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — ShareClassListView
+ ARNA Phase 2 UI — ShareClassListView
 =============================================================================
 
- File:      mase_app/src/features/shareholders/ShareClassListView/ShareClassListView.vue
+ File:      src/features/shareholders/ShareClassListView/ShareClassListView.vue
  Layer:     Features (Stage 15 — Shareholder Portal)
  Version:   1.0.1
  Status:    FROZEN
@@ -284,7 +284,7 @@ const props = defineProps<Props>();
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "MASES"
+ *   workspace  →  "ARNA"
  *   portal     →  "Maale Arna Portal"
  *
  * This view is mounted in the workspace build only — the shareholders
@@ -538,7 +538,7 @@ function activeVariantFor(row: ShareClass): 'success' | 'neutral' {
 .share-class-list-view {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -549,9 +549,9 @@ function activeVariantFor(row: ShareClass): 'success' | 'neutral' {
    rather than a display string.
    ============================================================================ */
 .share-class-list-view__code {
-  font-family: var(--mases-font-family-mono);
-  font-size: var(--mases-font-size-body-sm);
-  color: var(--mases-color-text-primary);
+  font-family: var(--arna-font-family-mono);
+  font-size: var(--arna-font-size-body-sm);
+  color: var(--arna-color-text-primary);
 }
 
 /* ============================================================================
@@ -564,7 +564,7 @@ function activeVariantFor(row: ShareClass): 'success' | 'neutral' {
   display: inline-flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
 }
 
 /* ============================================================================

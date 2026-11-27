@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — BaseLink
+ ARNA Phase 2 UI — BaseLink
 =============================================================================
 
- File:      mase_app/src/components/primitives/BaseLink/BaseLink.vue
+ File:      src/components/primitives/BaseLink/BaseLink.vue
  Layer:     1 (Primitives)
  Version:   1.1.0
  Status:    FROZEN

@@ -206,7 +206,7 @@ test.describe('ARNA shared appointment booking workspace', () => {
     const reschedule = card.getByRole('button', { name: 'ቀጠሮውን ያስተካክሉ' });
     await expect(reschedule).toBeVisible();
     await reschedule.click();
-    await expect(card.getByText('አዲስ ሰዓት ያቅርቡ')).toBeVisible();
+    await expect(card.getByRole('heading', { name: 'አዲስ ሰዓት ያቅርቡ' })).toBeVisible();
     await expect(card.locator('textarea')).toBeVisible();
     await expect(card.locator('input[type="time"]')).toHaveCount(2);
     const results = await new AxeBuilder({ page }).include('.appointment-workspace').analyze();

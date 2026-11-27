@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — BaseLabel
+ ARNA Phase 2 UI — BaseLabel
 =============================================================================
 
- File:      mase_app/src/components/primitives/BaseLabel/BaseLabel.vue
+ File:      src/components/primitives/BaseLabel/BaseLabel.vue
  Layer:     1 (Primitives)
  Version:   1.0.1
  Status:    FROZEN
@@ -201,7 +201,7 @@ const props = withDefaults(defineProps<Props>(), {
  * Development-time warning: required=true without a translated
  * requiredLabel means screen readers get the required state ONLY from
  * the native `required` attribute on the input. That is fine when the
- * input forwards `required` (all MASES input primitives do), but the
+ * input forwards `required` (all ARNA input primitives do), but the
  * warning surfaces the gap during development for custom controls
  * that do not.
  */
@@ -292,46 +292,46 @@ const showSrRequired = computed<boolean>(
 .label {
   display: inline-flex;
   align-items: baseline;
-  gap: var(--mases-space-1);
-  color: var(--mases-color-text-secondary);
+  gap: var(--arna-space-1);
+  color: var(--arna-color-text-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
 }
 
 /* ============================================================================
    Disabled state
    ============================================================================ */
 .label--disabled {
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
 }
 
 /* ============================================================================
    Error state
    ============================================================================ */
 .label--error {
-  color: var(--mases-color-text-danger);
+  color: var(--arna-color-text-danger);
 }
 
 /* ============================================================================
    Required asterisk
    ============================================================================ */
 .label__required-marker {
-  color: var(--mases-color-text-danger);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-danger);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 .label--disabled .label__required-marker {
-  color: var(--mases-color-state-disabled-text);
+  color: var(--arna-color-state-disabled-text);
 }
 
 /* ============================================================================
    Optional marker
    ============================================================================ */
 .label__optional {
-  color: var(--mases-color-text-tertiary);
-  font-weight: var(--mases-font-weight-regular);
+  color: var(--arna-color-text-tertiary);
+  font-weight: var(--arna-font-weight-regular);
 }
 
 /* ============================================================================

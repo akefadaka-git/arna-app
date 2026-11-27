@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — LauncherTile — Barrel Export
+ * ARNA Phase 2 UI — LauncherTile — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/layouts/AppShell/LauncherTile/index.ts
+ * File:      src/layouts/AppShell/LauncherTile/index.ts
  * Layer:     4 (Shell — AppShell family)
  * Version:   1.0.0
  * Status:    FROZEN

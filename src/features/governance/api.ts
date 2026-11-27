@@ -3,7 +3,7 @@
  * CHANGE VERIFICATION — G3 · File 1 of 7 (amendment v1.1.0)
  * =============================================================================
  *
- * File:      mase_app/src/features/governance/api.ts  (AMEND)
+ * File:      src/features/governance/api.ts  (AMEND)
  * Unit:      G3 — GovernanceBody frontend module (API contract amendment)
  * Delivery type:  Amendment — four new resource interfaces, four new
  *                 endpoint wrappers, four paginated-collection types,
@@ -243,10 +243,10 @@
 
 /*
  * =============================================================================
- * MASES Phase 2 UI — Governance Feature API Module
+ * ARNA Phase 2 UI — Governance Feature API Module
  * =============================================================================
  *
- * File:      mase_app/src/features/governance/api.ts
+ * File:      src/features/governance/api.ts
  * Layer:     Features (Governance domain)
  * Version:   1.1.0
  * Status:    FROZEN
@@ -532,7 +532,7 @@ export interface GovernanceAppointment {
  * The inline user summary the membership resource emits.
  *
  * The membership resource's `user` relation is emitted as an inline
- * array rather than a nested resource — MASES Core ships no
+ * array rather than a nested resource — ARNA Core ships no
  * `UserResource`. The three fields are `id`, `display_name`, and
  * `email`.
  */

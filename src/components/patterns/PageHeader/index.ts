@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — PageHeader — Barrel Export
+ * ARNA Phase 2 UI — PageHeader — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/components/patterns/PageHeader/index.ts
+ * File:      src/components/patterns/PageHeader/index.ts
  * Layer:     3 (Patterns)
  * Version:   1.0.0
  * Status:    FROZEN

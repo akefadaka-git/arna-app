@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — AbstractBackground
+ ARNA Phase 2 UI — AbstractBackground
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/AbstractBackground/AbstractBackground.vue
+ File:      src/layouts/AppShell/AbstractBackground/AbstractBackground.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.0.0
  Status:    FROZEN
@@ -24,7 +24,7 @@
  -----------------------------------------------------------------------------
  Purpose
  -----------------------------------------------------------------------------
- A subtle, decorative background layer for the MASES shell. Renders
+ A subtle, decorative background layer for the ARNA shell. Renders
  four of the five layers listed in Master Spec §28:
 
      base            —  a solid page-surface colour
@@ -51,7 +51,7 @@
  The current shell renders on flat ivory (--arna-color-surface-page,
  #FFFDF7). That is a deliberate choice the shell made in v1.0.0 and
  that has not been revised. The Master Spec §28 anticipates a richer
- surface, but qualifies it as optional ("MASES may use a subtle
+ surface, but qualifies it as optional ("ARNA may use a subtle
  abstract background system").
 
  This component is the delivered implementation of that optional
@@ -131,7 +131,7 @@
 
  The 45° angle is chosen over 0°/90° (a grid) because:
    · A grid reads as graph paper, which conflicts with the
-     document/form affordances of MASES.
+     document/form affordances of ARNA.
    · A diagonal reads as woven fabric, which is neutral.
 
  The 14px spacing is large enough that the pattern does not alias
@@ -320,7 +320,7 @@
  nothing to disable under `prefers-reduced-motion: reduce`. The
  media query block at the end of the file is a defensive no-op
  placeholder, matching the convention used by AppHeader.vue,
- AppFooter.vue, AppShell.vue, and MASESBrand.vue.
+ AppFooter.vue, AppShell.vue, and ArnaBrand.vue.
 
  Forced-colors: the component sets `display: none` under
  `@media (forced-colors: active)`. In Windows High Contrast Mode
@@ -348,7 +348,7 @@
     substrate at different strengths. The current component has a
     single fixed intensity.
 
- 3. Dark mode. If MASES adds a dark theme (the Master Spec §32
+ 3. Dark mode. If ARNA adds a dark theme (the Master Spec §32
     mentions dark surfaces as deferred), the component will need a
     dark-theme branch. The current values are tuned for the ivory
     light surface; on a dark surface the gold and aubergine washes
@@ -551,7 +551,7 @@
    The component defines no animation. There is nothing to disable
    under prefers-reduced-motion: reduce. This block is a defensive
    no-op placeholder, matching the convention used by AppHeader.vue,
-   AppFooter.vue, AppShell.vue, and MASESBrand.vue, so a future
+   AppFooter.vue, AppShell.vue, and ArnaBrand.vue, so a future
    revision that adds a transition has a documented place to gate it
    on the user's motion preference.
    ============================================================================ */

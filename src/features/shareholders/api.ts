@@ -3,7 +3,7 @@
  * CHANGE VERIFICATION — P3 · Unit 2 · File 7 of 13
  * =============================================================================
  *
- * File:      mase_app/src/features/shareholders/api.ts
+ * File:      src/features/shareholders/api.ts
  * Unit:      P3 · Unit 2 — Ethiopian calendar date rendering
  * Delivery type:  Amendment
  * Net lines:      +15 `_display` interface fields; +~50 docblock lines

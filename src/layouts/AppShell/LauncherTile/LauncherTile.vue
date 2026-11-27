@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — LauncherTile
+ ARNA Phase 2 UI — LauncherTile
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/LauncherTile/LauncherTile.vue
+ File:      src/layouts/AppShell/LauncherTile/LauncherTile.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.2.0
  Status:    ENHANCEMENT — forced-colors accessibility

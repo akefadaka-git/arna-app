@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — BaseRadio
+ ARNA Phase 2 UI — BaseRadio
 =============================================================================
 
- File:      mase_app/src/components/primitives/BaseRadio/BaseRadio.vue
+ File:      src/components/primitives/BaseRadio/BaseRadio.vue
  Layer:     1 (Primitives)
  Version:   1.1.0
  Status:    FROZEN

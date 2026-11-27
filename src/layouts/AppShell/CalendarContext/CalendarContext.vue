@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — CalendarContext
+ ARNA Phase 2 UI — CalendarContext
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/CalendarContext/CalendarContext.vue
+ File:      src/layouts/AppShell/CalendarContext/CalendarContext.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.1.0
  Status:    ENHANCEMENT — forced-colors accessibility

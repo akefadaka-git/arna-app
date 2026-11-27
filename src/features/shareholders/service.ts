@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Shareholder Feature Service
+ * ARNA Phase 2 UI — Shareholder Feature Service
  * =============================================================================
  *
- * File:      mase_app/src/features/shareholders/service.ts
+ * File:      src/features/shareholders/service.ts
  * Layer:     Features (Stage 15 — Shareholder Portal)
  * Version:   1.0.0
  * Status:    FROZEN

@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — DatePicker — Barrel Export
+ * ARNA Phase 2 UI — DatePicker — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/components/composites/DatePicker/index.ts
+ * File:      src/components/composites/DatePicker/index.ts
  * Layer:     2 (Composites)
  * Version:   1.0.0
  * Status:    FROZEN

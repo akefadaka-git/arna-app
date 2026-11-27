@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — MyCertificatesPage
+ ARNA Phase 2 UI — MyCertificatesPage
 =============================================================================
 
- File:      mase_app/src/features/portal/MyCertificatesPage.vue
+ File:      src/features/portal/MyCertificatesPage.vue
  Layer:     Features (Portal)
  Version:   1.1.0
  Status:    FROZEN
@@ -295,7 +295,7 @@ function asCertificate(row: unknown): ShareCertificate {
 .my-certificates-page {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 

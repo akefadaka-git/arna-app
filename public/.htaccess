@@ -1,8 +1,8 @@
 # =============================================================================
-# MASES Phase 2 UI — Apache configuration for the SPA builds
+# ARNA Phase 2 UI — Apache configuration for the SPA builds
 # =============================================================================
 #
-# File:    mase_app/public/.htaccess
+# File:    public/.htaccess
 # Phase:   1 (Frontend foundation) — Unit 1.9
 #
 # -----------------------------------------------------------------------------

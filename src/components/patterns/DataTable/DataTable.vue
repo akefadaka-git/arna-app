@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — DataTable
+ ARNA Phase 2 UI — DataTable
 =============================================================================
 
- File:      mase_app/src/components/patterns/DataTable/DataTable.vue
+ File:      src/components/patterns/DataTable/DataTable.vue
  Layer:     3 (Patterns)
  Version:   1.0.0
  Status:    FROZEN

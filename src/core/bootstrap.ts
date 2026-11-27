@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Application Bootstrap
+ * ARNA Phase 2 UI — Application Bootstrap
  * =============================================================================
  *
- * File:      mase_app/src/core/bootstrap.ts
+ * File:      src/core/bootstrap.ts
  * Layer:     Core (shared infrastructure)
  * Version:   1.0.1
  * Status:    FROZEN
@@ -355,25 +355,21 @@ function installApiClientProviders(pinia: Pinia): void {
  * adapters, matching the frozen §13.4 persistence rules (only the token
  * is affected by the §6.6 deferral).
  *
- * The storage key is namespaced (`arna.auth_token`). A legacy MASES key
- * is read as fallback; new writes use the ARNA key and remove the legacy
- * key, preventing collisions with a host page's sessionStorage.
+ * The storage key is namespaced (`arna.auth_token`). Only the canonical ARNA key is read, written and cleared; no legacy
+ * storage key is consulted.
  */
 function createSessionStorageAuthTokenStorage(): AuthTokenStorage {
   const KEY = 'arna.auth_token';
-  const LEGACY_KEY = 'mases.auth_token';
 
   return {
     get(): string | null {
-      return sessionStorage.getItem(KEY) ?? sessionStorage.getItem(LEGACY_KEY);
+      return sessionStorage.getItem(KEY);
     },
     set(token: string): void {
       sessionStorage.setItem(KEY, token);
-      sessionStorage.removeItem(LEGACY_KEY);
     },
     clear(): void {
       sessionStorage.removeItem(KEY);
-      sessionStorage.removeItem(LEGACY_KEY);
     },
   };
 }

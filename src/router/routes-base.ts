@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES UI — Shared Route Base
+ * ARNA UI — Shared Route Base
  * =============================================================================
  *
- * File:      mase_app/src/router/routes-base.ts
+ * File:      src/router/routes-base.ts
  * Layer:     Core (router configuration)
  * Version:   1.2.0
  * Status:    FROZEN

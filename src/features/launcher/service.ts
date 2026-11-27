@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Launcher Feature Service
+ * ARNA Phase 2 UI — Launcher Feature Service
  * =============================================================================
  *
- * File:      mase_app/src/features/launcher/service.ts
+ * File:      src/features/launcher/service.ts
  * Layer:     Features (Launcher surface)
  * Version:   1.0.0
  * Status:    FROZEN
@@ -47,9 +47,9 @@
  * What this module does NOT do
  * -----------------------------------------------------------------------------
  *   - It does not own the launcher list. That is the store's
- *     responsibility (mase_app/src/stores/launcher.ts).
+ *     responsibility (src/stores/launcher.ts).
  *   - It does not own the labels. Those are in
- *     mase_app/src/router/launcher-labels.ts.
+ *     src/router/launcher-labels.ts.
  *   - It does not render. LauncherGrid.vue and LauncherTile.vue own
  *     the presentation.
  *   - It does not suppress or reinterpret API errors. Every failure

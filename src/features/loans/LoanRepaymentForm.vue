@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — CR-LW3
 =============================================================================
 
- File:      mase_app/src/features/loans/LoanRepaymentForm.vue  (NEW)
+ File:      src/features/loans/LoanRepaymentForm.vue  (NEW)
  Unit:      CR-LW3 — Workspace loan dialogs (repayment)
  Delivery type:  New file.
  Net lines:      new file.
@@ -860,7 +860,7 @@ const submitLabel = computed<string>(() =>
 .loan-repayment-form {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-5);
+  gap: var(--arna-space-5);
   width: 100%;
 }
 
@@ -871,10 +871,10 @@ const submitLabel = computed<string>(() =>
 
 .loan-repayment-form__banner-reference {
   margin: 0;
-  margin-block-start: var(--mases-space-1);
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  margin-block-start: var(--arna-space-1);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   overflow-wrap: anywhere;
 }
 
@@ -884,37 +884,37 @@ const submitLabel = computed<string>(() =>
 .loan-repayment-form__section {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-4);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-md);
-  background-color: var(--mases-color-surface-sunken);
+  gap: var(--arna-space-3);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-4);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-md);
+  background-color: var(--arna-color-surface-sunken);
 }
 
 .loan-repayment-form__section-title {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-body);
-  line-height: var(--mases-line-height-body);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-body);
+  line-height: var(--arna-line-height-body);
+  font-weight: var(--arna-font-weight-semibold);
   overflow-wrap: anywhere;
 }
 
 .loan-repayment-form__section-helper {
   margin: 0;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   overflow-wrap: anywhere;
 }
 
 .loan-repayment-form__section-empty {
   margin: 0;
-  padding-block: var(--mases-space-3);
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  padding-block: var(--arna-space-3);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   text-align: center;
   overflow-wrap: anywhere;
 }
@@ -928,7 +928,7 @@ const submitLabel = computed<string>(() =>
 .loan-repayment-form__allocation-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   align-items: start;
 }
 
@@ -953,33 +953,33 @@ const submitLabel = computed<string>(() =>
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--mases-space-8);
-  height: var(--mases-space-8);
+  width: var(--arna-space-8);
+  height: var(--arna-space-8);
   padding: 0;
   border: 0;
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
   background-color: transparent;
-  color: var(--mases-color-icon-secondary);
+  color: var(--arna-color-icon-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-heading-5);
+  font-size: var(--arna-font-size-heading-5);
   line-height: 1;
   cursor: pointer;
   align-self: center;
 }
 
 .loan-repayment-form__allocation-remove:hover:not(:disabled) {
-  background-color: var(--mases-color-state-hover);
-  color: var(--mases-color-text-primary);
+  background-color: var(--arna-color-state-hover);
+  color: var(--arna-color-text-primary);
 }
 
 .loan-repayment-form__allocation-remove:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 .loan-repayment-form__allocation-remove:disabled {
   cursor: not-allowed;
-  color: var(--mases-color-text-disabled);
+  color: var(--arna-color-text-disabled);
 }
 
 /* ============================================================================
@@ -997,8 +997,8 @@ const submitLabel = computed<string>(() =>
   display: flex;
   flex-direction: column-reverse;
   align-items: stretch;
-  gap: var(--mases-space-3);
-  padding-block-start: var(--mases-space-2);
+  gap: var(--arna-space-3);
+  padding-block-start: var(--arna-space-2);
 }
 
 @media (min-width: 640px) {

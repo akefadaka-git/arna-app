@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — BaseProgressBar
+ ARNA Phase 2 UI — BaseProgressBar
 =============================================================================
 
- File:      mase_app/src/components/primitives/BaseProgressBar/BaseProgressBar.vue
+ File:      src/components/primitives/BaseProgressBar/BaseProgressBar.vue
  Layer:     1 (Primitives)
  Version:   1.1.0
  Status:    FROZEN

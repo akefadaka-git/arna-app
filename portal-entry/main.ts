@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Portal Entry Point
+ * ARNA Phase 2 UI — Portal Entry Point
  * =============================================================================
  *
- * File:      mase_app/portal-entry/main.ts
+ * File:      portal-entry/main.ts
  * Layer:     Root (application entry)
  * Version:   1.0.3
  * Status:    FROZEN
@@ -38,7 +38,7 @@
  * -----------------------------------------------------------------------------
  * Target deployment
  * -----------------------------------------------------------------------------
- * Build output serves https://portal.maalearna.com.et — the MASES
+ * Build output serves https://portal.maalearna.com.et — the ARNA
  * Shareholder Portal.
  *
  * -----------------------------------------------------------------------------

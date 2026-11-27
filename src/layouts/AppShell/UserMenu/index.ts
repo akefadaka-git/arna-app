@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — UserMenu — Barrel Export
+ * ARNA Phase 2 UI — UserMenu — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/layouts/AppShell/UserMenu/index.ts
+ * File:      src/layouts/AppShell/UserMenu/index.ts
  * Layer:     4 (Shell — AppShell family)
  * Version:   1.0.0
  * Status:    FROZEN

@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — Card
+ ARNA Phase 2 UI — Card
 =============================================================================
 
- File:      mase_app/src/components/patterns/Card/Card.vue
+ File:      src/components/patterns/Card/Card.vue
  Layer:     3 (Patterns)
  Version:   1.0.0
  Status:    FROZEN

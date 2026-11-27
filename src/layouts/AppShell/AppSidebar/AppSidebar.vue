@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — AppSidebar
+ ARNA Phase 2 UI — AppSidebar
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/AppSidebar/AppSidebar.vue
+ File:      src/layouts/AppShell/AppSidebar/AppSidebar.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.2.0
  Status:    ENHANCEMENT — forced-colors accessibility

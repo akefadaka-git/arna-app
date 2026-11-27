@@ -3,7 +3,7 @@
  * CHANGE VERIFICATION — CR-LW1
  * =============================================================================
  *
- * File:      mase_app/src/features/loans/service.ts  (AMEND)
+ * File:      src/features/loans/service.ts  (AMEND)
  * Unit:      CR-LW1 — Workspace loan views (service layer)
  * Delivery type:  Amendment — fifteen added pass-through wrappers; the
  *                 existing composite fetcher and two wrappers preserved.
@@ -66,10 +66,10 @@
 
 /*
  * =============================================================================
- * MASES Phase 2 UI — Loan Feature Service
+ * ARNA Phase 2 UI — Loan Feature Service
  * =============================================================================
  *
- * File:      mase_app/src/features/loans/service.ts
+ * File:      src/features/loans/service.ts
  * Layer:     Features (Loan domain)
  * Version:   1.1.0
  * Status:    FROZEN

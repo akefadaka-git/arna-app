@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 =============================================================================
- MASES — Maale Arna compact favicon (SVG)
+ ARNA — Maale Arna compact favicon (SVG)
 =============================================================================
 
- File:      mase_app/public/favicon.svg
+ File:      public/favicon.svg
  Version:   1.0.0-draft
  Status:    DRAFT — pending brand-owner review
  Authority: MASES_SHELL_DESIGN_SYSTEM_MASTER_SPEC.md §10, §29
@@ -65,7 +65,7 @@
 
  · LITERAL HEX VALUES, NOT CSS CUSTOM PROPERTIES. A standalone SVG
    file loaded via `<link rel="icon" />` is outside the page's CSS
-   cascade — it cannot read `var(--mases-color-...)`. The four hex
+   cascade — it cannot read `var(--arna-color-...)`. The four hex
    values below are drawn from the emblem itself; they are not
    design-system tokens. If the brand owner supplies a different
    palette, this file is the only place to change it. The tokens
@@ -75,7 +75,7 @@
      #1B3FB8  — royal blue, the emblem's figures and triangle
      #C8102E  — bright red, the emblem's wing
      #FFFDF7  — ivory, the emblem's interior ground (matches
-                tokens.css --mases-color-neutral-50)
+                tokens.css --arna-color-neutral-50)
 
  · NO CONNECTING ARC BETWEEN THE FIGURES. Early drafts drew a thin
    curve joining the figure-heads, echoing the emblem's hand-in-hand

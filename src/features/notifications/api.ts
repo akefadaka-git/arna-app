@@ -6,7 +6,7 @@
  * Server authorization remains authoritative for every read and mutation.
  */
 import { api } from '@/core/api/client';
-import type { MasesNotification, NotificationPriority } from '@/stores/notifications';
+import type { ArnaNotification, NotificationPriority } from '@/stores/notifications';
 import type { SupportedLocale } from '@/stores/locale';
 
 interface LocalizedText {
@@ -50,7 +50,7 @@ interface ReadAllMutationResult {
 }
 
 export interface NotificationPage {
-  readonly items: readonly MasesNotification[];
+  readonly items: readonly ArnaNotification[];
   readonly page: number;
   readonly perPage: number;
   readonly total: number;
@@ -67,7 +67,7 @@ function localized(value: LocalizedText | null, locale: 'am' | 'en'): string | u
   return typeof selected === 'string' ? selected : undefined;
 }
 
-function present(item: ApiNotification, locale: SupportedLocale): MasesNotification {
+function present(item: ApiNotification, locale: SupportedLocale): ArnaNotification {
   if (
     typeof item.id !== 'string' ||
     typeof item.category !== 'string' ||

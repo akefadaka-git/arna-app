@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — BaseButton
+ ARNA Phase 2 UI — BaseButton
 =============================================================================
 
- File:      mase_app/src/components/primitives/BaseButton/BaseButton.vue
+ File:      src/components/primitives/BaseButton/BaseButton.vue
  Layer:     1 (Primitives)
  Version:   1.1.0
  Status:    FROZEN
@@ -21,7 +21,7 @@
  Token discipline
  -----------------------------------------------------------------------------
  This component consumes ONLY Tier 2 semantic tokens declared in
- mase_app/src/styles/tokens.css. No hex value, px literal, radius literal,
+ src/styles/tokens.css. No hex value, px literal, radius literal,
  duration, easing, or shadow is defined in this file.
 
  The component catalog lists the following as its token dependencies:

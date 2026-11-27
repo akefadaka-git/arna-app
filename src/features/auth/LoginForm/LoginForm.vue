@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — LoginForm
+ ARNA Phase 2 UI — LoginForm
 =============================================================================
 
- File:      mase_app/src/features/auth/LoginForm/LoginForm.vue
+ File:      src/features/auth/LoginForm/LoginForm.vue
  Layer:     Features (Stage 12 — Authentication UI)
  Version:   2.2.0
  Status:    ACTIVE — Owner-authorized MFA enhancement
@@ -135,7 +135,7 @@
 
    1. When checked and login succeeds, the entered identifier is
       written to localStorage under
-      `arna.auth.remembered_identifier` (with a legacy MASES fallback).
+      `arna.auth.remembered_identifier` (using the canonical ARNA key only).
 
    2. On the next visit, the identifier is pre-filled, the checkbox
       is restored to checked, and focus lands on the password
@@ -532,7 +532,6 @@ const passwordFieldType = computed<'password' | 'text'>(() =>
 // Remember-me storage
 // -----------------------------------------------------------------------------
 const REMEMBERED_IDENTIFIER_KEY = 'arna.auth.remembered_identifier';
-const LEGACY_REMEMBERED_IDENTIFIER_KEY = 'mases.auth.remembered_identifier';
 
 /**
  * Read the remembered identifier. Returns null on storage failure or
@@ -540,7 +539,7 @@ const LEGACY_REMEMBERED_IDENTIFIER_KEY = 'mases.auth.remembered_identifier';
  */
 function loadRememberedIdentifier(): string | null {
   try {
-    const value = window.localStorage.getItem(REMEMBERED_IDENTIFIER_KEY) ?? window.localStorage.getItem(LEGACY_REMEMBERED_IDENTIFIER_KEY);
+    const value = window.localStorage.getItem(REMEMBERED_IDENTIFIER_KEY);
     if (typeof value === 'string' && value.length > 0) {
       return value;
     }
@@ -559,10 +558,8 @@ function persistRememberedIdentifier(value: string): void {
   try {
     if (value !== '') {
       window.localStorage.setItem(REMEMBERED_IDENTIFIER_KEY, value);
-      window.localStorage.removeItem(LEGACY_REMEMBERED_IDENTIFIER_KEY);
     } else {
       window.localStorage.removeItem(REMEMBERED_IDENTIFIER_KEY);
-      window.localStorage.removeItem(LEGACY_REMEMBERED_IDENTIFIER_KEY);
     }
   } catch {
     /* Silently disabled. */

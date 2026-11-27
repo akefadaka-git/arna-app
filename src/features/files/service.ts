@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — File Management Service
+ * ARNA Phase 2 UI — File Management Service
  * =============================================================================
  *
- * File:      mase_app/src/features/files/service.ts
+ * File:      src/features/files/service.ts
  * Layer:     Features (Stage 14 — File Management vertical)
  * Version:   1.0.0
  * Status:    FROZEN

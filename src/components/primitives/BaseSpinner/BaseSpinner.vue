@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — BaseSpinner
+ ARNA Phase 2 UI — BaseSpinner
 =============================================================================
 
- File:      mase_app/src/components/primitives/BaseSpinner/BaseSpinner.vue
+ File:      src/components/primitives/BaseSpinner/BaseSpinner.vue
  Layer:     1 (Primitives)
  Version:   1.1.0
  Status:    FROZEN

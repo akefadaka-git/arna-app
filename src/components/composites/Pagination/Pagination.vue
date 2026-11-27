@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — Pagination
+ ARNA Phase 2 UI — Pagination
 =============================================================================
 
- File:      mase_app/src/components/composites/Pagination/Pagination.vue
+ File:      src/components/composites/Pagination/Pagination.vue
  Layer:     2 (Composites)
  Version:   1.0.0
  Status:    FROZEN

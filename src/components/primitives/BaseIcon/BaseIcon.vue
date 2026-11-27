@@ -3,7 +3,7 @@
  ARNA Phase 2 UI — BaseIcon
 =============================================================================
 
- File:      mase_app/src/components/primitives/BaseIcon/BaseIcon.vue
+ File:      src/components/primitives/BaseIcon/BaseIcon.vue
  Layer:     1 (Primitives)
  Version:   2.1.0
  Status:    FROZEN

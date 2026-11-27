@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — LauncherRoute
+ ARNA Phase 2 UI — LauncherRoute
 =============================================================================
 
- File:      mase_app/src/router/pages/LauncherRoute.vue
+ File:      src/router/pages/LauncherRoute.vue
  Layer:     Core (router page)
  Version:   1.0.3
  Status:    FROZEN
@@ -90,7 +90,7 @@
  with the two async actions (ensureLoaded, retry) that drive them.
 
  The composable is a plain function, not a Pinia store. The store
- (mase_app/src/stores/launcher.ts) continues to own the list itself
+ (src/stores/launcher.ts) continues to own the list itself
  and its cache-freshness metadata; the composable owns the per-attempt
  loading/error state. This split is required by the store's own header
  comment, which explicitly assigns loading state to a per-call

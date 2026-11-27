@@ -3,7 +3,7 @@
  * CHANGE VERIFICATION — CR-W2
  * =============================================================================
  *
- * File:      mase_app/src/features/wallet/api.ts  (AMEND)
+ * File:      src/features/wallet/api.ts  (AMEND)
  * Unit:      CR-W2 — Portal self-service wallet page (API contract)
  * Delivery type:  Amendment — two additive interface changes, one new
  *                 function, revision history and endpoint-coverage note.
@@ -80,10 +80,10 @@
 
 /*
  * =============================================================================
- * MASES Phase 2 UI — Wallet API Module
+ * ARNA Phase 2 UI — Wallet API Module
  * =============================================================================
  *
- * File:      mase_app/src/features/wallet/api.ts
+ * File:      src/features/wallet/api.ts
  * Layer:     Features (Wallet domain)
  * Version:   1.0.2
  * Status:    FROZEN

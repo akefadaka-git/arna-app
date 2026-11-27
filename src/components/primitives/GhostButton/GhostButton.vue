@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — GhostButton
+ ARNA Phase 2 UI — GhostButton
 =============================================================================
 
- File:      mase_app/src/components/primitives/GhostButton/GhostButton.vue
+ File:      src/components/primitives/GhostButton/GhostButton.vue
  Layer:     1 (Primitives)
  Version:   1.0.0
  Status:    FROZEN
@@ -27,8 +27,8 @@
  -----------------------------------------------------------------------------
  The ghost variant renders with a transparent background and the
  primary text color, receiving a hover background
- (--mases-color-action-ghost-hover) on pointer or keyboard interaction.
- It is the standard "tertiary action" button in MASES surfaces — used
+ (--arna-color-action-ghost-hover) on pointer or keyboard interaction.
+ It is the standard "tertiary action" button in ARNA surfaces — used
  for dismissals, secondary navigation, disclosure toggles, and any
  action that should be reachable without competing visually with
  primary or secondary actions.

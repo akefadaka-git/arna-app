@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — CR-WORKSPACE-TITLE · Phase 1 · File 4
 =============================================================================
 
- File:      mase_app/src/features/wallet/WalletListView.vue  (AMEND)
+ File:      src/features/wallet/WalletListView.vue  (AMEND)
  Unit:      CR-WORKSPACE-TITLE — Phase 1, File 4
  Delivery type:  Enhancement — document.title via <PageTitle>.
                  One import added, one const added, one template
@@ -14,13 +14,13 @@
  Before (v1.0.3):
    The view set no document.title. The browser tab showed whatever
    the previously-visited route had left, or the entry HTML's
-   pre-JS default ("MASES") on a cold load directly at /wallets.
+   pre-JS default ("ARNA") on a cold load directly at /wallets.
 
  After (v1.0.4):
    The view sets document.title via <PageTitle>, bound to the
    existing labels.pageTitle and to import.meta.env.VITE_APP_NAME.
 
-     Workspace build    →  "የገንዘብ ማስቀመጫዎች — MASES"
+     Workspace build    →  "የገንዘብ ማስቀመጫዎች — ARNA"
      Empty VITE_APP_NAME →  "የገንዘብ ማስቀመጫዎች"
 
    The portal build does not mount this view (the wallet vertical is
@@ -43,10 +43,10 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — WalletListView
+ ARNA Phase 2 UI — WalletListView
 =============================================================================
 
- File:      mase_app/src/features/wallet/WalletListView.vue
+ File:      src/features/wallet/WalletListView.vue
  Layer:     Features (Wallet domain)
  Version:   1.0.4
  Status:    FROZEN
@@ -362,7 +362,7 @@ const router = useRouter();
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "MASES"
+ *   workspace  →  "ARNA"
  *   portal     →  "Maale Arna Portal"
  *
  * This view is mounted in the workspace build only. The portal's own
@@ -870,7 +870,7 @@ function onWalletOpened(): void {
 .wallet-list-view {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -889,7 +889,7 @@ function onWalletOpened(): void {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
 }
 
 @media (min-width: 640px) {
@@ -913,9 +913,9 @@ function onWalletOpened(): void {
    Owner link
    ============================================================================ */
 .wallet-list-view__owner-link {
-  color: var(--mases-color-text-brand);
+  color: var(--arna-color-text-brand);
   text-decoration: none;
-  font-weight: var(--mases-font-weight-medium);
+  font-weight: var(--arna-font-weight-medium);
 }
 
 .wallet-list-view__owner-link:hover {
@@ -923,9 +923,9 @@ function onWalletOpened(): void {
 }
 
 .wallet-list-view__owner-link:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
-  border-radius: var(--mases-radius-sm);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
+  border-radius: var(--arna-radius-sm);
 }
 
 /* ============================================================================
@@ -934,22 +934,22 @@ function onWalletOpened(): void {
 .wallet-list-view__status {
   display: inline-flex;
   align-items: center;
-  padding-block: var(--mases-space-1);
-  padding-inline: var(--mases-space-2);
-  border-radius: var(--mases-radius-sm);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
-  font-weight: var(--mases-font-weight-medium);
+  padding-block: var(--arna-space-1);
+  padding-inline: var(--arna-space-2);
+  border-radius: var(--arna-radius-sm);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
+  font-weight: var(--arna-font-weight-medium);
 }
 
 .wallet-list-view__status[data-active='true'] {
-  background-color: var(--mases-color-surface-accent);
-  color: var(--mases-color-text-accent);
+  background-color: var(--arna-color-surface-accent);
+  color: var(--arna-color-text-accent);
 }
 
 .wallet-list-view__status[data-active='false'] {
-  background-color: var(--mases-color-surface-sunken);
-  color: var(--mases-color-text-tertiary);
+  background-color: var(--arna-color-surface-sunken);
+  color: var(--arna-color-text-tertiary);
 }
 
 /* ============================================================================
@@ -959,27 +959,27 @@ function onWalletOpened(): void {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--mases-space-6);
-  height: var(--mases-space-6);
+  width: var(--arna-space-6);
+  height: var(--arna-space-6);
   padding: 0;
   border: 0;
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
   background-color: transparent;
-  color: var(--mases-color-icon-secondary);
+  color: var(--arna-color-icon-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
+  font-size: var(--arna-font-size-body);
   line-height: 1;
   cursor: pointer;
 }
 
 .wallet-list-view__row-actions-trigger:hover {
-  background-color: var(--mases-color-state-hover);
-  color: var(--mases-color-text-primary);
+  background-color: var(--arna-color-state-hover);
+  color: var(--arna-color-text-primary);
 }
 
 .wallet-list-view__row-actions-trigger:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
@@ -988,9 +988,9 @@ function onWalletOpened(): void {
 .wallet-list-view__pagination {
   display: flex;
   justify-content: center;
-  padding-block: var(--mases-space-4);
-  padding-inline: var(--mases-space-4);
-  border-block-start: 1px solid var(--mases-color-border-subtle);
+  padding-block: var(--arna-space-4);
+  padding-inline: var(--arna-space-4);
+  border-block-start: 1px solid var(--arna-color-border-subtle);
 }
 
 /* ============================================================================

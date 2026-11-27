@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — WalletDetailRoute
+ ARNA Phase 2 UI — WalletDetailRoute
 =============================================================================
 
- File:      mase_app/src/features/wallet/WalletDetailRoute.vue
+ File:      src/features/wallet/WalletDetailRoute.vue
  Layer:     Features (Wallet domain) — route wrapper
  Version:   1.0.3
  Status:    FROZEN

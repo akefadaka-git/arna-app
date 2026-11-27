@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — FileDetailView — Barrel Export
+ * ARNA Phase 2 UI — FileDetailView — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/features/files/FileDetailView/index.ts
+ * File:      src/features/files/FileDetailView/index.ts
  * Layer:     Features (Stage 14 — File Management vertical)
  * Version:   1.0.0
  * Status:    FROZEN

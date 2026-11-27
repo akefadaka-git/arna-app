@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — useMyShareholder
+ * ARNA Phase 2 UI — useMyShareholder
  * =============================================================================
  *
- * File:      mase_app/src/features/portal/useMyShareholder.ts
+ * File:      src/features/portal/useMyShareholder.ts
  * Layer:     Features (Stage 15.12 — Shareholder Portal Foundation)
  * Version:   1.0.0
  * Status:    FROZEN

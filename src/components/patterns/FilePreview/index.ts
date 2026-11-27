@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — FilePreview — Barrel Export
+ * ARNA Phase 2 UI — FilePreview — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/components/patterns/FilePreview/index.ts
+ * File:      src/components/patterns/FilePreview/index.ts
  * Layer:     3 (Patterns)
  * Version:   1.0.0
  * Status:    FROZEN

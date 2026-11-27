@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — WalletAllocationReverseDialog
+ ARNA Phase 2 UI — WalletAllocationReverseDialog
 =============================================================================
 
- File:      mase_app/src/features/wallet/WalletAllocationReverseDialog.vue
+ File:      src/features/wallet/WalletAllocationReverseDialog.vue
  Layer:     Features (Wallet domain)
  Version:   1.0.0
  Status:    FROZEN
@@ -473,7 +473,7 @@ const submitLabel = computed<string>(() =>
 .wallet-allocation-reverse-dialog {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-5);
+  gap: var(--arna-space-5);
   width: 100%;
 }
 
@@ -485,10 +485,10 @@ const submitLabel = computed<string>(() =>
 
 .wallet-allocation-reverse-dialog__banner-reference {
   margin: 0;
-  margin-block-start: var(--mases-space-1);
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  margin-block-start: var(--arna-space-1);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   overflow-wrap: break-word;
   word-break: normal;
 }
@@ -498,9 +498,9 @@ const submitLabel = computed<string>(() =>
    ============================================================================ */
 .wallet-allocation-reverse-dialog__confirm {
   margin: 0;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   overflow-wrap: break-word;
   word-break: normal;
 }
@@ -521,43 +521,43 @@ const submitLabel = computed<string>(() =>
 .wallet-allocation-reverse-dialog__summary {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-4);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-md);
-  background-color: var(--mases-color-surface-sunken);
+  gap: var(--arna-space-2);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-4);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-md);
+  background-color: var(--arna-color-surface-sunken);
   margin: 0;
 }
 
 .wallet-allocation-reverse-dialog__row {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   align-items: baseline;
 }
 
 @media (min-width: 640px) {
   .wallet-allocation-reverse-dialog__row {
     grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-    gap: var(--mases-space-3);
+    gap: var(--arna-space-3);
   }
 }
 
 .wallet-allocation-reverse-dialog__row dt {
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
   overflow-wrap: break-word;
   word-break: normal;
 }
 
 .wallet-allocation-reverse-dialog__row dd {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   overflow-wrap: break-word;
   word-break: normal;
 }
@@ -577,8 +577,8 @@ const submitLabel = computed<string>(() =>
   display: flex;
   flex-direction: column-reverse;
   align-items: stretch;
-  gap: var(--mases-space-3);
-  padding-block-start: var(--mases-space-2);
+  gap: var(--arna-space-3);
+  padding-block-start: var(--arna-space-2);
 }
 
 @media (min-width: 640px) {

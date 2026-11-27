@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — CR-WORKSPACE-TITLE · Phase 1 · File 2
 =============================================================================
 
- File:      mase_app/src/features/shareholders/ShareholderListView.vue  (AMEND)
+ File:      src/features/shareholders/ShareholderListView.vue  (AMEND)
  Unit:      CR-WORKSPACE-TITLE — Phase 1, File 2
  Delivery type:  Enhancement — document.title via <PageTitle>.
                  One import added, one const added, one template
@@ -14,13 +14,13 @@
  Before (v1.1.0):
    The view set no document.title. The browser tab showed whatever
    the previously-visited route had left, or the entry HTML's
-   pre-JS default ("MASES") on a cold load directly at /shareholders.
+   pre-JS default ("ARNA") on a cold load directly at /shareholders.
 
  After (v1.1.1):
    The view sets document.title via <PageTitle>, bound to the
    existing labels.pageTitle and to import.meta.env.VITE_APP_NAME.
 
-     Workspace build    →  "ባለአክሲዮኖች — MASES"
+     Workspace build    →  "ባለአክሲዮኖች — ARNA"
      Empty VITE_APP_NAME →  "ባለአክሲዮኖች"
 
    The portal build does not mount this view (the shareholders
@@ -43,10 +43,10 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — ShareholderListView
+ ARNA Phase 2 UI — ShareholderListView
 =============================================================================
 
- File:      mase_app/src/features/shareholders/ShareholderListView/ShareholderListView.vue
+ File:      src/features/shareholders/ShareholderListView/ShareholderListView.vue
  Layer:     Features (Stage 15 — Shareholder Portal)
  Version:   1.1.1
  Status:    FROZEN
@@ -384,7 +384,7 @@ const router = useRouter();
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "MASES"
+ *   workspace  →  "ARNA"
  *   portal     →  "Maale Arna Portal"
  *
  * This view is mounted in the workspace build only — the shareholders
@@ -862,7 +862,7 @@ async function onCreate(): Promise<void> {
 .shareholder-list-view {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -876,7 +876,7 @@ async function onCreate(): Promise<void> {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
 }
 
 .shareholder-list-view__controls > :first-child {
@@ -893,9 +893,9 @@ async function onCreate(): Promise<void> {
    Row name link
    ============================================================================ */
 .shareholder-list-view__name-link {
-  color: var(--mases-color-text-brand);
+  color: var(--arna-color-text-brand);
   text-decoration: none;
-  font-weight: var(--mases-font-weight-medium);
+  font-weight: var(--arna-font-weight-medium);
 }
 
 .shareholder-list-view__name-link:hover {
@@ -903,9 +903,9 @@ async function onCreate(): Promise<void> {
 }
 
 .shareholder-list-view__name-link:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
-  border-radius: var(--mases-radius-sm);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
+  border-radius: var(--arna-radius-sm);
 }
 
 /* ============================================================================
@@ -920,27 +920,27 @@ async function onCreate(): Promise<void> {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--mases-space-6);
-  height: var(--mases-space-6);
+  width: var(--arna-space-6);
+  height: var(--arna-space-6);
   padding: 0;
   border: 0;
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
   background-color: transparent;
-  color: var(--mases-color-icon-secondary);
+  color: var(--arna-color-icon-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
+  font-size: var(--arna-font-size-body);
   line-height: 1;
   cursor: pointer;
 }
 
 .shareholder-list-view__row-actions-trigger:hover {
-  background-color: var(--mases-color-state-hover);
-  color: var(--mases-color-text-primary);
+  background-color: var(--arna-color-state-hover);
+  color: var(--arna-color-text-primary);
 }
 
 .shareholder-list-view__row-actions-trigger:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
@@ -949,9 +949,9 @@ async function onCreate(): Promise<void> {
 .shareholder-list-view__pagination {
   display: flex;
   justify-content: center;
-  padding-block: var(--mases-space-4);
-  padding-inline: var(--mases-space-4);
-  border-block-start: 1px solid var(--mases-color-border-subtle);
+  padding-block: var(--arna-space-4);
+  padding-inline: var(--arna-space-4);
+  border-block-start: 1px solid var(--arna-color-border-subtle);
 }
 
 /* ============================================================================

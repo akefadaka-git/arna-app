@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — AppMobileDrawer
+ ARNA Phase 2 UI — AppMobileDrawer
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/AppMobileDrawer/AppMobileDrawer.vue
+ File:      src/layouts/AppShell/AppMobileDrawer/AppMobileDrawer.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.2.0
  Status:    ENHANCEMENT — forced-colors accessibility

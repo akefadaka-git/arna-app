@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — SkipToContent
+ ARNA Phase 2 UI — SkipToContent
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/SkipToContent/SkipToContent.vue
+ File:      src/layouts/AppShell/SkipToContent/SkipToContent.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.1.0
  Status:    ENHANCEMENT — forced-colors accessibility

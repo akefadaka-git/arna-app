@@ -1,8 +1,8 @@
 // =============================================================================
-// MASES UI — Node-side TypeScript configuration
+// ARNA UI — Node-side TypeScript configuration
 // =============================================================================
 //
-// File:    mase_app/tsconfig.node.json
+// File:    tsconfig.node.json
 // Phase:   1 (Frontend foundation) — Unit 1.3
 // Version: 1.0.1
 // Status:  PROVISIONAL — the pinned TypeScript and @types/node majors

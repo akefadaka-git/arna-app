@@ -3,7 +3,7 @@ import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLocaleStore } from '@/stores/locale';
 import { useNotificationsStore } from '@/stores/notifications';
-import type { MasesNotification } from '@/stores/notifications';
+import type { ArnaNotification } from '@/stores/notifications';
 import { useTenantStore } from '@/stores/tenant';
 import { formatCalendarDate } from '@/core/dates/calendar';
 import {
@@ -101,7 +101,7 @@ const NOTIFICATION_LIST_ROUTES = new Set([
 ]);
 
 function resolveNotificationTarget(
-  action: MasesNotification['action'],
+  action: ArnaNotification['action'],
 ): { name: string; params?: { id: string } } | null {
   if (!action || !router.hasRoute(action.route_name)) return null;
   if (NOTIFICATION_LIST_ROUTES.has(action.route_name)) return { name: action.route_name };
@@ -347,18 +347,18 @@ onUnmounted(() => {
 .notification-center {
   position: fixed;
   z-index: 1200;
-  inset-block-start: calc(var(--mases-shell-header-height, 4rem) + 0.5rem);
+  inset-block-start: calc(var(--arna-shell-header-height, 4rem) + 0.5rem);
   inset-inline-end: clamp(0.75rem, 2vw, 2rem);
   display: flex;
   flex-direction: column;
   width: min(28rem, calc(100vw - 1.5rem));
-  max-height: min(42rem, calc(100dvh - var(--mases-shell-header-height, 4rem) - 1.5rem));
+  max-height: min(42rem, calc(100dvh - var(--arna-shell-header-height, 4rem) - 1.5rem));
   overflow: hidden;
-  color: var(--mases-color-text-primary);
-  background: var(--mases-color-surface-raised);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-lg);
-  box-shadow: var(--mases-shadow-lg, 0 16px 48px rgb(0 0 0 / 18%));
+  color: var(--arna-color-text-primary);
+  background: var(--arna-color-surface-raised);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-lg);
+  box-shadow: var(--arna-shadow-lg, 0 16px 48px rgb(0 0 0 / 18%));
 }
 .notification-center__header, .notification-center__footer {
   display: flex;
@@ -366,13 +366,13 @@ onUnmounted(() => {
   justify-content: space-between;
   gap: 0.75rem;
   padding: 1rem;
-  border-block-end: 1px solid var(--mases-color-border-subtle);
+  border-block-end: 1px solid var(--arna-color-border-subtle);
 }
 .notification-center__header h2 { margin: 0; font-size: 1rem; font-weight: 700; }
-.notification-center__header p { margin: 0.25rem 0 0; color: var(--mases-color-text-secondary); font-size: 0.8rem; }
+.notification-center__header p { margin: 0.25rem 0 0; color: var(--arna-color-text-secondary); font-size: 0.8rem; }
 .notification-center__actions { display: flex; align-items: center; gap: 0.5rem; }
 .notification-center__text-button, .notification-center__close {
-  color: var(--mases-color-action-primary);
+  color: var(--arna-color-action-primary);
   background: transparent;
   border: 0;
   cursor: pointer;
@@ -380,19 +380,19 @@ onUnmounted(() => {
 }
 .notification-center__text-button:disabled { opacity: 0.45; cursor: not-allowed; }
 .notification-center__close { width: 2rem; height: 2rem; border-radius: 0.4rem; font-size: 1.5rem; }
-.notification-center__close:hover { background: var(--mases-color-surface-hover); }
+.notification-center__close:hover { background: var(--arna-color-surface-hover); }
 .notification-center__list { flex: 1 1 auto; min-height: 0; overflow: auto; margin: 0; padding: 0; list-style: none; }
-.notification-center__list li + li { border-block-start: 1px solid var(--mases-color-border-subtle); }
+.notification-center__list li + li { border-block-start: 1px solid var(--arna-color-border-subtle); }
 .notification-center__item { display: flex; flex-direction: column; gap: 0.35rem; width: 100%; padding: 0.9rem 1rem; color: inherit; text-align: start; background: transparent; border: 0; cursor: pointer; }
-.notification-center__item:hover { background: var(--mases-color-surface-hover); }
-.notification-center__item.is-unread { background: var(--mases-color-surface-subtle); }
+.notification-center__item:hover { background: var(--arna-color-surface-hover); }
+.notification-center__item.is-unread { background: var(--arna-color-surface-subtle); }
 .notification-center__item-heading { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; font-weight: 650; }
-.notification-center__body, .notification-center__meta { color: var(--mases-color-text-secondary); font-size: 0.85rem; }
-.notification-center__dot { width: 0.5rem; height: 0.5rem; flex: 0 0 auto; border-radius: 50%; background: var(--mases-color-action-primary); }
-.notification-center__state { padding: 2rem 1rem; text-align: center; color: var(--mases-color-text-secondary); }
+.notification-center__body, .notification-center__meta { color: var(--arna-color-text-secondary); font-size: 0.85rem; }
+.notification-center__dot { width: 0.5rem; height: 0.5rem; flex: 0 0 auto; border-radius: 50%; background: var(--arna-color-action-primary); }
+.notification-center__state { padding: 2rem 1rem; text-align: center; color: var(--arna-color-text-secondary); }
 .notification-center__destination-warning { padding-block: 0.75rem; }
-.notification-center__footer { border-block-start: 1px solid var(--mases-color-border-subtle); border-block-end: 0; }
-.notification-center button:focus-visible { outline: 3px solid var(--mases-color-state-focus-ring); outline-offset: 2px; }
+.notification-center__footer { border-block-start: 1px solid var(--arna-color-border-subtle); border-block-end: 0; }
+.notification-center button:focus-visible { outline: 3px solid var(--arna-color-state-focus-ring); outline-offset: 2px; }
 @media (forced-colors: active) {
   .notification-center { border: 1px solid CanvasText; background: Canvas; color: CanvasText; }
   .notification-center__dot { background: Highlight; }

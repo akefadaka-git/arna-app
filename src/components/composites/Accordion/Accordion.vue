@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — Accordion
+ ARNA Phase 2 UI — Accordion
 =============================================================================
 
- File:      mase_app/src/components/composites/Accordion/Accordion.vue
+ File:      src/components/composites/Accordion/Accordion.vue
  Layer:     2 (Composites)
  Version:   1.0.0
  Status:    FROZEN

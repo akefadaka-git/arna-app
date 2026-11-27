@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — FileDetailView
+ ARNA Phase 2 UI — FileDetailView
 =============================================================================
 
- File:      mase_app/src/features/files/FileDetailView/FileDetailView.vue
+ File:      src/features/files/FileDetailView/FileDetailView.vue
  Layer:     Features (Stage 14 — File Management vertical)
  Version:   1.0.1
  Status:    FROZEN
@@ -913,7 +913,7 @@ const pageTitle = computed<string>(
 .file-detail-view {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -923,7 +923,7 @@ const pageTitle = computed<string>(
 .file-detail-view__header-actions {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
 }
 
 /* ============================================================================
@@ -938,27 +938,27 @@ const pageTitle = computed<string>(
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--mases-space-8);
-  height: var(--mases-space-8);
+  width: var(--arna-space-8);
+  height: var(--arna-space-8);
   padding: 0;
   border: 0;
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
   background-color: transparent;
-  color: var(--mases-color-icon-secondary);
+  color: var(--arna-color-icon-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
+  font-size: var(--arna-font-size-body);
   line-height: 1;
   cursor: pointer;
 }
 
 .file-detail-view__actions-trigger:hover {
-  background-color: var(--mases-color-state-hover);
-  color: var(--mases-color-text-primary);
+  background-color: var(--arna-color-state-hover);
+  color: var(--arna-color-text-primary);
 }
 
 .file-detail-view__actions-trigger:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
@@ -970,7 +970,7 @@ const pageTitle = computed<string>(
 .file-detail-view__grid {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-  gap: var(--mases-space-4);
+  gap: var(--arna-space-4);
   align-items: start;
 }
 
@@ -986,17 +986,17 @@ const pageTitle = computed<string>(
   align-items: center;
   justify-content: center;
   min-height: 400px;
-  padding: var(--mases-space-6);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-md);
-  background-color: var(--mases-color-surface-sunken);
-  color: var(--mases-color-text-secondary);
+  padding: var(--arna-space-6);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-md);
+  background-color: var(--arna-color-surface-sunken);
+  color: var(--arna-color-text-secondary);
 }
 
 .file-detail-view__preview-fallback-text {
   margin: 0;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   text-align: center;
   overflow-wrap: anywhere;
 }
@@ -1009,31 +1009,31 @@ const pageTitle = computed<string>(
 .file-detail-view__metadata-list {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   margin: 0;
 }
 
 .file-detail-view__metadata-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   align-items: baseline;
 }
 
 .file-detail-view__metadata-row dt {
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
   overflow-wrap: anywhere;
 }
 
 .file-detail-view__metadata-row dd {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: anywhere;
 }
 
@@ -1042,17 +1042,17 @@ const pageTitle = computed<string>(
    ============================================================================ */
 .file-detail-view__section-title {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-6);
-  line-height: var(--mases-line-height-heading-6);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-6);
+  line-height: var(--arna-line-height-heading-6);
+  font-weight: var(--arna-font-weight-semibold);
   overflow-wrap: anywhere;
 }
 
 .file-detail-view__versions {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -1061,11 +1061,11 @@ const pageTitle = computed<string>(
 .file-detail-view__version {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-3);
-  padding-block: var(--mases-space-2);
-  border-block-end: 1px solid var(--mases-color-border-subtle);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  gap: var(--arna-space-3);
+  padding-block: var(--arna-space-2);
+  border-block-end: 1px solid var(--arna-color-border-subtle);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
 }
 
 .file-detail-view__version:last-child {
@@ -1073,33 +1073,33 @@ const pageTitle = computed<string>(
 }
 
 .file-detail-view__version-label {
-  font-weight: var(--mases-font-weight-medium);
-  color: var(--mases-color-text-primary);
+  font-weight: var(--arna-font-weight-medium);
+  color: var(--arna-color-text-primary);
 }
 
 .file-detail-view__version-current {
-  padding-block: var(--mases-space-1);
-  padding-inline: var(--mases-space-2);
-  border-radius: var(--mases-radius-sm);
-  background-color: var(--mases-color-surface-accent);
-  color: var(--mases-color-text-accent);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
-  font-weight: var(--mases-font-weight-medium);
+  padding-block: var(--arna-space-1);
+  padding-inline: var(--arna-space-2);
+  border-radius: var(--arna-radius-sm);
+  background-color: var(--arna-color-surface-accent);
+  color: var(--arna-color-text-accent);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
+  font-weight: var(--arna-font-weight-medium);
 }
 
 .file-detail-view__version-date {
   margin-inline-start: auto;
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
 }
 
 .file-detail-view__versions-empty {
   margin: 0;
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   overflow-wrap: anywhere;
 }
 

@@ -3,7 +3,7 @@
  * CHANGE VERIFICATION — G3 · File 3 of 7 (amendment — composite sections)
  * =============================================================================
  *
- * File:      mase_app/src/features/governance/labels.ts  (AMEND)
+ * File:      src/features/governance/labels.ts  (AMEND)
  * Unit:      G3 — GovernanceBody frontend module (labels — composite
  *            detail sections)
  * Delivery type:  Full-file replacement. Version remains 1.1.0 per
@@ -200,10 +200,10 @@
 
 /*
  * =============================================================================
- * MASES Phase 2 UI — Governance Feature Labels (Amharic)
+ * ARNA Phase 2 UI — Governance Feature Labels (Amharic)
  * =============================================================================
  *
- * File:      mase_app/src/features/governance/labels.ts
+ * File:      src/features/governance/labels.ts
  * Layer:     Features (Governance domain)
  * Version:   1.1.0
  * Status:    FROZEN

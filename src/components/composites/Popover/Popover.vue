@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — Popover
+ ARNA Phase 2 UI — Popover
 =============================================================================
 
- File:      mase_app/src/components/composites/Popover/Popover.vue
+ File:      src/components/composites/Popover/Popover.vue
  Layer:     2 (Composites)
  Version:   1.0.0
  Status:    FROZEN

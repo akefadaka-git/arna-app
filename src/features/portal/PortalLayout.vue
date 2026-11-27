@@ -58,7 +58,7 @@
  ARNA Platform UI — PortalLayout
 =============================================================================
 
- File:      mase_app/src/features/portal/PortalLayout.vue
+ File:      src/features/portal/PortalLayout.vue
  Layer:     Features (Stage 15.12 — Shareholder Portal Foundation)
  Version:   1.1.0
  Status:    FROZEN

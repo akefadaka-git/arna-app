@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — ShareholderForm — Barrel Export
+ * ARNA Phase 2 UI — ShareholderForm — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/features/shareholders/ShareholderForm/index.ts
+ * File:      src/features/shareholders/ShareholderForm/index.ts
  * Layer:     Features (Stage 15 — Shareholder Portal)
  * Version:   1.0.0
  * Status:    FROZEN

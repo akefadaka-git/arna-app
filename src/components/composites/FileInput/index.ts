@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — FileInput — Barrel Export
+ * ARNA Phase 2 UI — FileInput — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/components/composites/FileInput/index.ts
+ * File:      src/components/composites/FileInput/index.ts
  * Layer:     2 (Composites)
  * Version:   1.0.0
  * Status:    FROZEN

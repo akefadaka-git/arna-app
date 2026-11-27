@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — BaseCheckbox
+ ARNA Phase 2 UI — BaseCheckbox
 =============================================================================
 
- File:      mase_app/src/components/primitives/BaseCheckbox/BaseCheckbox.vue
+ File:      src/components/primitives/BaseCheckbox/BaseCheckbox.vue
  Layer:     1 (Primitives)
  Version:   1.1.0
  Status:    FROZEN

@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — AppMobileDrawer — Barrel Export
+ * ARNA Phase 2 UI — AppMobileDrawer — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/layouts/AppShell/AppMobileDrawer/index.ts
+ * File:      src/layouts/AppShell/AppMobileDrawer/index.ts
  * Layer:     4 (Shell — AppShell family)
  * Version:   1.0.0
  * Status:    FROZEN

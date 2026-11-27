@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — MaintenanceBanner
+ ARNA Phase 2 UI — MaintenanceBanner
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/MaintenanceBanner/MaintenanceBanner.vue
+ File:      src/layouts/AppShell/MaintenanceBanner/MaintenanceBanner.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.1.0
  Status:    ENHANCEMENT — forced-colors accessibility

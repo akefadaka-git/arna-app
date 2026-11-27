@@ -1,3 +1,5 @@
+> **SUPERSEDED / NOT CURRENT (2026-11-27):** The Owner-approved A1 ARNA identity decision supersedes this candidate's MASES-token-preservation approach. This file is retained as historical decision evidence only.
+
 # ARNA Brand Palette Token Reconciliation — Candidate v1.0
 
 - **Status:** Draft implementation candidate on `feat/arna-brand-palette-token-candidate`

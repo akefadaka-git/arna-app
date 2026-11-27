@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — Stepper
+ ARNA Phase 2 UI — Stepper
 =============================================================================
 
- File:      mase_app/src/components/composites/Stepper/Stepper.vue
+ File:      src/components/composites/Stepper/Stepper.vue
  Layer:     2 (Composites)
  Version:   1.0.0
  Status:    FROZEN
