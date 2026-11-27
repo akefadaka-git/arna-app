@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — ErrorShell — Barrel Export
+ * ARNA Phase 2 UI — ErrorShell — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/components/patterns/ErrorShell/index.ts
+ * File:      src/components/patterns/ErrorShell/index.ts
  * Layer:     3 (Patterns)
  * Version:   1.0.0
  * Status:    FROZEN

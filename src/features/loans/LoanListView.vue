@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — CR-WORKSPACE-TITLE · Phase 1 · File 6
 =============================================================================
 
- File:      mase_app/src/features/loans/LoanListView.vue  (AMEND)
+ File:      src/features/loans/LoanListView.vue  (AMEND)
  Unit:      CR-WORKSPACE-TITLE — Phase 1, File 6
  Delivery type:  Enhancement — document.title via <PageTitle>.
                  One import added, one const added, one template
@@ -14,13 +14,13 @@
  Before (v1.1.0):
    The view set no document.title. The browser tab showed whatever
    the previously-visited route had left, or the entry HTML's
-   pre-JS default ("MASES") on a cold load directly at /loans.
+   pre-JS default ("ARNA") on a cold load directly at /loans.
 
  After (v1.1.1):
    The view sets document.title via <PageTitle>, bound to the
    existing labels.pageTitle and to import.meta.env.VITE_APP_NAME.
 
-     Workspace build    →  "ብድሮች — MASES"
+     Workspace build    →  "ብድሮች — ARNA"
      Empty VITE_APP_NAME →  "ብድሮች"
 
    The portal build has its own loans list surface (MyLoansPage.vue),
@@ -46,7 +46,7 @@
  CHANGE VERIFICATION — CR-LW2
 =============================================================================
 
- File:      mase_app/src/features/loans/LoanListView.vue  (AMEND)
+ File:      src/features/loans/LoanListView.vue  (AMEND)
  Unit:      CR-LW2 — Workspace loan dialogs (list view's "New loan" wiring)
  Delivery type:  Amendment — one dialog import, one label import, one
                  open-state ref, one dialog component in the template,
@@ -136,7 +136,7 @@
  CHANGE VERIFICATION — CR-LW1
 =============================================================================
 
- File:      mase_app/src/features/loans/LoanListView.vue  (NEW)
+ File:      src/features/loans/LoanListView.vue  (NEW)
  Unit:      CR-LW1 — Workspace loan views (list)
  Delivery type:  New file.
  Net lines:      new file.
@@ -189,10 +189,10 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — LoanListView
+ ARNA Phase 2 UI — LoanListView
 =============================================================================
 
- File:      mase_app/src/features/loans/LoanListView.vue
+ File:      src/features/loans/LoanListView.vue
  Layer:     Features (Loan domain)
  Version:   1.1.1
  Status:    FROZEN
@@ -461,7 +461,7 @@ const router = useRouter();
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "MASES"
+ *   workspace  →  "ARNA"
  *   portal     →  "Maale Arna Portal"
  *
  * This view is mounted in the workspace build only. The portal has
@@ -961,7 +961,7 @@ function onApplicationSubmitted(): void {
 .loan-list-view {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -976,7 +976,7 @@ function onApplicationSubmitted(): void {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
 }
 
 .loan-list-view__controls > * {
@@ -987,9 +987,9 @@ function onApplicationSubmitted(): void {
    Loan link
    ============================================================================ */
 .loan-list-view__loan-link {
-  color: var(--mases-color-text-brand);
+  color: var(--arna-color-text-brand);
   text-decoration: none;
-  font-weight: var(--mases-font-weight-medium);
+  font-weight: var(--arna-font-weight-medium);
   font-variant-numeric: tabular-nums;
 }
 
@@ -998,9 +998,9 @@ function onApplicationSubmitted(): void {
 }
 
 .loan-list-view__loan-link:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
-  border-radius: var(--mases-radius-sm);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
+  border-radius: var(--arna-radius-sm);
 }
 
 /* ============================================================================
@@ -1010,27 +1010,27 @@ function onApplicationSubmitted(): void {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--mases-space-6);
-  height: var(--mases-space-6);
+  width: var(--arna-space-6);
+  height: var(--arna-space-6);
   padding: 0;
   border: 0;
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
   background-color: transparent;
-  color: var(--mases-color-icon-secondary);
+  color: var(--arna-color-icon-secondary);
   font-family: inherit;
-  font-size: var(--mases-font-size-body);
+  font-size: var(--arna-font-size-body);
   line-height: 1;
   cursor: pointer;
 }
 
 .loan-list-view__row-actions-trigger:hover {
-  background-color: var(--mases-color-state-hover);
-  color: var(--mases-color-text-primary);
+  background-color: var(--arna-color-state-hover);
+  color: var(--arna-color-text-primary);
 }
 
 .loan-list-view__row-actions-trigger:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 /* ============================================================================
@@ -1039,9 +1039,9 @@ function onApplicationSubmitted(): void {
 .loan-list-view__pagination {
   display: flex;
   justify-content: center;
-  padding-block: var(--mases-space-4);
-  padding-inline: var(--mases-space-4);
-  border-block-start: 1px solid var(--mases-color-border-subtle);
+  padding-block: var(--arna-space-4);
+  padding-inline: var(--arna-space-4);
+  border-block-start: 1px solid var(--arna-color-border-subtle);
 }
 
 /* ============================================================================

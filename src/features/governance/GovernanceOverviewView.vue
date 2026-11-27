@@ -129,7 +129,7 @@ onMounted(() => {
 .governance-overview {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
   min-width: 0;
 }
@@ -137,14 +137,14 @@ onMounted(() => {
 .governance-overview__hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   padding: clamp(1.25rem, 3vw, 2.25rem);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-xl);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-xl);
   background:
     radial-gradient(circle at 88% 12%, rgb(22 139 255 / 12%), transparent 35%),
-    linear-gradient(125deg, var(--mases-color-surface-raised), var(--mases-color-surface-page));
-  box-shadow: var(--mases-shadow-elevation-1);
+    linear-gradient(125deg, var(--arna-color-surface-raised), var(--arna-color-surface-page));
+  box-shadow: var(--arna-shadow-elevation-1);
 }
 
 .governance-overview__hero-copy {
@@ -152,53 +152,53 @@ onMounted(() => {
 }
 
 .governance-overview__eyebrow {
-  margin: 0 0 var(--mases-space-2);
-  color: var(--mases-color-text-brand);
-  font-size: var(--mases-font-size-body-sm);
-  font-weight: var(--mases-font-weight-semibold);
+  margin: 0 0 var(--arna-space-2);
+  color: var(--arna-color-text-brand);
+  font-size: var(--arna-font-size-body-sm);
+  font-weight: var(--arna-font-weight-semibold);
   letter-spacing: 0.04em;
 }
 
 .governance-overview__hero h2 {
   margin: 0;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-size: clamp(1.5rem, 3.2vw, 2.25rem);
   line-height: 1.25;
-  font-weight: var(--mases-font-weight-bold);
+  font-weight: var(--arna-font-weight-bold);
 }
 
 .governance-overview__hero-copy > p:not(.governance-overview__eyebrow) {
   max-width: 46rem;
-  color: var(--mases-color-text-secondary);
-  line-height: var(--mases-line-height-body);
+  color: var(--arna-color-text-secondary);
+  line-height: var(--arna-line-height-body);
 }
 
 .governance-overview__primary-link,
 .governance-overview__card-link {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   min-height: 2.75rem;
-  font-weight: var(--mases-font-weight-semibold);
+  font-weight: var(--arna-font-weight-semibold);
   text-decoration: none;
 }
 
 .governance-overview__primary-link {
-  margin-top: var(--mases-space-2);
+  margin-top: var(--arna-space-2);
   padding: 0.65rem 1rem;
-  border-radius: var(--mases-radius-md);
-  color: var(--mases-color-text-inverse);
-  background: var(--mases-color-action-primary);
+  border-radius: var(--arna-radius-md);
+  color: var(--arna-color-text-inverse);
+  background: var(--arna-color-action-primary);
 }
 
 .governance-overview__people-link {
-  margin-top: var(--mases-space-2);
-  margin-left: var(--mases-space-3);
-  color: var(--mases-color-text-brand);
+  margin-top: var(--arna-space-2);
+  margin-left: var(--arna-space-3);
+  color: var(--arna-color-text-brand);
 }
 
 .governance-overview__primary-link:hover {
-  background: var(--mases-color-action-primary-hover);
+  background: var(--arna-color-action-primary-hover);
 }
 
 .governance-overview__metric {
@@ -206,24 +206,24 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: var(--mases-space-2);
-  padding: var(--mases-space-5);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-lg);
-  background: var(--mases-color-surface-page);
+  gap: var(--arna-space-2);
+  padding: var(--arna-space-5);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-lg);
+  background: var(--arna-color-surface-page);
 }
 
 .governance-overview__metric-label,
 .governance-overview__metric-caption {
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body-sm);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body-sm);
 }
 
 .governance-overview__metric-value {
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-size: clamp(2.25rem, 5vw, 3.25rem);
   line-height: 1;
-  font-weight: var(--mases-font-weight-bold);
+  font-weight: var(--arna-font-weight-bold);
   font-variant-numeric: tabular-nums;
 }
 
@@ -231,7 +231,7 @@ onMounted(() => {
   align-self: flex-start;
   border: 0;
   padding: 0;
-  color: var(--mases-color-text-brand);
+  color: var(--arna-color-text-brand);
   background: transparent;
   font: inherit;
   text-decoration: underline;
@@ -241,25 +241,25 @@ onMounted(() => {
 .governance-overview__section {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-4);
+  gap: var(--arna-space-4);
 }
 
 .governance-overview__section-heading h2 {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-5);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-5);
 }
 
 .governance-overview__section-heading p {
-  margin: var(--mases-space-1) 0 0;
-  color: var(--mases-color-text-secondary);
-  line-height: var(--mases-line-height-body);
+  margin: var(--arna-space-1) 0 0;
+  color: var(--arna-color-text-secondary);
+  line-height: var(--arna-line-height-body);
 }
 
 .governance-overview__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--mases-space-4);
+  gap: var(--arna-space-4);
 }
 
 .governance-overview__card {
@@ -272,48 +272,48 @@ onMounted(() => {
   place-items: center;
   width: 2.5rem;
   height: 2.5rem;
-  border-radius: var(--mases-radius-md);
-  color: var(--mases-color-text-brand);
-  background: var(--mases-color-surface-accent);
-  font-weight: var(--mases-font-weight-bold);
+  border-radius: var(--arna-radius-md);
+  color: var(--arna-color-text-brand);
+  background: var(--arna-color-surface-accent);
+  font-weight: var(--arna-font-weight-bold);
 }
 
 .governance-overview__card h3 {
-  margin: var(--mases-space-3) 0 var(--mases-space-2);
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-6);
+  margin: var(--arna-space-3) 0 var(--arna-space-2);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-6);
 }
 
 .governance-overview__card p {
-  color: var(--mases-color-text-secondary);
-  line-height: var(--mases-line-height-body);
+  color: var(--arna-color-text-secondary);
+  line-height: var(--arna-line-height-body);
 }
 
 .governance-overview__card-link {
-  color: var(--mases-color-text-brand);
+  color: var(--arna-color-text-brand);
 }
 
 .governance-overview__primary-link:focus-visible,
 .governance-overview__card-link:focus-visible,
 .governance-overview__retry:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 .governance-overview__note {
   display: flex;
   align-items: flex-start;
-  gap: var(--mases-space-3);
-  padding: var(--mases-space-4);
-  border-inline-start: 3px solid var(--mases-color-border-brand);
-  border-radius: var(--mases-radius-md);
-  background: var(--mases-color-surface-subtle);
+  gap: var(--arna-space-3);
+  padding: var(--arna-space-4);
+  border-inline-start: 3px solid var(--arna-color-border-brand);
+  border-radius: var(--arna-radius-md);
+  background: var(--arna-color-surface-subtle);
 }
 
 .governance-overview__note p {
   margin: 0;
-  color: var(--mases-color-text-secondary);
-  line-height: var(--mases-line-height-body);
+  color: var(--arna-color-text-secondary);
+  line-height: var(--arna-line-height-body);
 }
 
 .governance-overview__note-mark {
@@ -323,9 +323,9 @@ onMounted(() => {
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 50%;
-  color: var(--mases-color-text-brand);
-  background: var(--mases-color-surface-accent);
-  font-weight: var(--mases-font-weight-bold);
+  color: var(--arna-color-text-brand);
+  background: var(--arna-color-surface-accent);
+  font-weight: var(--arna-font-weight-bold);
 }
 
 @media (min-width: 640px) {

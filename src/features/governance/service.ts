@@ -3,7 +3,7 @@
  * CHANGE VERIFICATION — G3 · File 2 of 7 (amendment v1.1.0)
  * =============================================================================
  *
- * File:      mase_app/src/features/governance/service.ts  (AMEND)
+ * File:      src/features/governance/service.ts  (AMEND)
  * Unit:      G3 — GovernanceBody frontend module (service amendment)
  * Delivery type:  Amendment — four new pass-through wrappers, one
  *                 composite fetcher, one result interface. File-level
@@ -136,10 +136,10 @@
 
 /*
  * =============================================================================
- * MASES Phase 2 UI — Governance Feature Service
+ * ARNA Phase 2 UI — Governance Feature Service
  * =============================================================================
  *
- * File:      mase_app/src/features/governance/service.ts
+ * File:      src/features/governance/service.ts
  * Layer:     Features (Governance domain)
  * Version:   1.1.0
  * Status:    FROZEN

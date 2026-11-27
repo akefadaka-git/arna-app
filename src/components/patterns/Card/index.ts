@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Card — Barrel Export
+ * ARNA Phase 2 UI — Card — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/components/patterns/Card/index.ts
+ * File:      src/components/patterns/Card/index.ts
  * Layer:     3 (Patterns)
  * Version:   1.0.0
  * Status:    FROZEN

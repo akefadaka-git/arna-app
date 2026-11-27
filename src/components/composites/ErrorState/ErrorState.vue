@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — ErrorState
+ ARNA Phase 2 UI — ErrorState
 =============================================================================
 
- File:      mase_app/src/components/composites/ErrorState/ErrorState.vue
+ File:      src/components/composites/ErrorState/ErrorState.vue
  Layer:     2 (Composites)
  Version:   1.0.0
  Status:    FROZEN

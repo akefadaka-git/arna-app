@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Vite ambient type declarations
+ * ARNA Phase 2 UI — Vite ambient type declarations
  * =============================================================================
  *
- * File:      mase_app/src/vite-env.d.ts
+ * File:      src/vite-env.d.ts
  * Phase:     1 (Frontend foundation)
  * Version:   1.1.0
  * Status:    FROZEN
@@ -16,7 +16,7 @@
  *
  * 1.1.0  — consolidation and VITE_APP_NAME (Unit L-8):
  *          · The duplicate ambient declaration file at the repository
- *            root (mase_app/vite-env.d.ts) is deleted in the same unit.
+ *            root (vite-env.d.ts) is deleted in the same unit.
  *            Only one ambient declaration file exists from this
  *            revision onward: this one.
  *
@@ -118,7 +118,7 @@
  */
 interface ImportMetaEnv {
   /**
-   * The MASES API origin (e.g. `https://api.maalearna.com.et`).
+   * The ARNA API origin (e.g. `https://api.maalearna.com.et`).
    *
    * Used by src/core/api/client.ts as the base URL for every HTTP
    * request. The client appends the path to this value.
@@ -141,7 +141,7 @@ interface ImportMetaEnv {
    * default alt text.
    *
    * Set per build:
-   *   · workspace build  →  "MASES"
+   *   · workspace build  →  "ARNA"
    *   · portal build     →  "Maale Arna Portal"
    *
    * Composed into `document.title` by every route wrapper's onMounted

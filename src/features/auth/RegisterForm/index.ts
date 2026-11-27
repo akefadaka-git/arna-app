@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — RegisterForm — Barrel Export
+ * ARNA Phase 2 UI — RegisterForm — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/features/auth/RegisterForm/index.ts
+ * File:      src/features/auth/RegisterForm/index.ts
  * Layer:     Features (Stage 12 — Authentication UI)
  * Version:   1.0.0
  * Status:    FROZEN

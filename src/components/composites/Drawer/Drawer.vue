@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — Drawer
+ ARNA Phase 2 UI — Drawer
 =============================================================================
 
- File:      mase_app/src/components/composites/Drawer/Drawer.vue
+ File:      src/components/composites/Drawer/Drawer.vue
  Layer:     2 (Composites)
  Version:   1.0.0
  Status:    FROZEN

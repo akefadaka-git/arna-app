@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — AppFooter
+ ARNA Phase 2 UI — AppFooter
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/AppFooter/AppFooter.vue
+ File:      src/layouts/AppShell/AppFooter/AppFooter.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.2.0
  Status:    ENHANCEMENT — forced-colors accessibility
@@ -61,7 +61,7 @@
  -----------------------------------------------------------------------------
  Purpose
  -----------------------------------------------------------------------------
- The MASES AppShell footer. Renders up to three regions:
+ The ARNA AppShell footer. Renders up to three regions:
    [start]   copyright  (optional prop)
    [center]  default slot content (optional)
    [end]     version    (optional prop)
@@ -176,8 +176,8 @@ interface Props {
    * short phrase: "© 2026 Maale Arna Share Company". Optional — the
    * region does not render when this prop is omitted.
    *
-   * MASES does not supply this prop today: the copyright line is
-   * rendered by MASESFooterContent inside the middle (default) slot
+   * ARNA does not supply this prop today: the copyright line is
+   * rendered by ArnaFooterContent inside the middle (default) slot
    * instead. The prop remains available to other consumers of
    * AppShell that want the simpler prop-based pattern.
    */
@@ -212,8 +212,8 @@ const props = withDefaults(defineProps<Props>(), {
  * point for white-label builds that want to replace the entire
  * middle content.
  *
- * MASES supplies this slot through AppShell's `#footer` forwarding
- * slot, whose default fallback content is MASESFooterContent.
+ * ARNA supplies this slot through AppShell's `#footer` forwarding
+ * slot, whose default fallback content is ArnaFooterContent.
  */
 defineSlots<{
   default?(): unknown;

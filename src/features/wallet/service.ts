@@ -3,7 +3,7 @@
  * CHANGE VERIFICATION — CR-W2
  * =============================================================================
  *
- * File:      mase_app/src/features/wallet/service.ts  (AMEND)
+ * File:      src/features/wallet/service.ts  (AMEND)
  * Unit:      CR-W2 — Portal self-service wallet page (service pass-through)
  * Delivery type:  Amendment — one added type import, one added
  *                 pass-through wrapper, revision history, version bump.
@@ -56,10 +56,10 @@
 
 /*
  * =============================================================================
- * MASES Phase 2 UI — Wallet Feature Service
+ * ARNA Phase 2 UI — Wallet Feature Service
  * =============================================================================
  *
- * File:      mase_app/src/features/wallet/service.ts
+ * File:      src/features/wallet/service.ts
  * Layer:     Features (Wallet domain)
  * Version:   1.0.4
  * Status:    FROZEN
@@ -333,7 +333,7 @@
  * helpers operate on the string directly.
  *
  * The trailing currency code is appended as-is. The platform's
- * `config/mases.php` declares a `currency_symbol` (`Br`) and a
+ * `config/arna.php` declares a `currency_symbol` (`Br`) and a
  * `currency_position` (`before`); a future CR that wants locale-aware
  * currency formatting renders the symbol per the config. Until then,
  * the code (e.g. `ETB`) is appended after a single space — a

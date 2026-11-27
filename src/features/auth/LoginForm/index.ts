@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — LoginForm — Barrel Export
+ * ARNA Phase 2 UI — LoginForm — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/features/auth/LoginForm/index.ts
+ * File:      src/features/auth/LoginForm/index.ts
  * Layer:     Features (Stage 12 — Authentication UI)
  * Version:   1.0.0
  * Status:    FROZEN

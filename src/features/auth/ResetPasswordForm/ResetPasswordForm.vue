@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — ResetPasswordForm
+ ARNA Phase 2 UI — ResetPasswordForm
 =============================================================================
 
- File:      mase_app/src/features/auth/ResetPasswordForm/ResetPasswordForm.vue
+ File:      src/features/auth/ResetPasswordForm/ResetPasswordForm.vue
  Layer:     Features (Stage 12 — Authentication UI)
  Version:   2.1.0
  Status:    FROZEN
@@ -300,13 +300,13 @@
  literals.
 
  Colors used:
-   --mases-color-text-primary      (all panel titles, toggle hover)
-   --mases-color-text-secondary    (all panel bodies)
-   --mases-color-text-tertiary     (request-id reference line)
-   --mases-color-text-warning      (caps lock warning)
-   --mases-color-text-disabled     (disabled toggle)
-   --mases-color-state-hover       (toggle hover background)
-   --mases-color-focus-ring-*      (toggle focus ring)
+   --arna-color-text-primary      (all panel titles, toggle hover)
+   --arna-color-text-secondary    (all panel bodies)
+   --arna-color-text-tertiary     (request-id reference line)
+   --arna-color-text-warning      (caps lock warning)
+   --arna-color-text-disabled     (disabled toggle)
+   --arna-color-state-hover       (toggle hover background)
+   --arna-color-focus-ring-*      (toggle focus ring)
 
  -----------------------------------------------------------------------------
  Production readiness
@@ -1124,7 +1124,7 @@ const passwordConfirmToggleLabel = computed<string>(() =>
 .reset-password {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-5);
+  gap: var(--arna-space-5);
   width: 100%;
 }
 
@@ -1134,7 +1134,7 @@ const passwordConfirmToggleLabel = computed<string>(() =>
 .reset-password__form {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-5);
+  gap: var(--arna-space-5);
   width: 100%;
 }
 
@@ -1145,10 +1145,10 @@ const passwordConfirmToggleLabel = computed<string>(() =>
 
 .reset-password__banner-reference {
   margin: 0;
-  margin-block-start: var(--mases-space-1);
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  margin-block-start: var(--arna-space-1);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   overflow-wrap: anywhere;
 }
 
@@ -1166,23 +1166,23 @@ const passwordConfirmToggleLabel = computed<string>(() =>
   height: 28px;
   padding: 0;
   border: 0;
-  border-radius: var(--mases-radius-sm);
+  border-radius: var(--arna-radius-sm);
   background-color: transparent;
   color: inherit;
   cursor: pointer;
   transition:
-    color var(--mases-duration-fast) var(--mases-easing-standard),
-    background-color var(--mases-duration-fast) var(--mases-easing-standard);
+    color var(--arna-duration-fast) var(--arna-easing-standard),
+    background-color var(--arna-duration-fast) var(--arna-easing-standard);
 }
 
 .reset-password__password-toggle:hover:not(:disabled) {
-  color: var(--mases-color-text-primary);
-  background-color: var(--mases-color-state-hover);
+  color: var(--arna-color-text-primary);
+  background-color: var(--arna-color-state-hover);
 }
 
 .reset-password__password-toggle:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 .reset-password__password-toggle:disabled {
@@ -1194,10 +1194,10 @@ const passwordConfirmToggleLabel = computed<string>(() =>
    ============================================================================ */
 .reset-password__caps-lock {
   margin: 0;
-  margin-block-start: calc(-1 * var(--mases-space-3));
-  color: var(--mases-color-text-warning);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  margin-block-start: calc(-1 * var(--arna-space-3));
+  color: var(--arna-color-text-warning);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   overflow-wrap: anywhere;
 }
 
@@ -1207,8 +1207,8 @@ const passwordConfirmToggleLabel = computed<string>(() =>
 .reset-password__actions {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
-  margin-block-start: var(--mases-space-1);
+  gap: var(--arna-space-2);
+  margin-block-start: var(--arna-space-1);
 }
 
 /* ============================================================================
@@ -1217,34 +1217,34 @@ const passwordConfirmToggleLabel = computed<string>(() =>
 .reset-password__invalid {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   width: 100%;
 }
 
 .reset-password__invalid-title {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-5);
-  line-height: var(--mases-line-height-heading-5);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-5);
+  line-height: var(--arna-line-height-heading-5);
+  font-weight: var(--arna-font-weight-semibold);
   overflow-wrap: anywhere;
 }
 
 .reset-password__invalid-message {
   margin: 0;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   overflow-wrap: anywhere;
 }
 
 .reset-password__invalid-actions {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
-  margin-block-start: var(--mases-space-2);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  gap: var(--arna-space-2);
+  margin-block-start: var(--arna-space-2);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
 }
 
 /* ============================================================================
@@ -1257,24 +1257,24 @@ const passwordConfirmToggleLabel = computed<string>(() =>
 .reset-password__success {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   width: 100%;
 }
 
 .reset-password__success-title {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-5);
-  line-height: var(--mases-line-height-heading-5);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-5);
+  line-height: var(--arna-line-height-heading-5);
+  font-weight: var(--arna-font-weight-semibold);
   overflow-wrap: anywhere;
 }
 
 .reset-password__success-message {
   margin: 0;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   overflow-wrap: anywhere;
 }
 
@@ -1284,10 +1284,10 @@ const passwordConfirmToggleLabel = computed<string>(() =>
 .reset-password__footer {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
-  margin-block-start: var(--mases-space-3);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  gap: var(--arna-space-2);
+  margin-block-start: var(--arna-space-3);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
 }
 
 /* ============================================================================

@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — StatusBadge
+ ARNA Phase 2 UI — StatusBadge
 =============================================================================
 
- File:      mase_app/src/components/patterns/StatusBadge/StatusBadge.vue
+ File:      src/components/patterns/StatusBadge/StatusBadge.vue
  Layer:     3 (Patterns)
  Version:   1.0.0
  Status:    FROZEN

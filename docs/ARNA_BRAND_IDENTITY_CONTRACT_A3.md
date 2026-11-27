@@ -11,8 +11,8 @@
 3. Surface names are **ARNA Workspace**, **ARNA Shareholder Portal**, **ARNA Administration**, and **ARNA Public Site**.
 4. The Amharic brand mark uses the approved Maale Arna corporate name with **ARNA** as the product mark. The product name is a proper noun and remains ARNA in both locales.
 5. Existing ARNA token names (`--arna-*`) are canonical and must not be renamed. The compatibility aliases resolve to the established semantic token values so theme overrides remain effective.
-6. Historical MASES references may remain only in explicitly historical provenance or migration compatibility. They must not be presented as current product identity.
-7. The old locale storage key `mases.locale` is read-only migration compatibility. New writes use `arna.locale`; clearing locale state clears both keys.
+6. Historical MASES references may remain only in explicitly historical provenance. They must not be presented as current product identity or implemented as compatibility behavior.
+7. The old locale storage key is not read or written. The application reads, writes and clears only the canonical `arna.locale` key.
 8. This frontend identity migration does not rename legal entities, API hostnames, email domains, DNS records, repositories or backend namespaces. Those require separate decisions.
 
 ## Required implementation coverage

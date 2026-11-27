@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — CR-L3 · File 4 · Revision 1.0.1
 =============================================================================
 
- File:      mase_app/src/features/portal/MyLoansPage.vue  (AMEND — revision)
+ File:      src/features/portal/MyLoansPage.vue  (AMEND — revision)
  Unit:      CR-L3 — Portal self-service loans pages (list)
  Delivery type:  Amendment — two call-site defensive reads; version bump.
  Net lines:      +2 call-site changes; ~20 lines docblock.
@@ -71,10 +71,10 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — MyLoansPage
+ ARNA Phase 2 UI — MyLoansPage
 =============================================================================
 
- File:      mase_app/src/features/portal/MyLoansPage.vue
+ File:      src/features/portal/MyLoansPage.vue
  Layer:     Features (Portal)
  Version:   1.0.1
  Status:    FROZEN
@@ -586,7 +586,7 @@ function statusVariant(
 .my-loans-page {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -598,9 +598,9 @@ function statusVariant(
    hover and a visible focus ring.
    ============================================================================ */
 .my-loans-page__link {
-  color: var(--mases-color-text-brand);
+  color: var(--arna-color-text-brand);
   text-decoration: none;
-  font-weight: var(--mases-font-weight-medium);
+  font-weight: var(--arna-font-weight-medium);
 }
 
 .my-loans-page__link:hover {
@@ -608,9 +608,9 @@ function statusVariant(
 }
 
 .my-loans-page__link:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
-  border-radius: var(--mases-radius-sm);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
+  border-radius: var(--arna-radius-sm);
 }
 
 /* ============================================================================

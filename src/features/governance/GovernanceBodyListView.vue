@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — v1.0.4 (duplicate-identifier fix)
 =============================================================================
 
- File:      mase_app/src/features/governance/GovernanceBodyListView.vue  (AMEND)
+ File:      src/features/governance/GovernanceBodyListView.vue  (AMEND)
  Unit:      Duplicate-identifier fix (build unblock)
  Delivery type:  Correction — the outer <script lang="ts"> block is
                  reduced to the type re-export alone. Two imports and
@@ -69,7 +69,7 @@
  CHANGE VERIFICATION — CR-WORKSPACE-TITLE · Phase 1 · File 10
 =============================================================================
 
- File:      mase_app/src/features/governance/GovernanceBodyListView.vue  (AMEND)
+ File:      src/features/governance/GovernanceBodyListView.vue  (AMEND)
  Unit:      CR-WORKSPACE-TITLE — Phase 1, File 10
  Delivery type:  Enhancement — document.title via <PageTitle>.
                  One import added, one const added, one template
@@ -80,14 +80,14 @@
  Before (v1.0.2):
    The view set no document.title. The browser tab showed whatever
    the previously-visited route had left, or the entry HTML's
-   pre-JS default ("MASES") on a cold load directly at
+   pre-JS default ("ARNA") on a cold load directly at
    /governance/bodies.
 
  After (v1.0.3):
    The view sets document.title via <PageTitle>, bound to the
    existing labels.pageTitle and to import.meta.env.VITE_APP_NAME.
 
-     Workspace build    →  "የአስተዳደር አካላት — MASES"
+     Workspace build    →  "የአስተዳደር አካላት — ARNA"
      Empty VITE_APP_NAME →  "የአስተዳደር አካላት"
 
    The portal build does not mount this view (the governance
@@ -113,7 +113,7 @@
  CHANGE VERIFICATION — G3 · File 4 of 7 (build fix)
 =============================================================================
 
- File:      mase_app/src/features/governance/GovernanceBodyListView.vue  (AMEND)
+ File:      src/features/governance/GovernanceBodyListView.vue  (AMEND)
  Unit:      G3 — GovernanceBody frontend module (build fix)
  Delivery type:  Correction — one attribute name changed in the
                  Pagination composite binding. No markup, state, or
@@ -151,7 +151,7 @@
  CHANGE VERIFICATION — G3 · File 4 of 7 (amendment v1.0.1)
 =============================================================================
 
- File:      mase_app/src/features/governance/GovernanceBodyListView.vue  (AMEND)
+ File:      src/features/governance/GovernanceBodyListView.vue  (AMEND)
  Unit:      G3 — GovernanceBody frontend module (list view amendment)
  Delivery type:  Amendment — three Pagination prop bindings corrected.
  Net lines:      ±3 lines in the template; ~55 lines docblock.
@@ -177,7 +177,7 @@
  CHANGE VERIFICATION — G3 · File 4 of 7 (initial v1.0.0)
 =============================================================================
 
- File:      mase_app/src/features/governance/GovernanceBodyListView.vue  (NEW)
+ File:      src/features/governance/GovernanceBodyListView.vue  (NEW)
  Unit:      G3 — GovernanceBody frontend module (list view)
  Delivery type:  New file.
 
@@ -199,10 +199,10 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — GovernanceBodyListView
+ ARNA Phase 2 UI — GovernanceBodyListView
 =============================================================================
 
- File:      mase_app/src/features/governance/GovernanceBodyListView.vue
+ File:      src/features/governance/GovernanceBodyListView.vue
  Layer:     Features (Governance domain)
  Version:   1.0.4
  Status:    FROZEN
@@ -501,7 +501,7 @@ const props = defineProps<Props>();
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "MASES"
+ *   workspace  →  "ARNA"
  *   portal     →  "Maale Arna Portal"
  *
  * This view is mounted in the workspace build only — the governance
@@ -938,7 +938,7 @@ function statusLabel(isActive: boolean): string {
 .governance-body-list-view {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -946,24 +946,24 @@ function statusLabel(isActive: boolean): string {
 .governance-body-list-view__filters {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--mases-space-3);
-  padding: var(--mases-space-4);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-lg);
-  background: var(--mases-color-surface-raised);
+  gap: var(--arna-space-3);
+  padding: var(--arna-space-4);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-lg);
+  background: var(--arna-color-surface-raised);
 }
 
 .governance-body-list-view__filter-field {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   min-width: 0;
 }
 
 .governance-body-list-view__filter-field label {
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body-sm);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body-sm);
+  font-weight: var(--arna-font-weight-semibold);
 }
 
 .governance-body-list-view__filter-field input,
@@ -971,10 +971,10 @@ function statusLabel(isActive: boolean): string {
   width: 100%;
   min-height: 2.75rem;
   padding: 0.65rem 0.75rem;
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-md);
-  color: var(--mases-color-text-primary);
-  background: var(--mases-color-surface-page);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-md);
+  color: var(--arna-color-text-primary);
+  background: var(--arna-color-surface-page);
   font: inherit;
 }
 
@@ -982,14 +982,14 @@ function statusLabel(isActive: boolean): string {
 .governance-body-list-view__filter-field select:focus-visible,
 .governance-body-list-view__apply:focus-visible,
 .governance-body-list-view__clear:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 
 .governance-body-list-view__filter-actions {
   display: flex;
   align-items: end;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-wrap: wrap;
 }
 
@@ -997,22 +997,22 @@ function statusLabel(isActive: boolean): string {
 .governance-body-list-view__clear {
   min-height: 2.75rem;
   padding: 0.65rem 0.9rem;
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
   font: inherit;
-  font-weight: var(--mases-font-weight-semibold);
+  font-weight: var(--arna-font-weight-semibold);
   cursor: pointer;
 }
 
 .governance-body-list-view__apply {
-  border: 1px solid var(--mases-color-action-primary);
-  color: var(--mases-color-text-inverse);
-  background: var(--mases-color-action-primary);
+  border: 1px solid var(--arna-color-action-primary);
+  color: var(--arna-color-text-inverse);
+  background: var(--arna-color-action-primary);
 }
 
 .governance-body-list-view__clear {
-  border: 1px solid var(--mases-color-border-subtle);
-  color: var(--mases-color-text-primary);
-  background: var(--mases-color-surface-page);
+  border: 1px solid var(--arna-color-border-subtle);
+  color: var(--arna-color-text-primary);
+  background: var(--arna-color-surface-page);
 }
 
 @media (min-width: 640px) {
@@ -1030,9 +1030,9 @@ function statusLabel(isActive: boolean): string {
    an underline on hover and a visible focus ring.
    ============================================================================ */
 .governance-body-list-view__code-link {
-  color: var(--mases-color-text-brand);
+  color: var(--arna-color-text-brand);
   text-decoration: none;
-  font-weight: var(--mases-font-weight-medium);
+  font-weight: var(--arna-font-weight-medium);
   font-variant-numeric: tabular-nums;
 }
 
@@ -1041,9 +1041,9 @@ function statusLabel(isActive: boolean): string {
 }
 
 .governance-body-list-view__code-link:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
-  border-radius: var(--mases-radius-sm);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
+  border-radius: var(--arna-radius-sm);
 }
 
 /* ============================================================================
@@ -1055,9 +1055,9 @@ function statusLabel(isActive: boolean): string {
 .governance-body-list-view__pagination {
   display: flex;
   justify-content: center;
-  padding-block: var(--mases-space-4);
-  padding-inline: var(--mases-space-4);
-  border-block-start: 1px solid var(--mases-color-border-subtle);
+  padding-block: var(--arna-space-4);
+  padding-inline: var(--arna-space-4);
+  border-block-start: 1px solid var(--arna-color-border-subtle);
 }
 
 /* ============================================================================

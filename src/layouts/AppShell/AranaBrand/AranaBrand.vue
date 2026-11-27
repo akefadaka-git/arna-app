@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — L-2.1 (brand mark, emblem interim)
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/AranaBrand/AranaBrand.vue  (AMEND)
+ File:      src/layouts/AppShell/AranaBrand/AranaBrand.vue  (AMEND)
  Unit:      L-2.1 — Shell brand mark, emblem interim
  Delivery type:  Enhancement — one new child element in the template,
                  one new media query in the scoped styles.
@@ -88,7 +88,7 @@
  ARNA Phase 2 UI — AranaBrand
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/AranaBrand/AranaBrand.vue
+ File:      src/layouts/AppShell/AranaBrand/AranaBrand.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.1.0
  Status:    FROZEN

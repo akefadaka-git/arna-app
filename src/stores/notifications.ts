@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — useNotificationsStore
+ * ARNA Phase 2 UI — useNotificationsStore
  * =============================================================================
  *
- * File:      mase_app/src/stores/notifications.ts
+ * File:      src/stores/notifications.ts
  * Layer:     Stores (Architecture Freeze §13.2)
  * Version:   1.0.0
  * Status:    FROZEN
@@ -100,7 +100,7 @@ export type NotificationPriority = 'low' | 'normal' | 'high';
  * documented so the eventual reconciliation against the real backend
  * shape is mechanical.
  */
-export interface MasesNotification {
+export interface ArnaNotification {
   /**
    * Stable identifier. Typed string (not number) to accommodate both
    * integer ids ("123") and UUIDs ("notif_abc") while the backend
@@ -179,7 +179,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
   // Private state — not returned from setup. Consumers read via getters
   // and write via actions.
   // ---------------------------------------------------------------------------
-  const _notifications = ref<readonly MasesNotification[]>([]);
+  const _notifications = ref<readonly ArnaNotification[]>([]);
   const _unreadCount = ref<number>(0);
   const _isLoading = ref<boolean>(false);
   const _error = ref<unknown | null>(null);
@@ -192,7 +192,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
   /**
    * The cached notification list. Empty until the first successful fetch.
    */
-  const notifications = computed<readonly MasesNotification[]>(
+  const notifications = computed<readonly ArnaNotification[]>(
     () => _notifications.value,
   );
 
@@ -276,7 +276,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
    * without fake timers — same affordance as Unit 11.7.
    */
   function setNotifications(
-    list: readonly MasesNotification[],
+    list: readonly ArnaNotification[],
     unreadCount: number,
     fetchedAt: number = Date.now(),
   ): void {

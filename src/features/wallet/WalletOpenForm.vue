@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — WalletOpenForm
+ ARNA Phase 2 UI — WalletOpenForm
 =============================================================================
 
- File:      mase_app/src/features/wallet/WalletOpenForm.vue
+ File:      src/features/wallet/WalletOpenForm.vue
  Layer:     Features (Wallet domain)
  Version:   1.0.0
  Status:    FROZEN
@@ -580,7 +580,7 @@ const submitLabel = computed<string>(() =>
 .wallet-open-form {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-5);
+  gap: var(--arna-space-5);
   width: 100%;
 }
 
@@ -592,10 +592,10 @@ const submitLabel = computed<string>(() =>
 
 .wallet-open-form__banner-reference {
   margin: 0;
-  margin-block-start: var(--mases-space-1);
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  margin-block-start: var(--arna-space-1);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   overflow-wrap: break-word;
   word-break: normal;
 }
@@ -606,7 +606,7 @@ const submitLabel = computed<string>(() =>
 .wallet-open-form__load-error {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-4);
+  gap: var(--arna-space-4);
   width: 100%;
 }
 
@@ -630,8 +630,8 @@ const submitLabel = computed<string>(() =>
   display: flex;
   flex-direction: column-reverse;
   align-items: stretch;
-  gap: var(--mases-space-3);
-  padding-block-start: var(--mases-space-2);
+  gap: var(--arna-space-3);
+  padding-block-start: var(--arna-space-2);
 }
 
 @media (min-width: 640px) {

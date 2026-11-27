@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — TenantSwitcher
+ ARNA Phase 2 UI — TenantSwitcher
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/TenantSwitcher/TenantSwitcher.vue
+ File:      src/layouts/AppShell/TenantSwitcher/TenantSwitcher.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.1.0
  Status:    ENHANCEMENT — forced-colors accessibility

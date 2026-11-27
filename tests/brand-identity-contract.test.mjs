@@ -63,10 +63,11 @@ test('build environments use ARNA surface names', async () => {
   }
 });
 
-test('locale storage migrates old preference and writes only the ARNA key', async () => {
+test('locale storage uses only the canonical ARNA key', async () => {
   const source = await read('../src/stores/locale.ts');
   assert.match(source, /const STORAGE_KEY = 'arna\.locale'/);
-  assert.match(source, /const LEGACY_STORAGE_KEY = 'mases\.locale'/);
+  assert.match(source, /return localStorage\.getItem\(STORAGE_KEY\);/);
+  assert.doesNotMatch(source, /mases\.locale|LEGACY_STORAGE_KEY/);
   assert.match(source, /getItem\(STORAGE_KEY\) \?\? localStorage\.getItem\(LEGACY_STORAGE_KEY\)/);
   assert.match(source, /setItem\(STORAGE_KEY, value\)/);
   assert.match(source, /removeItem\(LEGACY_STORAGE_KEY\)/);
@@ -84,21 +85,20 @@ async function collectFiles(directory) {
   return files;
 }
 
-test('persisted browser state uses ARNA keys with legacy migration fallbacks', async () => {
+test('persisted browser state uses only canonical ARNA keys', async () => {
   const tenant = await read('../src/stores/tenant.ts');
   assert.ok(tenant.includes("const KEY = 'arna.tenant_id'"));
-  assert.ok(tenant.includes("const LEGACY_KEY = 'mases.tenant_id'"));
-  assert.ok(tenant.includes('localStorage.getItem(KEY) ?? localStorage.getItem(LEGACY_KEY)'));
-  assert.ok(tenant.includes('localStorage.removeItem(LEGACY_KEY)'));
+  assert.ok(tenant.includes('localStorage.getItem(KEY)'));
+  assert.doesNotMatch(tenant, /mases\.tenant_id|LEGACY_KEY|localStorage\.getItem\(KEY\)\s*\?\?/);
 
   const bootstrap = await read('../src/core/bootstrap.ts');
   assert.ok(bootstrap.includes("const KEY = 'arna.auth_token'"));
-  assert.ok(bootstrap.includes("const LEGACY_KEY = 'mases.auth_token'"));
-  assert.ok(bootstrap.includes('sessionStorage.getItem(KEY) ?? sessionStorage.getItem(LEGACY_KEY)'));
+  assert.ok(bootstrap.includes('sessionStorage.getItem(KEY)'));
+  assert.doesNotMatch(bootstrap, /mases\.auth_token|LEGACY_KEY|sessionStorage\.getItem\(KEY\)\s*\?\?/);
 
   const login = await read('../src/features/auth/LoginForm/LoginForm.vue');
   assert.ok(login.includes("const REMEMBERED_IDENTIFIER_KEY = 'arna.auth.remembered_identifier'"));
-  assert.ok(login.includes("const LEGACY_REMEMBERED_IDENTIFIER_KEY = 'mases.auth.remembered_identifier'"));
+  assert.doesNotMatch(login, /mases\.auth\.remembered_identifier|LEGACY_REMEMBERED_IDENTIFIER_KEY/);
 });
 
 test('application source has no active legacy MASES component or DOM namespaces', async () => {
@@ -119,11 +119,12 @@ test('application source has no active legacy MASES component or DOM namespaces'
   assert.deepEqual(findings, [], 'Legacy MASES identifiers must be removed or explicitly migrated');
 });
 
-test('ARNA semantic tokens preserve the legacy token substrate through aliases', async () => {
+test('ARNA semantic tokens are canonical and do not depend on legacy aliases', async () => {
   const source = await read('../src/styles/tokens.css');
-  assert.ok(source.includes('--arna-space-1: var(--mases-space-1);'));
-  assert.ok(source.includes('--arna-color-text-primary: var(--mases-color-text-primary);'));
-  assert.ok(source.includes('--arna-focus-ring-width: var(--mases-focus-ring-width);'));
+  assert.match(source, /--arna-space-1:\s*[^;]+;/);
+  assert.match(source, /--arna-color-text-primary:\s*[^;]+;/);
+  assert.match(source, /--arna-focus-ring-width:\s*[^;]+;/);
+  assert.doesNotMatch(source, /--mases-/);
 });
 
 test('active Combobox DOM identifiers use the ARNA namespace', async () => {

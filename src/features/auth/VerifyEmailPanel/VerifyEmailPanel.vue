@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — VerifyEmailPanel
+ ARNA Phase 2 UI — VerifyEmailPanel
 =============================================================================
 
- File:      mase_app/src/features/auth/VerifyEmailPanel/VerifyEmailPanel.vue
+ File:      src/features/auth/VerifyEmailPanel/VerifyEmailPanel.vue
  Layer:     Features (Stage 12 — Authentication UI)
  Version:   1.2.0
  Status:    FROZEN
@@ -164,12 +164,12 @@
  literals.
 
  Colors used:
-   --mases-color-icon-secondary    (verifying icon)
-   --mases-color-icon-success      (verified, already-verified)
-   --mases-color-icon-danger       (failed)
-   --mases-color-text-primary      (state titles)
-   --mases-color-text-secondary    (state messages)
-   --mases-color-text-tertiary     (reference line)
+   --arna-color-icon-secondary    (verifying icon)
+   --arna-color-icon-success      (verified, already-verified)
+   --arna-color-icon-danger       (failed)
+   --arna-color-text-primary      (state titles)
+   --arna-color-text-secondary    (state messages)
+   --arna-color-text-tertiary     (reference line)
 
  -----------------------------------------------------------------------------
  Production readiness
@@ -681,7 +681,7 @@ function onBackToLogin(event: MouseEvent): void {
 .verify-email {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-5);
+  gap: var(--arna-space-5);
   width: 100%;
 }
 
@@ -692,7 +692,7 @@ function onBackToLogin(event: MouseEvent): void {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   width: 100%;
   text-align: center;
 }
@@ -701,15 +701,15 @@ function onBackToLogin(event: MouseEvent): void {
    Icon
    ============================================================================ */
 .verify-email__icon {
-  color: var(--mases-color-icon-secondary);
+  color: var(--arna-color-icon-secondary);
 }
 
 .verify-email__icon--success {
-  color: var(--mases-color-icon-success);
+  color: var(--arna-color-icon-success);
 }
 
 .verify-email__icon--failed {
-  color: var(--mases-color-icon-danger);
+  color: var(--arna-color-icon-danger);
 }
 
 /*
@@ -737,18 +737,18 @@ function onBackToLogin(event: MouseEvent): void {
    ============================================================================ */
 .verify-email__title {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-5);
-  line-height: var(--mases-line-height-heading-5);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-5);
+  line-height: var(--arna-line-height-heading-5);
+  font-weight: var(--arna-font-weight-semibold);
   overflow-wrap: anywhere;
 }
 
 .verify-email__message {
   margin: 0;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   overflow-wrap: anywhere;
 }
 
@@ -757,9 +757,9 @@ function onBackToLogin(event: MouseEvent): void {
    ============================================================================ */
 .verify-email__reference {
   margin: 0;
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   overflow-wrap: anywhere;
 }
 
@@ -769,10 +769,10 @@ function onBackToLogin(event: MouseEvent): void {
 .verify-email__actions {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
-  margin-block-start: var(--mases-space-2);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  gap: var(--arna-space-2);
+  margin-block-start: var(--arna-space-2);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
 }
 
 /* ============================================================================
@@ -781,11 +781,11 @@ function onBackToLogin(event: MouseEvent): void {
 .verify-email__footer {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   align-items: center;
-  margin-block-start: var(--mases-space-3);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  margin-block-start: var(--arna-space-3);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
 }
 
 /* ============================================================================

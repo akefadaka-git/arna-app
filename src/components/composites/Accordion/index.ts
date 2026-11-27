@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Accordion — Barrel Export
+ * ARNA Phase 2 UI — Accordion — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/components/composites/Accordion/index.ts
+ * File:      src/components/composites/Accordion/index.ts
  * Layer:     2 (Composites)
  * Version:   1.0.0
  * Status:    FROZEN

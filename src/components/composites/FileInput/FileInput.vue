@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — FileInput
+ ARNA Phase 2 UI — FileInput
 =============================================================================
 
- File:      mase_app/src/components/composites/FileInput/FileInput.vue
+ File:      src/components/composites/FileInput/FileInput.vue
  Layer:     2 (Composites)
  Version:   1.0.0
  Status:    FROZEN

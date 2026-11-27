@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — useLocaleStore
+ * ARNA Phase 2 UI — useLocaleStore
  * =============================================================================
  *
- * File:      mase_app/src/stores/locale.ts
+ * File:      src/stores/locale.ts
  * Layer:     Stores (Architecture Freeze §13.2)
  * Version:   1.0.0
  * Status:    FROZEN
@@ -42,13 +42,13 @@
  * -----------------------------------------------------------------------------
  * §9.2 lists the backend's resolution order with user.locale first.
  * §13.4 places the store's own persistence in localStorage under
- * `mases.locale`. §20.3 states that in the interim (no POST
+ * `arna.locale`. §20.3 states that in the interim (no POST
  * /api/locale endpoint), "the active locale is honored client-side".
  *
  * The store resolves these three rules as follows:
  *
  *   1. On cold start (before login):
- *        - localStorage 'mases.locale' if it holds a supported code
+ *        - localStorage 'arna.locale' if it holds a supported code
  *        - else 'am' (the §9.1 default)
  *
  *   2. On login (auth service calls hydrateFromUser(user.locale)):
@@ -123,7 +123,6 @@ export const DEFAULT_LOCALE: SupportedLocale = 'am';
  * The localStorage key. Frozen by §13.4.
  */
 const STORAGE_KEY = 'arna.locale';
-const LEGACY_STORAGE_KEY = 'mases.locale';
 
 /**
  * Type guard: is the given value a supported locale code?
@@ -148,20 +147,18 @@ export interface LocaleStorage {
 
 /**
  * The production default. Reads `arna.locale` first, falls back to
- * the legacy `mases.locale` key, and writes only the ARNA key.
+ * the canonical `arna.locale` key only.
  */
 function createLocalStorageLocaleStorage(): LocaleStorage {
   return {
     get(): string | null {
-      return localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY);
+      return localStorage.getItem(STORAGE_KEY);
     },
     set(value: string): void {
       localStorage.setItem(STORAGE_KEY, value);
-      localStorage.removeItem(LEGACY_STORAGE_KEY);
     },
     clear(): void {
       localStorage.removeItem(STORAGE_KEY);
-      localStorage.removeItem(LEGACY_STORAGE_KEY);
     },
   };
 }

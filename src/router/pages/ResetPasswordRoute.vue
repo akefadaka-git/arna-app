@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — L-4.4
 =============================================================================
 
- File:      mase_app/src/router/pages/ResetPasswordRoute.vue  (AMEND)
+ File:      src/router/pages/ResetPasswordRoute.vue  (AMEND)
  Unit:      L-4.4 — PageTitle adoption (reset-password)
  Delivery type:  Refactor — declarative document.title via <PageTitle>.
                  One import added, one import removed, one hook removed,
@@ -38,9 +38,9 @@
 
    Observable behaviour on the route is identical:
 
-     VITE_APP_NAME = "MASES"
-       v1.2.0  →  document.title = "የይለፍ ቃልዎን ያስጀምሩ — MASES"
-       v1.3.0  →  document.title = "የይለፍ ቃልዎን ያስጀምሩ — MASES"   (identical)
+     VITE_APP_NAME = "ARNA"
+       v1.2.0  →  document.title = "የይለፍ ቃልዎን ያስጀምሩ — ARNA"
+       v1.3.0  →  document.title = "የይለፍ ቃልዎን ያስጀምሩ — ARNA"   (identical)
 
      VITE_APP_NAME = "" or absent at runtime
        v1.2.0  →  document.title = "የይለፍ ቃልዎን ያስጀምሩ"
@@ -64,10 +64,10 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — ResetPasswordRoute
+ ARNA Phase 2 UI — ResetPasswordRoute
 =============================================================================
 
- File:      mase_app/src/router/pages/ResetPasswordRoute.vue
+ File:      src/router/pages/ResetPasswordRoute.vue
  Layer:     Core (router page)
  Version:   1.3.0
  Status:    FROZEN
@@ -95,10 +95,10 @@
           undefined or invalid.
 
           WHY: The heading styles reference
-          --mases-color-text-primary,
-          --mases-font-size-heading-4,
-          --mases-line-height-heading-4, and
-          --mases-font-weight-semibold. With no fallbacks, an
+          --arna-color-text-primary,
+          --arna-font-size-heading-4,
+          --arna-line-height-heading-4, and
+          --arna-font-weight-semibold. With no fallbacks, an
           undefined token makes the individual declaration
           invalid and the browser drops it — the heading renders
           with the browser's default font size, color, and line
@@ -226,7 +226,7 @@
      appName   = import.meta.env.VITE_APP_NAME
 
  In the workspace build, the title reads
- "የይለፍ ቃልዎን ያስጀምሩ — MASES"; in the portal build,
+ "የይለፍ ቃልዎን ያስጀምሩ — ARNA"; in the portal build,
  "የይለፍ ቃልዎን ያስጀምሩ — Maale Arna Portal".
 
  No cleanup on unmount is required in this file: PageTitle owns
@@ -261,15 +261,15 @@
  fallback value that mirrors a token.
 
  Colors used:
-   --mases-color-text-primary   (h1 text color)
+   --arna-color-text-primary   (h1 text color)
      fallback: #141009 — the resolved value of
-     --mases-color-neutral-900, which is what the token
+     --arna-color-neutral-900, which is what the token
      resolves to.
 
  Typography used:
-   --mases-font-size-heading-4        fallback: 24px
-   --mases-line-height-heading-4      fallback: 32px
-   --mases-font-weight-semibold       fallback: 600
+   --arna-font-size-heading-4        fallback: 24px
+   --arna-line-height-heading-4      fallback: 32px
+   --arna-font-weight-semibold       fallback: 600
 
  -----------------------------------------------------------------------------
  Production readiness
@@ -339,7 +339,7 @@ const router = useRouter();
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "MASES"
+ *   workspace  →  "ARNA"
  *   portal     →  "Maale Arna Portal"
  *
  * Passed to <PageTitle> as the title's suffix. PageTitle's own
@@ -408,21 +408,21 @@ async function onBackToLogin(): Promise<void> {
 
   /*
    * Fallback #141009 is the resolved value of
-   * --mases-color-neutral-900, which is what
-   * --mases-color-text-primary resolves to.
+   * --arna-color-neutral-900, which is what
+   * --arna-color-text-primary resolves to.
    */
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 
   font-family: inherit;
 
-  /* Fallback 24px matches --mases-font-size-heading-4. */
-  font-size: var(--mases-font-size-heading-4, 24px);
+  /* Fallback 24px matches --arna-font-size-heading-4. */
+  font-size: var(--arna-font-size-heading-4, 24px);
 
-  /* Fallback 32px matches --mases-line-height-heading-4. */
-  line-height: var(--mases-line-height-heading-4, 32px);
+  /* Fallback 32px matches --arna-line-height-heading-4. */
+  line-height: var(--arna-line-height-heading-4, 32px);
 
-  /* Fallback 600 matches --mases-font-weight-semibold. */
-  font-weight: var(--mases-font-weight-semibold, 600);
+  /* Fallback 600 matches --arna-font-weight-semibold. */
+  font-weight: var(--arna-font-weight-semibold, 600);
 
   text-align: center;
 

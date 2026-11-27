@@ -3,7 +3,7 @@
  * CHANGE VERIFICATION — SSO fix
  * =============================================================================
  *
- * File:      mase_app/src/stores/auth.ts  (AMEND)
+ * File:      src/stores/auth.ts  (AMEND)
  * Unit:      isAuthenticated — no longer requires a bearer token
  * Delivery type:  Correction — a session-cookie-authenticated user is
  *                 now correctly considered authenticated.
@@ -53,10 +53,10 @@
 
 /*
  * =============================================================================
- * MASES Phase 2 UI — useAuthStore
+ * ARNA Phase 2 UI — useAuthStore
  * =============================================================================
  *
- * File:      mase_app/src/stores/auth.ts
+ * File:      src/stores/auth.ts
  * Layer:     Stores (Architecture Freeze §13.2)
  * Version:   1.1.0
  * Status:    FROZEN

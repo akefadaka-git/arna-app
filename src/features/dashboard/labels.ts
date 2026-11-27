@@ -3,7 +3,7 @@
  * CHANGE VERIFICATION — CR-DASH1 (feature dashboard)
  * =============================================================================
  *
- * File:      mase_app/src/features/dashboard/labels.ts  (NEW)
+ * File:      src/features/dashboard/labels.ts  (NEW)
  * Unit:      CR-DASH1 — Workspace feature dashboard (labels)
  * Delivery type:  New file.
  * Net lines:      new file.

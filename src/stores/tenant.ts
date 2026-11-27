@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — useTenantStore
+ * ARNA Phase 2 UI — useTenantStore
  * =============================================================================
  *
- * File:      mase_app/src/stores/tenant.ts
+ * File:      src/stores/tenant.ts
  * Layer:     Stores (Architecture Freeze §13.2)
  * Version:   1.0.0
  * Status:    FROZEN
@@ -41,7 +41,7 @@
  * Storage (Architecture Freeze §13.4)
  * -----------------------------------------------------------------------------
  * The active tenant id is persisted under `arna.tenant_id`; legacy
- * `mases.tenant_id` is read as a migration fallback. New writes use
+ * No legacy tenant key is read. New writes use
  * the ARNA key and remove the legacy key. Storage is abstracted behind
  * TenantIdStorage so tests can isolate state without touching the browser's
  * global localStorage.
@@ -91,7 +91,7 @@ export interface TenantIdStorage {
 
 /**
  * The production default. Reads `arna.tenant_id` first, falls back to
- * `mases.tenant_id`, and writes only the ARNA key.
+ * the canonical ARNA key only.
  *
  * Parses defensively: a corrupted value (non-numeric, negative, zero,
  * or NaN) is treated as absent. The store then falls back to the
@@ -99,11 +99,10 @@ export interface TenantIdStorage {
  */
 function createLocalStorageTenantIdStorage(): TenantIdStorage {
   const KEY = 'arna.tenant_id';
-  const LEGACY_KEY = 'mases.tenant_id';
 
   return {
     get(): number | null {
-      const raw = localStorage.getItem(KEY) ?? localStorage.getItem(LEGACY_KEY);
+      const raw = localStorage.getItem(KEY);
       if (raw === null) return null;
       const parsed = Number.parseInt(raw, 10);
       if (!Number.isFinite(parsed) || parsed <= 0) return null;
@@ -111,11 +110,9 @@ function createLocalStorageTenantIdStorage(): TenantIdStorage {
     },
     set(id: number): void {
       localStorage.setItem(KEY, String(id));
-      localStorage.removeItem(LEGACY_KEY);
     },
     clear(): void {
       localStorage.removeItem(KEY);
-      localStorage.removeItem(LEGACY_KEY);
     },
   };
 }

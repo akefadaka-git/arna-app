@@ -28,7 +28,7 @@ Execution is strictly phased. Each phase must satisfy its completion criteria an
 
 ## 2. Owner decisions and non-negotiable controls
 
-- Preserve the approved ARNA/MASES Brand Identity Master Specification v1.0, emblem and approved semantic brand meaning.
+- Preserve the approved ARNA brand identity and emblem. The earlier MASES/ARNA Brand Identity Master Specification v1.0 remains historical evidence only.
 - Preserve existing domain boundaries, application entry points, API contracts and unrelated work.
 - Do not perform an unnecessary framework replacement or frontend rewrite.
 - Do not duplicate domain business logic or create competing sources of truth.

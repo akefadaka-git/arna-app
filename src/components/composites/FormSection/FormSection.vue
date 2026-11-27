@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — FormSection
+ ARNA Phase 2 UI — FormSection
 =============================================================================
 
- File:      mase_app/src/components/composites/FormSection/FormSection.vue
+ File:      src/components/composites/FormSection/FormSection.vue
  Layer:     2 (Composites)
  Version:   1.0.0
  Status:    FROZEN

@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — FileUploader — Barrel Export
+ * ARNA Phase 2 UI — FileUploader — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/components/patterns/FileUploader/index.ts
+ * File:      src/components/patterns/FileUploader/index.ts
  * Layer:     3 (Patterns)
  * Version:   1.0.0
  * Status:    FROZEN

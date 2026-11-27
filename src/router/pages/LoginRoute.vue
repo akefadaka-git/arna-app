@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — L-4.1
 =============================================================================
 
- File:      mase_app/src/router/pages/LoginRoute.vue  (AMEND)
+ File:      src/router/pages/LoginRoute.vue  (AMEND)
  Unit:      L-4.1 — PageTitle adoption (login)
  Delivery type:  Refactor — declarative document.title via <PageTitle>.
                  One import added, one import removed, one hook removed,
@@ -44,9 +44,9 @@
 
    Observable behaviour on the route is identical:
 
-     VITE_APP_NAME = "MASES"
-       v1.2.0  →  document.title = "ግባ — MASES"
-       v1.3.0  →  document.title = "ግባ — MASES"   (identical)
+     VITE_APP_NAME = "ARNA"
+       v1.2.0  →  document.title = "ግባ — ARNA"
+       v1.3.0  →  document.title = "ግባ — ARNA"   (identical)
 
      VITE_APP_NAME = "" or absent at runtime
        v1.2.0  →  document.title = "ግባ"
@@ -71,10 +71,10 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — LoginRoute
+ ARNA Phase 2 UI — LoginRoute
 =============================================================================
 
- File:      mase_app/src/router/pages/LoginRoute.vue
+ File:      src/router/pages/LoginRoute.vue
  Layer:     Core (router page)
  Version:   1.3.0
  Status:    FROZEN
@@ -110,7 +110,7 @@
             "{formAriaLabel} — {appName}" where `formAriaLabel` is
             the login form's accessible name and `appName` is
             `import.meta.env.VITE_APP_NAME`. In the workspace
-            build, the title reads "ግባ — MASES"; in the portal
+            build, the title reads "ግባ — ARNA"; in the portal
             build, "ግባ — Maale Arna Portal".
 
           · No changes to the two emit handlers, the brand slot,
@@ -258,7 +258,7 @@
  level is h1, matching the accessibility convention that each page
  has exactly one h1 and it names the page's purpose.
 
- The heading is not "Log in to MASES" or similar. Two reasons:
+ The heading is not "Log in to ARNA" or similar. Two reasons:
 
    · The logo above the card already announces the product name.
      A heading that repeated it would produce a redundant
@@ -310,10 +310,10 @@
  `color-mix()`, no `calc()` on colors.
 
  Colors used:
-   --mases-color-text-primary       (h1 text color)
-   --mases-font-size-heading-4
-   --mases-line-height-heading-4
-   --mases-font-weight-semibold
+   --arna-color-text-primary       (h1 text color)
+   --arna-font-size-heading-4
+   --arna-line-height-heading-4
+   --arna-font-weight-semibold
 
  No hex value appears in this file.
 
@@ -410,7 +410,7 @@ const sessionExpired = computed<boolean>(
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "MASES"
+ *   workspace  →  "ARNA"
  *   portal     →  "Maale Arna Portal"
  *
  * Passed to <PageTitle> as the title's suffix. PageTitle's own
@@ -475,11 +475,11 @@ async function onRegister(): Promise<void> {
    ============================================================================ */
 .login-route__title {
   margin: 0;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
-  font-size: var(--mases-font-size-heading-4);
-  line-height: var(--mases-line-height-heading-4);
-  font-weight: var(--mases-font-weight-semibold);
+  font-size: var(--arna-font-size-heading-4);
+  line-height: var(--arna-line-height-heading-4);
+  font-weight: var(--arna-font-weight-semibold);
   text-align: center;
   /*
    * Amharic-safe wrapping. A long translation of "Log in" (if the

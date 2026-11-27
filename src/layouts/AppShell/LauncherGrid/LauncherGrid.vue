@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — LauncherGrid
+ ARNA Phase 2 UI — LauncherGrid
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/LauncherGrid/LauncherGrid.vue
+ File:      src/layouts/AppShell/LauncherGrid/LauncherGrid.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.1.0
  Status:    ENHANCEMENT — narrow-container resilience

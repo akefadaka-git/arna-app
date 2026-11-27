@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "//": [
-    "MASES Phase 2 UI — Production Package Manifest",
+    "ARNA Phase 2 UI — Production Package Manifest",
     "ARCHITECTURE: one repository, one package.json, one node_modules tree, shared design system, four independent static builds, no Node.js runtime in production.",
     "ENTRY POINTS: workspace-entry/ -> workspace; portal-entry/ -> shareholder portal; admin-entry/ -> administration; public-entry/ -> public corporate website.",
     "BUILD OUTPUT: dist/; dist-portal/; dist-admin/; dist-public/.",

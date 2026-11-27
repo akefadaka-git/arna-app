@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — ShareholderDetailRoute
+ ARNA Phase 2 UI — ShareholderDetailRoute
 =============================================================================
 
- File:      mase_app/src/router/pages/ShareholderDetailRoute.vue
+ File:      src/router/pages/ShareholderDetailRoute.vue
  Layer:     Core (router page)
  Version:   1.0.0
  Status:    FROZEN

@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — L-4.10
 =============================================================================
 
- File:      mase_app/src/router/pages/LegalDocumentRoute.vue  (AMEND)
+ File:      src/router/pages/LegalDocumentRoute.vue  (AMEND)
  Unit:      L-4.10 — PageTitle adoption (legal document viewer)
  Delivery type:  Refactor — declarative document.title via <PageTitle>.
                  Two imports removed (onMounted, watch), one import
@@ -80,16 +80,16 @@
    Observable behaviour on the route is identical:
 
      Navigating to /legal/terms   (workspace build)
-       v1.0.0  →  document.title = "የአጠቃቀም ውሎች — MASES"
-       v1.1.0  →  document.title = "የአጠቃቀም ውሎች — MASES"           (identical)
+       v1.0.0  →  document.title = "የአጠቃቀም ውሎች — ARNA"
+       v1.1.0  →  document.title = "የአጠቃቀም ውሎች — ARNA"           (identical)
 
      Then navigating to /legal/privacy  (slug change, component reuse)
-       v1.0.0  →  document.title = "የግላዊነትና የውሂብ ጠበቃ ፖሊሲ — MASES"
-       v1.1.0  →  document.title = "የግላዊነትና የውሂብ ጠበቃ ፖሊሲ — MASES"  (identical)
+       v1.0.0  →  document.title = "የግላዊነትና የውሂብ ጠበቃ ፖሊሲ — ARNA"
+       v1.1.0  →  document.title = "የግላዊነትና የውሂብ ጠበቃ ፖሊሲ — ARNA"  (identical)
 
      Navigating to /legal/unresolvable-slug
-       v1.0.0  →  document.title = "ሰነዱ አልተገኘም — MASES"
-       v1.1.0  →  document.title = "ሰነዱ አልተገኘም — MASES"           (identical)
+       v1.0.0  →  document.title = "ሰነዱ አልተገኘም — ARNA"
+       v1.1.0  →  document.title = "ሰነዱ አልተገኘም — ARNA"           (identical)
 
      VITE_APP_NAME = "" or absent at runtime
        v1.0.0  →  document.title = "<pageLabel>"
@@ -118,10 +118,10 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — LegalDocumentRoute
+ ARNA Phase 2 UI — LegalDocumentRoute
 =============================================================================
 
- File:      mase_app/src/router/pages/LegalDocumentRoute.vue
+ File:      src/router/pages/LegalDocumentRoute.vue
  Layer:     Core (router page)
  Version:   1.1.0
  Status:    FROZEN
@@ -219,8 +219,8 @@
  The document is capped at the form-reading width. Two tokens are
  consulted, in order:
 
-   --mases-container-form              (first choice)
-   --mases-container-auth-card-wide    (fallback)
+   --arna-container-form              (first choice)
+   --arna-container-auth-card-wide    (fallback)
    560px                               (final fallback)
 
  A narrow single-column layout is correct for long-form legal text
@@ -389,7 +389,7 @@
      appName   = import.meta.env.VITE_APP_NAME
 
  In the workspace build, a document titled "የአጠቃቀም ውሎች" produces
- the tab title "የአጠቃቀም ውሎች — MASES". In the portal build, the
+ the tab title "የአጠቃቀም ውሎች — ARNA". In the portal build, the
  same document produces "የአጠቃቀም ውሎች — Maale Arna Portal".
 
  The page label is the same string the article's own <h1> renders
@@ -430,41 +430,41 @@
  fallback value that mirrors a token.
 
  Colors used:
-   --mases-color-text-primary      (title, section headings,
+   --arna-color-text-primary      (title, section headings,
                                     metadata labels)
-   --mases-color-text-secondary    (body paragraphs, metadata
+   --arna-color-text-secondary    (body paragraphs, metadata
                                     values, draft notice, TOC
                                     links, related-document links,
                                     back-link)
-   --mases-color-border-subtle     (section separators, metadata
+   --arna-color-border-subtle     (section separators, metadata
                                     block, draft notice box)
 
  Typography used:
-   --mases-font-size-heading-2     (page title)
-   --mases-line-height-heading-2
+   --arna-font-size-heading-2     (page title)
+   --arna-line-height-heading-2
 
-   --mases-font-size-heading-4     (section headings, metadata /
+   --arna-font-size-heading-4     (section headings, metadata /
                                     TOC / version history /
                                     related documents headings)
-   --mases-line-height-heading-4
+   --arna-line-height-heading-4
 
-   --mases-font-size-body          (paragraphs)
-   --mases-line-height-body
+   --arna-font-size-body          (paragraphs)
+   --arna-line-height-body
 
-   --mases-font-size-body-sm       (metadata rows, draft notice,
+   --arna-font-size-body-sm       (metadata rows, draft notice,
                                     version-history rows)
-   --mases-line-height-body-sm
+   --arna-line-height-body-sm
 
-   --mases-font-weight-semibold    (page title, headings, metadata
+   --arna-font-weight-semibold    (page title, headings, metadata
                                     labels)
 
  Spacing used:
-   --mases-space-2, --mases-space-3, --mases-space-4,
-   --mases-space-6, --mases-space-8, --mases-space-10
+   --arna-space-2, --arna-space-3, --arna-space-4,
+   --arna-space-6, --arna-space-8, --arna-space-10
 
  Container used:
-   --mases-container-form          (preferred reading width)
-   --mases-container-auth-card-wide (fallback)
+   --arna-container-form          (preferred reading width)
+   --arna-container-auth-card-wide (fallback)
 
  -----------------------------------------------------------------------------
  Production readiness
@@ -729,7 +729,7 @@ const pageTitle = computed<string>(() => {
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "MASES"
+ *   workspace  →  "ARNA"
  *   portal     →  "Maale Arna Portal"
  *
  * Passed to <PageTitle> as the title's suffix. PageTitle's own
@@ -977,18 +977,18 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-8, 32px);
+  gap: var(--arna-space-8, 32px);
   width: 100%;
 
   /*
    * Reading width. Consulted in order:
-   *   1. --mases-container-form             (first choice)
-   *   2. --mases-container-auth-card-wide   (fallback)
+   *   1. --arna-container-form             (first choice)
+   *   2. --arna-container-auth-card-wide   (fallback)
    *   3. 560px                              (final fallback)
    */
   max-width: var(
-    --mases-container-form,
-    var(--mases-container-auth-card-wide, 560px)
+    --arna-container-form,
+    var(--arna-container-auth-card-wide, 560px)
   );
   margin-inline: auto;
 
@@ -1005,7 +1005,7 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__not-found {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-4, 16px);
+  gap: var(--arna-space-4, 16px);
 }
 
 /* ============================================================================
@@ -1014,12 +1014,12 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__title {
   margin: 0;
 
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 
   font-family: inherit;
-  font-size: var(--mases-font-size-heading-2, 32px);
-  line-height: var(--mases-line-height-heading-2, 40px);
-  font-weight: var(--mases-font-weight-semibold, 600);
+  font-size: var(--arna-font-size-heading-2, 32px);
+  line-height: var(--arna-line-height-heading-2, 40px);
+  font-weight: var(--arna-font-weight-semibold, 600);
 
   text-align: start;
   overflow-wrap: anywhere;
@@ -1031,10 +1031,10 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__back-link {
   display: inline-block;
 
-  color: var(--mases-color-text-secondary, #3F382B);
+  color: var(--arna-color-text-secondary, #3F382B);
 
-  font-size: var(--mases-font-size-body-sm, 14px);
-  line-height: var(--mases-line-height-body-sm, 22px);
+  font-size: var(--arna-font-size-body-sm, 14px);
+  line-height: var(--arna-line-height-body-sm, 22px);
   text-decoration: underline;
 
   transition: color 120ms ease;
@@ -1044,7 +1044,7 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 
 .legal-document__back-link:hover,
 .legal-document__back-link:focus-visible {
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 }
 
 /* ============================================================================
@@ -1058,16 +1058,16 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__draft-notice {
   margin: 0;
 
-  padding-block: var(--mases-space-3, 12px);
-  padding-inline: var(--mases-space-4, 16px);
+  padding-block: var(--arna-space-3, 12px);
+  padding-inline: var(--arna-space-4, 16px);
 
-  border: 1px solid var(--mases-color-border-subtle, #E5E0D2);
-  border-radius: var(--mases-radius-md, 8px);
+  border: 1px solid var(--arna-color-border-subtle, #E5E0D2);
+  border-radius: var(--arna-radius-md, 8px);
 
-  color: var(--mases-color-text-secondary, #3F382B);
+  color: var(--arna-color-text-secondary, #3F382B);
 
-  font-size: var(--mases-font-size-body-sm, 14px);
-  line-height: var(--mases-line-height-body-sm, 22px);
+  font-size: var(--arna-font-size-body-sm, 14px);
+  line-height: var(--arna-line-height-body-sm, 22px);
 
   text-align: start;
   overflow-wrap: anywhere;
@@ -1085,13 +1085,13 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 
 .legal-document__heading {
   margin: 0;
-  margin-block-end: var(--mases-space-3, 12px);
+  margin-block-end: var(--arna-space-3, 12px);
 
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 
-  font-size: var(--mases-font-size-heading-4, 24px);
-  line-height: var(--mases-line-height-heading-4, 32px);
-  font-weight: var(--mases-font-weight-semibold, 600);
+  font-size: var(--arna-font-size-heading-4, 24px);
+  line-height: var(--arna-line-height-heading-4, 32px);
+  font-weight: var(--arna-font-weight-semibold, 600);
 
   text-align: start;
   overflow-wrap: anywhere;
@@ -1108,7 +1108,7 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__metadata-list {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3, 12px);
+  gap: var(--arna-space-3, 12px);
 
   margin: 0;
 }
@@ -1116,7 +1116,7 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__metadata-row {
   display: grid;
   grid-template-columns: max-content 1fr;
-  gap: var(--mases-space-3, 12px);
+  gap: var(--arna-space-3, 12px);
 
   margin: 0;
 }
@@ -1124,11 +1124,11 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__metadata-label {
   margin: 0;
 
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 
-  font-size: var(--mases-font-size-body-sm, 14px);
-  line-height: var(--mases-line-height-body-sm, 22px);
-  font-weight: var(--mases-font-weight-semibold, 600);
+  font-size: var(--arna-font-size-body-sm, 14px);
+  line-height: var(--arna-line-height-body-sm, 22px);
+  font-weight: var(--arna-font-weight-semibold, 600);
 
   overflow-wrap: anywhere;
 }
@@ -1136,10 +1136,10 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__metadata-value {
   margin: 0;
 
-  color: var(--mases-color-text-secondary, #3F382B);
+  color: var(--arna-color-text-secondary, #3F382B);
 
-  font-size: var(--mases-font-size-body-sm, 14px);
-  line-height: var(--mases-line-height-body-sm, 22px);
+  font-size: var(--arna-font-size-body-sm, 14px);
+  line-height: var(--arna-line-height-body-sm, 22px);
 
   overflow-wrap: anywhere;
 }
@@ -1169,16 +1169,16 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 }
 
 .legal-document__toc-list li + li {
-  margin-block-start: var(--mases-space-2, 8px);
+  margin-block-start: var(--arna-space-2, 8px);
 }
 
 .legal-document__toc-list a {
   display: inline-block;
 
-  color: var(--mases-color-text-secondary, #3F382B);
+  color: var(--arna-color-text-secondary, #3F382B);
 
-  font-size: var(--mases-font-size-body-sm, 14px);
-  line-height: var(--mases-line-height-body-sm, 22px);
+  font-size: var(--arna-font-size-body-sm, 14px);
+  line-height: var(--arna-line-height-body-sm, 22px);
   text-decoration: underline;
 
   overflow-wrap: anywhere;
@@ -1186,7 +1186,7 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 
 .legal-document__toc-list a:hover,
 .legal-document__toc-list a:focus-visible {
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 }
 
 /* ============================================================================
@@ -1201,29 +1201,29 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__body {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-8, 32px);
+  gap: var(--arna-space-8, 32px);
 }
 
 .legal-document__section {
   margin: 0;
 
-  scroll-margin-top: var(--mases-space-4, 16px);
+  scroll-margin-top: var(--arna-space-4, 16px);
 }
 
 .legal-document__paragraph {
   margin: 0;
 
-  color: var(--mases-color-text-secondary, #3F382B);
+  color: var(--arna-color-text-secondary, #3F382B);
 
-  font-size: var(--mases-font-size-body, 16px);
-  line-height: var(--mases-line-height-body, 26px);
+  font-size: var(--arna-font-size-body, 16px);
+  line-height: var(--arna-line-height-body, 26px);
 
   text-align: start;
   overflow-wrap: anywhere;
 }
 
 .legal-document__paragraph + .legal-document__paragraph {
-  margin-block-start: var(--mases-space-3, 12px);
+  margin-block-start: var(--arna-space-3, 12px);
 }
 
 /* ============================================================================
@@ -1236,7 +1236,7 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__version-list {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-4, 16px);
+  gap: var(--arna-space-4, 16px);
 
   margin: 0;
 }
@@ -1244,7 +1244,7 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__version-row {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2, 8px);
+  gap: var(--arna-space-2, 8px);
 
   margin: 0;
 }
@@ -1252,11 +1252,11 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 .legal-document__version-term {
   margin: 0;
 
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 
-  font-size: var(--mases-font-size-body-sm, 14px);
-  line-height: var(--mases-line-height-body-sm, 22px);
-  font-weight: var(--mases-font-weight-semibold, 600);
+  font-size: var(--arna-font-size-body-sm, 14px);
+  line-height: var(--arna-line-height-body-sm, 22px);
+  font-weight: var(--arna-font-weight-semibold, 600);
 
   overflow-wrap: anywhere;
 }
@@ -1281,16 +1281,16 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 }
 
 .legal-document__related-list li + li {
-  margin-block-start: var(--mases-space-2, 8px);
+  margin-block-start: var(--arna-space-2, 8px);
 }
 
 .legal-document__related-list a {
   display: inline-block;
 
-  color: var(--mases-color-text-secondary, #3F382B);
+  color: var(--arna-color-text-secondary, #3F382B);
 
-  font-size: var(--mases-font-size-body-sm, 14px);
-  line-height: var(--mases-line-height-body-sm, 22px);
+  font-size: var(--arna-font-size-body-sm, 14px);
+  line-height: var(--arna-line-height-body-sm, 22px);
   text-decoration: underline;
 
   overflow-wrap: anywhere;
@@ -1298,7 +1298,7 @@ const appName: string = import.meta.env.VITE_APP_NAME;
 
 .legal-document__related-list a:hover,
 .legal-document__related-list a:focus-visible {
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 }
 
 /* ============================================================================

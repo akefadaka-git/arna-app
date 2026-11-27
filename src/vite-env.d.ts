@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Vite ambient type declarations
+ * ARNA Phase 2 UI — Vite ambient type declarations
  * =============================================================================
  *
- * File:      mase_app/src/vite-env.d.ts
+ * File:      src/vite-env.d.ts
  * Phase:     1 (Frontend foundation) — Unit 1.4
  * Status:    FROZEN
  *
@@ -57,7 +57,7 @@
  */
 interface ImportMetaEnv {
   /**
-   * The MASES API origin (e.g. `https://api.maalearna.com.et`).
+   * The ARNA API origin (e.g. `https://api.maalearna.com.et`).
    *
    * Used by src/core/api/client.ts as the base URL for every HTTP
    * request. The client appends the path to this value.

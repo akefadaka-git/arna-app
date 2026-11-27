@@ -373,38 +373,38 @@ onMounted(load);
 </template>
 
 <style scoped>
-.people-profile { display: grid; gap: var(--mases-space-4); color: var(--mases-color-text-primary); }
-.people-profile__header, .people-profile__actions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--mases-space-3); }
-.people-profile__back, .people-profile button { justify-self: start; min-height: 2.75rem; padding: var(--mases-space-2) var(--mases-space-4); border: 1px solid var(--mases-color-border-default); border-radius: var(--mases-radius-md); color: inherit; background: var(--mases-color-surface-page); font: inherit; cursor: pointer; }
-.people-profile__card, .people-profile__state, .people-profile__relationships, .people-profile__documents { padding: var(--mases-space-5); border: 1px solid var(--mases-color-border-subtle); border-radius: var(--mases-radius-lg); background: var(--mases-color-surface-page); }
-.people-profile__eyebrow { color: var(--mases-color-text-secondary); font-size: var(--mases-font-size-body-sm); letter-spacing: .08em; }
-.people-profile h1 { margin-block: var(--mases-space-2); font-size: var(--mases-font-size-heading-3); overflow-wrap: anywhere; }
-.people-profile__english { color: var(--mases-color-text-secondary); }
-.people-profile dl, .people-profile__form, .people-profile__relationships dl, .people-profile__document-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: var(--mases-space-4); margin-block: var(--mases-space-5); }
-.people-profile dl div, .people-profile__form label, .people-profile__relationships dl div, .people-profile__document-form label { min-width: 0; display: grid; gap: var(--mases-space-1); }
-.people-profile dt, .people-profile__form label span { color: var(--mases-color-text-secondary); font-size: var(--mases-font-size-body-sm); }
-.people-profile dd { margin: var(--mases-space-1) 0 0; overflow-wrap: anywhere; }
-.people-profile__form input, .people-profile__form textarea, .people-profile__document-form input, .people-profile__document-form textarea { width: 100%; min-height: 2.75rem; padding: var(--mases-space-2) var(--mases-space-3); border: 1px solid var(--mases-color-border-default); border-radius: var(--mases-radius-md); background: var(--mases-color-surface-page); color: inherit; font: inherit; }
+.people-profile { display: grid; gap: var(--arna-space-4); color: var(--arna-color-text-primary); }
+.people-profile__header, .people-profile__actions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--arna-space-3); }
+.people-profile__back, .people-profile button { justify-self: start; min-height: 2.75rem; padding: var(--arna-space-2) var(--arna-space-4); border: 1px solid var(--arna-color-border-default); border-radius: var(--arna-radius-md); color: inherit; background: var(--arna-color-surface-page); font: inherit; cursor: pointer; }
+.people-profile__card, .people-profile__state, .people-profile__relationships, .people-profile__documents { padding: var(--arna-space-5); border: 1px solid var(--arna-color-border-subtle); border-radius: var(--arna-radius-lg); background: var(--arna-color-surface-page); }
+.people-profile__eyebrow { color: var(--arna-color-text-secondary); font-size: var(--arna-font-size-body-sm); letter-spacing: .08em; }
+.people-profile h1 { margin-block: var(--arna-space-2); font-size: var(--arna-font-size-heading-3); overflow-wrap: anywhere; }
+.people-profile__english { color: var(--arna-color-text-secondary); }
+.people-profile dl, .people-profile__form, .people-profile__relationships dl, .people-profile__document-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: var(--arna-space-4); margin-block: var(--arna-space-5); }
+.people-profile dl div, .people-profile__form label, .people-profile__relationships dl div, .people-profile__document-form label { min-width: 0; display: grid; gap: var(--arna-space-1); }
+.people-profile dt, .people-profile__form label span { color: var(--arna-color-text-secondary); font-size: var(--arna-font-size-body-sm); }
+.people-profile dd { margin: var(--arna-space-1) 0 0; overflow-wrap: anywhere; }
+.people-profile__form input, .people-profile__form textarea, .people-profile__document-form input, .people-profile__document-form textarea { width: 100%; min-height: 2.75rem; padding: var(--arna-space-2) var(--arna-space-3); border: 1px solid var(--arna-color-border-default); border-radius: var(--arna-radius-md); background: var(--arna-color-surface-page); color: inherit; font: inherit; }
 .people-profile__reason, .people-profile__actions { grid-column: 1 / -1; }
-.people-profile__relationship-manager { display: grid; gap: var(--mases-space-4); padding: var(--mases-space-5); border: 1px solid var(--mases-color-border-subtle); border-radius: var(--mases-radius-lg); background: var(--mases-color-surface-page); }
-.people-profile__relationship-domain { display: grid; gap: var(--mases-space-3); padding-block: var(--mases-space-3); border-top: 1px solid var(--mases-color-border-subtle); }
-.people-profile__relationship-reason, .people-profile__relationship-search, .people-profile__relationship-link { display: grid; gap: var(--mases-space-2); }
-.people-profile__relationship-reason span, .people-profile__relationship-search span, .people-profile__relationship-link span { color: var(--mases-color-text-secondary); font-size: var(--mases-font-size-body-sm); }
-.people-profile__relationship-reason textarea, .people-profile__relationship-search input, .people-profile__relationship-link select { width: 100%; min-height: 2.75rem; padding: var(--mases-space-2) var(--mases-space-3); border: 1px solid var(--mases-color-border-default); border-radius: var(--mases-radius-md); background: var(--mases-color-surface-page); color: inherit; font: inherit; }
+.people-profile__relationship-manager { display: grid; gap: var(--arna-space-4); padding: var(--arna-space-5); border: 1px solid var(--arna-color-border-subtle); border-radius: var(--arna-radius-lg); background: var(--arna-color-surface-page); }
+.people-profile__relationship-domain { display: grid; gap: var(--arna-space-3); padding-block: var(--arna-space-3); border-top: 1px solid var(--arna-color-border-subtle); }
+.people-profile__relationship-reason, .people-profile__relationship-search, .people-profile__relationship-link { display: grid; gap: var(--arna-space-2); }
+.people-profile__relationship-reason span, .people-profile__relationship-search span, .people-profile__relationship-link span { color: var(--arna-color-text-secondary); font-size: var(--arna-font-size-body-sm); }
+.people-profile__relationship-reason textarea, .people-profile__relationship-search input, .people-profile__relationship-link select { width: 100%; min-height: 2.75rem; padding: var(--arna-space-2) var(--arna-space-3); border: 1px solid var(--arna-color-border-default); border-radius: var(--arna-radius-md); background: var(--arna-color-surface-page); color: inherit; font: inherit; }
 .people-profile__relationship-search { grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
-.people-profile__relationship-list { display: grid; gap: var(--mases-space-2); padding: 0; list-style: none; }
-.people-profile__relationship-list li { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--mases-space-3); padding-block: var(--mases-space-2); border-bottom: 1px solid var(--mases-color-border-subtle); }
-.people-profile__relationship-list p, .people-profile__hint { margin: var(--mases-space-1) 0 0; color: var(--mases-color-text-secondary); overflow-wrap: anywhere; }
-.people-profile__document-list { display: grid; gap: var(--mases-space-3); padding: 0; list-style: none; }
-.people-profile__document-list li { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--mases-space-3); padding-block: var(--mases-space-3); border-bottom: 1px solid var(--mases-color-border-subtle); }
-.people-profile__document-list p { margin: var(--mases-space-1) 0 0; color: var(--mases-color-text-secondary); overflow-wrap: anywhere; }
-.people-profile__document-form { grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); align-items: end; margin-block: var(--mases-space-4); }
+.people-profile__relationship-list { display: grid; gap: var(--arna-space-2); padding: 0; list-style: none; }
+.people-profile__relationship-list li { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--arna-space-3); padding-block: var(--arna-space-2); border-bottom: 1px solid var(--arna-color-border-subtle); }
+.people-profile__relationship-list p, .people-profile__hint { margin: var(--arna-space-1) 0 0; color: var(--arna-color-text-secondary); overflow-wrap: anywhere; }
+.people-profile__document-list { display: grid; gap: var(--arna-space-3); padding: 0; list-style: none; }
+.people-profile__document-list li { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--arna-space-3); padding-block: var(--arna-space-3); border-bottom: 1px solid var(--arna-color-border-subtle); }
+.people-profile__document-list p { margin: var(--arna-space-1) 0 0; color: var(--arna-color-text-secondary); overflow-wrap: anywhere; }
+.people-profile__document-form { grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); align-items: end; margin-block: var(--arna-space-4); }
 .people-profile__document-form button { justify-self: start; }
 
-.people-profile__note, .people-profile__alert, .people-profile__success { padding: var(--mases-space-3); border-inline-start: 3px solid var(--mases-color-border-brand); background: var(--mases-color-surface-subtle); line-height: var(--mases-line-height-body); }
-.people-profile__alert { border-color: var(--mases-color-border-danger); }
-.people-profile__success { border-color: var(--mases-color-border-success); }
-.people-profile button:focus-visible, .people-profile input:focus-visible, .people-profile textarea:focus-visible { outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color); outline-offset: var(--mases-focus-ring-offset); }
+.people-profile__note, .people-profile__alert, .people-profile__success { padding: var(--arna-space-3); border-inline-start: 3px solid var(--arna-color-border-brand); background: var(--arna-color-surface-subtle); line-height: var(--arna-line-height-body); }
+.people-profile__alert { border-color: var(--arna-color-border-danger); }
+.people-profile__success { border-color: var(--arna-color-border-success); }
+.people-profile button:focus-visible, .people-profile input:focus-visible, .people-profile textarea:focus-visible { outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color); outline-offset: var(--arna-focus-ring-offset); }
 .people-profile button:disabled { opacity: .55; cursor: not-allowed; }
 @media (max-width: 40rem) { .people-profile__header > button, .people-profile__actions button { width: 100%; } }
 </style>

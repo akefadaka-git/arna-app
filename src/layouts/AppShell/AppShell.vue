@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES UI — AppShell
+ ARNA UI — AppShell
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/AppShell.vue
+ File:      src/layouts/AppShell/AppShell.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.2.0
  Status:    ENHANCEMENT — forced-colors shell accessibility
@@ -106,7 +106,7 @@
             continues to render the version string at the footer's
             end position. AranaFooterContent renders the copyright
             and the link row in the footer's middle region; the
-            `footerCopyright` prop is therefore unused by MASES (the
+            `footerCopyright` prop is therefore unused by ARNA (the
             layouts pass no value for it) but remains available to
             other consumers of AppShell.
           · No change to any other slot, prop, emit, or DOM region.
@@ -235,7 +235,7 @@
  regions:
 
    · AppFooter's `start` region is driven by its `copyright` prop.
-     MASES does not supply that prop — the copyright line is rendered
+     ARNA does not supply that prop — the copyright line is rendered
      by AranaFooterContent inside the middle region instead. The
      `copyright` prop remains available to other consumers of
      AppShell.
@@ -460,7 +460,7 @@ interface Props {
 
   /**
    * Footer copyright text. Passed through to AppFooter. Unused by
-   * MASES today — the copyright line is rendered by
+   * ARNA today — the copyright line is rendered by
    * AranaFooterContent in the footer's middle region. Available to
    * other consumers of AppShell.
    */

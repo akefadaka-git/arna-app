@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — BaseInput — Barrel Export
+ * ARNA Phase 2 UI — BaseInput — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/components/primitives/BaseInput/index.ts
+ * File:      src/components/primitives/BaseInput/index.ts
  * Layer:     1 (Primitives)
  * Version:   1.0.0
  * Status:    FROZEN

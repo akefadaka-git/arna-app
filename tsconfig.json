@@ -1,8 +1,8 @@
 // =============================================================================
-// MASES UI — Root TypeScript configuration
+// ARNA UI — Root TypeScript configuration
 // =============================================================================
 //
-// File:    mase_app/tsconfig.json
+// File:    tsconfig.json
 // Phase:   1 (Frontend foundation) — Unit 1.2
 // Version: 1.0.1
 // Status:  PROVISIONAL — the pinned TypeScript major is confirmed by

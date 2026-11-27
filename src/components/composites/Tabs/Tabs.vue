@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — Tabs
+ ARNA Phase 2 UI — Tabs
 =============================================================================
 
- File:      mase_app/src/components/composites/Tabs/Tabs.vue
+ File:      src/components/composites/Tabs/Tabs.vue
  Layer:     2 (Composites)
  Version:   1.0.0
  Status:    FROZEN

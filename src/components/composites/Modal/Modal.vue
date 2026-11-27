@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — Modal
+ ARNA Phase 2 UI — Modal
 =============================================================================
 
- File:      mase_app/src/components/composites/Modal/Modal.vue
+ File:      src/components/composites/Modal/Modal.vue
  Layer:     2 (Composites)
  Version:   1.0.0
  Status:    FROZEN

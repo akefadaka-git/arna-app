@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — ErrorCodeBadge
+ ARNA Phase 2 UI — ErrorCodeBadge
 =============================================================================
 
- File:      mase_app/src/components/primitives/ErrorCodeBadge/ErrorCodeBadge.vue
+ File:      src/components/primitives/ErrorCodeBadge/ErrorCodeBadge.vue
  Layer:     1 (Primitives)
  Version:   1.0.0
  Status:    FROZEN

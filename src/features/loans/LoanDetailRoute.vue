@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — CR-LW3
 =============================================================================
 
- File:      mase_app/src/features/loans/LoanDetailRoute.vue  (AMEND)
+ File:      src/features/loans/LoanDetailRoute.vue  (AMEND)
  Unit:      CR-LW3 — Workspace loan sub-resources (route wrapper)
  Delivery type:  Amendment — three dialog imports, one type import,
                  four new refs (three open-state booleans + one target),
@@ -123,7 +123,7 @@
  CHANGE VERIFICATION — CR-LW2
 =============================================================================
 
- File:      mase_app/src/features/loans/LoanDetailRoute.vue  (AMEND)
+ File:      src/features/loans/LoanDetailRoute.vue  (AMEND)
  Unit:      CR-LW2 — Workspace loan dialogs (route wrapper)
  Delivery type:  Amendment — five dialog imports, five dialog
                  open-state refs, a template ref into the detail view,
@@ -233,7 +233,7 @@
  CHANGE VERIFICATION — CR-LW1
 =============================================================================
 
- File:      mase_app/src/features/loans/LoanDetailRoute.vue  (NEW)
+ File:      src/features/loans/LoanDetailRoute.vue  (NEW)
  Unit:      CR-LW1 — Workspace loan views (route wrapper)
  Delivery type:  New file.
  Net lines:      new file.
@@ -276,10 +276,10 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — LoanDetailRoute
+ ARNA Phase 2 UI — LoanDetailRoute
 =============================================================================
 
- File:      mase_app/src/features/loans/LoanDetailRoute.vue
+ File:      src/features/loans/LoanDetailRoute.vue
  Layer:     Features (Loan domain) — route wrapper
  Version:   1.2.0
  Status:    FROZEN

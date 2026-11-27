@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Workspace Entry Point
+ * ARNA Phase 2 UI — Workspace Entry Point
  * =============================================================================
  *
- * File:      mase_app/workspace-entry/main.ts
+ * File:      workspace-entry/main.ts
  * Layer:     Root (application entry)
  * Version:   1.0.3
  * Status:    FROZEN
@@ -50,7 +50,7 @@
  * -----------------------------------------------------------------------------
  * Target deployment
  * -----------------------------------------------------------------------------
- * Build output serves https://app.maalearna.com.et — the MASES
+ * Build output serves https://app.maalearna.com.et — the ARNA
  * Workspace application.
  *
  * -----------------------------------------------------------------------------

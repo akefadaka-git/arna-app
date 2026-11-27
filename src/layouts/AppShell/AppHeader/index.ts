@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — AppHeader — Barrel Export
+ * ARNA Phase 2 UI — AppHeader — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/layouts/AppShell/AppHeader/index.ts
+ * File:      src/layouts/AppShell/AppHeader/index.ts
  * Layer:     4 (Shell — AppShell family)
  * Version:   1.0.0
  * Status:    FROZEN

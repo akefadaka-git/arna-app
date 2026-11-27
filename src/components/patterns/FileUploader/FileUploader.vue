@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — FileUploader
+ ARNA Phase 2 UI — FileUploader
 =============================================================================
 
- File:      mase_app/src/components/patterns/FileUploader/FileUploader.vue
+ File:      src/components/patterns/FileUploader/FileUploader.vue
  Layer:     3 (Patterns)
  Version:   1.0.1
  Status:    FROZEN

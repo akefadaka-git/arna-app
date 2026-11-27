@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — CR-LW2
 =============================================================================
 
- File:      mase_app/src/features/loans/LoanApproveForm.vue  (NEW)
+ File:      src/features/loans/LoanApproveForm.vue  (NEW)
  Unit:      CR-LW2 — Workspace loan dialogs (approval)
  Delivery type:  New file.
  Net lines:      new file.
@@ -66,10 +66,10 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — LoanApproveForm
+ ARNA Phase 2 UI — LoanApproveForm
 =============================================================================
 
- File:      mase_app/src/features/loans/LoanApproveForm.vue
+ File:      src/features/loans/LoanApproveForm.vue
  Layer:     Features (Loan domain)
  Version:   1.0.0
  Status:    FROZEN
@@ -498,7 +498,7 @@ const submitLabel = computed<string>(() =>
 .loan-approve-form {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-5);
+  gap: var(--arna-space-5);
   width: 100%;
 }
 
@@ -509,10 +509,10 @@ const submitLabel = computed<string>(() =>
 
 .loan-approve-form__banner-reference {
   margin: 0;
-  margin-block-start: var(--mases-space-1);
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  margin-block-start: var(--arna-space-1);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   overflow-wrap: anywhere;
 }
 
@@ -530,8 +530,8 @@ const submitLabel = computed<string>(() =>
   display: flex;
   flex-direction: column-reverse;
   align-items: stretch;
-  gap: var(--mases-space-3);
-  padding-block-start: var(--mases-space-2);
+  gap: var(--arna-space-3);
+  padding-block-start: var(--arna-space-2);
 }
 
 @media (min-width: 640px) {

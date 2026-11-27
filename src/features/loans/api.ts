@@ -3,7 +3,7 @@
  * CHANGE VERIFICATION — CR-LW1
  * =============================================================================
  *
- * File:      mase_app/src/features/loans/api.ts  (AMEND)
+ * File:      src/features/loans/api.ts  (AMEND)
  * Unit:      CR-LW1 — Workspace loan views (API contract)
  * Delivery type:  Amendment — new types, new endpoint functions.
  * Net lines:      +~900 lines
@@ -80,10 +80,10 @@
 
 /*
  * =============================================================================
- * MASES Phase 2 UI — Loan API Module
+ * ARNA Phase 2 UI — Loan API Module
  * =============================================================================
  *
- * File:      mase_app/src/features/loans/api.ts
+ * File:      src/features/loans/api.ts
  * Layer:     Features (Loan domain)
  * Version:   1.1.0
  * Status:    FROZEN

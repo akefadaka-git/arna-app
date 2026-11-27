@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — IconButton
+ ARNA Phase 2 UI — IconButton
 =============================================================================
 
- File:      mase_app/src/components/primitives/IconButton/IconButton.vue
+ File:      src/components/primitives/IconButton/IconButton.vue
  Layer:     1 (Primitives)
  Version:   1.0.1
  Status:    FROZEN

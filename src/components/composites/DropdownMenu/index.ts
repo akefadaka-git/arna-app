@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — DropdownMenu — Barrel Export
+ * ARNA Phase 2 UI — DropdownMenu — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/components/composites/DropdownMenu/index.ts
+ * File:      src/components/composites/DropdownMenu/index.ts
  * Layer:     2 (Composites)
  * Version:   1.0.0
  * Status:    FROZEN

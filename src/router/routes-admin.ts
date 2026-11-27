@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Admin Route Tree
+ * ARNA Phase 2 UI — Admin Route Tree
  * =============================================================================
  *
- * File:      mase_app/src/router/routes-admin.ts
+ * File:      src/router/routes-admin.ts
  * Layer:     Core (router configuration)
  * Version:   1.0.2
  * Status:    FROZEN

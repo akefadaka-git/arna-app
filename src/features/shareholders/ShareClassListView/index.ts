@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — ShareClassListView — Barrel Export
+ * ARNA Phase 2 UI — ShareClassListView — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/features/shareholders/ShareClassListView/index.ts
+ * File:      src/features/shareholders/ShareClassListView/index.ts
  * Layer:     Features (Stage 15 — Shareholder Portal)
  * Version:   1.0.0
  * Status:    FROZEN

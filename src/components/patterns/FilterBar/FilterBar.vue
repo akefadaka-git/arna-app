@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — FilterBar
+ ARNA Phase 2 UI — FilterBar
 =============================================================================
 
- File:      mase_app/src/components/patterns/FilterBar/FilterBar.vue
+ File:      src/components/patterns/FilterBar/FilterBar.vue
  Layer:     3 (Patterns)
  Version:   1.0.0
  Status:    FROZEN

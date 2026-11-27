@@ -3,7 +3,7 @@
  ARNA UI — AranaFooterContent
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/AranaFooterContent/AranaFooterContent.vue
+ File:      src/layouts/AppShell/AranaFooterContent/AranaFooterContent.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.1.0
  Status:    ENHANCEMENT — forced-colors accessibility

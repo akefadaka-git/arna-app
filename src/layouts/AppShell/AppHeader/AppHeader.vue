@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — AppHeader
+ ARNA Phase 2 UI — AppHeader
 =============================================================================
 
- File:      mase_app/src/layouts/AppShell/AppHeader/AppHeader.vue
+ File:      src/layouts/AppShell/AppHeader/AppHeader.vue
  Layer:     4 (Shell — AppShell family)
  Version:   1.2.0
  Status:    ENHANCEMENT — forced-colors accessibility
@@ -80,7 +80,7 @@
  -----------------------------------------------------------------------------
  Purpose
  -----------------------------------------------------------------------------
- The MASES AppShell header bar. Renders a sticky chrome frame with
+ The ARNA AppShell header bar. Renders a sticky chrome frame with
  three horizontal regions:
 
    [brand]   [nav]   [actions]
@@ -127,7 +127,7 @@
       caller — is a composition decision. Composition belongs to the
       shell, not to the frame. This file decides the three-region
       skeleton; the shell decides what fills it. The current fill is
-      documented in AppShell.vue's §"Composition": MASESBrand into
+      documented in AppShell.vue's §"Composition": ArnaBrand into
       #brand, breadcrumbs into #nav, and the notifications bell +
       tenant switcher + user menu into #actions. A future revision
       of that composition (reordering, adding a language selector)
@@ -162,7 +162,7 @@
    · Any store reads, route reads, or user-identity affordances.
    · The decision of which controls render in each region. That is
      AppShell's composition decision (see its §"Composition").
-   · The brand mark. When AppShell supplies MASESBrand into #brand,
+   · The brand mark. When AppShell supplies ArnaBrand into #brand,
      that component owns the brand strings; this file forwards
      whatever #brand receives.
    · Any navigation behaviour. A slot-rendered control that navigates
@@ -360,12 +360,12 @@ const emit = defineEmits<{
  * Slots.
  *
  * brand                 — the brand/logo region (left). Typically the
- *                         MASESBrand component; AppShell supplies it
+ *                         ArnaBrand component; AppShell supplies it
  *                         as the fallback content when no consumer
  *                         overrides the slot.
  * nav                   — the navigation region (center). Typically
  *                         breadcrumbs; currently unpopulated in the
- *                         MASES shell (see shell-labels.ts §"Future
+ *                         ARNA shell (see shell-labels.ts §"Future
  *                         hooks — breadcrumbs aria label").
  * actions               — the actions region (right). AppShell
  *                         composes the notifications bell, the
@@ -490,7 +490,7 @@ function onToggleClick(): void {
     <!-- ============================================================
          Brand region
 
-         Left-anchored, does not shrink. AppShell supplies MASESBrand
+         Left-anchored, does not shrink. AppShell supplies ArnaBrand
          as its fallback content; a consumer of AppShell that wants a
          different brand supplies its own #brand and this region
          receives that instead. See the file header §"Ownership" for
@@ -663,7 +663,7 @@ function onToggleClick(): void {
    Left-anchored. `flex-shrink: 0` reserves the brand's intrinsic
    width so a long nav or a wide actions cluster cannot squeeze it;
    `min-width: 0` is retained as a defensive declaration in case a
-   future revision changes the shrink policy. At current MASES brand
+   future revision changes the shrink policy. At current ARNA brand
    widths the region fits within the mobile budget without overflow;
    the smoke test at 375px and 320px confirmed this.
    --------------------------------------------------------------------------- */

@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — AccessDeniedPage
+ ARNA Phase 2 UI — AccessDeniedPage
 =============================================================================
 
- File:      mase_app/src/components/patterns/AccessDeniedPage/AccessDeniedPage.vue
+ File:      src/components/patterns/AccessDeniedPage/AccessDeniedPage.vue
  Layer:     3 (Patterns)
  Version:   1.0.0
  Status:    FROZEN

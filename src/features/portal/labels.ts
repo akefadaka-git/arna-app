@@ -3,7 +3,7 @@
  * CHANGE VERIFICATION — CR-LW1
  * =============================================================================
  *
- * File:      mase_app/src/features/portal/labels.ts  (AMEND)
+ * File:      src/features/portal/labels.ts  (AMEND)
  * Unit:      CR-LW1 — Workspace loan views (labels refactor)
  * Delivery type:  Amendment — the twelve LoanStatus display strings
  *                 move out of this file to `features/loans/labels.ts`;
@@ -81,7 +81,7 @@
  * CHANGE VERIFICATION — CR-L3
  * =============================================================================
  *
- * File:      mase_app/src/features/portal/labels.ts
+ * File:      src/features/portal/labels.ts
  * Unit:      CR-L3 — Portal self-service loans pages (labels)
  * Delivery type:  Amendment
  * Net lines:      +1 shared interface (LoanStatusLabels, 12 fields);
@@ -264,7 +264,7 @@
  * CHANGE VERIFICATION — CR-W2
  * =============================================================================
  *
- * File:      mase_app/src/features/portal/labels.ts
+ * File:      src/features/portal/labels.ts
  * Unit:      CR-W2 — Portal self-service wallet page (labels)
  * Delivery type:  Amendment
  * Net lines:      +1 interface (MyWalletPageLabels, 15 fields);
@@ -400,7 +400,7 @@
  * CHANGE VERIFICATION — P3 · Unit 1 · File 1 of 2
  * =============================================================================
  *
- * File:      mase_app/src/features/portal/labels.ts
+ * File:      src/features/portal/labels.ts
  * Unit:      P3 · Unit 1 — holdings-history drill-down (labels)
  * Delivery type:  Amendment
  * Net lines:      +1 interface extension (17 fields);

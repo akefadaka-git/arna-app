@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — CR-WORKSPACE-TITLE · Phase 1 · File 8
 =============================================================================
 
- File:      mase_app/src/features/loans/LoanStatementView.vue  (AMEND)
+ File:      src/features/loans/LoanStatementView.vue  (AMEND)
  Unit:      CR-WORKSPACE-TITLE — Phase 1, File 8
  Delivery type:  Enhancement — document.title via <PageTitle>.
                  One import added, one const added, one template
@@ -14,14 +14,14 @@
  Before (v1.0.0):
    The view set no document.title. The browser tab showed whatever
    the previously-visited route had left, or the entry HTML's
-   pre-JS default ("MASES") on a cold load directly at
+   pre-JS default ("ARNA") on a cold load directly at
    /loans/:id/statement.
 
  After (v1.0.1):
    The view sets document.title via <PageTitle>, bound to the
    existing labels.pageTitle and to import.meta.env.VITE_APP_NAME.
 
-     Workspace build    →  "መግለጫ — MASES"
+     Workspace build    →  "መግለጫ — ARNA"
      Empty VITE_APP_NAME →  "መግለጫ"
 
    The portal build does not mount this view (the loan sub-resource
@@ -47,7 +47,7 @@
  CHANGE VERIFICATION — CR-LW3 (build fix)
 =============================================================================
 
- File:      mase_app/src/features/loans/LoanStatementView.vue  (AMEND)
+ File:      src/features/loans/LoanStatementView.vue  (AMEND)
  Unit:      CR-LW3 — build fix (label name)
  Delivery type:  Correction — one identifier in the lineTypeLabel()
                  switch. No structural, template, or style change.
@@ -79,7 +79,7 @@
  CHANGE VERIFICATION — CR-LW3
 =============================================================================
 
- File:      mase_app/src/features/loans/LoanStatementView.vue  (NEW)
+ File:      src/features/loans/LoanStatementView.vue  (NEW)
  Unit:      CR-LW3 — Workspace loan sub-resource views (statement)
  Delivery type:  New file.
  Net lines:      new file.
@@ -246,10 +246,10 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — LoanStatementView
+ ARNA Phase 2 UI — LoanStatementView
 =============================================================================
 
- File:      mase_app/src/features/loans/LoanStatementView.vue
+ File:      src/features/loans/LoanStatementView.vue
  Layer:     Features (Loan domain)
  Version:   1.0.1
  Status:    FROZEN
@@ -519,7 +519,7 @@ const route = useRoute();
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "MASES"
+ *   workspace  →  "ARNA"
  *   portal     →  "Maale Arna Portal"
  *
  * This view is mounted in the workspace build only. The portal has no
@@ -898,7 +898,7 @@ const closingBalanceDisplay = computed<string>(() => {
 .loan-statement-view {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -908,13 +908,13 @@ const closingBalanceDisplay = computed<string>(() => {
 .loan-statement-view__back {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   align-self: flex-start;
-  color: var(--mases-color-text-brand);
+  color: var(--arna-color-text-brand);
   text-decoration: none;
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
 }
 
 .loan-statement-view__back:hover {
@@ -922,9 +922,9 @@ const closingBalanceDisplay = computed<string>(() => {
 }
 
 .loan-statement-view__back:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
-  border-radius: var(--mases-radius-sm);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
+  border-radius: var(--arna-radius-sm);
 }
 
 /* ============================================================================
@@ -933,38 +933,38 @@ const closingBalanceDisplay = computed<string>(() => {
 .loan-statement-view__summary {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   margin: 0;
 }
 
 .loan-statement-view__summary-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   align-items: baseline;
 }
 
 @media (min-width: 640px) {
   .loan-statement-view__summary-row {
     grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-    gap: var(--mases-space-3);
+    gap: var(--arna-space-3);
   }
 }
 
 .loan-statement-view__summary-row dt {
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
   overflow-wrap: anywhere;
 }
 
 .loan-statement-view__summary-row dd {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: anywhere;
 }
 
@@ -973,10 +973,10 @@ const closingBalanceDisplay = computed<string>(() => {
    ============================================================================ */
 .loan-statement-view__section-title {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-6);
-  line-height: var(--mases-line-height-heading-6);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-6);
+  line-height: var(--arna-line-height-heading-6);
+  font-weight: var(--arna-font-weight-semibold);
   overflow-wrap: anywhere;
 }
 
@@ -985,10 +985,10 @@ const closingBalanceDisplay = computed<string>(() => {
    ============================================================================ */
 .loan-statement-view__section-empty {
   margin: 0;
-  padding-block: var(--mases-space-4);
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  padding-block: var(--arna-space-4);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   text-align: center;
   overflow-wrap: anywhere;
 }

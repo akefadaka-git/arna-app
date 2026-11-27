@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — File Management API Module
+ * ARNA Phase 2 UI — File Management API Module
  * =============================================================================
  *
- * File:      mase_app/src/features/files/api.ts
+ * File:      src/features/files/api.ts
  * Layer:     Features (Stage 14 — File Management vertical)
  * Version:   1.0.2
  * Status:    FROZEN

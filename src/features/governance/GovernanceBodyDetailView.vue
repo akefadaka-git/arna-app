@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — G3 · File 5 of 7
 =============================================================================
 
- File:      mase_app/src/features/governance/GovernanceBodyDetailView.vue  (NEW)
+ File:      src/features/governance/GovernanceBodyDetailView.vue  (NEW)
  Unit:      G3 — GovernanceBody frontend module (detail view)
  Delivery type:  New file.
  Net lines:      new file.
@@ -864,7 +864,7 @@ function bodyStatusLabel(isActive: boolean): string {
 .governance-body-detail-view {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -873,10 +873,10 @@ function bodyStatusLabel(isActive: boolean): string {
    ============================================================================ */
 .governance-body-detail-view__section-title {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-6);
-  line-height: var(--mases-line-height-heading-6);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-6);
+  line-height: var(--arna-line-height-heading-6);
+  font-weight: var(--arna-font-weight-semibold);
   overflow-wrap: anywhere;
 }
 
@@ -891,7 +891,7 @@ function bodyStatusLabel(isActive: boolean): string {
 .governance-body-detail-view__term {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   margin: 0;
 }
 
@@ -899,7 +899,7 @@ function bodyStatusLabel(isActive: boolean): string {
 .governance-body-detail-view__term-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   align-items: baseline;
 }
 
@@ -907,26 +907,26 @@ function bodyStatusLabel(isActive: boolean): string {
   .governance-body-detail-view__identity-row,
   .governance-body-detail-view__term-row {
     grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-    gap: var(--mases-space-3);
+    gap: var(--arna-space-3);
   }
 }
 
 .governance-body-detail-view__identity-row dt,
 .governance-body-detail-view__term-row dt {
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
   overflow-wrap: anywhere;
 }
 
 .governance-body-detail-view__identity-row dd,
 .governance-body-detail-view__term-row dd {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-regular);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-regular);
   overflow-wrap: anywhere;
 }
 
@@ -934,9 +934,9 @@ function bodyStatusLabel(isActive: boolean): string {
    Inline link (parent body / reporting body)
    ============================================================================ */
 .governance-body-detail-view__link {
-  color: var(--mases-color-text-brand);
+  color: var(--arna-color-text-brand);
   text-decoration: none;
-  font-weight: var(--mases-font-weight-medium);
+  font-weight: var(--arna-font-weight-medium);
 }
 
 .governance-body-detail-view__link:hover {
@@ -944,9 +944,9 @@ function bodyStatusLabel(isActive: boolean): string {
 }
 
 .governance-body-detail-view__link:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
-  border-radius: var(--mases-radius-sm);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
+  border-radius: var(--arna-radius-sm);
 }
 
 /* ============================================================================
@@ -958,15 +958,15 @@ function bodyStatusLabel(isActive: boolean): string {
    ============================================================================ */
 .governance-body-detail-view__json {
   margin: 0;
-  padding-block: var(--mases-space-3);
-  padding-inline: var(--mases-space-3);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-md);
-  background-color: var(--mases-color-surface-subtle);
-  color: var(--mases-color-text-primary);
+  padding-block: var(--arna-space-3);
+  padding-inline: var(--arna-space-3);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-md);
+  background-color: var(--arna-color-surface-subtle);
+  color: var(--arna-color-text-primary);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   overflow-x: auto;
   white-space: pre;
 }
@@ -976,10 +976,10 @@ function bodyStatusLabel(isActive: boolean): string {
    ============================================================================ */
 .governance-body-detail-view__section-empty {
   margin: 0;
-  padding-block: var(--mases-space-4);
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  padding-block: var(--arna-space-4);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   text-align: center;
   overflow-wrap: anywhere;
 }

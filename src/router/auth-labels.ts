@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — Auth Page Labels (Amharic)
+ * ARNA Phase 2 UI — Auth Page Labels (Amharic)
  * =============================================================================
  *
- * File:      mase_app/src/router/auth-labels.ts
+ * File:      src/router/auth-labels.ts
  * Layer:     Core (router configuration)
  * Version:   3.2.0
  * Status:    ACTIVE — Owner-authorized MFA enhancement

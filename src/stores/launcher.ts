@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — useLauncherStore
+ * ARNA Phase 2 UI — useLauncherStore
  * =============================================================================
  *
- * File:      mase_app/src/stores/launcher.ts
+ * File:      src/stores/launcher.ts
  * Layer:     Stores (Architecture Freeze §13.2)
  * Version:   1.1.0
  * Status:    FROZEN

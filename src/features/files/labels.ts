@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — File Feature Labels (Amharic)
+ * ARNA Phase 2 UI — File Feature Labels (Amharic)
  * =============================================================================
  *
- * File:      mase_app/src/features/files/labels.ts
+ * File:      src/features/files/labels.ts
  * Layer:     Features (File Management vertical)
  * Version:   1.1.0
  * Status:    FROZEN

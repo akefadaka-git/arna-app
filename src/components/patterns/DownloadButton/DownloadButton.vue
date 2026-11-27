@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — DownloadButton
+ ARNA Phase 2 UI — DownloadButton
 =============================================================================
 
- File:      mase_app/src/components/patterns/DownloadButton/DownloadButton.vue
+ File:      src/components/patterns/DownloadButton/DownloadButton.vue
  Layer:     3 (Patterns)
  Version:   1.0.0
  Status:    FROZEN
@@ -372,7 +372,7 @@ const currentIcon = computed<IconName>(() => {
 .download-button__content {
   display: inline-flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   min-width: 0;
 }
 

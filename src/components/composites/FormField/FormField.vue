@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — FormField
+ ARNA Phase 2 UI — FormField
 =============================================================================
 
- File:      mase_app/src/components/composites/FormField/FormField.vue
+ File:      src/components/composites/FormField/FormField.vue
  Layer:     2 (Composites)
  Version:   1.0.1
  Status:    FROZEN

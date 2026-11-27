@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — LinkButton
+ ARNA Phase 2 UI — LinkButton
 =============================================================================
 
- File:      mase_app/src/components/primitives/LinkButton/LinkButton.vue
+ File:      src/components/primitives/LinkButton/LinkButton.vue
  Layer:     1 (Primitives)
  Version:   1.0.0
  Status:    FROZEN
@@ -28,7 +28,7 @@
  Visual identity
  -----------------------------------------------------------------------------
  The link variant renders as inline text in the brand action color
- (--mases-color-action-link, resolving to crimson-600) with no
+ (--arna-color-action-link, resolving to crimson-600) with no
  background, no border, no padding, and no minimum height. It receives
  an underline on hover or focus. It is designed to be visually
  indistinguishable from a hyperlink, while remaining a real <button>
@@ -143,7 +143,7 @@
       surrounding text context communicates its role.
 
    2. The link variant's contrast is verified in the Design System
-      §2.5.1: --mases-color-action-link against --mases-color-
+      §2.5.1: --arna-color-action-link against --arna-color-
       surface-page is 8.03:1, comfortably above WCAG 2.1 AA for body
       text.
 =============================================================================

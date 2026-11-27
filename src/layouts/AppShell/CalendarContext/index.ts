@@ -1,9 +1,9 @@
 /*
  * =============================================================================
- * MASES Phase 2 UI — CalendarContext — Barrel Export
+ * ARNA Phase 2 UI — CalendarContext — Barrel Export
  * =============================================================================
  *
- * File:      mase_app/src/layouts/AppShell/CalendarContext/index.ts
+ * File:      src/layouts/AppShell/CalendarContext/index.ts
  * Layer:     4 (Shell — AppShell family)
  * Version:   1.0.0
  * Status:    FROZEN

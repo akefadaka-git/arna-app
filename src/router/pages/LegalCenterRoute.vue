@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — L-4.9
 =============================================================================
 
- File:      mase_app/src/router/pages/LegalCenterRoute.vue  (AMEND)
+ File:      src/router/pages/LegalCenterRoute.vue  (AMEND)
  Unit:      L-4.9 — PageTitle adoption (legal center hub)
  Delivery type:  Refactor — declarative document.title via <PageTitle>.
                  One import added, one import removed, one hook removed,
@@ -40,9 +40,9 @@
 
    Observable behaviour on the route is identical:
 
-     VITE_APP_NAME = "MASES"
-       v1.0.0  →  document.title = "ሕጋዊ መረጃ — MASES"
-       v1.1.0  →  document.title = "ሕጋዊ መረጃ — MASES"           (identical)
+     VITE_APP_NAME = "ARNA"
+       v1.0.0  →  document.title = "ሕጋዊ መረጃ — ARNA"
+       v1.1.0  →  document.title = "ሕጋዊ መረጃ — ARNA"           (identical)
 
      VITE_APP_NAME = "" or absent at runtime
        v1.0.0  →  document.title = "ሕጋዊ መረጃ"
@@ -75,10 +75,10 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — LegalCenterRoute
+ ARNA Phase 2 UI — LegalCenterRoute
 =============================================================================
 
- File:      mase_app/src/router/pages/LegalCenterRoute.vue
+ File:      src/router/pages/LegalCenterRoute.vue
  Layer:     Core (router page)
  Version:   1.1.0
  Status:    FROZEN
@@ -160,8 +160,8 @@
  The hub renders inside a container capped at the form-reading
  width. Two tokens are consulted, in order:
 
-   --mases-container-form              (first choice)
-   --mases-container-auth-card-wide    (fallback)
+   --arna-container-form              (first choice)
+   --arna-container-auth-card-wide    (fallback)
    560px                               (final fallback)
 
  The form-reading width keeps the card list scannable. A wider
@@ -228,7 +228,7 @@
      pageLabel = legalCenterPageLabels.pageTitle   ("ሕጋዊ መረጃ")
      appName   = import.meta.env.VITE_APP_NAME
 
- In the workspace build, the title reads "ሕጋዊ መረጃ — MASES"; in
+ In the workspace build, the title reads "ሕጋዊ መረጃ — ARNA"; in
  the portal build, "ሕጋዊ መረጃ — Maale Arna Portal".
 
  The page label is the same string the hub's own <h1> renders
@@ -295,32 +295,32 @@
  fallback value that mirrors a token.
 
  Colors used:
-   --mases-color-text-primary      (page title, group headings,
+   --arna-color-text-primary      (page title, group headings,
                                     card titles)
-   --mases-color-text-secondary    (intro, card summaries, draft
+   --arna-color-text-secondary    (intro, card summaries, draft
                                     chip text)
-   --mases-color-border-subtle     (card border, chip border)
+   --arna-color-border-subtle     (card border, chip border)
 
  Typography used:
-   --mases-font-size-heading-4     (page title)
-   --mases-line-height-heading-4
-   --mases-font-weight-semibold
+   --arna-font-size-heading-4     (page title)
+   --arna-line-height-heading-4
+   --arna-font-weight-semibold
 
-   --mases-font-size-body          (intro, group headings, card
+   --arna-font-size-body          (intro, group headings, card
                                     titles)
-   --mases-line-height-body
+   --arna-line-height-body
 
-   --mases-font-size-body-sm       (card summaries, draft chip,
+   --arna-font-size-body-sm       (card summaries, draft chip,
                                     back-to-login link)
-   --mases-line-height-body-sm
+   --arna-line-height-body-sm
 
  Spacing used:
-   --mases-space-2, --mases-space-3, --mases-space-4,
-   --mases-space-6, --mases-space-8, --mases-space-10
+   --arna-space-2, --arna-space-3, --arna-space-4,
+   --arna-space-6, --arna-space-8, --arna-space-10
 
  Container used:
-   --mases-container-form          (preferred hub width)
-   --mases-container-auth-card-wide (fallback)
+   --arna-container-form          (preferred hub width)
+   --arna-container-auth-card-wide (fallback)
 
  -----------------------------------------------------------------------------
  Production readiness
@@ -411,7 +411,7 @@ import {
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "MASES"
+ *   workspace  →  "ARNA"
  *   portal     →  "Maale Arna Portal"
  *
  * Passed to <PageTitle> as the title's suffix. PageTitle's own
@@ -617,13 +617,13 @@ function headingForGroup(group: LegalHubGroup): string {
 .legal-center {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-8, 32px);
+  gap: var(--arna-space-8, 32px);
   width: 100%;
 
   /*
    * Reading width. Consulted in order:
-   *   1. --mases-container-form             (first choice)
-   *   2. --mases-container-auth-card-wide   (fallback)
+   *   1. --arna-container-form             (first choice)
+   *   2. --arna-container-auth-card-wide   (fallback)
    *   3. 560px                              (final fallback)
    *
    * The nested var() chain is standard CSS: if the outer token is
@@ -632,8 +632,8 @@ function headingForGroup(group: LegalHubGroup): string {
    * token is also undefined.
    */
   max-width: var(
-    --mases-container-form,
-    var(--mases-container-auth-card-wide, 560px)
+    --arna-container-form,
+    var(--arna-container-auth-card-wide, 560px)
   );
   margin-inline: auto;
 
@@ -650,12 +650,12 @@ function headingForGroup(group: LegalHubGroup): string {
 .legal-center__title {
   margin: 0;
 
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 
   font-family: inherit;
-  font-size: var(--mases-font-size-heading-4, 24px);
-  line-height: var(--mases-line-height-heading-4, 32px);
-  font-weight: var(--mases-font-weight-semibold, 600);
+  font-size: var(--arna-font-size-heading-4, 24px);
+  line-height: var(--arna-line-height-heading-4, 32px);
+  font-weight: var(--arna-font-weight-semibold, 600);
 
   text-align: start;
   overflow-wrap: anywhere;
@@ -663,12 +663,12 @@ function headingForGroup(group: LegalHubGroup): string {
 
 .legal-center__intro {
   margin: 0;
-  margin-block-start: var(--mases-space-3, 12px);
+  margin-block-start: var(--arna-space-3, 12px);
 
-  color: var(--mases-color-text-secondary, #3F382B);
+  color: var(--arna-color-text-secondary, #3F382B);
 
-  font-size: var(--mases-font-size-body, 16px);
-  line-height: var(--mases-line-height-body, 26px);
+  font-size: var(--arna-font-size-body, 16px);
+  line-height: var(--arna-line-height-body, 26px);
 
   text-align: start;
   overflow-wrap: anywhere;
@@ -683,13 +683,13 @@ function headingForGroup(group: LegalHubGroup): string {
 
 .legal-center__group-heading {
   margin: 0;
-  margin-block-end: var(--mases-space-3, 12px);
+  margin-block-end: var(--arna-space-3, 12px);
 
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 
-  font-size: var(--mases-font-size-body, 16px);
-  line-height: var(--mases-line-height-body, 26px);
-  font-weight: var(--mases-font-weight-semibold, 600);
+  font-size: var(--arna-font-size-body, 16px);
+  line-height: var(--arna-line-height-body, 26px);
+  font-weight: var(--arna-font-weight-semibold, 600);
 
   text-align: start;
   overflow-wrap: anywhere;
@@ -706,7 +706,7 @@ function headingForGroup(group: LegalHubGroup): string {
 .legal-center__cards {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3, 12px);
+  gap: var(--arna-space-3, 12px);
 
   margin: 0;
   padding: 0;
@@ -728,11 +728,11 @@ function headingForGroup(group: LegalHubGroup): string {
 .legal-center__card {
   display: block;
 
-  padding-block: var(--mases-space-4, 16px);
-  padding-inline: var(--mases-space-4, 16px);
+  padding-block: var(--arna-space-4, 16px);
+  padding-inline: var(--arna-space-4, 16px);
 
-  border: 1px solid var(--mases-color-border-subtle, #E5E0D2);
-  border-radius: var(--mases-radius-md, 8px);
+  border: 1px solid var(--arna-color-border-subtle, #E5E0D2);
+  border-radius: var(--arna-radius-md, 8px);
 
   color: inherit;
   text-decoration: none;
@@ -749,17 +749,17 @@ function headingForGroup(group: LegalHubGroup): string {
 
 .legal-center__card:hover,
 .legal-center__card:focus-visible {
-  border-color: var(--mases-color-text-secondary, #3F382B);
+  border-color: var(--arna-color-text-secondary, #3F382B);
 }
 
 .legal-center__card-title {
   margin: 0;
 
-  color: var(--mases-color-text-primary, #141009);
+  color: var(--arna-color-text-primary, #141009);
 
-  font-size: var(--mases-font-size-body, 16px);
-  line-height: var(--mases-line-height-body, 26px);
-  font-weight: var(--mases-font-weight-semibold, 600);
+  font-size: var(--arna-font-size-body, 16px);
+  line-height: var(--arna-line-height-body, 26px);
+  font-weight: var(--arna-font-weight-semibold, 600);
 
   text-align: start;
   overflow-wrap: anywhere;
@@ -767,12 +767,12 @@ function headingForGroup(group: LegalHubGroup): string {
 
 .legal-center__card-summary {
   margin: 0;
-  margin-block-start: var(--mases-space-2, 8px);
+  margin-block-start: var(--arna-space-2, 8px);
 
-  color: var(--mases-color-text-secondary, #3F382B);
+  color: var(--arna-color-text-secondary, #3F382B);
 
-  font-size: var(--mases-font-size-body-sm, 14px);
-  line-height: var(--mases-line-height-body-sm, 22px);
+  font-size: var(--arna-font-size-body-sm, 14px);
+  line-height: var(--arna-line-height-body-sm, 22px);
 
   text-align: start;
   overflow-wrap: anywhere;
@@ -781,17 +781,17 @@ function headingForGroup(group: LegalHubGroup): string {
 .legal-center__card-chip {
   display: inline-block;
 
-  margin-block-start: var(--mases-space-3, 12px);
-  padding-block: var(--mases-space-2, 8px);
-  padding-inline: var(--mases-space-3, 12px);
+  margin-block-start: var(--arna-space-3, 12px);
+  padding-block: var(--arna-space-2, 8px);
+  padding-inline: var(--arna-space-3, 12px);
 
-  border: 1px solid var(--mases-color-border-subtle, #E5E0D2);
-  border-radius: var(--mases-radius-md, 8px);
+  border: 1px solid var(--arna-color-border-subtle, #E5E0D2);
+  border-radius: var(--arna-radius-md, 8px);
 
-  color: var(--mases-color-text-secondary, #3F382B);
+  color: var(--arna-color-text-secondary, #3F382B);
 
-  font-size: var(--mases-font-size-body-sm, 14px);
-  line-height: var(--mases-line-height-body-sm, 22px);
+  font-size: var(--arna-font-size-body-sm, 14px);
+  line-height: var(--arna-line-height-body-sm, 22px);
 
   overflow-wrap: anywhere;
 }
@@ -801,18 +801,18 @@ function headingForGroup(group: LegalHubGroup): string {
    ============================================================================ */
 .legal-center__footer {
   margin: 0;
-  padding-block-start: var(--mases-space-6, 24px);
+  padding-block-start: var(--arna-space-6, 24px);
 
-  border-block-start: 1px solid var(--mases-color-border-subtle, #E5E0D2);
+  border-block-start: 1px solid var(--arna-color-border-subtle, #E5E0D2);
 }
 
 .legal-center__back-link {
   display: inline-block;
 
-  color: var(--mases-color-text-secondary, #3F382B);
+  color: var(--arna-color-text-secondary, #3F382B);
 
-  font-size: var(--mases-font-size-body-sm, 14px);
-  line-height: var(--mases-line-height-body-sm, 22px);
+  font-size: var(--arna-font-size-body-sm, 14px);
+  line-height: var(--arna-line-height-body-sm, 22px);
   text-decoration: underline;
 
   overflow-wrap: anywhere;

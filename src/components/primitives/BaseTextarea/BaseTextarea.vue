@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — BaseTextarea
+ ARNA Phase 2 UI — BaseTextarea
 =============================================================================
 
- File:      mase_app/src/components/primitives/BaseTextarea/BaseTextarea.vue
+ File:      src/components/primitives/BaseTextarea/BaseTextarea.vue
  Layer:     1 (Primitives)
  Version:   1.1.0
  Status:    FROZEN
@@ -235,7 +235,7 @@ interface Props {
 
   /**
    * Number of visible text rows. Defaults to 3 (the browser's native
-   * default is 2, which is too short for MASES forms).
+   * default is 2, which is too short for ARNA forms).
    */
   rows?: number;
 

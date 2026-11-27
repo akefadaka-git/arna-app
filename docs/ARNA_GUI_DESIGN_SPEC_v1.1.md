@@ -1,3 +1,5 @@
+> **SUPERSEDED (2026-11-27):** The Owner-approved A1 ARNA identity decision supersedes this document's MASES token-substrate freeze and compatibility direction. This file is retained as historical design evidence; its MASES token and fallback requirements are not current implementation guidance.
+
 # ARNA GUI Design Specification v1.1
 
 - **Document ID:** ARNA-GUI-A1-002

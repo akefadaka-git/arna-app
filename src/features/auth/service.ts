@@ -3,7 +3,7 @@
  * CHANGE VERIFICATION — SSO fix
  * =============================================================================
  *
- * File:      mase_app/src/features/auth/service.ts  (AMEND)
+ * File:      src/features/auth/service.ts  (AMEND)
  * Unit:      bootstrapSession — attempt the API call unconditionally
  * Delivery type:  Correction — the session-cookie path now works.
  * Net lines:      +~50 docblock; +7 code lines net.
@@ -60,10 +60,10 @@
 
 /*
  * =============================================================================
- * MASES Phase 2 UI — Authentication Service
+ * ARNA Phase 2 UI — Authentication Service
  * =============================================================================
  *
- * File:      mase_app/src/features/auth/service.ts
+ * File:      src/features/auth/service.ts
  * Layer:     Features (Stage 12 — Authentication UI)
  * Version:   1.3.0
  * Status:    ACTIVE — Owner-authorized enhancement
@@ -259,7 +259,7 @@
  * -----------------------------------------------------------------------------
  * SSO across sibling subdomains
  * -----------------------------------------------------------------------------
- * MASES is deployed as multiple SPAs on sibling subdomains of
+ * ARNA is deployed as multiple SPAs on sibling subdomains of
  * maalearna.com.et (app, portal, and future surfaces). Sanctum's
  * session cookie is scoped to `.maalearna.com.et`
  * (SESSION_DOMAIN=.maalearna.com.et in the API's .env), so a login

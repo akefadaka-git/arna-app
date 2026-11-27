@@ -3,7 +3,7 @@
  CHANGE VERIFICATION — CR-WORKSPACE-TITLE · Phase 1 · File 5
 =============================================================================
 
- File:      mase_app/src/features/wallet/WalletStatementView.vue  (AMEND)
+ File:      src/features/wallet/WalletStatementView.vue  (AMEND)
  Unit:      CR-WORKSPACE-TITLE — Phase 1, File 5
  Delivery type:  Enhancement — document.title via <PageTitle>.
                  One import added, one const added, one template
@@ -14,14 +14,14 @@
  Before (v1.0.2):
    The view set no document.title. The browser tab showed whatever
    the previously-visited route had left, or the entry HTML's
-   pre-JS default ("MASES") on a cold load directly at
+   pre-JS default ("ARNA") on a cold load directly at
    /wallets/:id/statement.
 
  After (v1.0.3):
    The view sets document.title via <PageTitle>, bound to the
    existing labels.pageTitle and to import.meta.env.VITE_APP_NAME.
 
-     Workspace build    →  "መግለጫ — MASES"
+     Workspace build    →  "መግለጫ — ARNA"
      Empty VITE_APP_NAME →  "መግለጫ"
 
    The portal build does not mount this view (the wallet vertical is
@@ -44,10 +44,10 @@
 
 <!--
 =============================================================================
- MASES Phase 2 UI — WalletStatementView
+ ARNA Phase 2 UI — WalletStatementView
 =============================================================================
 
- File:      mase_app/src/features/wallet/WalletStatementView.vue
+ File:      src/features/wallet/WalletStatementView.vue
  Layer:     Features (Wallet domain)
  Version:   1.0.3
  Status:    FROZEN
@@ -113,7 +113,7 @@ import { formatCalendarDate } from '@/core/dates/calendar';` block now uses pure
               - `.wallet-statement-view__filter-field` no longer needs
                 to declare `display: flex; flex-direction: column; gap`.
                 FormField provides its own column layout and a
-                `--mases-space-2` gap between the label and the
+                `--arna-space-2` gap between the label and the
                 control. The rule now only carries the flex sizing
                 (`flex: 1 1 180px; min-width: 0`) that the parent
                 filter row relies on.
@@ -352,7 +352,7 @@ const route = useRoute();
  * `string | undefined`.
  *
  * The value is set per build mode:
- *   workspace  →  "MASES"
+ *   workspace  →  "ARNA"
  *   portal     →  "Maale Arna Portal"
  *
  * This view is mounted in the workspace build only. The portal has no
@@ -753,7 +753,7 @@ function entryDirection(row: WalletEntry, cur: string): { debit: string; credit:
 .wallet-statement-view {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
 }
 
@@ -772,7 +772,7 @@ function entryDirection(row: WalletEntry, cur: string): { debit: string; credit:
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: var(--mases-space-4);
+  gap: var(--arna-space-4);
 }
 
 @media (min-width: 640px) {
@@ -787,7 +787,7 @@ function entryDirection(row: WalletEntry, cur: string): { debit: string; credit:
    Filter field (applied to the FormField root)
    ---------------------------------------------------------------------------
    FormField provides the column layout and the label/control gap
-   (--mases-space-2). This rule only carries the flex sizing that the
+   (--arna-space-2). This rule only carries the flex sizing that the
    parent filter row relies on: the two fields share the row's free
    space equally at the base, and can shrink below their content width
    without pushing the action row off the row.
@@ -800,7 +800,7 @@ function entryDirection(row: WalletEntry, cur: string): { debit: string; credit:
 .wallet-statement-view__filter-actions {
   display: flex;
   align-items: center;
-  gap: var(--mases-space-2);
+  gap: var(--arna-space-2);
   flex-shrink: 0;
   justify-content: flex-end;
 }
@@ -811,30 +811,30 @@ function entryDirection(row: WalletEntry, cur: string): { debit: string; credit:
 .wallet-statement-view__totals {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--mases-space-5);
+  gap: var(--arna-space-5);
 }
 
 .wallet-statement-view__total {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-1);
+  gap: var(--arna-space-1);
   min-width: 0;
 }
 
 .wallet-statement-view__total-label {
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
-  font-weight: var(--mases-font-weight-medium);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
+  font-weight: var(--arna-font-weight-medium);
   overflow-wrap: break-word;
   word-break: normal;
 }
 
 .wallet-statement-view__total-value {
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-5);
-  line-height: var(--mases-line-height-heading-5);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-5);
+  line-height: var(--arna-line-height-heading-5);
+  font-weight: var(--arna-font-weight-semibold);
   font-variant-numeric: tabular-nums;
   overflow-wrap: break-word;
   word-break: normal;
@@ -845,10 +845,10 @@ function entryDirection(row: WalletEntry, cur: string): { debit: string; credit:
    ============================================================================ */
 .wallet-statement-view__section-title {
   margin: 0;
-  color: var(--mases-color-text-primary);
-  font-size: var(--mases-font-size-heading-6);
-  line-height: var(--mases-line-height-heading-6);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-primary);
+  font-size: var(--arna-font-size-heading-6);
+  line-height: var(--arna-line-height-heading-6);
+  font-weight: var(--arna-font-weight-semibold);
   overflow-wrap: break-word;
   word-break: normal;
 }
@@ -858,10 +858,10 @@ function entryDirection(row: WalletEntry, cur: string): { debit: string; credit:
    ============================================================================ */
 .wallet-statement-view__section-empty {
   margin: 0;
-  padding-block: var(--mases-space-4);
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-body-sm);
-  line-height: var(--mases-line-height-body-sm);
+  padding-block: var(--arna-space-4);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-body-sm);
+  line-height: var(--arna-line-height-body-sm);
   text-align: center;
   overflow-wrap: break-word;
   word-break: normal;

@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — Alert
+ ARNA Phase 2 UI — Alert
 =============================================================================
 
- File:      mase_app/src/components/composites/Alert/Alert.vue
+ File:      src/components/composites/Alert/Alert.vue
  Layer:     2 (Composites)
  Version:   1.1.0
  Status:    FROZEN

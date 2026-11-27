@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — PermissionGate
+ ARNA Phase 2 UI — PermissionGate
 =============================================================================
 
- File:      mase_app/src/components/patterns/PermissionGate/PermissionGate.vue
+ File:      src/components/patterns/PermissionGate/PermissionGate.vue
  Layer:     3 (Patterns)
  Version:   1.0.0
  Status:    FROZEN
@@ -122,7 +122,7 @@ interface Props {
   /**
    * The permission slug (or slugs) required to render the default slot.
    *
-   * Each slug must be one of the 60 verified MASES permission slugs
+   * Each slug must be one of the 60 verified ARNA permission slugs
    * (see the Implementation Evidence Report §18). An unverified slug
    * cannot grant access — the backend will never include it in the
    * user's permission list, so the gate would always deny. A

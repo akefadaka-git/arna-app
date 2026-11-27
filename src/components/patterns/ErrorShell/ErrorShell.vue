@@ -1,9 +1,9 @@
 <!--
 =============================================================================
- MASES Phase 2 UI — ErrorShell
+ ARNA Phase 2 UI — ErrorShell
 =============================================================================
 
- File:      mase_app/src/components/patterns/ErrorShell/ErrorShell.vue
+ File:      src/components/patterns/ErrorShell/ErrorShell.vue
  Layer:     3 (Patterns)
  Version:   1.0.0
  Status:    FROZEN
@@ -197,8 +197,8 @@ const layout = computed<'centered' | 'column'>(() =>
    * units".
    */
   min-height: 100dvh;
-  background-color: var(--mases-color-surface-page);
-  color: var(--mases-color-text-primary);
+  background-color: var(--arna-color-surface-page);
+  color: var(--arna-color-text-primary);
   font-family: inherit;
   /*
    * Padding is applied here rather than on the content region so that
@@ -206,8 +206,8 @@ const layout = computed<'centered' | 'column'>(() =>
    * visual midline of the viewport), and so the brand/footer regions
    * align to the same horizontal insets as the content.
    */
-  padding-block: var(--mases-space-8);
-  padding-inline: var(--mases-space-6);
+  padding-block: var(--arna-space-8);
+  padding-inline: var(--arna-space-6);
 }
 
 /* ============================================================================
@@ -237,7 +237,7 @@ const layout = computed<'centered' | 'column'>(() =>
 .error-shell[data-layout='column'] {
   align-items: stretch;
   justify-content: flex-start;
-  gap: var(--mases-space-8);
+  gap: var(--arna-space-8);
 }
 
 .error-shell[data-layout='column'] .error-shell__content {
@@ -282,9 +282,9 @@ const layout = computed<'centered' | 'column'>(() =>
    * A muted text color so a version string or legal line does not
    * compete with the primary content.
    */
-  color: var(--mases-color-text-tertiary);
-  font-size: var(--mases-font-size-caption);
-  line-height: var(--mases-line-height-caption);
+  color: var(--arna-color-text-tertiary);
+  font-size: var(--arna-font-size-caption);
+  line-height: var(--arna-line-height-caption);
   /*
    * Amharic-safe wrapping for any Ethiopic content a consumer places
    * in the footer (e.g. a translated legal line).
@@ -300,12 +300,12 @@ const layout = computed<'centered' | 'column'>(() =>
    ============================================================================ */
 @media (max-width: 639px) {
   .error-shell {
-    padding-block: var(--mases-space-6);
-    padding-inline: var(--mases-space-4);
+    padding-block: var(--arna-space-6);
+    padding-inline: var(--arna-space-4);
   }
 
   .error-shell[data-layout='column'] {
-    gap: var(--mases-space-6);
+    gap: var(--arna-space-6);
   }
 }
 
