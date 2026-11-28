@@ -51,7 +51,7 @@ const dimensionDraft = ref({
   name_am: '',
   is_required_for_post: false,
 });
-const valueDraft = ref({ code: '', name_en: '', name_am: '', effective_from: '', effective_to: '' });
+const valueDraft = ref({ code: '', name_en: '', name_am: '', parent_id: null as number | null, effective_from: '', effective_to: '' });
 
 const canManageDimensions = computed(() => auth.permissions.includes('finance.dimension.manage'));
 const activeEntity = computed(() =>
@@ -164,10 +164,11 @@ async function saveDimensionValue(): Promise<void> {
       code: valueDraft.value.code.trim(),
       name_en: valueDraft.value.name_en.trim(),
       name_am: valueDraft.value.name_am.trim() || null,
+      parent_id: valueDraft.value.parent_id,
       effective_from: valueDraft.value.effective_from || null,
       effective_to: valueDraft.value.effective_to || null,
     });
-    valueDraft.value = { code: '', name_en: '', name_am: '', effective_from: '', effective_to: '' };
+    valueDraft.value = { code: '', name_en: '', name_am: '', parent_id: null, effective_from: '', effective_to: '' };
     await loadDimensionValues(selectedEntityId.value, selectedDimensionId.value);
   } catch {
     valueError.value = 'Value was not created. Check unique code, effective dates, and Finance dimension-manage permission.';
@@ -330,6 +331,7 @@ onMounted(() => void loadEntities());
                 <label>Code<input v-model="valueDraft.code" maxlength="64" required /></label>
                 <label>English name<input v-model="valueDraft.name_en" maxlength="180" required /></label>
                 <label>Amharic name<input v-model="valueDraft.name_am" maxlength="180" /></label>
+                <label>Parent value<select v-model.number="valueDraft.parent_id"><option :value="null">No parent</option><option v-for="parent in dimensionValues" :key="parent.id" :value="parent.id">{{ parent.code }} · {{ parent.name_en }}</option></select></label>
                 <label>Effective from<input v-model="valueDraft.effective_from" type="date" /></label>
                 <label>Effective to<input v-model="valueDraft.effective_to" type="date" /></label>
               </div>
