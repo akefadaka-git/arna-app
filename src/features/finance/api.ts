@@ -146,7 +146,6 @@ export interface FinanceDimension {
   readonly dimension_type: FinanceDimensionType;
   readonly name_am: string | null;
   readonly name_en: string;
-  readonly is_required: boolean;
   readonly status: 'active' | 'inactive';
   readonly values_count?: number;
 }
@@ -169,7 +168,6 @@ export interface FinanceDimensionCreateInput {
   readonly dimension_type: FinanceDimensionType;
   readonly name_en: string;
   readonly name_am?: string | null;
-  readonly is_required?: boolean;
 }
 
 export interface FinanceDimensionValueCreateInput {
