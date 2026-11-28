@@ -22,7 +22,7 @@ The App must display unconfigured or pending states as such. It must not infer f
 
 ## Document integration
 
-The App presents canonical document references returned by Finance and opens the existing Documents/Files experience for content and lifecycle. It does not create document numbers, upload a second binary copy, edit issued document hashes, or bypass Documents permissions.
+The App retrieves linked evidence from `GET /api/finance/documents` using the active legal entity and optional source/purpose filters. It presents canonical document references returned by Finance and opens the existing Documents/Files experience for content and lifecycle. It does not create document numbers, upload a second binary copy, edit issued document hashes, or bypass Documents permissions.
 
 Finance document purposes are source evidence, approval evidence, supporting evidence, issued output, reconciliation evidence and legal authority. Document links remain tenant/entity scoped.
 
