@@ -213,11 +213,14 @@ export function createFinanceDimensionValue(
   return api.post<FinanceDimensionValue>(`/api/finance/dimensions/${dimensionId}/values`, input);
 }
 
-function toFinancePaginationMeta(meta: Record<string, unknown> | undefined): FinancePaginationMeta {
+function toFinancePaginationMeta(meta: unknown): FinancePaginationMeta {
+  const record = meta !== null && typeof meta === 'object'
+    ? meta as Record<string, unknown>
+    : {};
   return {
-    current_page: typeof meta?.current_page === 'number' ? meta.current_page : undefined,
-    last_page: typeof meta?.last_page === 'number' ? meta.last_page : undefined,
-    per_page: typeof meta?.per_page === 'number' ? meta.per_page : undefined,
-    total: typeof meta?.total === 'number' ? meta.total : undefined,
+    current_page: typeof record.current_page === 'number' ? record.current_page : undefined,
+    last_page: typeof record.last_page === 'number' ? record.last_page : undefined,
+    per_page: typeof record.per_page === 'number' ? record.per_page : undefined,
+    total: typeof record.total === 'number' ? record.total : undefined,
   };
 }
