@@ -129,3 +129,94 @@ export async function listFinanceDocumentLinks(
     meta: response.meta ?? {},
   };
 }
+
+export type FinanceDimensionType =
+  | 'department'
+  | 'branch'
+  | 'project'
+  | 'cost_center'
+  | 'product'
+  | 'contract'
+  | 'customer'
+  | 'supplier'
+  | 'fund'
+  | 'region';
+
+export interface FinanceDimension {
+  readonly id: number;
+  readonly legal_entity_id: number;
+  readonly code: string;
+  readonly dimension_type: FinanceDimensionType;
+  readonly name_am: string | null;
+  readonly name_en: string;
+  readonly is_required: boolean;
+  readonly status: 'active' | 'inactive';
+  readonly values_count?: number;
+}
+
+export interface FinanceDimensionValue {
+  readonly id: number;
+  readonly dimension_id: number;
+  readonly parent_id: number | null;
+  readonly code: string;
+  readonly name_am: string | null;
+  readonly name_en: string;
+  readonly status: 'active' | 'inactive';
+  readonly effective_from: string | null;
+  readonly effective_to: string | null;
+}
+
+export interface FinanceDimensionCreateInput {
+  readonly legal_entity_id: number;
+  readonly code: string;
+  readonly dimension_type: FinanceDimensionType;
+  readonly name_en: string;
+  readonly name_am?: string | null;
+  readonly is_required?: boolean;
+}
+
+export interface FinanceDimensionValueCreateInput {
+  readonly legal_entity_id: number;
+  readonly code: string;
+  readonly name_en: string;
+  readonly name_am?: string | null;
+  readonly parent_id?: number | null;
+  readonly effective_from?: string | null;
+  readonly effective_to?: string | null;
+}
+
+export async function listFinanceDimensions(
+  legalEntityId: number,
+  page = 1,
+  perPage = 25,
+): Promise<{ items: readonly FinanceDimension[]; meta: Record<string, unknown> }> {
+  const response = await api.getWithMeta<readonly FinanceDimension[]>(
+    '/api/finance/dimensions',
+    { params: { legal_entity_id: legalEntityId, page, per_page: perPage } },
+  );
+  return { items: response.data, meta: response.meta ?? {} };
+}
+
+export function createFinanceDimension(input: FinanceDimensionCreateInput): Promise<FinanceDimension> {
+  return api.post<FinanceDimension>('/api/finance/dimensions', input);
+}
+
+export async function listFinanceDimensionValues(
+  legalEntityId: number,
+  dimensionId: number,
+  page = 1,
+  perPage = 25,
+): Promise<{ items: readonly FinanceDimensionValue[]; meta: Record<string, unknown> }> {
+  const response = await api.getWithMeta<readonly FinanceDimensionValue[]>(
+    `/api/finance/dimensions/${dimensionId}/values`,
+    { params: { legal_entity_id: legalEntityId, page, per_page: perPage } },
+  );
+  return { items: response.data, meta: response.meta ?? {} };
+}
+
+export function createFinanceDimensionValue(
+  dimensionId: number,
+  input: FinanceDimensionValueCreateInput,
+): Promise<FinanceDimensionValue> {
+  return api.post<FinanceDimensionValue>(`/api/finance/dimensions/${dimensionId}/values`, input);
+}
