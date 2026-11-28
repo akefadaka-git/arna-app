@@ -1681,6 +1681,13 @@ export const portalUserMenuItems: ReadonlyArray<UserMenuItem> = [
  */
 export const authenticatedNavItems: ReadonlyArray<NavItem> = [
   {
+    id: 'finance',
+    label: 'ፋይናንስ',
+    to: '/finance',
+    icon: 'wallet',
+    permission: 'finance.entity.view',
+  },
+  {
     id: 'dashboard',
     label: 'ዳሽቦርድ',
     to: '/dashboard',
