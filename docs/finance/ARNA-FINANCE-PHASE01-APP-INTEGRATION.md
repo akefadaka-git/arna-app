@@ -32,7 +32,7 @@ Finance document purposes are source evidence, approval evidence, supporting evi
 - Ethiopian Calendar is the default display calendar; Gregorian is supported as a display option.
 - Monetary values are transported and rendered as decimal strings, never JavaScript floating-point calculations.
 - A user may view profile state only with Finance entity-view permission.
-- The App consumes typed dimension and dimension-value APIs for department, branch, project, cost center, contract, fund and region. Product/customer/supplier references remain canonical in their source domains.
+- The App consumes `GET/POST /api/finance/dimensions` and `GET/POST /api/finance/dimensions/{dimensionId}/values` for department, branch, project, cost center, contract, fund and region. Dimension reads and management remain separately permission-gated. Product/customer/supplier references remain canonical in their source domains.
 
 The App must not expose controls for enabling multi-currency posting or changing tax/fiscal policy until separately authorized API commands exist.
 - Payroll and shareholder documents must continue to obey their source-domain confidentiality permissions.
