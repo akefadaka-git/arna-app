@@ -86,9 +86,3 @@ export async function listFinanceEntities(
   };
 }
 
-
-export async function listFinanceEntities(
-  query: FinanceEntityListQuery = {},
-): Promise<FinanceEntityListResponse> {
-  return api.get<FinanceEntityListResponse>('/api/finance/entities', { params: query });
-}
