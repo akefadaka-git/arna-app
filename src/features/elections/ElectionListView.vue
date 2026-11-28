@@ -8,7 +8,7 @@ import LoadingState from '@/components/composites/LoadingState';
 import ErrorState from '@/components/composites/ErrorState';
 import EmptyState from '@/components/composites/EmptyState';
 import { listGovernanceElections } from './source-snapshot-api';
-import type { GovernanceElectionSummary } from '@/features/governance/electionSourceSnapshotsApi';
+import type { GovernanceElectionSummary } from './source-snapshot-api';
 import { governanceElectionListLabels as labels } from './electionLabels';
 
 type ViewState = 'loading' | 'error' | 'empty' | 'ready';
