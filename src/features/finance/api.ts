@@ -73,14 +73,16 @@ export interface FinanceEntityListQuery {
   readonly per_page?: number;
 }
 
+export interface FinancePaginationMeta {
+  readonly current_page?: number;
+  readonly last_page?: number;
+  readonly per_page?: number;
+  readonly total?: number;
+}
+
 export interface FinanceEntityListResponse {
   readonly items: readonly FinanceLegalEntity[];
-  readonly meta: {
-    readonly current_page?: number;
-    readonly last_page?: number;
-    readonly per_page?: number;
-    readonly total?: number;
-  };
+  readonly meta: FinancePaginationMeta;
 }
 
 export async function listFinanceEntities(
@@ -92,7 +94,7 @@ export async function listFinanceEntities(
   );
   return {
     items: response.data,
-    meta: response.meta ?? {},
+    meta: thisPaginationMeta(response.meta),
   };
 }
 
@@ -189,7 +191,7 @@ export async function listFinanceDimensions(
     '/api/finance/dimensions',
     { params: { legal_entity_id: legalEntityId, page, per_page: perPage } },
   );
-  return { items: response.data, meta: response.meta ?? {} };
+  return { items: response.data, meta: thisPaginationMeta(response.meta) };
 }
 
 export function createFinanceDimension(input: FinanceDimensionCreateInput): Promise<FinanceDimension> {
@@ -214,4 +216,13 @@ export function createFinanceDimensionValue(
   input: FinanceDimensionValueCreateInput,
 ): Promise<FinanceDimensionValue> {
   return api.post<FinanceDimensionValue>(`/api/finance/dimensions/${dimensionId}/values`, input);
+}
+
+function thisPaginationMeta(meta: Record<string, unknown> | undefined): FinancePaginationMeta {
+  return {
+    current_page: typeof meta?.current_page === 'number' ? meta.current_page : undefined,
+    last_page: typeof meta?.last_page === 'number' ? meta.last_page : undefined,
+    per_page: typeof meta?.per_page === 'number' ? meta.per_page : undefined,
+    total: typeof meta?.total === 'number' ? meta.total : undefined,
+  };
 }
