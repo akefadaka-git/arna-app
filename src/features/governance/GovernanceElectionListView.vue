@@ -113,16 +113,16 @@ onMounted(() => {
 .election-list {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-6);
+  gap: var(--arna-space-6);
   width: 100%;
   min-width: 0;
 }
 .election-list__content {
   min-width: 0;
-  padding: var(--mases-space-4);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-lg);
-  background: var(--mases-color-surface-raised);
+  padding: var(--arna-space-4);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-lg);
+  background: var(--arna-color-surface-raised);
 }
 .election-list__table-wrap {
   overflow-x: auto;
@@ -134,41 +134,41 @@ onMounted(() => {
 }
 .election-list__table th,
 .election-list__table td {
-  padding: var(--mases-space-3);
-  border-bottom: 1px solid var(--mases-color-border-subtle);
+  padding: var(--arna-space-3);
+  border-bottom: 1px solid var(--arna-color-border-subtle);
   vertical-align: top;
 }
 .election-list__table th {
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body-sm);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body-sm);
+  font-weight: var(--arna-font-weight-semibold);
 }
 .election-list__code {
   font-variant-numeric: tabular-nums;
-  font-weight: var(--mases-font-weight-semibold);
+  font-weight: var(--arna-font-weight-semibold);
 }
 .election-list__link {
-  color: var(--mases-color-text-brand);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-brand);
+  font-weight: var(--arna-font-weight-semibold);
   text-decoration: none;
 }
 .election-list__link:hover {
   text-decoration: underline;
 }
 .election-list__link:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 .election-list__verified,
 .election-list__blocked,
 .election-list__muted {
-  font-size: var(--mases-font-size-body-sm);
+  font-size: var(--arna-font-size-body-sm);
 }
 .election-list__verified {
-  color: var(--mases-color-status-success-text);
+  color: var(--arna-color-status-success-text);
 }
 .election-list__blocked,
 .election-list__muted {
-  color: var(--mases-color-text-secondary);
+  color: var(--arna-color-text-secondary);
 }
 </style>
