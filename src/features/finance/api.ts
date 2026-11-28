@@ -64,12 +64,28 @@ export interface FinanceEntityListQuery {
 }
 
 export interface FinanceEntityListResponse {
-  readonly data: readonly FinanceLegalEntity[];
-  readonly current_page?: number;
-  readonly last_page?: number;
-  readonly per_page?: number;
-  readonly total?: number;
+  readonly items: readonly FinanceLegalEntity[];
+  readonly meta: {
+    readonly current_page?: number;
+    readonly last_page?: number;
+    readonly per_page?: number;
+    readonly total?: number;
+  };
 }
+
+export async function listFinanceEntities(
+  query: FinanceEntityListQuery = {},
+): Promise<FinanceEntityListResponse> {
+  const response = await api.getWithMeta<readonly FinanceLegalEntity[]>(
+    '/api/finance/entities',
+    { params: query },
+  );
+  return {
+    items: response.data,
+    meta: response.meta ?? {},
+  };
+}
+
 
 export async function listFinanceEntities(
   query: FinanceEntityListQuery = {},
