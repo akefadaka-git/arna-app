@@ -1,0 +1,84 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+
+const read = (path) => readFile(new URL(path, import.meta.url), 'utf8');
+
+test('Board Election list and workspace routes are permission-gated and navigable', async () => {
+  const routes = await read('../src/router/routes-workspace.ts');
+  const navigation = await read('../src/router/shell-labels.ts');
+
+  assert.ok(routes.includes("path: 'governance/elections'"));
+  assert.ok(routes.includes("name: 'governance-elections'"));
+  assert.ok(routes.includes("meta: { permission: 'governance.election.view' }"));
+  assert.ok(routes.includes("path: 'governance/elections/:id'"));
+  assert.ok(routes.includes("name: 'governance-election-workspace'"));
+  assert.ok(routes.includes("meta: { permission: 'governance.election.view' }"));
+  assert.ok(navigation.includes("to: '/governance/elections'"));
+  assert.ok(navigation.includes("permission: 'governance.election.view'"));
+});
+
+test('Shareholder source API adapter calls only the declared tenant election endpoints', async () => {
+  const api = await read('../src/features/elections/source-snapshot-api.ts');
+
+  for (const endpoint of [
+    '/api/governance/elections',
+    '/candidates',
+    '/authority-evidence',
+    '/committee/members',
+    '/shareholder-source-snapshots',
+    '/reconcile',
+  ]) {
+    assert.ok(api.includes(endpoint), `Missing API endpoint contract: ${endpoint}`);
+  }
+  assert.ok(api.includes('record_date_time: recordDateTime'));
+  assert.ok(api.includes('reason'));
+  assert.ok(api.includes("'blocked_unverified'"));
+});
+
+test('source-register UI is evidence-only and does not calculate electorate decisions', async () => {
+  const view = await read('../src/features/elections/ElectionSourceSnapshotView.vue');
+  const api = await read('../src/features/elections/source-snapshot-api.ts');
+
+  assert.ok(view.includes('Candidate intake'));
+  assert.ok(view.includes('No nomination, consent, declaration, evidence attachment or eligibility-decision action'));
+  assert.ok(view.includes('latestDecision'));
+  assert.ok(view.includes('canViewSource'));
+  assert.ok(view.includes('governance.election.register.prepare'));
+  assert.ok(view.includes('governance.election.register.reconcile'));
+  assert.ok(view.includes('canViewAuthority'));
+  assert.ok(view.includes('canViewCommittee'));
+  assert.ok(view.includes('does not record, review or verify legal authority'));
+  assert.ok(view.includes('No appointment, revocation, administrator grant or conflict action'));
+  assert.ok(view.includes('preparer cannot reconcile their own snapshot'));
+  assert.ok(view.includes('does not verify statutory ownership, voter eligibility, voting weight'));
+  assert.ok(view.includes('blocked_unverified'));
+  assert.ok(view.includes('selected.source_entries'));
+  assert.ok(view.includes('record_date_timezone'));
+  assert.ok(view.includes('database_timezone'));
+  assert.ok(!view.includes('voting_weight'));
+  assert.ok(!view.includes('voter_eligible'));
+  assert.ok(!view.includes('ballot'));
+  assert.ok(!api.includes('verifyElectionAuthority'));
+  assert.ok(!api.includes('appointElectionCommittee'));
+  assert.ok(!api.includes('eligibility-decision'));
+  assert.ok(!api.includes('/consent'));
+});
+
+
+test('independent workspace sections expose isolated request failures and retry', async () => {
+  const view = await read('../src/features/elections/ElectionSourceSnapshotView.vue');
+  for (const section of ['candidates', 'snapshots', 'authority', 'committee']) {
+    assert.ok(view.includes(`sectionErrors.${section}`), `Missing isolated error state for ${section}`);
+  }
+  assert.ok(view.includes('listElectionCandidates(electionId).catch'));
+  assert.ok(view.includes('listElectionAuthorityEvidence(electionId).catch'));
+  assert.ok(view.includes('listElectionCommitteeMembers(electionId).catch'));
+});
+
+test('election list uses Amharic-first locale fallback and the canonical workspace route', async () => {
+  const list = await read('../src/features/elections/ElectionListView.vue');
+  assert.ok(list.includes("auth.userLocale === 'am'"));
+  assert.ok(list.includes("name: 'governance-election-workspace'"));
+  assert.ok(list.includes("governance.election.register.view"));
+});

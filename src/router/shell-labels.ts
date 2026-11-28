@@ -1750,6 +1750,13 @@ export const authenticatedNavItems: ReadonlyArray<NavItem> = [
     permission: 'governance.body.view',
   },
   {
+    id: 'board-elections',
+    label: 'የቦርድ ምርጫዎች',
+    to: '/governance/elections',
+    icon: 'landmark',
+    permission: 'governance.election.view',
+  },
+  {
     id: 'appointments',
     label: 'የቀጠሮ ማስያዣ',
     to: '/appointments',

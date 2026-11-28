@@ -61,6 +61,8 @@ jobs:
         run: npm run test:notifications-locale-contract
       - name: Verify Owner-governed branch lifecycle workflow contract
         run: npm run test:owner-governed-lifecycle-workflow-contract
+      - name: Verify Board Election shareholder source snapshot UI contract
+        run: node --test tests/election-source-snapshot-contract.test.mjs
       - name: Type-check and build all applications
         run: npm run build
       - name: Verify root entry points, local assets, and deployment policy
