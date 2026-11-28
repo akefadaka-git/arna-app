@@ -94,7 +94,7 @@ export async function listFinanceEntities(
   );
   return {
     items: response.data,
-    meta: thisPaginationMeta(response.meta),
+    meta: toFinancePaginationMeta(response.meta),
   };
 }
 
@@ -110,12 +110,7 @@ export interface FinanceDocumentLinkQuery {
 
 export interface FinanceDocumentLinkListResponse {
   readonly items: readonly FinanceDocumentLink[];
-  readonly meta: {
-    readonly current_page?: number;
-    readonly last_page?: number;
-    readonly per_page?: number;
-    readonly total?: number;
-  };
+  readonly meta: FinancePaginationMeta;
 }
 
 export async function listFinanceDocumentLinks(
@@ -128,7 +123,7 @@ export async function listFinanceDocumentLinks(
   );
   return {
     items: response.data,
-    meta: response.meta ?? {},
+    meta: toFinancePaginationMeta(response.meta),
   };
 }
 
@@ -186,7 +181,7 @@ export async function listFinanceDimensions(
   legalEntityId: number,
   page = 1,
   perPage = 25,
-): Promise<{ items: readonly FinanceDimension[]; meta: Record<string, unknown> }> {
+): Promise<{ items: readonly FinanceDimension[]; meta: FinancePaginationMeta }> {
   const response = await api.getWithMeta<readonly FinanceDimension[]>(
     '/api/finance/dimensions',
     { params: { legal_entity_id: legalEntityId, page, per_page: perPage } },
@@ -218,7 +213,7 @@ export function createFinanceDimensionValue(
   return api.post<FinanceDimensionValue>(`/api/finance/dimensions/${dimensionId}/values`, input);
 }
 
-function thisPaginationMeta(meta: Record<string, unknown> | undefined): FinancePaginationMeta {
+function toFinancePaginationMeta(meta: Record<string, unknown> | undefined): FinancePaginationMeta {
   return {
     current_page: typeof meta?.current_page === 'number' ? meta.current_page : undefined,
     last_page: typeof meta?.last_page === 'number' ? meta.last_page : undefined,
