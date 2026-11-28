@@ -186,7 +186,7 @@ export async function listFinanceDimensions(
     '/api/finance/dimensions',
     { params: { legal_entity_id: legalEntityId, page, per_page: perPage } },
   );
-  return { items: response.data, meta: thisPaginationMeta(response.meta) };
+  return { items: response.data, meta: toFinancePaginationMeta(response.meta) };
 }
 
 export function createFinanceDimension(input: FinanceDimensionCreateInput): Promise<FinanceDimension> {
@@ -198,12 +198,12 @@ export async function listFinanceDimensionValues(
   dimensionId: number,
   page = 1,
   perPage = 25,
-): Promise<{ items: readonly FinanceDimensionValue[]; meta: Record<string, unknown> }> {
+): Promise<{ items: readonly FinanceDimensionValue[]; meta: FinancePaginationMeta }> {
   const response = await api.getWithMeta<readonly FinanceDimensionValue[]>(
     `/api/finance/dimensions/${dimensionId}/values`,
     { params: { legal_entity_id: legalEntityId, page, per_page: perPage } },
   );
-  return { items: response.data, meta: response.meta ?? {} };
+  return { items: response.data, meta: toFinancePaginationMeta(response.meta) };
 }
 
 export function createFinanceDimensionValue(
