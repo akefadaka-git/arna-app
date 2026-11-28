@@ -34,7 +34,7 @@ export interface FinanceLegalEntity {
   readonly base_currency: 'ETB';
   readonly status: 'active' | 'inactive';
   /** Eloquent relation emitted by the tenant-scoped entities index. */
-  readonly profile?: FinanceEntityAccountingProfile | null;
+  readonly accounting_profile?: FinanceEntityAccountingProfile | null;
 }
 
 export interface FinanceDocumentLink {
