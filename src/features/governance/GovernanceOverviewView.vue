@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
 
 import PageHeader from '@/components/patterns/PageHeader';
 import Card from '@/components/patterns/Card';
@@ -18,6 +19,8 @@ interface Props {
 
 defineProps<Props>();
 const appName: string = import.meta.env.VITE_APP_NAME;
+const auth = useAuthStore();
+const canViewElections = computed(() => auth.hasPermission('governance.election.view'));
 const isLoading = ref(true);
 const loadError = ref<unknown | null>(null);
 const meta = ref<GovernanceBodiesPaginationMeta | null>(null);
@@ -63,6 +66,14 @@ onMounted(() => {
         </RouterLink>
         <RouterLink class="governance-overview__people-link" to="/governance/people">
           የሰዎች ዝርዝር / People directory
+          <span aria-hidden="true">→</span>
+        </RouterLink>
+        <RouterLink
+          v-if="canViewElections"
+          class="governance-overview__people-link"
+          to="/governance/elections"
+        >
+          የቦርድ ምርጫዎች / Board elections
           <span aria-hidden="true">→</span>
         </RouterLink>
       </div>
