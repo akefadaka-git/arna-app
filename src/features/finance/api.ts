@@ -135,10 +135,7 @@ export type FinanceDimensionType =
   | 'branch'
   | 'project'
   | 'cost_center'
-  | 'product'
   | 'contract'
-  | 'customer'
-  | 'supplier'
   | 'fund'
   | 'region';
 
