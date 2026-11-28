@@ -88,7 +88,7 @@ export async function listFinanceEntities(
 ): Promise<FinanceEntityListResponse> {
   const response = await api.getWithMeta<readonly FinanceLegalEntity[]>(
     '/api/finance/entities',
-    { params: query },
+    { params: { page: query.page, per_page: query.per_page } },
   );
   return {
     items: response.data,
