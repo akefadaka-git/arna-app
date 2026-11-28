@@ -8,7 +8,7 @@ import { api } from '@/core/api/client';
  * policy switches itself.
  */
 export type FinanceCalendarCode = 'EC' | 'GC';
-export type FinanceCurrencyMode = 'base_only' | 'pending_approval' | 'multi_currency_enabled';
+export type FinanceCurrencyMode = 'base_only';
 export type FinancePolicyStatus = 'owner_review_required' | 'approved' | 'rejected';
 export type FinanceTaxProfileStatus = 'unconfigured' | 'pending_review' | 'configured' | 'suspended';
 
