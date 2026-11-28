@@ -8,7 +8,7 @@
 
 The App consumes the Finance entity index at `GET /api/finance/entities`. The authenticated API resolves tenant membership and permissions; the App does not send an authoritative tenant ID.
 
-Each entity may expose its eagerly loaded `profile`:
+Each entity may expose its eagerly loaded `accounting_profile`:
 
 - functional/reporting currency ETB;
 - transaction currency mode;
