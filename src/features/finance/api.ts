@@ -22,7 +22,7 @@ export interface FinanceEntityAccountingProfile {
   readonly fiscal_year_start_day_ec: number | null;
   readonly tax_profile_status: FinanceTaxProfileStatus;
   readonly accounting_policy_status: FinancePolicyStatus;
-  readonly document_numbering_policy_version: string;
+  readonly document_numbering_policy_version: string | null;
 }
 
 export interface FinanceLegalEntity {
