@@ -37,6 +37,18 @@ export interface FinanceLegalEntity {
   readonly accounting_profile?: FinanceEntityAccountingProfile | null;
 }
 
+export interface FinanceDocumentSummary {
+  readonly canonical_number: string;
+  readonly document_type_code: string;
+  readonly document_type_number: string;
+  readonly title: string;
+  readonly status: string;
+  readonly issued_at: string;
+  readonly file_id: number;
+  readonly file_version: number;
+  readonly file_sha256: string | null;
+}
+
 export interface FinanceDocumentLink {
   readonly id: number;
   readonly legal_entity_id: number;
@@ -53,6 +65,7 @@ export interface FinanceDocumentLink {
     | 'legal_authority';
   readonly is_primary: boolean;
   readonly linked_at: string;
+  readonly document?: FinanceDocumentSummary;
 }
 
 export interface FinanceEntityListQuery {
@@ -86,3 +99,36 @@ export async function listFinanceEntities(
   };
 }
 
+
+export interface FinanceDocumentLinkQuery {
+  readonly source_domain?: string;
+  readonly source_type?: string;
+  readonly source_id?: string;
+  readonly purpose?: FinanceDocumentLink['purpose'];
+  readonly page?: number;
+  readonly per_page?: number;
+}
+
+export interface FinanceDocumentLinkListResponse {
+  readonly items: readonly FinanceDocumentLink[];
+  readonly meta: {
+    readonly current_page?: number;
+    readonly last_page?: number;
+    readonly per_page?: number;
+    readonly total?: number;
+  };
+}
+
+export async function listFinanceDocumentLinks(
+  legalEntityId: number,
+  query: FinanceDocumentLinkQuery = {},
+): Promise<FinanceDocumentLinkListResponse> {
+  const response = await api.getWithMeta<readonly FinanceDocumentLink[]>(
+    '/api/finance/documents',
+    { params: { legal_entity_id: legalEntityId, ...query } },
+  );
+  return {
+    items: response.data,
+    meta: response.meta ?? {},
+  };
+}
