@@ -71,9 +71,6 @@ export interface FinanceDocumentLink {
 export interface FinanceEntityListQuery {
   readonly page?: number;
   readonly per_page?: number;
-  readonly search?: string;
-  readonly status?: 'active' | 'inactive';
-  readonly [key: string]: string | number | undefined;
 }
 
 export interface FinanceEntityListResponse {
