@@ -758,6 +758,14 @@ export const routesWorkspace: RouteRecordRaw[] = [
         meta: { permission: 'governance.body.view' },
       },
 
+      // Finance foundation — read-only entity, dimension and document evidence overview.
+      {
+        path: 'finance',
+        name: 'finance-foundation',
+        component: () => import('@/features/finance/FinanceFoundationView.vue'),
+        meta: { permission: 'finance.entity.view' },
+      },
+
       //
       // ORDER: list, then detail. No static-vs-dynamic conflict at the
       // :id level — the governance tree has no static sub-path
