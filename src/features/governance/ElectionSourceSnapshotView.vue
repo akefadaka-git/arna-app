@@ -296,13 +296,13 @@ onMounted(() => {
 .election-source {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-5);
+  gap: var(--arna-space-5);
   width: 100%;
   min-width: 0;
 }
 .election-source__back a,
 .election-source__refresh {
-  color: var(--mases-color-text-brand);
+  color: var(--arna-color-text-brand);
   font: inherit;
   text-decoration: none;
 }
@@ -310,71 +310,71 @@ onMounted(() => {
   text-decoration: underline;
 }
 .election-source__warning {
-  padding: var(--mases-space-4);
-  border: 1px solid var(--mases-color-border-warning, var(--mases-color-border-subtle));
-  border-radius: var(--mases-radius-lg);
-  background: var(--mases-color-surface-subtle);
+  padding: var(--arna-space-4);
+  border: 1px solid var(--arna-color-border-warning, var(--arna-color-border-subtle));
+  border-radius: var(--arna-radius-lg);
+  background: var(--arna-color-surface-subtle);
 }
 .election-source__warning h2,
 .election-source__capture h2,
 .election-source__list h2 {
-  margin: 0 0 var(--mases-space-2);
-  font-size: var(--mases-font-size-heading-6);
+  margin: 0 0 var(--arna-space-2);
+  font-size: var(--arna-font-size-heading-6);
 }
 .election-source__warning p {
-  margin: var(--mases-space-2) 0 0;
-  color: var(--mases-color-text-secondary);
-  line-height: var(--mases-line-height-body);
+  margin: var(--arna-space-2) 0 0;
+  color: var(--arna-color-text-secondary);
+  line-height: var(--arna-line-height-body);
 }
 .election-source__capture,
 .election-source__card {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
-  padding: var(--mases-space-4);
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-lg);
-  background: var(--mases-color-surface-raised);
+  gap: var(--arna-space-3);
+  padding: var(--arna-space-4);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-lg);
+  background: var(--arna-color-surface-raised);
 }
 .election-source__capture label,
 .election-source__reconcile label {
-  font-weight: var(--mases-font-weight-semibold);
+  font-weight: var(--arna-font-weight-semibold);
 }
 .election-source__capture input,
 .election-source__reconcile textarea {
   width: 100%;
   min-height: 2.75rem;
   padding: 0.65rem 0.75rem;
-  border: 1px solid var(--mases-color-border-subtle);
-  border-radius: var(--mases-radius-md);
-  color: var(--mases-color-text-primary);
-  background: var(--mases-color-surface-page);
+  border: 1px solid var(--arna-color-border-subtle);
+  border-radius: var(--arna-radius-md);
+  color: var(--arna-color-text-primary);
+  background: var(--arna-color-surface-page);
   font: inherit;
 }
 .election-source__capture p {
   margin: 0;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body-sm);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body-sm);
 }
 .election-source__primary,
 .election-source__secondary {
   align-self: flex-start;
   min-height: 2.75rem;
   padding: 0.65rem 0.9rem;
-  border-radius: var(--mases-radius-md);
+  border-radius: var(--arna-radius-md);
   font: inherit;
-  font-weight: var(--mases-font-weight-semibold);
+  font-weight: var(--arna-font-weight-semibold);
   cursor: pointer;
 }
 .election-source__primary {
-  border: 1px solid var(--mases-color-action-primary);
-  color: var(--mases-color-text-inverse);
-  background: var(--mases-color-action-primary);
+  border: 1px solid var(--arna-color-action-primary);
+  color: var(--arna-color-text-inverse);
+  background: var(--arna-color-action-primary);
 }
 .election-source__secondary {
-  border: 1px solid var(--mases-color-border-subtle);
-  color: var(--mases-color-text-primary);
-  background: var(--mases-color-surface-page);
+  border: 1px solid var(--arna-color-border-subtle);
+  color: var(--arna-color-text-primary);
+  background: var(--arna-color-surface-page);
 }
 .election-source__primary:disabled,
 .election-source__secondary:disabled,
@@ -385,45 +385,45 @@ onMounted(() => {
 .election-source__list {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
 }
 .election-source__list-heading,
 .election-source__card-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   flex-wrap: wrap;
 }
 .election-source__cards {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
 }
 .election-source__card-header h3 {
   margin: 0;
-  font-size: var(--mases-font-size-heading-6);
+  font-size: var(--arna-font-size-heading-6);
 }
 .election-source__blocked {
   padding: 0.2rem 0.55rem;
-  border-radius: var(--mases-radius-full);
-  color: var(--mases-color-text-secondary);
-  background: var(--mases-color-surface-subtle);
-  font-size: var(--mases-font-size-body-sm);
+  border-radius: var(--arna-radius-full);
+  color: var(--arna-color-text-secondary);
+  background: var(--arna-color-surface-subtle);
+  font-size: var(--arna-font-size-body-sm);
 }
 .election-source__facts {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-  gap: var(--mases-space-3);
+  gap: var(--arna-space-3);
   margin: 0;
 }
 .election-source__facts dt {
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body-sm);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body-sm);
 }
 .election-source__facts dd {
   margin: 0.2rem 0 0;
-  color: var(--mases-color-text-primary);
+  color: var(--arna-color-text-primary);
   font-variant-numeric: tabular-nums;
 }
 .election-source__digest {
@@ -433,12 +433,12 @@ onMounted(() => {
 .election-source__detail {
   display: flex;
   flex-direction: column;
-  gap: var(--mases-space-2);
-  padding-top: var(--mases-space-3);
-  border-top: 1px solid var(--mases-color-border-subtle);
+  gap: var(--arna-space-2);
+  padding-top: var(--arna-space-3);
+  border-top: 1px solid var(--arna-color-border-subtle);
 }
 .election-source__detail h4 {
-  margin: var(--mases-space-2) 0 0;
+  margin: var(--arna-space-2) 0 0;
 }
 .election-source__detail ul {
   margin: 0;
@@ -446,8 +446,8 @@ onMounted(() => {
 }
 .election-source__detail-note {
   margin: 0;
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body-sm);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body-sm);
 }
 .election-source__table-wrap {
   overflow-x: auto;
@@ -459,38 +459,38 @@ onMounted(() => {
 }
 .election-source__table th,
 .election-source__table td {
-  padding: var(--mases-space-2);
-  border-bottom: 1px solid var(--mases-color-border-subtle);
+  padding: var(--arna-space-2);
+  border-bottom: 1px solid var(--arna-color-border-subtle);
   vertical-align: top;
 }
 .election-source__table th {
-  color: var(--mases-color-text-secondary);
-  font-size: var(--mases-font-size-body-sm);
-  font-weight: var(--mases-font-weight-semibold);
+  color: var(--arna-color-text-secondary);
+  font-size: var(--arna-font-size-body-sm);
+  font-weight: var(--arna-font-weight-semibold);
 }
 .election-source__table td code {
   display: block;
   overflow-wrap: anywhere;
 }
 .election-source__history h4 {
-  margin: 0 0 var(--mases-space-2);
+  margin: 0 0 var(--arna-space-2);
 }
 .election-source__history ul {
   margin: 0;
   padding-inline-start: 1.25rem;
 }
 .election-source__success {
-  color: var(--mases-color-status-success-text);
+  color: var(--arna-color-status-success-text);
 }
 .election-source__error {
-  color: var(--mases-color-status-danger-text);
+  color: var(--arna-color-status-danger-text);
 }
 .election-source__refresh:focus-visible,
 .election-source__primary:focus-visible,
 .election-source__secondary:focus-visible,
 .election-source__back a:focus-visible {
-  outline: var(--mases-focus-ring-width) solid var(--mases-focus-ring-color);
-  outline-offset: var(--mases-focus-ring-offset);
+  outline: var(--arna-focus-ring-width) solid var(--arna-focus-ring-color);
+  outline-offset: var(--arna-focus-ring-offset);
 }
 @media (prefers-reduced-motion: reduce) {
   .election-source {
