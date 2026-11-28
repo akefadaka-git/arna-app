@@ -64,3 +64,21 @@ test('source-register UI is evidence-only and does not calculate electorate deci
   assert.ok(!api.includes('eligibility-decision'));
   assert.ok(!api.includes('/consent'));
 });
+
+
+test('independent workspace sections expose isolated request failures and retry', async () => {
+  const view = await read('../src/features/elections/ElectionSourceSnapshotView.vue');
+  for (const section of ['candidates', 'snapshots', 'authority', 'committee']) {
+    assert.ok(view.includes(`sectionErrors.${section}`), `Missing isolated error state for ${section}`);
+  }
+  assert.ok(view.includes('listElectionCandidates(electionId).catch'));
+  assert.ok(view.includes('listElectionAuthorityEvidence(electionId).catch'));
+  assert.ok(view.includes('listElectionCommitteeMembers(electionId).catch'));
+});
+
+test('election list uses Amharic-first locale fallback and the canonical workspace route', async () => {
+  const list = await read('../src/features/elections/ElectionListView.vue');
+  assert.ok(list.includes("auth.userLocale === 'am'"));
+  assert.ok(list.includes("name: 'governance-election-workspace'"));
+  assert.ok(list.includes("governance.election.register.view"));
+});
